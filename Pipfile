@@ -1,0 +1,27 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+djangorestframework = "*"
+django-environ = "*"
+whitenoise = "*"
+gunicorn = "*"
+psycopg2-binary = "*"
+django-extensions = "*"
+python-odt-template = "*"
+django-cors-headers = "*"
+django-downloadview = "*"
+jinja2 = "*"
+ipdb = "*"
+
+[dev-packages]
+black = "*"
+flake8 = "*"
+isort = "*"
+flake8-pyproject = "*"
+
+[requires]
+python_version = "3.12"

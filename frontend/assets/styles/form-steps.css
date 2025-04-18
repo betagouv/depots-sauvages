@@ -1,0 +1,35 @@
+.form-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0;
+}
+
+.step-question {
+  color: var(--text-mention-grey);
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.date-time {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-actions {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (max-width: 768px) {
+  .date-time {
+    grid-template-columns: 1fr;
+  }
+} 
