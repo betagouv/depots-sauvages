@@ -1,0 +1,13 @@
+# Yarn files
+.yarn/
+.yarnrc.yml
+.pnp.*
+
+# Node modules
+node_modules/
+
+# Other files to ignore in Docker context
+.git/
+.github/
+.vscode/
+*.log 
