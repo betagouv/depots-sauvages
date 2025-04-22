@@ -30,7 +30,7 @@ export interface Signalement {
   prejudiceAutresCouts: number
 
   // Management field
-  generate_doc: boolean
+  generateDoc: boolean
 }
 
 // Simple conversion functions using libraries
@@ -66,5 +66,5 @@ export const createEmptySignalement = (): Signalement => ({
   prejudiceAutresCouts: 0,
 
   // Management field
-  generate_doc: false,
+  generateDoc: false,
 })

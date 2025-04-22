@@ -29,7 +29,7 @@ export const useSignalementStore = defineStore('signalement', {
 
     async saveFormData() {
       if (this.currentStep === 2) {
-        this.formData.generate_doc = true
+        this.formData.generateDoc = true
       }
 
       if (this.currentId) {
