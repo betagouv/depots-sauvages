@@ -38,16 +38,22 @@ export const getDocumentUrl = (id: number | null): string => {
 }
 
 // API functions
-async function makeRequest(url: string, method: 'POST' | 'PUT', data: any) {
-  const response = await fetch(url, {
+async function makeRequest(url: string, method: 'GET' | 'POST' | 'PUT', data: any) {
+  const options: RequestInit = {
     method,
     headers: {
       'Content-Type': 'application/json',
       'X-CSRFToken': getCSRFToken() || '',
     },
     credentials: 'include',
-    body: JSON.stringify(data),
-  })
+  }
+
+  // Only include body for POST and PUT requests
+  if (method !== 'GET' && data) {
+    options.body = JSON.stringify(data)
+  }
+
+  const response = await fetch(url, options)
 
   if (!response.ok) {
     const error = await response.json()
@@ -60,3 +66,5 @@ async function makeRequest(url: string, method: 'POST' | 'PUT', data: any) {
 export const createResource = (url: string, data: any) => makeRequest(url, 'POST', data)
 
 export const updateResource = (url: string, data: any) => makeRequest(url, 'PUT', data)
+
+export const fetchResource = (url: string) => makeRequest(url, 'GET', {})

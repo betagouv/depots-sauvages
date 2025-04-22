@@ -28,9 +28,43 @@ export interface Signalement {
   prejudiceNombreVehicules: number
   prejudiceKilometrage: number
   prejudiceAutresCouts: number
-  generate_doc: boolean
+
+  // Management field
+  generateDoc: boolean
 }
 
 // Simple conversion functions using libraries
 export const toApiFormat = (data: Signalement) => snakecaseKeys(data)
 export const fromApiFormat = (data: any): Signalement => camelcaseKeys(data)
+
+// Factory function to create an empty Signalement
+export const createEmptySignalement = (): Signalement => ({
+  // Step 1
+  commune: '',
+  localisationDepot: '',
+  dateConstat: '',
+  heureConstat: '',
+  auteurSignalement: '',
+  natureTerrain: '',
+  volumeDepot: '',
+  typesDepot: [],
+  precisionsDepot: '',
+  photoDispo: false,
+
+  // Step 2
+  auteurIdentifie: false,
+  souhaitePorterPlainte: false,
+  indicesDisponibles: [],
+  precisionsIndices: '',
+  arreteMunicipalExiste: false,
+  prejudiceMontantConnu: false,
+  prejudiceMontant: 0,
+  prejudiceNombrePersonnes: 0,
+  prejudiceNombreHeures: 0,
+  prejudiceNombreVehicules: 0,
+  prejudiceKilometrage: 0,
+  prejudiceAutresCouts: 0,
+
+  // Management field
+  generateDoc: false,
+})

@@ -1,26 +1,23 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { getDocumentUrl } from '../../services/api'
-import { useSignalementStore } from '../../stores/signalement'
+import { getDocumentUrl } from '@/services/api'
+import { useSignalementStore } from '@/stores/signalement'
+import { computed, ref } from 'vue'
 
 const store = useSignalementStore()
 const emit = defineEmits(['restart'])
+const isDownloading = ref(false)
 
 // Create a computed property for the document URL
 const documentUrl = computed(() => getDocumentUrl(store.currentId))
 
 // Function to handle document download
 const downloadDocument = () => {
-  // Create an invisible anchor element
-  const a = document.createElement('a')
-  a.href = documentUrl.value
-  a.download = `signalement-${store.currentId}.odt`
-  a.target = '_blank'
+  window.open(documentUrl.value, '_blank')
+}
 
-  // Append to body, click, and remove to trigger download
-  document.body.appendChild(a)
-  a.click()
-  document.body.removeChild(a)
+// Function to handle restart
+const handleRestart = () => {
+  emit('restart')
 }
 </script>
 
@@ -48,9 +45,13 @@ const downloadDocument = () => {
         </div>
         <p>Le document récapitulatif de votre signalement est prêt, vous pouvez le télécharger:</p>
 
-        <button class="fr-btn download-button" @click="downloadDocument">
+        <button
+          class="fr-btn action-button download-button"
+          @click="downloadDocument"
+          :disabled="isDownloading"
+        >
           <span class="fr-icon-download-line" aria-hidden="true"></span>
-          Télécharger le document
+          {{ isDownloading ? 'Téléchargement...' : 'Télécharger le document' }}
         </button>
       </section>
 
@@ -101,7 +102,7 @@ const downloadDocument = () => {
 
       <!-- Restart button with updated styling -->
       <div class="action-buttons">
-        <button class="fr-btn restart-button" @click="$emit('restart')">
+        <button class="fr-btn action-button restart-button" @click="handleRestart">
           Faire un nouveau signalement
           <span class="fr-icon-arrow-right-line" aria-hidden="true"></span>
         </button>
@@ -137,7 +138,7 @@ const downloadDocument = () => {
 }
 
 .document-section {
-  background-color: #f5f5fe; /* Light blue background */
+  background-color: #f5f5fe;
   padding: 1.5rem;
   border-radius: 4px;
   margin-top: 2rem;
@@ -158,7 +159,7 @@ const downloadDocument = () => {
 
 .document-title {
   margin: 0;
-  color: #000091; /* DSFR blue */
+  color: #000091;
 }
 
 h3 {
@@ -172,14 +173,23 @@ p {
   margin: 0.5rem 0;
 }
 
-.download-button {
-  background-color: #000091; /* DSFR blue */
+/* Common button styling */
+.action-button {
+  background-color: #000091;
   color: white;
   border: none;
   padding: 0.5rem 1rem;
   display: inline-flex;
   align-items: center;
   font-weight: 500;
+}
+
+.action-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.download-button {
   margin-top: 1rem;
 }
 
@@ -190,16 +200,6 @@ p {
 .action-buttons {
   margin-top: 2rem;
   text-align: center;
-}
-
-.restart-button {
-  background-color: #000091; /* DSFR blue */
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  display: inline-flex;
-  align-items: center;
-  font-weight: 500;
 }
 
 .restart-button .fr-icon-arrow-right-line {

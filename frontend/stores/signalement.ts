@@ -1,47 +1,17 @@
 import { defineStore } from 'pinia'
-import { API_URLS, createResource, updateResource } from '../services/api'
+import { API_URLS, createResource, fetchResource, updateResource } from '../services/api'
 import type { Signalement } from '../types/signalement'
-import { fromApiFormat, toApiFormat } from '../types/signalement'
-
-// Create a single source of truth for initial state
-export const getInitialState = (): Signalement => ({
-  // Step 1
-  commune: '',
-  localisationDepot: '',
-  dateConstat: '',
-  heureConstat: '',
-  auteurSignalement: '',
-  natureTerrain: '',
-  volumeDepot: '',
-  typesDepot: [],
-  precisionsDepot: '',
-  photoDispo: false,
-
-  // Step 2
-  auteurIdentifie: false,
-  souhaitePorterPlainte: false,
-  indicesDisponibles: [],
-  precisionsIndices: '',
-  arreteMunicipalExiste: false,
-  prejudiceMontantConnu: true,
-  prejudiceMontant: 0,
-  prejudiceNombrePersonnes: 0,
-  prejudiceNombreHeures: 0,
-  prejudiceNombreVehicules: 0,
-  prejudiceKilometrage: 0,
-  prejudiceAutresCouts: 0,
-
-  // Management field
-  generate_doc: false,
-})
+import { createEmptySignalement, fromApiFormat, toApiFormat } from '../types/signalement'
 
 export const useSignalementStore = defineStore('signalement', {
+  // State
   state: () => ({
     currentStep: 1,
     currentId: null as number | null,
-    formData: getInitialState(),
+    formData: createEmptySignalement(),
   }),
 
+  // Actions
   actions: {
     updateStep(step: number) {
       this.currentStep = step
@@ -50,18 +20,20 @@ export const useSignalementStore = defineStore('signalement', {
     resetStore() {
       this.currentStep = 1
       this.currentId = null
-      this.formData = getInitialState()
+      this.formData = createEmptySignalement()
     },
 
+    // Utils
     updateBooleanField(field: keyof Signalement, value: string) {
       if (typeof this.formData[field] === 'boolean') {
-        this.formData[field] = value === ('oui' as never)
+        this.formData[field] = (value === 'oui') as any
       }
     },
 
+    // API
     async saveFormData() {
       if (this.currentStep === 2) {
-        this.formData.generate_doc = true
+        this.formData.generateDoc = true
       }
 
       if (this.currentId) {
@@ -78,11 +50,7 @@ export const useSignalementStore = defineStore('signalement', {
 
     async loadSignalement(id: number) {
       try {
-        const response = await fetch(`${API_URLS.signalements}${id}/`, {
-          credentials: 'include',
-        })
-        if (!response.ok) throw new Error('Failed to load signalement')
-        const data = await response.json()
+        const data = await fetchResource(`${API_URLS.signalements}${id}/`)
         this.currentId = id
         this.formData = fromApiFormat(data)
       } catch (error) {
