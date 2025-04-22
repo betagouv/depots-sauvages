@@ -1,25 +1,31 @@
 <script setup lang="ts">
 import '@/assets/styles/form-steps.css'
 import { useSignalementStore } from '@/stores/signalement'
-import { computed } from 'vue'
-import { auteurOptions, natureTerrainOptions, typesDepotOptions, volumeOptions } from './form-data'
+import { computed, ref } from 'vue'
+import {
+  auteurOptions,
+  natureTerrainOptions,
+  typesDepotOptions,
+  volumeOptions,
+  yesNoOptions,
+} from './form-data'
 
 const store = useSignalementStore()
-
-const showPhotoUpload = computed(() => store.formData.hasPhotos === 'oui')
-
-const yesNoOptions = [
-  { label: 'Oui', value: 'oui' },
-  { label: 'Non', value: 'non' },
-]
+const isSubmitting = ref(false) // Make this reactive
+const showPhotoUpload = computed(() => store.formData.photoDispo === true)
 
 const handleSubmit = async (event: Event) => {
   event.preventDefault()
+
+  isSubmitting.value = true
   try {
     await store.saveFormData()
     store.updateStep(2)
   } catch (error) {
     console.error('Failed to save:', error)
+    // Add error feedback here
+  } finally {
+    isSubmitting.value = false
   }
 }
 
@@ -32,18 +38,19 @@ const handleFileChange = (event: Event) => {
 
 const handleTypesDepotChange = (event: Event, value: string) => {
   const checked = (event.target as HTMLInputElement).checked
-  const currentTypes = [...(store.formData.typesDepot || [])]
 
-  if (checked && !currentTypes.includes(value)) {
-    currentTypes.push(value)
-  } else if (!checked) {
-    const index = currentTypes.indexOf(value)
-    if (index > -1) {
-      currentTypes.splice(index, 1)
-    }
+  // Create a new array to ensure reactivity
+  let newTypes = [...(store.formData.typesDepot || [])]
+
+  if (checked) {
+    // Add value if it doesn't exist
+    newTypes = [...newTypes, value]
+  } else {
+    // Remove value
+    newTypes = newTypes.filter((type) => type !== value)
   }
 
-  store.formData.typesDepot = currentTypes
+  store.formData.typesDepot = newTypes
 }
 </script>
 
@@ -88,7 +95,7 @@ const handleTypesDepotChange = (event: Event, value: string) => {
       <div class="photo-section">
         <DsfrRadioButtonSet
           :model-value="store.formData.photoDispo ? 'oui' : 'non'"
-          @update:model-value="store.updateBooleanField('photoDispo', $event)"
+          @update:model-value="(value) => store.updateBooleanField('photoDispo', value)"
           name="photo-dispo"
           legend="Avez-vous des photos du dépôt ?"
           :options="yesNoOptions"
@@ -146,7 +153,13 @@ const handleTypesDepotChange = (event: Event, value: string) => {
       />
 
       <div class="form-actions">
-        <DsfrButton type="submit" label="Suivant" icon="fr-icon-arrow-right-line" icon-right />
+        <DsfrButton
+          type="submit"
+          label="Suivant"
+          icon="fr-icon-arrow-right-line"
+          icon-right
+          :disabled="isSubmitting"
+        />
       </div>
     </form>
   </div>
@@ -161,5 +174,17 @@ const handleTypesDepotChange = (event: Event, value: string) => {
 
 .photo-section :deep(.fr-upload) {
   margin-top: 1rem;
+}
+
+.date-time {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .date-time {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
