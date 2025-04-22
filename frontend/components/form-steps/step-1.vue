@@ -146,7 +146,7 @@ const handleTypesDepotChange = (event: Event, value: string) => {
       </div>
 
       <DsfrInput
-        v-model="store.formData.precisionsDechets"
+        v-model="store.formData.precisionsDepot"
         label="✏️ Précisions sur les déchets"
         hint="N'inscrivez AUCUNE DONNÉE personnelle"
         :isTextarea="true"
