@@ -1,0 +1,19 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY package.json yarn.lock ./
+
+# Create a clean .yarnrc.yml file for Docker
+RUN echo 'nodeLinker: node-modules' > .yarnrc.yml
+
+# Copy the application code
+COPY . .
+
+# Pre-install dependencies
+RUN yarn install
+
+EXPOSE 5173
+
+ENTRYPOINT ["sh", "/app/scripts/frontend-entrypoint.sh"]
+CMD ["dev"] 

@@ -1,0 +1,17 @@
+FROM python:3.10-alpine
+
+WORKDIR /app
+
+RUN pip install pipenv
+
+COPY Pipfile Pipfile.lock ./
+
+RUN pipenv install --dev --system --deploy
+
+# Copy the application code
+COPY . .
+
+EXPOSE 8000
+
+ENTRYPOINT ["sh", "/app/scripts/backend-entrypoint.sh"]
+CMD ["runserver"] 
