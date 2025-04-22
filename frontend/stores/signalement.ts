@@ -1,15 +1,17 @@
 import { defineStore } from 'pinia'
-import { API_URLS, createResource, updateResource } from '../services/api'
+import { API_URLS, createResource, fetchResource, updateResource } from '../services/api'
 import type { Signalement } from '../types/signalement'
 import { createEmptySignalement, fromApiFormat, toApiFormat } from '../types/signalement'
 
 export const useSignalementStore = defineStore('signalement', {
+  // State
   state: () => ({
     currentStep: 1,
     currentId: null as number | null,
     formData: createEmptySignalement(),
   }),
 
+  // Actions
   actions: {
     updateStep(step: number) {
       this.currentStep = step
@@ -21,12 +23,14 @@ export const useSignalementStore = defineStore('signalement', {
       this.formData = createEmptySignalement()
     },
 
+    // Utils
     updateBooleanField(field: keyof Signalement, value: string) {
       if (typeof this.formData[field] === 'boolean') {
         this.formData[field] = value === ('oui' as never)
       }
     },
 
+    // API
     async saveFormData() {
       if (this.currentStep === 2) {
         this.formData.generateDoc = true
@@ -46,11 +50,7 @@ export const useSignalementStore = defineStore('signalement', {
 
     async loadSignalement(id: number) {
       try {
-        const response = await fetch(`${API_URLS.signalements}${id}/`, {
-          credentials: 'include',
-        })
-        if (!response.ok) throw new Error('Failed to load signalement')
-        const data = await response.json()
+        const data = await fetchResource(`${API_URLS.signalements}${id}/`)
         this.currentId = id
         this.formData = fromApiFormat(data)
       } catch (error) {
