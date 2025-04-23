@@ -37,6 +37,15 @@ class Signalement(models.Model):
     )
     document_generated_at = models.DateTimeField("Date de génération", null=True, blank=True)
 
+    def get_montant_prejudice(self):
+        """
+        Calculate the total amount of prejudice
+        """
+        if self.prejudice_montant_connu:
+            return self.prejudice_montant
+        else:
+            return "montant à estimer"
+
     class Meta:
         verbose_name = "signalement"
         verbose_name_plural = "signalements"
