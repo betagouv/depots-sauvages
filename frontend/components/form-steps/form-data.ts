@@ -6,15 +6,15 @@ export const STEPS = [
 
 export const volumeOptions = [
   { text: 'Sélectionner une option', value: '', disabled: true },
-  { text: 'Moins de 1m³', value: 'Moins de 1m³' },
-  { text: 'Entre 1 et 3m³', value: 'Entre 1 et 3m³' },
-  { text: 'Plus de 3m³', value: 'Plus de 3m³' },
+  { text: 'Moins de 1m³', value: 'moins de 1m³' },
+  { text: 'Entre 1 et 3m³', value: 'entre 1 et 3m³' },
+  { text: 'Plus de 3m³', value: 'plus de 3m³' },
 ]
 
 export const natureTerrainOptions = [
   {
     label: 'Privé',
-    value: 'prive',
+    value: 'privé',
     id: 'terrain-prive',
     hint: '',
   },
@@ -25,7 +25,7 @@ export const natureTerrainOptions = [
   },
   {
     label: 'Je ne sais pas',
-    value: 'inconnu',
+    value: '',
     id: 'terrain-inconnu',
   },
 ]
