@@ -66,7 +66,7 @@
       />
 
       <DsfrSelect
-        v-model="store.formData.volumeDechets"
+        v-model="store.formData.volumeDepot"
         label="📏 Volume estimé"
         :options="volumeOptions"
         required

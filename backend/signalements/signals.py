@@ -1,6 +1,4 @@
-import io
 import logging
-from pathlib import Path
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -22,23 +20,18 @@ def generate_document(sender, instance, created, **kwargs):
         try:
             # Get all model fields as a dictionary
             context = model_to_dict(instance)
-
             # Remove fields we don't need
             context.pop("id", None)
             context.pop("generate_doc", None)
             context.pop("document", None)
             context.pop("document_generated_at", None)
-
             # Format date and time fields
             if context["date_constat"]:
                 context["date_constat"] = context["date_constat"].strftime("%d/%m/%Y")
-
             if context["heure_constat"]:
                 context["heure_constat"] = context["heure_constat"].strftime("%H:%M")
-
             logger.info(f"Generating document for signalement {instance.id}")
             logger.debug(f"Template context: {context}")
-
             # Generate document
             processor = ODTProcessor()
             output_path = processor.process_template(
@@ -46,7 +39,6 @@ def generate_document(sender, instance, created, **kwargs):
                 context,
                 f"signalement_{instance.id}.odt",
             )
-
             # Store in DB
             with open(output_path, "rb") as f:
                 document_data = f.read()
