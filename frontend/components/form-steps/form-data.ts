@@ -7,8 +7,8 @@ export const STEPS = [
 export const volumeOptions = [
   { text: 'Sélectionner une option', value: '', disabled: true },
   { text: 'Moins de 1m³', value: 'Moins de 1m³' },
-  { text: 'Entre 1 et 3m³', value: 'Entre 1 et 3m' },
-  { text: 'Plus de 3m³', value: 'pluPlus de 3m³s3m3' },
+  { text: 'Entre 1 et 3m³', value: 'Entre 1 et 3m³' },
+  { text: 'Plus de 3m³', value: 'Plus de 3m³' },
 ]
 
 export const natureTerrainOptions = [
