@@ -6,9 +6,9 @@ export const STEPS = [
 
 export const volumeOptions = [
   { text: 'Sélectionner une option', value: '', disabled: true },
-  { text: 'Moins de 1m³', value: 'moins1m3' },
-  { text: 'Entre 1 et 3m³', value: '1a3m3' },
-  { text: 'Plus de 3m³', value: 'plus3m3' },
+  { text: 'Moins de 1m³', value: 'Moins de 1m³' },
+  { text: 'Entre 1 et 3m³', value: 'Entre 1 et 3m' },
+  { text: 'Plus de 3m³', value: 'pluPlus de 3m³s3m3' },
 ]
 
 export const natureTerrainOptions = [
@@ -51,7 +51,7 @@ export const typesDepotOptions = [
   },
   {
     label: 'Déchets verts',
-    value: 'dechetsVerts',
+    value: 'déchets verts',
     id: 'dechets-verts',
     name: 'types-dechets',
   },
@@ -69,13 +69,13 @@ export const typesDepotOptions = [
   },
   {
     label: 'Électroménager',
-    value: 'electromenager',
+    value: 'électroménager',
     id: 'dechets-electromenager',
     name: 'types-dechets',
   },
   {
     label: 'Ordures ménagères',
-    value: 'orduresMenageres',
+    value: 'ordures ménagères',
     id: 'dechets-ordures',
     name: 'types-dechets',
   },
@@ -87,13 +87,13 @@ export const typesDepotOptions = [
   },
   {
     label: 'Déchets de construction',
-    value: 'dechetsConstruction',
+    value: 'déchets de construction',
     id: 'dechets-construction',
     name: 'types-dechets',
   },
   {
     label: 'Déchets médicaux',
-    value: 'dechetsMedicaux',
+    value: 'déchets médicaux',
     id: 'dechets-medicaux',
     name: 'types-dechets',
   },
@@ -105,7 +105,7 @@ export const typesDepotOptions = [
   },
   {
     label: 'Peintures et essences',
-    value: 'peinturesEtEssences',
+    value: 'peintures et essences',
     id: 'dechets-peintures',
     name: 'types-dechets',
   },
@@ -126,31 +126,31 @@ export const typesDepotOptions = [
 export const indicesDisponiblesOptions = [
   {
     label: 'Caméra de vidéo-surveillance',
-    value: 'camera',
+    value: 'caméra de vidéo-surveillance',
     id: 'indices-camera',
     name: 'indices-disponibles',
   },
   {
     label: 'Piège photographique',
-    value: 'piegePhoto',
+    value: 'piège photographique',
     id: 'indices-piege-photo',
     name: 'indices-disponibles',
   },
   {
     label: 'Témoignages',
-    value: 'temoignages',
+    value: 'témoignages',
     id: 'indices-temoignages',
     name: 'indices-disponibles',
   },
   {
     label: 'Documents (factures, colis, courriers)',
-    value: 'documents',
+    value: 'documents (factures, colis, courriers)',
     id: 'indices-documents',
     name: 'indices-disponibles',
   },
   {
     label: 'Activités liées aux faits constatés',
-    value: 'activitesLiees',
+    value: 'activités liées aux faits constatés',
     id: 'indices-activites',
     name: 'indices-disponibles',
   },
@@ -163,10 +163,10 @@ export const yesNoOptions = [
 
 export const auteurOptions = [
   { text: 'Sélectionner', value: '', disabled: true },
-  { text: 'Le maire', value: 'maire' },
-  { text: 'La gendarmerie', value: 'gendarmerie' },
-  { text: 'Un agent de police municipale', value: 'police-municipale' },
-  { text: "Un agent de l'ONF", value: 'onf' },
-  { text: "Un agent de l'OFB", value: 'ofb' },
+  { text: 'Le maire', value: 'le maire' },
+  { text: 'La gendarmerie', value: 'la gendarmerie' },
+  { text: 'Un agent de police municipale', value: 'un agent de police municipale' },
+  { text: "Un agent de l'ONF", value: "un agent de l'ONF" },
+  { text: "Un agent de l'OFB", value: "un agent de l'OFB" },
   { text: 'Autre', value: 'autre' },
 ]
