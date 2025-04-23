@@ -1,26 +1,3 @@
-<script setup lang="ts">
-import { getDocumentUrl } from '@/services/api'
-import { useSignalementStore } from '@/stores/signalement'
-import { computed, ref } from 'vue'
-
-const store = useSignalementStore()
-const emit = defineEmits(['restart'])
-const isDownloading = ref(false)
-
-// Create a computed property for the document URL
-const documentUrl = computed(() => getDocumentUrl(store.currentId))
-
-// Function to handle document download
-const downloadDocument = () => {
-  window.open(documentUrl.value, '_blank')
-}
-
-// Function to handle restart
-const handleRestart = () => {
-  emit('restart')
-}
-</script>
-
 <template>
   <div class="confirmation-container">
     <DsfrAlert type="success" title="Merci pour votre signalement" />
@@ -110,6 +87,29 @@ const handleRestart = () => {
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { getDocumentUrl } from '@/services/api'
+import { useSignalementStore } from '@/stores/signalement'
+import { computed, ref } from 'vue'
+
+const store = useSignalementStore()
+const emit = defineEmits(['restart'])
+const isDownloading = ref(false)
+
+// Create a computed property for the document URL
+const documentUrl = computed(() => getDocumentUrl(store.currentId))
+
+// Function to handle document download
+const downloadDocument = () => {
+  window.open(documentUrl.value, '_blank')
+}
+
+// Function to handle restart
+const handleRestart = () => {
+  emit('restart')
+}
+</script>
 
 <style scoped>
 .confirmation-container {

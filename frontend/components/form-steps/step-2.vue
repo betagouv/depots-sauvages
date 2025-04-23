@@ -1,28 +1,3 @@
-<script setup lang="ts">
-import '@/assets/styles/form-steps.css'
-import { useSignalementStore } from '@/stores/signalement'
-import { ref } from 'vue'
-import { indicesDisponiblesOptions, yesNoOptions } from './form-data'
-
-const store = useSignalementStore()
-const isSubmitting = ref(false)
-
-const handleSubmit = async (event: Event) => {
-  event.preventDefault()
-  isSubmitting.value = true
-  try {
-    await store.saveFormData()
-    store.updateStep(3)
-  } catch (error) {
-    console.error('Failed to save:', error)
-  } finally {
-    isSubmitting.value = false
-  }
-}
-
-const handlePrevious = () => store.updateStep(1)
-</script>
-
 <template>
   <div class="form-container">
     <form @submit.prevent="handleSubmit">
@@ -152,6 +127,31 @@ const handlePrevious = () => store.updateStep(1)
     </form>
   </div>
 </template>
+
+<script setup lang="ts">
+import '@/assets/styles/form-steps.css'
+import { useSignalementStore } from '@/stores/signalement'
+import { ref } from 'vue'
+import { indicesDisponiblesOptions, yesNoOptions } from './form-data'
+
+const store = useSignalementStore()
+const isSubmitting = ref(false)
+
+const handleSubmit = async (event: Event) => {
+  event.preventDefault()
+  isSubmitting.value = true
+  try {
+    await store.saveFormData()
+    store.updateStep(3)
+  } catch (error) {
+    console.error('Failed to save:', error)
+  } finally {
+    isSubmitting.value = false
+  }
+}
+
+const handlePrevious = () => store.updateStep(1)
+</script>
 
 <style scoped>
 form {

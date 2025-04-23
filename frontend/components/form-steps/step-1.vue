@@ -1,59 +1,3 @@
-<script setup lang="ts">
-import '@/assets/styles/form-steps.css'
-import { useSignalementStore } from '@/stores/signalement'
-import { computed, ref } from 'vue'
-import {
-  auteurOptions,
-  natureTerrainOptions,
-  typesDepotOptions,
-  volumeOptions,
-  yesNoOptions,
-} from './form-data'
-
-const store = useSignalementStore()
-const isSubmitting = ref(false) // Make this reactive
-const showPhotoUpload = computed(() => store.formData.photoDispo === true)
-
-const handleSubmit = async (event: Event) => {
-  event.preventDefault()
-
-  isSubmitting.value = true
-  try {
-    await store.saveFormData()
-    store.updateStep(2)
-  } catch (error) {
-    console.error('Failed to save:', error)
-    // Add error feedback here
-  } finally {
-    isSubmitting.value = false
-  }
-}
-
-const handleFileChange = (event: Event) => {
-  const target = event.target as HTMLInputElement
-  if (target.files) {
-    store.formData.photos = Array.from(target.files)
-  }
-}
-
-const handleTypesDepotChange = (event: Event, value: string) => {
-  const checked = (event.target as HTMLInputElement).checked
-
-  // Create a new array to ensure reactivity
-  let newTypes = [...(store.formData.typesDepot || [])]
-
-  if (checked) {
-    // Add value if it doesn't exist
-    newTypes = [...newTypes, value]
-  } else {
-    // Remove value
-    newTypes = newTypes.filter((type) => type !== value)
-  }
-
-  store.formData.typesDepot = newTypes
-}
-</script>
-
 <template>
   <h2 class="step-question">Où se trouve le dépôt sauvage et comment vous contacter ?</h2>
   <div class="form-container">
@@ -164,6 +108,62 @@ const handleTypesDepotChange = (event: Event, value: string) => {
     </form>
   </div>
 </template>
+
+<script setup lang="ts">
+import '@/assets/styles/form-steps.css'
+import { useSignalementStore } from '@/stores/signalement'
+import { computed, ref } from 'vue'
+import {
+  auteurOptions,
+  natureTerrainOptions,
+  typesDepotOptions,
+  volumeOptions,
+  yesNoOptions,
+} from './form-data'
+
+const store = useSignalementStore()
+const isSubmitting = ref(false) // Make this reactive
+const showPhotoUpload = computed(() => store.formData.photoDispo === true)
+
+const handleSubmit = async (event: Event) => {
+  event.preventDefault()
+
+  isSubmitting.value = true
+  try {
+    await store.saveFormData()
+    store.updateStep(2)
+  } catch (error) {
+    console.error('Failed to save:', error)
+    // Add error feedback here
+  } finally {
+    isSubmitting.value = false
+  }
+}
+
+const handleFileChange = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  if (target.files) {
+    store.formData.photos = Array.from(target.files)
+  }
+}
+
+const handleTypesDepotChange = (event: Event, value: string) => {
+  const checked = (event.target as HTMLInputElement).checked
+
+  // Create a new array to ensure reactivity
+  let newTypes = [...(store.formData.typesDepot || [])]
+
+  if (checked) {
+    // Add value if it doesn't exist
+    newTypes = [...newTypes, value]
+  } else {
+    // Remove value
+    newTypes = newTypes.filter((type) => type !== value)
+  }
+
+  store.formData.typesDepot = newTypes
+}
+</script>
 
 <style scoped>
 .photo-section {
