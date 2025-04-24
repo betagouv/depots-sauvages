@@ -37,23 +37,22 @@
             inputmode="numeric"
             pattern="[0-9]{14}"
             hint="14 chiffres sans espaces"
-            required
           />
         </template>
 
 
         <template v-else>
           <DsfrInput
-            v-model="store.formData.nomParticulier"
-            label="Nom du particulier"
-            name="nom-particulier"
+            v-model="store.formData.prenomParticulier"
+            label="Prénom du particulier"
+            name="prenom-particulier"
             type="text"
             required
           />
           <DsfrInput
-            v-model="store.formData.prenomParticulier"
-            label="Prénom du particulier"
-            name="prenom-particulier"
+            v-model="store.formData.nomParticulier"
+            label="Nom du particulier"
+            name="nom-particulier"
             type="text"
             required
           />
@@ -89,14 +88,6 @@
             />
             <label class="fr-label" :for="option.id">{{ option.label }}</label>
           </div>
-          <DsfrInput
-            v-if="store.formData.indicesDisponibles.includes('autre')"
-            v-model="store.formData.precisionsIndices"
-            label="Précisez les autres indices"
-            name="precisions-indices"
-            type="text"
-          />
-
         </div>
       </div>
 
@@ -125,7 +116,6 @@
         label="Indiquez le montant du forfait d'enlèvement (en euros)"
         v-model="store.formData.montantForfaitEnlevement"
         min="0"
-        step="0.01"
         required
       />
 
@@ -134,8 +124,8 @@
         :model-value="store.formData.prejudiceMontantConnu ? 'oui' : 'non'"
         @update:model-value="(value) => store.updateBooleanField('prejudiceMontantConnu', value)"
         name="prejudice-montant-connu"
-        legend="Connaissez-vous le montant du préjudice ?"
         hint="Le préjudice peut comprendre les frais engagés par la mairie : prestation d’une entreprise de nettoyage, coût en déchetterie, emploi de personnels et matériels municipaux, etc."
+        legend="Connaissez-vous le montant du préjudice ?"
         :options="yesNoOptions"
         required
       />
@@ -145,6 +135,7 @@
           v-model="store.formData.prejudiceMontant"
           type="number"
           label="Montant du préjudice"
+          min="0"
           required
         />
       </template>
@@ -190,7 +181,7 @@
         />
         <DsfrButton
           type="submit"
-          label="Suivant"
+          label="Valider"
           icon="fr-icon-arrow-right-line"
           icon-right
           :disabled="isSubmitting"

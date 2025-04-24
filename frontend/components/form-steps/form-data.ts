@@ -149,8 +149,8 @@ export const indicesDisponiblesOptions = [
     name: 'indices-disponibles',
   },
   {
-    label: 'Piège photographique',
-    value: 'piège photographique',
+    label: 'Pièges photographiques',
+    value: 'pièges photographiques',
     id: 'indices-piege-photo',
     name: 'indices-disponibles',
   },
@@ -161,8 +161,8 @@ export const indicesDisponiblesOptions = [
     name: 'indices-disponibles',
   },
   {
-    label: 'Documents (factures, colis, courriers, etc)',
-    value: 'documents (factures, colis, courriers, etc)',
+    label: 'Documents (factures, colis, courriers, etc.)',
+    value: 'documents (factures, colis, courriers, etc.)',
     id: 'indices-documents',
     name: 'indices-disponibles',
   },
@@ -171,13 +171,7 @@ export const indicesDisponiblesOptions = [
     value: 'activités liées aux faits constatés',
     id: 'indices-activites',
     name: 'indices-disponibles',
-  },
-  {
-    label: 'Autre',
-    value: 'autre',
-    id: 'indices-autre',
-    name: 'indices-autre',
-  },
+  }
 ]
 
 export const yesNoOptions = [
@@ -186,8 +180,8 @@ export const yesNoOptions = [
 ]
 
 export const auteurIdentifieOptions = [
-  {label: 'entreprise', value: 'oui'},
-  {label: 'particulier', value: 'non'},
+  {label: 'ENTREPRISE', value: 'oui'},
+  {label: 'PARTICULIER', value: 'non'},
 
 ]
 
@@ -196,7 +190,7 @@ export const auteurOptions = [
   { text: 'Le maire', value: 'le maire' },
   { text: "Un agent de l'ONF", value: "un agent de l'ONF" },
   { text: 'La gendarmerie', value: 'la gendarmerie' },
-  { text: 'Un agent assermenté (policier municipal, garde-champêtre, etc)', value: 'un agent assermenté' },
+  { text: 'Un agent assermenté (policier municipal, garde-champêtre, etc.)', value: 'un agent assermenté' },
   { text: "Un autre agent de la mairie", value: "un autre agent de la mairie" },
   { text: 'Autre', value: 'autre' },
 ]

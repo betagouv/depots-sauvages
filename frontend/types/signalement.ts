@@ -27,6 +27,7 @@ export interface Signalement {
   indicesDisponibles: string[]
   precisionsIndices: string
   arreteMunicipalExiste: boolean
+  montantForfaitEnlevement: number
   prejudiceMontantConnu: boolean
   prejudiceMontant: number
   prejudiceNombrePersonnes: number
@@ -69,6 +70,7 @@ export const createEmptySignalement = (): Signalement => ({
   indicesDisponibles: [],
   precisionsIndices: '',
   arreteMunicipalExiste: false,
+  montantForfaitEnlevement: 0,
   prejudiceMontantConnu: false,
   prejudiceMontant: 0,
   prejudiceNombrePersonnes: 0,

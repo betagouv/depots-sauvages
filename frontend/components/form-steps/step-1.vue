@@ -22,6 +22,13 @@
         :options="auteurOptions"
         required
       />
+      <DsfrInput
+        v-if="store.formData.indicesDisponibles.includes('autre')"
+        v-model="store.formData.precisionsIndices"
+        label="Précisez les autres indices"
+        name="precisions-indices"
+        type="text"
+      />
 
       <div class="date-time">
         <DsfrInput
@@ -81,6 +88,7 @@
         name="risque-ecoulement"
         legend="Existe-t-il un risque d'écoulement ?"
         :options="yesNoOptions"
+        required
       />
 
       <div class="fr-form-group">
@@ -102,8 +110,8 @@
 
       <DsfrInput
         v-model="store.formData.precisionsDepot"
-        label="✏️ Autres informations ?"
-        hint="Apportez tout autre élément (présence d'habitation, présence d'élevage, voie ferrée...), identité du propriétaire du terrain (si terrain privé), zone particulière (zone agricole, zone forestière, zone naturelle, zone humide, zone Natura 2000, zone Ramsar, etc.), cours d'eau à proximité ou un captage d'eau, dernière date à laquelle le dépôt n'étais pas présent (si vous en avez connaissance)..."
+        label="✏️ Autres informations"
+        hint="Apportez tout autre élément (présence d'habitation, présence d'élevage, voie ferrée, etc.), identité du propriétaire du terrain (si terrain privé), zone particulière (zone agricole, zone forestière, zone naturelle, zone humide, zone Natura 2000, zone Ramsar, etc.), cours d'eau à proximité ou un captage d'eau, dernière date à laquelle le dépôt n'étais pas présent (si vous en avez connaissance)."
         :isTextarea="true"
       />
 
@@ -131,6 +139,7 @@ import {
   volumeOptions,
   yesNoOptions,
 } from './form-data'
+import { DsfrInput } from '@gouvminint/vue-dsfr'
 
 const store = useSignalementStore()
 const isSubmitting = ref(false) // Make this reactive

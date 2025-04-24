@@ -5,6 +5,16 @@
       service-description="Signalement des dépôts sauvages"
     />
     <div class="fr-container" role="main" id="content">
+      <DsfrNotice>
+        Votre avis compte
+        <a
+          href="#"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          lien formulaire de feedback
+        </a>
+      </DsfrNotice>
       <slot />
     </div>
     <DsfrFooter>
