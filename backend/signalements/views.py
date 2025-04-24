@@ -35,18 +35,12 @@ class SignalementDocumentDownloadView(View):
     def get(self, request, pk):
         """Handle GET request to download the document."""
         obj = self.get_object(pk)
-
-        # Convert bytes to a file-like object
         document_file = io.BytesIO(obj.document)
-
-        # Create a filename
         filename = f"signalement-{obj.id}-{obj.commune}.odt"
-
         response = FileResponse(
             document_file,
             content_type="application/vnd.oasis.opendocument.text",
             as_attachment=True,
             filename=filename,
         )
-
         return response
