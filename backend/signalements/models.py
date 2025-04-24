@@ -1,7 +1,9 @@
 from django.db import models
 
+from backend.signalements.prejudice import PrejudiceMixin
 
-class Signalement(models.Model):
+
+class Signalement(PrejudiceMixin, models.Model):
     """
     Model for waste deposit reports
     """
@@ -29,7 +31,7 @@ class Signalement(models.Model):
     prejudice_kilometrage = models.IntegerField("kilométrage", null=True, blank=True)
     prejudice_autres_couts = models.IntegerField("autres coûts", null=True, blank=True)
     document = models.BinaryField("Document généré", null=True, blank=True)
-    pdf_document = models.BinaryField(null=True, blank=True)
+    pdf_document = models.BinaryField("Document PDF", null=True, blank=True)
     # Management fields
     generate_doc = models.BooleanField(
         "Générer le document",
@@ -37,23 +39,6 @@ class Signalement(models.Model):
         help_text="Flag indicating if document should be generated",
     )
     document_generated_at = models.DateTimeField("Date de génération", null=True, blank=True)
-
-    def get_prejudice_montant_calcule(self):
-        """
-        Calculate the total amount of prejudice, when the amount is unknown.
-        """
-        if self.prejudice_montant_connu:
-            # If the amount is known, return the amount.
-            # This should not happen, but it's a safety net.
-            return self.prejudice_montant
-        AGENT_HOURLY_RATE = 18.03  # In euros, the hourly rate of a person
-        VEHICLE_USAGE_RATE = 1.30  # In euros, the usage rate of a vehicle
-        agent_cost = self.prejudice_nombre_personnes * AGENT_HOURLY_RATE
-        total_agent_cost = agent_cost * self.prejudice_nombre_heures
-        vehicle_cost = self.prejudice_kilometrage * VEHICLE_USAGE_RATE
-        total_vehicle_cost = vehicle_cost * self.prejudice_nombre_vehicules
-        total_cost = self.prejudice_autres_couts + total_agent_cost + total_vehicle_cost
-        return total_cost
 
     class Meta:
         verbose_name = "signalement"

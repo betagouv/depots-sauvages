@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="signalement",
             name="pdf_document",
-            field=models.BinaryField(blank=True, null=True),
+            field=models.BinaryField("Document PDF", blank=True, null=True),
         ),
     ]
