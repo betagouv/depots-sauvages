@@ -51,7 +51,7 @@ class Signalement(models.Model):
         total_agent_cost = agent_cost * self.prejudice_nombre_heures
         vehicle_cost = self.prejudice_kilometrage * VEHICLE_USAGE_RATE
         total_vehicle_cost = vehicle_cost * self.prejudice_nombre_vehicules
-        total_cost = total_agent_cost + total_vehicle_cost
+        total_cost = self.prejudice_autres_couts + total_agent_cost + total_vehicle_cost
         return total_cost
 
     class Meta:
