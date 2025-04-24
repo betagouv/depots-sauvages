@@ -13,18 +13,18 @@ export const volumeOptions = [
 
 export const natureTerrainOptions = [
   {
-    label: 'Public',
-    value: 'public',
+    label: 'Terrain public',
+    value: 'terrain public',
     id: 'terrain-public',
   },
   {
     label: 'Forêt domaniale',
-    value: 'forêt-domaniale',
+    value: 'forêt domaniale',
     id: 'terrain-foret-domaniale',
   },
   {
-    label: 'Privé',
-    value: 'privé',
+    label: 'Terrain privé',
+    value: 'terrain privé',
     id: 'terrain-prive',
   },
 
