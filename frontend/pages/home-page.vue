@@ -4,10 +4,7 @@
       <h1 class="fr-h2">Signalement de dépôts sauvages</h1>
       <DsfrCallout v-if="store.currentStep !== 3">
         <p>
-          Ce formulaire vise à faciliter vos actions en matière de lutte contre les dépôts sauvages.
-          Une fois le formulaire rempli, des documents types vous seront alors envoyés et pourront
-          être joints à votre plainte (procédure pénale) et/ou au dossier de la procédure
-          administrative.
+          Ce formulaire vise à vous accompagner lorsque vous devez traiter un dépôt sauvage. Une fois le formulaire rempli, un rapport de constatation personnalisé sera généré pour vous permettre d’initier une procédure administrative et faciliter un éventuel dépôt de plainte. Des conseils vous seront aussi proposés pour la suite des procédures.
         </p>
       </DsfrCallout>
 

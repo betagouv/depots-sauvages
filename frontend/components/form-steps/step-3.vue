@@ -5,14 +5,10 @@
     <div class="confirmation-content">
       <section class="confirmation-section">
         <p>
-          Dans quelques instants vous recevrez un document pré-rempli qui estime le montant de votre
-          préjudice. Ce document est indispensable pour votre plainte. Vous pourrez terminer de le
-          compléter et l'ajouter à votre procédure.
+          Vous trouverez ci-dessous votre rapport de constatation pré-rempli, à compléter avec les éléments manquants (charte graphique de la mairie, date et signature du rédacteur du document, etc.).
         </p>
-        <p>
-          La brigade compétente va également recevoir un résumé des informations que vous avez
-          rempli. Pour signer votre plainte, appelez la brigade afin de convenir d'un rendez-vous.
-        </p>
+        <p>Si vous souhaitez déposer plainte, pensez à apporter ce rapport de constatation en brigade.</p>
+        <p>Ce rapport est nécessaire pour initier une procédure administrative (voir conseils et aide à la rédaction d’une procédure administrative en bas de page).</p>
       </section>
 
       <section class="confirmation-section document-section">
@@ -20,7 +16,7 @@
           <span class="document-icon">📄</span>
           <h3 class="document-title">Document disponible</h3>
         </div>
-        <p>Le document récapitulatif de votre signalement est prêt, vous pouvez le télécharger:</p>
+        <p>Vous pouvez télécharger votre rapport de constatation :</p>
 
         <button
           class="fr-btn action-button download-button"
@@ -28,53 +24,61 @@
           :disabled="isDownloading"
         >
           <span class="fr-icon-download-line" aria-hidden="true"></span>
-          {{ isDownloading ? 'Téléchargement...' : 'Télécharger le document' }}
+          {{ isDownloading ? 'Téléchargement...' : 'Télécharger le document au format PDF' }}
         </button>
+        <button
+          class="fr-btn action-button download-button"
+          @click="downloadDocument"
+          :disabled="isDownloading"
+        >
+          <span class="fr-icon-download-line" aria-hidden="true"></span>
+          {{ isDownloading ? 'Téléchargement...' : 'Télécharger le document au format ODT' }}
+        </button>
+
       </section>
 
-      <section class="confirmation-section">
-        <h3>📞 Demandez conseil à un enquêteur environnement</h3>
-        <p>
-          Vous avez une question, besoin d'un renseignement ou d'un conseil spécifique ? Contactez
-          un gendarme spécialisé (Enquêteur environnement) via
-          <a
-            href="#"
-            class="fr-link fr-icon-external-link-line fr-link--icon-right"
-            target="_blank"
-          >
-            ProtectEnvi sur Tchap
-          </a>
-        </p>
-        <p>Nous nous engageons à vous répondre le plus rapidement possible.</p>
-      </section>
 
       <section class="confirmation-section">
         <h3>📑 Procédure administrative</h3>
         <p>
           Si vous souhaitez plus d'informations concernant la procédure administrative rendez-vous
           <a
-            href="#"
+            href="https://acdechets.smartidf.services/aide-verbalisation"
             class="fr-link fr-icon-external-link-line fr-link--icon-right"
             target="_blank"
           >
-            sur le guide pas à pas
+            sur le guide ACDéchets de la Région Île de France
           </a>
-          de la Région Île de France (ACDéchets).
+          pour vous aider pas à pas.
         </p>
       </section>
 
       <section class="confirmation-section">
         <h3>🙋🏻‍♂️ Conseils pratiques</h3>
         <p>
-          Retrouvez des conseils pratiques sur l'application à destination des élus :
-          <a
-            href="#"
-            class="fr-link fr-icon-external-link-line fr-link--icon-right"
-            target="_blank"
-          >
-            Gend'Elu
-          </a>
+          Retrouvez des conseils pratiques sur l'application à destination des élus, Gend’élus:
         </p>
+        <ul>
+          <li>
+            <a
+            href="https://play.google.com/store/apps/details?id=com.gendelus&hl=fr&pli=1"
+            class="fr-link fr-icon-external-link-line fr-link--icon-right"
+            target='_blank'
+            rel='noreferrer noopener'>
+              Télécharger l’application sur le Play Store
+            </a>
+            </li>
+          <li>
+            <a
+              href="https://apps.apple.com/fr/app/gend%C3%A9lus/id6444316373"
+              class="fr-link fr-icon-external-link-line fr-link--icon-right"
+              target='_blank'
+              rel='noreferrer noopener'
+            >
+              Télécharger l’application sur l'App store
+            </a>
+          </li>
+        </ul>
       </section>
 
       <!-- Restart button with updated styling -->
