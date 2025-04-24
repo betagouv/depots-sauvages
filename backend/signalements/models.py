@@ -44,7 +44,7 @@ class Signalement(models.Model):
         if self.prejudice_montant_connu:
             return self.prejudice_montant
         else:
-            return "montant à estimer"
+            return 0
 
     class Meta:
         verbose_name = "signalement"

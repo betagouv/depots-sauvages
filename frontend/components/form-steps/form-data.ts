@@ -16,7 +16,6 @@ export const natureTerrainOptions = [
     label: 'Privé',
     value: 'privé',
     id: 'terrain-prive',
-    hint: '',
   },
   {
     label: 'Public',
