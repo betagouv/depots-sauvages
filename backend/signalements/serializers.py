@@ -10,4 +10,4 @@ class SignalementSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Signalement
-        exclude = ["document"]
+        exclude = ["document", "pdf_document"]
