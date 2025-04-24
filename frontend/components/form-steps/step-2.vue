@@ -11,13 +11,55 @@
       />
 
       <DsfrRadioButtonSet
-        v-if="showAuteurIdentifie"
-        name="entreprise-privee"
-        :model-value="store.formData.estUneEntreprise ? 'oui' : 'non'"
+        v-if="showBlocAuteur"
+        :model-value="isEntreprise ? 'oui' : 'non'"
+        @update:model-value="(value) => store.updateBooleanField('estUneEntreprise', value)"
+        name="categorie-auteur"
         legend="S'agit-il d'une entreprise ou d'un particulier ?"
-        :options="yesNoOptions"
+        :options="auteurIdentifieOptions"
         required
       />
+
+      <template v-if="showBlocAuteur">
+        <template v-if="isEntreprise">
+          <DsfrInput
+            v-model="store.formData.nomEntreprise"
+            label="Nom de l'entreprise"
+            name="nom-entreprise"
+            type="text"
+            required
+          />
+          <DsfrInput
+            v-model="store.formData.numeroSiret"
+            label="Numéro de SIRET"
+            name="numero-siret"
+            type="text"
+            inputmode="numeric"
+            pattern="[0-9]{14}"
+            hint="14 chiffres sans espaces"
+            required
+          />
+        </template>
+
+
+        <template v-else>
+          <DsfrInput
+            v-model="store.formData.nomParticulier"
+            label="Nom du particulier"
+            name="nom-particulier"
+            type="text"
+            required
+          />
+          <DsfrInput
+            v-model="store.formData.prenomParticulier"
+            label="Prénom du particulier"
+            name="prenom-particulier"
+            type="text"
+            required
+          />
+        </template>
+      </template>
+
 
       <DsfrRadioButtonSet
         :model-value="store.formData.souhaitePorterPlainte ? 'oui' : 'non'"
@@ -30,7 +72,7 @@
 
       <div class="fr-form-group">
         <legend class="fr-fieldset__legend fr-text--regular">
-          🔍 Des indices pourraient-ils permettre d'identifier l'auteur
+          🔍 Des indices pourraient-ils permettre d'identifier l'auteur ?
         </legend>
         <div class="fr-fieldset__content">
           <div
@@ -47,13 +89,21 @@
             />
             <label class="fr-label" :for="option.id">{{ option.label }}</label>
           </div>
+          <DsfrInput
+            v-if="store.formData.indicesDisponibles.includes('autre')"
+            v-model="store.formData.precisionsIndices"
+            label="Précisez les autres indices"
+            name="precisions-indices"
+            type="text"
+          />
+
         </div>
       </div>
 
       <DsfrInput
         v-model="store.formData.precisionsIndices"
-        label="Avez vous d'autres éléments à ajouter"
-        hint="N'inscrivez AUCUNE donnée personnelle"
+        label="Avez vous d'autres éléments à ajouter ?"
+        hint="Exemple: identité et qualité des personnes rencontrées, nature des vérifications auxquelles il a été procédé, etc."
         :isTextarea="true"
       />
 
@@ -68,22 +118,28 @@
         required
       />
 
+      <DsfrInput
+        v-if="store.formData.arreteMunicipalExiste"
+        type="number"
+        name="forfait-enlevement"
+        label="Indiquez le montant du forfait d'enlèvement (en euros)"
+        v-model="store.formData.montantForfaitEnlevement"
+        min="0"
+        step="0.01"
+        required
+      />
+
+
       <DsfrRadioButtonSet
         :model-value="store.formData.prejudiceMontantConnu ? 'oui' : 'non'"
         @update:model-value="(value) => store.updateBooleanField('prejudiceMontantConnu', value)"
         name="prejudice-montant-connu"
         legend="Connaissez-vous le montant du préjudice ?"
+        hint="Le préjudice peut comprendre les frais engagés par la mairie : prestation d’une entreprise de nettoyage, coût en déchetterie, emploi de personnels et matériels municipaux, etc."
         :options="yesNoOptions"
         required
       />
 
-      <DsfrInput
-        v-if="store.formData.prejudiceMontantConnu"
-        type="text"
-        name="forfait-enlevement"
-        label="Indiquez le montant du forfait d'enlèvement (en euros)"
-        required
-      />
       <template v-if="store.formData.prejudiceMontantConnu">
         <DsfrInput
           v-model="store.formData.prejudiceMontant"
@@ -148,11 +204,14 @@
 import '@/assets/styles/form-steps.css'
 import { useSignalementStore } from '@/stores/signalement'
 import { computed, ref } from 'vue'
-import { indicesDisponiblesOptions, yesNoOptions } from './form-data'
+import { auteurIdentifieOptions, indicesDisponiblesOptions, yesNoOptions } from './form-data'
+import { DsfrInput, DsfrRadioButtonSet } from '@gouvminint/vue-dsfr'
 
 const store = useSignalementStore()
 const isSubmitting = ref(false)
-const showAuteurIdentifie = computed(() => store.formData.auteurIdentifie === true)
+const showBlocAuteur = computed(() => store.formData.auteurIdentifie)
+const isEntreprise = computed(() => store.formData.estUneEntreprise)
+
 
 const handleSubmit = async (event: Event) => {
   event.preventDefault()

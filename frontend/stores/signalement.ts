@@ -30,6 +30,7 @@ export const useSignalementStore = defineStore('signalement', {
       }
     },
 
+
     // API
     async saveFormData() {
       if (this.currentStep === 2) {

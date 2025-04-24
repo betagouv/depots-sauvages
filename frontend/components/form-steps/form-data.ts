@@ -161,8 +161,8 @@ export const indicesDisponiblesOptions = [
     name: 'indices-disponibles',
   },
   {
-    label: 'Documents (factures, colis, courriers)',
-    value: 'documents (factures, colis, courriers)',
+    label: 'Documents (factures, colis, courriers, etc)',
+    value: 'documents (factures, colis, courriers, etc)',
     id: 'indices-documents',
     name: 'indices-disponibles',
   },
@@ -172,6 +172,12 @@ export const indicesDisponiblesOptions = [
     id: 'indices-activites',
     name: 'indices-disponibles',
   },
+  {
+    label: 'Autre',
+    value: 'autre',
+    id: 'indices-autre',
+    name: 'indices-autre',
+  },
 ]
 
 export const yesNoOptions = [
@@ -180,8 +186,8 @@ export const yesNoOptions = [
 ]
 
 export const auteurIdentifieOptions = [
-  {label: 'entreprise', value: 'entreprise'},
-  {label: 'particulier', value: 'particulier'},
+  {label: 'entreprise', value: 'oui'},
+  {label: 'particulier', value: 'non'},
 
 ]
 

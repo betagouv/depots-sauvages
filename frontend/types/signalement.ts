@@ -21,6 +21,8 @@ export interface Signalement {
   estUneEntreprise: boolean
   nomEntreprise: string
   numeroSiret: string
+  nomParticulier: string
+  prenomParticulier: string
   souhaitePorterPlainte: boolean
   indicesDisponibles: string[]
   precisionsIndices: string
@@ -61,6 +63,8 @@ export const createEmptySignalement = (): Signalement => ({
   estUneEntreprise: false,
   nomEntreprise: '',
   numeroSiret: '',
+  nomParticulier: '',
+  prenomParticulier: '',
   souhaitePorterPlainte: false,
   indicesDisponibles: [],
   precisionsIndices: '',

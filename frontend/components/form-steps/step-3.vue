@@ -5,13 +5,8 @@
     <div class="confirmation-content">
       <section class="confirmation-section">
         <p>
-          Dans quelques instants vous recevrez un document pré-rempli qui estime le montant de votre
-          préjudice. Ce document est indispensable pour votre plainte. Vous pourrez terminer de le
-          compléter et l'ajouter à votre procédure.
-        </p>
-        <p>
-          La brigade compétente va également recevoir un résumé des informations que vous avez
-          rempli. Pour signer votre plainte, appelez la brigade afin de convenir d'un rendez-vous.
+          Vous trouverez ci-dessous votre rapport de constatation pré-rempli, à compléter avec les éléments manquants (charte graphique de la mairie, date et signature du rédacteur du document, etc.). Ce rapport est nécessaire pour initier une procédure administrative (voir conseils et aide à la rédaction d’une procédure administrative en bas de page).
+          Si vous souhaitez déposer plainte, pensez à apporter ce rapport de constatation en brigade.
         </p>
       </section>
 
