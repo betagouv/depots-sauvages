@@ -19,4 +19,10 @@ urlpatterns = [
         SignalementDocumentDownloadView.as_view(),
         name="signalement-document",
     ),
+    path(
+        "documents/signalements/<int:pk>/pdf/",
+        SignalementDocumentDownloadView.as_view(),
+        {"format": "pdf"},
+        name="signalement-pdf",
+    ),
 ]

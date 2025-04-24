@@ -32,14 +32,23 @@ class SignalementDocumentDownloadView(View):
         except Signalement.DoesNotExist:
             raise Http404("Signalement not found")
 
-    def get(self, request, pk):
+    def get(self, request, pk, format=None):
         """Handle GET request to download the document."""
         obj = self.get_object(pk)
-        document_file = io.BytesIO(obj.document)
-        filename = f"signalement-{obj.id}-{obj.commune}.odt"
+        # Determine which format to download
+        if format == "pdf" and hasattr(obj, "pdf_document") and obj.pdf_document:
+            document_file = io.BytesIO(obj.pdf_document)
+            content_type = "application/pdf"
+            filename = f"signalement-{obj.id}-{obj.commune}.pdf"
+        else:
+            # Default to ODT
+            document_file = io.BytesIO(obj.document)
+            content_type = "application/vnd.oasis.opendocument.text"
+            filename = f"signalement-{obj.id}-{obj.commune}.odt"
+
         response = FileResponse(
             document_file,
-            content_type="application/vnd.oasis.opendocument.text",
+            content_type=content_type,
             as_attachment=True,
             filename=filename,
         )
