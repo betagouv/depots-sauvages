@@ -1,6 +1,7 @@
 <template>
   <h2 class="step-question">Où se trouve le dépôt sauvage et comment vous contacter ?</h2>
   <div class="form-container">
+    <p>Les champs avec <abbr title="Champ obligatoire">*</abbr> sont obligatoires</p>
     <form @submit.prevent="handleSubmit">
       <DsfrInput
         v-model="store.formData.commune"
@@ -11,6 +12,7 @@
       <DsfrInput
         v-model="store.formData.adresseDepot"
         label="🏠 Quelle est l'adresse du dépôt de déchets ?"
+        hint="(numéro, lieu, type, libellé de voie...)"
         required
       />
 
@@ -25,13 +27,15 @@
         <DsfrInput
           v-model="store.formData.dateConstat"
           type="date"
-          label="Date du constat"
+          label="Date de la constatation"
+          hint="au format JJ/MM/AAAA"
           required
         />
         <DsfrInput
           v-model="store.formData.heureConstat"
           type="time"
-          label="Heure du constat"
+          label="Heure de la constatation"
+          hint=" au format HH:MM"
           required
         />
       </div>
@@ -60,7 +64,7 @@
       <DsfrRadioButtonSet
         v-model="store.formData.natureTerrain"
         name="nature-terrain"
-        legend="🌍 Nature du terrain"
+        legend="🌍 Quelle est la nature du terrain concerné par le dépôt ?"
         :options="natureTerrainOptions"
         required
       />
@@ -68,12 +72,19 @@
       <DsfrSelect
         v-model="store.formData.volumeDepot"
         label="📏 Volume estimé"
+        hint="en m3"
         :options="volumeOptions"
         required
       />
+      <DsfrRadioButtonSet
+        v-model="store.formData.risqueEcoulement"
+        name="risque-ecoulement"
+        legend="Existe-t-il un risque d'écoulement ?"
+        :options="yesNoOptions"
+      />
 
       <div class="fr-form-group">
-        <legend class="fr-fieldset__legend fr-text--regular">Types de dépôts</legend>
+        <legend class="fr-fieldset__legend fr-text--regular">Type de dépôts</legend>
         <div class="fr-fieldset__content">
           <div v-for="option in typesDepotOptions" :key="option.value" class="fr-checkbox-group">
             <input
@@ -91,8 +102,8 @@
 
       <DsfrInput
         v-model="store.formData.precisionsDepot"
-        label="✏️ Précisions sur les déchets"
-        hint="N'inscrivez AUCUNE DONNÉE personnelle"
+        label="✏️ Autres informations ?"
+        hint="Apportez tout autre élément (présence d'habitation, présence d'élevage, voie ferrée...), identité du propriétaire du terrain (si terrain privé), zone particulière (zone agricole, zone forestière, zone naturelle, zone humide, zone Natura 2000, zone Ramsar, etc.), cours d'eau à proximité ou un captage d'eau, dernière date à laquelle le dépôt n'étais pas présent (si vous en avez connaissance)..."
         :isTextarea="true"
       />
 

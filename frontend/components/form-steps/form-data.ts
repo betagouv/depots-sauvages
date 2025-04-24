@@ -13,16 +13,22 @@ export const volumeOptions = [
 
 export const natureTerrainOptions = [
   {
+    label: 'Public',
+    value: 'public',
+    id: 'terrain-public',
+  },
+  {
+    label: 'Forêt domaniale',
+    value: 'forêt-domaniale',
+    id: 'terrain-foret-domaniale',
+  },
+  {
     label: 'Privé',
     value: 'privé',
     id: 'terrain-prive',
     hint: '',
   },
-  {
-    label: 'Public',
-    value: 'public',
-    id: 'terrain-public',
-  },
+
   {
     label: 'Je ne sais pas',
     value: '',
@@ -32,10 +38,10 @@ export const natureTerrainOptions = [
 
 export const typesDepotOptions = [
   {
-    label: 'Tuiles',
-    value: 'tuiles',
-    id: 'depot-tuiles',
-    name: 'types-depot',
+    label: 'Amiante',
+    value: 'amiante',
+    id: 'dechets-amiante',
+    name: 'types-dechets',
   },
   {
     label: 'Carrelage',
@@ -44,45 +50,9 @@ export const typesDepotOptions = [
     name: 'types-depot',
   },
   {
-    label: 'Encombrants',
-    value: 'encombrants',
-    id: 'dechets-encombrants',
-    name: 'types-dechets',
-  },
-  {
-    label: 'Déchets verts',
-    value: 'déchets verts',
-    id: 'dechets-verts',
-    name: 'types-dechets',
-  },
-  {
-    label: 'Gravats',
-    value: 'gravats',
-    id: 'dechets-gravats',
-    name: 'types-dechets',
-  },
-  {
-    label: 'Pneus',
-    value: 'pneus',
-    id: 'dechets-pneus',
-    name: 'types-dechets',
-  },
-  {
-    label: 'Électroménager',
-    value: 'électroménager',
-    id: 'dechets-electromenager',
-    name: 'types-dechets',
-  },
-  {
-    label: 'Ordures ménagères',
-    value: 'ordures ménagères',
-    id: 'dechets-ordures',
-    name: 'types-dechets',
-  },
-  {
-    label: 'Amiante',
-    value: 'amiante',
-    id: 'dechets-amiante',
+    label: 'Déchets automobiles',
+    value: 'déchets automobiles',
+    id: 'dechets-automobile',
     name: 'types-dechets',
   },
   {
@@ -92,9 +62,39 @@ export const typesDepotOptions = [
     name: 'types-dechets',
   },
   {
+    label: 'Déchets éléctriques et électroniques',
+    value: 'déchets éléctriques et électroniques',
+    id: 'dechets-electriques-electroniques',
+    name: 'types-dechets',
+  },
+  {
     label: 'Déchets médicaux',
     value: 'déchets médicaux',
     id: 'dechets-medicaux',
+    name: 'types-dechets',
+  },
+  {
+    label: 'Déchets verts',
+    value: 'déchets verts',
+    id: 'dechets-verts',
+    name: 'types-dechets',
+  },
+  {
+    label: 'Électroménager',
+    value: 'électroménager',
+    id: 'dechets-electromenager',
+    name: 'types-dechets',
+  },
+  {
+    label: 'Encombrants',
+    value: 'encombrants',
+    id: 'dechets-encombrants',
+    name: 'types-dechets',
+  },
+  {
+    label: 'Gravats',
+    value: 'gravats',
+    id: 'dechets-gravats',
     name: 'types-dechets',
   },
   {
@@ -104,9 +104,21 @@ export const typesDepotOptions = [
     name: 'types-dechets',
   },
   {
+    label: 'Ordures ménagères',
+    value: 'ordures ménagères',
+    id: 'dechets-ordures',
+    name: 'types-dechets',
+  },
+  {
     label: 'Peintures et essences',
     value: 'peintures et essences',
     id: 'dechets-peintures',
+    name: 'types-dechets',
+  },
+  {
+    label: 'Pneus',
+    value: 'pneus',
+    id: 'dechets-pneus',
     name: 'types-dechets',
   },
   {
@@ -114,6 +126,12 @@ export const typesDepotOptions = [
     value: 'textiles',
     id: 'dechets-textiles',
     name: 'types-dechets',
+  },
+  {
+    label: 'Tuiles',
+    value: 'tuiles',
+    id: 'depot-tuiles',
+    name: 'types-depot',
   },
   {
     label: 'Autre',
@@ -161,12 +179,18 @@ export const yesNoOptions = [
   { label: 'Non', value: 'non' },
 ]
 
+export const auteurIdentifieOptions = [
+  {label: 'entreprise', value: 'entreprise'},
+  {label: 'particulier', value: 'particulier'},
+
+]
+
 export const auteurOptions = [
   { text: 'Sélectionner', value: '', disabled: true },
   { text: 'Le maire', value: 'le maire' },
-  { text: 'La gendarmerie', value: 'la gendarmerie' },
-  { text: 'Un agent de police municipale', value: 'un agent de police municipale' },
   { text: "Un agent de l'ONF", value: "un agent de l'ONF" },
-  { text: "Un agent de l'OFB", value: "un agent de l'OFB" },
+  { text: 'La gendarmerie', value: 'la gendarmerie' },
+  { text: 'Un agent assermenté (policier municipal, garde-champêtre, etc)', value: 'un agent assermenté' },
+  { text: "Un autre agent de la mairie", value: "un autre agent de la mairie" },
   { text: 'Autre', value: 'autre' },
 ]

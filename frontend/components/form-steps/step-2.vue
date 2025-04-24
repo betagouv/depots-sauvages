@@ -11,6 +11,15 @@
       />
 
       <DsfrRadioButtonSet
+        v-if="showAuteurIdentifie"
+        name="entreprise-privee"
+        :model-value="store.formData.estUneEntreprise ? 'oui' : 'non'"
+        legend="S'agit-il d'une entreprise ou d'un particulier ?"
+        :options="yesNoOptions"
+        required
+      />
+
+      <DsfrRadioButtonSet
         :model-value="store.formData.souhaitePorterPlainte ? 'oui' : 'non'"
         @update:model-value="(value) => store.updateBooleanField('souhaitePorterPlainte', value)"
         name="souhaite-porter-plainte"
@@ -54,7 +63,7 @@
         :model-value="store.formData.arreteMunicipalExiste ? 'oui' : 'non'"
         @update:model-value="(value) => store.updateBooleanField('arreteMunicipalExiste', value)"
         name="arrete-municipal"
-        legend="Disposez-vous d'un arrêté ou d'une délibération municipale encadrant ce type d'infraction et fixant le montant d'un forfait d'enlévement ?"
+        legend="Disposez-vous d'un arrêté ou d'une délibération municipale encadrant ce type d'infraction et fixant le montant d'un forfait d'enlèvement ?"
         :options="yesNoOptions"
         required
       />
@@ -68,6 +77,13 @@
         required
       />
 
+      <DsfrInput
+        v-if="store.formData.prejudiceMontantConnu"
+        type="text"
+        name="forfait-enlevement"
+        label="Indiquez le montant du forfait d'enlèvement (en euros)"
+        required
+      />
       <template v-if="store.formData.prejudiceMontantConnu">
         <DsfrInput
           v-model="store.formData.prejudiceMontant"
@@ -131,11 +147,12 @@
 <script setup lang="ts">
 import '@/assets/styles/form-steps.css'
 import { useSignalementStore } from '@/stores/signalement'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { indicesDisponiblesOptions, yesNoOptions } from './form-data'
 
 const store = useSignalementStore()
 const isSubmitting = ref(false)
+const showAuteurIdentifie = computed(() => store.formData.auteurIdentifie === true)
 
 const handleSubmit = async (event: Event) => {
   event.preventDefault()

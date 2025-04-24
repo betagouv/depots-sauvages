@@ -11,12 +11,16 @@ export interface Signalement {
   auteurSignalement: string
   natureTerrain: string
   volumeDepot: string
+  risqueEcoulement: boolean
   typesDepot: string[]
   precisionsDepot: string
   photoDispo: boolean
 
   // Step 2
   auteurIdentifie: boolean
+  estUneEntreprise: boolean
+  nomEntreprise: string
+  numeroSiret: string
   souhaitePorterPlainte: boolean
   indicesDisponibles: string[]
   precisionsIndices: string
@@ -47,12 +51,16 @@ export const createEmptySignalement = (): Signalement => ({
   auteurSignalement: '',
   natureTerrain: '',
   volumeDepot: '',
+  risqueEcoulement: false,
   typesDepot: [],
   precisionsDepot: '',
   photoDispo: false,
 
   // Step 2
   auteurIdentifie: false,
+  estUneEntreprise: false,
+  nomEntreprise: '',
+  numeroSiret: '',
   souhaitePorterPlainte: false,
   indicesDisponibles: [],
   precisionsIndices: '',
