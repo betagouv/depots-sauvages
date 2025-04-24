@@ -29,6 +29,7 @@ class Signalement(models.Model):
     prejudice_kilometrage = models.IntegerField("kilométrage", null=True, blank=True)
     prejudice_autres_couts = models.IntegerField("autres coûts", null=True, blank=True)
     document = models.BinaryField("Document généré", null=True, blank=True)
+    pdf_document = models.BinaryField(null=True, blank=True)
     # Management fields
     generate_doc = models.BooleanField(
         "Générer le document",
