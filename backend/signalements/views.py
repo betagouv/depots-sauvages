@@ -1,6 +1,7 @@
 import io
 
 from django.http import FileResponse, Http404
+from django.shortcuts import get_object_or_404
 from django.views.generic import View
 from rest_framework import viewsets
 
@@ -22,34 +23,39 @@ class SignalementDocumentDownloadView(View):
     Custom view to download the generated document for a signalement.
     """
 
-    def get_object(self, pk):
-        """Get the signalement object."""
-        try:
-            obj = Signalement.objects.get(pk=pk)
-            if not obj.document:
-                raise Http404("Document not found or not yet generated")
-            return obj
-        except Signalement.DoesNotExist:
-            raise Http404("Signalement not found")
+    def prepare_pdf_response(self, signalement):
+        if not signalement.pdf_document:
+            raise Http404("PDF document not yet generated")
+        return {
+            "file": io.BytesIO(signalement.pdf_document),
+            "content_type": "application/pdf",
+            "filename": f"signalement-{signalement.id}-{signalement.commune}.pdf",
+        }
+
+    def prepare_odt_response(self, signalement):
+        if not signalement.document:
+            raise Http404("ODT document not yet generated")
+        return {
+            "file": io.BytesIO(signalement.document),
+            "content_type": "application/vnd.oasis.opendocument.text",
+            "filename": f"signalement-{signalement.id}-{signalement.commune}.odt",
+        }
+
+    def get_document_response(self, signalement, format):
+        if format == "pdf":
+            response_data = self.prepare_pdf_response(signalement)
+        else:
+            response_data = self.prepare_odt_response(signalement)
+        return FileResponse(
+            response_data["file"],
+            content_type=response_data["content_type"],
+            as_attachment=True,
+            filename=response_data["filename"],
+        )
 
     def get(self, request, pk, format=None):
-        """Handle GET request to download the document."""
-        obj = self.get_object(pk)
-        # Determine which format to download
-        if format == "pdf" and hasattr(obj, "pdf_document") and obj.pdf_document:
-            document_file = io.BytesIO(obj.pdf_document)
-            content_type = "application/pdf"
-            filename = f"signalement-{obj.id}-{obj.commune}.pdf"
-        else:
-            # Default to ODT
-            document_file = io.BytesIO(obj.document)
-            content_type = "application/vnd.oasis.opendocument.text"
-            filename = f"signalement-{obj.id}-{obj.commune}.odt"
-
-        response = FileResponse(
-            document_file,
-            content_type=content_type,
-            as_attachment=True,
-            filename=filename,
-        )
-        return response
+        """
+        Handle GET request to download the document.
+        """
+        signalement = get_object_or_404(Signalement, pk=pk)
+        return self.get_document_response(signalement, format)
