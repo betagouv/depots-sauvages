@@ -25,7 +25,7 @@ def generate_document(sender, instance, created, **kwargs):
             context.pop("generate_doc", None)
             context.pop("document", None)
             context.pop("document_generated_at", None)
-            context["montant_total_prejudice"] = instance.get_montant_prejudice()
+            context["prejudice_montant_calcule"] = instance.get_prejudice_montant_calcule()
             # Format date and time fields
             if context["date_constat"]:
                 context["date_constat"] = context["date_constat"].strftime("%d/%m/%Y")
