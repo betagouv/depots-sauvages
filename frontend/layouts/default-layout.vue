@@ -13,7 +13,7 @@
         >
           Partagez-vous votre avis !
         </a>
-        Cette version démo est en test et disponible pendant 10 jours. Vos retours sont précieux pour faire évoluer l’outil.
+        Cette version démo est en test et disponible jusqu'au 7 mai. Vos retours sont précieux pour faire évoluer l’outil.
       </DsfrNotice>
       <slot />
     </div>
