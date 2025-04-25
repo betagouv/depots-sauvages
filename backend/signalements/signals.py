@@ -5,7 +5,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.forms.models import model_to_dict
 from django.utils import timezone
-from python_odt_template.libreoffice import convert_to_pdf
+from python_odt_template.libreoffice import libreoffice
 
 from backend.doc_maker.odt import ODTProcessor
 from backend.signalements.models import Signalement
@@ -44,7 +44,7 @@ def generate_document(sender, instance, created, **kwargs):
             )
             # Convert to PDF using the library's function
             output_dir = Path(output_odt_path).parent
-            convert_to_pdf(output_odt_path, output_dir)
+            libreoffice.convert(output_odt_path, str(output_dir))
             output_pdf_path = output_dir / f"signalement_{instance.id}.pdf"
             # Store ODT in DB
             with open(output_odt_path, "rb") as f:
