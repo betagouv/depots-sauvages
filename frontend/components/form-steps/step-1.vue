@@ -57,7 +57,7 @@
           required
         />
 
-        <DsfrFileUpload
+<!--        <DsfrFileUpload
           v-if="showPhotoUpload"
           v-model="store.formData.photos"
           label="Ajouter vos photos"
@@ -65,7 +65,7 @@
           accept=".jpg,.jpeg,.png,.pdf"
           multiple
           @change="handleFileChange"
-        />
+        />-->
       </div>
 
       <DsfrRadioButtonSet

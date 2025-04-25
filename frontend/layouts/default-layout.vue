@@ -6,14 +6,14 @@
     />
     <div class="fr-container" role="main" id="content">
       <DsfrNotice>
-        Votre avis compte
         <a
           href="#"
           rel="noopener noreferrer"
           target="_blank"
         >
-          lien formulaire de feedback
+          Partagez-vous votre avis !
         </a>
+        Cette version démo est en test et disponible pendant 10 jours. Vos retours sont précieux pour faire évoluer l’outil.
       </DsfrNotice>
       <slot />
     </div>

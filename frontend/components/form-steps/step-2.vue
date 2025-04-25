@@ -1,5 +1,6 @@
 <template>
   <div class="form-container">
+    <p>Les champs avec <abbr title="Champ obligatoire">*</abbr> sont obligatoires</p>
     <form @submit.prevent="handleSubmit">
       <DsfrRadioButtonSet
         :model-value="store.formData.auteurIdentifie ? 'oui' : 'non'"
