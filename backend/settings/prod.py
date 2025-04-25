@@ -10,6 +10,14 @@ SECRET_KEY = env("SECRET_KEY")
 
 DEBUG = env.bool("DEBUG", default=False)
 
+LOGGING_LEVEL = env("LOGGING_LEVEL", default="INFO")
+
+LOGGING["loggers"]["backend.signalements"] = {
+    "handlers": ["console"],
+    "level": LOGGING_LEVEL,
+    "propagate": True,
+}
+
 # Security settings for production
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 
