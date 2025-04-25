@@ -10,7 +10,7 @@
       />
 
       <DsfrInput
-        v-model="store.formData.adresseDepot"
+        v-model="store.formData.localisationDepot"
         label="🏠 Quelle est l'adresse du dépôt de déchets ?"
         hint="(numéro, lieu, type, libellé de voie...)"
         required
@@ -131,6 +131,7 @@
 <script setup lang="ts">
 import '@/assets/styles/form-steps.css'
 import { useSignalementStore } from '@/stores/signalement'
+import { DsfrInput } from '@gouvminint/vue-dsfr'
 import { computed, ref } from 'vue'
 import {
   auteurOptions,
@@ -139,7 +140,6 @@ import {
   volumeOptions,
   yesNoOptions,
 } from './form-data'
-import { DsfrInput } from '@gouvminint/vue-dsfr'
 
 const store = useSignalementStore()
 const isSubmitting = ref(false) // Make this reactive
