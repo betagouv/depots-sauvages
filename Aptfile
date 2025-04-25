@@ -2,3 +2,9 @@ libreoffice-core
 libreoffice-common
 libreoffice-writer
 fonts-liberation
+libxinerama1
+libdbus-glib-1-2
+libcairo2
+libcups2
+libglu1-mesa
+libsm6
