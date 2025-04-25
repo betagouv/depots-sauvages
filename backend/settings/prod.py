@@ -10,6 +10,14 @@ SECRET_KEY = env("SECRET_KEY")
 
 DEBUG = env.bool("DEBUG", default=False)
 
+LOGGING_LEVEL = env("LOGGING_LEVEL", default="INFO")
+
+LOGGING["loggers"]["backend.signalements"] = {
+    "handlers": ["console"],
+    "level": LOGGING_LEVEL,
+    "propagate": True,
+}
+
 # Security settings for production
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 
@@ -26,3 +34,8 @@ CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
 CSRF_COOKIE_SAMESITE = "Lax"
 CSRF_COOKIE_HTTPONLY = False  # Needed to access the token in JavaScript
 SESSION_COOKIE_SAMESITE = "Lax"
+
+# ConvertAPI Settings
+CONVERTAPI_SECRET = env.str("CONVERTAPI_SECRET", default="")
+CONVERTAPI_TIMEOUT = env.int("CONVERTAPI_TIMEOUT", default=10)  # Timeout in seconds
+CONVERTAPI_BASE_URL = env.str("CONVERTAPI_BASE_URL", default="https://v2.convertapi.com")

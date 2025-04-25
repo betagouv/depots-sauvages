@@ -16,6 +16,7 @@ django-cors-headers = "*"
 django-downloadview = "*"
 jinja2 = "*"
 ipdb = "*"
+convertapi = "*"
 
 [dev-packages]
 black = "*"

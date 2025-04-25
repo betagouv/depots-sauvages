@@ -31,12 +31,6 @@ export const API_URLS = {
   signalements: `${API_URL}/signalements/`,
 }
 
-// Document URL builder
-export const getDocumentUrl = (id: number | null): string => {
-  if (!id) return '#'
-  return `${BACKEND_URL}/documents/signalements/${id}/`
-}
-
 // API functions
 async function makeRequest(url: string, method: 'GET' | 'POST' | 'PUT', data: any) {
   const options: RequestInit = {

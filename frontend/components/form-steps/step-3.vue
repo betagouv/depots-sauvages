@@ -5,10 +5,18 @@
     <div class="confirmation-content">
       <section class="confirmation-section">
         <p>
-          Vous trouverez ci-dessous votre rapport de constatation pré-rempli, à compléter avec les éléments manquants (charte graphique de la mairie, date et signature du rédacteur du document, etc.).
+          Vous trouverez ci-dessous votre rapport de constatation pré-rempli, à compléter avec les
+          éléments manquants (charte graphique de la mairie, date et signature du rédacteur du
+          document, etc.).
         </p>
-        <p>Si vous souhaitez déposer plainte, pensez à apporter ce rapport de constatation en brigade.</p>
-        <p>Ce rapport est nécessaire pour initier une procédure administrative (voir conseils et aide à la rédaction d’une procédure administrative en bas de page).</p>
+        <p>
+          Si vous souhaitez déposer plainte, pensez à apporter ce rapport de constatation en
+          brigade.
+        </p>
+        <p>
+          Ce rapport est nécessaire pour initier une procédure administrative (voir conseils et aide
+          à la rédaction d'une procédure administrative en bas de page).
+        </p>
       </section>
 
       <section class="confirmation-section document-section">
@@ -18,25 +26,15 @@
         </div>
         <p>Vous pouvez télécharger votre rapport de constatation :</p>
 
-        <button
-          class="fr-btn action-button download-button"
-          @click="downloadDocument"
-          :disabled="isDownloading"
-        >
+        <button class="fr-btn action-button download-button" @click="downloadDocument('pdf')">
           <span class="fr-icon-download-line" aria-hidden="true"></span>
-          {{ isDownloading ? 'Téléchargement...' : 'Télécharger le document au format PDF' }}
+          Télécharger le document au format PDF
         </button>
-        <button
-          class="fr-btn action-button download-button"
-          @click="downloadDocument"
-          :disabled="isDownloading"
-        >
+        <button class="fr-btn action-button download-button" @click="downloadDocument('odt')">
           <span class="fr-icon-download-line" aria-hidden="true"></span>
-          {{ isDownloading ? 'Téléchargement...' : 'Télécharger le document au format ODT' }}
+          Télécharger le document au format ODT
         </button>
-
       </section>
-
 
       <section class="confirmation-section">
         <h3>📑 Procédure administrative</h3>
@@ -55,27 +53,26 @@
 
       <section class="confirmation-section">
         <h3>🙋🏻‍♂️ Conseils pratiques</h3>
-        <p>
-          Retrouvez des conseils pratiques sur l'application à destination des élus, Gend’élus:
-        </p>
+        <p>Retrouvez des conseils pratiques sur l'application à destination des élus, Gend'élus:</p>
         <ul>
           <li>
             <a
-            href="https://play.google.com/store/apps/details?id=com.gendelus&hl=fr&pli=1"
-            class="fr-link fr-icon-external-link-line fr-link--icon-right"
-            target='_blank'
-            rel='noreferrer noopener'>
-              Télécharger l’application sur le Play Store
+              href="https://play.google.com/store/apps/details?id=com.gendelus&hl=fr&pli=1"
+              class="fr-link fr-icon-external-link-line fr-link--icon-right"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              Télécharger l'application sur le Play Store
             </a>
-            </li>
+          </li>
           <li>
             <a
               href="https://apps.apple.com/fr/app/gend%C3%A9lus/id6444316373"
               class="fr-link fr-icon-external-link-line fr-link--icon-right"
-              target='_blank'
-              rel='noreferrer noopener'
+              target="_blank"
+              rel="noreferrer noopener"
             >
-              Télécharger l’application sur l'App store
+              Télécharger l'application sur l'App store
             </a>
           </li>
         </ul>
@@ -93,23 +90,22 @@
 </template>
 
 <script setup lang="ts">
-import { getDocumentUrl } from '@/services/api'
+import { getDocumentUrl } from '@/services/urls'
 import { useSignalementStore } from '@/stores/signalement'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 
 const store = useSignalementStore()
 const emit = defineEmits(['restart'])
-const isDownloading = ref(false)
 
-// Create a computed property for the document URL
+// Create computed properties for both formats
 const documentUrl = computed(() => getDocumentUrl(store.currentId))
+const pdfUrl = computed(() => getDocumentUrl(store.currentId, 'pdf'))
 
-// Function to handle document download
-const downloadDocument = () => {
-  window.open(documentUrl.value, '_blank')
+// Download function
+const downloadDocument = (format: 'pdf' | 'odt') => {
+  window.open(getDocumentUrl(store.currentId, format), '_blank')
 }
 
-// Function to handle restart
 const handleRestart = () => {
   emit('restart')
 }
