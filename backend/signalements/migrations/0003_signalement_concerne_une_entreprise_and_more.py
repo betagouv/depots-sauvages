@@ -37,4 +37,11 @@ class Migration(migrations.Migration):
                 blank=True, max_length=255, verbose_name="prénom du particulier"
             ),
         ),
+        migrations.AddField(
+            model_name="signalement",
+            name="montant_forfait_enlevement",
+            field=models.IntegerField(
+                null=True, blank=True, verbose_name="montant du forfait d'enlèvement"
+            ),
+        ),
     ]
