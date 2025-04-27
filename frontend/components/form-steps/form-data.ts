@@ -170,7 +170,7 @@ export const indicesDisponiblesOptions = [
     value: 'activités liées aux faits constatés',
     id: 'indices-activites',
     name: 'indices-disponibles',
-  }
+  },
 ]
 
 export const yesNoOptions = [
@@ -178,10 +178,9 @@ export const yesNoOptions = [
   { label: 'Non', value: 'non' },
 ]
 
-export const auteurIdentifieOptions = [
-  {label: 'ENTREPRISE', value: 'oui'},
-  {label: 'PARTICULIER', value: 'non'},
-
+export const statutAuteurOptions = [
+  { label: 'ENTREPRISE', value: 'entreprise' },
+  { label: 'PARTICULIER', value: 'particulier' },
 ]
 
 export const auteurOptions = [
@@ -189,7 +188,10 @@ export const auteurOptions = [
   { text: 'Le maire', value: 'le maire' },
   { text: "Un agent de l'ONF", value: "un agent de l'ONF" },
   { text: 'La gendarmerie', value: 'la gendarmerie' },
-  { text: 'Un agent assermenté (policier municipal, garde-champêtre, etc.)', value: 'un agent assermenté' },
-  { text: "Un autre agent de la mairie", value: "un autre agent de la mairie" },
+  {
+    text: 'Un agent assermenté (policier municipal, garde-champêtre, etc.)',
+    value: 'un agent assermenté',
+  },
+  { text: 'Un autre agent de la mairie', value: 'un autre agent de la mairie' },
   { text: 'Autre', value: 'autre' },
 ]

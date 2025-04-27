@@ -13,16 +13,15 @@
 
       <DsfrRadioButtonSet
         v-if="showBlocAuteur"
-        :model-value="isEntreprise ? 'oui' : 'non'"
-        @update:model-value="(value) => store.updateBooleanField('concerneUneEntreprise', value)"
-        name="categorie-auteur"
+        v-model="store.formData.statutAuteur"
+        name="statut-auteur"
         legend="S'agit-il d'une entreprise ou d'un particulier ?"
-        :options="auteurIdentifieOptions"
+        :options="statutAuteurOptions"
         required
       />
 
       <template v-if="showBlocAuteur">
-        <template v-if="isEntreprise">
+        <template v-if="store.formData.statutAuteur === 'entreprise'">
           <DsfrInput
             v-model="store.formData.nomEntreprise"
             label="Nom de l'entreprise"
@@ -41,7 +40,7 @@
           />
         </template>
 
-        <template v-else>
+        <template v-if="store.formData.statutAuteur === 'particulier'">
           <DsfrInput
             v-model="store.formData.prenomParticulier"
             label="Prénom du particulier"
@@ -122,7 +121,7 @@
         :model-value="store.formData.prejudiceMontantConnu ? 'oui' : 'non'"
         @update:model-value="(value) => store.updateBooleanField('prejudiceMontantConnu', value)"
         name="prejudice-montant-connu"
-        hint="Le préjudice peut comprendre les frais engagés par la mairie : prestation d’une entreprise de nettoyage, coût en déchetterie, emploi de personnels et matériels municipaux, etc."
+        hint="Le préjudice peut comprendre les frais engagés par la mairie : prestation d'une entreprise de nettoyage, coût en déchetterie, emploi de personnels et matériels municipaux, etc."
         legend="Connaissez-vous le montant du préjudice ?"
         :options="yesNoOptions"
         required
@@ -194,12 +193,11 @@ import '@/assets/styles/form-steps.css'
 import { useSignalementStore } from '@/stores/signalement'
 import { DsfrInput, DsfrRadioButtonSet } from '@gouvminint/vue-dsfr'
 import { computed, ref } from 'vue'
-import { auteurIdentifieOptions, indicesDisponiblesOptions, yesNoOptions } from './form-data'
+import { indicesDisponiblesOptions, statutAuteurOptions, yesNoOptions } from './form-data'
 
 const store = useSignalementStore()
 const isSubmitting = ref(false)
 const showBlocAuteur = computed(() => store.formData.auteurIdentifie)
-const isEntreprise = computed(() => store.formData.concerneUneEntreprise)
 
 const handleSubmit = async (event: Event) => {
   event.preventDefault()

@@ -40,8 +40,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="signalement",
             name="montant_forfait_enlevement",
-            field=models.IntegerField(
-                null=True, blank=True, verbose_name="montant du forfait d'enlèvement"
-            ),
+            field=models.IntegerField(null=True, blank=True, verbose_name="forfait enlèvement"),
         ),
     ]

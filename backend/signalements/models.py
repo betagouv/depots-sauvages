@@ -23,7 +23,7 @@ class Signalement(PrejudiceMixin, models.Model):
     indices_disponibles = models.JSONField("indices", default=list, blank=True, null=True)
     precisions_indices = models.TextField("précisions indices", blank=True)
     arrete_municipal_existe = models.BooleanField("arrêté", default=False)
-    montant_forfait_enlevement = models.IntegerField("forfait enlevement", null=True, blank=True)
+    montant_forfait_enlevement = models.IntegerField("forfait enlèvement", null=True, blank=True)
     prejudice_montant_connu = models.BooleanField("montant connu", default=False)
     prejudice_montant = models.IntegerField("montant préjudice", null=True, blank=True)
     prejudice_nombre_personnes = models.IntegerField("personnes", null=True, blank=True)
@@ -35,7 +35,7 @@ class Signalement(PrejudiceMixin, models.Model):
     nom_particulier = models.CharField("nom du particulier", max_length=255, blank=True)
     nom_entreprise = models.CharField("nom de l'entreprise", max_length=255, blank=True)
     numero_siret = models.CharField("numéro SIRET", max_length=255, blank=True)
-    concerne_une_entreprise = models.BooleanField("concerne une entreprise", default=False)
+    statut_auteur = models.CharField("statut de l'auteur", max_length=255, null=True, blank=True)
     document = models.BinaryField("Document généré", null=True, blank=True)
     pdf_document = models.BinaryField("Document PDF", null=True, blank=True)
     # Management fields
