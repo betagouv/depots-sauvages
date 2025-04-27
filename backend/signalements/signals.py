@@ -1,7 +1,7 @@
 import logging
+import threading
 import time
 
-from asgiref.sync import sync_to_async
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
@@ -30,29 +30,25 @@ def save_documents(instance, odt_data, pdf_data):
         post_save.connect(generate_document, sender=Signalement)
 
 
-async def generate_document_async(instance):
+def generate_document_background(instance):
     """
-    Asynchronously generate document
+    Generate document in background thread
     """
     start_time = time.time()
-    logger.info(f"Starting async document generation for signalement {instance.id}")
+    logger.info(f"Starting document generation for signalement {instance.id}")
     try:
         context = odt_utils.prepare_context(instance)
-        logger.debug(f"Context prepared")
-        output_odt_path = await sync_to_async(odt_utils.generate_odt_document)(instance, context)
-        logger.debug(f"ODT document generated")
-        odt_data = await sync_to_async(odt_utils.read_odt_document)(output_odt_path)
-        logger.debug(f"ODT document read")
-        pdf_data = await sync_to_async(pdf_utils.convert_odt_to_pdf)(
-            output_odt_path, f"signalement_{instance.id}.pdf"
-        )
-        logger.debug(f"PDF document generated")
-        await sync_to_async(save_documents)(instance, odt_data, pdf_data)
+        logger.debug("Context prepared for document generation")
+        output_odt_path = odt_utils.generate_odt_document(instance, context)
+        logger.debug("ODT document generated")
+        odt_data = odt_utils.read_odt_document(output_odt_path)
+        logger.debug("ODT document read")
+        pdf_data = pdf_utils.convert_odt_to_pdf(output_odt_path, f"signalement_{instance.id}.pdf")
+        logger.debug("PDF document generated")
+        save_documents(instance, odt_data, pdf_data)
         end_time = time.time()
         duration = end_time - start_time
-        logger.debug(
-            f"Document generation completed for signalement {instance.id} in {duration:.2f} seconds"
-        )
+        logger.info(f"Generation completed for signalement {instance.id} in {duration:.2f} seconds")
     except Exception as e:
         logger.error(f"Error generating document for signalement {instance.id}: {e}", exc_info=True)
 
@@ -64,7 +60,5 @@ def generate_document(sender, instance, created, **kwargs):
     """
     if not instance.generate_doc:
         return
-    logger.debug(f"Post-save on signalement {instance.id}, starting async generation")
-    import asyncio
-
-    asyncio.run(generate_document_async(instance))
+    logger.info(f"Post-save signal for signalement {instance.id}, starting background generation")
+    threading.Thread(target=generate_document_background, args=(instance,)).start()
