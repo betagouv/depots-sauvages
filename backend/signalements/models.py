@@ -30,6 +30,11 @@ class Signalement(PrejudiceMixin, models.Model):
     prejudice_nombre_vehicules = models.IntegerField("véhicules", null=True, blank=True)
     prejudice_kilometrage = models.IntegerField("kilométrage", null=True, blank=True)
     prejudice_autres_couts = models.IntegerField("autres coûts", null=True, blank=True)
+    prenom_particulier = models.CharField("prénom du particulier", max_length=255, blank=True)
+    nom_particulier = models.CharField("nom du particulier", max_length=255, blank=True)
+    nom_entreprise = models.CharField("nom de l'entreprise", max_length=255, blank=True)
+    numero_siret = models.CharField("numéro SIRET", max_length=255, blank=True)
+    concerne_une_entreprise = models.BooleanField("concerne une entreprise", default=False)
     document = models.BinaryField("Document généré", null=True, blank=True)
     pdf_document = models.BinaryField("Document PDF", null=True, blank=True)
     # Management fields

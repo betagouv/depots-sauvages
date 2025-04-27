@@ -13,6 +13,8 @@ class SignalementAdmin(admin.ModelAdmin):
         "volume_depot",
         "photo_dispo",
         "auteur_identifie",
+        "concerne_une_entreprise",
+        "document_generated_at",
     ]
 
     list_filter = [
@@ -21,6 +23,7 @@ class SignalementAdmin(admin.ModelAdmin):
         "nature_terrain",
         "photo_dispo",
         "auteur_identifie",
+        "concerne_une_entreprise",
         "souhaite_porter_plainte",
         "arrete_municipal_existe",
         "prejudice_montant_connu",
@@ -33,4 +36,8 @@ class SignalementAdmin(admin.ModelAdmin):
         "auteur_signalement",
         "precisions_depot",
         "precisions_indices",
+        "nom_entreprise",
+        "nom_particulier",
+        "prenom_particulier",
+        "numero_siret",
     ]
