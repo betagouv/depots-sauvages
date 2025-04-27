@@ -13,7 +13,7 @@ class SignalementAdmin(admin.ModelAdmin):
         "volume_depot",
         "photo_dispo",
         "auteur_identifie",
-        "concerne_une_entreprise",
+        "statut_auteur",
         "document_generated_at",
     ]
 
@@ -23,7 +23,7 @@ class SignalementAdmin(admin.ModelAdmin):
         "nature_terrain",
         "photo_dispo",
         "auteur_identifie",
-        "concerne_une_entreprise",
+        "statut_auteur",
         "souhaite_porter_plainte",
         "arrete_municipal_existe",
         "prejudice_montant_connu",
