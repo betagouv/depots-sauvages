@@ -57,7 +57,7 @@
           required
         />
 
-<!--        <DsfrFileUpload
+        <!--        <DsfrFileUpload
           v-if="showPhotoUpload"
           v-model="store.formData.photos"
           label="Ajouter vos photos"
@@ -84,7 +84,7 @@
         required
       />
       <DsfrRadioButtonSet
-        v-model="store.formData.risqueEcoulement"
+        @update:model-value="(value) => store.updateBooleanField('risqueEcoulement', value)"
         name="risque-ecoulement"
         legend="Existe-t-il un risque d'écoulement ?"
         :options="yesNoOptions"
