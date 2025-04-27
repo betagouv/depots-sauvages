@@ -67,7 +67,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "prejudice_montant",
-                    models.IntegerField(blank=True, null=True, verbose_name="montant"),
+                    models.IntegerField(blank=True, null=True, verbose_name="montant préjudice"),
                 ),
                 (
                     "prejudice_nombre_personnes",
