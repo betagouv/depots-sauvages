@@ -14,7 +14,7 @@
       <DsfrRadioButtonSet
         v-if="showBlocAuteur"
         :model-value="isEntreprise ? 'oui' : 'non'"
-        @update:model-value="(value) => store.updateBooleanField('estUneEntreprise', value)"
+        @update:model-value="(value) => store.updateBooleanField('concerneUneEntreprise', value)"
         name="categorie-auteur"
         legend="S'agit-il d'une entreprise ou d'un particulier ?"
         :options="auteurIdentifieOptions"
@@ -41,7 +41,6 @@
           />
         </template>
 
-
         <template v-else>
           <DsfrInput
             v-model="store.formData.prenomParticulier"
@@ -59,7 +58,6 @@
           />
         </template>
       </template>
-
 
       <DsfrRadioButtonSet
         :model-value="store.formData.souhaitePorterPlainte ? 'oui' : 'non'"
@@ -119,7 +117,6 @@
         min="0"
         required
       />
-
 
       <DsfrRadioButtonSet
         :model-value="store.formData.prejudiceMontantConnu ? 'oui' : 'non'"
@@ -195,15 +192,14 @@
 <script setup lang="ts">
 import '@/assets/styles/form-steps.css'
 import { useSignalementStore } from '@/stores/signalement'
+import { DsfrInput, DsfrRadioButtonSet } from '@gouvminint/vue-dsfr'
 import { computed, ref } from 'vue'
 import { auteurIdentifieOptions, indicesDisponiblesOptions, yesNoOptions } from './form-data'
-import { DsfrInput, DsfrRadioButtonSet } from '@gouvminint/vue-dsfr'
 
 const store = useSignalementStore()
 const isSubmitting = ref(false)
 const showBlocAuteur = computed(() => store.formData.auteurIdentifie)
-const isEntreprise = computed(() => store.formData.estUneEntreprise)
-
+const isEntreprise = computed(() => store.formData.concerneUneEntreprise)
 
 const handleSubmit = async (event: Event) => {
   event.preventDefault()

@@ -18,7 +18,7 @@ export interface Signalement {
 
   // Step 2
   auteurIdentifie: boolean
-  estUneEntreprise: boolean
+  concerneUneEntreprise: boolean
   nomEntreprise: string
   numeroSiret: string
   nomParticulier: string
@@ -61,7 +61,7 @@ export const createEmptySignalement = (): Signalement => ({
 
   // Step 2
   auteurIdentifie: false,
-  estUneEntreprise: false,
+  concerneUneEntreprise: false,
   nomEntreprise: '',
   numeroSiret: '',
   nomParticulier: '',
