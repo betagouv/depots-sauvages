@@ -142,7 +142,7 @@ import {
 } from './form-data'
 
 const store = useSignalementStore()
-const isSubmitting = ref(false) // Make this reactive
+const isSubmitting = ref(false)
 const showPhotoUpload = computed(() => store.formData.photoDispo === true)
 
 const handleSubmit = async (event: Event) => {
