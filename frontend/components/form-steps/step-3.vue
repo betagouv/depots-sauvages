@@ -26,14 +26,22 @@
         </div>
         <p>Vous pouvez télécharger votre rapport de constatation :</p>
 
-        <button class="fr-btn action-button download-button" @click="downloadDocument('pdf')">
-          <span class="fr-icon-download-line" aria-hidden="true"></span>
+        <DsfrButton
+          class="action-button download-button"
+          :icon="{ name: 'ri-download-line', animation: isPdfReady ? undefined : 'spin' }"
+          :disabled="!isPdfReady"
+          @click="downloadDocument('pdf')"
+        >
           Télécharger le document au format PDF
-        </button>
-        <button class="fr-btn action-button download-button" @click="downloadDocument('odt')">
-          <span class="fr-icon-download-line" aria-hidden="true"></span>
+        </DsfrButton>
+        <DsfrButton
+          class="action-button download-button"
+          :icon="{ name: 'ri-download-line', animation: isOdtReady ? undefined : 'spin' }"
+          :disabled="!isOdtReady"
+          @click="downloadDocument('odt')"
+        >
           Télécharger le document au format ODT
-        </button>
+        </DsfrButton>
       </section>
 
       <section class="confirmation-section">
@@ -92,10 +100,14 @@
 <script setup lang="ts">
 import { getDocumentUrl } from '@/services/urls'
 import { useSignalementStore } from '@/stores/signalement'
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 const store = useSignalementStore()
 const emit = defineEmits(['restart'])
+
+// Loading states
+const isPdfReady = ref(false)
+const isOdtReady = ref(false)
 
 // Create computed properties for both formats
 const documentUrl = computed(() => getDocumentUrl(store.currentId))
@@ -109,6 +121,17 @@ const downloadDocument = (format: 'pdf' | 'odt') => {
 const handleRestart = () => {
   emit('restart')
 }
+
+// Control buttons delay
+onMounted(() => {
+  setTimeout(() => {
+    isOdtReady.value = true
+  }, 3000) // Enable after 3 seconds
+
+  setTimeout(() => {
+    isPdfReady.value = true
+  }, 6000) // Enable after 6 seconds
+})
 </script>
 
 <style scoped>
@@ -191,10 +214,9 @@ p {
 
 .download-button {
   margin-top: 1rem;
-}
-
-.download-button .fr-icon-download-line {
-  margin-right: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .action-buttons {
