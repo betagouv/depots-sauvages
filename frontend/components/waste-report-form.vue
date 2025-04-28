@@ -52,7 +52,6 @@ defineEmits(['stepChange'])
 
 .confirmation-step {
   text-align: center;
-  padding: 2rem;
 }
 
 .success-icon {
