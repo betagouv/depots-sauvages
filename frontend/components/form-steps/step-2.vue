@@ -1,5 +1,5 @@
 <template>
-  <div class="form-container">
+  <div class="fr-container--sm">
     <p>Les champs avec <abbr title="Champ obligatoire">*</abbr> sont obligatoires</p>
     <form @submit.prevent="handleSubmit">
       <DsfrRadioButtonSet
@@ -138,7 +138,7 @@
       </template>
 
       <template v-else>
-        <fieldset class="fr-fieldset">
+        <fieldset class="fr-fieldset fr-ml-0 fr-pl-0">
           <legend class="fr-fieldset__legend">Estimation du préjudice</legend>
           <DsfrInput
             v-model="store.formData.prejudiceNombrePersonnes"
@@ -168,7 +168,7 @@
         </fieldset>
       </template>
 
-      <div class="form-actions">
+      <div class="fr-mt-3w actions-row">
         <DsfrButton
           type="button"
           label="Précédent"
@@ -216,14 +216,9 @@ const handlePrevious = () => store.updateStep(1)
 </script>
 
 <style scoped>
-form {
-  max-width: 600px;
-  margin: 0;
-}
-
-.form-actions {
+.actions-row {
   display: flex;
   justify-content: space-between;
-  margin-top: 2rem;
+  gap: 1rem;
 }
 </style>
