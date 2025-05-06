@@ -1,10 +1,10 @@
 <template>
-  <div class="layout-default">
+  <div>
     <DsfrHeader
       service-title="Protect Envi"
       service-description="Signalement des dépôts sauvages"
     />
-    <div class="fr-container" role="main" id="content">
+    <div class="fr-container fr-py-3w" role="main" id="content">
       <DsfrNotice>
         <a
           href="https://docs.google.com/forms/d/e/1FAIpQLSe73qnFQje6_hdhKv1VeyZVQOIeRzn0Q7ahRI4hlBjq8atG8Q/viewform"
@@ -13,7 +13,8 @@
         >
           Partagez-vous votre avis !
         </a>
-        Cette version démo est en test et disponible jusqu'au 7 mai. Vos retours sont précieux pour faire évoluer l’outil.
+        Cette version démo est en test et disponible jusqu'au 7 mai. Vos retours sont précieux pour
+        faire évoluer l'outil.
       </DsfrNotice>
       <slot />
     </div>
@@ -58,32 +59,4 @@ const footerLinks: FooterLink[] = [
 ]
 </script>
 
-<style scoped>
-.layout-default {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.fr-container {
-  padding: 2rem 1rem;
-}
-
-.layout-container {
-  padding: 2rem 1rem;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-@media (min-width: 768px) {
-  .layout-container {
-    padding: 2rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .layout-container {
-    padding: 3rem;
-  }
-}
-</style>
+<style scoped></style>
