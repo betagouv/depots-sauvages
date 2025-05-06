@@ -134,16 +134,14 @@
       </form>
     </div>
 
-    <div class="fr-col-12 fr-col-md-6">
-      <div class="fr-grid-row fr-grid-row--right fr-mt-3w fr-mr-1w">
-        <DsfrButton
-          type="submit"
-          label="Suivant"
-          icon="fr-icon-arrow-right-line"
-          icon-right
-          :disabled="isSubmitting"
-        />
-      </div>
+    <div class="fr-mt-3w actions-row">
+      <DsfrButton
+        type="submit"
+        label="Suivant"
+        icon="fr-icon-arrow-right-line"
+        icon-right
+        :disabled="isSubmitting"
+      />
     </div>
   </div>
 </template>
@@ -205,4 +203,9 @@ const handleTypesDepotChange = (event: Event, value: string) => {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.actions-row {
+  display: flex;
+  justify-content: flex-end;
+}
+</style>
