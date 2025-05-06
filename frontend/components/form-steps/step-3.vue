@@ -1,97 +1,100 @@
 <template>
-  <div class="confirmation-container">
+  <div class="fr-container--sm">
     <DsfrAlert type="success" title="Merci pour votre signalement" />
 
-    <div class="confirmation-content">
-      <section class="confirmation-section">
-        <p>
-          Vous trouverez ci-dessous votre rapport de constatation pré-rempli, à compléter avec les
-          éléments manquants (charte graphique de la mairie, date et signature du rédacteur du
-          document, etc.).
-        </p>
-        <p>
-          Si vous souhaitez déposer plainte, pensez à apporter ce rapport de constatation en
-          brigade.
-        </p>
-        <p>
-          Ce rapport est nécessaire pour initier une procédure administrative (voir conseils et aide
-          à la rédaction d'une procédure administrative en bas de page).
-        </p>
-      </section>
+    <div class="fr-bg--contrast fr-mt-3w fr-radius-2w">
+      <div class="confirmation-content">
+        <section class="confirmation-section">
+          <p>
+            Vous trouverez ci-dessous votre rapport de constatation pré-rempli, à compléter avec les
+            éléments manquants (charte graphique de la mairie, date et signature du rédacteur du
+            document, etc.).
+          </p>
+          <p>
+            Si vous souhaitez déposer plainte, pensez à apporter ce rapport de constatation en
+            brigade.
+          </p>
+          <p>
+            Ce rapport est nécessaire pour initier une procédure administrative (voir conseils et
+            aide à la rédaction d'une procédure administrative en bas de page).
+          </p>
+        </section>
 
-      <section class="confirmation-section document-section">
-        <div class="document-header">
-          <span class="document-icon">📄</span>
-          <h3 class="document-title">Document disponible</h3>
-        </div>
-        <p>Vous pouvez télécharger votre rapport de constatation :</p>
+        <section class="confirmation-section document-section">
+          <div class="document-header">
+            <span class="document-icon">📄</span>
+            <h3 class="document-title">Document disponible</h3>
+          </div>
+          <p>Vous pouvez télécharger votre rapport de constatation :</p>
 
-        <DsfrButton
-          class="action-button download-button"
-          :icon="{ name: 'ri-download-line', animation: isPdfReady ? undefined : 'spin' }"
-          :disabled="!isPdfReady"
-          @click="downloadDocument('pdf')"
-        >
-          Télécharger le document au format PDF
-        </DsfrButton>
-        <DsfrButton
-          class="action-button download-button"
-          :icon="{ name: 'ri-download-line', animation: isOdtReady ? undefined : 'spin' }"
-          :disabled="!isOdtReady"
-          @click="downloadDocument('odt')"
-        >
-          Télécharger le document au format ODT
-        </DsfrButton>
-      </section>
-
-      <section class="confirmation-section">
-        <h3>📑 Procédure administrative</h3>
-        <p>
-          Si vous souhaitez plus d'informations concernant la procédure administrative rendez-vous
-          <a
-            href="https://acdechets.smartidf.services/aide-verbalisation"
-            class="fr-link fr-icon-external-link-line fr-link--icon-right"
-            target="_blank"
+          <DsfrButton
+            class="action-button download-button"
+            :icon="{ name: 'ri-download-line', animation: isPdfReady ? undefined : 'spin' }"
+            :disabled="!isPdfReady"
+            @click="downloadDocument('pdf')"
           >
-            sur le guide ACDéchets de la Région Île de France
-          </a>
-          pour vous aider pas à pas.
-        </p>
-      </section>
+            Télécharger le document au format PDF
+          </DsfrButton>
+          <DsfrButton
+            class="action-button download-button"
+            :icon="{ name: 'ri-download-line', animation: isOdtReady ? undefined : 'spin' }"
+            :disabled="!isOdtReady"
+            @click="downloadDocument('odt')"
+          >
+            Télécharger le document au format ODT
+          </DsfrButton>
+        </section>
 
-      <section class="confirmation-section">
-        <h3>🙋🏻‍♂️ Conseils pratiques</h3>
-        <p>Retrouvez des conseils pratiques sur l'application à destination des élus, Gend'élus:</p>
-        <ul>
-          <li>
+        <section class="confirmation-section">
+          <h3>📑 Procédure administrative</h3>
+          <p>
+            Si vous souhaitez plus d'informations concernant la procédure administrative rendez-vous
             <a
-              href="https://play.google.com/store/apps/details?id=com.gendelus&hl=fr&pli=1"
+              href="https://acdechets.smartidf.services/aide-verbalisation"
               class="fr-link fr-icon-external-link-line fr-link--icon-right"
               target="_blank"
-              rel="noreferrer noopener"
             >
-              Télécharger l'application sur le Play Store
+              sur le guide ACDéchets de la Région Île de France
             </a>
-          </li>
-          <li>
-            <a
-              href="https://apps.apple.com/fr/app/gend%C3%A9lus/id6444316373"
-              class="fr-link fr-icon-external-link-line fr-link--icon-right"
-              target="_blank"
-              rel="noreferrer noopener"
-            >
-              Télécharger l'application sur l'App store
-            </a>
-          </li>
-        </ul>
-      </section>
+            pour vous aider pas à pas.
+          </p>
+        </section>
 
-      <!-- Restart button with updated styling -->
-      <div class="action-buttons">
-        <button class="fr-btn action-button restart-button" @click="handleRestart">
-          Faire un nouveau signalement
-          <span class="fr-icon-arrow-right-line" aria-hidden="true"></span>
-        </button>
+        <section class="confirmation-section">
+          <h3>🙋🏻‍♂️ Conseils pratiques</h3>
+          <p>
+            Retrouvez des conseils pratiques sur l'application à destination des élus, Gend'élus:
+          </p>
+          <ul>
+            <li>
+              <a
+                href="https://play.google.com/store/apps/details?id=com.gendelus&hl=fr&pli=1"
+                class="fr-link fr-icon-external-link-line fr-link--icon-right"
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                Télécharger l'application sur le Play Store
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://apps.apple.com/fr/app/gend%C3%A9lus/id6444316373"
+                class="fr-link fr-icon-external-link-line fr-link--icon-right"
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                Télécharger l'application sur l'App store
+              </a>
+            </li>
+          </ul>
+        </section>
+
+        <div class="fr-mt-5w fr-text--center">
+          <button class="fr-btn" @click="handleRestart">
+            Faire un nouveau signalement
+            <span class="fr-icon-arrow-right-line" aria-hidden="true"></span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -135,11 +138,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.confirmation-container {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
 .confirmation-content {
   background: var(--background-contrast-grey);
   padding: 2rem;
@@ -162,11 +160,20 @@ onMounted(() => {
 
 .document-section {
   background-color: #f5f5fe;
-  padding: 1.5rem;
-  border-radius: 4px;
+  padding: 2.5rem 1rem;
+  border-radius: 1.5rem;
   margin-top: 2rem;
   margin-bottom: 2rem;
   border: 1px solid #e3e3fd;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (min-width: 601px) {
+  .document-section {
+    padding: 1.5rem;
+    border-radius: 1rem;
+  }
 }
 
 .document-header {
@@ -226,14 +233,5 @@ p {
 
 .restart-button .fr-icon-arrow-right-line {
   margin-left: 0.5rem;
-}
-
-@media (max-width: 768px) {
-  .confirmation-container {
-    padding: 0 0.5rem;
-  }
-  .confirmation-content {
-    padding: 1.5rem;
-  }
 }
 </style>
