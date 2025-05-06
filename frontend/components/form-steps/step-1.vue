@@ -1,121 +1,141 @@
 <template>
-  <h2 class="step-question">Où se trouve le dépôt sauvage et comment vous contacter ?</h2>
-  <div class="form-container">
-    <p>Les champs avec <abbr title="Champ obligatoire">*</abbr> sont obligatoires</p>
-    <form @submit.prevent="handleSubmit">
-      <DsfrInput
-        v-model="store.formData.commune"
-        label="📍 Sur quelle commune a eu lieu le dépôt ?"
-        required
-      />
+  <div class="fr-container--sm">
+    <h2 class="fr-h3 fr-mb-3w">Où se trouve le dépôt sauvage et comment vous contacter ?</h2>
+    <div class="fr-form-group">
+      <p class="fr-text--sm fr-mb-3w">
+        Les champs avec <abbr title="Champ obligatoire">*</abbr> sont obligatoires
+      </p>
+      <form @submit.prevent="handleSubmit" class="fr-grid-row fr-grid-row--gutters">
+        <div class="fr-col-12 fr-col-md-6">
+          <DsfrInput
+            v-model="store.formData.commune"
+            label="📍 Sur quelle commune a eu lieu le dépôt ?"
+            required
+          />
+        </div>
 
-      <DsfrInput
-        v-model="store.formData.localisationDepot"
-        label="🏠 Quelle est l'adresse du dépôt de déchets ?"
-        hint="(numéro, lieu, type, libellé de voie...)"
-        required
-      />
+        <div class="fr-col-12 fr-col-md-6">
+          <DsfrInput
+            v-model="store.formData.localisationDepot"
+            label="🏠 Quelle est l'adresse du dépôt de déchets ?"
+            hint="(numéro, lieu, type, libellé de voie...)"
+            required
+          />
+        </div>
 
-      <DsfrSelect
-        v-model="store.formData.auteurSignalement"
-        label="👮 Qui a réalisé la constatation ?"
-        :options="auteurOptions"
-        required
-      />
-      <DsfrInput
-        v-if="store.formData.indicesDisponibles.includes('autre')"
-        v-model="store.formData.precisionsIndices"
-        label="Précisez les autres indices"
-        name="precisions-indices"
-        type="text"
-      />
+        <div class="fr-col-12 fr-col-md-6">
+          <DsfrSelect
+            v-model="store.formData.auteurSignalement"
+            label="👮 Qui a réalisé la constatation ?"
+            :options="auteurOptions"
+            required
+          />
+        </div>
+        <div class="fr-col-12 fr-col-md-6">
+          <DsfrInput
+            v-if="store.formData.indicesDisponibles.includes('autre')"
+            v-model="store.formData.precisionsIndices"
+            label="Précisez les autres indices"
+            name="precisions-indices"
+            type="text"
+          />
+        </div>
 
-      <div class="date-time">
-        <DsfrInput
-          v-model="store.formData.dateConstat"
-          type="date"
-          label="Date de la constatation"
-          hint="au format JJ/MM/AAAA"
-          required
-        />
-        <DsfrInput
-          v-model="store.formData.heureConstat"
-          type="time"
-          label="Heure de la constatation"
-          hint=" au format HH:MM"
-          required
-        />
-      </div>
+        <div class="fr-col-12 fr-col-md-6">
+          <DsfrInput
+            v-model="store.formData.dateConstat"
+            type="date"
+            label="Date de la constatation"
+            hint="au format JJ/MM/AAAA"
+            required
+          />
+        </div>
+        <div class="fr-col-12 fr-col-md-6">
+          <DsfrInput
+            v-model="store.formData.heureConstat"
+            type="time"
+            label="Heure de la constatation"
+            hint=" au format HH:MM"
+            required
+          />
+        </div>
 
-      <div class="photo-section">
-        <DsfrRadioButtonSet
-          :model-value="store.formData.photoDispo ? 'oui' : 'non'"
-          @update:model-value="(value) => store.updateBooleanField('photoDispo', value)"
-          name="photo-dispo"
-          legend="Avez-vous des photos du dépôt ?"
-          :options="yesNoOptions"
-          required
-        />
+        <div class="fr-col-12">
+          <DsfrRadioButtonSet
+            :model-value="store.formData.photoDispo ? 'oui' : 'non'"
+            @update:model-value="(value) => store.updateBooleanField('photoDispo', value)"
+            name="photo-dispo"
+            legend="Avez-vous des photos du dépôt ?"
+            :options="yesNoOptions"
+            required
+          />
+        </div>
 
-        <!--        <DsfrFileUpload
-          v-if="showPhotoUpload"
-          v-model="store.formData.photos"
-          label="Ajouter vos photos"
-          hint="Formats acceptés : .jpg, .jpeg, .png, .pdf"
-          accept=".jpg,.jpeg,.png,.pdf"
-          multiple
-          @change="handleFileChange"
-        />-->
-      </div>
+        <div class="fr-col-12">
+          <DsfrRadioButtonSet
+            v-model="store.formData.natureTerrain"
+            name="nature-terrain"
+            legend="🌍 Quelle est la nature du terrain concerné par le dépôt ?"
+            :options="natureTerrainOptions"
+            required
+          />
+        </div>
 
-      <DsfrRadioButtonSet
-        v-model="store.formData.natureTerrain"
-        name="nature-terrain"
-        legend="🌍 Quelle est la nature du terrain concerné par le dépôt ?"
-        :options="natureTerrainOptions"
-        required
-      />
+        <div class="fr-col-12 fr-col-md-6">
+          <DsfrSelect
+            v-model="store.formData.volumeDepot"
+            label="📏 Volume estimé"
+            hint="en m3"
+            :options="volumeOptions"
+            required
+          />
+        </div>
+        <div class="fr-col-12">
+          <DsfrRadioButtonSet
+            @update:model-value="(value) => store.updateBooleanField('risqueEcoulement', value)"
+            name="risque-ecoulement"
+            legend="Existe-t-il un risque d'écoulement ?"
+            :options="yesNoOptions"
+            required
+          />
+        </div>
 
-      <DsfrSelect
-        v-model="store.formData.volumeDepot"
-        label="📏 Volume estimé"
-        hint="en m3"
-        :options="volumeOptions"
-        required
-      />
-      <DsfrRadioButtonSet
-        @update:model-value="(value) => store.updateBooleanField('risqueEcoulement', value)"
-        name="risque-ecoulement"
-        legend="Existe-t-il un risque d'écoulement ?"
-        :options="yesNoOptions"
-        required
-      />
-
-      <div class="fr-form-group">
-        <legend class="fr-fieldset__legend fr-text--regular">Type de dépôts</legend>
-        <div class="fr-fieldset__content">
-          <div v-for="option in typesDepotOptions" :key="option.value" class="fr-checkbox-group">
-            <input
-              type="checkbox"
-              :id="option.id"
-              :name="option.name"
-              :value="option.value"
-              :checked="store.formData.typesDepot?.includes(option.value) ?? false"
-              @change="handleTypesDepotChange($event, option.value)"
-            />
-            <label class="fr-label" :for="option.id">{{ option.label }}</label>
+        <div class="fr-col-12">
+          <div class="fr-form-group">
+            <legend class="fr-fieldset__legend fr-text--regular">Type de dépôts</legend>
+            <div class="fr-fieldset__content">
+              <div
+                v-for="option in typesDepotOptions"
+                :key="option.value"
+                class="fr-checkbox-group"
+              >
+                <input
+                  type="checkbox"
+                  :id="option.id"
+                  :name="option.name"
+                  :value="option.value"
+                  :checked="store.formData.typesDepot?.includes(option.value) ?? false"
+                  @change="handleTypesDepotChange($event, option.value)"
+                />
+                <label class="fr-label" :for="option.id">{{ option.label }}</label>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <DsfrInput
-        v-model="store.formData.precisionsDepot"
-        label="✏️ Autres informations"
-        hint="Apportez tout autre élément (présence d'habitation, présence d'élevage, voie ferrée, etc.), identité du propriétaire du terrain (si terrain privé), zone particulière (zone agricole, zone forestière, zone naturelle, zone humide, zone Natura 2000, zone Ramsar, etc.), cours d'eau à proximité ou un captage d'eau, dernière date à laquelle le dépôt n'étais pas présent (si vous en avez connaissance)."
-        :isTextarea="true"
-      />
+        <div class="fr-col-12 fr-col-md-6">
+          <DsfrInput
+            v-model="store.formData.precisionsDepot"
+            label="✏️ Autres informations"
+            hint="Apportez tout autre élément (présence d'habitation, présence d'élevage, voie ferrée, etc.), identité du propriétaire du terrain (si terrain privé), zone particulière (zone agricole, zone forestière, zone naturelle, zone humide, zone Natura 2000, zone Ramsar, etc.), cours d'eau à proximité ou un captage d'eau, dernière date à laquelle le dépôt n'étais pas présent (si vous en avez connaissance)."
+            :isTextarea="true"
+          />
+        </div>
+      </form>
+    </div>
 
-      <div class="form-actions">
+    <div class="fr-col-12 fr-col-md-6">
+      <div class="fr-grid-row fr-grid-row--right fr-mt-3w fr-mr-1w">
         <DsfrButton
           type="submit"
           label="Suivant"
@@ -124,7 +144,7 @@
           :disabled="isSubmitting"
         />
       </div>
-    </form>
+    </div>
   </div>
 </template>
 
@@ -185,26 +205,4 @@ const handleTypesDepotChange = (event: Event, value: string) => {
 }
 </script>
 
-<style scoped>
-.photo-section {
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
-  margin-top: 1.5rem;
-}
-
-.photo-section :deep(.fr-upload) {
-  margin-top: 1rem;
-}
-
-.date-time {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-@media (max-width: 768px) {
-  .date-time {
-    grid-template-columns: 1fr;
-  }
-}
-</style>
+<style scoped></style>
