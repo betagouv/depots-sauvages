@@ -176,21 +176,15 @@ const handleSubmit = async (event: Event) => {
   }
 }
 
-const handleTypesDepotChange = (event: Event, value: string) => {
-  const checked = (event.target as HTMLInputElement).checked
+const handleTypesDepotChange = (event: Event, depositType: string) => {
+  const isChecked = (event.target as HTMLInputElement).checked
+  const currentTypes = store.formData.typesDepot || []
 
-  // Create a new array to ensure reactivity
-  let newTypes = [...(store.formData.typesDepot || [])]
+  const updatedTypes = isChecked
+    ? [...currentTypes, depositType]
+    : currentTypes.filter((type) => type !== depositType)
 
-  if (checked) {
-    // Add value if it doesn't exist
-    newTypes = [...newTypes, value]
-  } else {
-    // Remove value
-    newTypes = newTypes.filter((type) => type !== value)
-  }
-
-  store.formData.typesDepot = newTypes
+  store.formData.typesDepot = updatedTypes
 }
 </script>
 
