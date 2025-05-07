@@ -114,8 +114,7 @@
                   :id="option.id"
                   :name="option.name"
                   :value="option.value"
-                  :checked="store.formData.typesDepot?.includes(option.value) ?? false"
-                  @change="handleTypesDepotChange($event, option.value)"
+                  v-model="store.formData.typesDepot"
                 />
                 <label class="fr-label" :for="option.id">{{ option.label }}</label>
               </div>
@@ -174,17 +173,6 @@ const handleSubmit = async (event: Event) => {
   } finally {
     isSubmitting.value = false
   }
-}
-
-const handleTypesDepotChange = (event: Event, depositType: string) => {
-  const isChecked = (event.target as HTMLInputElement).checked
-  const currentTypes = store.formData.typesDepot || []
-
-  const updatedTypes = isChecked
-    ? [...currentTypes, depositType]
-    : currentTypes.filter((type) => type !== depositType)
-
-  store.formData.typesDepot = updatedTypes
 }
 </script>
 
