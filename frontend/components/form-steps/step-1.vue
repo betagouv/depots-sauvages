@@ -130,17 +130,17 @@
             :isTextarea="true"
           />
         </div>
-      </form>
-    </div>
 
-    <div class="fr-mt-3w actions-row">
-      <DsfrButton
-        type="submit"
-        label="Suivant"
-        icon="fr-icon-arrow-right-line"
-        icon-right
-        :disabled="isSubmitting"
-      />
+        <div class="fr-col-12 fr-mt-3w actions-row">
+          <DsfrButton
+            type="submit"
+            label="Suivant"
+            icon="fr-icon-arrow-right-line"
+            icon-right
+            :disabled="isSubmitting"
+          />
+        </div>
+      </form>
     </div>
   </div>
 </template>
