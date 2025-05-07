@@ -150,7 +150,7 @@
 import '@/assets/styles/form-steps.css'
 import { useSignalementStore } from '@/stores/signalement'
 import { DsfrInput } from '@gouvminint/vue-dsfr'
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import {
   auteurOptions,
   natureTerrainOptions,
@@ -161,7 +161,6 @@ import {
 
 const store = useSignalementStore()
 const isSubmitting = ref(false)
-const showPhotoUpload = computed(() => store.formData.photoDispo === true)
 
 const handleSubmit = async (event: Event) => {
   event.preventDefault()
@@ -172,16 +171,8 @@ const handleSubmit = async (event: Event) => {
     store.updateStep(2)
   } catch (error) {
     console.error('Failed to save:', error)
-    // Add error feedback here
   } finally {
     isSubmitting.value = false
-  }
-}
-
-const handleFileChange = (event: Event) => {
-  const target = event.target as HTMLInputElement
-  if (target.files) {
-    store.formData.photos = Array.from(target.files)
   }
 }
 
