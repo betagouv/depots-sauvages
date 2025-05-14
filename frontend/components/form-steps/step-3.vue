@@ -23,23 +23,22 @@
         <section class="document-section fr-p-4w fr-mb-4w fr-mt-4w">
           <h3 class="document-title">📄 Document disponible</h3>
           <p>Vous pouvez télécharger votre rapport de constatation :</p>
-
-          <DsfrButton
-            class="action-button download-button"
-            :icon="{ name: 'ri-download-line', animation: isPdfReady ? undefined : 'spin' }"
-            :disabled="!isPdfReady"
-            @click="downloadDocument('pdf')"
-          >
-            Télécharger le document au format PDF
-          </DsfrButton>
-          <DsfrButton
-            class="action-button download-button"
-            :icon="{ name: 'ri-download-line', animation: isOdtReady ? undefined : 'spin' }"
-            :disabled="!isOdtReady"
-            @click="downloadDocument('odt')"
-          >
-            Télécharger le document au format ODT
-          </DsfrButton>
+          <div class="fr-btns-group fr-btns-group--block fr-btns-group--inline-md">
+            <DsfrButton
+              :icon="{ name: 'ri-download-line', animation: isPdfReady ? undefined : 'spin' }"
+              :disabled="!isPdfReady"
+              @click="downloadDocument('pdf')"
+            >
+              <span class="fr-m-2w">Télécharger le document au format PDF</span>
+            </DsfrButton>
+            <DsfrButton
+              :icon="{ name: 'ri-download-line', animation: isOdtReady ? undefined : 'spin' }"
+              :disabled="!isOdtReady"
+              @click="downloadDocument('odt')"
+            >
+              <span class="fr-m-2w">Télécharger le document au format ODT</span>
+            </DsfrButton>
+          </div>
         </section>
 
         <section class="confirmation-section fr-mb-4w fr-pb-4w">
@@ -153,37 +152,5 @@ onMounted(() => {
 
 .document-title {
   color: #000091;
-}
-
-/* Common button styling */
-.action-button {
-  background-color: #000091;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  display: inline-flex;
-  align-items: center;
-  font-weight: 500;
-}
-
-.action-button:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.download-button {
-  margin-top: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.action-buttons {
-  margin-top: 2rem;
-  text-align: center;
-}
-
-.restart-button .fr-icon-arrow-right-line {
-  margin-left: 0.5rem;
 }
 </style>
