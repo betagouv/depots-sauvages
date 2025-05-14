@@ -21,10 +21,7 @@
         </section>
 
         <section class="document-section fr-p-4w fr-mb-4w fr-mt-4w">
-          <div class="document-header">
-            <span class="document-icon">📄</span>
-            <h3 class="document-title">Document disponible</h3>
-          </div>
+          <h3 class="document-title">📄 Document disponible</h3>
           <p>Vous pouvez télécharger votre rapport de constatation :</p>
 
           <DsfrButton
@@ -154,31 +151,8 @@ onMounted(() => {
   background-color: #f5f5fe;
 }
 
-.document-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.document-icon {
-  font-size: 1.5rem;
-  margin-right: 0.5rem;
-}
-
 .document-title {
-  margin: 0;
   color: #000091;
-}
-
-h3 {
-  color: var(--text-title-grey);
-  font-size: 1.25rem;
-  margin-bottom: 1rem;
-}
-
-p {
-  line-height: 1.5;
-  margin: 0.5rem 0;
 }
 
 /* Common button styling */
