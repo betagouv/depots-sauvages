@@ -2,9 +2,9 @@
   <div class="fr-container--sm">
     <DsfrAlert type="success" title="Merci pour votre signalement" />
 
-    <div class="fr-bg--contrast fr-mt-3w fr-radius-2w">
-      <div class="confirmation-content">
-        <section class="confirmation-section">
+    <div class="fr-bg--contrast fr-mt-3w">
+      <div class="confirmation-content fr-p-4w">
+        <section class="confirmation-section fr-mb-4w fr-pb-4w">
           <p>
             Vous trouverez ci-dessous votre rapport de constatation pré-rempli, à compléter avec les
             éléments manquants (charte graphique de la mairie, date et signature du rédacteur du
@@ -20,7 +20,7 @@
           </p>
         </section>
 
-        <section class="confirmation-section document-section">
+        <section class="document-section fr-p-4w fr-mb-4w fr-mt-4w">
           <div class="document-header">
             <span class="document-icon">📄</span>
             <h3 class="document-title">Document disponible</h3>
@@ -45,7 +45,7 @@
           </DsfrButton>
         </section>
 
-        <section class="confirmation-section">
+        <section class="confirmation-section fr-mb-4w fr-pb-4w">
           <h3>📑 Procédure administrative</h3>
           <p>
             Si vous souhaitez plus d'informations concernant la procédure administrative rendez-vous
@@ -60,7 +60,7 @@
           </p>
         </section>
 
-        <section class="confirmation-section">
+        <section class="confirmation-section fr-mb-4w fr-pb-4w">
           <h3>🙋🏻‍♂️ Conseils pratiques</h3>
           <p>
             Retrouvez des conseils pratiques sur l'application à destination des élus, Gend'élus:
@@ -140,40 +140,18 @@ onMounted(() => {
 <style scoped>
 .confirmation-content {
   background: var(--background-contrast-grey);
-  padding: 2rem;
-  border-radius: 8px;
-  text-align: left;
-  margin-top: 1.5rem;
 }
 
 .confirmation-section {
-  margin-bottom: 2rem;
-  padding-bottom: 2rem;
   border-bottom: 1px solid var(--border-default-grey);
 }
 
 .confirmation-section:last-of-type {
-  margin-bottom: 1.5rem;
-  padding-bottom: 0;
   border: none;
 }
 
 .document-section {
   background-color: #f5f5fe;
-  padding: 2.5rem 1rem;
-  border-radius: 1.5rem;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-  border: 1px solid #e3e3fd;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-@media (min-width: 601px) {
-  .document-section {
-    padding: 1.5rem;
-    border-radius: 1rem;
-  }
 }
 
 .document-header {
