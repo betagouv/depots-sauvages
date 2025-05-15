@@ -181,4 +181,12 @@ const handleSubmit = async (event: Event) => {
   display: flex;
   justify-content: flex-end;
 }
+
+/* Fix for Safari/iOS time input */
+input[type='time'] {
+  width: 100%;
+  min-width: 0;
+  display: block;
+  box-sizing: border-box;
+}
 </style>
