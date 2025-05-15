@@ -47,7 +47,6 @@
             type="date"
             label="Date de la constatation"
             hint="au format JJ/MM/AAAA"
-            required
           />
         </div>
         <div class="fr-col-12 fr-col-md-6">
@@ -56,7 +55,6 @@
             type="time"
             label="Heure de la constatation"
             hint=" au format HH:MM"
-            required
           />
         </div>
 
