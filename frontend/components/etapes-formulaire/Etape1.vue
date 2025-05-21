@@ -146,7 +146,7 @@
 </template>
 
 <script setup lang="ts">
-import '@/assets/styles/form-steps.css'
+import '@/styles/form-steps.css'
 import { useSignalementStore } from '@/stores/signalement'
 import { DsfrInput } from '@gouvminint/vue-dsfr'
 import { ref } from 'vue'
