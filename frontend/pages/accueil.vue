@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import WasteReportForm from '@/components/waste-report-form.vue'
+import WasteReportForm from '@/components/FormulaireSignalement.vue'
 import { useSignalementStore } from '@/stores/signalement'
 
 const store = useSignalementStore()

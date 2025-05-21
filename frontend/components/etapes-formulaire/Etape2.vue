@@ -189,7 +189,7 @@
 </template>
 
 <script setup lang="ts">
-import '@/assets/styles/form-steps.css'
+import '@/styles/form-steps.css'
 import { useSignalementStore } from '@/stores/signalement'
 import { DsfrInput, DsfrRadioButtonSet } from '@gouvminint/vue-dsfr'
 import { computed, ref } from 'vue'

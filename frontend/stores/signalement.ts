@@ -27,7 +27,7 @@ export const useSignalementStore = defineStore('signalement', {
     updateBooleanField(field: keyof Signalement, value: string) {
       if (typeof this.formData[field] === 'boolean') {
         this.formData[field] = (value === 'oui') as any
-      }
+      }s
     },
 
 
