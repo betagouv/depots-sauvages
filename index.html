@@ -2,12 +2,16 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="/static/favicon.ico" type="image/x-icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token }}" />
+    <meta name="description" content="Signaler un dépôt sauvage avec Protect'Envi." />
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon" />
     <title>Protect Envi - Signalement de dépôts sauvages</title>
   </head>
   <body>
+  <noscript>
+    <p>JavaScript est requis pour utiliser cette application.</p>
+  </noscript>
     <div id="app"></div>
     <!-- Load Vue.js app -->
     <script type="module" src="frontend/main.js"></script>
