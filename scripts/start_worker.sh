@@ -1,6 +1,5 @@
 #!/bin/bash
-# This script starts the django-tasks worker for the all queues
 
-echo "Starting django-tasks worker..."
+echo "Starting django-tasks worker for app ($DJANGO_SETTINGS_MODULE)..."
 
-python manage.py db_worker
+python manage.py db_worker --queue default --queue documents
