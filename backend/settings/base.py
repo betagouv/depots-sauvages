@@ -97,8 +97,6 @@ REST_FRAMEWORK = {
     ],
 }
 
-TASKS = {"default": {"BACKEND": "django_tasks.backends.immediate.ImmediateBackend"}}
-
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -125,3 +123,14 @@ LOGGING = {
         },
     },
 }
+
+# Django Tasks Settings
+TASKS = {
+    "default": {"BACKEND": "django_tasks.backends.immediate.ImmediateBackend"},
+    "QUEUES": ["default", "documents"],
+}
+TASKS_LOGGING = {
+    "handlers": ["console"],
+    "level": "INFO",
+}
+LOGGING["loggers"]["django_tasks"] = TASKS_LOGGING

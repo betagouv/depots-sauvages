@@ -30,7 +30,7 @@ def save_documents(instance, odt_data, pdf_data):
         post_save.connect(generate_document, sender=Signalement)
 
 
-@task
+@task(queue_name="documents")
 def generate_document_task(signalement_id):
     """
     Generate document in background.
