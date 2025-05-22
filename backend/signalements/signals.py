@@ -1,10 +1,10 @@
 import logging
-import threading
 import time
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
+from django_tasks import task
 
 from backend.doc_maker import odt_utils, pdf_utils
 from backend.signalements.models import Signalement
@@ -30,13 +30,15 @@ def save_documents(instance, odt_data, pdf_data):
         post_save.connect(generate_document, sender=Signalement)
 
 
-def generate_document_background(instance):
+@task
+def generate_document_task(signalement_id):
     """
-    Generate document in background thread
+    Generate document in background.
     """
     start_time = time.time()
-    logger.info(f"Starting document generation for signalement {instance.id}")
+    logger.info(f"Starting document generation for signalement {signalement_id}")
     try:
+        instance = Signalement.objects.get(id=signalement_id)
         context = odt_utils.prepare_context(instance)
         logger.debug("Context prepared for document generation")
         output_odt_path = odt_utils.generate_odt_document(instance, context)
@@ -49,16 +51,27 @@ def generate_document_background(instance):
         end_time = time.time()
         duration = end_time - start_time
         logger.info(f"Generation completed for signalement {instance.id} in {duration:.2f} seconds")
+        return {
+            "status": "success",
+            "signalement_id": instance.id,
+            "duration": duration,
+        }
     except Exception as e:
-        logger.error(f"Error generating document for signalement {instance.id}: {e}", exc_info=True)
+        logger.error(
+            f"Error generating document for signalement {signalement_id}: {e}", exc_info=True
+        )
+        raise  # Let django-tasks handle retries
 
 
 @receiver(post_save, sender=Signalement)
 def generate_document(sender, instance, created, **kwargs):
     """
-    Generate document when generate_doc flag is True
+    Signal handler to trigger document generation when a Signalement is saved.
+    Only triggers if generate_doc flag is True.
     """
     if not instance.generate_doc:
         return
     logger.info(f"Post-save signal for signalement {instance.id}, starting background generation")
-    threading.Thread(target=generate_document_background, args=(instance,)).start()
+    results = generate_document_task.enqueue(instance.id)
+    logger.info(f"Document generation task enqueued for signalement {instance.id}")
+    logger.debug(f"Task results: {results.return_value}")
