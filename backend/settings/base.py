@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "rest_framework",
     "corsheaders",
+    "django_tasks",
     #
     # Project apps
     "backend.home",
@@ -95,6 +96,8 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.AllowAny",
     ],
 }
+
+TASKS = {"default": {"BACKEND": "django_tasks.backends.immediate.ImmediateBackend"}}
 
 LOGGING = {
     "version": 1,
