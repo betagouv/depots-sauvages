@@ -72,6 +72,5 @@ def generate_document(sender, instance, created, **kwargs):
     if not instance.generate_doc:
         return
     logger.info(f"Post-save signal for signalement {instance.id}, starting background generation")
-    results = generate_document_task.enqueue(instance.id)
+    generate_document_task.enqueue(instance.id)
     logger.info(f"Document generation task enqueued for signalement {instance.id}")
-    logger.debug(f"Task results: {results.return_value}")
