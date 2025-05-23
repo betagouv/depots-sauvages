@@ -19,6 +19,8 @@ INSTALLED_APPS = [
     "django_extensions",
     "rest_framework",
     "corsheaders",
+    "django_tasks",
+    "django_tasks.backends.database",
     #
     # Project apps
     "backend.home",
@@ -122,3 +124,17 @@ LOGGING = {
         },
     },
 }
+
+# Django Tasks Settings
+TASKS = {
+    "default": {
+        "BACKEND": "django_tasks.backends.immediate.ImmediateBackend",
+        "QUEUES": ["default", "documents"],
+    },
+}
+TASKS_LOGGING = {
+    "handlers": ["console"],
+    "level": "INFO",
+}
+LOGGING["loggers"]["django_tasks"] = TASKS_LOGGING
+LOGGING["loggers"]["django_tasks"] = TASKS_LOGGING
