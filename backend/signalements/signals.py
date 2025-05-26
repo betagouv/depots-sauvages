@@ -6,13 +6,13 @@ from django.dispatch import receiver
 from django.utils import timezone
 from django_tasks import task
 
-from backend.doc_maker import odt_utils, pdf_utils
+from backend.doc_maker import odt_utils
 from backend.signalements.models import Signalement
 
 logger = logging.getLogger(__name__)
 
 
-def save_documents(instance, odt_data, pdf_data):
+def save_documents(instance, odt_data):
     """
     Save document data to the instance.
     """
@@ -21,11 +21,9 @@ def save_documents(instance, odt_data, pdf_data):
     try:
         if odt_data:
             instance.document = odt_data
-        if pdf_data:
-            instance.pdf_document = pdf_data
         instance.document_generated_at = timezone.now()
         instance.save()
-        logger.info(f"Documents saved for signalement {instance.id}")
+        logger.info(f"Document saved for signalement {instance.id}")
     finally:
         post_save.connect(generate_document, sender=Signalement)
 
@@ -45,9 +43,7 @@ def generate_document_task(signalement_id):
         logger.debug("ODT document generated")
         odt_data = odt_utils.read_odt_document(output_odt_path)
         logger.debug("ODT document read")
-        pdf_data = pdf_utils.convert_odt_to_pdf(output_odt_path, f"signalement_{instance.id}.pdf")
-        logger.debug("PDF document generated")
-        save_documents(instance, odt_data, pdf_data)
+        save_documents(instance, odt_data)
         end_time = time.time()
         duration = end_time - start_time
         logger.info(f"Generation completed for signalement {instance.id} in {duration:.2f} seconds")
