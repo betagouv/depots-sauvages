@@ -137,4 +137,3 @@ TASKS_LOGGING = {
     "level": "INFO",
 }
 LOGGING["loggers"]["django_tasks"] = TASKS_LOGGING
-LOGGING["loggers"]["django_tasks"] = TASKS_LOGGING
