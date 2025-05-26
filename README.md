@@ -1,189 +1,218 @@
-# Dépots Sauvages - Protect Envi
 
-Application de signalement des dépôts sauvages pour les communes.
+# Dépôts Sauvages - Protect Envi
 
-## Quick Start with Docker
+Application de signalement des dépôts sauvages destinée aux communes.
 
-Run the project locally using Docker and Docker Compose V2:
+Documentation disponible en :
+- 🇫🇷 [Français](README)
+- 🇬🇧 [English](README.en.md)
+
+
+## 📑 Sommaire
+
+- [🚀 Démarrage rapide avec Docker](#-démarrage-rapide-avec-docker)
+- [🐳 Remarque sur Docker Compose](#-remarque-sur-docker-compose)
+- [⚙️ Configuration de l'environnement](#️-configuration-de-lenvironnement)
+- [🔧 Installation sans Docker](#-installation-sans-docker)
+  - [Backend Django](#backend-django)
+  - [Frontend Vue.js](#frontend-vuejs)
+- [🗂️ Structure du projet](#️-structure-du-projet)
+- [🛠️ Commandes Docker](#️-commandes-docker)
+  - [Backend](#backend)
+  - [Frontend](#frontend)
+  - [Les deux conteneurs](#les-deux-conteneurs)
+
+---
+
+## 🚀 Démarrage rapide avec Docker
+
+Lancez le projet en local à l'aide de Docker et Docker Compose V2 :
 
 ```bash
-# Clone the repository
 git clone https://github.com/your-username/depots-sauvages.git
 cd depots-sauvages
 
-# Start the application using Docker Compose V2
 docker compose up --build
-```
+````
 
-The application will be available at:
+Accès local :
 
-- Frontend: http://localhost:5173
-- Backend: http://localhost:8000
-- Admin interface: http://localhost:8000/admin/
-  - user: admin
-  - password: admin
-- API: http://localhost:8000/api/
+* Frontend : [http://localhost:5173](http://localhost:5173)
+* Backend : [http://localhost:8000](http://localhost:8000)
+* Admin : [http://localhost:8000/admin/](http://localhost:8000/admin/)
 
-More details in `docker-compose.yml`.
+    * utilisateur : admin
+    * mot de passe : admin
+* API : [http://localhost:8000/api/](http://localhost:8000/api/)
 
-### Docker Compose Version Note
+---
 
-This project uses Dockerfiles that are compatible with Docker Compose V2. If you're using an older version of Docker Compose V1, you might encounter errors when building the containers.
+## 🐳 Remarque sur Docker Compose
 
-#### How to check your Docker Compose version:
+Ce projet nécessite Docker Compose V2. Si vous utilisez Docker Compose V1, vous pouvez rencontrer des problèmes à la compilation.
+Vérifiez votre version :
 
 ```bash
 docker-compose --version  # V1 format
 docker compose --version  # V2 format
 ```
 
-#### If you have Docker Compose V1
+### Si vous utilisez Docker Compose V1
 
-We recommend upgrading to Docker Compose V2:
-
-Alternatively, you can use V1 with this syntax though you might encounter build issues:
-
+Nous recommandons de faire une montée de version vers Docker Compose V2.
+Sinon, vous pouvez utiliser cette commande : 
 ```bash
 docker-compose up --build
 ```
 
-## Environment Setup
+---
 
-Copy the example environment file:
+## ⚙️ Configuration de l'environnement
+
+Copiez le fichier d'exemple :
 
 ```bash
 cp .env.example .env
 ```
 
-Note: The `.env` file contains both Django backend and Vite frontend configurations. Variables prefixed with `VITE_` are exposed to the frontend application.
+Note: Le fichier `.env` contient des variables pour Django et Vite. Les variables préfixées `VITE_` sont utilisées côté frontend.
 
-## Project Setup without Docker
+---
 
-### Prerequisites
+## 🔧 Installation sans Docker
 
+### Pré-requis
 - Python 3.8+
 - pipenv
-- Node.js 20+ and Yarn
-- PostgreSQL in prod
-- SQLite in local dev
+- Node.js 20+ et Yarn
+- PostgreSQL en prod
+- SQLite en dev local
 
-### Backend Setup
 
-1. Install dependencies using pipenv:
+### 🔧 Configuration du Backend
+
+1. Installez les dépendances avec pipenv :
 
 ```bash
 pipenv install
-```
+````
 
-2. Activate the virtual environment:
+2. Activez l’environnement virtuel :
 
 ```bash
 pipenv shell
 ```
 
-3. Run migrations:
+3. Exécutez les migrations :
 
 ```bash
 python manage.py migrate
 ```
 
-4. Create a superuser if needed:
+4. Créez un super-utilisateur si nécessaire :
 
 ```bash
 python manage.py createsuperuser
 ```
 
-5. Run the development server:
+5. Lancez le serveur de développement :
 
 ```bash
 python manage.py runserver
 ```
 
-The Django backend will now be running at http://localhost:8000.
+Le back-end Django sera désormais accessible à l’adresse : [http://localhost:8000](http://localhost:8000)
 
-### Frontend Setup (Vue.js)
 
-1. Navigate to the frontend directory:
+### 🔧 Configuration du Frontend (Vue.js)
+
+1. Accédez au répertoire `frontend` :
 
 ```bash
 cd frontend
-```
+````
 
-2. Install dependencies:
+2. Installez les dépendances :
 
 ```bash
 yarn install
 ```
 
-3. Run the development server:
+3. Lancez le serveur de développement :
 
 ```bash
 yarn dev
 ```
 
-The Vue.js frontend will now be running at http://localhost:5173.
+Le frontend Vue.js sera désormais accessible à l’adresse : [http://localhost:5173](http://localhost:5173)
 
-## Project Structure
+
+---
+
+## 🗂️ Structure du projet
 
 ```
 depots-sauvages/
-├── backend/                    # Django backend
-│ ├── settings/                 # Django settings
-│ └── urls.py                   # Main URL configuration
-├── frontend/                   # Vue.js frontend
-├── scripts/                    # Helper scripts
-├── documents/                  # App generated documents
+├── backend/        # Django backend
+│   ├── settings/   # Django configuration
+│   └── urls.py     # URL principale de configuration
+├── frontend/       # Vue.js front-end
+├── scripts/        # Scripts utilitaires
+├── documents/      # Documents générés
 ```
 
-## Docker Commands
+---
 
-### Backend Container
+## 🛠️ Commandes Docker
+
+### Conteneur backend
 
 ```bash
-# Start the development server
+# Démarrer le serveur de développement
 docker compose up backend
 
-# Run with Gunicorn for production-like
+# Lancer Gunicorn pour une exécution proche de la production
 docker compose run --rm backend gunicorn
 
-# Run Django management commands
-docker compose run --rm backend python manage.py [command]
+# Exécuter des commandes Django
+docker compose run --rm backend python manage.py [commande]
 
-# Example: Create a superuser
+# Exemple : créer un superutilisateur
 docker compose run --rm backend python manage.py createsuperuser
 
-# Open a bash shell in the container
+# Ouvrir un shell bash dans le conteneur
 docker compose run --rm backend sh
+
 ```
 
-### Frontend Container
+### 🎨 Conteneur Frontend
 
 ```bash
-# Start the development server
+# Démarrer le serveur de développement
 docker compose up frontend
 
-# Build for production
+# Construire l’application pour la production
 docker compose run --rm frontend build
 
-# Run the preview server
+# Lancer le serveur de prévisualisation
 docker compose run --rm frontend preview
 
-# Run any yarn command
-docker compose run --rm frontend yarn [command]
+# Exécuter une commande yarn
+docker compose run --rm frontend yarn [commande]
 
-# Open a shell in the container
+# Ouvrir un shell dans le conteneur
 docker compose run --rm frontend sh
 ```
 
-### Running Both Containers
+### Lancer les deux conteneurs
 
 ```bash
-# Start both containers
+# Démarrer les deux conteneurs
 docker compose up
 
-# Build and start both containers
+# Construire et démarrer les deux conteneurs
 docker compose up --build
 
-# Stop all containers
+# Arrêter tous les conteneurs
 docker compose down
 ```
