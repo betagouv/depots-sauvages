@@ -38,7 +38,6 @@ class Signalement(PrejudiceMixin, models.Model):
     numero_siret = models.CharField("numéro SIRET", max_length=255, blank=True)
     statut_auteur = models.CharField("statut de l'auteur", max_length=255, null=True, blank=True)
     document = models.BinaryField("Document généré", null=True, blank=True)
-    pdf_document = models.BinaryField("Document PDF", null=True, blank=True)
     # Management fields
     generate_doc = models.BooleanField(
         "Générer le document",
