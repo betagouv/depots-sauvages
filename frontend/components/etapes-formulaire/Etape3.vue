@@ -25,13 +25,6 @@
           <p>Vous pouvez télécharger votre rapport de constatation :</p>
           <div class="fr-btns-group fr-btns-group--block fr-btns-group--inline-md">
             <DsfrButton
-              :icon="{ name: 'ri-download-line', animation: isPdfReady ? undefined : 'spin' }"
-              :disabled="!isPdfReady"
-              @click="downloadDocument('pdf')"
-            >
-              <span class="fr-m-2w">Télécharger le document au format PDF</span>
-            </DsfrButton>
-            <DsfrButton
               :icon="{ name: 'ri-download-line', animation: isOdtReady ? undefined : 'spin' }"
               :disabled="!isOdtReady"
               @click="downloadDocument('odt')"
@@ -105,16 +98,14 @@ const store = useSignalementStore()
 const emit = defineEmits(['restart'])
 
 // Loading states
-const isPdfReady = ref(false)
 const isOdtReady = ref(false)
 
-// Create computed properties for both formats
+// Create computed properties for document URL
 const documentUrl = computed(() => getDocumentUrl(store.currentId))
-const pdfUrl = computed(() => getDocumentUrl(store.currentId, 'pdf'))
 
 // Download function
-const downloadDocument = (format: 'pdf' | 'odt') => {
-  window.open(getDocumentUrl(store.currentId, format), '_blank')
+const downloadDocument = (format: 'odt') => {
+  window.open(getDocumentUrl(store.currentId), '_blank')
 }
 
 const handleRestart = () => {
@@ -126,10 +117,6 @@ onMounted(() => {
   setTimeout(() => {
     isOdtReady.value = true
   }, 3000) // Enable after 3 seconds
-
-  setTimeout(() => {
-    isPdfReady.value = true
-  }, 6000) // Enable after 6 seconds
 })
 </script>
 
