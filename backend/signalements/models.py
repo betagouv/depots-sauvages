@@ -37,14 +37,14 @@ class Signalement(PrejudiceMixin, models.Model):
     nom_entreprise = models.CharField("nom de l'entreprise", max_length=255, blank=True)
     numero_siret = models.CharField("numéro SIRET", max_length=255, blank=True)
     statut_auteur = models.CharField("statut de l'auteur", max_length=255, null=True, blank=True)
-    document = models.BinaryField("Document généré", null=True, blank=True)
+    doc_constat = models.BinaryField("Rapport de constatation", null=True, blank=True)
     # Management fields
-    generate_doc = models.BooleanField(
-        "Générer le document",
+    generate_doc_constat = models.BooleanField(
+        "Générer le rapport de constatation",
         default=False,
-        help_text="Flag indicating if document should be generated",
+        help_text="Faut-il générer le rapport de constatation ?",
     )
-    document_generated_at = models.DateTimeField("Date de génération", null=True, blank=True)
+    doc_constat_generated_at = models.DateTimeField("Date de génération", null=True, blank=True)
 
     class Meta:
         verbose_name = "signalement"
