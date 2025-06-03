@@ -50,7 +50,7 @@ def generate_document_task(signalement_id, doc_base_name):
 
         # Generate document based on type
         if doc_base_name == "doc_constat":
-            output_odt_path = odt_utils.generate_odt_document(instance, context)
+            output_odt_path = odt_utils.generate_doc_constat(instance, context)
         else:
             output_odt_path = odt_utils.generate_lettre_info(instance, context)
 
