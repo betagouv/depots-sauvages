@@ -42,7 +42,7 @@ def generate_document(instance, context, template_name):
     )
 
 
-def generate_odt_document(instance, context):
+def generate_doc_constat(instance, context):
     """
     Generate 'rapport de constatation' ODT document.
     """
