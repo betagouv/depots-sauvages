@@ -15,6 +15,7 @@ class SignalementAdmin(admin.ModelAdmin):
         "auteur_identifie",
         "statut_auteur",
         "doc_constat_should_generate",
+        "lettre_info_should_generate",
     ]
 
     list_filter = [
@@ -28,6 +29,7 @@ class SignalementAdmin(admin.ModelAdmin):
         "arrete_municipal_existe",
         "prejudice_montant_connu",
         "doc_constat_should_generate",
+        "lettre_info_should_generate",
     ]
 
     search_fields = [
