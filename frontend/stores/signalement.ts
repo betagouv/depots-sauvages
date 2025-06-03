@@ -15,6 +15,9 @@ export const useSignalementStore = defineStore('signalement', {
   actions: {
     updateStep(step: number) {
       this.currentStep = step
+      if (step >= 2) {
+        this.formData.docConstatShouldGenerate = true
+      }
     },
 
     resetStore() {
@@ -30,20 +33,19 @@ export const useSignalementStore = defineStore('signalement', {
       }
     },
 
-
     // API
     async saveFormData() {
-      if (this.currentStep === 2) {
-        this.formData.generateDoc = true
+      if (this.currentStep >= 2) {
+        this.formData.docConstatShouldGenerate = true
       }
 
+      const dataToSend = toApiFormat(this.formData)
+      console.log('Sending data to API:', dataToSend)
+
       if (this.currentId) {
-        return await updateResource(
-          `${API_URLS.signalements}${this.currentId}/`,
-          toApiFormat(this.formData)
-        )
+        return await updateResource(`${API_URLS.signalements}${this.currentId}/`, dataToSend)
       } else {
-        const data = await createResource(API_URLS.signalements, toApiFormat(this.formData))
+        const data = await createResource(API_URLS.signalements, dataToSend)
         this.currentId = data.id
         return data
       }
