@@ -39,7 +39,7 @@ class Signalement(PrejudiceMixin, models.Model):
     statut_auteur = models.CharField("statut de l'auteur", max_length=255, null=True, blank=True)
     doc_constat = models.BinaryField("Rapport de constatation", null=True, blank=True)
     # Management fields
-    generate_doc_constat = models.BooleanField(
+    doc_constat_should_generate = models.BooleanField(
         "Générer le rapport de constatation",
         default=False,
         help_text="Faut-il générer le rapport de constatation ?",
