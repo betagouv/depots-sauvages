@@ -17,6 +17,8 @@ export const useSignalementStore = defineStore('signalement', {
       this.currentStep = step
       if (step >= 2) {
         this.formData.docConstatShouldGenerate = true
+      } else if (step === 1) {
+        this.formData.docConstatShouldGenerate = false
       }
     },
 
