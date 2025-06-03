@@ -27,9 +27,9 @@
             <DsfrButton
               :icon="{ name: 'ri-download-line', animation: isOdtReady ? undefined : 'spin' }"
               :disabled="!isOdtReady"
-              @click="downloadDocument('odt')"
+              @click="downloadDocConstat"
             >
-              <span class="fr-m-2w">Télécharger le document au format ODT</span>
+              <span class="fr-m-2w">Télécharger le rapport de constatation au format ODT</span>
             </DsfrButton>
           </div>
         </section>
@@ -90,7 +90,7 @@
 </template>
 
 <script setup lang="ts">
-import { getDocumentUrl } from '@/services/urls'
+import { getDocConstatUrl } from '@/services/urls'
 import { useSignalementStore } from '@/stores/signalement'
 import { computed, onMounted, ref } from 'vue'
 
@@ -101,11 +101,11 @@ const emit = defineEmits(['restart'])
 const isOdtReady = ref(false)
 
 // Create computed properties for document URL
-const documentUrl = computed(() => getDocumentUrl(store.currentId))
+const docConstatUrl = computed(() => getDocConstatUrl(store.currentId))
 
 // Download function
-const downloadDocument = (format: 'odt') => {
-  window.open(getDocumentUrl(store.currentId), '_blank')
+const downloadDocConstat = () => {
+  window.open(getDocConstatUrl(store.currentId), '_blank')
 }
 
 const handleRestart = () => {
