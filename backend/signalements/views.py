@@ -24,15 +24,15 @@ class SignalementDocumentDownloadView(View):
     """
 
     def prepare_odt_response(self, signalement):
-        if not signalement.document:
-            raise Http404("ODT document not yet generated")
+        if not signalement.doc_constat:
+            raise Http404("Rapport de constatation not yet generated")
         return {
-            "file": io.BytesIO(signalement.document),
+            "file": io.BytesIO(signalement.doc_constat),
             "content_type": "application/vnd.oasis.opendocument.text",
             "filename": f"signalement-{signalement.id}-{signalement.commune}.odt",
         }
 
-    def get_document_response(self, signalement):
+    def get_doc_constat_response(self, signalement):
         response_data = self.prepare_odt_response(signalement)
         return FileResponse(
             response_data["file"],
@@ -46,4 +46,4 @@ class SignalementDocumentDownloadView(View):
         Handle GET request to download the document.
         """
         signalement = get_object_or_404(Signalement, pk=pk)
-        return self.get_document_response(signalement)
+        return self.get_doc_constat_response(signalement)
