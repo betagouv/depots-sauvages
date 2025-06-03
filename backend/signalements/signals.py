@@ -12,24 +12,24 @@ from backend.signalements.models import Signalement
 logger = logging.getLogger(__name__)
 
 
-def save_documents(instance, odt_data):
+def save_doc_constat(instance, odt_data):
     """
     Save document data to the instance.
     """
     # Prevent infinite loop
-    post_save.disconnect(generate_document, sender=Signalement)
+    post_save.disconnect(generate_doc_constat, sender=Signalement)
     try:
         if odt_data:
-            instance.document = odt_data
-        instance.document_generated_at = timezone.now()
+            instance.doc_constat = odt_data
+        instance.doc_constat_generated_at = timezone.now()
         instance.save()
-        logger.info(f"Document saved for signalement {instance.id}")
+        logger.info(f"Document 'constatation' saved for signalement {instance.id}")
     finally:
-        post_save.connect(generate_document, sender=Signalement)
+        post_save.connect(generate_doc_constat, sender=Signalement)
 
 
 @task(queue_name="documents")
-def generate_document_task(signalement_id):
+def generate_doc_constat_task(signalement_id):
     """
     Generate document in background.
     """
@@ -43,7 +43,7 @@ def generate_document_task(signalement_id):
         logger.debug("ODT document generated")
         odt_data = odt_utils.read_odt_document(output_odt_path)
         logger.debug("ODT document read")
-        save_documents(instance, odt_data)
+        save_doc_constat(instance, odt_data)
         end_time = time.time()
         duration = end_time - start_time
         logger.info(f"Generation completed for signalement {instance.id} in {duration:.2f} seconds")
@@ -60,13 +60,16 @@ def generate_document_task(signalement_id):
 
 
 @receiver(post_save, sender=Signalement)
-def generate_document(sender, instance, created, **kwargs):
+def generate_doc_constat(sender, instance, created, **kwargs):
     """
-    Signal handler to trigger document generation when a Signalement is saved.
-    Only triggers if generate_doc flag is True.
+    Signal handler to trigger rapport de constatation generation when a Signalement is saved.
+    Only triggers if doc_constat_should_generate flag is True.
     """
-    if not instance.generate_doc:
+    logger.debug(
+        f"Signal for {instance.id} with generate doc: {instance.doc_constat_should_generate}"
+    )
+    if not instance.doc_constat_should_generate:
         return
     logger.info(f"Post-save signal for signalement {instance.id}, starting background generation")
-    generate_document_task.enqueue(instance.id)
+    generate_doc_constat_task.enqueue(instance.id)
     logger.info(f"Document generation task enqueued for signalement {instance.id}")

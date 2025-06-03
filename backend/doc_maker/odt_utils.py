@@ -15,9 +15,9 @@ def prepare_context(instance):
     context = model_to_dict(instance)
     # Remove fields we don't need
     context.pop("id", None)
-    context.pop("generate_doc", None)
-    context.pop("document", None)
-    context.pop("document_generated_at", None)
+    context.pop("doc_constat_should_generate", None)
+    context.pop("doc_constat", None)
+    context.pop("doc_constat_generated_at", None)
     context["prejudice_montant_calcule"] = instance.get_prejudice_montant_calcule()
     # Format date and time fields
     if context["date_constat"]:
