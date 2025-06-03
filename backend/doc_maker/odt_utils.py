@@ -3,7 +3,6 @@ import logging
 from django.forms.models import model_to_dict
 
 from backend.doc_maker.odt import ODTProcessor
-from backend.doc_maker.settings import OUTPUT_DIR, TEMPLATE_DIR
 
 logger = logging.getLogger(__name__)
 
@@ -36,11 +35,10 @@ def generate_document(instance, context, template_name):
     """
     processor = ODTProcessor()
     base_name = template_name.replace(".odt", "")
-    return processor.generate_document(
-        template_path=TEMPLATE_DIR / template_name,
-        output_dir=OUTPUT_DIR,
+    return processor.process_template(
+        template_name=template_name,
         context=context,
-        filename=f"{base_name}-{instance.id}-{instance.commune}",
+        output_filename=f"{base_name}-{instance.id}-{instance.commune}.odt",
     )
 
 
