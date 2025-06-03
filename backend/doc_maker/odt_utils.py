@@ -18,6 +18,9 @@ def prepare_context(instance):
     context.pop("doc_constat_should_generate", None)
     context.pop("doc_constat", None)
     context.pop("doc_constat_generated_at", None)
+    context.pop("lettre_info_should_generate", None)
+    context.pop("lettre_info", None)
+    context.pop("lettre_info_generated_at", None)
     context["prejudice_montant_calcule"] = instance.get_prejudice_montant_calcule()
     # Format date and time fields
     if context["date_constat"]:
@@ -27,27 +30,37 @@ def prepare_context(instance):
     return context
 
 
+def generate_document(instance, context, template_name):
+    """
+    Generate ODT document for the given instance and template.
+    """
+    processor = ODTProcessor()
+    base_name = template_name.replace(".odt", "")
+    return processor.generate_document(
+        template_path=TEMPLATE_DIR / template_name,
+        output_dir=OUTPUT_DIR,
+        context=context,
+        filename=f"{base_name}-{instance.id}-{instance.commune}",
+    )
+
+
 def generate_odt_document(instance, context):
     """
-    Generate an ODT document from the template and context.
-    Returns the path to the generated ODT file.
+    Generate 'rapport de constatation' ODT document.
     """
-    logger.info(f"Generating ODT document for signalement {instance.id}")
-    logger.debug(f"Template context: {context}")
-    processor = ODTProcessor()  # This will ensure directories exist
-    template_path = str(TEMPLATE_DIR / "template-doc-constat.odt")
-    output_path = str(OUTPUT_DIR / f"signalement_{instance.id}.odt")
-    generated_file_path = processor.process_template(
-        template_path,
-        context,
-        output_path,
-    )
-    return generated_file_path
+    return generate_document(instance, context, template_name="doc-constat.odt")
 
 
-def read_odt_document(odt_path):
+def generate_lettre_info(instance, context):
     """
-    Read the contents of an ODT file.
+    Generate 'lettre info' ODT document.
     """
-    with open(odt_path, "rb") as f:
+    return generate_document(instance, context, template_name="lettre-info.odt")
+
+
+def read_odt_document(file_path):
+    """
+    Read ODT document from file.
+    """
+    with open(file_path, "rb") as f:
         return f.read()
