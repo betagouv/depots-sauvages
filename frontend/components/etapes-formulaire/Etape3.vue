@@ -21,8 +21,8 @@
         </section>
 
         <section class="document-section fr-p-4w fr-mb-4w fr-mt-4w">
-          <h3 class="document-title">📄 Document disponible</h3>
-          <p>Vous pouvez télécharger votre rapport de constatation :</p>
+          <h3 class="document-title">📄 Documents disponibles</h3>
+          <p>Vous pouvez télécharger les documents suivants :</p>
           <div class="fr-btns-group fr-btns-group--block fr-btns-group--inline-md">
             <DsfrButton
               :icon="{ name: 'ri-download-line', animation: isOdtReady ? undefined : 'spin' }"
@@ -30,6 +30,13 @@
               @click="downloadDocConstat"
             >
               <span class="fr-m-2w">Télécharger le rapport de constatation au format ODT</span>
+            </DsfrButton>
+            <DsfrButton
+              :icon="{ name: 'ri-download-line', animation: isOdtReady ? undefined : 'spin' }"
+              :disabled="!isOdtReady"
+              @click="downloadLettreInfo"
+            >
+              <span class="fr-m-2w">Télécharger la lettre d'information au format ODT</span>
             </DsfrButton>
           </div>
         </section>
@@ -90,7 +97,7 @@
 </template>
 
 <script setup lang="ts">
-import { getDocConstatUrl } from '@/services/urls'
+import { getDocConstatUrl, getLettreInfoUrl } from '@/services/urls'
 import { useSignalementStore } from '@/stores/signalement'
 import { computed, onMounted, ref } from 'vue'
 
@@ -100,12 +107,17 @@ const emit = defineEmits(['restart'])
 // Loading states
 const isOdtReady = ref(false)
 
-// Create computed properties for document URL
+// Create computed properties for document URLs
 const docConstatUrl = computed(() => getDocConstatUrl(store.currentId))
+const lettreInfoUrl = computed(() => getLettreInfoUrl(store.currentId))
 
-// Download function
+// Download functions
 const downloadDocConstat = () => {
   window.open(getDocConstatUrl(store.currentId), '_blank')
+}
+
+const downloadLettreInfo = () => {
+  window.open(getLettreInfoUrl(store.currentId), '_blank')
 }
 
 const handleRestart = () => {
