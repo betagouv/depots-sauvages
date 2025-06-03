@@ -8,5 +8,5 @@ def generate_test_document():
     context = {"administration": "test bal"}
 
     return processor.process_template(
-        template_name="template.odt", context=context, output_filename="pv1.odt"
+        template_name="template-doc-constat.odt", context=context, output_filename="pv1.odt"
     )
