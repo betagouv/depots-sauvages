@@ -35,7 +35,7 @@ def generate_odt_document(instance, context):
     logger.info(f"Generating ODT document for signalement {instance.id}")
     logger.debug(f"Template context: {context}")
     processor = ODTProcessor()  # This will ensure directories exist
-    template_path = str(TEMPLATE_DIR / "template.odt")
+    template_path = str(TEMPLATE_DIR / "template-doc-constat.odt")
     output_path = str(OUTPUT_DIR / f"signalement_{instance.id}.odt")
     generated_file_path = processor.process_template(
         template_path,
