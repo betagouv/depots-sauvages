@@ -14,8 +14,8 @@ urlpatterns = [
     re_path(r"^$", index_view, name="index"),
     path("api/", include(router.urls)),
     path(
-        "documents/signalements/<int:pk>/",
+        "api/signalements/<int:pk>/documents/<str:doc_type>/",
         SignalementDocumentDownloadView.as_view(),
-        name="signalement-document",
+        name="signalement-document-download",
     ),
 ]
