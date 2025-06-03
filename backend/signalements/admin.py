@@ -14,7 +14,7 @@ class SignalementAdmin(admin.ModelAdmin):
         "photo_dispo",
         "auteur_identifie",
         "statut_auteur",
-        "document_generated_at",
+        "doc_constat_should_generate",
     ]
 
     list_filter = [
@@ -27,7 +27,7 @@ class SignalementAdmin(admin.ModelAdmin):
         "souhaite_porter_plainte",
         "arrete_municipal_existe",
         "prejudice_montant_connu",
-        "generate_doc",
+        "doc_constat_should_generate",
     ]
 
     search_fields = [
