@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='signalement',
-            name='generate_doc_constat',
+            name='doc_constat_should_generate',
             field=models.BooleanField(default=False, help_text='Faut-il générer le rapport de constatation ?', verbose_name='Générer le rapport de constatation'),
         ),
     ]
