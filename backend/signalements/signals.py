@@ -12,55 +12,53 @@ from backend.signalements.models import Signalement
 logger = logging.getLogger(__name__)
 
 
-def save_doc_constat(instance, odt_data):
+def save_document(instance, odt_data, doc_base_name):
     """
     Save document data to the instance.
     """
-    # Prevent infinite loop
-    post_save.disconnect(generate_doc_constat, sender=Signalement)
+    signal_handler = None
+    if doc_base_name == "doc_constat":
+        signal_handler = generate_doc_constat
+    elif doc_base_name == "lettre_info":
+        signal_handler = generate_lettre_info
+    if not signal_handler:
+        return
+    post_save.disconnect(signal_handler, sender=Signalement)  # Prevent infinite loop
     try:
         if odt_data:
-            instance.doc_constat = odt_data
-        instance.doc_constat_generated_at = timezone.now()
+            setattr(instance, doc_base_name, odt_data)
+        setattr(instance, f"{doc_base_name}_generated_at", timezone.now())
+        if doc_base_name == "lettre_info":
+            setattr(instance, f"{doc_base_name}_should_generate", False)
         instance.save()
-        logger.info(f"Document 'constatation' saved for signalement {instance.id}")
+        logger.info(f"Document '{doc_base_name}' saved for signalement {instance.id}")
     finally:
-        post_save.connect(generate_doc_constat, sender=Signalement)
-
-
-def save_lettre_info(instance, odt_data):
-    """
-    Save lettre info data to the instance.
-    """
-    # Prevent infinite loop
-    post_save.disconnect(generate_lettre_info, sender=Signalement)
-    try:
-        if odt_data:
-            instance.lettre_info = odt_data
-        instance.lettre_info_generated_at = timezone.now()
-        instance.lettre_info_should_generate = False
-        instance.save()
-        logger.info(f"Lettre info saved for signalement {instance.id}")
-    finally:
-        post_save.connect(generate_lettre_info, sender=Signalement)
+        post_save.connect(signal_handler, sender=Signalement)
 
 
 @task(queue_name="documents")
-def generate_doc_constat_task(signalement_id):
+def generate_document_task(signalement_id, doc_base_name):
     """
     Generate document in background.
     """
     start_time = time.time()
-    logger.info(f"Starting document generation for signalement {signalement_id}")
+    logger.info(f"Starting {doc_base_name} generation for signalement {signalement_id}")
     try:
         instance = Signalement.objects.get(id=signalement_id)
         context = odt_utils.prepare_context(instance)
-        logger.debug("Context prepared for document generation")
-        output_odt_path = odt_utils.generate_odt_document(instance, context)
-        logger.debug("ODT document generated")
+        logger.debug(f"Context prepared for {doc_base_name} generation")
+
+        # Generate document based on type
+        if doc_base_name == "doc_constat":
+            output_odt_path = odt_utils.generate_odt_document(instance, context)
+        else:
+            output_odt_path = odt_utils.generate_lettre_info(instance, context)
+
+        logger.debug(f"{doc_base_name} generated")
         odt_data = odt_utils.read_odt_document(output_odt_path)
-        logger.debug("ODT document read")
-        save_doc_constat(instance, odt_data)
+        logger.debug(f"{doc_base_name} read")
+        save_document(instance, odt_data, doc_base_name)
+
         end_time = time.time()
         duration = end_time - start_time
         logger.info(f"Generation completed for signalement {instance.id} in {duration:.2f} seconds")
@@ -71,38 +69,7 @@ def generate_doc_constat_task(signalement_id):
         }
     except Exception as e:
         logger.error(
-            f"Error generating document for signalement {signalement_id}: {e}", exc_info=True
-        )
-        raise  # Let django-tasks handle retries
-
-
-@task(queue_name="documents")
-def generate_lettre_info_task(signalement_id):
-    """
-    Generate lettre info in background.
-    """
-    start_time = time.time()
-    logger.info(f"Starting lettre info generation for signalement {signalement_id}")
-    try:
-        instance = Signalement.objects.get(id=signalement_id)
-        context = odt_utils.prepare_context(instance)
-        logger.debug("Context prepared for lettre info generation")
-        output_odt_path = odt_utils.generate_lettre_info(instance, context)
-        logger.debug("Lettre info generated")
-        odt_data = odt_utils.read_odt_document(output_odt_path)
-        logger.debug("Lettre info read")
-        save_lettre_info(instance, odt_data)
-        end_time = time.time()
-        duration = end_time - start_time
-        logger.info(f"Generation completed for signalement {instance.id} in {duration:.2f} seconds")
-        return {
-            "status": "success",
-            "signalement_id": instance.id,
-            "duration": duration,
-        }
-    except Exception as e:
-        logger.error(
-            f"Error generating lettre info for signalement {signalement_id}: {e}", exc_info=True
+            f"Error generating {doc_base_name} for signalement {signalement_id}: {e}", exc_info=True
         )
         raise  # Let django-tasks handle retries
 
@@ -114,12 +81,12 @@ def generate_doc_constat(sender, instance, created, **kwargs):
     Only triggers if doc_constat_should_generate flag is True.
     """
     logger.debug(
-        f"Signal for {instance.id} with generate doc: {instance.doc_constat_should_generate}"
+        f"Signal for {instance.id} with generate doc: " f"{instance.doc_constat_should_generate}"
     )
     if not instance.doc_constat_should_generate:
         return
     logger.info(f"Post-save signal for signalement {instance.id}, starting background generation")
-    generate_doc_constat_task.enqueue(instance.id)
+    generate_document_task.enqueue(instance.id, doc_base_name="doc_constat")
     logger.info(f"Document generation task enqueued for signalement {instance.id}")
 
 
@@ -130,10 +97,11 @@ def generate_lettre_info(sender, instance, created, **kwargs):
     Only triggers if lettre_info_should_generate flag is True.
     """
     logger.debug(
-        f"Signal for {instance.id} with generate lettre info: {instance.lettre_info_should_generate}"
+        f"Signal for {instance.id} with generate lettre info: "
+        f"{instance.lettre_info_should_generate}"
     )
     if not instance.lettre_info_should_generate:
         return
     logger.info(f"Post-save signal for signalement {instance.id}, starting background generation")
-    generate_lettre_info_task.enqueue(instance.id)
+    generate_document_task.enqueue(instance.id, doc_base_name="lettre_info")
     logger.info(f"Lettre info generation task enqueued for signalement {instance.id}")
