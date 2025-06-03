@@ -36,8 +36,9 @@ export interface Signalement {
   prejudiceKilometrage: number
   prejudiceAutresCouts: number
 
-  // Management field
+  // Management fields
   docConstatShouldGenerate: boolean
+  lettreInfoShouldGenerate: boolean
 }
 
 // Simple conversion functions using libraries
@@ -79,6 +80,7 @@ export const createEmptySignalement = (): Signalement => ({
   prejudiceKilometrage: 0,
   prejudiceAutresCouts: 0,
 
-  // Management field
+  // Management fields
   docConstatShouldGenerate: false,
+  lettreInfoShouldGenerate: false,
 })
