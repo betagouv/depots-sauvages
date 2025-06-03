@@ -1,24 +1,26 @@
 <template>
-  <main class="fr-container--sm">
-    <h1 class="fr-h2 fr-py-3w">Signalement de dépôts sauvages</h1>
-    <DsfrCallout v-if="store.currentStep !== 3" class="fr-mb-3w">
-      <p>
-        Ce formulaire vise à vous accompagner lorsque vous devez traiter un dépôt sauvage. Une fois
-        le formulaire rempli, un rapport de constatation personnalisé sera généré pour vous
-        permettre d'initier une procédure administrative et faciliter un éventuel dépôt de plainte.
-        Des conseils vous seront aussi proposés pour la suite des procédures.
-      </p>
-    </DsfrCallout>
+  <main class="fr-container--sm fr-py-5w">
+    <div class="fr-grid-row fr-grid-row--gutters">
+      <div class="fr-col-12 fr-col-md-6">
+        <h1 class="fr-h1 fr-mb-3w">Agir ensemble contre les dépôts sauvages</h1>
+        <p class="fr-text fr-mb-2w">Simplifier le signalement des dépôts sauvages</p>
+        <p>Notre outil vous accompagne et vous aide à produire des rapports pour faciliter la procédure administrative et judiciaire.</p>
+        <p>Notre objectif : améliorer l’efficacité des services publics, faciliter les procédures et contribuer à la réduction durable des dépôts sauvages sur le territoire.</p>
+        <RouterLink to="/debuter-procedure" class="fr-btn fr-mt-3w">Débuter une procédure</RouterLink>
+      </div>
 
-    <WasteReportForm @step-change="store.updateStep" />
+      <div class="fr-col-12 fr-col-md-6">
+        <DsfrPicture
+          legend="Déchèterie sauvage à Carrières-sous-Poissy - Yvelines"
+          ratio="16x9"
+          size="medium"
+          src="frontend/assets/images/image-decheterie-carrieres-sous-poissy.jpg"
+          title="Déchèterie sauvage à Carrières-sous-Poissy - Yvelines"
+        />
+      </div>
+    </div>
   </main>
 </template>
-
 <script setup lang="ts">
-import WasteReportForm from '@/components/FormulaireSignalement.vue'
-import { useSignalementStore } from '@/stores/signalement'
-
-const store = useSignalementStore()
+import { DsfrPicture } from '@gouvminint/vue-dsfr'
 </script>
-
-<style scoped></style>
