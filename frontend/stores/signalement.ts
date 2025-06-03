@@ -17,8 +17,10 @@ export const useSignalementStore = defineStore('signalement', {
       this.currentStep = step
       if (step >= 2) {
         this.formData.docConstatShouldGenerate = true
+        this.formData.lettreInfoShouldGenerate = true
       } else if (step === 1) {
         this.formData.docConstatShouldGenerate = false
+        this.formData.lettreInfoShouldGenerate = false
       }
     },
 
@@ -39,6 +41,7 @@ export const useSignalementStore = defineStore('signalement', {
     async saveFormData() {
       if (this.currentStep >= 2) {
         this.formData.docConstatShouldGenerate = true
+        this.formData.lettreInfoShouldGenerate = true
       }
 
       const dataToSend = toApiFormat(this.formData)
