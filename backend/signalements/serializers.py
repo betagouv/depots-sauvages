@@ -10,4 +10,4 @@ class SignalementSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Signalement
-        exclude = ["doc_constat"]
+        exclude = ["doc_constat", "lettre_info"]
