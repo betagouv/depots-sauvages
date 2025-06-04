@@ -1,0 +1,25 @@
+{
+  "formation": {
+    "web": {
+      "amount": 1,
+      "size": "S"
+    },
+    "worker": {
+      "amount": 1,
+      "size": "S"
+    }
+  },
+  "env": {
+    "DJANGO_DEBUG": {
+      "value": "True"
+    }
+  },
+  "scripts": {
+    "first-deploy": "bash scripts/first_deploy.sh"
+  },
+  "addons": [
+    {
+      "plan": "postgresql:postgresql-sandbox"
+    }
+  ]
+}
