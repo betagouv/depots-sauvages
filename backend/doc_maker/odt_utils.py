@@ -1,6 +1,7 @@
 import logging
 
 from django.forms.models import model_to_dict
+from django.utils import timezone
 
 from backend.doc_maker.odt import ODTProcessor
 
@@ -21,9 +22,10 @@ def prepare_context(instance):
     context.pop("lettre_info", None)
     context.pop("lettre_info_generated_at", None)
     context["prejudice_montant_calcule"] = instance.get_prejudice_montant_calcule()
+    context["today"] = timezone.now().strftime("%-d %B %Y")
     # Format date and time fields
     if context["date_constat"]:
-        context["date_constat"] = context["date_constat"].strftime("%d/%m/%Y")
+        context["date_constat"] = context["date_constat"].strftime("%-d %B %Y")
     if context["heure_constat"]:
         context["heure_constat"] = context["heure_constat"].strftime("%H:%M")
     return context
