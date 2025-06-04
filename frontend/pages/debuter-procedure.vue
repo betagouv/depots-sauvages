@@ -17,8 +17,7 @@
 <script setup lang="ts">
 import WasteReportForm from '@/components/FormulaireSignalement.vue'
 import { useSignalementStore } from '@/stores/signalement'
+import { DsfrCallout } from '@gouvminint/vue-dsfr'
 
 const store = useSignalementStore()
 </script>
-
-<style scoped></style>
