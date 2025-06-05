@@ -4,9 +4,9 @@
     <DsfrCallout v-if="store.currentStep !== 3" class="fr-mb-3w">
       <p>
         Ce formulaire vise à vous accompagner lorsque vous devez traiter un dépôt sauvage. Une fois
-        le formulaire rempli, un rapport de constatation personnalisé sera généré pour vous
-        permettre d'initier une procédure administrative et faciliter un éventuel dépôt de plainte.
-        Des conseils vous seront aussi proposés pour la suite des procédures.
+        le formulaire rempli, des documents personnalisés seront générés pour vous permettre
+        d'initier une procédure administrative et faciliter un éventuel dépôt de plainte. Des
+        conseils vous seront aussi proposés pour la suite des procédures.
       </p>
     </DsfrCallout>
 
