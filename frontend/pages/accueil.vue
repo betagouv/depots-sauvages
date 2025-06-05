@@ -19,11 +19,11 @@
 
       <div class="fr-col-12 fr-col-md-6">
         <DsfrPicture
-          legend="Déchèterie sauvage à Carrières-sous-Poissy - Yvelines"
+          legend="Dépot de déchets sauvage"
           ratio="16x9"
           size="medium"
-          src="frontend/assets/images/image-decheterie-carrieres-sous-poissy.jpg"
-          title="Déchèterie sauvage à Carrières-sous-Poissy - Yvelines"
+          src="/static/depot-de-dechet-sauvage-image-accueil.webp"
+          title="Dépot de déchets sauvage"
         />
       </div>
 
