@@ -14,29 +14,28 @@
         >
           Partagez-vous votre avis !
         </a>
-        Cette version démo est en test et disponible jusqu'au 7 mai. Vos retours sont précieux pour
-        faire évoluer l'outil.
+        Vos retours sont précieux pour faire évoluer l'outil.
       </DsfrNotice>
       <slot />
     </div>
-    <DsfrFooter
-      :logo-text="logoText"
-    >
+    <DsfrFooter :logo-text="logoText">
       <template #description>
         Le site de la mission logiciels libres et communs numériques est une publication de la
-        <a href="https://www.numerique.gouv.fr/" target="_blank">direction interministérielle du numérique</a>.
-        Le
-        <a href="https://github.com/betagouv/depots-sauvages"
-           title="code source - Nouvelle fenêtre"
-           target="_blank"
-           rel="noreferrer noopener"
+        <a href="https://www.numerique.gouv.fr/" target="_blank"
+          >direction interministérielle du numérique</a
+        >. Le
+        <a
+          href="https://github.com/betagouv/depots-sauvages"
+          title="code source - Nouvelle fenêtre"
+          target="_blank"
+          rel="noreferrer noopener"
         >
           code source de ce site
         </a>
         est publié sous licence libre.
       </template>
       <template #bottom-link>
-        <DsfrFooterLinkList :links="footerLinks"/>
+        <DsfrFooterLinkList :links="footerLinks" />
       </template>
       <template #content>
         <p>
@@ -67,7 +66,7 @@ interface BreadcrumbLink {
   to: string
 }
 
-const logoText = ["Ministère","de l’intérieur"];
+const logoText = ['Ministère', 'de l’intérieur']
 const breadcrumbLinks: BreadcrumbLink[] = []
 
 const footerLinks: FooterLink[] = [
