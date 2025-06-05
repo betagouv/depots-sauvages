@@ -6,7 +6,7 @@
       <div class="confirmation-content fr-p-4w">
         <section class="confirmation-section fr-mb-4w fr-pb-4w">
           <p>
-            Vous trouverez ci-dessous votre rapport de constatation pré-rempli, à compléter avec les
+            Vous trouverez ci-dessous des pièces de procédures pré-remplies, à compléter avec les
             éléments manquants (charte graphique de la mairie, date et signature du rédacteur du
             document, etc.).
           </p>
