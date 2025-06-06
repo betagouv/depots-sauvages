@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "django_tasks",
     "django_tasks.backends.database",
+    "anymail",
     #
     # Project apps
     "backend.home",
@@ -137,3 +138,13 @@ TASKS_LOGGING = {
     "level": "INFO",
 }
 LOGGING["loggers"]["django_tasks"] = TASKS_LOGGING
+
+# Email Configuration
+EMAIL_BACKEND = "anymail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = "noreply@example.com"
+SERVER_EMAIL = "server@example.com"
+
+# Anymail settings
+ANYMAIL = {
+    "TEST_MODE": True,
+}

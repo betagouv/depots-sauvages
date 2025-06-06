@@ -37,3 +37,14 @@ CSRF_TRUSTED_ORIGINS = ["http://localhost:5173"]
 CSRF_COOKIE_SAMESITE = "Lax"
 CSRF_COOKIE_HTTPONLY = False  # Needed to access the token in JavaScript
 SESSION_COOKIE_SAMESITE = "Lax"
+
+# Email Configuration
+EMAIL_BACKEND = "anymail.backends.brevo.EmailBackend"
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
+SERVER_EMAIL = env("SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
+
+# Anymail Brevo settings
+ANYMAIL = {
+    "BREVO_API_KEY": env("BREVO_API_KEY"),
+    "BREVO_SENDER_DOMAIN": env("BREVO_SENDER_DOMAIN"),
+}
