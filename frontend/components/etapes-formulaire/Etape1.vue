@@ -51,13 +51,38 @@
           />
         </div>
         <div class="fr-col-12 fr-col-md-6">
-          <DsfrInput
-            v-model="store.formData.heureConstat"
-            type="time"
-            label="Heure de la constatation"
-            hint=" au format HH:MM"
-            required
-          />
+          <label class="fr-label fr-mb-1w" for="heure-constat">Heure de la constatation *</label>
+          <div class="fr-input-group fr-grid-row fr-grid-row--middle fr-grid-row--gutters">
+            <div class="fr-col-auto">
+              <input
+                id="heure"
+                v-model="store.heure"
+                type="number"
+                min="0"
+                max="23"
+                class="fr-input fr-w-4w"
+                @input="store.updateTime"
+                required
+                aria-label="Heure"
+                placeholder="HH"
+              />
+            </div>
+            <div class="fr-col-auto">:</div>
+            <div class="fr-col-auto">
+              <input
+                id="minutes"
+                v-model="store.minutes"
+                type="number"
+                min="0"
+                max="59"
+                class="fr-input fr-w-4w"
+                @input="store.updateTime"
+                required
+                aria-label="Minutes"
+                placeholder="MM"
+              />
+            </div>
+          </div>
         </div>
 
         <div class="fr-col-12">
@@ -146,8 +171,8 @@
 </template>
 
 <script setup lang="ts">
-import '@/styles/form-steps.css'
 import { useSignalementStore } from '@/stores/signalement'
+import '@/styles/form-steps.css'
 import { DsfrInput } from '@gouvminint/vue-dsfr'
 import { ref } from 'vue'
 import {
