@@ -9,6 +9,8 @@ export const useSignalementStore = defineStore('signalement', {
     currentStep: 1,
     currentId: null as number | null,
     formData: createEmptySignalement(),
+    heure: '',
+    minutes: '',
   }),
 
   // Actions
@@ -28,6 +30,12 @@ export const useSignalementStore = defineStore('signalement', {
       this.currentStep = 1
       this.currentId = null
       this.formData = createEmptySignalement()
+      this.heure = ''
+      this.minutes = ''
+    },
+
+    updateTime() {
+      this.formData.heureConstat = `${this.heure}:${this.minutes}`
     },
 
     // Utils
@@ -61,6 +69,11 @@ export const useSignalementStore = defineStore('signalement', {
         const data = await fetchResource(`${API_URLS.signalements}${id}/`)
         this.currentId = id
         this.formData = fromApiFormat(data)
+        if (this.formData.heureConstat) {
+          const [h, m] = this.formData.heureConstat.split(':')
+          this.heure = h
+          this.minutes = m
+        }
       } catch (error) {
         console.error('Error loading signalement:', error)
         throw error
