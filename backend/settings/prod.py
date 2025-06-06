@@ -37,3 +37,14 @@ SESSION_COOKIE_SAMESITE = "Lax"
 
 # Django Tasks Settings
 TASKS["default"]["BACKEND"] = "django_tasks.backends.database.DatabaseBackend"
+
+# Email Configuration
+EMAIL_BACKEND = "anymail.backends.brevo.EmailBackend"
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
+SERVER_EMAIL = env("SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
+
+# Anymail settings for production
+ANYMAIL = {
+    "BREVO_API_KEY": env("BREVO_API_KEY"),
+    "BREVO_SENDER_DOMAIN": env("BREVO_SENDER_DOMAIN"),
+}
