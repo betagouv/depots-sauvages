@@ -50,39 +50,21 @@
             required
           />
         </div>
-        <div class="fr-col-12 fr-col-md-6">
-          <label class="fr-label fr-mb-1w" for="heure-constat">Heure de la constatation *</label>
-          <div class="fr-input-group fr-grid-row fr-grid-row--middle fr-grid-row--gutters">
-            <div class="fr-col-auto">
-              <input
-                id="heure"
-                v-model="store.heure"
-                type="number"
-                min="0"
-                max="23"
-                class="fr-input fr-w-4w"
-                @input="store.updateTime"
-                required
-                aria-label="Heure"
-                placeholder="HH"
-              />
-            </div>
-            <div class="fr-col-auto">:</div>
-            <div class="fr-col-auto">
-              <input
-                id="minutes"
-                v-model="store.minutes"
-                type="number"
-                min="0"
-                max="59"
-                class="fr-input fr-w-4w"
-                @input="store.updateTime"
-                required
-                aria-label="Minutes"
-                placeholder="MM"
-              />
-            </div>
-          </div>
+        <div class="fr-input-group fr-col-12 fr-col-md-6">
+          <label class="fr-label" for="heure-constatation">
+            Heure de la constatation *
+            <span class="fr-hint-text">Format attendu : HH:MM</span>
+          </label>
+          <input
+            type="time"
+            v-model="store.formData.heureConstat"
+            id="heure-constatation"
+            name="heure-constatation"
+            class="fr-input"
+            min="00:00"
+            max="23:00"
+            required
+          />
         </div>
 
         <div class="fr-col-12">
