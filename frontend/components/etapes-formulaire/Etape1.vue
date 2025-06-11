@@ -50,12 +50,19 @@
             required
           />
         </div>
-        <div class="fr-col-12 fr-col-md-6">
-          <DsfrInput
-            v-model="store.formData.heureConstat"
+        <div class="fr-input-group fr-col-12 fr-col-md-6">
+          <label class="fr-label" for="heure-constatation">
+            Heure de la constatation *
+            <span class="fr-hint-text">Format attendu : HH:MM</span>
+          </label>
+          <input
             type="time"
-            label="Heure de la constatation"
-            hint=" au format HH:MM"
+            v-model="store.formData.heureConstat"
+            id="heure-constatation"
+            name="heure-constatation"
+            class="fr-input"
+            min="00:00"
+            max="23:00"
             required
           />
         </div>
@@ -146,8 +153,8 @@
 </template>
 
 <script setup lang="ts">
-import '@/styles/form-steps.css'
 import { useSignalementStore } from '@/stores/signalement'
+import '@/styles/form-steps.css'
 import { DsfrInput } from '@gouvminint/vue-dsfr'
 import { ref } from 'vue'
 import {
