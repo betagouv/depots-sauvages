@@ -5,6 +5,31 @@
       service-description="Agir contre les dépôts sauvages"
       :logoText="logoText"
     />
+
+    <nav
+      class="fr-container"
+      role="navigation"
+      aria-label="Menu principal"
+    >
+      <ul class="fr-nav__list">
+        <li
+          v-for="lien in navLinks"
+          :key="lien.href"
+          class="fr-nav__item"
+        >
+          <a
+            class="fr-nav__link"
+            :class="{ 'fr-nav__link--active': route.path === lien.href }"
+            :aria-current="route.path === lien.href ? 'page' : undefined"
+            :href="lien.href"
+          >
+            {{ lien.text }}
+          </a>
+        </li>
+      </ul>
+
+    </nav>
+
     <div class="fr-container fr-py-3w" role="main" id="content">
       <DsfrNotice>
         <a
@@ -55,7 +80,7 @@
 
 <script setup lang="ts">
 import { DsfrFooter, DsfrFooterLinkList, DsfrHeader, DsfrNotice } from '@gouvminint/vue-dsfr'
-
+import { useRoute } from 'vue-router'
 interface FooterLink {
   text: string
   href: string
@@ -66,8 +91,15 @@ interface BreadcrumbLink {
   to: string
 }
 
+const route = useRoute()
 const logoText = ['Ministère', 'de l’intérieur']
 const breadcrumbLinks: BreadcrumbLink[] = []
+
+const navLinks = [
+  { text: 'Accueil', href: '/' },
+  { text: 'Débuter une procédure', href: '/debuter-procedure' },
+  { text: 'Être accompagné', href: '/accompagnement' },
+]
 
 const footerLinks: FooterLink[] = [
   { text: 'legifrance.gouv.fr', href: 'https://legifrance.gouv.fr' },
