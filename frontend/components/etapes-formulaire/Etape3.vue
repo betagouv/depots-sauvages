@@ -39,22 +39,25 @@
           </div>
 
           <div class="fr-mt-4w">
-            <h4>Recevoir les documents par email</h4>
+            <h4>Recevoir vos documents par e-mail</h4>
             <div class="fr-input-group">
-              <label class="fr-label" for="email-input"> Adresse email </label>
+              <label class="fr-label" for="email-input">
+                Adresse électronique
+                <span class="fr-hint-text">Format attendu : nom@domaine.fr</span>
+              </label>
               <input
                 class="fr-input"
                 :class="{ 'fr-input--error': emailError }"
                 id="email-input"
                 v-model="email"
                 type="email"
-                placeholder="votre@email.com"
+                :aria-describedby="emailInputDescribedBy || undefined"
               />
-              <p v-if="emailError" class="fr-error-text">
+              <p v-if="emailError" class="fr-error-text" :id="errorId" role="alert">
                 {{ emailError }}
-              </p>
-              <p v-if="showSuccessAlert" class="fr-valid-text">
-                Les documents ont été envoyés avec succès à votre adresse email
+              </
+              <p v-if="showSuccessAlert" class="fr-valid-text" :id="successId" role="alert">
+                Un e-mail contenant les documents a été envoyé avec succès à l’adresse {{ email }}
               </p>
             </div>
             <DsfrButton
@@ -63,7 +66,7 @@
               :disabled="!isEmailValid || isSending"
               @click="sendEmail"
             >
-              {{ isSending ? 'Envoi en cours...' : 'Envoyer par email' }}
+              {{ isSending ? 'Les documents sont en cours d’envoi' : 'Envoyer les documents par e-mail' }}
             </DsfrButton>
           </div>
         </section>
@@ -149,6 +152,14 @@ const isEmailValid = computed(() => {
   return input.checkValidity()
 })
 
+const errorId = 'email-error';
+const successId = 'email-success';
+const emailInputDescribedBy = computed(() => {
+  if (emailError.value) return errorId
+  if (showSuccessAlert.value) return successId
+  return null
+})
+
 // Create computed properties for document URLs
 const docConstatUrl = computed(() => getDocConstatUrl(store.currentId))
 const lettreInfoUrl = computed(() => getLettreInfoUrl(store.currentId))
@@ -165,7 +176,7 @@ const downloadLettreInfo = () => {
 // Email sending function
 const sendEmail = async () => {
   if (!isEmailValid.value) {
-    emailError.value = 'Veuillez entrer une adresse email valide'
+    emailError.value = "L’adresse e-mail saisie n’est pas valide. Vérifiez le format (ex. : nom@domaine.fr)."
     return
   }
 
@@ -178,7 +189,10 @@ const sendEmail = async () => {
     showSuccessAlert.value = true
     email.value = ''
   } catch (error: any) {
-    emailError.value = error.response?.data?.error || "Erreur lors de l'envoi de l'email"
+    const messageServeur = error.response?.data?.error
+    emailError.value = messageServeur
+      ? `L’envoi a échoué : ${messageServeur}. Veuillez réessayer.`
+      : "L’envoi a échoué. Vérifiez votre connexion ou réessayez dans quelques instants."
   } finally {
     isSending.value = false
   }
