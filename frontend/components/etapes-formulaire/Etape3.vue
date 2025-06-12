@@ -55,7 +55,7 @@
               />
               <p v-if="emailError" class="fr-error-text" :id="errorId" role="alert">
                 {{ emailError }}
-              </
+              </p>
               <p v-if="showSuccessAlert" class="fr-valid-text" :id="successId" role="alert">
                 Un e-mail contenant les documents a été envoyé avec succès à l’adresse {{ email }}
               </p>
@@ -66,7 +66,11 @@
               :disabled="!isEmailValid || isSending"
               @click="sendEmail"
             >
-              {{ isSending ? 'Les documents sont en cours d’envoi' : 'Envoyer les documents par e-mail' }}
+              {{
+                isSending
+                  ? 'Les documents sont en cours d’envoi'
+                  : 'Envoyer les documents par e-mail'
+              }}
             </DsfrButton>
           </div>
         </section>
@@ -152,8 +156,8 @@ const isEmailValid = computed(() => {
   return input.checkValidity()
 })
 
-const errorId = 'email-error';
-const successId = 'email-success';
+const errorId = 'email-error'
+const successId = 'email-success'
 const emailInputDescribedBy = computed(() => {
   if (emailError.value) return errorId
   if (showSuccessAlert.value) return successId
@@ -176,7 +180,8 @@ const downloadLettreInfo = () => {
 // Email sending function
 const sendEmail = async () => {
   if (!isEmailValid.value) {
-    emailError.value = "L’adresse e-mail saisie n’est pas valide. Vérifiez le format (ex. : nom@domaine.fr)."
+    emailError.value =
+      'L’adresse e-mail saisie n’est pas valide. Vérifiez le format (ex. : nom@domaine.fr).'
     return
   }
 
@@ -192,7 +197,7 @@ const sendEmail = async () => {
     const messageServeur = error.response?.data?.error
     emailError.value = messageServeur
       ? `L’envoi a échoué : ${messageServeur}. Veuillez réessayer.`
-      : "L’envoi a échoué. Vérifiez votre connexion ou réessayez dans quelques instants."
+      : 'L’envoi a échoué. Vérifiez votre connexion ou réessayez dans quelques instants.'
   } finally {
     isSending.value = false
   }
