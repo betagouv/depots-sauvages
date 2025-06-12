@@ -58,11 +58,11 @@
             </div>
             <DsfrButton
               class="fr-mt-2w"
-              :icon="{ name: 'fr-icon-mail-fill', animation: isSending ? 'spin' : undefined }"
+              :icon="{ name: 'fr-icon-mail-fill' }"
               :disabled="!isEmailValid || isSending"
               @click="sendEmail"
             >
-              Envoyer par email
+              {{ isSending ? 'Envoi en cours...' : 'Envoyer par email' }}
             </DsfrButton>
           </div>
         </section>
@@ -140,8 +140,11 @@ const emailError = ref('')
 
 // Email validation
 const isEmailValid = computed(() => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  return emailRegex.test(email.value)
+  if (!email.value.trim()) return false
+  const input = document.createElement('input')
+  input.type = 'email'
+  input.value = email.value
+  return input.checkValidity()
 })
 
 // Create computed properties for document URLs
