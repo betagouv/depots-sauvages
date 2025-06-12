@@ -27,7 +27,7 @@
         <div class="fr-grid-row fr-grid-row--gutters">
           <div class="fr-col-12 fr-col-md-6">
             <a
-              href="mailto:contact@protect-envi.beta.gouv.fr"
+              :href="`mailto:${contactEmail}`"
               class="fr-btn fr-mb-2w"
               aria-label="Envoyer un e-mail"
             >
@@ -41,7 +41,7 @@
 
           <div class="fr-col-12 fr-col-md-6">
             <a
-              href="https://wa.me/1234567890"
+              :href="whatsappLink"
               target="_blank"
               rel="noopener noreferrer"
               class="fr-btn fr-btn--secondary fr-mb-2w"
@@ -62,4 +62,6 @@
 </template>
 
 <script setup lang="ts">
+const contactEmail = import.meta.env.VITE_CONTACT_EMAIL;
+const whatsappLink = import.meta.env.VITE_WHATSAPP_LINK;
 </script>
