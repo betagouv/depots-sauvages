@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -18,36 +19,29 @@ class SendEmailViewSet(viewsets.ViewSet):
         """
         Send an email with the signalement documents to the specified email address.
         """
-        try:
-            signalement = Signalement.objects.get(id=pk)
-            serializer = EmailSerializer(data=request.data)
-            if not serializer.is_valid():
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            email = serializer.validated_data["email"]
-            subject = f"Documents du signalement #{signalement.id} - {signalement.commune}"
-            html_template = render_to_string(
-                "email-get-documents.html", {"signalement": signalement}
+        signalement = get_object_or_404(Signalement, id=pk)
+        serializer = EmailSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        email = serializer.validated_data["email"]
+        subject = f"Documents du signalement #{signalement.id} - {signalement.commune}"
+        html_template = render_to_string("email-get-documents.html", {"signalement": signalement})
+        handler = EmailHandler(subject=subject, html_template=html_template, to_emails=[email])
+        if signalement.doc_constat:
+            handler.add_attachment(
+                filename=f"rapport-constatation-{signalement.id}-{signalement.commune}.odt",
+                content=signalement.doc_constat,
+                mimetype="application/vnd.oasis.opendocument.text",
             )
-            handler = EmailHandler(subject=subject, html_template=html_template, to_emails=[email])
-            if signalement.doc_constat:
-                handler.add_attachment(
-                    filename=f"rapport-constatation-{signalement.id}-{signalement.commune}.odt",
-                    content=signalement.doc_constat,
-                    mimetype="application/vnd.oasis.opendocument.text",
-                )
-            if signalement.lettre_info:
-                handler.add_attachment(
-                    filename=f"lettre-info-{signalement.id}-{signalement.commune}.odt",
-                    content=signalement.lettre_info,
-                    mimetype="application/vnd.oasis.opendocument.text",
-                )
-            if handler.send():
-                return Response({"message": "Email sent successfully"})
-            else:
-                return Response(
-                    {"error": "Failed to send email"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
-                )
-        except Signalement.DoesNotExist:
-            return Response({"error": "Signalement not found"}, status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        if signalement.lettre_info:
+            handler.add_attachment(
+                filename=f"lettre-info-{signalement.id}-{signalement.commune}.odt",
+                content=signalement.lettre_info,
+                mimetype="application/vnd.oasis.opendocument.text",
+            )
+        if handler.send():
+            return Response({"message": "Email sent successfully"})
+        return Response(
+            {"error": "Email service unavailable"},
+            status=status.HTTP_503_SERVICE_UNAVAILABLE,
+        )
