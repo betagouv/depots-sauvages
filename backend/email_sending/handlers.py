@@ -2,7 +2,7 @@ from django.conf import settings
 from django.core.mail import EmailMessage
 
 
-class EmailSender:
+class EmailHandler:
     """
     Utility class to send emails through Django's email backend.
     Handles email creation and sending with attachments.
