@@ -39,6 +39,32 @@
               <span class="fr-m-2w">Télécharger la lettre d'information au format ODT</span>
             </DsfrButton>
           </div>
+
+          <div class="fr-mt-4w">
+            <h4>Recevoir les documents par email</h4>
+            <div class="fr-input-group">
+              <label class="fr-label" for="email-input"> Adresse email </label>
+              <input
+                class="fr-input"
+                :class="{ 'fr-input--error': emailError }"
+                id="email-input"
+                v-model="email"
+                type="email"
+                placeholder="votre@email.com"
+              />
+              <p v-if="emailError" class="fr-error-text">
+                {{ emailError }}
+              </p>
+            </div>
+            <DsfrButton
+              class="fr-mt-2w"
+              :icon="{ name: 'fr-icon-mail-fill', animation: isSending ? 'spin' : undefined }"
+              :disabled="!isEmailValid || isSending"
+              @click="sendEmail"
+            >
+              Envoyer par email
+            </DsfrButton>
+          </div>
         </section>
 
         <section class="confirmation-section fr-mb-4w fr-pb-4w">
@@ -97,8 +123,10 @@
 </template>
 
 <script setup lang="ts">
-import { getDocConstatUrl, getLettreInfoUrl } from '@/services/urls'
+import { createResource } from '@/services/api'
+import { getDocConstatUrl, getLettreInfoUrl, getSendEmailUrl } from '@/services/urls'
 import { useSignalementStore } from '@/stores/signalement'
+import { DsfrAlert, DsfrButton } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, ref } from 'vue'
 
 const store = useSignalementStore()
@@ -106,6 +134,15 @@ const emit = defineEmits(['restart'])
 
 // Loading states
 const isOdtReady = ref(false)
+const isSending = ref(false)
+const email = ref('')
+const emailError = ref('')
+
+// Email validation
+const isEmailValid = computed(() => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  return emailRegex.test(email.value)
+})
 
 // Create computed properties for document URLs
 const docConstatUrl = computed(() => getDocConstatUrl(store.currentId))
@@ -118,6 +155,27 @@ const downloadDocConstat = () => {
 
 const downloadLettreInfo = () => {
   window.open(getLettreInfoUrl(store.currentId), '_blank')
+}
+
+// Email sending function
+const sendEmail = async () => {
+  if (!isEmailValid.value) {
+    emailError.value = 'Veuillez entrer une adresse email valide'
+    return
+  }
+
+  isSending.value = true
+  emailError.value = ''
+
+  try {
+    await createResource(getSendEmailUrl(store.currentId), { email: email.value })
+    alert('Les documents ont été envoyés avec succès à votre adresse email')
+    email.value = ''
+  } catch (error: any) {
+    emailError.value = error.response?.data?.error || "Erreur lors de l'envoi de l'email"
+  } finally {
+    isSending.value = false
+  }
 }
 
 const handleRestart = () => {
