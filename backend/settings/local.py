@@ -48,3 +48,6 @@ ANYMAIL = {
     "BREVO_API_KEY": env("BREVO_API_KEY"),
     "BREVO_SENDER_DOMAIN": env("BREVO_SENDER_DOMAIN"),
 }
+
+# Rate limiting
+EMAIL_RATE_LIMIT = env("EMAIL_RATE_LIMIT", default="10/m")
