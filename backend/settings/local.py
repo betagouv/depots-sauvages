@@ -39,8 +39,8 @@ CSRF_COOKIE_HTTPONLY = False  # Needed to access the token in JavaScript
 SESSION_COOKIE_SAMESITE = "Lax"
 
 # Email Configuration
-EMAIL_BACKEND = "anymail.backends.brevo.EmailBackend"
-DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
+EMAIL_BACKEND = env("EMAIL_BACKEND", default="anymail.backends.console.EmailBackend")
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="noreply@example.com")
 SERVER_EMAIL = env("SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
 
 # Anymail Brevo settings
