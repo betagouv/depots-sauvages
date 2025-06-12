@@ -139,10 +139,7 @@ TASKS_LOGGING = {
 }
 LOGGING["loggers"]["django_tasks"] = TASKS_LOGGING
 
-# Email Configuration
-EMAIL_BACKEND = "anymail.backends.console.EmailBackend"
-DEFAULT_FROM_EMAIL = "noreply@example.com"
-SERVER_EMAIL = "server@example.com"
+# Email sending rate limiting
 EMAIL_RATE_LIMIT = "10/m"
 
 # Anymail settings
