@@ -15,7 +15,7 @@ class SendEmailViewSet(viewsets.ViewSet):
     """
 
     @action(detail=True, methods=["post"])
-    def send_signalement(self, request, pk=None):
+    def send_email(self, request, pk=None):
         """
         Send an email with the signalement documents to the specified email address.
         """
