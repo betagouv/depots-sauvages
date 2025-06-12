@@ -22,7 +22,7 @@ urlpatterns = [
     ),
     path(
         "api/signalements/<int:pk>/send-email/",
-        SendEmailViewSet.as_view({"post": "send_signalement"}),
+        SendEmailViewSet.as_view({"post": "send_email"}),
         name="signalement-send-email",
     ),
     re_path(r"^(?!admin|api).*", TemplateView.as_view(template_name="index.html")),
