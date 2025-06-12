@@ -1,7 +1,5 @@
 <template>
   <div class="fr-container--sm">
-    <DsfrAlert type="success" title="Merci pour votre signalement" />
-
     <div class="fr-bg--contrast fr-mt-3w">
       <div class="confirmation-content fr-p-4w">
         <section class="confirmation-section fr-mb-4w fr-pb-4w">
@@ -54,6 +52,9 @@
               />
               <p v-if="emailError" class="fr-error-text">
                 {{ emailError }}
+              </p>
+              <p v-if="showSuccessAlert" class="fr-valid-text">
+                Les documents ont été envoyés avec succès à votre adresse email
               </p>
             </div>
             <DsfrButton
@@ -126,7 +127,7 @@
 import { createResource } from '@/services/api'
 import { getDocConstatUrl, getLettreInfoUrl, getSendEmailUrl } from '@/services/urls'
 import { useSignalementStore } from '@/stores/signalement'
-import { DsfrAlert, DsfrButton } from '@gouvminint/vue-dsfr'
+import { DsfrButton } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, ref } from 'vue'
 
 const store = useSignalementStore()
@@ -135,6 +136,7 @@ const emit = defineEmits(['restart'])
 // Loading states
 const isOdtReady = ref(false)
 const isSending = ref(false)
+const showSuccessAlert = ref(false)
 const email = ref('')
 const emailError = ref('')
 
@@ -169,10 +171,11 @@ const sendEmail = async () => {
 
   isSending.value = true
   emailError.value = ''
+  showSuccessAlert.value = false
 
   try {
     await createResource(getSendEmailUrl(store.currentId), { email: email.value })
-    alert('Les documents ont été envoyés avec succès à votre adresse email')
+    showSuccessAlert.value = true
     email.value = ''
   } catch (error: any) {
     emailError.value = error.response?.data?.error || "Erreur lors de l'envoi de l'email"
