@@ -57,8 +57,8 @@
               <p v-if="emailError" class="fr-error-text" :id="errorId" role="alert">
                 {{ emailError }}
               </p>
-              <p v-if="showSuccessAlert" class="fr-valid-text" :id="successId" role="alert">
-                Un e-mail contenant les documents a été envoyé avec succès à l’adresse {{ email }}
+              <p v-if="emailSuccess" class="fr-valid-text" :id="successId" role="alert">
+                Un e-mail contenant les documents a été envoyé avec succès à l'adresse {{ email }}
               </p>
             </div>
             <DsfrButton
@@ -144,14 +144,14 @@ const emit = defineEmits(['restart'])
 // Loading states
 const isOdtReady = ref(false)
 const isSending = ref(false)
-const showSuccessAlert = ref(false)
+const emailSuccess = ref(false)
 const email = ref('')
 const emailError = ref('')
 
 // Clear messages when user types
 const clearMessages = () => {
   emailError.value = ''
-  showSuccessAlert.value = false
+  emailSuccess.value = false
 }
 
 // Email validation
@@ -167,7 +167,7 @@ const errorId = 'email-error'
 const successId = 'email-success'
 const emailInputDescribedBy = computed(() => {
   if (emailError.value) return errorId
-  if (showSuccessAlert.value) return successId
+  if (emailSuccess.value) return successId
   return null
 })
 
@@ -194,11 +194,11 @@ const sendEmail = async () => {
 
   isSending.value = true
   emailError.value = ''
-  showSuccessAlert.value = false
+  emailSuccess.value = false
 
   try {
     await createResource(getSendEmailUrl(store.currentId), { email: email.value })
-    showSuccessAlert.value = true
+    emailSuccess.value = true
     email.value = ''
   } catch (error: any) {
     const messageServeur = error.response?.data?.error
