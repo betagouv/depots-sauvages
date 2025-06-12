@@ -52,6 +52,7 @@
                 v-model="email"
                 type="email"
                 :aria-describedby="emailInputDescribedBy || undefined"
+                @input="clearMessages"
               />
               <p v-if="emailError" class="fr-error-text" :id="errorId" role="alert">
                 {{ emailError }}
@@ -146,6 +147,12 @@ const isSending = ref(false)
 const showSuccessAlert = ref(false)
 const email = ref('')
 const emailError = ref('')
+
+// Clear messages when user types
+const clearMessages = () => {
+  emailError.value = ''
+  showSuccessAlert.value = false
+}
 
 // Email validation
 const isEmailValid = computed(() => {
