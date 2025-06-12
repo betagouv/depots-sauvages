@@ -6,6 +6,7 @@ from rest_framework.response import Response
 
 from backend.email_sending.handlers import EmailHandler
 from backend.email_sending.serializers import EmailSerializer
+from backend.email_sending.throttling import EmailRateThrottle
 from backend.signalements.models import Signalement
 
 
@@ -13,6 +14,8 @@ class SendEmailViewSet(viewsets.ViewSet):
     """
     ViewSet for handling email sending operations.
     """
+
+    throttle_classes = [EmailRateThrottle]
 
     @action(detail=True, methods=["post"])
     def send_email(self, request, pk=None):

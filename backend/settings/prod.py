@@ -35,6 +35,9 @@ CSRF_COOKIE_SAMESITE = "Lax"
 CSRF_COOKIE_HTTPONLY = False  # Needed to access the token in JavaScript
 SESSION_COOKIE_SAMESITE = "Lax"
 
+# Rate limiting
+EMAIL_RATE_LIMIT = env("EMAIL_RATE_LIMIT", default="5/hour")
+
 # Django Tasks Settings
 TASKS["default"]["BACKEND"] = "django_tasks.backends.database.DatabaseBackend"
 
