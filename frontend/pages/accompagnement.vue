@@ -9,16 +9,6 @@
         </p>
       </div>
 
-      <div class="fr-col-12 fr-col-md-6">
-        <DsfrPicture
-          legend="Dépot de déchets sauvage"
-          ratio="16x9"
-          size="medium"
-          src="/static/depot-de-dechet-sauvage-image-accueil.webp"
-          title="Dépot de déchets sauvage"
-        />
-      </div>
-
       <div class="fr-container">
         <h2>Contactez-nous</h2>
         <p class="fr-mb-4w">
