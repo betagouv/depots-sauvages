@@ -52,7 +52,7 @@
                 v-model="email"
                 type="email"
                 :aria-describedby="emailInputDescribedBy || undefined"
-                @input="clearMessages"
+                @input="clearEmailSuccessError"
               />
               <p v-if="emailError" class="fr-error-text" :id="errorId" role="alert">
                 {{ emailError }}
@@ -152,25 +152,6 @@ const emailSuccess = ref<string>('')
 const errorId = 'email-error'
 const successId = 'email-success'
 
-const isEmailValid = computed(() => {
-  if (!email.value.trim()) return false
-  const input = document.createElement('input')
-  input.type = 'email'
-  input.value = email.value
-  return input.checkValidity()
-})
-
-const emailInputDescribedBy = computed(() => {
-  if (emailError.value) return errorId
-  if (emailSuccess.value) return successId
-  return null
-})
-
-const clearMessages = () => {
-  emailError.value = ''
-  emailSuccess.value = ''
-}
-
 const downloadDocConstat = () => {
   window.open(getDocConstatUrl(store.currentId), '_blank')
 }
@@ -179,17 +160,32 @@ const downloadLettreInfo = () => {
   window.open(getLettreInfoUrl(store.currentId), '_blank')
 }
 
+const isEmailValid = computed(() => {
+  if (email.value.trim() === '') return false
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  return emailRegex.test(email.value)
+})
+
+const emailInputDescribedBy = computed(() => {
+  if (emailError.value) return errorId
+  if (emailSuccess.value) return successId
+  return null
+})
+
+const clearEmailSuccessError = () => {
+  emailError.value = ''
+  emailSuccess.value = ''
+}
+
 const sendEmail = async () => {
-  if (!isEmailValid.value) {
+  if (!isEmailValid) {
     emailError.value =
       "L'adresse e-mail saisie n'est pas valide. Vérifiez le format (ex. : nom@domaine.fr)."
     return
   }
-
   isSending.value = true
   emailError.value = ''
   emailSuccess.value = ''
-
   try {
     await createResource(getSendEmailUrl(store.currentId), { email: email.value })
     emailSuccess.value = `Un e-mail contenant les documents a été envoyé avec succès à l'adresse ${email.value}`
