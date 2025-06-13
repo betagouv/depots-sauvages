@@ -179,7 +179,7 @@ const clearEmailSuccessError = () => {
 }
 
 const sendEmail = async () => {
-  if (!isEmailValid) {
+  if (!isEmailValid.value) {
     emailError.value =
       "L'adresse e-mail saisie n'est pas valide. Vérifiez le format (ex. : nom@domaine.fr)."
     return
