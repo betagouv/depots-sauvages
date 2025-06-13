@@ -58,7 +58,7 @@
                 {{ emailError }}
               </p>
               <p v-if="emailSuccess" class="fr-valid-text" :id="successId" role="alert">
-                Un e-mail contenant les documents a été envoyé avec succès à l'adresse {{ email }}
+                {{ emailSuccess }}
               </p>
             </div>
             <DsfrButton
@@ -70,7 +70,7 @@
               <span class="fr-m-1w">
                 {{
                   isSending
-                    ? 'Les documents sont en cours d’envoi'
+                    ? "Les documents sont en cours d'envoi"
                     : 'Envoyer les documents par e-mail'
                 }}
               </span>
@@ -143,20 +143,15 @@ import { computed, onMounted, ref } from 'vue'
 const store = useSignalementStore()
 const emit = defineEmits(['restart'])
 
-// Loading states
-const isOdtReady = ref(false)
-const isSending = ref(false)
-const emailSuccess = ref(false)
-const email = ref('')
-const emailError = ref('')
+const isOdtReady = ref<boolean>(false)
+const isSending = ref<boolean>(false)
+const email = ref<string>('')
+const emailError = ref<string>('')
+const emailSuccess = ref<string>('')
 
-// Clear messages when user types
-const clearMessages = () => {
-  emailError.value = ''
-  emailSuccess.value = false
-}
+const errorId = 'email-error'
+const successId = 'email-success'
 
-// Email validation
 const isEmailValid = computed(() => {
   if (!email.value.trim()) return false
   const input = document.createElement('input')
@@ -165,19 +160,17 @@ const isEmailValid = computed(() => {
   return input.checkValidity()
 })
 
-const errorId = 'email-error'
-const successId = 'email-success'
 const emailInputDescribedBy = computed(() => {
   if (emailError.value) return errorId
   if (emailSuccess.value) return successId
   return null
 })
 
-// Create computed properties for document URLs
-const docConstatUrl = computed(() => getDocConstatUrl(store.currentId))
-const lettreInfoUrl = computed(() => getLettreInfoUrl(store.currentId))
+const clearMessages = () => {
+  emailError.value = ''
+  emailSuccess.value = ''
+}
 
-// Download functions
 const downloadDocConstat = () => {
   window.open(getDocConstatUrl(store.currentId), '_blank')
 }
@@ -186,27 +179,26 @@ const downloadLettreInfo = () => {
   window.open(getLettreInfoUrl(store.currentId), '_blank')
 }
 
-// Email sending function
 const sendEmail = async () => {
   if (!isEmailValid.value) {
     emailError.value =
-      'L’adresse e-mail saisie n’est pas valide. Vérifiez le format (ex. : nom@domaine.fr).'
+      "L'adresse e-mail saisie n'est pas valide. Vérifiez le format (ex. : nom@domaine.fr)."
     return
   }
 
   isSending.value = true
   emailError.value = ''
-  emailSuccess.value = false
+  emailSuccess.value = ''
 
   try {
     await createResource(getSendEmailUrl(store.currentId), { email: email.value })
-    emailSuccess.value = true
+    emailSuccess.value = `Un e-mail contenant les documents a été envoyé avec succès à l'adresse ${email.value}`
     email.value = ''
   } catch (error: any) {
     const messageServeur = error.response?.data?.error
     emailError.value = messageServeur
-      ? `L’envoi a échoué : ${messageServeur}. Veuillez réessayer.`
-      : 'L’envoi a échoué. Vérifiez votre connexion ou réessayez dans quelques instants.'
+      ? `L'envoi a échoué : ${messageServeur}. Veuillez réessayer.`
+      : "L'envoi a échoué. Vérifiez votre connexion ou réessayez dans quelques instants."
   } finally {
     isSending.value = false
   }
