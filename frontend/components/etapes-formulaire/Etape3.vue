@@ -1,7 +1,5 @@
 <template>
   <div class="fr-container--sm">
-    <DsfrAlert type="success" title="Merci pour votre signalement" />
-
     <div class="fr-bg--contrast fr-mt-3w">
       <div class="confirmation-content fr-p-4w">
         <section class="confirmation-section fr-mb-4w fr-pb-4w">
@@ -29,14 +27,54 @@
               :disabled="!isOdtReady"
               @click="downloadDocConstat"
             >
-              <span class="fr-m-2w">Télécharger le rapport de constatation au format ODT</span>
+              <span class="fr-m-1w">Télécharger le rapport de constatation au format ODT</span>
             </DsfrButton>
             <DsfrButton
               :icon="{ name: 'ri-download-line', animation: isOdtReady ? undefined : 'spin' }"
               :disabled="!isOdtReady"
               @click="downloadLettreInfo"
             >
-              <span class="fr-m-2w">Télécharger la lettre d'information au format ODT</span>
+              <span class="fr-m-1w">Télécharger la lettre d'information au format ODT</span>
+            </DsfrButton>
+          </div>
+
+          <div class="fr-mt-4w">
+            <h4>Recevoir vos documents par e-mail</h4>
+            <div class="fr-input-group">
+              <label class="fr-label" for="email-input">
+                Adresse électronique
+                <span class="fr-hint-text">Format attendu : nom@domaine.fr</span>
+              </label>
+              <input
+                class="fr-input"
+                :class="{ 'fr-input--error': emailError }"
+                id="email-input"
+                v-model="email"
+                type="email"
+                :aria-describedby="emailInputDescribedBy || undefined"
+                @input="clearEmailSuccessError"
+                autocomplete="email"
+              />
+              <p v-if="emailError" class="fr-error-text" :id="errorId" role="alert">
+                {{ emailError }}
+              </p>
+              <p v-if="emailSuccess" class="fr-valid-text" :id="successId" role="alert">
+                {{ emailSuccess }}
+              </p>
+            </div>
+            <DsfrButton
+              class="fr-mt-2w"
+              :icon="{ name: 'ri-mail-fill' }"
+              :disabled="!isEmailValid || isSending"
+              @click="sendEmail"
+            >
+              <span class="fr-m-1w">
+                {{
+                  isSending
+                    ? "Les documents sont en cours d'envoi"
+                    : 'Envoyer les documents par e-mail'
+                }}
+              </span>
             </DsfrButton>
           </div>
         </section>
@@ -97,27 +135,70 @@
 </template>
 
 <script setup lang="ts">
-import { getDocConstatUrl, getLettreInfoUrl } from '@/services/urls'
+import { createResource } from '@/services/api'
+import { getDocConstatUrl, getLettreInfoUrl, getSendEmailUrl } from '@/services/urls'
 import { useSignalementStore } from '@/stores/signalement'
+import { DsfrButton } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, ref } from 'vue'
 
 const store = useSignalementStore()
 const emit = defineEmits(['restart'])
 
-// Loading states
-const isOdtReady = ref(false)
+const isOdtReady = ref<boolean>(false)
+const isSending = ref<boolean>(false)
+const email = ref<string>('')
+const emailError = ref<string>('')
+const emailSuccess = ref<string>('')
 
-// Create computed properties for document URLs
-const docConstatUrl = computed(() => getDocConstatUrl(store.currentId))
-const lettreInfoUrl = computed(() => getLettreInfoUrl(store.currentId))
+const errorId = 'email-error'
+const successId = 'email-success'
 
-// Download functions
 const downloadDocConstat = () => {
   window.open(getDocConstatUrl(store.currentId), '_blank')
 }
 
 const downloadLettreInfo = () => {
   window.open(getLettreInfoUrl(store.currentId), '_blank')
+}
+
+const isEmailValid = computed(() => {
+  if (email.value.trim() === '') return false
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  return emailRegex.test(email.value)
+})
+
+const emailInputDescribedBy = computed(() => {
+  if (emailError.value) return errorId
+  if (emailSuccess.value) return successId
+  return null
+})
+
+const clearEmailSuccessError = () => {
+  emailError.value = ''
+  emailSuccess.value = ''
+}
+
+const sendEmail = async () => {
+  if (!isEmailValid.value) {
+    emailError.value =
+      "L'adresse e-mail saisie n'est pas valide. Vérifiez le format (ex. : nom@domaine.fr)."
+    return
+  }
+  isSending.value = true
+  emailError.value = ''
+  emailSuccess.value = ''
+  try {
+    await createResource(getSendEmailUrl(store.currentId), { email: email.value })
+    emailSuccess.value = `Un e-mail contenant les documents a été envoyé avec succès à l'adresse ${email.value}`
+    email.value = ''
+  } catch (error: any) {
+    const messageServeur = error.response?.data?.error
+    emailError.value = messageServeur
+      ? `L'envoi a échoué : ${messageServeur}. Veuillez réessayer.`
+      : "L'envoi a échoué. Vérifiez votre connexion ou réessayez dans quelques instants."
+  } finally {
+    isSending.value = false
+  }
 }
 
 const handleRestart = () => {
