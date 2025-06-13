@@ -51,3 +51,8 @@ ANYMAIL = {
 
 # Rate limiting
 EMAIL_RATE_LIMIT = env("EMAIL_RATE_LIMIT", default="10/hour")
+
+# Reverse proxy settings
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
