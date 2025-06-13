@@ -19,6 +19,11 @@ const router = createRouter({
       path: '/debuter-procedure',
       name: 'Formulaire',
       component: () => import('./pages/debuter-procedure.vue'),
+    } ,
+    {
+      path: '/accompagnement',
+      name: 'Accompagnement',
+      component: () => import('./pages/accompagnement.vue'),
     }
   ],
 })

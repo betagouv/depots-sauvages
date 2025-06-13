@@ -13,8 +13,8 @@
           contribuer à la réduction durable des dépôts sauvages sur le territoire.
         </p>
         <RouterLink to="/debuter-procedure" class="fr-btn fr-mt-3w"
-          >Débuter une procédure</RouterLink
-        >
+          >Débuter une procédure
+        </RouterLink>
       </div>
 
       <div class="fr-col-12 fr-col-md-6">
