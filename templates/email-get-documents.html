@@ -1,12 +1,41 @@
 <!DOCTYPE html>
-<html>
-    <body>
-        <h1>Documents du signalement #{{ signalement.id }}</h1>
-        <p>Commune: {{ signalement.commune }}</p>
-        <p>Vous trouverez ci-joint les documents suivants :</p>
-        <ul>
-            <li>Rapport de constatation</li>
-            <li>Lettre d'information</li>
-        </ul>
-    </body>
-</html> 
+<html lang="fr">
+<head>
+  <title>[protect-envi.beta.gouv.fr] Vos documents pour votre signalement</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="format-detection" content="telephone=no" />
+</head>
+<body>
+<div class="email-container">
+  <header role="banner">
+    <a href="https://protect-envi.beta.gouv.fr/" target="_blank" rel="noreferrer noopener">
+      Protect’Envi - Agir contre le dépôt des déchets sauvages
+    </a>
+  </header>
+  <main role="main">
+    <h1>Votre rapport et lettre d’information pour le signalement n°{{ signalement.id }}</h1>
+    <p>Bonjour,</p>
+    <p>
+      Vous avez demandé à recevoir les documents liés à votre signalement réalisé le {{ signalement.date }} dans la commune de
+      <strong>{{ signalement.commune }}</strong>.
+    </p>
+    <p>Vous trouverez ci-joint les documents suivants :</p>
+    <ul>
+      <li>Rapport de constatation</li>
+      <li>Lettre d'information</li>
+    </ul>
+    <p>Ces documents vous permettront de poursuivre votre démarche auprès des services compétents.</p>
+    <p>Pour toute question ou assistance, vous pouvez contacter le <a href="contact@protect-envi.beta.gouv.fr">service support Protect'Envi</a>.</p>
+    <p>Merci de votre confiance,</p>
+    <p>L’équipe Protect’Envi</p>
+  </main>
+  <footer role="content-info">
+    <p>Merci de ne pas répondre directement à cet e-mail.</p>
+    <p><small>2025 - Protect’Envi - Direction interministérielle du numérique et  Ministère de l’Intérieur</small></p>
+  </footer>
+</div>
+</body>
+</html>
