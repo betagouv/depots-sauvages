@@ -27,14 +27,14 @@
               :disabled="!isOdtReady"
               @click="downloadDocConstat"
             >
-              <span class="fr-m-2w">Télécharger le rapport de constatation au format ODT</span>
+              <span class="fr-m-1w">Télécharger le rapport de constatation au format ODT</span>
             </DsfrButton>
             <DsfrButton
               :icon="{ name: 'ri-download-line', animation: isOdtReady ? undefined : 'spin' }"
               :disabled="!isOdtReady"
               @click="downloadLettreInfo"
             >
-              <span class="fr-m-2w">Télécharger la lettre d'information au format ODT</span>
+              <span class="fr-m-1w">Télécharger la lettre d'information au format ODT</span>
             </DsfrButton>
           </div>
 
@@ -63,15 +63,17 @@
             </div>
             <DsfrButton
               class="fr-mt-2w"
-              :icon="{ name: 'fr-icon-mail-fill' }"
+              :icon="{ name: 'ri-mail-fill' }"
               :disabled="!isEmailValid || isSending"
               @click="sendEmail"
             >
-              {{
-                isSending
-                  ? 'Les documents sont en cours d’envoi'
-                  : 'Envoyer les documents par e-mail'
-              }}
+              <span class="fr-m-1w">
+                {{
+                  isSending
+                    ? 'Les documents sont en cours d’envoi'
+                    : 'Envoyer les documents par e-mail'
+                }}
+              </span>
             </DsfrButton>
           </div>
         </section>
