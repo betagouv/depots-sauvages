@@ -39,7 +39,7 @@ SESSION_COOKIE_SAMESITE = "Lax"
 TASKS["default"]["BACKEND"] = "django_tasks.backends.database.DatabaseBackend"
 
 # Email Configuration
-EMAIL_BACKEND = "anymail.backends.brevo.EmailBackend"
+EMAIL_BACKEND = env("EMAIL_BACKEND", default="anymail.backends.brevo.EmailBackend")
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
 SERVER_EMAIL = env("SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
 
