@@ -53,6 +53,7 @@
                 type="email"
                 :aria-describedby="emailInputDescribedBy || undefined"
                 @input="clearEmailSuccessError"
+                autocomplete="email"
               />
               <p v-if="emailError" class="fr-error-text" :id="errorId" role="alert">
                 {{ emailError }}
