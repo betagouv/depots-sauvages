@@ -172,6 +172,11 @@ const isSubmitting = ref(false)
 const handleSubmit = async (event: Event) => {
   event.preventDefault()
 
+  // Force le blur de l'élément actif pour éviter le blocage Safari
+  if (document.activeElement instanceof HTMLElement) {
+    document.activeElement.blur()
+  }
+
   isSubmitting.value = true
   try {
     await store.saveFormData()
@@ -182,6 +187,7 @@ const handleSubmit = async (event: Event) => {
     isSubmitting.value = false
   }
 }
+
 
 </script>
 

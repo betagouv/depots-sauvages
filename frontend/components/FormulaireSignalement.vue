@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { useScroll } from '@/composables/useScroll'
-import { computed, watch } from 'vue'
+import { computed, nextTick, watch } from 'vue'
 import { useSignalementStore } from '../stores/signalement'
 import { STEPS } from './etapes-formulaire/form-data'
 import Etape1 from './etapes-formulaire/Etape1.vue'
@@ -32,8 +32,12 @@ const { scrollToTop } = useScroll()
 // Watch for step changes and scroll to top
 watch(
   () => store.currentStep,
-  () => {
-    scrollToTop()
+  async () => {
+    await nextTick()
+    // petit délai pour Safari
+    setTimeout(() => {
+      scrollToTop()
+    }, 30)
   }
 )
 
