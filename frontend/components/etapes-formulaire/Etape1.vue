@@ -195,21 +195,24 @@ const handleSubmit = async (event: Event) => {
 @supports (-webkit-touch-callout: none) {
   input[type="time"] {
     min-height: 3rem;
+    -webkit-appearance: none;
+    appearance: none;
   }
 }
-input[type="time"] {
+
+::v-deep(input[type="time"]) {
   font-family: inherit;
   font-size: 1rem;
   padding: 1rem;
   height: auto;
-  appearance: none;
-  -webkit-appearance: none;
   border: 1px solid #ddd;
   box-sizing: border-box;
   width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
 }
 
-input[type="time"]:focus {
+::v-deep(input[type="time"]:focus) {
   outline: 2px solid #0a76f6;
   outline-offset: 2px;
 }
