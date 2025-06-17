@@ -3,10 +3,6 @@
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12 fr-col-md-6">
         <h1 class="fr-h1 fr-mb-3w">Un accompagnement personnalisé pour mieux agir</h1>
-        <p class="fr-text fr-mb-2w">Simplifier le signalement des dépôts sauvages</p>
-        <p>
-          Notre équipe vous accompagne pour vous guider dans chaque étape du traitement des dépôts sauvages.
-        </p>
       </div>
 
       <div class="fr-container">
