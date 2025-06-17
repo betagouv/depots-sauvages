@@ -50,6 +50,7 @@
             required
           />
         </div>
+
         <div class="fr-input-group fr-col-12 fr-col-md-6">
           <label class="fr-label" for="heure-constatation">
             Heure de la constatation *
@@ -62,7 +63,7 @@
             name="heure-constatation"
             class="fr-input"
             min="00:00"
-            max="23:00"
+            max="23:59"
             required
           />
         </div>
@@ -181,11 +182,35 @@ const handleSubmit = async (event: Event) => {
     isSubmitting.value = false
   }
 }
+
 </script>
 
 <style scoped>
+@supports (-webkit-touch-callout: none) {
+  input[type="time"] {
+    min-height: 3rem;
+  }
+}
+input[type="time"] {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 1rem;
+  height: auto;
+  appearance: none;
+  -webkit-appearance: none;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+input[type="time"]:focus {
+  outline: 2px solid #0a76f6;
+  outline-offset: 2px;
+}
+
 .actions-row {
   display: flex;
   justify-content: flex-end;
 }
+
 </style>
