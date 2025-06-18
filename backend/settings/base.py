@@ -120,7 +120,7 @@ LOGGING = {
         },
     },
     "loggers": {
-        "backend.signalements": {
+        "root": {
             "handlers": ["console"],
             "level": "INFO",
         },
