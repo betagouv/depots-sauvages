@@ -50,12 +50,20 @@
             required
           />
         </div>
-        <div class="fr-col-12 fr-col-md-6">
-          <DsfrInput
-            v-model="store.formData.heureConstat"
+
+        <div class="fr-input-group fr-col-12 fr-col-md-6">
+          <label class="fr-label" for="heure-constatation">
+            Heure de la constatation *
+            <span class="fr-hint-text">Format attendu : HH:MM</span>
+          </label>
+          <input
             type="time"
-            label="Heure de la constatation"
-            hint=" au format HH:MM"
+            v-model="store.formData.heureConstat"
+            id="heure-constatation"
+            name="heure-constatation"
+            class="fr-input"
+            min="00:00"
+            max="23:59"
             required
           />
         </div>
@@ -146,8 +154,8 @@
 </template>
 
 <script setup lang="ts">
-import '@/styles/form-steps.css'
 import { useSignalementStore } from '@/stores/signalement'
+import '@/styles/form-steps.css'
 import { DsfrInput } from '@gouvminint/vue-dsfr'
 import { ref } from 'vue'
 import {
@@ -164,6 +172,11 @@ const isSubmitting = ref(false)
 const handleSubmit = async (event: Event) => {
   event.preventDefault()
 
+  // Force le blur de l'élément actif pour éviter le blocage Safari
+  if (document.activeElement instanceof HTMLElement) {
+    document.activeElement.blur()
+  }
+
   isSubmitting.value = true
   try {
     await store.saveFormData()
@@ -174,11 +187,39 @@ const handleSubmit = async (event: Event) => {
     isSubmitting.value = false
   }
 }
+
+
 </script>
 
 <style scoped>
+@supports (-webkit-touch-callout: none) {
+  input[type="time"] {
+    min-height: 3rem;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+}
+
+::v-deep(input[type="time"]) {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 1rem;
+  height: auto;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+::v-deep(input[type="time"]:focus) {
+  outline: 2px solid #0a76f6;
+  outline-offset: 2px;
+}
+
 .actions-row {
   display: flex;
   justify-content: flex-end;
 }
+
 </style>
