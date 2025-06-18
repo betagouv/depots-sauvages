@@ -15,7 +15,7 @@ INSTALLED_APPS = ["whitenoise.runserver_nostatic"] + INSTALLED_APPS
 
 DEBUG = True
 
-LOGGING["loggers"]["backend.signalements"]["level"] = "DEBUG"
+LOGGING["loggers"]["root"]["level"] = "DEBUG"
 
 # Database
 DATABASES = {
