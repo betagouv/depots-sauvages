@@ -1,3 +1,8 @@
+# On Scalingo, REMOTE_ADDR is set to the real client IP via X-Forwarded-For
+# by the platform's proxy. There is a header X-Real-IP that is set to the
+# real client IP, but by default it is not used by Django and DRF and we
+# don't need to use it.
+
 from django.conf import settings
 from rest_framework.throttling import AnonRateThrottle
 
