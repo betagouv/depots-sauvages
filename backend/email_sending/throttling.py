@@ -11,6 +11,7 @@ class EmailRateThrottle(AnonRateThrottle):
     Custom throttle for email sending endpoint.
     """
 
+    scope = "email"
     rate = getattr(settings, "EMAIL_RATE_LIMIT")
 
     def allow_request(self, request, view):
