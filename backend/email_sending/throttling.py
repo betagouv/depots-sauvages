@@ -16,9 +16,10 @@ class EmailRateThrottle(AnonRateThrottle):
     def allow_request(self, request, view):
         self.key = self.get_cache_key(request, view)
         self.history = self.cache.get(self.key, []) if self.key else None
+        remote_addr = request.META.get("REMOTE_ADDR")
         allowed = super().allow_request(request, view)
         logger.info(
-            f"[THROTTLE] key={self.key} rate={self.rate} history={self.history} allowed={allowed}"
+            f"[THROTTLE] key={self.key} rate={self.rate} history={self.history} allowed={allowed} REMOTE_ADDR={remote_addr}"
         )
         return allowed
 
