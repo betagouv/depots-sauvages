@@ -13,6 +13,7 @@ class EmailRateThrottle(AnonRateThrottle):
 
     scope = "email"
     rate = getattr(settings, "EMAIL_RATE_LIMIT")
+    cache_format = "throttle_%(scope)s_%(ident)s"
 
     def get_ident(self, request):
         xff = request.META.get("HTTP_X_FORWARDED_FOR")
@@ -32,7 +33,9 @@ class EmailRateThrottle(AnonRateThrottle):
 
     def get_cache_key(self, request, view):
         ident = self.get_ident(request)
-        logger.info(f"[THROTTLE] get_cache_key: scope={self.scope} ident={ident}")
+        logger.info(
+            f"[THROTTLE] get_cache_key: cache_format={self.cache_format} scope={self.scope} ident={ident}"
+        )
         if request.user and request.user.is_authenticated:
             return None  # Only throttle unauthenticated requests.
         if self.scope is None or ident is None:
