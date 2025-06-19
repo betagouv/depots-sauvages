@@ -1,7 +1,7 @@
 export const STEPS = [
   'Information sur le dépôt de déchets',
   'Procédure et préjudice',
-  'Et maintenant ?',
+  'Finalisation du signalement',
 ]
 
 export const volumeOptions = [

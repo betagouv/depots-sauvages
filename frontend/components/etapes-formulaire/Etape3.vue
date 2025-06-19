@@ -1,7 +1,13 @@
 <template>
+  <div>
+    <DsfrAlert
+      type="success"
+      title="Vos documents sont prêts"
+    />
+  </div>
   <div class="fr-container--sm">
     <div class="fr-bg--contrast fr-mt-3w">
-      <div class="confirmation-content fr-p-4w">
+      <div class="fr-p-4w">
         <section class="confirmation-section fr-mb-4w fr-pb-4w">
           <p>
             Vous trouverez ci-dessous des pièces de procédures pré-remplies, à compléter avec les
@@ -21,22 +27,26 @@
         <section class="document-section fr-p-4w fr-mb-4w fr-mt-4w">
           <h3 class="document-title">📄 Documents disponibles</h3>
           <p>Vous pouvez télécharger les documents suivants :</p>
-          <div class="fr-btns-group fr-btns-group--block fr-btns-group--inline-md">
-            <DsfrButton
-              :icon="{ name: 'ri-download-line', animation: isOdtReady ? undefined : 'spin' }"
-              :disabled="!isOdtReady"
-              @click="downloadDocConstat"
-            >
-              <span class="fr-m-1w">Télécharger le rapport de constatation au format ODT</span>
-            </DsfrButton>
-            <DsfrButton
-              :icon="{ name: 'ri-download-line', animation: isOdtReady ? undefined : 'spin' }"
-              :disabled="!isOdtReady"
-              @click="downloadLettreInfo"
-            >
-              <span class="fr-m-1w">Télécharger la lettre d'information au format ODT</span>
-            </DsfrButton>
-          </div>
+          <ul class="fr-btns-group fr-btns-group--block fr-btns-group--inline-md">
+            <li>
+              <DsfrButton
+                :icon="{ name: 'ri-download-line', animation: isOdtReady ? undefined : 'spin' }"
+                :disabled="!isOdtReady"
+                @click="downloadDocConstat"
+              >
+                <span class="fr-m-1w">Télécharger le rapport de constatation au format ODT</span>
+              </DsfrButton>
+            </li>
+            <li>
+              <DsfrButton
+                :icon="{ name: 'ri-download-line', animation: isOdtReady ? undefined : 'spin' }"
+                :disabled="!isOdtReady"
+                @click="downloadLettreInfo"
+              >
+                <span class="fr-m-1w">Télécharger la lettre d'information au format ODT</span>
+              </DsfrButton>
+            </li>
+          </ul>
 
           <div class="fr-mt-4w">
             <h4>Recevoir vos documents par e-mail</h4>
@@ -77,6 +87,28 @@
               </span>
             </DsfrButton>
           </div>
+        </section>
+
+        <section class="fr-p-4w fr-mb-4w fr-mt-4w">
+          <h3>Étapes suivantes de la procédure</h3>
+          <div class="fr-highlight">
+            <h3 class="fr-h5">Important : la procédure reste à finaliser</h3>
+            <p>Les documents sont générés mais <strong>aucune démarche n’a encore été transmise</strong>.</p>
+            <p>Vous devez vérifier, compléter et envoyer les documents pour que votre signalement soit pris en compte.</p>
+            <p>Veillez à suivre les étapes ci-dessous pour finaliser correctement votre démarche.</p>
+          </div>
+          <div class="fr-p-3w fr-border fr-border--warning fr-background-alt--grey">
+            <p class="fr-text--sm">
+              <strong>Attention :</strong> les documents sont générés, mais <strong>vous devez les compléter et les envoyer vous-même</strong> pour finaliser votre démarche. Aucune information n’a été transmise à ce stade.
+            </p>
+          </div>
+
+          <ul>
+            <li>Vérifier et compléter les documents si nécessaire</li>
+            <li>Envoyer la lettre en recommandé avec accués de réception (LRAR)</li>
+            <li>Conserver une copie pour vos archives</li>
+            <li>Contacter la mairie ou la gendarmerie si besoin</li>
+          </ul>
         </section>
 
         <section class="confirmation-section fr-mb-4w fr-pb-4w">
