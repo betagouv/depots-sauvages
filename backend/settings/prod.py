@@ -18,12 +18,12 @@ LOGGING["loggers"]["backend.signalements"] = {
     "propagate": True,
 }
 
-# Security settings for production
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
-
 DATABASES = {
     "default": env.db("DATABASE_URL", default=f"file:///{PROJECT_ROOT / 'db.sqlite3'}"),
 }
+# Security settings for production
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
+
 
 # CORS/CSRF Settings
 CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[])
@@ -37,3 +37,35 @@ SESSION_COOKIE_SAMESITE = "Lax"
 
 # Django Tasks Settings
 TASKS["default"]["BACKEND"] = "django_tasks.backends.database.DatabaseBackend"
+
+# Email Configuration
+EMAIL_BACKEND = env("EMAIL_BACKEND", default="anymail.backends.brevo.EmailBackend")
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
+SERVER_EMAIL = env("SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
+
+# Anymail settings for production
+ANYMAIL = {
+    "BREVO_API_KEY": env("BREVO_API_KEY"),
+    "BREVO_SENDER_DOMAIN": env("BREVO_SENDER_DOMAIN"),
+}
+
+# Rate limiting
+EMAIL_RATE_LIMIT = env("EMAIL_RATE_LIMIT", default="10/hour")
+
+# Reverse proxy settings
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+# If Redis is available, use it, notably for shared throttling state.
+redis_url = env("REDIS_URL", default=None)
+if redis_url:
+    CACHES = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": redis_url,
+            "OPTIONS": {
+                "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            },
+        }
+    }

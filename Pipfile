@@ -17,6 +17,8 @@ django-downloadview = "*"
 jinja2 = "*"
 ipdb = "*"
 django-tasks = "*"
+django-anymail = {extras = ["brevo"], version = "*"}
+django-redis = "*"
 
 [dev-packages]
 black = "*"

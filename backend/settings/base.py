@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "django_tasks",
     "django_tasks.backends.database",
+    "anymail",
     #
     # Project apps
     "backend.home",
@@ -118,7 +119,7 @@ LOGGING = {
         },
     },
     "loggers": {
-        "backend.signalements": {
+        "root": {
             "handlers": ["console"],
             "level": "INFO",
         },
@@ -137,3 +138,18 @@ TASKS_LOGGING = {
     "level": "INFO",
 }
 LOGGING["loggers"]["django_tasks"] = TASKS_LOGGING
+
+# Email sending rate limiting
+EMAIL_RATE_LIMIT = "10/m"
+
+# Cache settings - used in particular for rate limiting
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+    }
+}
+
+# Anymail settings
+ANYMAIL = {
+    "TEST_MODE": True,
+}
