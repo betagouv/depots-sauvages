@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     "anymail",
     #
     # Project apps
+    "backend.throttling",
     "backend.home",
     "backend.signalements",
     "backend.antispam_timer",
