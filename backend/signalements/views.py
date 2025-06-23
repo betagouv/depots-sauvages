@@ -1,4 +1,5 @@
 import io
+import logging
 
 from django.conf import settings
 from django.http import FileResponse, Http404
@@ -10,6 +11,8 @@ from backend.antispam_timer.timer import FormTimer
 from backend.signalements.models import Signalement
 from backend.signalements.serializers import SignalementSerializer
 
+logger = logging.getLogger(__name__)
+
 
 class SignalementViewSet(viewsets.ModelViewSet):
     """
@@ -20,9 +23,15 @@ class SignalementViewSet(viewsets.ModelViewSet):
     serializer_class = SignalementSerializer
 
     def retrieve(self, request, *args, **kwargs):
-        # Reset timer on GET requests to retrieve endpoint.
+        logger.debug(f"Signalement retrieved, resretting timer {request.session.session_key}")
         FormTimer.start_timer(request, settings.TIMER_BASE_NAME)
         return super().retrieve(request, *args, **kwargs)
+
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        logger.debug(f"Signalement created, resetting timer {request.session.session_key}")
+        FormTimer.start_timer(request, settings.TIMER_BASE_NAME)
+        return response
 
 
 class SignalementDocumentDownloadView(View):
