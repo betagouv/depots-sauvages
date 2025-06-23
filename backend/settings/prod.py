@@ -51,6 +51,7 @@ ANYMAIL = {
 
 # Rate limiting
 EMAIL_RATE_LIMIT = env("EMAIL_RATE_LIMIT", default="10/hour")
+SIGNALEMENT_RATE_LIMIT = env("SIGNALEMENT_RATE_LIMIT", default="10/hour")
 
 # Form submission timing settings
 MIN_FORM_TIME = env.int("MIN_FORM_TIME", default=5)

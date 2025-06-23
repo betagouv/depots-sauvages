@@ -10,6 +10,7 @@ from rest_framework import viewsets
 from backend.antispam_timer.timer import FormTimer
 from backend.signalements.models import Signalement
 from backend.signalements.serializers import SignalementSerializer
+from backend.throttling.throttles import SignalementRateThrottle
 
 logger = logging.getLogger(__name__)
 
@@ -21,6 +22,7 @@ class SignalementViewSet(viewsets.ModelViewSet):
 
     queryset = Signalement.objects.all()
     serializer_class = SignalementSerializer
+    throttle_classes = [SignalementRateThrottle]
 
     def retrieve(self, request, *args, **kwargs):
         logger.debug(f"Signalement retrieved, resretting timer {request.session.session_key}")

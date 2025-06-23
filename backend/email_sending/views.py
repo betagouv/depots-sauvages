@@ -6,8 +6,8 @@ from rest_framework.response import Response
 
 from backend.email_sending.handlers import EmailHandler
 from backend.email_sending.serializers import EmailSerializer
-from backend.email_sending.throttling import EmailRateThrottle
 from backend.signalements.models import Signalement
+from backend.throttling.throttles import EmailRateThrottle
 
 
 class SendEmailViewSet(viewsets.ViewSet):
