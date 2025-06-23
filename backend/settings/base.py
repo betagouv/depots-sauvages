@@ -150,6 +150,8 @@ CACHES = {
     }
 }
 
+TIMER_BASE_NAME = "signalement"  # Base name for timer cache keys
+
 # Anymail settings
 ANYMAIL = {
     "TEST_MODE": True,
