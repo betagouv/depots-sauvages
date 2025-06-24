@@ -89,10 +89,7 @@ USE_TZ = True
 try:
     locale.setlocale(locale.LC_TIME, "fr_FR.UTF-8")
 except locale.Error:
-    try:
-        locale.setlocale(locale.LC_TIME, "fr_FR")
-    except locale.Error:
-        pass  # Fallback to system default
+    pass  # Fallback to system default
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = "/static/"
