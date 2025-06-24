@@ -167,7 +167,7 @@ depots-sauvages/
 ### Limitation de débit - Throttling
 
 - **IP throttling** : Limitation du nombre de requêtes par adresse IP
-- **Email throttling** : Protection contre l'envoi massif d'emails
+- **Email throttling** : Protection contre l'envoi massif d'e-mails
 - Configuration via `backend/throttling/throttles.py`
 
 ### Timer anti-spam
