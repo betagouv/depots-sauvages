@@ -1,42 +1,42 @@
 <template>
   <div class="fr-container--sm">
     <div class="fr-bg--contrast fr-mt-3w">
-      <div class="confirmation-content fr-p-4w">
-        <section class="confirmation-section fr-mb-4w fr-pb-4w">
+      <div class="fr-p-4w">
+        <section class="fr-callout fr-callout--grey fr-mt-3w fr-mb-3w">
           <p>
-            Vous trouverez ci-dessous des pièces de procédures pré-remplies, à compléter avec les
-            éléments manquants (charte graphique de la mairie, date et signature du rédacteur du
-            document, etc.).
+            Vous trouverez ci-dessous des pièces de procédure <span class="fr-text--bold">pré-remplies</span>, à compléter avec les éléments manquants (charte graphique de la mairie, date et signature du rédacteur du document, etc.).
           </p>
           <p>
-            Si vous souhaitez déposer plainte, pensez à apporter ce rapport de constatation en
-            brigade.
+            Si vous envisagez de déposer plainte, <span class="fr-text--bold">apportez le rapport de constatation</span> en brigade.
           </p>
           <p>
-            Ce rapport est nécessaire pour initier une procédure administrative (voir conseils et
-            aide à la rédaction d'une procédure administrative en bas de page).
+            Ce rapport est également <span class="fr-text--bold">indispensable pour lancer une procédure administrative</span>. Des conseils et une aide à la rédaction sont disponibles en bas de page.
           </p>
         </section>
 
-        <section class="document-section fr-p-4w fr-mb-4w fr-mt-4w">
-          <h3 class="document-title">📄 Documents disponibles</h3>
+        <section class="document-section fr-p-4w fr-mt-4w fr-mb-4w">
+          <h3 class="document-title"><span aria-hidden="true">📄</span> Documents disponibles</h3>
           <p>Vous pouvez télécharger les documents suivants :</p>
-          <div class="fr-btns-group fr-btns-group--block fr-btns-group--inline-md">
-            <DsfrButton
-              :icon="{ name: 'ri-download-line', animation: isOdtReady ? undefined : 'spin' }"
-              :disabled="!isOdtReady"
-              @click="downloadDocConstat"
-            >
-              <span class="fr-m-1w">Télécharger le rapport de constatation au format ODT</span>
-            </DsfrButton>
-            <DsfrButton
-              :icon="{ name: 'ri-download-line', animation: isOdtReady ? undefined : 'spin' }"
-              :disabled="!isOdtReady"
-              @click="downloadLettreInfo"
-            >
-              <span class="fr-m-1w">Télécharger la lettre d'information au format ODT</span>
-            </DsfrButton>
-          </div>
+          <ul class="fr-btns-group fr-btns-group--block fr-btns-group--inline-md">
+            <li>
+              <DsfrButton
+                :icon="{ name: 'ri-download-line', animation: isOdtReady ? undefined : 'spin' }"
+                :disabled="!isOdtReady"
+                @click="downloadDocConstat"
+              >
+                <span class="fr-m-1w">Télécharger le rapport de constatation au format ODT</span>
+              </DsfrButton>
+            </li>
+           <li>
+             <DsfrButton
+               :icon="{ name: 'ri-download-line', animation: isOdtReady ? undefined : 'spin' }"
+               :disabled="!isOdtReady"
+               @click="downloadLettreInfo"
+             >
+               <span class="fr-m-1w">Télécharger la lettre d'information au format ODT</span>
+             </DsfrButton>
+           </li>
+          </ul>
 
           <div class="fr-mt-4w">
             <h4>Recevoir vos documents par e-mail</h4>
@@ -79,26 +79,50 @@
           </div>
         </section>
 
-        <section class="confirmation-section fr-mb-4w fr-pb-4w">
-          <h3>📑 Procédure administrative</h3>
-          <p>
-            Si vous souhaitez plus d'informations concernant la procédure administrative rendez-vous
+        <section class="fr-p-4w fr-mt-4w fr-bg--g100">
+          <h3 class="fr-h3"><span aria-hidden="true">📌</span> Étapes suivantes</h3>
+          <section class="fr-bg--g100">
+            <h4 class="fr-h3 fr-mb-2w">Étapes à effectuer avant d'entamer la procédure</h4>
+            <p>Pour lancer officiellement une procédure à l'encontre de l'auteur présumé de ce dépôt sauvage :</p>
+            <ul class="fr-mb-3w">
+              <li><span aria-hidden="true">📥</span> Récupérez le rapport de constatation et la lettre d'information par e-mail ;</li>
+              <li><span aria-hidden="true">✍️</span> Relisez, complétez et signez ces deux documents (ou faites-les signer par votre autorité compétente : maire ou personne habilitée à réaliser des constatations).</li>
+            </ul>
+
+            <div class="fr-alert fr-alert--info fr-alert--sm fr-mt-3w" role="status">
+              <h4 class="fr-alert__title">Procédure administrative</h4>
+              <ul class="fr-mb-0">
+                <li><span aria-hidden="true">📬</span> Envoyez la lettre d'information en recommandé avec accusé de réception à l'auteur présumé du dépôt ;</li>
+                <li><span aria-hidden="true">🗂️</span> Conservez une copie de tous les documents pour vos archives ;</li>
+                <li><span aria-hidden="true">⏳</span> À la fin de la période du contradictoire (10 jours minimum), contactez l'équipe <span class="fr-text--bold">Protect'Envi</span> pour être aidé dans la rédaction de la suite (mise en demeure et amende administrative).</li>
+              </ul>
+            </div>
+
+            <div class="fr-alert fr-alert--info fr-alert--sm fr-mt-3w" role="status">
+              <h4 class="fr-alert__title">Procédure judiciaire</h4>
+              <ul class="fr-mb-0">
+                <li><span aria-hidden="true">📝</span> Envoyez le rapport de constatation.</li>
+                <li><span aria-hidden="true">🧾</span> Prenez rendez-vous auprès de la brigade de gendarmerie ou du commissariat de police pour déposer plainte.</li>
+              </ul>
+            </div>
+          </section>
+
+          <p class="fr-mt-3w">
+            <span aria-hidden="true">👉</span> Pour un accompagnement pas à pas, consultez le
             <a
               href="https://acdechets.smartidf.services/aide-verbalisation"
               class="fr-link fr-icon-external-link-line fr-link--icon-right"
               target="_blank"
+              rel="noopener"
             >
-              sur le guide ACDéchets de la Région Île de France
+              guide ACDéchets de la Région Île-de-France
             </a>
-            pour vous aider pas à pas.
           </p>
         </section>
 
-        <section class="confirmation-section fr-mb-4w fr-pb-4w">
-          <h3>🙋🏻‍♂️ Conseils pratiques</h3>
-          <p>
-            Retrouvez des conseils pratiques sur l'application à destination des élus, Gend'élus:
-          </p>
+        <section class="fr-p-4w fr-bg--g100">
+          <h3 class="fr-h3 fr-mb-2w">Conseils pratiques</h3>
+          <p>Retrouvez des conseils pratiques sur l'application à destination des élus, Gend'élus :</p>
           <ul>
             <li>
               <a
@@ -107,7 +131,7 @@
                 target="_blank"
                 rel="noreferrer noopener"
               >
-                Télécharger l'application sur le Play Store
+                Télécharger sur le Play Store
               </a>
             </li>
             <li>
@@ -117,15 +141,34 @@
                 target="_blank"
                 rel="noreferrer noopener"
               >
-                Télécharger l'application sur l'App store
+                Télécharger sur l’App Store
               </a>
             </li>
           </ul>
         </section>
 
-        <div class="fr-mt-5w fr-text--center">
+        <section class="fr-p-4w fr-bg--g100">
+          <h3 class="fr-h3"><span aria-hidden="true">✅</span> Vous avez terminé le module "Débuter une procédure"</h3>
+          <p>Vous pouvez maintenant :</p>
+          <ul>
+            <li><span aria-hidden="true">🔍</span> Retrouver de l'aide dans la section
+              <a
+                href="/accompagnement"
+                rel="noreferrer noopener"
+              >
+                Être accompagné ;
+              </a>
+            </li>
+            <li><span aria-hidden="true">🔁</span> Démarrer une nouvelle procédure si nécessaire</li>
+          </ul>
+        </section>
+
+        <div class="fr-btns-group fr-btns-group--inline fr-btns-group--center fr-mt-4w">
+          <button class="fr-btn fr-btn--secondary" @click="goHome">
+            Retour à l'accueil
+          </button>
           <button class="fr-btn" @click="handleRestart">
-            Faire un nouveau signalement
+            Démarrer une nouvelle procédure
             <span class="fr-icon-arrow-right-line" aria-hidden="true"></span>
           </button>
         </div>
@@ -203,6 +246,10 @@ const sendEmail = async () => {
 
 const handleRestart = () => {
   emit('restart')
+}
+
+const goHome = () => {
+  window.location.href = '/'
 }
 
 // Control buttons delay
