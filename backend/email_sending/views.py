@@ -1,9 +1,11 @@
+from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from backend.antispam_timer.timer import FormTimer
 from backend.email_sending.handlers import EmailHandler
 from backend.email_sending.serializers import EmailSerializer
 from backend.signalements.models import Signalement
@@ -23,7 +25,7 @@ class SendEmailViewSet(viewsets.ViewSet):
         Send an email with the signalement documents to the specified email address.
         """
         signalement = get_object_or_404(Signalement, id=pk)
-        serializer = EmailSerializer(data=request.data)
+        serializer = EmailSerializer(data=request.data, context={"request": request})
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         email = serializer.validated_data["email"]
@@ -43,6 +45,8 @@ class SendEmailViewSet(viewsets.ViewSet):
                 mimetype="application/vnd.oasis.opendocument.text",
             )
         if handler.send():
+            # Reset timer after successful email sending
+            FormTimer.start_timer(request, settings.TIMER_BASE_NAME)
             return Response({"message": "Email sent successfully"})
         return Response(
             {"error": "Email service unavailable"},
