@@ -52,15 +52,11 @@ class FormTimer:
         if not timer_data:
             logger.debug(f"No timer data found for {base_name} - starting timer")
             cls.start_timer(request, base_name)
-            raise serializers.ValidationError(
-                "Session de formulaire invalide. Veuillez recharger la page."
-            )
+            raise serializers.ValidationError("Session invalide. Veuillez recharger la page.")
         total_time = timezone.now().timestamp() - timer_data["start_time"]
         logger.debug(f"Validating timer: {total_time:.1f}s (required: {cls.MIN_FORM_TIME}s)")
         if total_time < cls.MIN_FORM_TIME:
             logger.debug("Timer validation failed - keeping original timer")
-            raise serializers.ValidationError(
-                "Il y a eu un problème avec l'envoi du formulaire. Veuillez réessayer."
-            )
+            raise serializers.ValidationError("Délai de réponse invalide. Veuillez réessayer.")
         logger.debug(f"Timer validation passed: {total_time:.1f}s")
         return timer_data
