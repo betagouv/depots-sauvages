@@ -1,3 +1,4 @@
+import locale
 from pathlib import Path
 
 SETTINGS_DIR = Path(__file__).resolve().parent
@@ -83,6 +84,15 @@ LANGUAGE_CODE = "fr-fr"
 TIME_ZONE = "Europe/Paris"
 USE_I18N = True
 USE_TZ = True
+
+# Set French locale for date formatting
+try:
+    locale.setlocale(locale.LC_TIME, "fr_FR.UTF-8")
+except locale.Error:
+    try:
+        locale.setlocale(locale.LC_TIME, "fr_FR")
+    except locale.Error:
+        pass  # Fallback to system default
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = "/static/"
