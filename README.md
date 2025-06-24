@@ -175,7 +175,9 @@ Pour assurer la lisibilité et la cohérence, nous appliquons les règles suivan
 
 - Les commentaires dans le code sont en anglais.
 
-- Les PRs et leurs descriptions sont en français. Les messages de commit dans une PR peuvent être en français ou en anglais.
+- Les PRs et leurs descriptions sont en français.
+
+- Les messages de commit sont, de préférence, en anglais, mais peuvent être en français.
 
 - Les noms de branches sont en anglais, en suivant la convention : [conventional-branch](https://conventional-branch.github.io/).
 
