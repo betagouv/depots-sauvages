@@ -1,12 +1,11 @@
-
 # Dépôts Sauvages - Protect Envi
 
 Application de signalement des dépôts sauvages destinée aux communes.
 
 Documentation disponible en :
+
 - 🇫🇷 [Français](README)
 - 🇬🇧 [English](README.en.md)
-
 
 ## 📑 Sommaire
 
@@ -33,17 +32,18 @@ git clone https://github.com/your-username/depots-sauvages.git
 cd depots-sauvages
 
 docker compose up --build
-````
+```
 
 Accès local :
 
-* Frontend : [http://localhost:5173](http://localhost:5173)
-* Backend : [http://localhost:8000](http://localhost:8000)
-* Admin : [http://localhost:8000/admin/](http://localhost:8000/admin/)
+- Frontend : [http://localhost:5173](http://localhost:5173)
+- Backend : [http://localhost:8000](http://localhost:8000)
+- Admin : [http://localhost:8000/admin/](http://localhost:8000/admin/)
 
-    * utilisateur : admin
-    * mot de passe : admin
-* API : [http://localhost:8000/api/](http://localhost:8000/api/)
+  - utilisateur : admin
+  - mot de passe : admin
+
+- API : [http://localhost:8000/api/](http://localhost:8000/api/)
 
 ---
 
@@ -60,7 +60,8 @@ docker compose --version  # V2 format
 ### Si vous utilisez Docker Compose V1
 
 Nous recommandons de faire une montée de version vers Docker Compose V2.
-Sinon, vous pouvez utiliser cette commande : 
+Sinon, vous pouvez utiliser cette commande :
+
 ```bash
 docker-compose up --build
 ```
@@ -82,12 +83,12 @@ Note: Le fichier `.env` contient des variables pour Django et Vite. Les variable
 ## 🔧 Installation sans Docker
 
 ### Pré-requis
+
 - Python 3.8+
 - pipenv
 - Node.js 20+ et Yarn
 - PostgreSQL en prod
 - SQLite en dev local
-
 
 ### 🔧 Configuration du Backend
 
@@ -95,7 +96,7 @@ Note: Le fichier `.env` contient des variables pour Django et Vite. Les variable
 
 ```bash
 pipenv install
-````
+```
 
 2. Activez l’environnement virtuel :
 
@@ -123,14 +124,13 @@ python manage.py runserver
 
 Le back-end Django sera désormais accessible à l’adresse : [http://localhost:8000](http://localhost:8000)
 
-
 ### 🔧 Configuration du Frontend (Vue.js)
 
 1. Accédez au répertoire `frontend` :
 
 ```bash
 cd frontend
-````
+```
 
 2. Installez les dépendances :
 
@@ -146,7 +146,6 @@ yarn dev
 
 Le frontend Vue.js sera désormais accessible à l’adresse : [http://localhost:5173](http://localhost:5173)
 
-
 ---
 
 ## 🗂️ Structure du projet
@@ -160,6 +159,25 @@ depots-sauvages/
 ├── scripts/        # Scripts utilitaires
 ├── documents/      # Documents générés
 ```
+
+---
+
+## 🔒 Sécurité
+
+### Limitation de débit - Throttling
+
+- **IP throttling** : Limitation du nombre de requêtes par adresse IP
+- **Email throttling** : Protection contre l'envoi massif d'emails
+- Configuration via `backend/throttling/throttles.py`
+
+### Timer anti-spam
+
+Prévention des soumissions automatisées trop rapides.
+
+- Vérification du temps minimum entre les soumissions
+- Configuration : `MIN_FORM_TIME` en seconde
+- Protection du formulaire signalement et l'envoie d'email
+- Session-based\*\* : Timer lié à la session utilisateur
 
 ---
 
@@ -191,7 +209,7 @@ docker compose run --rm backend sh
 # Démarrer le serveur de développement
 docker compose up frontend
 
-# Construire l’application pour la production
+# Construire l'application pour la production
 docker compose run --rm frontend build
 
 # Lancer le serveur de prévisualisation
