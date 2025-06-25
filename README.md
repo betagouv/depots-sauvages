@@ -175,7 +175,7 @@ depots-sauvages/
 Prévention des soumissions automatisées trop rapides.
 
 - Vérification du temps minimum entre les soumissions
-- Configuration : `MIN_FORM_TIME` en seconde
+- Configuration : `ANTISPAM_MIN_TIME_SECONDS` en seconde
 - Protection du formulaire signalement et l'envoi d'e-mail
 - Session-based : Timer lié à la session utilisateur
 

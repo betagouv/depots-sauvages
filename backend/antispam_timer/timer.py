@@ -15,7 +15,7 @@ class FormTimer:
     """
 
     CACHE_TIMEOUT = getattr(settings, "FORM_TIMER_CACHE_TIMEOUT")
-    MIN_FORM_TIME = settings.MIN_FORM_TIME
+    ANTISPAM_MIN_TIME_SECONDS = settings.ANTISPAM_MIN_TIME_SECONDS
 
     @classmethod
     def _get_cache_key(cls, request, base_name):
@@ -55,8 +55,10 @@ class FormTimer:
             cls.start_timer(request, base_name)
             raise serializers.ValidationError("Session invalide. Veuillez recharger la page.")
         total_time = timezone.now().timestamp() - timer_data["start_time"]
-        logger.debug(f"Validating timer: {total_time:.1f}s (required: {cls.MIN_FORM_TIME}s)")
-        if total_time < cls.MIN_FORM_TIME:
+        logger.debug(
+            f"Validating timer: {total_time:.1f}s (required: {cls.ANTISPAM_MIN_TIME_SECONDS}s)"
+        )
+        if total_time < cls.ANTISPAM_MIN_TIME_SECONDS:
             logger.debug("Timer validation failed - keeping original timer")
             raise serializers.ValidationError("Délai de réponse invalide. Veuillez réessayer.")
         logger.debug(f"Timer validation passed: {total_time:.1f}s")
