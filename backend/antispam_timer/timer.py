@@ -23,6 +23,7 @@ class FormTimer:
         Generate cache key for timer data.
         """
         if not request.session.session_key:
+            logger.error(f"Get cache key: No session key found for request to {base_name}")
             raise serializers.ValidationError(
                 "Session invalide. Veuillez recharger la page et réessayer."
             )
