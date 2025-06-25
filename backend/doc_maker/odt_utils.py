@@ -23,12 +23,13 @@ def prepare_context(instance):
     context.pop("lettre_info_generated_at", None)
     context["prejudice_montant_calcule"] = instance.get_prejudice_montant_calcule()
     today = timezone.now()
-    context["today"] = today.strftime("%-d %B %Y")
-    if context["date_constat"]:
-        date_constat = context["date_constat"]
+    context["date_courante"] = today.strftime("%-d %B %Y")
+    context["annee_courante"] = today.year
+    date_constat = context.get("date_constat")
+    heure_constat = context.get("heure_constat")
+    if date_constat:
         context["date_constat"] = date_constat.strftime("%-d %B %Y")
-    if context["heure_constat"]:
-        heure_constat = context["heure_constat"]
+    if heure_constat:
         context["heure_constat"] = heure_constat.strftime("%H:%M")
     return context
 
