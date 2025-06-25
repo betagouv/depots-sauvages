@@ -14,7 +14,7 @@ class FormTimer:
     Requires proper session management for security.
     """
 
-    CACHE_TIMEOUT = 1800  # 30 minutes
+    CACHE_TIMEOUT = getattr(settings, "FORM_TIMER_CACHE_TIMEOUT")
     MIN_FORM_TIME = settings.MIN_FORM_TIME
 
     @classmethod

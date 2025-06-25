@@ -55,6 +55,7 @@ SIGNALEMENT_RATE_LIMIT = env("SIGNALEMENT_RATE_LIMIT", default="10/hour")
 
 # Form submission timing settings
 MIN_FORM_TIME = env.int("MIN_FORM_TIME", default=5)
+FORM_TIMER_CACHE_TIMEOUT = env.int("FORM_TIMER_CACHE_TIMEOUT", default=4 * 3600)
 
 # Reverse proxy settings
 USE_X_FORWARDED_HOST = True

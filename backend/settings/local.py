@@ -55,3 +55,4 @@ SIGNALEMENT_RATE_LIMIT = env("SIGNALEMENT_RATE_LIMIT", default="10/m")
 
 # Form submission timing settings
 MIN_FORM_TIME = env.int("MIN_FORM_TIME", default=15)
+FORM_TIMER_CACHE_TIMEOUT = env.int("FORM_TIMER_CACHE_TIMEOUT", default=4 * 3600)
