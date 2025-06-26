@@ -1,7 +1,7 @@
 export const STEPS = [
   'Information sur le dépôt de déchets',
   'Procédure et préjudice',
-  'Préparez les documents pour la procédure',
+  'Bravo ! Vous pouvez lancer la procédure',
 ]
 
 export const volumeOptions = [
