@@ -17,6 +17,11 @@ const router = createRouter({
     },
     {
       path: '/debuter-procedure',
+      name: 'Introduction',
+      component: () => import('./pages/introduction-formulaire.vue'),
+    } ,
+    {
+      path: '/debuter-procedure/formulaire',
       name: 'Formulaire',
       component: () => import('./pages/debuter-procedure.vue'),
     } ,
