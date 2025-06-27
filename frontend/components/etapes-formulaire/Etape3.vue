@@ -3,37 +3,48 @@
     <div class="fr-bg--contrast">
       <div class="fr-p-4w">
         <section class="document-section fr-py-3w fr-px-2w fr-mb-4w fr-bg--g100">
-        <h2 class="fr-h3 fr-mb-1w">Télécharger et compléter les documents</h2>
+          <h2 class="fr-h3 fr-mb-1w">Télécharger et compléter les documents</h2>
           <p>
-            Vous trouverez ci-dessous des pièces de procédure <span class="fr-text--bold">pré-remplies</span>, à compléter avec les éléments manquants (charte graphique de la mairie, date et signature du rédacteur du document, etc.).
+            Vous trouverez ci-dessous des pièces de procédure
+            <span class="fr-text--bold">pré-remplies</span>, à compléter avec les éléments manquants
+            (charte graphique de la mairie, date et signature du rédacteur du document, etc.).
           </p>
 
-          <h3 class="fr-h4 document-title fr-mt-3w"><span aria-hidden="true">📄</span> Documents disponibles</h3>
+          <h3 class="fr-h4 document-title fr-mt-3w">
+            <span aria-hidden="true">📄</span> Documents disponibles
+          </h3>
           <p>Vous pouvez télécharger les documents suivants :</p>
           <ul class="fr-mb-3w">
             <li>
               <a
-                :href="isOdtReady ? getDocConstatUrl(store.currentId) : undefined"
+                v-if="isOdtReady"
+                :href="getDocConstatUrl(store.currentId)"
                 class="fr-link fr-text--sm fr-link--download"
                 :aria-disabled="!isOdtReady"
                 :tabindex="!isOdtReady ? -1 : 0"
-                @click.prevent="!isOdtReady"
               >
-                Télécharger le rapport de constatation <span v-if="docConstatSize">( .odt, {{ docConstatSize }})</span>
-                <span v-else-if="!isOdtReady" aria-live="polite"> – Chargement…</span>
+                Télécharger le rapport de constatation
+                <span v-if="docConstatSize">( .odt, {{ docConstatSize }})</span>
               </a>
+              <span v-else class="fr-text--sm fr-text--disabled">
+                Télécharger le rapport de constatation
+                <span aria-live="polite"> – Chargement…</span>
+              </span>
             </li>
             <li>
               <a
-                :href="isOdtReady ? getLettreInfoUrl(store.currentId) : undefined"
+                v-if="isOdtReady"
+                :href="getLettreInfoUrl(store.currentId)"
                 class="fr-link fr-text--sm fr-link--download"
                 :aria-disabled="!isOdtReady"
                 :tabindex="!isOdtReady ? -1 : 0"
-                @click.prevent="!isOdtReady"
               >
-              Télécharger la lettre d'information <span v-if="lettreInfoSize">( .odt, {{ lettreInfoSize }})</span>
-              <span v-else-if="!isOdtReady" aria-live="polite"> – Chargement…</span>
+                Télécharger la lettre d'information
+                <span v-if="lettreInfoSize">( .odt, {{ lettreInfoSize }})</span>
               </a>
+              <span v-else class="fr-text--sm fr-text--disabled">
+                Télécharger la lettre d'information <span aria-live="polite"> – Chargement…</span>
+              </span>
             </li>
           </ul>
 
@@ -54,8 +65,12 @@
                 @input="clearEmailSuccessError"
                 autocomplete="email"
               />
-              <p v-if="emailError" class="fr-error-text" :id="errorId" role="alert">{{ emailError }}</p>
-              <p v-if="emailSuccess" class="fr-valid-text" :id="successId" role="alert">{{ emailSuccess }}</p>
+              <p v-if="emailError" class="fr-error-text" :id="errorId" role="alert">
+                {{ emailError }}
+              </p>
+              <p v-if="emailSuccess" class="fr-valid-text" :id="successId" role="alert">
+                {{ emailSuccess }}
+              </p>
             </div>
 
             <DsfrButton
@@ -65,7 +80,7 @@
               @click="sendEmail"
             >
               <span class="fr-m-1w">
-                {{ isSending ? "Les documents sont en cours d'envoi" : "Envoyer par e-mail" }}
+                {{ isSending ? "Les documents sont en cours d'envoi" : 'Envoyer par e-mail' }}
               </span>
             </DsfrButton>
           </div>
@@ -75,26 +90,52 @@
           <h2 class="fr-h3"><span aria-hidden="true">📌</span> Ce qu’il vous reste à faire</h2>
 
           <h3 class="fr-h4 fr-mb-2w">Avant d'entamer la procédure</h3>
-          <p>Pour lancer officiellement une procédure à l'encontre de l'auteur présumé de ce dépôt sauvage :</p>
+          <p>
+            Pour lancer officiellement une procédure à l'encontre de l'auteur présumé de ce dépôt
+            sauvage :
+          </p>
           <ul class="fr-mb-3w">
-            <li><span aria-hidden="true">📥</span> Récupérez le rapport de constatation et la lettre d'information par e-mail ;</li>
-            <li><span aria-hidden="true">✍️</span> Relisez, complétez et signez ces deux documents (ou faites-les signer par votre autorité compétente : maire ou personne habilitée à réaliser des constatations).</li>
+            <li>
+              <span aria-hidden="true">📥</span> Récupérez le rapport de constatation et la lettre
+              d'information par e-mail ;
+            </li>
+            <li>
+              <span aria-hidden="true">✍️</span> Relisez, complétez et signez ces deux documents (ou
+              faites-les signer par votre autorité compétente : maire ou personne habilitée à
+              réaliser des constatations).
+            </li>
           </ul>
 
           <div class="fr-alert fr-alert--info fr-alert--sm fr-mt-3w" role="status">
             <h4 class="fr-alert__title">Procédure administrative</h4>
             <ul class="fr-mb-0">
-              <li><span aria-hidden="true">📬</span> Envoyez la lettre d'information en recommandé avec accusé de réception à l'auteur présumé ;</li>
-              <li><span aria-hidden="true">🗂️</span> Conservez une copie de tous les documents pour vos archives ;</li>
-              <li><span aria-hidden="true">⏳</span> À la fin de la période du contradictoire (10 jours minimum), contactez l'équipe <span class="fr-text--bold">Protect'Envi</span> pour être aidé dans la mise en demeure et l'amende administrative.</li>
+              <li>
+                <span aria-hidden="true">📬</span> Envoyez la lettre d'information en recommandé
+                avec accusé de réception à l'auteur présumé ;
+              </li>
+              <li>
+                <span aria-hidden="true">🗂️</span> Conservez une copie de tous les documents pour
+                vos archives ;
+              </li>
+              <li>
+                <span aria-hidden="true">⏳</span> À la fin de la période du contradictoire (10
+                jours minimum), contactez l'équipe
+                <span class="fr-text--bold">Protect'Envi</span> pour être aidé dans la mise en
+                demeure et l'amende administrative.
+              </li>
             </ul>
           </div>
 
           <div class="fr-alert fr-alert--info fr-alert--sm fr-mt-3w" role="status">
             <h4 class="fr-alert__title">Procédure judiciaire</h4>
             <ul class="fr-mb-0">
-              <li><span aria-hidden="true">📝</span> Envoyez le rapport de constatation à la brigade ;</li>
-              <li><span aria-hidden="true">🧾</span> Prenez rendez-vous auprès de la brigade de gendarmerie ou du commissariat pour déposer plainte.</li>
+              <li>
+                <span aria-hidden="true">📝</span> Envoyez le rapport de constatation à la brigade ;
+              </li>
+              <li>
+                <span aria-hidden="true">🧾</span> Prenez rendez-vous auprès de la brigade de
+                gendarmerie ou du commissariat pour déposer plainte.
+              </li>
             </ul>
           </div>
         </section>
@@ -112,7 +153,10 @@
               guide ACDéchets de la Région Île-de-France
             </a>
           </p>
-          <p> <span aria-hidden="true">👉</span> Retrouvez des conseils pratiques sur l'application à destination des élus, Gend'élus :</p>
+          <p>
+            <span aria-hidden="true">👉</span> Retrouvez des conseils pratiques sur l'application à
+            destination des élus, Gend'élus :
+          </p>
           <ul>
             <li>
               <a
@@ -138,20 +182,23 @@
         </section>
 
         <section class="fr-p-4w fr-bg--g100">
-          <h3 class="fr-h3"><span aria-hidden="true">✅</span> Vous avez terminé le module "Débuter une procédure"</h3>
+          <h3 class="fr-h3">
+            <span aria-hidden="true">✅</span> Vous avez terminé le module "Débuter une procédure"
+          </h3>
           <p>Vous pouvez maintenant :</p>
           <ul>
-            <li><span aria-hidden="true">🔍</span> Retrouver de l'aide dans la section
+            <li>
+              <span aria-hidden="true">🔍</span> Retrouver de l'aide dans la section
               <a href="/accompagnement" rel="noreferrer noopener">Être accompagné</a>
             </li>
-            <li><span aria-hidden="true">🔁</span> Démarrer une nouvelle procédure si nécessaire</li>
+            <li>
+              <span aria-hidden="true">🔁</span> Démarrer une nouvelle procédure si nécessaire
+            </li>
           </ul>
         </section>
 
         <div class="fr-btns-group fr-btns-group--inline fr-btns-group--center fr-mt-4w">
-          <button class="fr-btn fr-btn--tertiary" @click="goHome">
-            Retour à l'accueil
-          </button>
+          <button class="fr-btn fr-btn--tertiary" @click="goHome">Retour à l'accueil</button>
           <button class="fr-btn" @click="handleRestart">
             Démarrer une nouvelle procédure
             <span class="fr-icon-arrow-right-line" aria-hidden="true"></span>
@@ -170,9 +217,9 @@
 import { createResource } from '@/services/api'
 import { getDocConstatUrl, getLettreInfoUrl, getSendEmailUrl } from '@/services/urls'
 import { useSignalementStore } from '@/stores/signalement'
+import { formatBytes, getFileSizeFromUrl } from '@/utils/files'
 import { DsfrButton } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, ref } from 'vue'
-import { formatBytes, getFileSizeFromUrl } from '@/utils/files'
 
 const store = useSignalementStore()
 const emit = defineEmits(['restart'])
@@ -187,25 +234,6 @@ const lettreInfoSize = ref(null)
 
 const errorId = 'email-error'
 const successId = 'email-success'
-
-/*const downloadDocConstat = () => {
-  window.open(getDocConstatUrl(store.currentId), '_blank')
-}*/
-
-const downloadDocConstat = () => {
-  const url = getDocConstatUrl(store.currentId)
-  const link = document.createElement('a')
-  link.href = url
-  link.setAttribute('download', '') // déclenche un téléchargement
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
-}
-
-
-const downloadLettreInfo = () => {
-  window.open(getLettreInfoUrl(store.currentId), '_blank')
-}
 
 const isEmailValid = computed(() => {
   if (email.value.trim() === '') return false
@@ -266,7 +294,7 @@ onMounted(async () => {
 
   const [rawSizeDocConstat, rawSizeLettreInfo] = await Promise.all([
     getFileSizeFromUrl(urlDocConstat),
-    getFileSizeFromUrl(urlLettreInfo)
+    getFileSizeFromUrl(urlLettreInfo),
   ])
 
   docConstatSize.value = rawSizeDocConstat ? formatBytes(rawSizeDocConstat) : 'Taille inconnue'
