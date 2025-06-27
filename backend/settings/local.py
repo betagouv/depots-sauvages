@@ -51,3 +51,8 @@ ANYMAIL = {
 
 # Rate limiting
 EMAIL_RATE_LIMIT = env("EMAIL_RATE_LIMIT", default="10/m")
+SIGNALEMENT_RATE_LIMIT = env("SIGNALEMENT_RATE_LIMIT", default="10/m")
+
+# Form submission timing settings
+ANTISPAM_MIN_TIME_SECONDS = env.int("ANTISPAM_MIN_TIME_SECONDS", default=15)
+FORM_TIMER_CACHE_TIMEOUT = env.int("FORM_TIMER_CACHE_TIMEOUT", default=4 * 3600)

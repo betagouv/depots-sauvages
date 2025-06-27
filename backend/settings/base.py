@@ -25,8 +25,10 @@ INSTALLED_APPS = [
     "anymail",
     #
     # Project apps
+    "backend.throttling",
     "backend.home",
     "backend.signalements",
+    "backend.antispam_timer",
 ]
 
 MIDDLEWARE = [
@@ -155,6 +157,8 @@ CACHES = {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
     }
 }
+
+TIMER_BASE_NAME = "signalement"  # Base name for timer cache keys
 
 # Anymail settings
 ANYMAIL = {

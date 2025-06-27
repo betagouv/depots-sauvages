@@ -51,6 +51,11 @@ ANYMAIL = {
 
 # Rate limiting
 EMAIL_RATE_LIMIT = env("EMAIL_RATE_LIMIT", default="10/hour")
+SIGNALEMENT_RATE_LIMIT = env("SIGNALEMENT_RATE_LIMIT", default="10/hour")
+
+# Form submission timing settings
+ANTISPAM_MIN_TIME_SECONDS = env.int("ANTISPAM_MIN_TIME_SECONDS", default=5)
+FORM_TIMER_CACHE_TIMEOUT = env.int("FORM_TIMER_CACHE_TIMEOUT", default=4 * 3600)
 
 # Reverse proxy settings
 USE_X_FORWARDED_HOST = True
