@@ -187,7 +187,7 @@
         />
         <DsfrButton
           type="submit"
-          label="Valider"
+          label="Suivant"
           icon="fr-icon-arrow-right-line"
           icon-right
           :disabled="isSubmitting"
@@ -225,7 +225,7 @@ const handleSubmit = async (event: Event) => {
   }
 }
 
-const handlePrevious = () => store.updateStep(1)
+const handlePrevious = () => store.updateStep(2)
 </script>
 
 <style scoped>
