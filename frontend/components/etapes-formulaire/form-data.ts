@@ -1,6 +1,8 @@
 export const STEPS = [
   'Information sur le dépôt de déchets',
-  'Procédure et préjudice',
+  'Description du dépôt',
+  'Compléter les informations utiles pour le traitement',
+  'Récapitulatif',
   'Bravo ! Vous pouvez lancer la procédure',
 ]
 
@@ -30,7 +32,7 @@ export const natureTerrainOptions = [
 
   {
     label: 'Je ne sais pas',
-    value: '',
+    value: 'inconnu',
     id: 'terrain-inconnu',
   },
 ]

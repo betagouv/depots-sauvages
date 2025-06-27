@@ -1,6 +1,6 @@
 <template>
   <div class="fr-container--sm">
-    <h2 class="fr-h3 fr-mb-3w">Où se trouve le dépôt sauvage et comment vous contacter ?</h2>
+    <h2 class="fr-h3 fr-mb-3w">Localisation du dépôt</h2>
     <div class="fr-form-group">
       <p class="fr-text--sm fr-mb-3w">
         Les champs avec <abbr title="Champ obligatoire">*</abbr> sont obligatoires
@@ -9,7 +9,7 @@
         <div class="fr-col-12 fr-col-md-6">
           <DsfrInput
             v-model="store.formData.commune"
-            label="📍 Sur quelle commune a eu lieu le dépôt ?"
+            label="Commune du dépôt"
             required
           />
         </div>
@@ -17,110 +17,24 @@
         <div class="fr-col-12 fr-col-md-6">
           <DsfrInput
             v-model="store.formData.localisationDepot"
-            label="🏠 Quelle est l'adresse du dépôt de déchets ?"
+            label="Adresse du dépôt"
             hint="(numéro, lieu, type, libellé de voie...)"
             required
           />
         </div>
-
-        <div class="fr-col-12 fr-col-md-6">
-          <DsfrSelect
-            v-model="store.formData.auteurSignalement"
-            label="👮 Qui a réalisé la constatation ?"
-            :options="auteurOptions"
-            required
-          />
-        </div>
-        <div class="fr-col-12 fr-col-md-6">
-          <DsfrInput
-            v-if="store.formData.indicesDisponibles.includes('autre')"
-            v-model="store.formData.precisionsIndices"
-            label="Précisez les autres indices"
-            name="precisions-indices"
-            type="text"
-          />
-        </div>
-
-        <div class="fr-col-12 fr-col-md-6">
-          <DsfrInput
-            v-model="store.formData.dateConstat"
-            type="date"
-            label="Date de la constatation"
-            hint="au format JJ/MM/AAAA"
-            required
-          />
-        </div>
-
-        <div class="fr-input-group fr-col-12 fr-col-md-6">
-          <label class="fr-label" for="heure-constatation">
-            Heure de la constatation *
-            <span class="fr-hint-text">Format attendu : HH:MM</span>
-          </label>
-          <input
-            type="time"
-            v-model="store.formData.heureConstat"
-            id="heure-constatation"
-            name="heure-constatation"
-            class="fr-input"
-            min="00:00"
-            max="23:59"
-            required
-          />
-        </div>
-
-        <div class="fr-col-12">
-          <DsfrRadioButtonSet
-            :model-value="store.formData.photoDispo ? 'oui' : 'non'"
-            @update:model-value="(value) => store.updateBooleanField('photoDispo', value)"
-            name="photo-dispo"
-            legend="Avez-vous des photos du dépôt ?"
-            :options="yesNoOptions"
-            required
-          />
-        </div>
-
-        <div class="fr-col-12">
-          <DsfrRadioButtonSet
-            v-model="store.formData.natureTerrain"
-            name="nature-terrain"
-            legend="🌍 Quelle est la nature du terrain concerné par le dépôt ?"
-            :options="natureTerrainOptions"
-            required
-          />
-        </div>
-
-        <div class="fr-col-12 fr-col-md-6">
-          <DsfrSelect
-            v-model="store.formData.volumeDepot"
-            label="📏 Volume estimé"
-            hint="en m3"
-            :options="volumeOptions"
-            required
-          />
-        </div>
-        <div class="fr-col-12">
-          <DsfrRadioButtonSet
-            @update:model-value="(value) => store.updateBooleanField('risqueEcoulement', value)"
-            name="risque-ecoulement"
-            legend="Existe-t-il un risque d'écoulement ?"
-            :options="yesNoOptions"
-            required
-          />
-        </div>
-
         <div class="fr-col-12">
           <div class="fr-form-group">
-            <legend class="fr-fieldset__legend fr-text--regular">Type de dépôts</legend>
+            <legend class="fr-fieldset__legend fr-text--regular">Nature du terrain</legend>
             <div class="fr-fieldset__content">
               <div
-                v-for="option in typesDepotOptions"
+                v-for="option in natureTerrainOptions"
                 :key="option.value"
                 class="fr-checkbox-group"
               >
                 <input
                   type="checkbox"
                   :id="option.id"
-                  :name="option.name"
+                  :name="option.label"
                   :value="option.value"
                   v-model="store.formData.typesDepot"
                 />
@@ -130,14 +44,43 @@
           </div>
         </div>
 
-        <div class="fr-col-12 fr-col-md-6">
-          <DsfrInput
-            v-model="store.formData.precisionsDepot"
-            label="✏️ Autres informations"
-            hint="Apportez tout autre élément (présence d'habitation, présence d'élevage, voie ferrée, etc.), identité du propriétaire du terrain (si terrain privé), zone particulière (zone agricole, zone forestière, zone naturelle, zone humide, zone Natura 2000, zone Ramsar, etc.), cours d'eau à proximité ou un captage d'eau, dernière date à laquelle le dépôt n'étais pas présent (si vous en avez connaissance)."
-            :isTextarea="true"
-          />
-        </div>
+        <fieldset>
+         <legend>Détails de la constatation</legend>
+          <div class="fr-col-12 fr-col-md-6">
+            <DsfrSelect
+              v-model="store.formData.auteurSignalement"
+              label="Qui a constaté le dépôt ?"
+              :options="auteurOptions"
+              required
+            />
+          </div>
+          <div class="fr-col-12 fr-col-md-6">
+            <DsfrInput
+              v-model="store.formData.dateConstat"
+              type="date"
+              label="Date de la constatation"
+              hint="au format JJ/MM/AAAA"
+              required
+            />
+          </div>
+
+          <div class="fr-input-group fr-col-12 fr-col-md-6">
+            <label class="fr-label" for="heure-constatation">
+              Heure de la constatation *
+              <span class="fr-hint-text">Format attendu : HH:MM</span>
+            </label>
+            <input
+              type="time"
+              v-model="store.formData.heureConstat"
+              id="heure-constatation"
+              name="heure-constatation"
+              class="fr-input"
+              min="00:00"
+              max="23:59"
+              required
+            />
+          </div>
+        </fieldset>
 
         <div class="fr-col-12 fr-mt-3w actions-row">
           <DsfrButton

@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "nature_terrain",
-                    models.CharField(blank=True, max_length=255, verbose_name="terrain"),
+                    models.CharField(blank=True, default=list, verbose_name="terrain"),
                 ),
                 (
                     "volume_depot",
