@@ -1,10 +1,9 @@
 <template>
-  <div class="fr-container--sm">
-    <h2 class="fr-h3 fr-mb-3w">Localisation du dépôt</h2>
-    <div class="fr-form-group">
+  <div class="fr-container--sm fr-m-1w">
       <p class="fr-text--sm fr-mb-3w">
         Les champs avec <abbr title="Champ obligatoire">*</abbr> sont obligatoires
       </p>
+      <h2 class="fr-h5 fr-mb-3w">Localisation du dépôt</h2>
       <form @submit.prevent="handleSubmit" class="fr-grid-row fr-grid-row--gutters">
         <div class="fr-col-12 fr-col-md-6">
           <DsfrInput
@@ -23,8 +22,8 @@
           />
         </div>
         <div class="fr-col-12">
-          <div class="fr-form-group">
-            <legend class="fr-fieldset__legend fr-text--regular">Nature du terrain</legend>
+          <fieldset class="fr-form-group fr-fieldset--no-border">
+            <legend class="fr-pb-2w fr-text--regular">Nature du terrain</legend>
             <div class="fr-fieldset__content">
               <div
                 v-for="option in natureTerrainOptions"
@@ -41,20 +40,17 @@
                 <label class="fr-label" :for="option.id">{{ option.label }}</label>
               </div>
             </div>
-          </div>
+          </fieldset>
         </div>
 
-        <fieldset>
-         <legend>Détails de la constatation</legend>
-          <div class="fr-col-12 fr-col-md-6">
-            <DsfrSelect
+        <div class="fr-col-12 fr-form-group">
+          <h2 class="fr-h5 fr-mb-3w">Détails de la constatation</h2>
+          <DsfrSelect
               v-model="store.formData.auteurSignalement"
               label="Qui a constaté le dépôt ?"
               :options="auteurOptions"
               required
             />
-          </div>
-          <div class="fr-col-12 fr-col-md-6">
             <DsfrInput
               v-model="store.formData.dateConstat"
               type="date"
@@ -62,9 +58,7 @@
               hint="au format JJ/MM/AAAA"
               required
             />
-          </div>
-
-          <div class="fr-input-group fr-col-12 fr-col-md-6">
+          <div class="fr-mt-3w">
             <label class="fr-label" for="heure-constatation">
               Heure de la constatation *
               <span class="fr-hint-text">Format attendu : HH:MM</span>
@@ -80,7 +74,7 @@
               required
             />
           </div>
-        </fieldset>
+        </div>
 
         <div class="fr-col-12 fr-mt-3w actions-row">
           <DsfrButton
@@ -92,7 +86,6 @@
           />
         </div>
       </form>
-    </div>
   </div>
 </template>
 
@@ -104,9 +97,6 @@ import { ref } from 'vue'
 import {
   auteurOptions,
   natureTerrainOptions,
-  typesDepotOptions,
-  volumeOptions,
-  yesNoOptions,
 } from './form-data'
 
 const store = useSignalementStore()
@@ -164,5 +154,13 @@ const handleSubmit = async (event: Event) => {
   display: flex;
   justify-content: flex-end;
 }
+
+.fr-fieldset--no-border {
+  border: none;
+  margin: 0;
+  padding: 0;
+  color: #161616 !important;
+}
+
 
 </style>

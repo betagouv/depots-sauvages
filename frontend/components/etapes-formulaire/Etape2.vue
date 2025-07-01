@@ -1,5 +1,5 @@
 <template>
-  <div class="fr-container--sm">
+  <div class="fr-container--sm fr-m-1w">
     <p>Les champs avec <abbr title="Champ obligatoire">*</abbr> sont obligatoires</p>
     <form @submit.prevent="handleSubmit">
       <div class="fr-col-12">
@@ -24,39 +24,38 @@
       <div class="fr-col-12 fr-col-md-6">
         <DsfrSelect
           v-model="store.formData.volumeDepot"
-          label="📏 Volume estimé"
+          label="Volume estimé"
           hint="en m3"
           :options="volumeOptions"
           required
         />
       </div>
-      <div class="fr-col-12">
-        <div class="fr-form-group">
-          <legend class="fr-fieldset__legend fr-text--regular">Type de dépôts</legend>
-          <div class="fr-fieldset__content">
-            <div
-              v-for="option in typesDepotOptions"
-              :key="option.value"
-              class="fr-checkbox-group"
-            >
-              <input
-                type="checkbox"
-                :id="option.id"
-                :name="option.name"
-                :value="option.value"
-                v-model="store.formData.typesDepot"
-              />
-              <label class="fr-label" :for="option.id">{{ option.label }}</label>
+      <div class="fr-col-12 fr-mt-2w">
+        <fieldset class="fr-form-group fr-fieldset--no-border">
+          <legend class="fr-pb-2w fr-text--regular">Type de dépôts</legend>
+            <div class="fr-fieldset__content">
+              <div
+                v-for="option in typesDepotOptions"
+                :key="option.value"
+                class="fr-checkbox-group"
+              >
+                <input
+                  type="checkbox"
+                  :id="option.id"
+                  :name="option.name"
+                  :value="option.value"
+                  v-model="store.formData.typesDepot"
+                />
+                <label class="fr-label" :for="option.id">{{ option.label }}</label>
+              </div>
             </div>
-          </div>
-        </div>
+          </fieldset>
       </div>
-
 
       <div class="fr-col-12 fr-col-md-6">
         <DsfrInput
           v-model="store.formData.precisionsDepot"
-          label="✏️ Autres informations"
+          label="Autres informations"
           hint="Apportez tout autre élément (présence d'habitation, présence d'élevage, voie ferrée, etc.), identité du propriétaire du terrain (si terrain privé), zone particulière (zone agricole, zone forestière, zone naturelle, zone humide, zone Natura 2000, zone Ramsar, etc.), cours d'eau à proximité ou un captage d'eau, dernière date à laquelle le dépôt n'étais pas présent (si vous en avez connaissance)."
           :isTextarea="true"
         />
@@ -97,10 +96,8 @@
 import '@/styles/form-steps.css'
 import { useSignalementStore } from '@/stores/signalement'
 import { DsfrInput, DsfrRadioButtonSet } from '@gouvminint/vue-dsfr'
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import {
-  indicesDisponiblesOptions,
-  statutAuteurOptions,
   typesDepotOptions,
   volumeOptions,
   yesNoOptions,
@@ -108,7 +105,6 @@ import {
 
 const store = useSignalementStore()
 const isSubmitting = ref(false)
-const showBlocAuteur = computed(() => store.formData.auteurIdentifie)
 
 const handleSubmit = async (event: Event) => {
   event.preventDefault()
@@ -131,5 +127,12 @@ const handlePrevious = () => store.updateStep(1)
   display: flex;
   justify-content: space-between;
   gap: 1rem;
+}
+
+.fr-fieldset--no-border {
+  border: none;
+  margin: 0;
+  padding: 0;
+  color: #161616 !important;
 }
 </style>
