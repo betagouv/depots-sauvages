@@ -3,7 +3,7 @@
       <p class="fr-text--sm fr-mb-3w">
         Les champs avec <abbr title="Champ obligatoire">*</abbr> sont obligatoires
       </p>
-      <h2 class="fr-h5 fr-mb-3w">Localisation du dépôt</h2>
+      <h3 class="fr-h5 fr-mb-3w">Localisation du dépôt</h3>
       <form @submit.prevent="handleSubmit" class="fr-grid-row fr-grid-row--gutters">
         <div class="fr-col-12 fr-col-md-6">
           <DsfrInput
@@ -56,7 +56,7 @@
         </div>
 
         <div class="fr-col-12 fr-form-group">
-          <h2 class="fr-h5 fr-mb-3w">Détails de la constatation</h2>
+          <h3 class="fr-h5 fr-mb-3w">Détails de la constatation</h3>
           <DsfrSelect
               v-model="store.formData.auteurSignalement"
               label="Qui a constaté le dépôt ?"
