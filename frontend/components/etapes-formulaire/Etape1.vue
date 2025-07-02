@@ -22,8 +22,20 @@
           />
         </div>
         <div class="fr-col-12">
-          <fieldset class="fr-form-group fr-fieldset--no-border">
-            <legend class="fr-pb-2w fr-text--regular">Nature du terrain</legend>
+          <fieldset
+            ref="natureTerrainFieldSet"
+            class="fr-form-group fr-fieldset--no-border"
+            :class="{ 'fr-form-group--error': showNatureTerrainError }"
+          >
+            <legend
+              class="fr-text--regular"
+              :class="{ 'fr-pb-2w': !showNatureTerrainError }"
+            >
+              Nature du terrain *
+            </legend>
+            <p v-if="showNatureTerrainError" class="fr-error-text fr-my-2w" tabindex="-1" ref="natureTerrainErrorMessage">
+              Le champ Nature du terrain est vide. Veuillez sélectionner au moins une option.
+            </p>
             <div class="fr-fieldset__content">
               <div
                 v-for="option in natureTerrainOptions"
@@ -93,14 +105,27 @@
 import { useSignalementStore } from '@/stores/signalement'
 import '@/styles/form-steps.css'
 import { DsfrInput } from '@gouvminint/vue-dsfr'
-import { ref } from 'vue'
+import { ref, warn, watch } from 'vue'
 import {
   auteurOptions,
   natureTerrainOptions,
 } from './form-data'
 
 const store = useSignalementStore()
+
 const isSubmitting = ref(false)
+const showNatureTerrainError = ref(false)
+const natureTerrainErrorMessage = ref<HTMLElement | null>(null)
+
+watch(
+  () => store.formData.typesDepot,
+  (selectedOptions) => {
+    if (Array.isArray(selectedOptions) && selectedOptions.length > 0) {
+      showNatureTerrainError.value = false
+    }
+  },
+  {deep: true }
+)
 
 const handleSubmit = async (event: Event) => {
   event.preventDefault()
@@ -108,6 +133,12 @@ const handleSubmit = async (event: Event) => {
   // Force le blur de l'élément actif pour éviter le blocage Safari
   if (document.activeElement instanceof HTMLElement) {
     document.activeElement.blur()
+  }
+
+  showNatureTerrainError.value = store.formData.typesDepot.length === 0
+  if (showNatureTerrainError.value) {
+    natureTerrainErrorMessage.value?.focus()
+    return
   }
 
   isSubmitting.value = true
@@ -120,7 +151,6 @@ const handleSubmit = async (event: Event) => {
     isSubmitting.value = false
   }
 }
-
 
 </script>
 
