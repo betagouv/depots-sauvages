@@ -1,8 +1,13 @@
 <template>
-  <div class="fr-container--sm">
-    <p>Les champs avec <abbr title="Champ obligatoire">*</abbr> sont obligatoires</p>
+  <div class="fr-container fr-grid-row fr-grid-row--center fr-mb-4w">
     <form @submit.prevent="handleSubmit">
-      <h2>Récapitulatif</h2>
+      <h2>Vous êtes prêts à générer vos documents</h2>
+      <div>
+        <p>Le rapport de constatation et la lettre d’information vont être créés à partir des données que vous avez saisies. </p>
+        <p>Ces documents vous permettront de signaler officiellement le dépôt sauvage auprès des autorités compétentes. </p>
+        <p>Après génération, vous pourrez télécharger ces documents ou les recevoir par e-mail.</p>
+        <p>Si vous souhaitez modifier certaines informations, vous pouvez revenir à l’étape précédente à tout moment.</p>
+      </div>
 
       <div class="fr-mt-3w actions-row">
         <DsfrButton
@@ -14,7 +19,7 @@
         />
         <DsfrButton
           type="submit"
-          label="Suivant"
+          label="Générer les documents"
           icon="fr-icon-arrow-right-line"
           icon-right
           :disabled="isSubmitting"
