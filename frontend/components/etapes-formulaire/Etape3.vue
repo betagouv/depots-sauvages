@@ -248,7 +248,7 @@ const handleSubmit = async (event: Event) => {
   isSubmitting.value = true
   try {
     await store.saveFormData()
-    store.updateStep(5)
+    store.updateStep(4)
   } catch (error) {
     console.error('Failed to save:', error)
   } finally {

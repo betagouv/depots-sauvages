@@ -2,7 +2,7 @@ export const STEPS = [
   'Information sur le dépôt de déchets',
   'Description du dépôt',
   'Compléter les informations utiles pour le traitement',
-  'Récapitulatif',
+  'Générer les documents',
   'Bravo ! Vous pouvez lancer la procédure',
 ]
 
