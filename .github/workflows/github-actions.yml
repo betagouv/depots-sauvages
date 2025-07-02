@@ -1,0 +1,73 @@
+name: CI - Frontend Quality Checks
+
+on:
+  push:
+    branches: [main, staging]
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+
+jobs:
+  tests:
+    name: Tests Vitest + A11Y
+    runs-on: ubuntu-latest
+    if: ${{ !github.event.pull_request.draft }}
+
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npx vitest test
+        working-directory: frontend
+
+  html5validation:
+    name: ✅ HTML5 Validator
+    runs-on: ubuntu-latest
+    if: ${{ !github.event.pull_request.draft }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: npm
+
+      - name: Install frontend deps
+        run: npm install
+        working-directory: frontend
+
+      - name: Build frontend
+        run: npm build
+        working-directory: frontend
+
+      - name: Move index.html to root
+        run: cp frontend/dist/index.html ./
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install html5validator
+        run: pip install html5validator
+
+      - name: ✅ Run validator on index.html
+        run: html5validator --root . --files index.html
