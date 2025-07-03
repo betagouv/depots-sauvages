@@ -19,6 +19,7 @@ ipdb = "*"
 django-tasks = "*"
 django-anymail = {extras = ["brevo"], version = "*"}
 django-redis = "*"
+django-model-utils = "*"
 
 [dev-packages]
 black = "*"
