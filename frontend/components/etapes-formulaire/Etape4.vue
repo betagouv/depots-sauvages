@@ -4,7 +4,7 @@
       <h2>Vous êtes prêts à générer vos documents</h2>
       <div>
         <p>Le rapport de constatation et la lettre d’information vont être créés à partir des données que vous avez saisies. </p>
-        <p>Ces documents vous permettront de signaler officiellement le dépôt sauvage auprès des autorités compétentes. </p>
+        <p>Ces documents vous permettront d’initier la procédure administrative au niveau de la mairie et/ou de porter plainte.</p>
         <p>Après génération, vous pourrez télécharger ces documents ou les recevoir par e-mail.</p>
         <p>Si vous souhaitez modifier certaines informations, vous pouvez revenir à l’étape précédente à tout moment.</p>
       </div>
