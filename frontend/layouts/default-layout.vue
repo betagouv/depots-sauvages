@@ -2,7 +2,7 @@
   <div>
     <DsfrHeader
       service-title="Protect’Envi"
-      service-description="Agir contre les dépôts sauvages"
+      service-description="Accompagner les collectivités pour mieux lutter contre les dépôts sauvages."
       :logoText="logoText"
     />
 
