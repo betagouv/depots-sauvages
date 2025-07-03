@@ -1,9 +1,10 @@
 from django.db import models
+from model_utils.models import TimeStampedModel
 
 from backend.signalements.prejudice import PrejudiceMixin
 
 
-class Signalement(PrejudiceMixin, models.Model):
+class Signalement(PrejudiceMixin, TimeStampedModel):
     """
     Model for waste deposit reports
     """
