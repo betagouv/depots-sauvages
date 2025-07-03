@@ -13,7 +13,7 @@ class Signalement(PrejudiceMixin, models.Model):
     date_constat = models.DateField("date")
     heure_constat = models.TimeField("heure")
     auteur_signalement = models.CharField("auteur", max_length=255, blank=True)
-    nature_terrain = models.CharField("terrain", max_length=255, blank=True)
+    nature_terrain = models.JSONField("terrain", default=list, blank=True)
     volume_depot = models.CharField("volume", max_length=255, blank=True)
     risque_ecoulement = models.BooleanField("risque d'écoulement", default=False)
     types_depot = models.JSONField("types", default=list, blank=True, null=True)

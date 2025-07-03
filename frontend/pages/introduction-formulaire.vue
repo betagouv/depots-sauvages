@@ -3,7 +3,7 @@
     <div class="fr-col-12 fr-col-md-8 fr-col-lg-6 fr-text--center fr-mt-4w">
       <h1 class="fr-h2">Commencer la procédure</h1>
       <p class="fr-text fr-mb-3w">
-        Ce formulaire vous guide en <span class="fr-text--bold">3 étapes</span> pour signaler un dépôt sauvage.
+        Ce formulaire vous guide en <span class="fr-text--bold">5 étapes</span> pour signaler un dépôt sauvage.
       </p>
       <p class="fr-text fr-mb-3w">
         À la fin, vous pourrez récupérer des documents  générés et personnalisés pour vous permettre d'initier une procédure administrative et faciliter un éventuel dépôt de plainte.
@@ -22,7 +22,7 @@
       </p>
       <div class="fr-p-3w fr-mb-3w fr-background-alt--grey fr-border--grey fr-border fr-radius">
         <ul>
-          <li>Temps estimé : 2 à 5 minutes</li>
+          <li>Temps estimé : 2 minutes</li>
           <li>Documents utiles : Ajoutez des photos si disponibles (facultatif)</li>
         </ul>
       </div>

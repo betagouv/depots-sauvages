@@ -1,330 +1,276 @@
 <template>
-  <div class="fr-container--sm">
-    <div class="fr-bg--contrast">
-      <div class="fr-p-4w">
-        <section class="document-section fr-py-3w fr-px-2w fr-mb-4w fr-bg--g100">
-          <h2 class="fr-h3 fr-mb-1w">Télécharger et compléter les documents</h2>
-          <p>
-            Vous trouverez ci-dessous des pièces de procédure
-            <span class="fr-text--bold">pré-remplies</span>, à compléter avec les éléments manquants
-            (charte graphique de la mairie, date et signature du rédacteur du document, etc.).
-          </p>
+  <div class="fr-container--sm fr-m-1w">
+    <p>Les champs avec <abbr title="Champ obligatoire">*</abbr> sont obligatoires</p>
+    <form @submit.prevent="handleSubmit">
+      <div class="fr-form-group">
+        <h3 class="fr-h5">À propos de l’auteur des faits</h3>
+        <DsfrRadioButtonSet
+          :model-value="store.formData.auteurIdentifie ? 'oui' : 'non'"
+          @update:model-value="(value) => store.updateBooleanField('auteurIdentifie', value)"
+          name="auteur-identifie"
+          legend="L'auteur des faits est-il identifié ?"
+          :options="yesNoOptions"
+          required
+        />
 
-          <h3 class="fr-h4 document-title fr-mt-3w">
-            <span aria-hidden="true">📄</span> Documents disponibles
-          </h3>
-          <p>Vous pouvez télécharger les documents suivants :</p>
-          <ul class="fr-mb-3w">
-            <li>
-              <a
-                v-if="isOdtReady"
-                :href="getDocConstatUrl(store.currentId)"
-                class="fr-link fr-text--sm fr-link--download"
-                :aria-disabled="!isOdtReady"
-                :tabindex="!isOdtReady ? -1 : 0"
-              >
-                Télécharger le rapport de constatation
-                <span v-if="docConstatSize">( .odt, {{ docConstatSize }})</span>
-              </a>
-              <span v-else class="fr-text--sm fr-text--disabled">
-                Télécharger le rapport de constatation
-                <span aria-live="polite"> – Chargement…</span>
-              </span>
-            </li>
-            <li>
-              <a
-                v-if="isOdtReady"
-                :href="getLettreInfoUrl(store.currentId)"
-                class="fr-link fr-text--sm fr-link--download"
-                :aria-disabled="!isOdtReady"
-                :tabindex="!isOdtReady ? -1 : 0"
-              >
-                Télécharger la lettre d'information
-                <span v-if="lettreInfoSize">( .odt, {{ lettreInfoSize }})</span>
-              </a>
-              <span v-else class="fr-text--sm fr-text--disabled">
-                Télécharger la lettre d'information <span aria-live="polite"> – Chargement…</span>
-              </span>
-            </li>
-          </ul>
+        <DsfrRadioButtonSet
+          v-if="showBlocAuteur"
+          v-model="store.formData.statutAuteur"
+          name="statut-auteur"
+          legend="S'agit-il d'une entreprise ou d'un particulier ?"
+          :options="statutAuteurOptions"
+          required
+        />
 
-          <div class="fr-mt-4w">
-            <h4 class="fr-h4">Recevoir vos documents par e-mail</h4>
-            <div class="fr-input-group">
-              <label class="fr-label" for="email-input">
-                Adresse électronique
-                <span class="fr-hint-text">Format attendu : nom@domaine.fr</span>
-              </label>
-              <input
-                class="fr-input"
-                :class="{ 'fr-input--error': emailError }"
-                id="email-input"
-                v-model="email"
-                type="email"
-                :aria-describedby="emailInputDescribedBy || undefined"
-                @input="clearEmailSuccessError"
-                autocomplete="email"
+        <template v-if="showBlocAuteur">
+          <template v-if="store.formData.statutAuteur === 'entreprise'">
+            <div class="fr-mb-4w">
+              <DsfrInput
+                class="fr-mb-3w"
+                v-model="store.formData.nomEntreprise"
+                label="Nom de l'entreprise ou raison sociale"
+                name="nom-entreprise"
+                type="text"
+                required
               />
-              <p v-if="emailError" class="fr-error-text" :id="errorId" role="alert">
-                {{ emailError }}
-              </p>
-              <p v-if="emailSuccess" class="fr-valid-text" :id="successId" role="alert">
-                {{ emailSuccess }}
-              </p>
+              <DsfrInput
+                v-model="store.formData.numeroSiret"
+                label="Numéro de SIRET"
+                name="numero-siret"
+                type="text"
+                inputmode="numeric"
+                pattern="[0-9]{14}"
+                hint="14 chiffres sans espaces"
+              />
             </div>
+          </template>
 
-            <DsfrButton
-              class="fr-mt-2w"
-              :icon="{ name: 'ri-mail-fill' }"
-              :disabled="!isEmailValid || isSending"
-              @click="sendEmail"
+          <template v-if="store.formData.statutAuteur === 'particulier'">
+            <div class="fr-mb-3w">
+              <DsfrInput
+                v-model="store.formData.prenomParticulier"
+                label="Prénom du particulier"
+                name="prenom-particulier"
+                type="text"
+                required
+              />
+              <DsfrInput
+                v-model="store.formData.nomParticulier"
+                label="Nom du particulier"
+                name="nom-particulier"
+                type="text"
+                required
+              />
+            </div>
+          </template>
+        </template>
+
+        <fieldset class="fr-form-group fr-pl-0 fr-fieldset--no-border">
+          <legend class="fr-pb-2w fr-text--regular">
+            Disposez-vous d’éléments pouvant aider à identifier l’auteur ?
+          </legend>
+          <div class="fr-fieldset__content fr-ml-0">
+            <div
+              v-for="option in indicesDisponiblesOptions"
+              :key="option.value"
+              class="fr-checkbox-group"
             >
-              <span class="fr-m-1w">
-                {{ isSending ? "Les documents sont en cours d'envoi" : 'Envoyer par e-mail' }}
-              </span>
-            </DsfrButton>
+              <input
+                type="checkbox"
+                :id="option.id"
+                :name="option.name"
+                :value="option.value"
+                v-model="store.formData.indicesDisponibles"
+              />
+              <label class="fr-label" :for="option.id">{{ option.label }}</label>
+            </div>
           </div>
-        </section>
+        </fieldset>
 
-        <section class="fr-mt-4w fr-bg--g100">
-          <h2 class="fr-h3"><span aria-hidden="true">📌</span> Ce qu’il vous reste à faire</h2>
-
-          <h3 class="fr-h4 fr-mb-2w">Avant d'entamer la procédure</h3>
-          <p>
-            Pour lancer officiellement une procédure à l'encontre de l'auteur présumé de ce dépôt
-            sauvage :
-          </p>
-          <ul class="fr-mb-3w">
-            <li>
-              <span aria-hidden="true">📥</span> Récupérez le rapport de constatation et la lettre
-              d'information par e-mail ;
-            </li>
-            <li>
-              <span aria-hidden="true">✍️</span> Relisez, complétez et signez ces deux documents (ou
-              faites-les signer par votre autorité compétente : maire ou personne habilitée à
-              réaliser des constatations).
-            </li>
-          </ul>
-
-          <div class="fr-alert fr-alert--info fr-alert--sm fr-mt-3w" role="status">
-            <h4 class="fr-alert__title">Procédure administrative</h4>
-            <ul class="fr-mb-0">
-              <li>
-                <span aria-hidden="true">📬</span> Envoyez la lettre d'information en recommandé
-                avec accusé de réception à l'auteur présumé ;
-              </li>
-              <li>
-                <span aria-hidden="true">🗂️</span> Conservez une copie de tous les documents pour
-                vos archives ;
-              </li>
-              <li>
-                <span aria-hidden="true">⏳</span> À la fin de la période du contradictoire (10
-                jours minimum), contactez l'équipe
-                <span class="fr-text--bold">Protect'Envi</span> pour être aidé dans la mise en
-                demeure et l'amende administrative.
-              </li>
-            </ul>
-          </div>
-
-          <div class="fr-alert fr-alert--info fr-alert--sm fr-mt-3w" role="status">
-            <h4 class="fr-alert__title">Procédure judiciaire</h4>
-            <ul class="fr-mb-0">
-              <li>
-                <span aria-hidden="true">📝</span> Envoyez le rapport de constatation à la brigade ;
-              </li>
-              <li>
-                <span aria-hidden="true">🧾</span> Prenez rendez-vous auprès de la brigade de
-                gendarmerie ou du commissariat pour déposer plainte.
-              </li>
-            </ul>
-          </div>
-        </section>
-
-        <section class="fr-p-4w fr-bg--g100">
-          <h3 class="fr-h3">Ressources utiles</h3>
-          <p class="fr-mt-3w">
-            <span aria-hidden="true">👉</span> Pour un accompagnement pas à pas, consultez le
-            <a
-              href="https://acdechets.smartidf.services/aide-verbalisation"
-              class="fr-link fr-icon-external-link-line fr-link--icon-right"
-              target="_blank"
-              rel="noopener"
-            >
-              guide ACDéchets de la Région Île-de-France
-            </a>
-          </p>
-          <p>
-            <span aria-hidden="true">👉</span> Retrouvez des conseils pratiques sur l'application à
-            destination des élus, Gend'élus :
-          </p>
-          <ul>
-            <li>
-              <a
-                href="https://play.google.com/store/apps/details?id=com.gendelus&hl=fr&pli=1"
-                class="fr-link fr-icon-external-link-line fr-link--icon-right"
-                target="_blank"
-                rel="noreferrer noopener"
-              >
-                Télécharger sur le Play Store
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://apps.apple.com/fr/app/gend%C3%A9lus/id6444316373"
-                class="fr-link fr-icon-external-link-line fr-link--icon-right"
-                target="_blank"
-                rel="noreferrer noopener"
-              >
-                Télécharger sur l’App Store
-              </a>
-            </li>
-          </ul>
-        </section>
-
-        <section class="fr-p-4w fr-bg--g100">
-          <h3 class="fr-h3">
-            <span aria-hidden="true">✅</span> Vous avez terminé le module "Débuter une procédure"
-          </h3>
-          <p>Vous pouvez maintenant :</p>
-          <ul>
-            <li>
-              <span aria-hidden="true">🔍</span> Retrouver de l'aide dans la section
-              <a href="/accompagnement" rel="noreferrer noopener">Être accompagné</a>
-            </li>
-            <li>
-              <span aria-hidden="true">🔁</span> Démarrer une nouvelle procédure si nécessaire
-            </li>
-          </ul>
-        </section>
-
-        <div class="fr-btns-group fr-btns-group--inline fr-btns-group--center fr-mt-4w">
-          <button class="fr-btn fr-btn--tertiary" @click="goHome">Retour à l'accueil</button>
-          <button class="fr-btn" @click="handleRestart">
-            Démarrer une nouvelle procédure
-            <span class="fr-icon-arrow-right-line" aria-hidden="true"></span>
-          </button>
-          <button class="fr-btn fr-btn--secondary" @click="goToAccompagnement">
-            Demander un accompagnement
-            <span class="fr-ml-1w fr-icon-arrow-right-line" aria-hidden="true"></span>
-          </button>
-        </div>
       </div>
-    </div>
+
+      <div class="fr-form-group">
+        <h3 class="fr-h5">Souhaitez-vous engager une procédure ?</h3>
+        <DsfrRadioButtonSet
+          :model-value="store.formData.souhaitePorterPlainte ? 'oui' : 'non'"
+          @update:model-value="(value) => store.updateBooleanField('souhaitePorterPlainte', value)"
+          name="souhaite-porter-plainte"
+          legend="Souhaitez-vous que la collectivité engage une procédure (plainte, signalement, etc.) ?"
+          :options="yesNoOptions"
+          required
+        />
+      </div>
+
+      <div class="fr-form-group">
+        <h3 class="fr-h5">Ce que vous avez constaté</h3>
+        <DsfrInput
+          v-model="store.formData.precisionsIndices"
+          label="Décrivez brièvement les faits constatés, autres éléments à ajouter"
+          hint="Exemple: identité et qualité des personnes rencontrées, nature des vérifications auxquelles il a été procédé, etc."
+          :isTextarea="true"
+        />
+      </div>
+
+      <div class="fr-form-group fr-mt-3w">
+        <h3 class="fr-h5">Estimation du préjudice</h3>
+        <DsfrRadioButtonSet
+          :model-value="store.formData.arreteMunicipalExiste ? 'oui' : 'non'"
+          @update:model-value="(value) => store.updateBooleanField('arreteMunicipalExiste', value)"
+          name="arrete-municipal"
+          legend="Disposez-vous d'un arrêté ou d'une délibération municipale encadrant ce type d'infraction et fixant le montant d'un forfait d'enlèvement ?"
+          :options="yesNoOptions"
+          required
+        />
+
+        <DsfrInput
+          v-if="store.formData.arreteMunicipalExiste"
+          type="number"
+          name="forfait-enlevement"
+          label="Indiquez le montant du forfait d'enlèvement (en euros)"
+          v-model="store.formData.montantForfaitEnlevement"
+          min="0"
+          required
+        />
+
+        <fieldset class="fr-form-group fr-fieldset--no-border fr-mb-3w">
+          <legend class="fr-text--regular">
+            Connaissez-vous le montant du préjudice (en euros) ? *
+            <span class="fr-hint-text fr-mt-1w">
+              Exemple : les frais engagés par la mairie ; prestation d'une entreprise de nettoyage, coût en déchetterie, emploi de personnels et matériels municipaux, etc.
+            </span>
+          </legend>
+          <div class="fr-radio-group fr-my-1w fr-py-1w">
+            <input
+              type="radio"
+              id="prejudice-oui"
+              name="prejudice-montant-connu"
+              value="oui"
+              :checked="store.formData.prejudiceMontantConnu === true"
+              @change="store.updateBooleanField('prejudiceMontantConnu', 'oui')"
+              required
+            />
+            <label class="fr-label" for="prejudice-oui">Oui</label>
+          </div>
+
+          <div class="fr-radio-group fr-my-1w">
+            <input
+              type="radio"
+              id="prejudice-non"
+              name="prejudice-montant-connu"
+              value="non"
+              :checked="store.formData.prejudiceMontantConnu === false"
+              @change="store.updateBooleanField('prejudiceMontantConnu', 'non')"
+              required
+            />
+            <label class="fr-label" for="prejudice-non">Non</label>
+          </div>
+        </fieldset>
+
+        <template v-if="store.formData.prejudiceMontantConnu">
+          <DsfrInput
+            v-model="store.formData.prejudiceMontant"
+            type="number"
+            label="Montant du préjudice (en euros)"
+            min="0"
+            required
+          />
+        </template>
+
+        <template v-else>
+          <fieldset class="fr-form-group fr-fieldset--no-border">
+            <legend class="fr-pb-2w fr-text--regular">Ajouter un détail estimatif du montant</legend>
+            <DsfrInput
+              v-model="store.formData.prejudiceNombrePersonnes"
+              type="number"
+              label="Nombre de personnes mobilisées"
+            />
+            <DsfrInput
+              v-model="store.formData.prejudiceNombreHeures"
+              type="number"
+              label="Nombre d'heures travaillées"
+            />
+            <DsfrInput
+              v-model="store.formData.prejudiceNombreVehicules"
+              type="number"
+              label="Nombre de véhicules utilisés"
+            />
+            <DsfrInput
+              v-model="store.formData.prejudiceKilometrage"
+              type="number"
+              label="Kilométrage estimé"
+            />
+            <DsfrInput
+              v-model="store.formData.prejudiceAutresCouts"
+              type="number"
+              label="Autres coûts"
+            />
+          </fieldset>
+        </template>
+      </div>
+
+      <div class="fr-mt-3w actions-row">
+        <DsfrButton
+          type="button"
+          label="Précédent"
+          icon="fr-icon-arrow-left-line"
+          secondary
+          @click="handlePrevious"
+        />
+        <DsfrButton
+          type="submit"
+          label="Suivant"
+          icon="fr-icon-arrow-right-line"
+          icon-right
+          :disabled="isSubmitting"
+        />
+      </div>
+    </form>
   </div>
 </template>
 
 <script setup lang="ts">
-import { createResource } from '@/services/api'
-import { getDocConstatUrl, getLettreInfoUrl, getSendEmailUrl } from '@/services/urls'
+import '@/styles/form-steps.css'
 import { useSignalementStore } from '@/stores/signalement'
-import { formatBytes, getFileSizeFromUrl } from '@/utils/files'
-import { DsfrButton } from '@gouvminint/vue-dsfr'
-import { computed, onMounted, ref } from 'vue'
+import { DsfrInput, DsfrRadioButtonSet } from '@gouvminint/vue-dsfr'
+import { computed, ref } from 'vue'
+import {
+  indicesDisponiblesOptions,
+  statutAuteurOptions,
+  yesNoOptions,
+} from './form-data'
 
 const store = useSignalementStore()
-const emit = defineEmits(['restart'])
+const isSubmitting = ref(false)
+const showBlocAuteur = computed(() => store.formData.auteurIdentifie)
 
-const isOdtReady = ref<boolean>(false)
-const isSending = ref<boolean>(false)
-const email = ref<string>('')
-const emailError = ref<string>('')
-const emailSuccess = ref<string>('')
-const docConstatSize = ref(null)
-const lettreInfoSize = ref(null)
-
-const errorId = 'email-error'
-const successId = 'email-success'
-
-const isEmailValid = computed(() => {
-  if (email.value.trim() === '') return false
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  return emailRegex.test(email.value)
-})
-
-const emailInputDescribedBy = computed(() => {
-  if (emailError.value) return errorId
-  if (emailSuccess.value) return successId
-  return null
-})
-
-const clearEmailSuccessError = () => {
-  emailError.value = ''
-  emailSuccess.value = ''
-}
-
-const sendEmail = async () => {
-  if (!isEmailValid.value) {
-    emailError.value =
-      "L'adresse e-mail saisie n'est pas valide. Vérifiez le format (ex. : nom@domaine.fr)."
-    return
-  }
-  isSending.value = true
-  emailError.value = ''
-  emailSuccess.value = ''
+const handleSubmit = async (event: Event) => {
+  event.preventDefault()
+  isSubmitting.value = true
   try {
-    await createResource(getSendEmailUrl(store.currentId), { email: email.value })
-    emailSuccess.value = `Un e-mail contenant les documents a été envoyé avec succès à l'adresse ${email.value}`
-    email.value = ''
-  } catch (error: any) {
-    const messageServeur = error.response?.data?.error
-    emailError.value = messageServeur
-      ? `L'envoi a échoué : ${messageServeur}. Veuillez réessayer.`
-      : "L'envoi a échoué. Vérifiez votre connexion ou réessayez dans quelques instants."
+    await store.saveFormData()
+    store.updateStep(5)
+  } catch (error) {
+    console.error('Failed to save:', error)
   } finally {
-    isSending.value = false
+    isSubmitting.value = false
   }
 }
 
-const handleRestart = () => {
-  emit('restart')
-}
-
-const goHome = () => {
-  window.location.href = '/'
-}
-
-const goToAccompagnement = () => {
-  window.location.href = '/accompagnement'
-}
-
-// Control buttons delay
-onMounted(async () => {
-  const urlDocConstat = getDocConstatUrl(store.currentId)
-  const urlLettreInfo = getLettreInfoUrl(store.currentId)
-
-  const [rawSizeDocConstat, rawSizeLettreInfo] = await Promise.all([
-    getFileSizeFromUrl(urlDocConstat),
-    getFileSizeFromUrl(urlLettreInfo),
-  ])
-
-  docConstatSize.value = rawSizeDocConstat ? formatBytes(rawSizeDocConstat) : 'Taille inconnue'
-  lettreInfoSize.value = rawSizeLettreInfo ? formatBytes(rawSizeLettreInfo) : 'Taille inconnue'
-
-  // Simulation : rendre le bouton actif après 3s
-  setTimeout(() => {
-    isOdtReady.value = true
-  }, 3000)
-})
+const handlePrevious = () => store.updateStep(2)
 </script>
 
 <style scoped>
-.confirmation-content {
-  background: var(--background-contrast-grey);
+.actions-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
-.confirmation-section {
-  border-bottom: 1px solid var(--border-default-grey);
-}
-
-.confirmation-section:last-of-type {
+.fr-fieldset--no-border {
   border: none;
+  margin: 0;
+  padding: 0;
+  color: #161616 !important;
 }
 
-.document-section {
-  background-color: #f5f5fe;
-}
-
-.document-title {
-  color: #000091;
-}
 </style>

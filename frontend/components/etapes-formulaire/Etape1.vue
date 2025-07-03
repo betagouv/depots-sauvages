@@ -1,15 +1,14 @@
 <template>
-  <div class="fr-container--sm">
-    <h2 class="fr-h3 fr-mb-3w">Où se trouve le dépôt sauvage et comment vous contacter ?</h2>
-    <div class="fr-form-group">
+  <div class="fr-container--sm fr-m-1w">
       <p class="fr-text--sm fr-mb-3w">
         Les champs avec <abbr title="Champ obligatoire">*</abbr> sont obligatoires
       </p>
+      <h3 class="fr-h5 fr-mb-3w">Localisation du dépôt</h3>
       <form @submit.prevent="handleSubmit" class="fr-grid-row fr-grid-row--gutters">
         <div class="fr-col-12 fr-col-md-6">
           <DsfrInput
             v-model="store.formData.commune"
-            label="📍 Sur quelle commune a eu lieu le dépôt ?"
+            label="Commune du dépôt"
             required
           />
         </div>
@@ -17,126 +16,76 @@
         <div class="fr-col-12 fr-col-md-6">
           <DsfrInput
             v-model="store.formData.localisationDepot"
-            label="🏠 Quelle est l'adresse du dépôt de déchets ?"
+            label="Adresse du dépôt"
             hint="(numéro, lieu, type, libellé de voie...)"
             required
           />
         </div>
-
-        <div class="fr-col-12 fr-col-md-6">
-          <DsfrSelect
-            v-model="store.formData.auteurSignalement"
-            label="👮 Qui a réalisé la constatation ?"
-            :options="auteurOptions"
-            required
-          />
-        </div>
-        <div class="fr-col-12 fr-col-md-6">
-          <DsfrInput
-            v-if="store.formData.indicesDisponibles.includes('autre')"
-            v-model="store.formData.precisionsIndices"
-            label="Précisez les autres indices"
-            name="precisions-indices"
-            type="text"
-          />
-        </div>
-
-        <div class="fr-col-12 fr-col-md-6">
-          <DsfrInput
-            v-model="store.formData.dateConstat"
-            type="date"
-            label="Date de la constatation"
-            hint="au format JJ/MM/AAAA"
-            required
-          />
-        </div>
-
-        <div class="fr-input-group fr-col-12 fr-col-md-6">
-          <label class="fr-label" for="heure-constatation">
-            Heure de la constatation *
-            <span class="fr-hint-text">Format attendu : HH:MM</span>
-          </label>
-          <input
-            type="time"
-            v-model="store.formData.heureConstat"
-            id="heure-constatation"
-            name="heure-constatation"
-            class="fr-input"
-            min="00:00"
-            max="23:59"
-            required
-          />
-        </div>
-
         <div class="fr-col-12">
-          <DsfrRadioButtonSet
-            :model-value="store.formData.photoDispo ? 'oui' : 'non'"
-            @update:model-value="(value) => store.updateBooleanField('photoDispo', value)"
-            name="photo-dispo"
-            legend="Avez-vous des photos du dépôt ?"
-            :options="yesNoOptions"
-            required
-          />
-        </div>
-
-        <div class="fr-col-12">
-          <DsfrRadioButtonSet
-            v-model="store.formData.natureTerrain"
-            name="nature-terrain"
-            legend="🌍 Quelle est la nature du terrain concerné par le dépôt ?"
-            :options="natureTerrainOptions"
-            required
-          />
-        </div>
-
-        <div class="fr-col-12 fr-col-md-6">
-          <DsfrSelect
-            v-model="store.formData.volumeDepot"
-            label="📏 Volume estimé"
-            hint="en m3"
-            :options="volumeOptions"
-            required
-          />
-        </div>
-        <div class="fr-col-12">
-          <DsfrRadioButtonSet
-            @update:model-value="(value) => store.updateBooleanField('risqueEcoulement', value)"
-            name="risque-ecoulement"
-            legend="Existe-t-il un risque d'écoulement ?"
-            :options="yesNoOptions"
-            required
-          />
-        </div>
-
-        <div class="fr-col-12">
-          <div class="fr-form-group">
-            <legend class="fr-fieldset__legend fr-text--regular">Type de dépôts</legend>
+          <fieldset
+            ref="natureTerrainFieldSet"
+            class="fr-form-group fr-fieldset--no-border"
+            :class="{ 'fr-form-group--error': showNatureTerrainError }"
+          >
+            <legend
+              class="fr-text--regular"
+              :class="{ 'fr-pb-2w': !showNatureTerrainError }"
+            >
+              Nature du terrain *
+            </legend>
+            <p v-if="showNatureTerrainError" class="fr-error-text fr-my-2w" tabindex="-1" ref="natureTerrainErrorMessage">
+              Le champ Nature du terrain est vide. Veuillez sélectionner au moins une option.
+            </p>
             <div class="fr-fieldset__content">
               <div
-                v-for="option in typesDepotOptions"
+                v-for="option in natureTerrainOptions"
                 :key="option.value"
                 class="fr-checkbox-group"
               >
                 <input
                   type="checkbox"
                   :id="option.id"
-                  :name="option.name"
+                  :name="option.label"
                   :value="option.value"
-                  v-model="store.formData.typesDepot"
+                  v-model="store.formData.natureTerrain"
                 />
                 <label class="fr-label" :for="option.id">{{ option.label }}</label>
               </div>
             </div>
-          </div>
+          </fieldset>
         </div>
 
-        <div class="fr-col-12 fr-col-md-6">
-          <DsfrInput
-            v-model="store.formData.precisionsDepot"
-            label="✏️ Autres informations"
-            hint="Apportez tout autre élément (présence d'habitation, présence d'élevage, voie ferrée, etc.), identité du propriétaire du terrain (si terrain privé), zone particulière (zone agricole, zone forestière, zone naturelle, zone humide, zone Natura 2000, zone Ramsar, etc.), cours d'eau à proximité ou un captage d'eau, dernière date à laquelle le dépôt n'étais pas présent (si vous en avez connaissance)."
-            :isTextarea="true"
-          />
+        <div class="fr-col-12 fr-form-group">
+          <h3 class="fr-h5 fr-mb-3w">Détails de la constatation</h3>
+          <DsfrSelect
+              v-model="store.formData.auteurSignalement"
+              label="Qui a constaté le dépôt ?"
+              :options="auteurOptions"
+              required
+            />
+            <DsfrInput
+              v-model="store.formData.dateConstat"
+              type="date"
+              label="Date de la constatation"
+              hint="au format JJ/MM/AAAA"
+              required
+            />
+          <div class="fr-mt-3w">
+            <label class="fr-label" for="heure-constatation">
+              Heure de la constatation *
+              <span class="fr-hint-text">Format attendu : HH:MM</span>
+            </label>
+            <input
+              type="time"
+              v-model="store.formData.heureConstat"
+              id="heure-constatation"
+              name="heure-constatation"
+              class="fr-input"
+              min="00:00"
+              max="23:59"
+              required
+            />
+          </div>
         </div>
 
         <div class="fr-col-12 fr-mt-3w actions-row">
@@ -149,7 +98,6 @@
           />
         </div>
       </form>
-    </div>
   </div>
 </template>
 
@@ -157,17 +105,27 @@
 import { useSignalementStore } from '@/stores/signalement'
 import '@/styles/form-steps.css'
 import { DsfrInput } from '@gouvminint/vue-dsfr'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import {
   auteurOptions,
   natureTerrainOptions,
-  typesDepotOptions,
-  volumeOptions,
-  yesNoOptions,
 } from './form-data'
 
 const store = useSignalementStore()
+
 const isSubmitting = ref(false)
+const showNatureTerrainError = ref(false)
+const natureTerrainErrorMessage = ref<HTMLElement | null>(null)
+
+watch(
+  () => store.formData.typesDepot,
+  (selectedOptions) => {
+    if (Array.isArray(selectedOptions) && selectedOptions.length > 0) {
+      showNatureTerrainError.value = false
+    }
+  },
+  {deep: true }
+)
 
 const handleSubmit = async (event: Event) => {
   event.preventDefault()
@@ -175,6 +133,12 @@ const handleSubmit = async (event: Event) => {
   // Force le blur de l'élément actif pour éviter le blocage Safari
   if (document.activeElement instanceof HTMLElement) {
     document.activeElement.blur()
+  }
+
+  showNatureTerrainError.value = store.formData.natureTerrain.length === 0
+  if (showNatureTerrainError.value) {
+    natureTerrainErrorMessage.value?.focus()
+    return
   }
 
   isSubmitting.value = true
@@ -187,7 +151,6 @@ const handleSubmit = async (event: Event) => {
     isSubmitting.value = false
   }
 }
-
 
 </script>
 
@@ -221,5 +184,13 @@ const handleSubmit = async (event: Event) => {
   display: flex;
   justify-content: flex-end;
 }
+
+.fr-fieldset--no-border {
+  border: none;
+  margin: 0;
+  padding: 0;
+  color: #161616 !important;
+}
+
 
 </style>

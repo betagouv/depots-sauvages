@@ -10,7 +10,9 @@
       <div class="fr-container--sm">
         <Etape1 v-if="store.currentStep === 1" />
         <Etape2 v-if="store.currentStep === 2" />
-        <Etape3 v-if="store.currentStep === 3" @restart="resetForm" />
+        <Etape3 v-if="store.currentStep === 3" />
+        <Etape4 v-if="store.currentStep === 4" />
+        <Etape5 v-if="store.currentStep === 5" @restart="resetForm" />
       </div>
     </div>
   </div>
@@ -24,6 +26,8 @@ import { STEPS } from './etapes-formulaire/form-data'
 import Etape1 from './etapes-formulaire/Etape1.vue'
 import Etape2 from './etapes-formulaire/Etape2.vue'
 import Etape3 from './etapes-formulaire/Etape3.vue'
+import Etape4 from './etapes-formulaire/Etape4.vue'
+import Etape5 from './etapes-formulaire/Etape5.vue'
 
 const store = useSignalementStore()
 const isLastStep = computed(() => store.currentStep === STEPS.length)

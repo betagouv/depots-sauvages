@@ -9,14 +9,16 @@ export interface Signalement {
   dateConstat: string
   heureConstat: string
   auteurSignalement: string
-  natureTerrain: string
+  natureTerrain: string[]
+
+  // Step 2
   volumeDepot: string
   risqueEcoulement: boolean
   typesDepot: string[]
   precisionsDepot: string
   photoDispo: boolean
 
-  // Step 2
+  // Step 3
   auteurIdentifie: boolean
   statutAuteur: string
   nomEntreprise: string
@@ -53,7 +55,7 @@ export const createEmptySignalement = (): Signalement => ({
   dateConstat: '',
   heureConstat: '',
   auteurSignalement: '',
-  natureTerrain: '',
+  natureTerrain: [],
   volumeDepot: '',
   risqueEcoulement: false,
   typesDepot: [],

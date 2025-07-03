@@ -1,172 +1,76 @@
 <template>
-  <div class="fr-container--sm">
+  <div class="fr-container--sm fr-m-1w">
     <p>Les champs avec <abbr title="Champ obligatoire">*</abbr> sont obligatoires</p>
     <form @submit.prevent="handleSubmit">
-      <DsfrRadioButtonSet
-        :model-value="store.formData.auteurIdentifie ? 'oui' : 'non'"
-        @update:model-value="(value) => store.updateBooleanField('auteurIdentifie', value)"
-        name="auteur-identifie"
-        legend="L'auteur des faits est-il identifié ?"
-        :options="yesNoOptions"
-        required
-      />
-
-      <DsfrRadioButtonSet
-        v-if="showBlocAuteur"
-        v-model="store.formData.statutAuteur"
-        name="statut-auteur"
-        legend="S'agit-il d'une entreprise ou d'un particulier ?"
-        :options="statutAuteurOptions"
-        required
-      />
-
-      <template v-if="showBlocAuteur">
-        <template v-if="store.formData.statutAuteur === 'entreprise'">
-          <DsfrInput
-            v-model="store.formData.nomEntreprise"
-            label="Nom de l'entreprise"
-            name="nom-entreprise"
-            type="text"
-            required
-          />
-          <DsfrInput
-            v-model="store.formData.numeroSiret"
-            label="Numéro de SIRET"
-            name="numero-siret"
-            type="text"
-            inputmode="numeric"
-            pattern="[0-9]{14}"
-            hint="14 chiffres sans espaces"
-          />
-        </template>
-
-        <template v-if="store.formData.statutAuteur === 'particulier'">
-          <DsfrInput
-            v-model="store.formData.prenomParticulier"
-            label="Prénom du particulier"
-            name="prenom-particulier"
-            type="text"
-            required
-          />
-          <DsfrInput
-            v-model="store.formData.nomParticulier"
-            label="Nom du particulier"
-            name="nom-particulier"
-            type="text"
-            required
-          />
-        </template>
-      </template>
-
-      <DsfrRadioButtonSet
-        :model-value="store.formData.souhaitePorterPlainte ? 'oui' : 'non'"
-        @update:model-value="(value) => store.updateBooleanField('souhaitePorterPlainte', value)"
-        name="souhaite-porter-plainte"
-        legend="Souhaitez-vous porter plainte ?"
-        :options="yesNoOptions"
-        required
-      />
-
-      <div class="fr-form-group">
-        <legend class="fr-fieldset__legend fr-text--regular">
-          🔍 Des indices pourraient-ils permettre d'identifier l'auteur ?
-        </legend>
-        <div class="fr-fieldset__content">
-          <div
-            v-for="option in indicesDisponiblesOptions"
-            :key="option.value"
-            class="fr-checkbox-group"
-          >
-            <input
-              type="checkbox"
-              :id="option.id"
-              :name="option.name"
-              :value="option.value"
-              v-model="store.formData.indicesDisponibles"
-            />
-            <label class="fr-label" :for="option.id">{{ option.label }}</label>
-          </div>
-        </div>
-      </div>
-
-      <DsfrInput
-        v-model="store.formData.precisionsIndices"
-        label="Avez vous d'autres éléments à ajouter ?"
-        hint="Exemple: identité et qualité des personnes rencontrées, nature des vérifications auxquelles il a été procédé, etc."
-        :isTextarea="true"
-      />
-
-      <hr />
-
-      <DsfrRadioButtonSet
-        :model-value="store.formData.arreteMunicipalExiste ? 'oui' : 'non'"
-        @update:model-value="(value) => store.updateBooleanField('arreteMunicipalExiste', value)"
-        name="arrete-municipal"
-        legend="Disposez-vous d'un arrêté ou d'une délibération municipale encadrant ce type d'infraction et fixant le montant d'un forfait d'enlèvement ?"
-        :options="yesNoOptions"
-        required
-      />
-
-      <DsfrInput
-        v-if="store.formData.arreteMunicipalExiste"
-        type="number"
-        name="forfait-enlevement"
-        label="Indiquez le montant du forfait d'enlèvement (en euros)"
-        v-model="store.formData.montantForfaitEnlevement"
-        min="0"
-        required
-      />
-
-      <DsfrRadioButtonSet
-        :model-value="store.formData.prejudiceMontantConnu ? 'oui' : 'non'"
-        @update:model-value="(value) => store.updateBooleanField('prejudiceMontantConnu', value)"
-        name="prejudice-montant-connu"
-        hint="Le préjudice peut comprendre les frais engagés par la mairie : prestation d'une entreprise de nettoyage, coût en déchetterie, emploi de personnels et matériels municipaux, etc."
-        legend="Connaissez-vous le montant du préjudice ?"
-        :options="yesNoOptions"
-        required
-      />
-
-      <template v-if="store.formData.prejudiceMontantConnu">
-        <DsfrInput
-          v-model="store.formData.prejudiceMontant"
-          type="number"
-          label="Montant du préjudice"
-          min="0"
+      <div class="fr-col-12">
+        <DsfrRadioButtonSet
+          :model-value="store.formData.photoDispo ? 'oui' : 'non'"
+          @update:model-value="(value) => store.updateBooleanField('photoDispo', value)"
+          name="photo-dispo"
+          legend="Avez-vous des photos du dépôt ?"
+          :options="yesNoOptions"
           required
         />
-      </template>
+      </div>
+      <div class="fr-col-12">
+        <DsfrRadioButtonSet
+          @update:model-value="(value) => store.updateBooleanField('risqueEcoulement', value)"
+          name="risque-ecoulement"
+          legend="Existe-t-il un risque d'écoulement ?"
+          :options="yesNoOptions"
+          required
+        />
+      </div>
+      <div class="fr-col-12 fr-col-md-6">
+        <DsfrSelect
+          v-model="store.formData.volumeDepot"
+          label="Volume estimé"
+          hint="en m3"
+          :options="volumeOptions"
+          required
+        />
+      </div>
+      <div class="fr-col-12 fr-mt-2w">
+        <fieldset class="fr-form-group fr-fieldset--no-border">
+          <legend class="fr-pb-2w fr-text--regular">Type de dépôts</legend>
+            <div class="fr-fieldset__content">
+              <div
+                v-for="option in typesDepotOptions"
+                :key="option.value"
+                class="fr-checkbox-group"
+              >
+                <input
+                  type="checkbox"
+                  :id="option.id"
+                  :name="option.name"
+                  :value="option.value"
+                  v-model="store.formData.typesDepot"
+                />
+                <label class="fr-label" :for="option.id">{{ option.label }}</label>
+              </div>
+            </div>
+          </fieldset>
+      </div>
 
-      <template v-else>
-        <fieldset class="fr-fieldset fr-ml-0 fr-pl-0">
-          <legend class="fr-fieldset__legend">Estimation du préjudice</legend>
-          <DsfrInput
-            v-model="store.formData.prejudiceNombrePersonnes"
-            type="number"
-            label="Nombre de personnes mobilisées"
-          />
-          <DsfrInput
-            v-model="store.formData.prejudiceNombreHeures"
-            type="number"
-            label="Nombre d'heures"
-          />
-          <DsfrInput
-            v-model="store.formData.prejudiceNombreVehicules"
-            type="number"
-            label="Nombre de véhicules"
-          />
-          <DsfrInput
-            v-model="store.formData.prejudiceKilometrage"
-            type="number"
-            label="Kilométrage"
-          />
-          <DsfrInput
-            v-model="store.formData.prejudiceAutresCouts"
-            type="number"
-            label="Autres coûts"
-          />
-        </fieldset>
-      </template>
+      <div class="fr-col-12 fr-col-md-6">
+        <DsfrInput
+          v-model="store.formData.precisionsDepot"
+          label="Autres informations"
+          hint="Apportez tout autre élément (présence d'habitation, présence d'élevage, voie ferrée, etc.), identité du propriétaire du terrain (si terrain privé), zone particulière (zone agricole, zone forestière, zone naturelle, zone humide, zone Natura 2000, zone Ramsar, etc.), cours d'eau à proximité ou un captage d'eau, dernière date à laquelle le dépôt n'était pas présent (si vous en avez connaissance)."
+          :isTextarea="true"
+        />
+      </div>
+
+
+      <div class="fr-col-12 fr-col-md-6">
+        <DsfrInput
+          v-if="store.formData.indicesDisponibles.includes('autre')"
+          v-model="store.formData.precisionsIndices"
+          label="Précisez les autres indices"
+          name="precisions-indices"
+          type="text"
+        />
+      </div>
 
       <div class="fr-mt-3w actions-row">
         <DsfrButton
@@ -178,7 +82,7 @@
         />
         <DsfrButton
           type="submit"
-          label="Valider"
+          label="Suivant"
           icon="fr-icon-arrow-right-line"
           icon-right
           :disabled="isSubmitting"
@@ -192,12 +96,15 @@
 import '@/styles/form-steps.css'
 import { useSignalementStore } from '@/stores/signalement'
 import { DsfrInput, DsfrRadioButtonSet } from '@gouvminint/vue-dsfr'
-import { computed, ref } from 'vue'
-import { indicesDisponiblesOptions, statutAuteurOptions, yesNoOptions } from './form-data'
+import { ref } from 'vue'
+import {
+  typesDepotOptions,
+  volumeOptions,
+  yesNoOptions,
+} from './form-data'
 
 const store = useSignalementStore()
 const isSubmitting = ref(false)
-const showBlocAuteur = computed(() => store.formData.auteurIdentifie)
 
 const handleSubmit = async (event: Event) => {
   event.preventDefault()
@@ -220,5 +127,12 @@ const handlePrevious = () => store.updateStep(1)
   display: flex;
   justify-content: space-between;
   gap: 1rem;
+}
+
+.fr-fieldset--no-border {
+  border: none;
+  margin: 0;
+  padding: 0;
+  color: #161616 !important;
 }
 </style>
