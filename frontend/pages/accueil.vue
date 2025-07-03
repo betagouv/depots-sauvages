@@ -2,7 +2,7 @@
   <main class="fr-container--sm fr-py-5w">
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12 fr-col-md-6">
-        <h1 class="fr-h1 fr-mb-3w">Agir ensemble contre les dépôts sauvages</h1>
+        <h1 class="fr-h1 fr-mb-3w">Accompagner les collectivités pour mieux lutter contre les dépôts sauvages.</h1>
         <p class="fr-text fr-mb-2w">Simplifier le signalement des dépôts sauvages</p>
         <p>
           Notre outil vous accompagne et vous aide à produire des rapports pour faciliter la
@@ -19,11 +19,11 @@
 
       <div class="fr-col-12 fr-col-md-6">
         <DsfrPicture
-          legend="Dépot de déchets sauvage"
+          legend="Dépôt sauvage"
           ratio="16x9"
           size="medium"
           src="/static/depot-de-dechet-sauvage-image-accueil.webp"
-          title="Dépot de déchets sauvage"
+          title="Dépôt sauvage"
         />
       </div>
 
