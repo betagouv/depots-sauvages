@@ -47,7 +47,7 @@
                   :id="option.id"
                   :name="option.label"
                   :value="option.value"
-                  v-model="store.formData.typesDepot"
+                  v-model="store.formData.natureTerrain"
                 />
                 <label class="fr-label" :for="option.id">{{ option.label }}</label>
               </div>
@@ -105,7 +105,7 @@
 import { useSignalementStore } from '@/stores/signalement'
 import '@/styles/form-steps.css'
 import { DsfrInput } from '@gouvminint/vue-dsfr'
-import { ref, warn, watch } from 'vue'
+import { ref, watch } from 'vue'
 import {
   auteurOptions,
   natureTerrainOptions,
@@ -135,7 +135,7 @@ const handleSubmit = async (event: Event) => {
     document.activeElement.blur()
   }
 
-  showNatureTerrainError.value = store.formData.typesDepot.length === 0
+  showNatureTerrainError.value = store.formData.natureTerrain.length === 0
   if (showNatureTerrainError.value) {
     natureTerrainErrorMessage.value?.focus()
     return
