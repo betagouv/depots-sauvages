@@ -8,28 +8,23 @@ class SignalementAdmin(admin.ModelAdmin):
     list_display = [
         "commune",
         "date_constat",
+        "created",
+        "modified",
         "auteur_signalement",
-        "nature_terrain",
-        "volume_depot",
-        "photo_dispo",
-        "auteur_identifie",
-        "statut_auteur",
-        "doc_constat_should_generate",
-        "lettre_info_should_generate",
+        "doc_constat_generated_at",
+        "lettre_info_generated_at",
     ]
 
     list_filter = [
-        "commune",
         "date_constat",
+        "created",
+        "modified",
+        "doc_constat_generated_at",
+        "lettre_info_generated_at",
         "nature_terrain",
         "photo_dispo",
         "auteur_identifie",
         "statut_auteur",
-        "souhaite_porter_plainte",
-        "arrete_municipal_existe",
-        "prejudice_montant_connu",
-        "doc_constat_should_generate",
-        "lettre_info_should_generate",
     ]
 
     search_fields = [
@@ -37,9 +32,14 @@ class SignalementAdmin(admin.ModelAdmin):
         "localisation_depot",
         "auteur_signalement",
         "precisions_depot",
-        "precisions_indices",
         "nom_entreprise",
         "nom_particulier",
         "prenom_particulier",
-        "numero_siret",
+    ]
+
+    readonly_fields = [
+        "created",
+        "modified",
+        "doc_constat_generated_at",
+        "lettre_info_generated_at",
     ]
