@@ -7,12 +7,10 @@ from django.conf import settings
 from rest_framework.throttling import AnonRateThrottle
 
 
-class EmailRateThrottle(AnonRateThrottle):
+class BaseRateThrottle(AnonRateThrottle):
     """
-    Custom throttle for email sending endpoint.
+    Base throttle class with common functionality for IP-based rate limiting.
     """
-
-    rate = getattr(settings, "EMAIL_RATE_LIMIT")
 
     def get_cache_key(self, request, view):
         """
@@ -24,4 +22,22 @@ class EmailRateThrottle(AnonRateThrottle):
         client_ip = request.META.get("REMOTE_ADDR")
         if not client_ip:
             return None
-        return f"email_throttle_{client_ip}"
+        return f"{self.cache_key_prefix}_{client_ip}"
+
+
+class EmailRateThrottle(BaseRateThrottle):
+    """
+    Custom throttle for email sending endpoint.
+    """
+
+    rate = getattr(settings, "EMAIL_RATE_LIMIT")
+    cache_key_prefix = "email_throttle"
+
+
+class SignalementRateThrottle(BaseRateThrottle):
+    """
+    Custom throttle for signalement submission endpoint.
+    """
+
+    rate = getattr(settings, "SIGNALEMENT_RATE_LIMIT")
+    cache_key_prefix = "signalement_throttle"

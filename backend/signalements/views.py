@@ -7,6 +7,7 @@ from rest_framework import viewsets
 
 from backend.signalements.models import Signalement
 from backend.signalements.serializers import SignalementSerializer
+from backend.throttling.throttles import SignalementRateThrottle
 
 
 class SignalementViewSet(viewsets.ModelViewSet):
@@ -16,6 +17,7 @@ class SignalementViewSet(viewsets.ModelViewSet):
 
     queryset = Signalement.objects.all()
     serializer_class = SignalementSerializer
+    throttle_classes = [SignalementRateThrottle]
 
 
 class SignalementDocumentDownloadView(View):
