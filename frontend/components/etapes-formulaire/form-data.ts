@@ -1,5 +1,5 @@
 export const STEPS = [
-  'Information sur le dépôt de déchets',
+  'Information sur le dépôt sauvage',
   'Description du dépôt',
   'Compléter les informations utiles pour le traitement',
   'Récapitulatif',
@@ -63,8 +63,8 @@ export const typesDepotOptions = [
     name: 'types-dechets',
   },
   {
-    label: 'Déchets éléctriques et électroniques',
-    value: 'déchets éléctriques et électroniques',
+    label: 'Déchets électriques et électroniques',
+    value: 'déchets électriques et électroniques',
     id: 'dechets-electriques-electroniques',
     name: 'types-dechets',
   },

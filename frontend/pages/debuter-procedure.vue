@@ -1,6 +1,6 @@
 <template>
   <main class="fr-container--sm">
-    <h1 class="fr-h2 fr-py-3w">Signalement de dépôts sauvages</h1>
+    <h1 class="fr-h2 fr-py-3w">Procédure dépôt sauvage</h1>
     <DsfrCallout v-if="store.currentStep === 1" class="fr-mb-3w">
       <p>
         Ce formulaire vise à vous accompagner lorsque vous devez traiter un dépôt sauvage. Une fois
