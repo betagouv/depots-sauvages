@@ -120,7 +120,7 @@
               <li>
                 <span aria-hidden="true">⏳</span> À la fin de la période du contradictoire (10
                 jours minimum), contactez l'équipe
-                <span class="fr-text--bold">Protect'Envi</span> pour être aidé dans la mise en
+                <span class="fr-text--bold">Protect'Envi</span> pour être aidé pour rédiger la mise en
                 demeure et l'amende administrative.
               </li>
             </ul>
@@ -155,7 +155,7 @@
           </p>
           <p>
             <span aria-hidden="true">👉</span> Retrouvez des conseils pratiques sur l'application à
-            destination des élus, Gend'élus :
+            destination des élus, Gend'élus, accessible à tout le monde :
           </p>
           <ul>
             <li>
