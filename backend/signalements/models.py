@@ -11,8 +11,8 @@ class Signalement(PrejudiceMixin, TimeStampedModel):
 
     commune = models.CharField("commune", max_length=255)
     localisation_depot = models.CharField("localisation", max_length=255, blank=True)
-    date_constat = models.DateField("date")
-    heure_constat = models.TimeField("heure")
+    date_constat = models.DateField("date de constatation")
+    heure_constat = models.TimeField("heure de constatation")
     auteur_signalement = models.CharField("auteur", max_length=255, blank=True)
     nature_terrain = models.CharField("terrain", max_length=255, blank=True)
     volume_depot = models.CharField("volume", max_length=255, blank=True)
@@ -47,14 +47,16 @@ class Signalement(PrejudiceMixin, TimeStampedModel):
         default=False,
         help_text="Faut-il générer le rapport de constatation ?",
     )
-    doc_constat_generated_at = models.DateTimeField("Date de génération", null=True, blank=True)
+    doc_constat_generated_at = models.DateTimeField(
+        "date rapport de constatation", null=True, blank=True
+    )
     lettre_info_should_generate = models.BooleanField(
         "Générer la lettre d'information",
         default=False,
         help_text="Faut-il générer la lettre d'information ?",
     )
     lettre_info_generated_at = models.DateTimeField(
-        "Date de génération de la lettre", null=True, blank=True
+        "date lettre information", null=True, blank=True
     )
 
     class Meta:

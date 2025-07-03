@@ -24,8 +24,8 @@ class Migration(migrations.Migration):
                     "localisation_depot",
                     models.CharField(blank=True, max_length=255, verbose_name="localisation"),
                 ),
-                ("date_constat", models.DateField(verbose_name="date")),
-                ("heure_constat", models.TimeField(verbose_name="heure")),
+                ("date_constat", models.DateField(verbose_name="date de constatation")),
+                ("heure_constat", models.TimeField(verbose_name="heure de constatation")),
                 (
                     "auteur_signalement",
                     models.CharField(blank=True, max_length=255, verbose_name="auteur"),
@@ -103,7 +103,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "document_generated_at",
-                    models.DateTimeField(blank=True, null=True, verbose_name="Date de génération"),
+                    models.DateTimeField(blank=True, null=True, verbose_name="date rapport de constatation"),
                 ),
             ],
             options={

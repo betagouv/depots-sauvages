@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='signalement',
             name='lettre_info_generated_at',
-            field=models.DateTimeField(blank=True, null=True, verbose_name='Date de génération de la lettre'),
+            field=models.DateTimeField(blank=True, null=True, verbose_name='date lettre information'),
         ),
         migrations.AddField(
             model_name='signalement',
