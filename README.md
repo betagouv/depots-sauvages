@@ -177,10 +177,6 @@ Pour assurer la lisibilité et la cohérence, nous appliquons les règles suivan
 
 - Les PRs et leurs descriptions sont en français.
 
-- Les messages de commit sont, de préférence, en anglais, mais peuvent être en français.
-
-- Les noms de branches sont en anglais, en suivant la convention : [conventional-branch](https://conventional-branch.github.io/).
-
 Certaines notions intermédiaires comme « étape » peuvent relever du métier ou de la technique. Ici, nous utilisons « EtapeXForm.vue » (et non « StepXForm.vue ») car ces étapes correspondent à des phases du parcours utilisateur, et non à des composants techniques abstraits.
 
 ---
