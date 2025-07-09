@@ -19,7 +19,7 @@ class Signalement(PrejudiceMixin, TimeStampedModel):
     risque_ecoulement = models.BooleanField("risque d'écoulement", default=False)
     types_depot = models.JSONField("types", default=list, blank=True, null=True)
     precisions_depot = models.TextField("précisions", blank=True)
-    photo_dispo = models.BooleanField("photos", default=False)
+    photo_dispo = models.BooleanField("photos", null=True, blank=True)
     auteur_identifie = models.BooleanField("identifié", default=False)
     souhaite_porter_plainte = models.BooleanField("plainte", default=False)
     indices_disponibles = models.JSONField("indices", default=list, blank=True, null=True)
