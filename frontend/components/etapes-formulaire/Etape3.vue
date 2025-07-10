@@ -4,66 +4,62 @@
     <form @submit.prevent="handleSubmit">
       <div class="fr-form-group">
         <h3 class="fr-h5">À propos de l’auteur des faits</h3>
-        <DsfrRadioButtonSet
-          :model-value="store.formData.auteurIdentifie ? 'oui' : 'non'"
-          @update:model-value="(value) => store.updateBooleanField('auteurIdentifie', value)"
-          name="auteur-identifie"
-          legend="L'auteur des faits est-il identifié ?"
-          :options="yesNoOptions"
-          required
+        <fieldset
+          class="fr-form-group fr-fieldset--no-border fr-mb-3w"
+          :class="{ 'fr-form-group--error': showAuteurIdentifieError }"
+        >
+          <legend
+            class="fr-text--regular"
+            :class="{ 'fr-pb-2w': !showAuteurIdentifieError }"
+          >
+            L’auteur des faits est-il identifié ? *
+          </legend>
+          <p
+            v-if="showAuteurIdentifieError"
+            class="fr-error-text fr-my-2w"
+            tabindex="-1"
+            ref="auteurIdentifieErrorMessage"
+            id="error-message-auteurIdentifie"
+            aria-live="polite"
+          >
+            {{ store.errors.auteurIdentifie }}
+          </p>
+          <div class="fr-radio-group fr-my-1w fr-py-1w">
+            <input
+              type="radio"
+              id="auteurIdentifie-oui"
+              name="auteur-identifie"
+              :value="true"
+              v-model="store.formData.auteurIdentifie"
+              @change="clearError('auteurIdentifie')"
+              aria-describedby="error-message-auteurIdentifie"
+            />
+            <label class="fr-label" for="auteurIdentifie-oui">Oui</label>
+          </div>
+
+          <div class="fr-radio-group fr-my-1w">
+            <input
+              type="radio"
+              id="auteurIdentifie-non"
+              name="auteur-identifie"
+              :value="false"
+              v-model="store.formData.auteurIdentifie"
+              @change="clearError('auteurIdentifie')"
+              aria-describedby="error-message-auteurIdentifie"
+            />
+            <label class="fr-label" for="auteurIdentifie-non">Non</label>
+          </div>
+        </fieldset>
+
+        <StatutAuteur v-if="store.formData.auteurIdentifie === true" />
+
+        <AuteurDetails
+          v-if="showBlocAuteur && (store.formData.statutAuteur === 'entreprise' || store.formData.statutAuteur === 'particulier')"
+          :statutAuteur="store.formData.statutAuteur"
+          :formData="store.formData"
+          :errors="store.errors"
+          :clearError="clearError"
         />
-
-        <DsfrRadioButtonSet
-          v-if="showBlocAuteur"
-          v-model="store.formData.statutAuteur"
-          name="statut-auteur"
-          legend="S'agit-il d'une entreprise ou d'un particulier ?"
-          :options="statutAuteurOptions"
-          required
-        />
-
-        <template v-if="showBlocAuteur">
-          <template v-if="store.formData.statutAuteur === 'entreprise'">
-            <div class="fr-mb-4w">
-              <DsfrInput
-                class="fr-mb-3w"
-                v-model="store.formData.nomEntreprise"
-                label="Nom de l'entreprise ou raison sociale"
-                name="nom-entreprise"
-                type="text"
-                required
-              />
-              <DsfrInput
-                v-model="store.formData.numeroSiret"
-                label="Numéro de SIRET"
-                name="numero-siret"
-                type="text"
-                inputmode="numeric"
-                pattern="[0-9]{14}"
-                hint="14 chiffres sans espaces"
-              />
-            </div>
-          </template>
-
-          <template v-if="store.formData.statutAuteur === 'particulier'">
-            <div class="fr-mb-3w">
-              <DsfrInput
-                v-model="store.formData.prenomParticulier"
-                label="Prénom du particulier"
-                name="prenom-particulier"
-                type="text"
-                required
-              />
-              <DsfrInput
-                v-model="store.formData.nomParticulier"
-                label="Nom du particulier"
-                name="nom-particulier"
-                type="text"
-                required
-              />
-            </div>
-          </template>
-        </template>
 
         <fieldset class="fr-form-group fr-pl-0 fr-fieldset--no-border">
           <legend class="fr-pb-2w fr-text--regular">
@@ -232,19 +228,118 @@
 import '@/styles/form-steps.css'
 import { useSignalementStore } from '@/stores/signalement'
 import { DsfrInput, DsfrRadioButtonSet } from '@gouvminint/vue-dsfr'
-import { computed, ref } from 'vue'
-import {
-  indicesDisponiblesOptions,
-  statutAuteurOptions,
-  yesNoOptions,
-} from './form-data'
+import { computed, nextTick, ref, watch } from 'vue'
+import { indicesDisponiblesOptions, yesNoOptions } from './form-data'
+import AuteurDetails from './AuteurDetails.vue'
+import StatutAuteur from './StatutAuteur.vue'
 
 const store = useSignalementStore()
 const isSubmitting = ref(false)
-const showBlocAuteur = computed(() => store.formData.auteurIdentifie)
+const showBlocAuteur = computed(() => store.formData.auteurIdentifie === true)
+const showAuteurIdentifieError = computed(() => !!store.errors.auteurIdentifie)
+
+watch(() => store.formData.auteurIdentifie, (value) => {
+  if (value !== true) {
+    Object.assign(store.formData, {
+      statutAuteur: '',
+      nomEntreprise: '',
+      numeroSiret: '',
+      prenomParticulier: '',
+      nomParticulier: ''
+    })
+  }
+})
+
+watch(() => store.formData.statutAuteur, (newValue) => {
+  if (newValue === 'entreprise') {
+    store.formData.prenomParticulier = ''
+    store.formData.nomParticulier = ''
+  } else if (newValue === 'particulier') {
+    store.formData.nomEntreprise = ''
+    store.formData.numeroSiret = ''
+  }
+})
+
+const validateStep3 = () => {
+  const errors: Record<string, string> = {}
+
+  const { auteurIdentifie, statutAuteur } = store.formData
+
+  if (auteurIdentifie !== true && auteurIdentifie !== false) {
+    errors.auteurIdentifie = "Le champ « L’auteur des faits est-il identifié ? » est vide. Veuillez sélectionner une option."
+  }
+
+  if (auteurIdentifie === true) {
+    validateStatutAuteur(errors, statutAuteur)
+  }
+
+  store.errors = errors
+  return Object.keys(errors).length === 0
+}
+
+function validateStatutAuteur(errors: Record<string, string>, statutAuteur: string) {
+  if (!statutAuteur || (statutAuteur !== 'entreprise' && statutAuteur !== 'particulier')) {
+    errors.statutAuteur = "Le champ « S'agit-il d'une entreprise ou d'un particulier ? » est vide. Veuillez sélectionner une option."
+    return
+  }
+
+  if (statutAuteur === 'entreprise') {
+    validateAuteurEntreprise(errors)
+  } else if (statutAuteur === 'particulier') {
+    validateAuteurParticulier(errors)
+  }
+}
+
+function validateAuteurEntreprise(errors: Record<string, string>) {
+  const { nomEntreprise, numeroSiret } = store.formData
+
+  if (!nomEntreprise || nomEntreprise.trim() === '') {
+    errors.nomEntreprise = "Le champ Nom de l’entreprise est vide. Veuillez renseigner le nom."
+  }
+
+  const siretRegex = /^\d{14}$/
+  const numeroSiretStr = numeroSiret?.trim()
+
+  if (numeroSiretStr && !siretRegex.test(numeroSiretStr)) {
+    errors.numeroSiret = 'Le numéro de SIRET doit contenir 14 chiffres.'
+  }
+}
+
+function validateAuteurParticulier(errors: Record<string, string>) {
+  const { prenomParticulier, nomParticulier } = store.formData
+
+  if (!prenomParticulier || prenomParticulier.trim() === '') {
+    errors.prenomParticulier = 'Le champ Prénom du particulier est vide. Veuillez renseigner le prénom.'
+  }
+
+  if (!nomParticulier || nomParticulier.trim() === '') {
+    errors.nomParticulier = 'Le champ Nom du particulier est vide. Veuillez renseigner le nom.'
+  }
+}
+
+const clearError = (field: string) => {
+  if (store.errors[field]) {
+    delete store.errors[field]
+  }
+}
 
 const handleSubmit = async (event: Event) => {
   event.preventDefault()
+
+  const isValid = validateStep3()
+
+
+  if (!isValid) {
+    await nextTick()
+    const firstErrorElement = document.querySelector(
+      '.fr-input-group--error select, .fr-input-group--error input, .fr-form-group--error input, .fr-error-text'
+      )
+    if (firstErrorElement instanceof HTMLElement) {
+      firstErrorElement.focus()
+    }
+    return
+  }
+
   isSubmitting.value = true
   try {
     await store.saveFormData()

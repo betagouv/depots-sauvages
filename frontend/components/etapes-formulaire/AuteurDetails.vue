@@ -4,7 +4,7 @@
       <div class="fr-mb-4w">
         <div
           class="fr-col-12 fr-col-md-6 fr-input-group"
-          :class="{ 'fr-input-group--error': errors.nomEntreprise && !formData.nomEntreprise }"
+          :class="{ 'fr-input-group--error': errors.nomEntreprise }"
         >
           <label class="fr-label" for="nom-entreprise">Nom de l'entreprise ou raison sociale *</label>
           <input
@@ -16,7 +16,7 @@
             aria-describedby="error-message-nomEntreprise"
           />
           <p
-            v-if="errors.nomEntreprise && !formData.nomEntreprise"
+            v-if="errors.nomEntreprise"
             class="fr-error-text"
             id="error-message-nomEntreprise"
             aria-live="polite"
@@ -27,9 +27,10 @@
 
         <div
           class="fr-col-12 fr-col-md-6 fr-input-group"
-          :class="{ 'fr-input-group--error': errors.numeroSiret && !formData.numeroSiret }"
+          :class="{ 'fr-input-group--error': errors.numeroSiret }"
         >
           <label class="fr-label" for="numero-siret">Numéro de SIRET</label>
+          <span class="fr-hint-text">14 chiffres sans espaces</span>
           <input
             id="numero-siret"
             type="text"
@@ -38,10 +39,10 @@
             class="fr-input"
             aria-describedby="error-message-numeroSiret"
             inputmode="numeric"
-            pattern="[0-9]{14}"
+            @invalid.prevent
           />
           <p
-            v-if="errors.numeroSiret && !formData.numeroSiret"
+            v-if="errors.numeroSiret"
             class="fr-error-text"
             id="error-message-numeroSiret"
             aria-live="polite"
@@ -56,7 +57,7 @@
       <div class="fr-mb-3w">
         <div
           class="fr-col-12 fr-col-md-6 fr-input-group"
-          :class="{ 'fr-input-group--error': errors.prenomParticulier && !formData.prenomParticulier }"
+          :class="{ 'fr-input-group--error': errors.prenomParticulier }"
         >
           <label class="fr-label" for="prenom-particulier">Prénom du particulier *</label>
           <input
@@ -68,7 +69,7 @@
             aria-describedby="error-message-prenomParticulier"
           />
           <p
-            v-if="errors.prenomParticulier && !formData.prenomParticulier"
+            v-if="errors.prenomParticulier"
             class="fr-error-text"
             id="error-message-prenomParticulier"
             aria-live="polite"
@@ -79,7 +80,7 @@
 
         <div
           class="fr-col-12 fr-col-md-6 fr-input-group"
-          :class="{ 'fr-input-group--error': errors.nomParticulier && !formData.nomParticulier }"
+          :class="{ 'fr-input-group--error': errors.nomParticulier }"
         >
           <label class="fr-label" for="nom-particulier">Nom du particulier *</label>
           <input
@@ -91,7 +92,7 @@
             aria-describedby="error-message-nomParticulier"
           />
           <p
-            v-if="errors.nomParticulier && !formData.nomParticulier"
+            v-if="errors.nomParticulier"
             class="fr-error-text"
             id="error-message-nomParticulier"
             aria-live="polite"

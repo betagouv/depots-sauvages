@@ -1,25 +1,26 @@
 <template>
   <fieldset
-    v-if="store.formData.auteurIdentifie"
     class="fr-form-group fr-fieldset--no-border fr-mb-3w"
-    :class="{ 'fr-form-group--error': showStatutAuteurError }"
+    :class="{ 'fr-form-group--error': showError }"
   >
     <legend
       class="fr-text--regular"
-      :class="{ 'fr-pb-2w': !showStatutAuteurError }"
+      :class="{ 'fr-pb-2w': !showError }"
     >
       S'agit-il d'une entreprise ou d'un particulier ? *
     </legend>
+
     <p
-      v-if="showStatutAuteurError"
+      v-if="showError"
       class="fr-error-text fr-my-2w"
       tabindex="-1"
-      ref="statutAuteurErrorMessage"
       id="error-message-statutAuteur"
       aria-live="polite"
+      ref="statutAuteurErrorMessage"
     >
       {{ store.errors.statutAuteur }}
     </p>
+
     <div class="fr-radio-group fr-my-1w fr-py-1w">
       <input
         type="radio"
@@ -47,18 +48,27 @@
     </div>
   </fieldset>
 </template>
-<script>
-export default {
-  name: 'jaja',
+
+<script setup lang="ts">
+import { computed } from 'vue'
+import { useSignalementStore } from '@/stores/signalement'
+
+const store = useSignalementStore()
+
+const showError = computed(() => !!store.errors.statutAuteur)
+
+function clearError(field: string) {
+  if (store.errors[field]) {
+    delete store.errors[field]
+  }
 }
 </script>
-<style scoped>
 
+<style scoped>
 .fr-fieldset--no-border {
   border: none;
   margin: 0;
   padding: 0;
   color: #161616 !important;
 }
-
 </style>
