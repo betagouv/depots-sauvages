@@ -114,7 +114,7 @@
         >
           <legend
             class="fr-pb-2w fr-text--regular"
-            :class="{ 'fr-pb-2w': !showTypeDepotsError }"
+            :class="{'fr-label--error': showTypeDepotsError,'fr-pb-2w': !showTypeDepotsError}"
           >
             Type de dépôts *
           </legend>
@@ -126,7 +126,7 @@
             id="error-message-typeDepots"
             aria-live="polite"
           >
-            Le champ Type de dépôts est vide. Veuillez sélectionner au moins une option.
+            Le champ "Type de dépôts" est vide. Veuillez sélectionner au moins une option.
           </p>
             <div class="fr-fieldset__content">
               <div

@@ -49,12 +49,12 @@
           >
             <legend
               class="fr-text--regular"
-              :class="{ 'fr-pb-2w': !showNatureTerrainError }"
+              :class="{ 'fr-pb-2w': !showNatureTerrainError, 'fr-label--error': showNatureTerrainError, }"
             >
               Nature du terrain *
             </legend>
             <p v-if="showNatureTerrainError" class="fr-error-text fr-my-2w" tabindex="-1" ref="natureTerrainErrorMessage" id="error-message-natureTerrain" aria-live="polite">
-              Le champ Nature du terrain est vide. Veuillez sélectionner au moins une option.
+              Le champ "Nature du terrain" est vide. Veuillez sélectionner au moins une option.
             </p>
             <div class="fr-fieldset__content">
               <div
@@ -166,11 +166,11 @@ const validateStep1 = () => {
   showNatureTerrainError.value = false
 
   if (!store.formData.commune) {
-    errors.commune = 'Le champ Commune du dépôt est vide. Veuillez renseigner une commune.'
+    errors.commune = 'Le champ "Commune du dépôt" est vide. Veuillez renseigner une commune.'
   }
 
   if (!store.formData.localisationDepot) {
-    errors.localisationDepot = 'Le champ Adresse du dépôt est obligatoire. Veuillez renseigner une adresse.'
+    errors.localisationDepot = 'Le champ "Adresse du dépôt" est vide. Veuillez renseigner une adresse.'
   }
 
   if (!store.formData.natureTerrain || store.formData.natureTerrain.length === 0) {
@@ -178,15 +178,15 @@ const validateStep1 = () => {
   }
 
   if (!store.formData.auteurSignalement) {
-    errors.auteurSignalement = 'Le champ Qui a constaté le dépôt est vide. Veuillez sélectionner une option dans la liste.'
+    errors.auteurSignalement = 'Le champ "Qui a constaté le dépôt" est vide. Veuillez sélectionner une option dans la liste.'
   }
 
   if (!store.formData.dateConstat) {
-    errors.dateConstat = 'Le champ Date de la constatation est vide. Veuillez renseigner une date.'
+    errors.dateConstat = 'Le champ "Date de la constatation" est vide. Veuillez renseigner une date.'
   }
 
   if (!store.formData.heureConstat) {
-    errors.heureConstat = 'Le champ Heure de la constatation est vide. Veuillez renseigner une heure.'
+    errors.heureConstat = 'Le champ "Heure de la constatation" est vide. Veuillez renseigner une heure.'
   }
 
   store.errors = errors

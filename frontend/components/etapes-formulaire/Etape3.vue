@@ -294,7 +294,7 @@ function validateAuteurEntreprise(errors: Record<string, string>) {
   const { nomEntreprise, numeroSiret } = store.formData
 
   if (!nomEntreprise || nomEntreprise.trim() === '') {
-    errors.nomEntreprise = "Le champ Nom de l’entreprise est vide. Veuillez renseigner le nom."
+    errors.nomEntreprise = 'Le champ "Nom de l’entreprise" est vide. Veuillez renseigner le nom.'
   }
 
   const siretRegex = /^\d{14}$/
@@ -309,11 +309,11 @@ function validateAuteurParticulier(errors: Record<string, string>) {
   const { prenomParticulier, nomParticulier } = store.formData
 
   if (!prenomParticulier || prenomParticulier.trim() === '') {
-    errors.prenomParticulier = 'Le champ Prénom du particulier est vide. Veuillez renseigner le prénom.'
+    errors.prenomParticulier = 'Le champ "Prénom du particulier" est vide. Veuillez renseigner le prénom.'
   }
 
   if (!nomParticulier || nomParticulier.trim() === '') {
-    errors.nomParticulier = 'Le champ Nom du particulier est vide. Veuillez renseigner le nom.'
+    errors.nomParticulier = 'Le champ "Nom du particulier" est vide. Veuillez renseigner le nom.'
   }
 }
 

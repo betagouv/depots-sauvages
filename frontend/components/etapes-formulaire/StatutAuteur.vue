@@ -5,7 +5,7 @@
   >
     <legend
       class="fr-text--regular"
-      :class="{ 'fr-pb-2w': !showError }"
+      :class="{ 'fr-label--error': showError, 'fr-pb-2w': !showError }"
     >
       S'agit-il d'une entreprise ou d'un particulier ? *
     </legend>

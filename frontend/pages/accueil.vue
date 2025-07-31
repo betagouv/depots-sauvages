@@ -5,7 +5,7 @@
         <h1 class="fr-h1 fr-mb-3w">Accompagner les collectivités pour mieux lutter contre les dépôts sauvages.</h1>
         <p class="fr-text fr-mb-2w">Simplifier le signalement des dépôts sauvages</p>
         <p>
-          Notre outil vous accompagne et vous aide à produire des rapports pour faciliter la
+          Protect’Envi est l'outil qui vous accompagne et vous aide à produire des rapports pour faciliter la
           procédure administrative et judiciaire.
         </p>
         <p>
