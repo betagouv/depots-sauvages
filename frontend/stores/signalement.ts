@@ -3,11 +3,13 @@ import { API_URLS, createResource, fetchResource, updateResource } from '../serv
 import type { Signalement } from '../types/signalement'
 import { createEmptySignalement, fromApiFormat, toApiFormat } from '../types/signalement'
 
+
 export const useSignalementStore = defineStore('signalement', {
   // State
   state: () => ({
     currentStep: 1,
     currentId: null as number | null,
+    errors: {} as Record<string, string>,
     formData: createEmptySignalement(),
   }),
 
