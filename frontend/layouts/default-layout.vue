@@ -30,7 +30,7 @@
 
     </nav>
 
-    <div class="fr-container fr-py-3w" role="main" id="content">
+    <main class="fr-container fr-py-3w" role="main" id="content">
       <DsfrNotice>
         <a
           href="https://docs.google.com/forms/d/e/1FAIpQLSe73qnFQje6_hdhKv1VeyZVQOIeRzn0Q7ahRI4hlBjq8atG8Q/viewform"
@@ -42,7 +42,7 @@
         Vos retours sont précieux pour faire évoluer l'outil.
       </DsfrNotice>
       <slot />
-    </div>
+    </main>
     <DsfrFooter :logo-text="logoText">
       <template #description>
         Le site de la mission logiciels libres et communs numériques est une publication de la
