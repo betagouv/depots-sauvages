@@ -19,7 +19,9 @@
     "vue-router": "4"
   },
   "devDependencies": {
+    "@pinia/testing": "^1.0.2",
     "@testing-library/jest-dom": "^6.6.4",
+    "@testing-library/user-event": "^14.6.1",
     "@testing-library/vue": "^8.1.0",
     "@vitejs/plugin-vue": "^4.2.3",
     "axe-core": "^4.10.3",
