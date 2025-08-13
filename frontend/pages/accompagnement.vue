@@ -1,5 +1,5 @@
 <template>
-  <main class="fr-container--sm fr-py-5w">
+  <div class="fr-container--sm fr-py-5w">
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12 fr-col-md-6">
         <h1 class="fr-h1 fr-mb-3w">Un accompagnement personnalisé pour mieux agir</h1>
@@ -31,7 +31,6 @@
               target="_blank"
               rel="noopener noreferrer"
               class="fr-btn fr-btn--secondary fr-mb-2w"
-              aria-label="Contacter via WhatsApp"
             >
             Démarrer une conversation WhatsApp
             </a>
@@ -44,7 +43,7 @@
         </div>
       </div>
     </div>
-  </main>
+  </div>
 </template>
 
 <script setup lang="ts">

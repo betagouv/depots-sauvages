@@ -11,13 +11,14 @@
       <p class="fr-text fr-mb-3w">
         Des bulles d'aide s'affichent pour vous expliquer les informations à saisir.
         Survolez
-        <span
-          class="fr-btn--icon fr-btn--tertiary-no-outline fr-icon-question-line"
-          aria-label="Aide"
+        <button
+          type="button"
           data-fr-tooltip
+          class="fr-btn--icon fr-btn--tertiary-no-outline fr-icon-question-line"
           title="Passez la souris sur l’icône pour obtenir une aide sur les champs à remplir."
         >
-        </span>
+          <span class="fr-sr-only">Passez la souris sur l’icône pour obtenir une aide sur les champs à remplir.</span>
+        </button>
         pour les afficher.
       </p>
       <div class="fr-p-3w fr-mb-3w fr-background-alt--grey fr-border--grey fr-border fr-radius">
@@ -27,7 +28,9 @@
         </ul>
       </div>
       <div class="fr-grid-row fr-grid-row--center">
-        <button class="fr-btn" @click="startProcedure">Démarrez la procédure</button>
+        <RouterLink to="/debuter-procedure/formulaire" class="fr-btn fr-mt-3w" @click="startProcedure">
+          Démarrez la procédure
+        </RouterLink>
       </div>
     </div>
   </div>
