@@ -54,3 +54,12 @@ def test_that_a_signalement_is_updated_via_api_update_endpoint(client):
     assert "Updated Commune" in str(response_data)
     signalement.refresh_from_db()
     assert signalement.commune == "Updated Commune"
+
+
+def test_that_a_signalement_delete_endpoint_is_not_available(client):
+    signalement = SignalementFactory(commune="Delete Test Commune")
+    url = reverse("signalement-detail", kwargs={"pk": signalement.id})
+    assert Signalement.objects.filter(id=signalement.id).exists()
+    response = client.delete(url)
+    assert response.status_code == 405
+    assert Signalement.objects.filter(id=signalement.id).exists()
