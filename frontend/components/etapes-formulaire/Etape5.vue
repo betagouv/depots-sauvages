@@ -49,45 +49,15 @@
           </ul>
 
           <div class="fr-mt-4w">
-            <h4 class="fr-h4">Recevoir vos documents par e-mail</h4>
-            <div class="fr-input-group">
-              <label class="fr-label" for="email-input">
-                Adresse électronique
-                <span class="fr-hint-text">Format attendu : nom@domaine.fr</span>
-              </label>
-              <input
-                class="fr-input"
-                :class="{ 'fr-input--error': emailError }"
-                id="email-input"
-                v-model="email"
-                type="email"
-                :aria-describedby="emailInputDescribedBy || undefined"
-                @input="clearEmailSuccessError"
-                autocomplete="email"
-              />
-              <p v-if="emailError" class="fr-error-text" :id="errorId" role="alert">
-                {{ emailError }}
-              </p>
-              <p v-if="emailSuccess" class="fr-valid-text" :id="successId" role="alert">
-                {{ emailSuccess }}
-              </p>
-            </div>
-
-            <DsfrButton
-              class="fr-mt-2w"
-              :icon="{ name: 'ri-mail-fill' }"
-              :disabled="!isEmailValid || isSending"
-              @click="sendEmail"
-            >
-              <span class="fr-m-1w">
-                {{ isSending ? "Les documents sont en cours d'envoi" : 'Envoyer par e-mail' }}
-              </span>
-            </DsfrButton>
+            <h4 class="fr-h4">Vos documents ont bien été transmis</h4>
+            <p class="fr-text--sm fr-text--success">
+              Vos documents ont été transmis à l'adresse {{ store.formData.contactEmail }}
+            </p>
           </div>
         </section>
 
         <section class="fr-mt-4w fr-bg--g100">
-          <h2 class="fr-h3"><span aria-hidden="true">📌</span> Ce qu’il vous reste à faire</h2>
+          <h2 class="fr-h3"><span aria-hidden="true">📌</span> Ce qu'il vous reste à faire</h2>
 
           <h3 class="fr-h4 fr-mb-2w">Avant d'entamer la procédure</h3>
           <p>
@@ -120,8 +90,8 @@
               <li>
                 <span aria-hidden="true">⏳</span> À la fin de la période du contradictoire (10
                 jours minimum), contactez l'équipe
-                <span class="fr-text--bold">Protect'Envi</span> pour être aidé pour rédiger la mise en
-                demeure et l'amende administrative.
+                <span class="fr-text--bold">Protect'Envi</span> pour être aidé pour rédiger la mise
+                en demeure et l'amende administrative.
               </li>
             </ul>
           </div>
@@ -148,7 +118,7 @@
               href="https://acdechets.smartidf.services/aide-verbalisation"
               class="fr-link fr-icon-external-link-line fr-link--icon-right"
               target="_blank"
-              rel="noopener"
+              rel="nopener"
             >
               guide ACDéchets de la Région Île-de-France
             </a>
@@ -175,7 +145,7 @@
                 target="_blank"
                 rel="noreferrer noopener"
               >
-                Télécharger sur l’App Store
+                Télécharger sur l'App Store
               </a>
             </li>
           </ul>
@@ -214,66 +184,17 @@
 </template>
 
 <script setup lang="ts">
-import { createResource } from '@/services/api'
-import { getDocConstatUrl, getLettreInfoUrl, getSendEmailUrl } from '@/services/urls'
+import { getDocConstatUrl, getLettreInfoUrl } from '@/services/urls'
 import { useSignalementStore } from '@/stores/signalement'
 import { formatBytes, getFileSizeFromUrl } from '@/utils/files'
-import { DsfrButton } from '@gouvminint/vue-dsfr'
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const store = useSignalementStore()
 const emit = defineEmits(['restart'])
 
 const isOdtReady = ref<boolean>(false)
-const isSending = ref<boolean>(false)
-const email = ref<string>('')
-const emailError = ref<string>('')
-const emailSuccess = ref<string>('')
 const docConstatSize = ref(null)
 const lettreInfoSize = ref(null)
-
-const errorId = 'email-error'
-const successId = 'email-success'
-
-const isEmailValid = computed(() => {
-  if (email.value.trim() === '') return false
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  return emailRegex.test(email.value)
-})
-
-const emailInputDescribedBy = computed(() => {
-  if (emailError.value) return errorId
-  if (emailSuccess.value) return successId
-  return null
-})
-
-const clearEmailSuccessError = () => {
-  emailError.value = ''
-  emailSuccess.value = ''
-}
-
-const sendEmail = async () => {
-  if (!isEmailValid.value) {
-    emailError.value =
-      "L'adresse e-mail saisie n'est pas valide. Vérifiez le format (ex. : nom@domaine.fr)."
-    return
-  }
-  isSending.value = true
-  emailError.value = ''
-  emailSuccess.value = ''
-  try {
-    await createResource(getSendEmailUrl(store.currentId), { email: email.value })
-    emailSuccess.value = `Un e-mail contenant les documents a été envoyé avec succès à l'adresse ${email.value}`
-    email.value = ''
-  } catch (error: any) {
-    const messageServeur = error.response?.data?.error
-    emailError.value = messageServeur
-      ? `L'envoi a échoué : ${messageServeur}. Veuillez réessayer.`
-      : "L'envoi a échoué. Vérifiez votre connexion ou réessayez dans quelques instants."
-  } finally {
-    isSending.value = false
-  }
-}
 
 const handleRestart = () => {
   emit('restart')
