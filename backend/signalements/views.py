@@ -3,14 +3,20 @@ import io
 from django.http import FileResponse, Http404
 from django.shortcuts import get_object_or_404
 from django.views.generic import View
-from rest_framework import viewsets
+from rest_framework import mixins, viewsets
 
 from backend.signalements.models import Signalement
 from backend.signalements.serializers import SignalementSerializer
 from backend.throttling.throttles import SignalementRateThrottle
 
 
-class SignalementViewSet(viewsets.ModelViewSet):
+class SignalementViewSet(
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.ListModelMixin,
+    viewsets.GenericViewSet,
+):
     """
     ViewSet for Signalement model.
     """

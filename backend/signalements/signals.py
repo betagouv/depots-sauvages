@@ -36,10 +36,9 @@ def save_document(instance, odt_data, doc_base_name):
         post_save.connect(signal_handler, sender=Signalement)
 
 
-@task(queue_name="documents")
-def generate_document_task(signalement_id, doc_base_name):
+def generate_document(signalement_id, doc_base_name):
     """
-    Generate document in background.
+    Generate document synchronously.
     """
     start_time = time.time()
     logger.info(f"Starting {doc_base_name} generation for signalement {signalement_id}")
@@ -71,7 +70,15 @@ def generate_document_task(signalement_id, doc_base_name):
         logger.error(
             f"Error generating {doc_base_name} for signalement {signalement_id}: {e}", exc_info=True
         )
-        raise  # Let django-tasks handle retries
+        raise
+
+
+@task(queue_name="documents")
+def generate_document_task(signalement_id, doc_base_name):
+    """
+    Generate document in background.
+    """
+    return generate_document(signalement_id, doc_base_name)
 
 
 @receiver(post_save, sender=Signalement)

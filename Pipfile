@@ -26,6 +26,10 @@ black = "*"
 flake8 = "*"
 isort = "*"
 flake8-pyproject = "*"
+pytest = "*"
+pytest-django = "*"
+pytest-cov = "*"
+factory-boy = "*"
 
 [requires]
 python_version = "3.12"
