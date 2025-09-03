@@ -31,7 +31,7 @@
               type="text"
               id="nom"
               name="nom"
-              v-model="formData.nom"
+              v-model="store.formData.contactNom"
               required
             />
           </div>
@@ -42,7 +42,7 @@
               type="text"
               id="prenom"
               name="prenom"
-              v-model="formData.prenom"
+              v-model="store.formData.contactPrenom"
               required
             />
           </div>
@@ -56,7 +56,7 @@
           type="email"
           id="email"
           name="email"
-          v-model="formData.email"
+          v-model="store.formData.contactEmail"
           required
         />
       </div>
@@ -68,7 +68,7 @@
           type="tel"
           id="telephone"
           name="telephone"
-          v-model="formData.telephone"
+          v-model="store.formData.contactTelephone"
           required
         />
       </div>
@@ -101,19 +101,12 @@ import { computed, ref } from 'vue'
 const store = useSignalementStore()
 const isSubmitting = ref(false)
 
-const formData = ref({
-  nom: '',
-  prenom: '',
-  email: '',
-  telephone: '',
-})
-
 const isFormValid = computed(() => {
   return (
-    formData.value.nom.trim() !== '' &&
-    formData.value.prenom.trim() !== '' &&
-    formData.value.email.trim() !== '' &&
-    formData.value.telephone.trim() !== ''
+    store.formData.contactNom.trim() !== '' &&
+    store.formData.contactPrenom.trim() !== '' &&
+    store.formData.contactEmail.trim() !== '' &&
+    store.formData.contactTelephone.trim() !== ''
   )
 })
 

@@ -38,6 +38,12 @@ export interface Signalement {
   prejudiceKilometrage: number
   prejudiceAutresCouts: number
 
+  // Step 4 - Personne contact
+  contactNom: string
+  contactPrenom: string
+  contactEmail: string
+  contactTelephone: string
+
   // Management fields
   docConstatShouldGenerate: boolean
   lettreInfoShouldGenerate: boolean
@@ -49,7 +55,6 @@ export const fromApiFormat = (data: any): Signalement => camelcaseKeys(data)
 
 // Factory function to create an empty Signalement
 export const createEmptySignalement = (): Signalement => ({
-  // Step 1
   commune: '',
   localisationDepot: '',
   dateConstat: '',
@@ -61,8 +66,6 @@ export const createEmptySignalement = (): Signalement => ({
   typesDepot: [],
   precisionsDepot: '',
   photoDispo: false,
-
-  // Step 2
   auteurIdentifie: false,
   statutAuteur: '',
   nomEntreprise: '',
@@ -81,6 +84,10 @@ export const createEmptySignalement = (): Signalement => ({
   prejudiceNombreVehicules: 0,
   prejudiceKilometrage: 0,
   prejudiceAutresCouts: 0,
+  contactNom: '',
+  contactPrenom: '',
+  contactEmail: '',
+  contactTelephone: '',
 
   // Management fields
   docConstatShouldGenerate: false,
