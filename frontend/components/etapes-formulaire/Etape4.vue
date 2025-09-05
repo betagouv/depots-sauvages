@@ -87,6 +87,11 @@
           </label>
         </div>
 
+        <p v-if="showPhoneConsentError" class="fr-error-text fr-mt-1w">
+          Si vous renseignez votre numéro de téléphone, vous devez accepter d'être recontacté(e)
+          pour un accompagnement personnalisé.
+        </p>
+
         <p class="fr-text--sm fr-mt-2w">
           Les informations saisies dans ce formulaire sont uniquement utilisées pour:<br />
           - Vous transmettre les documents demandés (rapport et lettre d'information)<br />
@@ -121,10 +126,11 @@
 <script setup lang="ts">
 import { useSignalementStore } from '@/stores/signalement'
 import '@/styles/form-steps.css'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 const store = useSignalementStore()
 const isSubmitting = ref(false)
+const hasValidationError = ref(false)
 
 const isFormValid = computed(() => {
   return (
@@ -134,11 +140,43 @@ const isFormValid = computed(() => {
   )
 })
 
+const hasPhoneWithoutConsent = computed(() => {
+  return store.formData.contactTelephone.trim() !== '' && !store.formData.accepteAccompagnement
+})
+
+const showPhoneConsentError = computed(() => {
+  return hasValidationError.value && hasPhoneWithoutConsent.value
+})
+
+// Hide phone/consent error when user corrects the problem
+watch(
+  () => [store.formData.contactTelephone, store.formData.accepteAccompagnement],
+  () => {
+    if (hasValidationError.value && !hasPhoneWithoutConsent.value) {
+      hasValidationError.value = false
+    }
+  }
+)
+
 const handleSubmit = async (event: Event) => {
   event.preventDefault()
-  if (!isFormValid.value) return
-
   isSubmitting.value = true
+
+  // Check the consistency of the phone/consent
+  if (hasPhoneWithoutConsent.value) {
+    hasValidationError.value = true
+    isSubmitting.value = false
+    return
+  }
+
+  // Clear the error if everything is OK
+  hasValidationError.value = false
+
+  if (!isFormValid.value) {
+    isSubmitting.value = false
+    return
+  }
+
   try {
     await store.saveFormData()
     store.updateStep(5)
