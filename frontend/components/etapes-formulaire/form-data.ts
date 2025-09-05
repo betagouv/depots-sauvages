@@ -2,7 +2,7 @@ export const STEPS = [
   'Information sur le dépôt sauvage',
   'Description du dépôt',
   'Compléter les informations utiles pour le traitement',
-  'Générer les documents',
+  'Vos coordonnées',
   'Bravo ! Vous pouvez lancer la procédure',
 ]
 

@@ -43,6 +43,7 @@ export interface Signalement {
   contactPrenom: string
   contactEmail: string
   contactTelephone: string
+  accepteAccompagnement: boolean
 
   // Management fields
   docConstatShouldGenerate: boolean
@@ -88,6 +89,7 @@ export const createEmptySignalement = (): Signalement => ({
   contactPrenom: '',
   contactEmail: '',
   contactTelephone: '',
+  accepteAccompagnement: false,
 
   // Management fields
   docConstatShouldGenerate: false,
