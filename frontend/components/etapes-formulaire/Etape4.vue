@@ -1,7 +1,7 @@
 <template>
   <div class="fr-container fr-grid-row fr-grid-row--center fr-mb-4w">
     <form @submit.prevent="handleSubmit">
-      <h2>Vous êtes prêts à générer vos documents</h2>
+      <h2>Vos coordonnées</h2>
       <div>
         <p>
           Le rapport de constatation et la lettre d'information vont être créés à partir des données
