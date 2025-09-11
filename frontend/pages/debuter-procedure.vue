@@ -1,5 +1,5 @@
 <template>
-  <main class="fr-container--sm">
+  <div class="fr-container--sm">
     <h1 class="fr-h2 fr-py-3w">Procédure dépôt sauvage</h1>
     <DsfrCallout v-if="store.currentStep === 1" class="fr-mb-3w">
       <p>
@@ -11,7 +11,7 @@
     </DsfrCallout>
 
     <WasteReportForm @step-change="store.updateStep" />
-  </main>
+  </div>
 </template>
 
 <script setup lang="ts">
