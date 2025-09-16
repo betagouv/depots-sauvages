@@ -38,6 +38,11 @@ class Signalement(PrejudiceMixin, TimeStampedModel):
     nom_entreprise = models.CharField("nom de l'entreprise", max_length=255, blank=True)
     numero_siret = models.CharField("numéro SIRET", max_length=255, blank=True)
     statut_auteur = models.CharField("statut de l'auteur", max_length=255, null=True, blank=True)
+    contact_nom = models.CharField("nom du contact", max_length=255, blank=True)
+    contact_prenom = models.CharField("prénom du contact", max_length=255, blank=True)
+    contact_email = models.EmailField("email du contact", blank=True)
+    contact_telephone = models.CharField("téléphone du contact", max_length=20, blank=True)
+    accepte_accompagnement = models.BooleanField("accepte accompagnement", default=False)
     # Documents fields
     doc_constat = models.BinaryField("Rapport de constatation", null=True, blank=True)
     lettre_info = models.BinaryField("Lettre d'information", null=True, blank=True)
