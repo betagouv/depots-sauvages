@@ -14,7 +14,7 @@ class Signalement(PrejudiceMixin, TimeStampedModel):
     date_constat = models.DateField("date de constatation")
     heure_constat = models.TimeField("heure de constatation")
     auteur_signalement = models.CharField("auteur", max_length=255, blank=True)
-    nature_terrain = models.JSONField("terrain", default=list, blank=True)
+    nature_terrain = models.JSONField("terrain", default=list, blank=True, null=True)
     volume_depot = models.CharField("volume", max_length=255, blank=True)
     risque_ecoulement = models.BooleanField("risque d'écoulement", default=False)
     types_depot = models.JSONField("types", default=list, blank=True, null=True)
