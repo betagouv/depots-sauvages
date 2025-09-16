@@ -19,3 +19,8 @@ class SignalementFactory(factory.django.DjangoModelFactory):
     prejudice_nombre_vehicules = 1
     prejudice_kilometrage = 10
     prejudice_autres_couts = 0
+    contact_nom = factory.Faker("last_name")
+    contact_prenom = factory.Faker("first_name")
+    contact_email = factory.Faker("email")
+    contact_telephone = factory.Faker("phone_number")
+    accepte_accompagnement = factory.Faker("boolean")
