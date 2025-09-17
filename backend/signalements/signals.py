@@ -112,3 +112,21 @@ def generate_lettre_info(sender, instance, created, **kwargs):
     logger.info(f"Post-save signal for signalement {instance.id}, starting background generation")
     generate_document_task.enqueue(instance.id, doc_base_name="lettre_info")
     logger.info(f"Lettre info generation task enqueued for signalement {instance.id}")
+
+
+@task(queue_name="emails")
+def send_contact_email_task(signalement_id):
+    """
+    Send email to contact person in background.
+    """
+    logger.info(f"Starting contact email sending for signalement {signalement_id}")
+    try:
+        signalement = Signalement.objects.get(id=signalement_id)
+        signalement.send_contact_person_email()
+        logger.info(f"Contact email sent successfully for signalement {signalement_id}")
+        return {"status": "success", "signalement_id": signalement_id}
+    except Exception as e:
+        logger.error(
+            f"Error sending contact email for signalement {signalement_id}: {e}", exc_info=True
+        )
+        raise

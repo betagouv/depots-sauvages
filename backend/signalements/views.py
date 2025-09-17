@@ -3,10 +3,13 @@ import io
 from django.http import FileResponse, Http404
 from django.shortcuts import get_object_or_404
 from django.views.generic import View
-from rest_framework import mixins, viewsets
+from rest_framework import mixins, status, viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from backend.signalements.models import Signalement
 from backend.signalements.serializers import SignalementSerializer
+from backend.signalements.signals import send_contact_email_task
 from backend.throttling.throttles import SignalementRateThrottle
 
 
@@ -24,6 +27,20 @@ class SignalementViewSet(
     queryset = Signalement.objects.all()
     serializer_class = SignalementSerializer
     throttle_classes = [SignalementRateThrottle]
+
+    @action(detail=True, methods=["post"])
+    def send_contact_email(self, request, pk=None):
+        """
+        Send email to contact person.
+        """
+        signalement = self.get_object()
+        if not signalement.contact_email:
+            return Response(
+                {"error": "No contact email available for this signalement"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        send_contact_email_task.enqueue(signalement.id)
+        return Response({"message": "Contact email queued for sending"})
 
 
 class SignalementDocumentDownloadView(View):
