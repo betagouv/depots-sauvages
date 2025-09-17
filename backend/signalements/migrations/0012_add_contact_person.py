@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("signalements", "0010_alter_signalement_nature_terrain"),
+        ("signalements", "0011_fix_nature_terrain_data_migration"),
     ]
 
     operations = [

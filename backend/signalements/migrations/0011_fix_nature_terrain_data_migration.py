@@ -25,7 +25,7 @@ def convert_nature_terrain_data(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("signalements", "0011_add_contact_person"),
+        ("signalements", "0010_alter_signalement_nature_terrain"),
     ]
 
     operations = [
