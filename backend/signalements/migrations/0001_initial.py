@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
                 ("heure_constat", models.TimeField(verbose_name="heure de constatation")),
                 (
                     "auteur_signalement",
-                    models.CharField(blank=True, max_length=255, verbose_name="auteur"),
+                    models.CharField(blank=True, max_length=255, verbose_name="auteur signalement"),
                 ),
                 (
                     "nature_terrain",
@@ -44,10 +44,13 @@ class Migration(migrations.Migration):
                 ),
                 ("precisions_depot", models.TextField(blank=True, verbose_name="précisions")),
                 ("photo_dispo", models.BooleanField(default=False, verbose_name="photos")),
-                ("auteur_identifie", models.BooleanField(default=False, verbose_name="identifié")),
+                (
+                    "auteur_identifie",
+                    models.BooleanField(default=False, verbose_name="auteur identifié"),
+                ),
                 (
                     "souhaite_porter_plainte",
-                    models.BooleanField(default=False, verbose_name="plainte"),
+                    models.BooleanField(default=False, verbose_name="souhaite porter plainte"),
                 ),
                 (
                     "indices_disponibles",
@@ -59,7 +62,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "arrete_municipal_existe",
-                    models.BooleanField(default=False, verbose_name="arrêté"),
+                    models.BooleanField(default=False, verbose_name="arrêté municipal existe"),
                 ),
                 (
                     "prejudice_montant_connu",
@@ -103,7 +106,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "document_generated_at",
-                    models.DateTimeField(blank=True, null=True, verbose_name="date rapport de constatation"),
+                    models.DateTimeField(
+                        blank=True, null=True, verbose_name="date rapport de constatation"
+                    ),
                 ),
             ],
             options={
