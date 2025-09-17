@@ -138,7 +138,7 @@ LOGGING = {
 TASKS = {
     "default": {
         "BACKEND": "django_tasks.backends.immediate.ImmediateBackend",
-        "QUEUES": ["default", "documents"],
+        "QUEUES": ["default", "documents", "emails"],
     },
 }
 TASKS_LOGGING = {
