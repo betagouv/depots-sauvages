@@ -179,6 +179,11 @@ const handleSubmit = async (event: Event) => {
 
   try {
     await store.saveFormData()
+
+    store.sendContactPersonEmail().catch((emailError) => {
+      console.error('Contact email sending failed:', emailError)
+    })
+
     store.updateStep(5)
   } catch (error) {
     console.error('Failed to save:', error)
