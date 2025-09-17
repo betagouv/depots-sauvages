@@ -67,6 +67,16 @@ export const useSignalementStore = defineStore('signalement', {
         throw error
       }
     },
+
+    async sendContactPersonEmail() {
+      if (!this.currentId) {
+        throw new Error('No signalement ID available')
+      }
+      return await createResource(
+        `${API_URLS.signalements}${this.currentId}/send_contact_email/`,
+        {}
+      )
+    },
   },
 })
 
