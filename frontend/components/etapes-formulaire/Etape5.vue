@@ -2,7 +2,7 @@
   <div class="fr-container--sm">
     <div class="fr-bg--contrast">
       <div class="fr-p-4w">
-        <section class="document-section fr-py-3w fr-px-2w fr-mb-4w fr-bg--g100">
+        <section class="highlighted-section fr-py-3w fr-px-2w fr-mb-4w">
           <h2 class="fr-h3 fr-mb-1w">Télécharger et compléter les documents</h2>
           <p>
             Vous trouverez ci-dessous des pièces de procédure
@@ -10,7 +10,7 @@
             (charte graphique de la mairie, date et signature du rédacteur du document, etc.).
           </p>
 
-          <h3 class="fr-h4 document-title fr-mt-3w">
+          <h3 class="fr-h4 highlighted-title fr-mt-3w">
             <span aria-hidden="true">📄</span> Documents disponibles
           </h3>
           <p>Vous pouvez télécharger les documents suivants :</p>
@@ -239,13 +239,5 @@ onMounted(async () => {
 
 .confirmation-section:last-of-type {
   border: none;
-}
-
-.document-section {
-  background-color: #f5f5fe;
-}
-
-.document-title {
-  color: #000091;
 }
 </style>
