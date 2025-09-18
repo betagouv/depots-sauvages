@@ -184,12 +184,4 @@ const handlePrevious = () => store.updateStep(3)
   justify-content: space-between;
   gap: 1rem;
 }
-
-.highlighted-section {
-  background-color: #f5f5fe;
-}
-
-.highlighted-title {
-  color: #000091;
-}
 </style>
