@@ -40,7 +40,10 @@
             </div>
 
             <div class="fr-form-group">
-              <label class="fr-label" for="email"> Adresse e-mail * </label>
+              <label class="fr-label fr-mt-3w" for="email"> Adresse e-mail * </label>
+              <span class="fr-hint-text">
+                Format attendu : nom@domaine.fr (Vos documents seront envoyés à cette adresse.)
+              </span>
               <input
                 class="fr-input"
                 type="email"
@@ -49,9 +52,6 @@
                 v-model="store.formData.contactEmail"
                 required
               />
-              <p class="fr-hint-text">
-                Format attendu : nom@domaine.fr (Vos documents seront envoyés à cette adresse.)
-              </p>
             </div>
           </section>
 
