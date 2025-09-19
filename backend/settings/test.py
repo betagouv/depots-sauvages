@@ -15,3 +15,7 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": True,
 }
+
+# Disable rate limiting in tests by setting very high limits
+SIGNALEMENT_RATE_LIMIT = "100/hour"
+EMAIL_RATE_LIMIT = "100/hour"

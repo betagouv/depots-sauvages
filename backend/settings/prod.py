@@ -45,6 +45,7 @@ SERVER_EMAIL = env("SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
 
 # Anymail settings for production
 ANYMAIL = {
+    "TEST_MODE": False,
     "BREVO_API_KEY": env("BREVO_API_KEY"),
     "BREVO_SENDER_DOMAIN": env("BREVO_SENDER_DOMAIN"),
 }

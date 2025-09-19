@@ -32,4 +32,12 @@ form {
   .date-time {
     grid-template-columns: 1fr;
   }
-} 
+}
+
+.highlighted-section {
+  background-color: #f5f5fe;
+}
+
+.highlighted-title {
+  color: #000091;
+}

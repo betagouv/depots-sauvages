@@ -3,7 +3,6 @@ import { API_URLS, createResource, fetchResource, updateResource } from '../serv
 import type { Signalement } from '../types/signalement'
 import { createEmptySignalement, fromApiFormat, toApiFormat } from '../types/signalement'
 
-
 export const useSignalementStore = defineStore('signalement', {
   // State
   state: () => ({
@@ -67,6 +66,16 @@ export const useSignalementStore = defineStore('signalement', {
         console.error('Error loading signalement:', error)
         throw error
       }
+    },
+
+    async sendContactPersonEmail() {
+      if (!this.currentId) {
+        throw new Error('No signalement ID available')
+      }
+      return await createResource(
+        `${API_URLS.signalements}${this.currentId}/send_contact_email/`,
+        {}
+      )
     },
   },
 })
