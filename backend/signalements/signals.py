@@ -74,12 +74,29 @@ def generate_document(signalement_id, doc_base_name):
         raise
 
 
-@task(queue_name="documents")
+@task(queue_name="default")
 def generate_document_task(signalement_id, doc_base_name):
     """
     Generate document in background.
     """
-    return generate_document(signalement_id, doc_base_name)
+    logger.info(
+        f"Document generation task started for signalement {signalement_id}, "
+        f"document {doc_base_name}"
+    )
+    try:
+        result = generate_document(signalement_id, doc_base_name)
+        logger.info(
+            f"Document generation task completed successfully for signalement "
+            f"{signalement_id}, document {doc_base_name}"
+        )
+        return result
+    except Exception as e:
+        logger.error(
+            f"Document generation task failed for signalement {signalement_id}, "
+            f"document {doc_base_name}: {e}",
+            exc_info=True,
+        )
+        raise
 
 
 @receiver(post_save, sender=Signalement)
