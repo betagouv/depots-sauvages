@@ -19,3 +19,6 @@ LOGGING = {
 # Disable rate limiting in tests by setting very high limits
 SIGNALEMENT_RATE_LIMIT = "100/hour"
 EMAIL_RATE_LIMIT = "100/hour"
+
+# Don't wait for documents to be generated in tests
+EMAIL_DOCUMENT_WAIT_TIME = 0
