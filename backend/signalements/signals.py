@@ -1,7 +1,6 @@
 import logging
 import time
 
-from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
@@ -135,16 +134,10 @@ def generate_lettre_info(sender, instance, created, **kwargs):
 @task(queue_name="default")
 def send_contact_email_task(signalement_id):
     """
-    Wait for document generation and send email to contact person.
+    Send email to contact person in background.
     """
     logger.info(f"Starting contact email sending for signalement {signalement_id}")
     try:
-        wait_time = getattr(settings, "EMAIL_DOCUMENT_WAIT_TIME", 10)
-        logger.info(
-            f"Waiting {wait_time} seconds for documents to be generated "
-            f"for signalement {signalement_id}"
-        )
-        time.sleep(wait_time)
         signalement = Signalement.objects.get(id=signalement_id)
         signalement.send_contact_person_email()
         logger.info(f"Contact email sent successfully for signalement {signalement_id}")

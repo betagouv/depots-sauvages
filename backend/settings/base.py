@@ -150,9 +150,6 @@ LOGGING["loggers"]["django_tasks"] = TASKS_LOGGING
 # Email sending rate limiting
 EMAIL_RATE_LIMIT = "10/m"
 
-# Seconds to wait for documents before sending email
-EMAIL_DOCUMENT_WAIT_TIME = 10
-
 # Cache settings - used in particular for rate limiting
 CACHES = {
     "default": {

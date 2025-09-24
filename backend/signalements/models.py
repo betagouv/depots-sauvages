@@ -83,7 +83,6 @@ class Signalement(PrejudiceMixin, TimeStampedModel):
         """
         if not self.contact_email:
             raise ValueError("Contact email is required")
-        self.refresh_from_db()  # Get latest document data
         subject = f"Documents du signalement #{self.id} - {self.commune}"
         html_template = render_to_string("email-get-documents.html", {"signalement": self})
         handler = EmailHandler(

@@ -54,9 +54,6 @@ ANYMAIL = {
 EMAIL_RATE_LIMIT = env("EMAIL_RATE_LIMIT", default="10/hour")
 SIGNALEMENT_RATE_LIMIT = env("SIGNALEMENT_RATE_LIMIT", default="10/hour")
 
-# Seconds to wait for documents before sending email
-EMAIL_DOCUMENT_WAIT_TIME = env.int("EMAIL_DOCUMENT_WAIT_TIME", default=10)
-
 # Reverse proxy settings
 USE_X_FORWARDED_HOST = True
 USE_X_FORWARDED_PORT = True
