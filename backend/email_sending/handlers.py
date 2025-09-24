@@ -1,5 +1,9 @@
+import logging
+
 from django.conf import settings
 from django.core.mail import EmailMessage
+
+logger = logging.getLogger(__name__)
 
 
 class EmailHandler:
@@ -36,10 +40,21 @@ class EmailHandler:
             to=self.to_emails,
         )
         msg.content_subtype = "html"
+        logger.info(f"Sending email with {len(self.attachments)} attachments")
         for attachment in self.attachments:
+            logger.debug(
+                f"Attaching file: {attachment['filename']} "
+                f"(size: {len(attachment['content'])} bytes)"
+            )
             msg.attach(
                 filename=attachment["filename"],
                 content=attachment["content"],
                 mimetype=attachment["mimetype"],
             )
-        return msg.send()
+        try:
+            result = msg.send()
+            logger.info(f"Email sent successfully with {len(self.attachments)} attachments")
+            return result
+        except Exception as e:
+            logger.error(f"Failed to send email with attachments: {e}")
+            raise

@@ -2,4 +2,4 @@
 
 echo "🔄 Starting django-tasks worker for app ($DJANGO_SETTINGS_MODULE)..."
 
-python manage.py db_worker --queue default --queue documents --queue emails
+python manage.py db_worker --queue default
