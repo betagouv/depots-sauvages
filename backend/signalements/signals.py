@@ -132,7 +132,7 @@ def generate_lettre_info(sender, instance, created, **kwargs):
     logger.info(f"Lettre info generation task enqueued for signalement {instance.id}")
 
 
-@task(queue_name="emails")
+@task(queue_name="default")
 def send_contact_email_task(signalement_id):
     """
     Wait for document generation and send email to contact person.
@@ -142,7 +142,7 @@ def send_contact_email_task(signalement_id):
         wait_time = getattr(settings, "EMAIL_DOCUMENT_WAIT_TIME", 10)
         logger.info(
             f"Waiting {wait_time} seconds for documents to be generated "
-            "for signalement {signalement_id}"
+            f"for signalement {signalement_id}"
         )
         time.sleep(wait_time)
         signalement = Signalement.objects.get(id=signalement_id)
