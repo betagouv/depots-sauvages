@@ -7,16 +7,13 @@
     />
 
     <nav
+      v-if="!route.meta.hideNavigation"
       class="fr-container"
       role="navigation"
       aria-label="Menu principal"
     >
       <ul class="fr-nav__list">
-        <li
-          v-for="lien in navLinks"
-          :key="lien.href"
-          class="fr-nav__item"
-        >
+        <li v-for="lien in navLinks" :key="lien.href" class="fr-nav__item">
           <a
             class="fr-nav__link"
             :class="{ 'fr-nav__link--active': route.path === lien.href }"
@@ -27,11 +24,10 @@
           </a>
         </li>
       </ul>
-
     </nav>
 
     <main class="fr-container fr-py-3w" role="main" id="content">
-      <DsfrNotice>
+      <DsfrNotice v-if="!route.meta.hideFeedback">
         <a
           href="https://docs.google.com/forms/d/e/1FAIpQLSe73qnFQje6_hdhKv1VeyZVQOIeRzn0Q7ahRI4hlBjq8atG8Q/viewform"
           rel="noopener noreferrer"
