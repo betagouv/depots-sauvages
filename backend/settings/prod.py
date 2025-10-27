@@ -54,6 +54,12 @@ ANYMAIL = {
 EMAIL_RATE_LIMIT = env("EMAIL_RATE_LIMIT", default="10/hour")
 SIGNALEMENT_RATE_LIMIT = env("SIGNALEMENT_RATE_LIMIT", default="10/hour")
 
+# DS Integration Settings - Démarches Simplifiées
+DS_API_TOKEN = env("DS_API_TOKEN")
+DS_SIGNALEMENT_DEMARCHE_ID = env("DS_SIGNALEMENT_DEMARCHE_ID")
+DS_REQUEST_TIMEOUT = env.int("DS_REQUEST_TIMEOUT", default=30)
+DS_MAX_RETRIES = env.int("DS_MAX_RETRIES", default=3)
+
 # Reverse proxy settings
 USE_X_FORWARDED_HOST = True
 USE_X_FORWARDED_PORT = True

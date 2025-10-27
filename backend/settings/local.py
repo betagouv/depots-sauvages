@@ -52,3 +52,7 @@ ANYMAIL = {
 # Rate limiting
 EMAIL_RATE_LIMIT = env("EMAIL_RATE_LIMIT", default="10/m")
 SIGNALEMENT_RATE_LIMIT = env("SIGNALEMENT_RATE_LIMIT", default="10/m")
+
+# DS Integration Settings - Démarches Simplifiées
+DS_API_TOKEN = env("DS_API_TOKEN", default=None)
+DS_SIGNALEMENT_DEMARCHE_ID = env("DS_SIGNALEMENT_DEMARCHE_ID")
