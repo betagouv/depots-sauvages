@@ -195,5 +195,6 @@ export const auteurOptions = [
     value: 'un agent assermenté',
   },
   { text: 'Un autre agent de la mairie', value: 'un autre agent de la mairie' },
+  { text: 'Un citoyen', value: 'un citoyen' },
   { text: 'Autre', value: 'autre' },
 ]
