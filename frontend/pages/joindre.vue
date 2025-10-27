@@ -6,15 +6,15 @@
         <div class="fr-grid-row fr-grid-row--center">
           <div class="fr-col-12 fr-col-md-10 fr-col-lg-8">
             <h1 class="fr-hero__title fr-text--center">
-              Agissez concrètement contre les dépôts sauvages !
+              Luttez efficacement contre les dépôts sauvages dans votre commune.
             </h1>
             <p class="fr-hero__text fr-text--lg fr-text--center">
-              Vous êtes une collectivité ou un service public motivé pour simplifier vos
-              signalements et générer vos documents administratifs ? Nous vous accompagnons pas à
-              pas. Rejoignez-nous dès maintenant.
+              Vous êtes une collectivité touchée par les dépôts sauvages et vous souhaitez agir ? La
+              Gendarmerie nationale recherche 100 communes volontaires pour ce dispositif pilote
+              d'accompagnement personnalisé.
             </p>
             <div class="fr-hero__actions fr-text--center">
-              <a class="fr-btn fr-btn--lg" href="#formulaire"> Je veux être accompagné... </a>
+              <a class="fr-btn fr-btn--lg" href="#formulaire"> Je veux être accompagné</a>
             </div>
           </div>
         </div>
@@ -40,9 +40,9 @@
             <div class="fr-col-12 fr-col-md-4">
               <div class="fr-card fr-card--sm fr-card--grey">
                 <div class="fr-card__body">
-                  <h3 class="fr-card__title">Des procédures sans suite</h3>
+                  <h3 class="fr-card__title">Des auteurs impunis</h3>
                   <p class="fr-card__desc">
-                    Les interventions se répètent, les plaintes sont souvent classées sans suite.
+                    Les interventions se répètent, Les auteurs sont rarement sanctionnés.
                   </p>
                 </div>
               </div>
@@ -51,7 +51,10 @@
               <div class="fr-card fr-card--sm fr-card--grey">
                 <div class="fr-card__body">
                   <h3 class="fr-card__title">Des agents et élus démunis</h3>
-                  <p class="fr-card__desc">Face aux incivilités, la pression citoyenne augmente.</p>
+                  <p class="fr-card__desc">
+                    Face aux incivilités et aux dégradations de l’environnement, les attentes des
+                    citoyens sont fortes
+                  </p>
                 </div>
               </div>
             </div>
@@ -64,7 +67,7 @@
     <div id="formulaire" class="fr-container fr-py-6w">
       <div class="fr-grid-row fr-grid-row--gutters">
         <div class="fr-col-12">
-          <h2 class="fr-h2 fr-mb-4w">Je veux être accompagné...</h2>
+          <h2 class="fr-h2 fr-mb-4w">Je veux être accompagné</h2>
           <div class="fr-card">
             <div class="fr-card__body fr-px-0">
               <iframe
@@ -77,6 +80,24 @@
               ></iframe>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Additional Information Section -->
+    <div class="fr-container fr-py-4w">
+      <div class="fr-grid-row fr-grid-row--center">
+        <div class="fr-col-12 fr-col-md-8">
+          <p class="fr-text--lg fr-text--center">
+            Si vous souhaitez démarrer une procédure administrative pour lutter contre les dépôts
+            sauvages, rendez-vous sur :
+            <a
+              href="https://protect-envi.beta.gouv.fr/debuter-procedure"
+              class="fr-link fr-link--lg"
+            >
+              https://protect-envi.beta.gouv.fr/
+            </a>
+          </p>
         </div>
       </div>
     </div>
