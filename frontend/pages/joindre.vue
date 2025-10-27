@@ -66,7 +66,7 @@
         <div class="fr-col-12">
           <h2 class="fr-h2 fr-mb-4w">Je veux être accompagné...</h2>
           <div class="fr-card">
-            <div class="fr-card__body fr-px-0w">
+            <div class="fr-card__body fr-px-0">
               <iframe
                 src="https://grist.numerique.gouv.fr/o/cesan-investigation/forms/iDiH8ZjadFkK38hbkuAXAY/197"
                 width="100%"
