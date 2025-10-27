@@ -73,8 +73,10 @@
               <iframe
                 src="https://grist.numerique.gouv.fr/o/cesan-investigation/forms/iDiH8ZjadFkK38hbkuAXAY/197"
                 width="100%"
-                height="600"
+                height="2100"
                 frameborder="0"
+                scrolling="no"
+                style="overflow: hidden; border: none"
                 title="Formulaire"
                 class="grist-form"
               ></iframe>
@@ -118,6 +120,11 @@ html {
 .hero-section {
   background-color: #f5f5fe;
   padding: 4rem 0;
+}
+
+/* Disable iframe scrolling */
+.grist-form {
+  overflow: hidden;
 }
 
 /* Ensure proper spacing from footer */
