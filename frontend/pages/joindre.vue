@@ -6,15 +6,15 @@
         <div class="fr-grid-row fr-grid-row--center">
           <div class="fr-col-12 fr-col-md-10 fr-col-lg-8">
             <h1 class="fr-hero__title fr-text--center">
-              Luttez efficacement contre les dépôts sauvages dans votre commune.
+              Rejoignez les 100 collectivités pour mieux lutter contre les dépôts sauvages.
             </h1>
             <p class="fr-hero__text fr-text--lg fr-text--center">
               Vous êtes une collectivité touchée par les dépôts sauvages et vous souhaitez agir ? La
-              Gendarmerie nationale recherche 100 communes volontaires pour ce dispositif pilote
-              d'accompagnement personnalisé.
+              Gendarmerie nationale peut vous aider. Pour bénéficier d’un accompagnement
+              personnalisé complétez le formulaire ci-dessous.
             </p>
             <div class="fr-hero__actions fr-text--center">
-              <a class="fr-btn fr-btn--lg" href="#formulaire"> Je veux être accompagné</a>
+              <a class="fr-btn fr-btn--lg" href="#formulaire"> Remplir le formulaire</a>
             </div>
           </div>
         </div>
@@ -67,7 +67,7 @@
     <div id="formulaire" class="fr-container fr-py-6w">
       <div class="fr-grid-row fr-grid-row--gutters">
         <div class="fr-col-12">
-          <h2 class="fr-h2 fr-mb-4w">Je veux être accompagné</h2>
+          <h2 class="fr-h2 fr-mb-4w">Remplir le formulaire</h2>
           <div class="fr-card">
             <div class="fr-card__body fr-px-0">
               <iframe
