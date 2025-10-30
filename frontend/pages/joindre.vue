@@ -6,15 +6,15 @@
         <div class="fr-grid-row fr-grid-row--center">
           <div class="fr-col-12 fr-col-md-10 fr-col-lg-8">
             <h1 class="fr-hero__title fr-text--center">
-              Rejoignez les 100 collectivités pour mieux lutter contre les dépôts sauvages.
+              Rejoignez les 100 collectivités pilotes pour mieux lutter contre les dépôts sauvages.
             </h1>
             <p class="fr-hero__text fr-text--lg fr-text--center">
               Vous êtes une collectivité touchée par les dépôts sauvages et vous souhaitez agir ? La
               Gendarmerie nationale peut vous aider. Pour bénéficier d’un accompagnement
-              personnalisé complétez le formulaire ci-dessous.
+              personnalisé complétez le formulaire ci-dessous en deux minutes.
             </p>
             <div class="fr-hero__actions fr-text--center">
-              <a class="fr-btn fr-btn--lg" href="#formulaire"> Remplir le formulaire</a>
+              <a class="fr-btn fr-btn--lg" href="#formulaire"> Je candidate pour ma collectivité</a>
             </div>
           </div>
         </div>
@@ -25,7 +25,7 @@
     <div class="fr-container">
       <div class="fr-grid-row fr-grid-row--gutters">
         <div class="fr-col-12">
-          <h2 class="fr-h2 fr-mb-4w">Pourquoi inscrire votre commune ?</h2>
+          <h2 class="fr-h2 fr-mb-4w">Pourquoi rejoindre le dispositif Protect’Envi ?</h2>
           <div class="fr-grid-row fr-grid-row--gutters fr-mb-4w">
             <div class="fr-col-12 fr-col-md-4">
               <div class="fr-card fr-card--sm fr-card--grey">
@@ -50,9 +50,7 @@
             <div class="fr-col-12 fr-col-md-4">
               <div class="fr-card fr-card--sm fr-card--grey">
                 <div class="fr-card__body">
-                  <h3 class="fr-card__title">
-                    Des sanctions qui aboutissent, face aux incivilités
-                  </h3>
+                  <h3 class="fr-card__title">Des sanctions qui aboutissent face aux incivilités</h3>
                   <p class="fr-card__desc">
                     Des procédures efficaces pour identifier et sanctionner les auteurs.
                   </p>
@@ -68,7 +66,7 @@
     <div id="formulaire" class="fr-container fr-pb-4w">
       <div class="fr-grid-row fr-grid-row--gutters">
         <div class="fr-col-12">
-          <h2 class="fr-h2 fr-mb-4w">Remplir le formulaire</h2>
+          <h2 class="fr-h2 fr-mb-4w">Je candidate pour ma collectivité</h2>
           <div class="fr-card">
             <div class="fr-card__body fr-px-0">
               <iframe
@@ -108,7 +106,7 @@
                 <div class="fr-card__body">
                   <h3 class="fr-card__title">Des auteurs impunis</h3>
                   <p class="fr-card__desc">
-                    Les interventions se répètent, Les auteurs sont rarement sanctionnés.
+                    Les interventions se répètent, les auteurs sont rarement sanctionnés.
                   </p>
                 </div>
               </div>
@@ -118,7 +116,7 @@
                 <div class="fr-card__body">
                   <h3 class="fr-card__title">Des agents et élus démunis</h3>
                   <p class="fr-card__desc">
-                    Face aux incivilités et aux dégradations de l’environnement, les attentes des
+                    Face aux incivilités et aux dégradations de l'environnement, les attentes des
                     citoyens sont fortes
                   </p>
                 </div>
