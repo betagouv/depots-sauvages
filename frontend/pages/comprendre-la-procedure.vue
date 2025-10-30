@@ -1,7 +1,7 @@
 <template>
   <div class="fr-container--sm fr-py-5w">
     <h1 class="fr-h1 fr-mb-3w">Comprendre la procédure administrative pour dépôt sauvage</h1>
-    <p class="fr-text fr-mb-4w">
+    <p class="fr-text fr-text--lead fr-mb-6w">
       <strong
         >Lorsqu'un dépôt sauvage est découvert, l'autorité titulaire du pouvoir de police peut
         initier une procédure administrative sur le fondement de l'article L541-3 du Code de
@@ -12,7 +12,7 @@
     <h2 class="fr-h3 fr-mb-2w">
       <strong>Qui est l'autorité titulaire du pouvoir de police :</strong>
     </h2>
-    <ul class="fr-mb-6w">
+    <ul class="fr-mb-4w">
       <li>
         Le maire de la commune (article L. 541-3 du code de l’environnement, article 2212-2 du CGCT)
       </li>
@@ -24,8 +24,9 @@
     </ul>
 
     <h2 class="fr-h3 fr-mb-3w"><strong>Le déroulement de la procédure administrative :</strong></h2>
+    <hr class="fr-hr fr-my-4w" />
 
-    <h3 class="fr-h4 fr-mb-2w">1) Constatation du dépôt</h3>
+    <h3 class="fr-h4 fr-mb-2w fr-mt-6w">1) Constatation du dépôt</h3>
 
     <h4 class="fr-h6 fr-mb-1w"><strong>Par qui ?</strong></h4>
     <ul class="fr-mb-4w">
@@ -44,7 +45,7 @@
       Rédaction d'un rapport de constatation à l'aide de Protect'Envi, en mobilité ou au bureau
     </p>
 
-    <h3 class="fr-h4 fr-mb-2w">2) Recherche de l'auteur/responsable</h3>
+    <h3 class="fr-h4 fr-mb-2w fr-mt-6w">2) Recherche de l'auteur/responsable</h3>
 
     <h4 class="fr-h6 fr-mb-1w">À qui peut-on imputer la procédure ?</h4>
     <p class="fr-text">
@@ -114,7 +115,7 @@
       communication de l'identité de l'auteur présumé des faits.
     </p>
 
-    <h3 class="fr-h4 fr-mb-2w">2-bis) Retrait immédiat du dépôt</h3>
+    <h3 class="fr-h4 fr-mb-2w fr-mt-6w">2-bis) Retrait immédiat du dépôt</h3>
     <DsfrAlert type="info" small class="fr-mb-4w">
       <p class="fr-text">
         <strong>Facultatif mais recommandé.</strong>
@@ -125,7 +126,7 @@
       l'atteinte à l'environnement prolongée
     </p>
 
-    <h3 class="fr-h4 fr-mb-2w">3) Lettre d'information</h3>
+    <h3 class="fr-h4 fr-mb-2w fr-mt-6w">3) Lettre d'information</h3>
     <h4 class="fr-h6 fr-mb-1w">Qui ?</h4>
     <p class="fr-text">
       L'autorité titulaire du pouvoir de police administrative (maire ou, par délégation, adjoints
@@ -157,7 +158,7 @@
       </p>
     </DsfrAlert>
 
-    <h3 class="fr-h4 fr-mb-2w">4) Amende administrative</h3>
+    <h3 class="fr-h4 fr-mb-2w fr-mt-6w">4) Amende administrative</h3>
     <h4 class="fr-h6 fr-mb-1w">Qui ?</h4>
     <p class="fr-text">
       L'autorité titulaire du pouvoir de police administrative (maire ou, par délégation, adjoints
@@ -206,7 +207,7 @@
       administratif compétent.
     </p>
 
-    <h3 class="fr-h4 fr-mb-2w">5) Suite de la procédure</h3>
+    <h3 class="fr-h4 fr-mb-2w fr-mt-6w">5) Suite de la procédure</h3>
     <p class="fr-text">
       Si le dépôt n'a pas été retiré (par la mairie ou autrui), il est possible de mettre en demeure
       le responsable du dépôt de le retirer dans un délai imparti, à l’issue de la procédure
