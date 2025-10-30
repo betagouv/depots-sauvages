@@ -1,20 +1,86 @@
 <template>
   <div>
     <!-- Hero Section -->
-    <div class="hero-section fr-mb-6w">
+    <div class="hero-section fr-mb-4w fr-py-4w">
       <div class="fr-container">
         <div class="fr-grid-row fr-grid-row--center">
           <div class="fr-col-12 fr-col-md-10 fr-col-lg-8">
             <h1 class="fr-hero__title fr-text--center">
-              Luttez efficacement contre les dépôts sauvages dans votre commune.
+              Rejoignez les 100 collectivités pour mieux lutter contre les dépôts sauvages.
             </h1>
             <p class="fr-hero__text fr-text--lg fr-text--center">
               Vous êtes une collectivité touchée par les dépôts sauvages et vous souhaitez agir ? La
-              Gendarmerie nationale recherche 100 communes volontaires pour ce dispositif pilote
-              d'accompagnement personnalisé.
+              Gendarmerie nationale peut vous aider. Pour bénéficier d’un accompagnement
+              personnalisé complétez le formulaire ci-dessous.
             </p>
             <div class="fr-hero__actions fr-text--center">
-              <a class="fr-btn fr-btn--lg" href="#formulaire"> Je veux être accompagné</a>
+              <a class="fr-btn fr-btn--lg" href="#formulaire"> Remplir le formulaire</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Why Join Section -->
+    <div class="fr-container">
+      <div class="fr-grid-row fr-grid-row--gutters">
+        <div class="fr-col-12">
+          <h2 class="fr-h2 fr-mb-4w">Pourquoi inscrire votre commune ?</h2>
+          <div class="fr-grid-row fr-grid-row--gutters fr-mb-4w">
+            <div class="fr-col-12 fr-col-md-4">
+              <div class="fr-card fr-card--sm fr-card--grey">
+                <div class="fr-card__body">
+                  <h3 class="fr-card__title">Bénéficiez d’une aide juridique</h3>
+                  <p class="fr-card__desc">
+                    Accompagnement par la Gendarmerie et conseils juridiques adaptés à vos besoins.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="fr-col-12 fr-col-md-4">
+              <div class="fr-card fr-card--sm fr-card--grey">
+                <div class="fr-card__body">
+                  <h3 class="fr-card__title">Simplifiez vos démarches</h3>
+                  <p class="fr-card__desc">
+                    Des outils et des modèles pour accélérer et sécuriser vos démarches.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="fr-col-12 fr-col-md-4">
+              <div class="fr-card fr-card--sm fr-card--grey">
+                <div class="fr-card__body">
+                  <h3 class="fr-card__title">
+                    Des sanctions qui aboutissent, face aux incivilités
+                  </h3>
+                  <p class="fr-card__desc">
+                    Des procédures efficaces pour identifier et sanctionner les auteurs.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Section -->
+    <div id="formulaire" class="fr-container fr-pb-4w">
+      <div class="fr-grid-row fr-grid-row--gutters">
+        <div class="fr-col-12">
+          <h2 class="fr-h2 fr-mb-4w">Remplir le formulaire</h2>
+          <div class="fr-card">
+            <div class="fr-card__body fr-px-0">
+              <iframe
+                src="https://grist.numerique.gouv.fr/o/cesan-investigation/forms/iDiH8ZjadFkK38hbkuAXAY/197"
+                width="100%"
+                height="2100"
+                frameborder="0"
+                scrolling="no"
+                style="overflow: hidden; border: none"
+                title="Formulaire"
+                class="grist-form"
+              ></iframe>
             </div>
           </div>
         </div>
@@ -22,7 +88,7 @@
     </div>
 
     <!-- Problem Section -->
-    <div class="fr-container fr-py-6w">
+    <div class="fr-container fr-pt-8w">
       <div class="fr-grid-row fr-grid-row--gutters">
         <div class="fr-col-12">
           <h2 class="fr-h2 fr-mb-4w">Le problème</h2>
@@ -63,29 +129,6 @@
       </div>
     </div>
 
-    <!-- Form Section -->
-    <div id="formulaire" class="fr-container fr-py-6w">
-      <div class="fr-grid-row fr-grid-row--gutters">
-        <div class="fr-col-12">
-          <h2 class="fr-h2 fr-mb-4w">Je veux être accompagné</h2>
-          <div class="fr-card">
-            <div class="fr-card__body fr-px-0">
-              <iframe
-                src="https://grist.numerique.gouv.fr/o/cesan-investigation/forms/iDiH8ZjadFkK38hbkuAXAY/197"
-                width="100%"
-                height="2100"
-                frameborder="0"
-                scrolling="no"
-                style="overflow: hidden; border: none"
-                title="Formulaire"
-                class="grist-form"
-              ></iframe>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- Additional Information Section -->
     <div class="fr-container fr-py-4w">
       <div class="fr-grid-row fr-grid-row--center">
@@ -119,16 +162,10 @@ html {
 /* Hero section with consistent background color */
 .hero-section {
   background-color: #f5f5fe;
-  padding: 4rem 0;
 }
 
 /* Disable iframe scrolling */
 .grist-form {
   overflow: hidden;
-}
-
-/* Ensure proper spacing from footer */
-.fr-container {
-  margin-bottom: 2rem;
 }
 </style>
