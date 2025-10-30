@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Hero Section -->
-    <div class="hero-section fr-mb-6w">
+    <div class="hero-section fr-mb-4w fr-py-4w">
       <div class="fr-container">
         <div class="fr-grid-row fr-grid-row--center">
           <div class="fr-col-12 fr-col-md-10 fr-col-lg-8">
@@ -22,7 +22,7 @@
     </div>
 
     <!-- Why Join Section -->
-    <div class="fr-container fr-py-6w">
+    <div class="fr-container">
       <div class="fr-grid-row fr-grid-row--gutters">
         <div class="fr-col-12">
           <h2 class="fr-h2 fr-mb-4w">Pourquoi inscrire votre commune ?</h2>
@@ -65,7 +65,7 @@
     </div>
 
     <!-- Form Section -->
-    <div id="formulaire" class="fr-container fr-py-6w">
+    <div id="formulaire" class="fr-container fr-pb-4w">
       <div class="fr-grid-row fr-grid-row--gutters">
         <div class="fr-col-12">
           <h2 class="fr-h2 fr-mb-4w">Remplir le formulaire</h2>
@@ -88,7 +88,7 @@
     </div>
 
     <!-- Problem Section -->
-    <div class="fr-container fr-py-6w">
+    <div class="fr-container fr-pt-8w">
       <div class="fr-grid-row fr-grid-row--gutters">
         <div class="fr-col-12">
           <h2 class="fr-h2 fr-mb-4w">Le problème</h2>
@@ -162,16 +162,10 @@ html {
 /* Hero section with consistent background color */
 .hero-section {
   background-color: #f5f5fe;
-  padding: 4rem 0;
 }
 
 /* Disable iframe scrolling */
 .grist-form {
   overflow: hidden;
-}
-
-/* Ensure proper spacing from footer */
-.fr-container {
-  margin-bottom: 2rem;
 }
 </style>
