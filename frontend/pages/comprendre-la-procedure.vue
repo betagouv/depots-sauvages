@@ -67,8 +67,10 @@
     <section class="fr-mb-7w">
       <article class="fr-card fr-card--shadow fr-card--no-arrow fr-p-4w fr-mb-6w">
         <div class="fr-card__body">
-          <DsfrBadge label="Étape 1" type="info" :small="false" class="fr-mb-2w" />
-          <h3 class="fr-h4 fr-mb-3w">Constatation du dépôt</h3>
+          <h3 class="fr-h4 fr-mb-3w fr-display-flex fr-flex-wrap fr-gap-1w">
+            <DsfrBadge label="Étape 1" type="info" :small="false" />
+            <span>Constatation du dépôt</span>
+          </h3>
           <div class="fr-grid-row fr-grid-row--gutters">
             <div class="fr-col-12 fr-col-md-6">
               <h4 class="fr-h5 fr-mb-1w">Qui peut constater&nbsp;?</h4>
@@ -106,8 +108,10 @@
 
       <article class="fr-card fr-card--shadow fr-card--no-arrow fr-p-4w fr-mb-6w">
         <div class="fr-card__body">
-          <DsfrBadge label="Étape 2" type="info" :small="false" class="fr-mb-2w" />
-          <h3 class="fr-h4 fr-mb-3w">Recherche du responsable</h3>
+          <h3 class="fr-h4 fr-mb-3w fr-display-flex fr-flex-wrap fr-gap-1w">
+            <DsfrBadge label="Étape 2" type="info" :small="false" />
+            <span>Recherche du responsable</span>
+          </h3>
           <p class="fr-text">
             Le responsable est le <strong>producteur ou détenteur des déchets</strong> (article
             L.541-2 du Code de l'environnement).
@@ -198,8 +202,10 @@
 
       <article class="fr-card fr-card--shadow fr-card--no-arrow fr-p-4w fr-mb-6w">
         <div class="fr-card__body">
-          <DsfrBadge label="Étape 3" type="info" :small="false" class="fr-mb-2w" />
-          <h3 class="fr-h4 fr-mb-3w">Lettre d'information au responsable présumé</h3>
+          <h3 class="fr-h4 fr-mb-3w fr-display-flex fr-flex-wrap fr-gap-1w">
+            <DsfrBadge label="Étape 3" type="info" :small="false" />
+            <span>Lettre d'information au responsable présumé</span>
+          </h3>
           <h4 class="fr-h5 fr-mb-1w">Qui&nbsp;?</h4>
           <p class="fr-text">L'autorité titulaire du pouvoir de police administrative.</p>
           <h4 class="fr-h5 fr-mb-1w">Comment&nbsp;?</h4>
@@ -220,8 +226,10 @@
 
       <article class="fr-card fr-card--shadow fr-card--no-arrow fr-p-4w fr-mb-6w">
         <div class="fr-card__body">
-          <DsfrBadge label="Étape 4" type="info" :small="false" class="fr-mb-2w" />
-          <h3 class="fr-h4 fr-mb-3w">Amende administrative</h3>
+          <h3 class="fr-h4 fr-mb-3w fr-display-flex fr-flex-wrap fr-gap-1w">
+            <DsfrBadge label="Étape 4" type="info" :small="false" />
+            <span>Amende administrative</span>
+          </h3>
           <h4 class="fr-h5 fr-mb-1w">Qui la prononce&nbsp;?</h4>
           <p class="fr-text">
             Le maire (ou autorité déléguée) à l'issue du délai de contradictoire.
@@ -249,8 +257,10 @@
 
       <article class="fr-card fr-card--shadow fr-card--no-arrow fr-p-4w">
         <div class="fr-card__body">
-          <DsfrBadge label="Étape 5" type="info" :small="false" class="fr-mb-2w" />
-          <h3 class="fr-h4 fr-mb-3w">Mise en demeure de nettoyage</h3>
+          <h3 class="fr-h4 fr-mb-3w fr-display-flex fr-flex-wrap fr-gap-1w">
+            <DsfrBadge label="Étape 5" type="info" :small="false" />
+            <span>Mise en demeure de nettoyage</span>
+          </h3>
           <p class="fr-text">Si le dépôt n'est pas retiré :</p>
           <ul class="fr-text fr-pl-2w">
             <li>
