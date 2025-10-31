@@ -32,7 +32,10 @@
     </header>
 
     <section class="fr-mb-7w">
-      <h2 class="fr-h3 fr-mb-3w">Qui peut engager la procédure&nbsp;?</h2>
+      <h2 class="fr-h3 fr-mb-3w">
+        <span class="fr-icon-user-fill fr-mr-1w" aria-hidden="true"></span>
+        <span>Qui peut engager la procédure&nbsp;?</span>
+      </h2>
       <div class="fr-grid-row fr-grid-row--gutters">
         <div class="fr-col-12 fr-col-md-4">
           <DsfrCard
@@ -276,9 +279,63 @@
       </article>
     </section>
 
+    <section class="fr-my-8w">
+      <h2 class="fr-h3 fr-mb-3w">
+        <span class="fr-icon-scales-2-line fr-mr-1w" aria-hidden="true"></span>
+        <span>Textes de loi et références</span>
+      </h2>
+      <ul class="fr-text fr-pl-2w fr-mb-0">
+        <li>
+          <a
+            href="https://www.legifrance.gouv.fr/codes/id/LEGIARTI000006584365/1990-09-30"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            Article L.541-3 du Code de l'environnement
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006743353"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            Article L.541-2 du Code de l'environnement
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000037703945"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            Article L.2212-2 du Code général des collectivités territoriales
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000031104930"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            Article L.2122-18 du Code général des collectivités territoriales
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000048850168"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            Article L.5211-9-2 du Code général des collectivités territoriales
+          </a>
+        </li>
+      </ul>
+    </section>
+
     <section>
       <h2 class="fr-h3 fr-mb-3w">
-        <span class="fr-icon-compass-3-line fr-mr-1w" aria-hidden="true"></span>
+        <span class="fr-icon-flag-fill fr-mr-1w" aria-hidden="true"></span>
         <span>À retenir</span>
       </h2>
       <DsfrCallout class="fr-mb-0" content="">
@@ -306,7 +363,7 @@ import { reactive } from 'vue'
 
 const accordions = reactive({
   moyens: true,
-  exemple: true,
+  exemple: false,
 })
 
 const toggleAccordion = (key: keyof typeof accordions) => {
