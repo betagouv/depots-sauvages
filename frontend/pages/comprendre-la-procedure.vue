@@ -68,7 +68,7 @@
       <article class="fr-card fr-card--shadow fr-card--no-arrow fr-p-4w fr-mb-6w">
         <div class="fr-card__body">
           <h3 class="fr-h4 fr-mb-3w fr-display-flex fr-flex-wrap fr-gap-1w">
-            <DsfrBadge label="Étape 1" type="info" :small="false" />
+            <DsfrBadge class="fr-mr-1w" label="Étape 1" type="info" :small="false" />
             <span>Constatation du dépôt</span>
           </h3>
           <div class="fr-grid-row fr-grid-row--gutters">
@@ -109,7 +109,7 @@
       <article class="fr-card fr-card--shadow fr-card--no-arrow fr-p-4w fr-mb-6w">
         <div class="fr-card__body">
           <h3 class="fr-h4 fr-mb-3w fr-display-flex fr-flex-wrap fr-gap-1w">
-            <DsfrBadge label="Étape 2" type="info" :small="false" />
+            <DsfrBadge class="fr-mr-1w" label="Étape 2" type="info" :small="false" />
             <span>Recherche du responsable</span>
           </h3>
           <p class="fr-text">
@@ -203,7 +203,7 @@
       <article class="fr-card fr-card--shadow fr-card--no-arrow fr-p-4w fr-mb-6w">
         <div class="fr-card__body">
           <h3 class="fr-h4 fr-mb-3w fr-display-flex fr-flex-wrap fr-gap-1w">
-            <DsfrBadge label="Étape 3" type="info" :small="false" />
+            <DsfrBadge class="fr-mr-1w" label="Étape 3" type="info" :small="false" />
             <span>Lettre d'information au responsable présumé</span>
           </h3>
           <h4 class="fr-h5 fr-mb-1w">Qui&nbsp;?</h4>
@@ -227,7 +227,7 @@
       <article class="fr-card fr-card--shadow fr-card--no-arrow fr-p-4w fr-mb-6w">
         <div class="fr-card__body">
           <h3 class="fr-h4 fr-mb-3w fr-display-flex fr-flex-wrap fr-gap-1w">
-            <DsfrBadge label="Étape 4" type="info" :small="false" />
+            <DsfrBadge class="fr-mr-1w" label="Étape 4" type="info" :small="false" />
             <span>Amende administrative</span>
           </h3>
           <h4 class="fr-h5 fr-mb-1w">Qui la prononce&nbsp;?</h4>
@@ -258,7 +258,7 @@
       <article class="fr-card fr-card--shadow fr-card--no-arrow fr-p-4w">
         <div class="fr-card__body">
           <h3 class="fr-h4 fr-mb-3w fr-display-flex fr-flex-wrap fr-gap-1w">
-            <DsfrBadge label="Étape 5" type="info" :small="false" />
+            <DsfrBadge class="fr-mr-1w" label="Étape 5" type="info" :small="false" />
             <span>Mise en demeure de nettoyage</span>
           </h3>
           <p class="fr-text">Si le dépôt n'est pas retiré :</p>
