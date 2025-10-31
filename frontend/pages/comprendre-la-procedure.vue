@@ -177,18 +177,16 @@
                   </p>
                   <ul class="fr-text fr-pl-2w fr-mb-0">
                     <li>
-                      Le <strong>particulier</strong> est
-                      <strong>la personne productrice</strong> des déchets et donc responsable de
-                      leur gestion.
+                      Le <strong>particulier</strong> est <em>la personne productrice</em> des
+                      déchets et donc responsable de leur gestion.
                     </li>
                     <li>
-                      Le <strong>transporteur</strong> est <strong>l’auteur</strong> du dépôt
-                      sauvage.
+                      Le <strong>transporteur</strong> est <em>l’auteur</em> du dépôt sauvage.
                     </li>
                     <li>
-                      Le <strong>propriétaire du terrain</strong> est <strong>la victime</strong> du
-                      dépôt — mais sa responsabilité pourrait également être retenue s’il ne prend
-                      pas les mesures nécessaires pour faire retirer les déchets.
+                      Le <strong>propriétaire du terrain</strong> est <em>la victime</em> du dépôt,
+                      mais sa responsabilité pourrait également être retenue s’il ne prend pas les
+                      mesures nécessaires pour faire retirer les déchets.
                     </li>
                   </ul>
                 </div>
