@@ -361,7 +361,7 @@ import { reactive } from 'vue'
 
 const accordions = reactive({
   moyens: true,
-  exemple: false,
+  exemple: true,
 })
 
 const toggleAccordion = (key: keyof typeof accordions) => {
