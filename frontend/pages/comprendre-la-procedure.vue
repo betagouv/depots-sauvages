@@ -1,7 +1,7 @@
 <template>
   <div class="fr-container--md fr-py-6w fr-pb-8w">
     <header class="hero-section fr-mb-6w fr-p-4w">
-      <h1 class="fr-h1 fr-mb-3w">Comprendre la procédure administrative en cas de dépôt sauvage</h1>
+      <h1 class="fr-h1 fr-mb-3w">Que peut faire la mairie en cas de dépôt sauvage ?</h1>
       <p class="fr-text fr-text--lead">
         Lorsqu'une commune constate un dépôt sauvage, elle dispose de
         <strong>deux leviers d'action</strong> :
@@ -19,15 +19,17 @@
       <p class="fr-text fr-mb-3w">
         <span class="fr-icon-arrow-right-line fr-mr-1w" aria-hidden="true"></span>
         <span>
-          La <strong>procédure administrative</strong> permet de sanctionner plus efficacement les
-          <strong>dépôts sauvages du quotidien</strong>, avec une amende pouvant aller jusqu'à
-          <strong>15&nbsp;000&nbsp;€</strong>, <strong>recouvrée au profit de la mairie</strong>.
+          La <strong>procédure administrative</strong> permet de sanctionner efficacement les
+          auteurs de <strong>dépôts sauvages du quotidien</strong>, avec une amende pouvant aller
+          jusqu'à <strong>15&nbsp;000&nbsp;€</strong>,
+          <strong>recouvrée au profit de la mairie</strong>.
         </span>
       </p>
       <DsfrNotice
-        class="fr-mb-2w"
-        title="Amende jusqu'à 15 000 €"
-        content="Amende jusqu'à 15 000 € recouvrée au profit de la mairie."
+        title="Les deux procédures ne sont pas exclusives !
+        La procédure administrative est la plus simple et adaptée pour des dépôts du quotidien,
+        tandis que la procédure judiciaire est plus longue mais indispensable pour les dépôts
+        les plus graves."
       />
     </header>
 
@@ -36,6 +38,7 @@
         <span class="fr-icon-user-fill fr-mr-1w" aria-hidden="true"></span>
         <span>Qui peut engager la procédure&nbsp;?</span>
       </h2>
+      <p class="fr-text">Il s’agit de l’autorité titulaire du pouvoir de police.</p>
       <div class="fr-grid-row fr-grid-row--gutters">
         <div class="fr-col-12 fr-col-md-4">
           <DsfrCard
@@ -85,7 +88,7 @@
               <ul class="fr-text fr-pl-2w">
                 <li>
                   Rédaction d'un <strong>rapport de constatation</strong> à l'aide de
-                  <em>Protect'Envi</em>, en mobilité ou au bureau Rédaction d'un
+                  <em>Protect'Envi</em>, en mobilité ou au bureau
                 </li>
                 <li>Photos, localisation précise, description du dépôt</li>
               </ul>
@@ -101,6 +104,9 @@
               <strong>éviter son extension</strong> et
               <strong>limiter l'impact environnemental</strong>. Le retrait peut être effectué par
               la commune ou le propriétaire du terrain.
+            </p>
+            <p class="fr-text fr-mt-2w">
+              Le retrait peut se faire dès que les constatations sont terminées (photos, fouille).
             </p>
           </DsfrCallout>
         </div>
@@ -125,6 +131,7 @@
           <p class="fr-text fr-mt-2w">
             <strong>Plusieurs responsables peuvent être poursuivis individuellement.</strong>
           </p>
+          <p class="fr-text">Une personne morale peut également être poursuivie.</p>
           <div class="fr-accordions-group fr-mt-3w">
             <section class="fr-accordion">
               <h4 class="fr-accordion__title">
@@ -206,7 +213,7 @@
             <DsfrBadge class="fr-mr-1w" label="Étape 3" type="info" :small="false" />
             <span>Lettre d'information au responsable présumé</span>
           </h3>
-          <h4 class="fr-h5 fr-mb-1w">Qui&nbsp;?</h4>
+          <h4 class="fr-h5 fr-mb-1w">Par qui&nbsp;?</h4>
           <p class="fr-text">L'autorité titulaire du pouvoir de police administrative.</p>
           <h4 class="fr-h5 fr-mb-1w">Comment&nbsp;?</h4>
           <ul class="fr-text fr-pl-2w">
@@ -230,27 +237,40 @@
             <DsfrBadge class="fr-mr-1w" label="Étape 4" type="info" :small="false" />
             <span>Amende administrative</span>
           </h3>
-          <h4 class="fr-h5 fr-mb-1w">Qui la prononce&nbsp;?</h4>
+          <h4 class="fr-h5 fr-my-2w">Qui la prononce&nbsp;?</h4>
           <p class="fr-text">
-            Le maire (ou autorité déléguée) à l'issue du délai de contradictoire.
+            L’autorité titulaire du pouvoir de police (ou autorité déléguée) à l'issue du délai de
+            contradictoire.
           </p>
-          <h4 class="fr-h5 fr-mb-1w">Montant maximum</h4>
+          <DsfrNotice
+            class="fr-mb-2w"
+            title="il est possible de prononcer l’amende même si le responsable ne reconnaît
+            pas les faits"
+          />
+          <h4 class="fr-h5 fr-my-2w">Montant maximum</h4>
           <p class="fr-text fr-mb-2w"><strong>15&nbsp;000&nbsp;€</strong> par responsable.</p>
-          <h4 class="fr-h5 fr-mb-1w">Critères de fixation</h4>
+          <h4 class="fr-h5 fr-my-2w">Critères de fixation</h4>
           <ul class="fr-text fr-pl-2w">
             <li>Gravité de l'infraction ;</li>
             <li>Proportionnalité ;</li>
             <li>Coût du nettoyage pour la commune.</li>
           </ul>
-          <h4 class="fr-h5 fr-mb-1w">Procédure</h4>
+          <h4 class="fr-h5 fr-my-2w">Procédure</h4>
           <ul class="fr-text fr-pl-2w">
             <li>Décision par <strong>arrêté municipal ou présidentiel</strong> ;</li>
             <li>Transmission au <strong>Trésor public</strong> pour recouvrement ;</li>
             <li>Sommes reversées <strong>intégralement à la collectivité</strong>.</li>
           </ul>
-          <h4 class="fr-h5 fr-mb-1w">Recours possible</h4>
-          <p class="fr-text fr-mb-0">
+          <h4 class="fr-h5 fr-my-2w">Recours possible</h4>
+          <p class="fr-text">
             Le responsable peut contester devant le <strong>tribunal administratif</strong>.
+          </p>
+          <h4 class="fr-h5 fr-my-2w">Comment&nbsp;?</h4>
+          <p class="fr-text">
+            En contactant directement l'équipe Protect’Envi :
+            <a href="mailto:contact@protect-envi.beta.gouv.fr" class="fr-link"
+              >contact@protect-envi.beta.gouv.fr</a
+            >.
           </p>
         </div>
       </article>
@@ -269,7 +289,7 @@
             </li>
             <li>
               En cas de non-respect, elle peut prononcer une <strong>nouvelle amende</strong> allant
-              jusqu'à <strong>150&nbsp;000&nbsp;€</strong>
+              jusqu'à <strong>150&nbsp;000&nbsp;€</strong> et d’autres sanctions complémentaires
               (article L.541-3 du Code de l'environnement).
             </li>
           </ul>
