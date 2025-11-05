@@ -93,6 +93,7 @@ const breadcrumbLinks: BreadcrumbLink[] = []
 
 const navLinks = [
   { text: 'Accueil', href: '/' },
+  { text: 'Comprendre la procédure', href: '/comprendre-la-procedure' },
   { text: 'Débuter une procédure', href: '/debuter-procedure' },
   { text: 'Être accompagné', href: '/accompagnement' },
 ]

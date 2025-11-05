@@ -16,6 +16,11 @@ const router = createRouter({
       component: () => import('./pages/accueil.vue'),
     },
     {
+      path: '/comprendre-la-procedure',
+      name: 'ComprendreProcedure',
+      component: () => import('./pages/comprendre-la-procedure.vue'),
+    },
+    {
       path: '/debuter-procedure',
       name: 'Introduction',
       component: () => import('./pages/introduction-formulaire.vue'),
