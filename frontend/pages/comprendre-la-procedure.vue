@@ -213,7 +213,7 @@
             <DsfrBadge class="fr-mr-1w" label="Étape 3" type="info" :small="false" />
             <span>Lettre d'information au responsable présumé</span>
           </h3>
-          <h4 class="fr-h5 fr-mb-1w">Par qui&nbsp;?</h4>
+          <h4 class="fr-h5 fr-mb-1w">Qui la rédige&nbsp;?</h4>
           <p class="fr-text">L'autorité titulaire du pouvoir de police administrative.</p>
           <h4 class="fr-h5 fr-mb-1w">Comment&nbsp;?</h4>
           <ul class="fr-text fr-pl-2w">
@@ -244,7 +244,7 @@
           </p>
           <DsfrNotice
             class="fr-mb-2w"
-            title="il est possible de prononcer l’amende même si le responsable ne reconnaît
+            title="Il est possible de prononcer l’amende même si le responsable ne reconnaît
             pas les faits"
           />
           <h4 class="fr-h5 fr-my-2w">Montant maximum</h4>
@@ -263,9 +263,12 @@
           </ul>
           <h4 class="fr-h5 fr-my-2w">Recours possible</h4>
           <p class="fr-text">
-            Le responsable peut contester devant le <strong>tribunal administratif</strong>.
+            Le responsable peut contester la procédure devant le
+            <strong>tribunal administratif</strong>.
           </p>
-          <h4 class="fr-h5 fr-my-2w">Comment&nbsp;?</h4>
+          <h4 class="fr-h5 fr-my-2w">
+            Comment choisir le montant de l’amende et prendre l’arrêté&nbsp;?
+          </h4>
           <p class="fr-text">
             En contactant directement l'équipe Protect’Envi :
             <a href="mailto:contact@protect-envi.beta.gouv.fr" class="fr-link"
