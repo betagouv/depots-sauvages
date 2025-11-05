@@ -270,8 +270,11 @@
             Comment choisir le montant de l’amende et prendre l’arrêté&nbsp;?
           </h4>
           <p class="fr-text">
-            En contactant directement l'équipe Protect’Envi :
-            <a href="mailto:contact@protect-envi.beta.gouv.fr" class="fr-link"
+            En contactant directement l'équipe Protect'Envi :
+            <a
+              href="mailto:contact@protect-envi.beta.gouv.fr"
+              class="fr-link"
+              aria-label="Envoyer un e-mail à contact@protect-envi.beta.gouv.fr"
               >contact@protect-envi.beta.gouv.fr</a
             >.
           </p>
@@ -311,6 +314,7 @@
             href="https://www.legifrance.gouv.fr/codes/id/LEGIARTI000006584365/1990-09-30"
             target="_blank"
             rel="noreferrer noopener"
+            title="Article L.541-3 du Code de l'environnement - Nouvelle fenêtre"
           >
             Article L.541-3 du Code de l'environnement
           </a>
@@ -320,6 +324,7 @@
             href="https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006743353"
             target="_blank"
             rel="noreferrer noopener"
+            title="Article L.541-2 du Code de l'environnement - Nouvelle fenêtre"
           >
             Article L.541-2 du Code de l'environnement
           </a>
@@ -329,6 +334,7 @@
             href="https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000037703945"
             target="_blank"
             rel="noreferrer noopener"
+            title="Article L.2212-2 du Code général des collectivités territoriales - Nouvelle fenêtre"
           >
             Article L.2212-2 du Code général des collectivités territoriales
           </a>
@@ -338,6 +344,7 @@
             href="https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000031104930"
             target="_blank"
             rel="noreferrer noopener"
+            title="Article L.2122-18 du Code général des collectivités territoriales - Nouvelle fenêtre"
           >
             Article L.2122-18 du Code général des collectivités territoriales
           </a>
@@ -347,6 +354,7 @@
             href="https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000048850168"
             target="_blank"
             rel="noreferrer noopener"
+            title="Article L.5211-9-2 du Code général des collectivités territoriales - Nouvelle fenêtre"
           >
             Article L.5211-9-2 du Code général des collectivités territoriales
           </a>
