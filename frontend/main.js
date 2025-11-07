@@ -64,6 +64,8 @@ if (import.meta.env.VITE_MATOMO_ENABLED === 'true') {
     router: router,
     disableCookies: true,
     requireConsent: false,
+    trackInitialView: true, // trigger the first pageview
+    trackInitialViewOnce: true, // avoid double counting on hot-reload
   })
 }
 
