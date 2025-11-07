@@ -3,6 +3,7 @@ import '@gouvfr/dsfr/dist/utility/utility.min.css'
 import VueDsfr from '@gouvminint/vue-dsfr'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
+import VueMatomo from 'vue-matomo'
 import { createRouter, createWebHistory } from 'vue-router'
 import App from './app.vue'
 
@@ -55,4 +56,15 @@ const app = createApp(App)
 app.use(router)
 app.use(pinia)
 app.use(VueDsfr)
+
+if (import.meta.env.VITE_MATOMO_ENABLED === 'true') {
+  app.use(VueMatomo, {
+    host: import.meta.env.VITE_MATOMO_HOST,
+    siteId: parseInt(import.meta.env.VITE_MATOMO_SITE_ID),
+    router: router,
+    disableCookies: true,
+    requireConsent: false,
+  })
+}
+
 app.mount('#app')
