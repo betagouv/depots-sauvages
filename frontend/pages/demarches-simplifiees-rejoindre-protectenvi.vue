@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <main>
     <div class="hero-section fr-mb-4w fr-py-4w">
       <div class="fr-container">
         <div class="fr-grid-row fr-grid-row--center">
@@ -15,8 +15,6 @@
               <a
                 class="fr-btn fr-btn--lg"
                 href="https://www.demarches-simplifiees.fr/commencer/rejoindre-protect-envi-pour-mieux-lutter-contre-les-depots-sauvages"
-                target="_blank"
-                rel="noreferrer"
               >
                 Accéder à la démarche
               </a>
@@ -25,7 +23,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </main>
 </template>
 
 <style scoped>
