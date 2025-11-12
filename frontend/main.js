@@ -48,6 +48,12 @@ const router = createRouter({
       component: () => import('./pages/rejoindre-le-dispositif.vue'),
       meta: { hideNavigation: true, hideFeedback: true },
     },
+    {
+      path: '/demarches-simplifiees-rejoindre-protectenvi',
+      name: 'DemarchesSimplifieesRejoindreProtectEnvi',
+      component: () => import('./pages/demarches-simplifiees-rejoindre-protectenvi.vue'),
+      meta: { hideNavigation: true, hideFeedback: true },
+    },
   ],
 })
 
