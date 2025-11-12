@@ -5,19 +5,21 @@
         <div class="fr-grid-row fr-grid-row--center">
           <div class="fr-col-12 fr-col-md-10 fr-col-lg-8">
             <h1 class="fr-hero__title fr-text--center">
-              Rejoindre Protect'Envi pour lutter contre les dépôts sauvages
+              Rejoignez les 100 collectivités pilotes pour mieux lutter contre les dépôts sauvages.
             </h1>
             <p class="fr-hero__text fr-text--lg fr-text--center">
-              Informez-vous et accédez au dispositif Protect'Envi proposé par la Gendarmerie
-              nationale.
+              Vous êtes une collectivité touchée par les dépôts sauvages et vous souhaitez agir ? La
+              Gendarmerie nationale peut vous aider. Pour bénéficier d’un accompagnement
+              personnalisé complétez la démarche simplifiée en deux minutes en cliquant sur le
+              bouton ci-dessous
             </p>
             <div class="fr-hero__actions fr-text--center">
               <a
                 class="fr-btn fr-btn--lg"
                 href="https://www.demarches-simplifiees.fr/commencer/rejoindre-protect-envi-pour-mieux-lutter-contre-les-depots-sauvages"
               >
-                Accéder à la démarche
-              </a>
+                Je candidate pour ma collectivité</a
+              >
             </div>
           </div>
         </div>
