@@ -27,6 +27,54 @@
     </div>
 
     <div v-else class="fr-container fr-pb-4w">
+      <div v-if="error" class="fr-alert fr-alert--error fr-mb-4w">
+        <p class="fr-alert__title">Erreur</p>
+        <p>{{ error }}</p>
+      </div>
+
+      <div v-else-if="dossierData" class="fr-mb-4w">
+        <div class="fr-card fr-mb-4w">
+          <div class="fr-card__body">
+            <h2 class="fr-card__title">Informations du dossier</h2>
+            <div class="fr-grid-row fr-grid-row--gutters fr-mt-2w">
+              <div class="fr-col-12 fr-col-md-6">
+                <p><strong>Numéro de dossier:</strong> {{ dossierData.number }}</p>
+                <p><strong>État:</strong> {{ dossierData.state }}</p>
+                <p v-if="dossierData.dateDepot">
+                  <strong>Date de dépôt:</strong> {{ formatDate(dossierData.dateDepot) }}
+                </p>
+                <p v-if="dossierData.dateDerniereModification">
+                  <strong>Dernière modification:</strong>
+                  {{ formatDate(dossierData.dateDerniereModification) }}
+                </p>
+              </div>
+              <div class="fr-col-12 fr-col-md-6" v-if="dossierData.usager">
+                <p><strong>Email:</strong> {{ dossierData.usager.email || 'indisponible' }}</p>
+              </div>
+            </div>
+            <div v-if="dossierData.champs && dossierData.champs.length > 0" class="fr-mt-4w">
+              <h3 class="fr-h4">Champs du formulaire</h3>
+              <div class="fr-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Label</th>
+                      <th>Valeur</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="champ in dossierData.champs" :key="champ.id">
+                      <td>{{ champ.label }}</td>
+                      <td>{{ getChampValue(champ) || 'indisponible' }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="fr-grid-row fr-grid-row--gutters">
         <div class="fr-col-12 fr-col-md-6">
           <DsfrCard
@@ -81,6 +129,37 @@ const showLoading = ref(true)
 const isLoading = ref(false)
 const error = ref<string | null>(null)
 const dossierData = ref<any>(null)
+
+const formatDate = (dateString: string) => {
+  if (!dateString) return ''
+  const date = new Date(dateString)
+  return date.toLocaleDateString('fr-FR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+}
+
+const getChampValue = (champ: any) => {
+  if (champ.stringValue) return champ.stringValue
+  if (champ.value !== undefined && champ.value !== null) {
+    if (typeof champ.value === 'boolean') return champ.value ? 'Oui' : 'Non'
+    return String(champ.value)
+  }
+  if (champ.values?.length) return champ.values.join(', ')
+  if (champ.commune?.name) {
+    return `${champ.commune.name} (${champ.commune.postalCode || ''})`.trim()
+  }
+  if (champ.address?.streetAddress || champ.address?.cityName) {
+    return `${champ.address.label || ''} ${champ.address.streetAddress || ''} ${
+      champ.address.postalCode || ''
+    } ${champ.address.cityName || ''}`.trim()
+  }
+  if (champ.datetime) return formatDate(champ.datetime)
+  return ''
+}
 
 onMounted(async () => {
   const dossierId = (route.params.dossier_id as string) || (route.query.dossier_id as string)
