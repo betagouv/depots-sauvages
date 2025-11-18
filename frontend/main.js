@@ -43,6 +43,12 @@ const router = createRouter({
       meta: { hideNavigation: true, hideFeedback: true },
     },
     {
+      path: '/documents',
+      name: 'Documents',
+      component: () => import('./pages/documents.vue'),
+      meta: { hideNavigation: true, hideFeedback: true },
+    },
+    {
       path: '/rejoindre-le-dispositif',
       name: 'RejoindreDispositif',
       component: () => import('./pages/rejoindre-le-dispositif.vue'),
