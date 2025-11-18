@@ -57,7 +57,34 @@
 </template>
 
 <script setup lang="ts">
+import { API_URLS, createResource } from '@/services/api'
 import { DsfrCard } from '@gouvminint/vue-dsfr'
+import { onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+const isLoading = ref(false)
+const error = ref<string | null>(null)
+const dossierData = ref<any>(null)
+
+onMounted(async () => {
+  const dossierId = (route.params.dossier_id as string) || (route.query.dossier_id as string)
+  if (!dossierId) {
+    error.value = 'dossier_id is required in the URL'
+    return
+  }
+  isLoading.value = true
+  error.value = null
+  try {
+    dossierData.value = await createResource(API_URLS.processDossier, {
+      dossier_id: dossierId,
+    })
+  } catch (err: any) {
+    error.value = err.error || 'An error occurred while processing the dossier'
+  } finally {
+    isLoading.value = false
+  }
+})
 </script>
 
 <style scoped>

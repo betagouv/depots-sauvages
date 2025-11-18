@@ -13,7 +13,6 @@ class ProcessDossierView(APIView):
         Handle POST request to process a dossier.
         """
         dossier_id = request.data.get("dossier_id")
-
         if not dossier_id:
             return Response(
                 {"error": "dossier_id is required"},

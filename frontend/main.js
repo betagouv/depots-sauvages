@@ -43,9 +43,9 @@ const router = createRouter({
       meta: { hideNavigation: true, hideFeedback: true },
     },
     {
-      path: '/documents',
-      name: 'Documents',
-      component: () => import('./pages/documents.vue'),
+      path: '/signalements-ds/:dossier_id',
+      name: 'SignalementsDS',
+      component: () => import('./pages/signalements-ds.vue'),
       meta: { hideNavigation: true, hideFeedback: true },
     },
     {
