@@ -170,8 +170,6 @@ onMounted(async () => {
   }
   isLoading.value = true
   error.value = null
-  const loadingStartTime = Date.now()
-  const minLoadingDuration = Number(import.meta.env.VITE_DS_PAGE_LOADING_DURATION) || 5000
   try {
     dossierData.value = await createResource(API_URLS.processDossier, {
       dossier_id: dossierId,
@@ -180,11 +178,7 @@ onMounted(async () => {
     error.value = err.error || 'An error occurred while processing the dossier'
   } finally {
     isLoading.value = false
-    const elapsedTime = Date.now() - loadingStartTime
-    const remainingTime = Math.max(0, minLoadingDuration - elapsedTime)
-    setTimeout(() => {
-      showLoading.value = false
-    }, remainingTime)
+    showLoading.value = false
   }
 })
 </script>
