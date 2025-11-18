@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "backend.home",
     "backend.signalements",
     "backend.ds",
+    "backend.ds_signalements",
 ]
 
 MIDDLEWARE = [
