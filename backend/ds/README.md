@@ -22,7 +22,6 @@ DS_MAX_RETRIES = 3
 
 ```python
 DS_API_TOKEN = "SOME-KEY"
-DS_SIGNALEMENT_DEMARCHE_ID = 12345
 ```
 
 ## Usage
