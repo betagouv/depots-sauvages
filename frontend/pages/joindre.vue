@@ -28,34 +28,31 @@
           <h2 class="fr-h2 fr-mb-4w">Pourquoi rejoindre le dispositif Protect’Envi ?</h2>
           <div class="fr-grid-row fr-grid-row--gutters fr-mb-4w">
             <div class="fr-col-12 fr-col-md-4">
-              <div class="fr-card fr-card--sm fr-card--grey">
-                <div class="fr-card__body">
-                  <h3 class="fr-card__title">Bénéficiez d’une aide juridique</h3>
-                  <p class="fr-card__desc">
-                    Accompagnement par la Gendarmerie et conseils juridiques adaptés à vos besoins.
-                  </p>
-                </div>
-              </div>
+              <DsfrCard
+                no-arrow
+                size="sm"
+                title="Bénéficiez d'une aide juridique"
+                description="Accompagnement par la Gendarmerie et conseils juridiques adaptés à vos besoins."
+                class="fr-card--grey"
+              />
             </div>
             <div class="fr-col-12 fr-col-md-4">
-              <div class="fr-card fr-card--sm fr-card--grey">
-                <div class="fr-card__body">
-                  <h3 class="fr-card__title">Simplifiez vos démarches</h3>
-                  <p class="fr-card__desc">
-                    Des outils et des modèles pour accélérer et sécuriser vos démarches.
-                  </p>
-                </div>
-              </div>
+              <DsfrCard
+                no-arrow
+                size="sm"
+                title="Simplifiez vos démarches"
+                description="Des outils et des modèles pour accélérer et sécuriser vos démarches."
+                class="fr-card--grey"
+              />
             </div>
             <div class="fr-col-12 fr-col-md-4">
-              <div class="fr-card fr-card--sm fr-card--grey">
-                <div class="fr-card__body">
-                  <h3 class="fr-card__title">Des sanctions qui aboutissent face aux incivilités</h3>
-                  <p class="fr-card__desc">
-                    Des procédures efficaces pour identifier et sanctionner les auteurs.
-                  </p>
-                </div>
-              </div>
+              <DsfrCard
+                no-arrow
+                size="sm"
+                title="Des sanctions qui aboutissent face aux incivilités"
+                description="Des procédures efficaces pour identifier et sanctionner les auteurs."
+                class="fr-card--grey"
+              />
             </div>
           </div>
         </div>
@@ -92,36 +89,31 @@
           <h2 class="fr-h2 fr-mb-4w">Le problème</h2>
           <div class="fr-grid-row fr-grid-row--gutters fr-mb-4w">
             <div class="fr-col-12 fr-col-md-4">
-              <div class="fr-card fr-card--sm fr-card--grey">
-                <div class="fr-card__body">
-                  <h3 class="fr-card__title">Des coûts qui s'accumulent</h3>
-                  <p class="fr-card__desc">
-                    Chaque année, les dépôts sauvages coûtent des milliers d'euros aux communes.
-                    (Source : ADEME)
-                  </p>
-                </div>
-              </div>
+              <DsfrCard
+                no-arrow
+                size="sm"
+                title="Des coûts qui s'accumulent"
+                description="Chaque année, les dépôts sauvages coûtent des milliers d'euros aux communes. (Source : ADEME)"
+                class="fr-card--grey"
+              />
             </div>
             <div class="fr-col-12 fr-col-md-4">
-              <div class="fr-card fr-card--sm fr-card--grey">
-                <div class="fr-card__body">
-                  <h3 class="fr-card__title">Des auteurs impunis</h3>
-                  <p class="fr-card__desc">
-                    Les interventions se répètent, les auteurs sont rarement sanctionnés.
-                  </p>
-                </div>
-              </div>
+              <DsfrCard
+                no-arrow
+                size="sm"
+                title="Des auteurs impunis"
+                description="Les interventions se répètent, les auteurs sont rarement sanctionnés."
+                class="fr-card--grey"
+              />
             </div>
             <div class="fr-col-12 fr-col-md-4">
-              <div class="fr-card fr-card--sm fr-card--grey">
-                <div class="fr-card__body">
-                  <h3 class="fr-card__title">Des agents et élus démunis</h3>
-                  <p class="fr-card__desc">
-                    Face aux incivilités et aux dégradations de l'environnement, les attentes des
-                    citoyens sont fortes
-                  </p>
-                </div>
-              </div>
+              <DsfrCard
+                no-arrow
+                size="sm"
+                title="Des agents et élus démunis"
+                description="Face aux incivilités et aux dégradations de l'environnement, les attentes des citoyens sont fortes"
+                class="fr-card--grey"
+              />
             </div>
           </div>
         </div>
@@ -149,7 +141,7 @@
 </template>
 
 <script setup lang="ts">
-// Landing page
+import { DsfrCard } from '@gouvminint/vue-dsfr'
 </script>
 
 <style scoped>
