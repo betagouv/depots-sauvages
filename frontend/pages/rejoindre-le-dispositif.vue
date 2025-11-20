@@ -26,7 +26,6 @@
             <a
               href="https://protect-envi.beta.gouv.fr/debuter-procedure"
               class="fr-link fr-link--lg"
-              aria-label="Ouvrir Protect-Envi pour démarrer la procédure"
             >
               https://protect-envi.beta.gouv.fr/
             </a>

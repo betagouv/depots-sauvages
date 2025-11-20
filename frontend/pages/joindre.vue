@@ -1,6 +1,5 @@
 <template>
   <main>
-    <!-- Hero Section -->
     <div class="hero-section fr-mb-4w fr-py-4w">
       <div class="fr-container">
         <div class="fr-grid-row fr-grid-row--center">
@@ -17,7 +16,6 @@
               <a
                 class="fr-btn fr-btn--lg"
                 href="#formulaire"
-                aria-label="Accéder au formulaire de candidature pour les collectivités"
               >
                 Je candidate pour ma collectivité
               </a>
@@ -126,7 +124,6 @@
       </div>
     </div>
 
-    <!-- Additional Information Section -->
     <div class="fr-container fr-py-4w">
       <div class="fr-grid-row fr-grid-row--center">
         <div class="fr-col-12 fr-col-md-8">
@@ -147,7 +144,7 @@
 </template>
 
 <script setup lang="ts">
-import { DsfrCard } from '@gouvminint/vue-dsfr'
+import { DsfrCard } from '@gouvminint/vue-dsfr';
 </script>
 
 <style scoped>
