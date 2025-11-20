@@ -2,7 +2,7 @@
   <main>
     <div>
       <p class="fr-sr-only" id="formulaire-protectenvi-description">
-        Formulaire de candidature Protect’Envi intégré depuis Grist.
+      Formulaire de candidature à remplir pour postuler au dispositif Protect’Envi, intégré depuis la plateforme Grist.
       </p>
       <iframe
         src="https://grist.numerique.gouv.fr/o/cesan-investigation/forms/iDiH8ZjadFkK38hbkuAXAY/197"
