@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <main>
     <!-- Hero Section -->
     <div class="hero-section fr-mb-4w fr-py-4w">
       <div class="fr-container">
@@ -14,7 +14,13 @@
               personnalisé complétez le formulaire ci-dessous en deux minutes.
             </p>
             <div class="fr-hero__actions fr-text--center">
-              <a class="fr-btn fr-btn--lg" href="#formulaire"> Je candidate pour ma collectivité</a>
+              <a
+                class="fr-btn fr-btn--lg"
+                href="#formulaire"
+                aria-label="Accéder au formulaire de candidature pour les collectivités"
+              >
+                Je candidate pour ma collectivité
+              </a>
             </div>
           </div>
         </div>
@@ -70,11 +76,11 @@
                 src="https://grist.numerique.gouv.fr/o/cesan-investigation/forms/iDiH8ZjadFkK38hbkuAXAY/197"
                 width="100%"
                 height="2100"
-                frameborder="0"
                 scrolling="no"
                 style="overflow: hidden; border: none"
-                title="Formulaire"
+                title="Formulaire de candidature Protect’Envi"
                 class="grist-form"
+                loading="lazy"
               ></iframe>
             </div>
           </div>
@@ -137,7 +143,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </main>
 </template>
 
 <script setup lang="ts">
