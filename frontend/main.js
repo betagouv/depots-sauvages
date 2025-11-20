@@ -75,4 +75,13 @@ if (import.meta.env.VITE_MATOMO_ENABLED === 'true') {
   })
 }
 
+if (import.meta.env.VITE_CRISP_ENABLED === 'true' && import.meta.env.VITE_CRISP_WEBSITE_ID) {
+  window.$crisp = []
+  window.CRISP_WEBSITE_ID = import.meta.env.VITE_CRISP_WEBSITE_ID
+  const script = document.createElement('script')
+  script.src = 'https://client.crisp.chat/l.js'
+  script.async = true
+  document.getElementsByTagName('head')[0].appendChild(script)
+}
+
 app.mount('#app')
