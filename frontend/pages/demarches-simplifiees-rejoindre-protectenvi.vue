@@ -19,7 +19,7 @@
                 href="https://www.demarches-simplifiees.fr/commencer/rejoindre-protect-envi-pour-mieux-lutter-contre-les-depots-sauvages"
                 target="_blank"
                 rel="noreferrer noopener"
-                aria-label="Ouvrir la démarche simplifiée Protect-Envi dans un nouvel onglet"
+                aria-label="Je candidate pour ma collectivité (nouvel onglet)"
               >
                 Je candidate pour ma collectivité</a
               >
