@@ -6,6 +6,7 @@ from rest_framework import status
 pytestmark = pytest.mark.django_db(databases=settings.DATABASES.keys())
 
 
+@pytest.mark.skip(reason="Skipped to avoid triggering API call")
 def test_process_dossier_returns_success_with_valid_dossier_id(client):
     url = reverse("signalements-process-ds-dossier")
     data = {"dossier_id": 12345}
