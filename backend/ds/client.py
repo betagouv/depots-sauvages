@@ -52,10 +52,10 @@ class DSGraphQLClient:
             logger.error("Failed to parse DS API response: %s", error)
             raise ValueError("Invalid JSON response from DS API") from error
 
-    def get_dossier(self, dossier_number):
+    def get_dossier(self, numero_dossier):
         """
-        Fetch dossier by number.
+        Fetch dossier data.
         """
-        params = {"dossierNumber": dossier_number}
+        params = {"dossierNumber": numero_dossier}
         data = self._make_request(GET_SIGNALEMENT_DOSSIER_QUERY, params)
         return data.get("dossier", {})

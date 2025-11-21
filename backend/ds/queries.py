@@ -23,21 +23,6 @@ query GetSignalementDossier($dossierNumber: Int!) {
             ... on MultipleDropDownListChamp {
                 values
             }
-            ... on CommuneChamp {
-                commune {
-                    name
-                    code
-                    postalCode
-                }
-            }
-            ... on AddressChamp {
-                address {
-                    label
-                    streetAddress
-                    postalCode
-                    cityName
-                }
-            }
             ... on DatetimeChamp {
                 datetime
             }

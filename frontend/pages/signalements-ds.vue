@@ -37,13 +37,13 @@
           <div class="fr-card__body">
             <h2 class="fr-card__title">Informations du dossier</h2>
             <div class="fr-mt-2w">
-              <p><strong>Numéro de dossier:</strong> {{ dossierData.number }}</p>
-              <p v-if="dossierData.dateDepot">
-                <strong>Date de dépôt:</strong> {{ formatDate(dossierData.dateDepot) }}
+              <p><strong>Numéro de dossier:</strong> {{ dossierData.ds_numero_dossier }}</p>
+              <p v-if="dossierData.ds_date_depot">
+                <strong>Date de dépôt:</strong> {{ formatDate(dossierData.ds_date_depot) }}
               </p>
-              <p v-if="dossierData.dateDerniereModification">
+              <p v-if="dossierData.ds_date_modification">
                 <strong>Dernière modification:</strong>
-                {{ formatDate(dossierData.dateDerniereModification) }}
+                {{ formatDate(dossierData.ds_date_modification) }}
               </p>
             </div>
           </div>

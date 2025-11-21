@@ -1,59 +1,57 @@
+from django.utils import dateparse
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from backend.ds.champs import DSChamp
 from backend.ds.client import DSGraphQLClient
+from backend.ds_signalements.ds_mappings import CHAMP_ID_TO_FIELD, DATE_CONSTAT_CHAMP_ID
+from backend.ds_signalements.models import DSSignalement
 
 
 class ProcessDossierView(APIView):
-    """
-    API endpoint to receive a dossier ID and process it.
-    """
-
-    SENSITIVE_FIELD_IDS = [
-        "Q2hhbXAtNTYxNzQ4NA==",  # Numéro de téléphone
-        "Q2hhbXAtNTYxNzQ5MQ==",  # NOM de l'auteur présumé responsable
-        "Q2hhbXAtNTYxNzQ5Mg==",  # Prénom de l'auteur présumé responsable
-        "Q2hhbXAtNTYxNzM2Ng==",  # Localisation du dépôt
-        "Q2hhbXAtNDYyODE3Mg==",  # Vous pouvez préciser la géolocalisation
-    ]
-
     def post(self, request):
-        """
-        Handle POST request to process a dossier.
-        """
         dossier_id = request.data.get("dossier_id")
-        if not dossier_id:
-            return Response(
-                {"error": "dossier_id is required"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        if not dossier_id or not dossier_id.isdigit():
+            return self._bad_request("dossier_id is required and must be an integer")
+        numero_dossier = int(dossier_id)
         try:
-            client = DSGraphQLClient()
-            dossier_number = int(dossier_id)
-            dossier = client.get_dossier(dossier_number)
-            if not dossier:
-                return Response(
-                    {"error": f"Dossier {dossier_id} not found"},
-                    status=status.HTTP_404_NOT_FOUND,
-                )
-            response_data = dossier.copy()
-            response_data["champs"] = [
-                champ
-                for champ in dossier.get("champs", [])
-                if champ.get("id") not in self.SENSITIVE_FIELD_IDS
-            ]
-            usager = dossier.get("usager", {})
-            if usager:
-                response_data["usager"] = {**usager, "email": None}
-            return Response(response_data)
-        except ValueError as error:
-            return Response(
-                {"error": str(error)},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+            ds_client = DSGraphQLClient()
+            dossier = ds_client.get_dossier(numero_dossier)
         except Exception as error:
-            return Response(
-                {"error": f"Failed to fetch dossier: {str(error)}"},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            )
+            return self._bad_request(str(error))
+        if not dossier:
+            return self._bad_request(f"Dossier {dossier_id} not found")
+        signalement_data = self._dossier_to_model_data(dossier)
+        DSSignalement.objects.update_or_create(
+            ds_numero_dossier=numero_dossier, defaults=signalement_data
+        )
+        return Response({**signalement_data, "ds_numero_dossier": numero_dossier})
+
+    def _dossier_to_model_data(self, dossier):
+        ds_champ = DSChamp(dossier)
+        ds_date_depot = self._parse_datetime(dossier.get("dateDepot"))
+        ds_date_modification = self._parse_datetime(dossier.get("dateDerniereModification"))
+        champs_data = ds_champ.get_data()
+        data = {
+            "ds_date_depot": ds_date_depot,
+            "ds_date_modification": ds_date_modification,
+        }
+        for champ_id, value in champs_data.items():
+            field_name = CHAMP_ID_TO_FIELD.get(champ_id)
+            if field_name and value not in (None, "", []):
+                data[field_name] = value
+        datetime_constat = champs_data[DATE_CONSTAT_CHAMP_ID]
+        if datetime_constat:
+            data["date_constat"] = datetime_constat.date()
+            data["heure_constat"] = datetime_constat.time()
+        data["commune"] = data["localisation_depot"].split(" ")[-1]
+        return data
+
+    def _parse_datetime(self, date_string):
+        if not date_string:
+            return None
+        return dateparse.parse_datetime(date_string)
+
+    def _bad_request(self, message):
+        return Response({"error": message}, status=status.HTTP_400_BAD_REQUEST)
