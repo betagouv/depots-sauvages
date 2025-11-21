@@ -3,8 +3,7 @@ from django.contrib import admin
 from .models import Signalement
 
 
-@admin.register(Signalement)
-class SignalementAdmin(admin.ModelAdmin):
+class BaseSignalementAdminMixin:
     list_display = [
         "commune",
         "date_constat",
@@ -17,7 +16,6 @@ class SignalementAdmin(admin.ModelAdmin):
         "created",
         "modified",
     ]
-
     list_filter = [
         "date_constat",
         "created",
@@ -30,7 +28,6 @@ class SignalementAdmin(admin.ModelAdmin):
         "statut_auteur",
         "accepte_accompagnement",
     ]
-
     search_fields = [
         "commune",
         "localisation_depot",
@@ -43,14 +40,12 @@ class SignalementAdmin(admin.ModelAdmin):
         "contact_prenom",
         "contact_email",
     ]
-
     readonly_fields = [
         "created",
         "modified",
         "doc_constat_generated_at",
         "lettre_info_generated_at",
     ]
-
     fieldsets = (
         (
             "Information générale",
@@ -143,3 +138,11 @@ class SignalementAdmin(admin.ModelAdmin):
             },
         ),
     )
+
+
+@admin.register(Signalement)
+class SignalementAdmin(
+    BaseSignalementAdminMixin,
+    admin.ModelAdmin,
+):
+    pass
