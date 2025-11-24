@@ -1,16 +1,9 @@
-"""
-Helpers for extracting values from DS GraphQL champ objects.
-"""
-
 from django.utils import dateparse
 
 
 class DSChamp:
     """
     Wrapper class for accessing DS dossier champs easily.
-
-    Provides convenient access to champ values by ID and converts
-    the champs list into a dictionary for efficient lookups.
     """
 
     def __init__(self, dossier):

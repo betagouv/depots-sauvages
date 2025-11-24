@@ -1,7 +1,3 @@
-"""
-DS GraphQL client for interacting with Démarches Simplifiées API
-"""
-
 import json
 import logging
 
