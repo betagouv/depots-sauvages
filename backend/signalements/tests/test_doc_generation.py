@@ -2,6 +2,7 @@ import pytest
 from django.conf import settings
 from django.urls import reverse
 
+from backend.signalements.models import Signalement
 from backend.signalements.signals import generate_document
 from backend.unit_tests.factories import SignalementFactory
 
@@ -24,7 +25,7 @@ def test_doc_constat_download_works(client):
 
 def test_doc_constat_generation_works(client):
     signalement = SignalementFactory(commune="Test Commune")
-    generate_document(signalement.id, doc_base_name="doc_constat")
+    generate_document(signalement.id, doc_base_name="doc_constat", sender_model=Signalement)
     signalement.refresh_from_db()
     assert signalement.doc_constat is not None
     assert signalement.doc_constat_generated_at is not None
@@ -46,7 +47,7 @@ def test_lettre_info_download_works(client):
 
 def test_lettre_info_generation_works(client):
     signalement = SignalementFactory(commune="Test Commune")
-    generate_document(signalement.id, doc_base_name="lettre_info")
+    generate_document(signalement.id, doc_base_name="lettre_info", sender_model=Signalement)
     signalement.refresh_from_db()
     assert signalement.lettre_info is not None
     assert signalement.lettre_info_generated_at is not None
