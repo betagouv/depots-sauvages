@@ -4,10 +4,18 @@
       <div class="fr-container">
         <div class="fr-grid-row fr-grid-row--center">
           <div class="fr-col-12 fr-col-md-10 fr-col-lg-8">
-            <h1 class="fr-hero__title fr-text--center">Télécharger vos documents</h1>
+            <h1 class="fr-hero__title fr-text--center">
+              <template v-if="dossierData?.auteur_identifie">Téléchargez vos documents</template>
+              <template v-else>Téléchargez votre document</template>
+            </h1>
             <p class="fr-hero__text fr-text--lg fr-text--center">
-              Téléchargez en un clic votre rapport de constatation et la lettre d'information
-              associée à votre dossier.
+              <template v-if="dossierData?.auteur_identifie">
+                Téléchargez le rapport de constatation et la lettre d'information associée au
+                signalement de dépôt sauvage.
+              </template>
+              <template v-else>
+                Téléchargez le rapport de constatation associé au signalement de dépôt sauvage.
+              </template>
             </p>
           </div>
         </div>
@@ -32,29 +40,31 @@
         <p>{{ error }}</p>
       </div>
 
-      <div v-else-if="dossierData" class="fr-mb-4w">
-        <div class="fr-card fr-mb-4w">
-          <div class="fr-card__body">
-            <h2 class="fr-card__title">Informations du dossier</h2>
-            <div class="fr-mt-2w">
-              <p><strong>Numéro de dossier:</strong> {{ dossierData.ds_numero_dossier }}</p>
-              <p v-if="dossierData.ds_date_depot">
-                <strong>Date de dépôt:</strong> {{ formatDate(dossierData.ds_date_depot) }}
-              </p>
-              <p v-if="dossierData.ds_date_modification">
-                <strong>Dernière modification:</strong>
-                {{ formatDate(dossierData.ds_date_modification) }}
-              </p>
+      <div v-else-if="dossierData" class="fr-grid-row fr-grid-row--gutters">
+        <div class="fr-col-12 fr-col-lg-12">
+          <div class="fr-card fr-mb-4w">
+            <div class="fr-card__body">
+              <h2 class="fr-card__title">Informations du dossier</h2>
+              <div class="fr-mt-2w">
+                <p><strong>Numéro de dossier:</strong> {{ dossierData.ds_numero_dossier }}</p>
+                <p v-if="dossierData.ds_date_depot">
+                  <strong>Date de dépôt:</strong> {{ formatDate(dossierData.ds_date_depot) }}
+                </p>
+                <p v-if="dossierData.ds_date_modification">
+                  <strong>Dernière modification:</strong>
+                  {{ formatDate(dossierData.ds_date_modification) }}
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       <div class="fr-grid-row fr-grid-row--gutters">
-        <div class="fr-col-12 fr-col-md-6">
+        <div v-if="dossierData?.auteur_identifie" class="fr-col-12 fr-col-md-6">
           <DsfrCard
             title="Lettre d'information"
-            description="Courrier type rappelant les faits constatés, les obligations du détenteur des déchets et le délai de réponse prévu par la procédure."
+            description="Courrier rappelant les faits constatés et les obligations du détenteur."
             :buttons="[
               {
                 label: 'Télécharger',
@@ -70,10 +80,13 @@
           />
         </div>
 
-        <div class="fr-col-12 fr-col-md-6">
+        <div
+          class="fr-col-12"
+          :class="dossierData?.auteur_identifie ? 'fr-col-md-6' : 'fr-col-lg-12'"
+        >
           <DsfrCard
             title="Rapport de constatation"
-            description="Pièce officielle résumant les observations de terrain et les préjudices causés par le dépôt sauvage."
+            description="Résumé des observations de terrain et des préjudices causés."
             :buttons="[
               {
                 label: 'Télécharger',
