@@ -43,8 +43,10 @@
       <div v-else-if="dossierData" class="fr-grid-row fr-grid-row--gutters">
         <div class="fr-col-12 fr-col-lg-12">
           <div class="fr-card fr-mb-4w">
+            <div class="fr-card__header">
+              <h2 class="fr-card__title fr-m-2w">Informations du dossier</h2>
+            </div>
             <div class="fr-card__body">
-              <h2 class="fr-card__title">Informations du dossier</h2>
               <div class="fr-mt-2w">
                 <p><strong>Numéro de dossier:</strong> {{ dossierData.ds_numero_dossier }}</p>
                 <p v-if="dossierData.ds_date_depot">
