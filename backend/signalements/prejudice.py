@@ -8,9 +8,14 @@ class PrejudiceMixin:
         """
         if self.prejudice_montant_connu:
             return self.prejudice_montant
-        agent_cost = self.prejudice_nombre_personnes * self.AGENT_HOURLY_RATE
-        total_agent_cost = agent_cost * self.prejudice_nombre_heures
-        vehicle_cost = self.prejudice_kilometrage * self.VEHICLE_USAGE_RATE
-        total_vehicle_cost = vehicle_cost * self.prejudice_nombre_vehicules
-        total_cost = self.prejudice_autres_couts + total_agent_cost + total_vehicle_cost
+        nombre_personnes = self.prejudice_nombre_personnes or 0
+        nombre_heures = self.prejudice_nombre_heures or 0
+        kilometrage = self.prejudice_kilometrage or 0
+        nombre_vehicules = self.prejudice_nombre_vehicules or 0
+        autres_couts = self.prejudice_autres_couts or 0
+        agent_cost = nombre_personnes * self.AGENT_HOURLY_RATE
+        total_agent_cost = agent_cost * nombre_heures
+        vehicle_cost = kilometrage * self.VEHICLE_USAGE_RATE
+        total_vehicle_cost = vehicle_cost * nombre_vehicules
+        total_cost = autres_couts + total_agent_cost + total_vehicle_cost
         return total_cost
