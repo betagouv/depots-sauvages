@@ -1,6 +1,7 @@
 import logging
 import time
 
+from django.apps import apps
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
@@ -38,14 +39,15 @@ def save_document(instance, odt_data, doc_base_name):
         post_save.connect(signal_handler, sender=sender_model)
 
 
-def generate_document(signalement_id, doc_base_name, sender_model):
+def generate_document(signalement_id, doc_base_name, model_label):
     """
     Generate document synchronously.
     """
     start_time = time.time()
     logger.info(f"Starting {doc_base_name} generation for signalement {signalement_id}")
     try:
-        SignalementModel = sender_model
+        app_label, model_name = model_label.split(".")
+        SignalementModel = apps.get_model(app_label, model_name)
         instance = SignalementModel.objects.get(id=signalement_id)
         context = odt_utils.prepare_context(instance)
         logger.debug(f"Context prepared for {doc_base_name} generation")
@@ -74,16 +76,16 @@ def generate_document(signalement_id, doc_base_name, sender_model):
 
 
 @task(queue_name="default")
-def generate_document_task(signalement_id, doc_base_name, sender_model=None):
+def generate_document_task(signalement_id, doc_base_name, model_label):
     """
     Generate document in background.
     """
     logger.info(
         f"Document generation task started for signalement {signalement_id}, "
-        f"document {doc_base_name}"
+        f"document {doc_base_name} ({model_label})"
     )
     try:
-        result = generate_document(signalement_id, doc_base_name, sender_model)
+        result = generate_document(signalement_id, doc_base_name, model_label)
         logger.info(
             f"Document generation task completed successfully for signalement "
             f"{signalement_id}, document {doc_base_name}"
@@ -111,11 +113,11 @@ def generate_doc_constat(sender, instance, created, **kwargs):
     if not instance.doc_constat_should_generate:
         return
     logger.info(f"Post-save signal for signalement {instance.id}, starting background generation")
-    sender_model = instance.__class__
+    model_label = f"{instance._meta.app_label}.{instance._meta.model_name}"
     generate_document_task.enqueue(
         instance.id,
         doc_base_name="doc_constat",
-        sender_model=sender_model,
+        model_label=model_label,
     )
     logger.info(f"Document generation task enqueued for signalement {instance.id}")
 
@@ -134,11 +136,11 @@ def generate_lettre_info(sender, instance, created, **kwargs):
     if not instance.lettre_info_should_generate:
         return
     logger.info(f"Post-save signal for signalement {instance.id}, starting background generation")
-    sender_model = instance.__class__
+    model_label = f"{instance._meta.app_label}.{instance._meta.model_name}"
     generate_document_task.enqueue(
         instance.id,
         doc_base_name="lettre_info",
-        sender_model=sender_model,
+        model_label=model_label,
     )
     logger.info(f"Lettre info generation task enqueued for signalement {instance.id}")
 

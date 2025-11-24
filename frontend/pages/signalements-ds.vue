@@ -72,8 +72,7 @@
                 label: 'Télécharger',
                 icon: { name: 'ri-download-line', scale: 1.5, class: 'fr-mr-1w' },
                 iconOnly: false,
-                onClick: () => {},
-                disabled: isLoading,
+                onClick: () => openDocument(getDsLettreInfoUrl(dossierData?.id ?? null)),
               },
             ]"
             size="large"
@@ -94,8 +93,7 @@
                 label: 'Télécharger',
                 icon: { name: 'ri-download-line', scale: 1.5, class: 'fr-mr-1w' },
                 iconOnly: false,
-                onClick: () => {},
-                disabled: isLoading,
+                onClick: () => openDocument(getDsDocConstatUrl(dossierData?.id ?? null)),
               },
             ]"
             size="large"
@@ -109,16 +107,22 @@
 </template>
 
 <script setup lang="ts">
-import { API_URLS, createResource } from '@/services/api'
 import { DsfrCard } from '@gouvminint/vue-dsfr'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { API_URLS, createResource } from '../services/api'
+import { getDsDocConstatUrl, getDsLettreInfoUrl } from '../services/urls'
 
 const route = useRoute()
 const showLoading = ref(true)
 const isLoading = ref(false)
 const error = ref<string | null>(null)
 const dossierData = ref<any>(null)
+
+const openDocument = (url: string) => {
+  if (!url) return
+  window.open(url, '_blank', 'noopener')
+}
 
 const formatDate = (dateString: string) => {
   if (!dateString) return ''

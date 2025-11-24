@@ -7,6 +7,11 @@ from backend.ds.champs import DSChamp
 from backend.ds.client import DSGraphQLClient
 from backend.ds_signalements.ds_mappings import CHAMP_ID_TO_FIELD, DATE_CONSTAT_CHAMP_ID
 from backend.ds_signalements.models import DSSignalement
+from backend.signalements.serializers import SignalementSerializer
+from backend.signalements.view_mixins import (
+    SignalementDocumentDownloadViewMixin,
+    SignalementViewSetMixin,
+)
 
 
 class ProcessDossierView(APIView):
@@ -23,9 +28,13 @@ class ProcessDossierView(APIView):
         if not dossier:
             return self.bad_request(f"Dossier {dossier_id} not found")
         signalement_data = self.dossier_to_model_data(dossier)
-        DSSignalement.objects.update_or_create(
+        signalement, _ = DSSignalement.objects.update_or_create(
             ds_numero_dossier=numero_dossier, defaults=signalement_data
         )
+        signalement.doc_constat_should_generate = True
+        signalement.lettre_info_should_generate = True
+        signalement.save()
+        signalement_data["id"] = signalement.id
         return Response({**signalement_data, "ds_numero_dossier": numero_dossier})
 
     def dossier_to_model_data(self, dossier):
@@ -55,3 +64,22 @@ class ProcessDossierView(APIView):
 
     def bad_request(self, message):
         return Response({"error": message}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DSSignalementViewSet(SignalementViewSetMixin):
+    """
+    ViewSet for DSSignalement model.
+    """
+
+    model_class = DSSignalement
+    serializer_class = SignalementSerializer
+    model_label = "ds_signalements.DSSignalement"
+    send_contact_email_enabled = False
+
+
+class DSSignalementDocumentDownloadView(SignalementDocumentDownloadViewMixin):
+    """
+    Download documents for DSSignalement instances.
+    """
+
+    model_class = DSSignalement
