@@ -24,7 +24,7 @@ class DSGraphQLClient:
         self.endpoint = settings.DS_GRAPHQL_ENDPOINT
         self.timeout = settings.DS_REQUEST_TIMEOUT
 
-    def _make_request(self, query, params=None):
+    def make_request(self, query, params=None):
         """
         Execute GraphQL request.
         """
@@ -53,5 +53,5 @@ class DSGraphQLClient:
         Fetch dossier data.
         """
         params = {"dossierNumber": numero_dossier}
-        data = self._make_request(GET_SIGNALEMENT_DOSSIER_QUERY, params)
+        data = self.make_request(GET_SIGNALEMENT_DOSSIER_QUERY, params)
         return data.get("dossier", {})

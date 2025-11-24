@@ -13,25 +13,25 @@ class ProcessDossierView(APIView):
     def post(self, request):
         dossier_id = request.data.get("dossier_id")
         if not dossier_id or not dossier_id.isdigit():
-            return self._bad_request("dossier_id is required and must be an integer")
+            return self.bad_request("dossier_id is required and must be an integer")
         numero_dossier = int(dossier_id)
         try:
             ds_client = DSGraphQLClient()
             dossier = ds_client.get_dossier(numero_dossier)
         except Exception as error:
-            return self._bad_request(str(error))
+            return self.bad_request(str(error))
         if not dossier:
-            return self._bad_request(f"Dossier {dossier_id} not found")
-        signalement_data = self._dossier_to_model_data(dossier)
+            return self.bad_request(f"Dossier {dossier_id} not found")
+        signalement_data = self.dossier_to_model_data(dossier)
         DSSignalement.objects.update_or_create(
             ds_numero_dossier=numero_dossier, defaults=signalement_data
         )
         return Response({**signalement_data, "ds_numero_dossier": numero_dossier})
 
-    def _dossier_to_model_data(self, dossier):
+    def dossier_to_model_data(self, dossier):
         ds_champ = DSChamp(dossier)
-        ds_date_depot = self._parse_datetime(dossier.get("dateDepot"))
-        ds_date_modification = self._parse_datetime(dossier.get("dateDerniereModification"))
+        ds_date_depot = self.parse_datetime(dossier.get("dateDepot"))
+        ds_date_modification = self.parse_datetime(dossier.get("dateDerniereModification"))
         champs_data = ds_champ.get_data()
         data = {
             "ds_date_depot": ds_date_depot,
@@ -48,10 +48,10 @@ class ProcessDossierView(APIView):
         data["commune"] = data["localisation_depot"].split(" ")[-1]
         return data
 
-    def _parse_datetime(self, date_string):
+    def parse_datetime(self, date_string):
         if not date_string:
             return None
         return dateparse.parse_datetime(date_string)
 
-    def _bad_request(self, message):
+    def bad_request(self, message):
         return Response({"error": message}, status=status.HTTP_400_BAD_REQUEST)
