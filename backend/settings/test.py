@@ -19,3 +19,6 @@ LOGGING = {
 # Disable rate limiting in tests by setting very high limits
 SIGNALEMENT_RATE_LIMIT = "100/hour"
 EMAIL_RATE_LIMIT = "100/hour"
+
+# DS Integration Settings for tests
+DS_API_TOKEN = "test-token"

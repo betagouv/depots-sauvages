@@ -43,6 +43,12 @@ const router = createRouter({
       meta: { hideNavigation: true, hideFeedback: true },
     },
     {
+      path: '/signalements-ds/:dossier_id',
+      name: 'SignalementsDS',
+      component: () => import('./pages/signalements-ds.vue'),
+      meta: { hideNavigation: true, hideFeedback: true },
+    },
+    {
       path: '/rejoindre-le-dispositif',
       name: 'RejoindreDispositif',
       component: () => import('./pages/rejoindre-le-dispositif.vue'),

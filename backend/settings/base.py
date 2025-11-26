@@ -28,6 +28,8 @@ INSTALLED_APPS = [
     "backend.throttling",
     "backend.home",
     "backend.signalements",
+    "backend.ds",
+    "backend.ds_signalements",
 ]
 
 MIDDLEWARE = [
@@ -161,3 +163,8 @@ CACHES = {
 ANYMAIL = {
     "TEST_MODE": True,
 }
+
+# DS Integration Settings - Démarches Simplifiées
+DS_GRAPHQL_ENDPOINT = "https://www.demarches-simplifiees.fr/api/v2/graphql"
+DS_REQUEST_TIMEOUT = 30
+DS_MAX_RETRIES = 3
