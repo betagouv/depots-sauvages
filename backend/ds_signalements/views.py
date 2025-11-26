@@ -1,3 +1,5 @@
+import logging
+
 from django.utils import dateparse
 from rest_framework import status
 from rest_framework.response import Response
@@ -27,8 +29,9 @@ class ProcessDossierView(APIView):
         try:
             ds_client = DSGraphQLClient()
             dossier = ds_client.get_dossier(numero_dossier)
-        except Exception as error:
-            return self.bad_request(str(error))
+        except Exception:
+            logging.exception("Error fetching dossier with id %s", dossier_id)
+            return self.bad_request("An internal error occurred.")
         if not dossier:
             return self.bad_request(f"Dossier {dossier_id} not found")
         signalement_data = self.dossier_to_model_data(dossier)
