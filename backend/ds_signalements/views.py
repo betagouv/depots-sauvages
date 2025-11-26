@@ -63,6 +63,12 @@ class ProcessDossierView(APIView):
             procedure_lower = str(procedure_judiciaire).lower()
             if "plainte" in procedure_lower or "déposé" in procedure_lower:
                 data["souhaite_porter_plainte"] = True
+        if data.get("statut_auteur"):
+            statut_lower = str(data["statut_auteur"]).lower()
+            if "entreprise" in statut_lower:
+                data["statut_auteur"] = "entreprise"
+            elif "particulier" in statut_lower:
+                data["statut_auteur"] = "particulier"
         if data.get("localisation_depot"):
             data["commune"] = data["localisation_depot"].split(" ")[-1]
         usager = dossier.get("usager", {})
