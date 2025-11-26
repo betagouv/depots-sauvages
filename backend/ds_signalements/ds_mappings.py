@@ -13,6 +13,7 @@ CHAMP_ID_TO_FIELD = {
     "Q2hhbXAtNTYxNzM4OQ==": "arrete_municipal_existe",
     "Q2hhbXAtNTgwMDExMQ==": "montant_forfait_enlevement",
     "Q2hhbXAtNTYxNzM5MA==": "prejudice_montant_connu",
+    "Q2hhbXAtNTYxNzM5MQ==": "prejudice_montant",
     "Q2hhbXAtNTYxNzM5Mw==": "prejudice_nombre_personnes",
     "Q2hhbXAtNTYxNzM5NA==": "prejudice_nombre_heures",
     "Q2hhbXAtNTYxNzM5NQ==": "prejudice_nombre_vehicules",
