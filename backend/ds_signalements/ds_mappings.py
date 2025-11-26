@@ -25,6 +25,8 @@ CHAMP_ID_TO_FIELD = {
     "Q2hhbXAtNTYxNzQ5NA==": "numero_siret",
     "Q2hhbXAtNTYxNzQ4Mw==": "accepte_accompagnement",
     "Q2hhbXAtNTYxNzQ4NA==": "contact_telephone",
+    "Q2hhbXAtNTYxNzM4Nw==": "precisions_indices",
 }
 
 DATE_CONSTAT_CHAMP_ID = "Q2hhbXAtNTYxNzM2MQ=="  # Date et Heure de la constatation
+PROCEDURE_JUDICIAIRE_CHAMP_ID = "Q2hhbXAtNTYxNzM4NQ=="  # Procédure judiciaire

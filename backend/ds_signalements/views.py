@@ -5,7 +5,11 @@ from rest_framework.views import APIView
 
 from backend.ds.champs import DSChamp
 from backend.ds.client import DSGraphQLClient
-from backend.ds_signalements.ds_mappings import CHAMP_ID_TO_FIELD, DATE_CONSTAT_CHAMP_ID
+from backend.ds_signalements.ds_mappings import (
+    CHAMP_ID_TO_FIELD,
+    DATE_CONSTAT_CHAMP_ID,
+    PROCEDURE_JUDICIAIRE_CHAMP_ID,
+)
 from backend.ds_signalements.models import DSSignalement
 from backend.signalements.serializers import SignalementSerializer
 from backend.signalements.view_mixins import (
@@ -54,6 +58,11 @@ class ProcessDossierView(APIView):
         if datetime_constat:
             data["date_constat"] = datetime_constat.date()
             data["heure_constat"] = datetime_constat.time()
+        procedure_judiciaire = champs_data.get(PROCEDURE_JUDICIAIRE_CHAMP_ID)
+        if procedure_judiciaire:
+            procedure_lower = str(procedure_judiciaire).lower()
+            if "plainte" in procedure_lower or "déposé" in procedure_lower:
+                data["souhaite_porter_plainte"] = True
         if data.get("localisation_depot"):
             data["commune"] = data["localisation_depot"].split(" ")[-1]
         usager = dossier.get("usager", {})
