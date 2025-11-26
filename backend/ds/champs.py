@@ -46,6 +46,9 @@ class DSChamp:
     def get_champ_boolean_value(self, champ):
         if champ.get("value") is not None:
             return bool(champ["value"])
+        string_value = champ.get("stringValue", "").lower()
+        if string_value in ("true", "1", "yes", "oui"):
+            return True
         return False
 
     def get_champ_list_value(self, champ):
@@ -60,7 +63,12 @@ class DSChamp:
             try:
                 return int(float(champ["value"]))
             except (ValueError, TypeError):
-                return None
+                pass
+        string_value = champ.get("stringValue")
+        try:
+            return int(float(string_value))
+        except (ValueError, TypeError):
+            pass
         return None
 
     def get_champ_datetime(self, champ):

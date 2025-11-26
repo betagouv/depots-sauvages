@@ -9,6 +9,7 @@ CHAMP_ID_TO_FIELD = {
     "Q2hhbXAtNTYxNzM3Nw==": "precisions_depot",
     "Q2hhbXAtNTYxNzM4MQ==": "auteur_identifie",
     "Q2hhbXAtNTYxNzM4Mw==": "indices_disponibles",
+    "Q2hhbXAtNTYxNzM4Ng==": "precisions_indices",
     "Q2hhbXAtNTYxNzM4OQ==": "arrete_municipal_existe",
     "Q2hhbXAtNTgwMDExMQ==": "montant_forfait_enlevement",
     "Q2hhbXAtNTYxNzM5MA==": "prejudice_montant_connu",
@@ -20,6 +21,7 @@ CHAMP_ID_TO_FIELD = {
     "Q2hhbXAtNTYxNzQ5MQ==": "nom_particulier",
     "Q2hhbXAtNTYxNzQ5Mg==": "prenom_particulier",
     "Q2hhbXAtNTYxNzQ5Mw==": "statut_auteur",
+    "Q2hhbXAtNTYxNzQ5NA==": "numero_siret",
     "Q2hhbXAtNTYxNzQ4Mw==": "accepte_accompagnement",
     "Q2hhbXAtNTYxNzQ4NA==": "contact_telephone",
 }

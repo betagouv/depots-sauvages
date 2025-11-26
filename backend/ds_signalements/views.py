@@ -50,11 +50,20 @@ class ProcessDossierView(APIView):
             field_name = CHAMP_ID_TO_FIELD.get(champ_id)
             if field_name and value not in (None, "", []):
                 data[field_name] = value
-        datetime_constat = champs_data[DATE_CONSTAT_CHAMP_ID]
+        datetime_constat = champs_data.get(DATE_CONSTAT_CHAMP_ID)
         if datetime_constat:
             data["date_constat"] = datetime_constat.date()
             data["heure_constat"] = datetime_constat.time()
-        data["commune"] = data["localisation_depot"].split(" ")[-1]
+        if data.get("localisation_depot"):
+            data["commune"] = data["localisation_depot"].split(" ")[-1]
+        usager = dossier.get("usager", {})
+        if usager.get("email"):
+            data["contact_email"] = usager["email"]
+        demandeur = dossier.get("demandeur", {})
+        if demandeur.get("nom"):
+            data["contact_nom"] = demandeur["nom"]
+        if demandeur.get("prenom"):
+            data["contact_prenom"] = demandeur["prenom"]
         return data
 
     def parse_datetime(self, date_string):

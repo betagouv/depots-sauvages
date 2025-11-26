@@ -9,6 +9,12 @@ query GetSignalementDossier($dossierNumber: Int!) {
         usager {
             email
         }
+        demandeur {
+            ... on PersonnePhysique {
+                nom
+                prenom
+            }
+        }
         champs {
             id
             label
@@ -29,10 +35,18 @@ query GetSignalementDossier($dossierNumber: Int!) {
             ... on DecimalNumberChamp {
                 value
             }
+            ... on IntegerNumberChamp {
+                value
+            }
+            ... on CheckboxChamp {
+                value
+            }
+            ... on SiretChamp {
+                stringValue
+            }
         }
     }
 }
 """
 
 __all__ = ["GET_SIGNALEMENT_DOSSIER_QUERY"]
-# End of queries
