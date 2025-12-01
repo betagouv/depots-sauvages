@@ -1,4 +1,4 @@
-import { API_URL } from './api'
+import { API_URL, DS_BASE_URL } from './api'
 
 // Get the URL for downloading the doc "rapport de constatation"
 export const getDocConstatUrl = (id: number | null) => {
@@ -19,4 +19,9 @@ export const getDsDocConstatUrl = (id: number | null) => {
 export const getDsLettreInfoUrl = (id: number | null) => {
   if (!id) return ''
   return `${API_URL}/ds-signalements/${id}/documents/lettre-info/`
+}
+
+export const getDsModifyUrl = (numeroDossier: string | null) => {
+  if (!numeroDossier) return ''
+  return `${DS_BASE_URL}/dossiers/${numeroDossier}/modifier`
 }

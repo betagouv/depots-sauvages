@@ -41,13 +41,11 @@
       </div>
 
       <div v-else-if="dossierData" class="fr-grid-row fr-grid-row--gutters">
-        <div class="fr-col-12 fr-col-lg-12">
-          <div class="fr-card fr-mb-4w">
-            <div class="fr-card__header">
-              <h2 class="fr-card__title fr-m-2w">Informations du dossier</h2>
-            </div>
+        <div class="fr-col-12 fr-col-md-6">
+          <div class="fr-card fr-card--lg">
             <div class="fr-card__body">
-              <div class="fr-mt-2w">
+              <h2 class="fr-card__title">Informations du dossier</h2>
+              <div class="fr-card__desc">
                 <p><strong>Numéro de dossier:</strong> {{ dossierData.ds_numero_dossier }}</p>
                 <p v-if="dossierData.ds_date_depot">
                   <strong>Date de dépôt:</strong> {{ formatDate(dossierData.ds_date_depot) }}
@@ -59,6 +57,25 @@
               </div>
             </div>
           </div>
+        </div>
+
+        <div v-if="dossierData.ds_numero_dossier" class="fr-col-12 fr-col-md-6">
+          <DsfrCard
+            title="Modifier votre dossier"
+            description="Vous pouvez consulter ou modifier votre dossier sur le site Démarches Simplifiées."
+            :buttons="[
+              {
+                label: 'Consulter ou modifier',
+                icon: { name: 'ri-external-link-line', scale: 1.5, class: 'fr-mr-1w' },
+                iconOnly: false,
+                secondary: true,
+                onClick: () => openDocument(getDsModifyUrl(dossierData.ds_numero_dossier)),
+              },
+            ]"
+            size="large"
+            no-arrow
+            title-tag="h2"
+          />
         </div>
       </div>
 
@@ -111,7 +128,7 @@ import { DsfrCard } from '@gouvminint/vue-dsfr'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { API_URLS, createResource } from '../services/api'
-import { getDsDocConstatUrl, getDsLettreInfoUrl } from '../services/urls'
+import { getDsDocConstatUrl, getDsLettreInfoUrl, getDsModifyUrl } from '../services/urls'
 
 const route = useRoute()
 const showLoading = ref(true)

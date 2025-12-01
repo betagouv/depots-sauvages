@@ -1,8 +1,7 @@
-// Get base URL from environment or use default
+// URLs from environment variables
 export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'
-
-// Derive API URL from backend URL
 export const API_URL = `${BACKEND_URL}/api`
+export const DS_BASE_URL = import.meta.env.VITE_DS_BASE_URL || 'https://demarche.numerique.gouv.fr'
 
 // Helper to get CSRF token
 const getCSRFToken = (): string => {
