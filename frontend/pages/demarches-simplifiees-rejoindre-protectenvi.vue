@@ -9,14 +9,14 @@
             </h1>
             <p class="fr-hero__text fr-text--lg fr-text--center">
               Vous êtes une collectivité touchée par les dépôts sauvages et vous souhaitez agir ? La
-              Gendarmerie nationale peut vous aider. Pour bénéficier d’un accompagnement
+              Gendarmerie nationale peut vous aider. Pour bénéficier d'un accompagnement
               personnalisé complétez la démarche simplifiée en deux minutes en cliquant sur le
               bouton ci-dessous
             </p>
             <div class="fr-hero__actions fr-text--center">
               <a
                 class="fr-btn fr-btn--lg"
-                href="https://demarche.numerique.gouv.fr/commencer/rejoindre-protect-envi-pour-mieux-lutter-contre-les-depots-sauvages"
+                :href="demarcheUrl"
                 target="_blank"
                 rel="noreferrer noopener"
                 aria-label="Je candidate pour ma collectivité (nouvel onglet)"
@@ -30,6 +30,12 @@
     </div>
   </main>
 </template>
+
+<script setup lang="ts">
+import { DS_BASE_URL } from '../services/api'
+
+const demarcheUrl = `${DS_BASE_URL}/commencer/rejoindre-protect-envi-pour-mieux-lutter-contre-les-depots-sauvages`
+</script>
 
 <style scoped>
 .hero-section {
