@@ -16,7 +16,7 @@
             <div class="fr-hero__actions fr-text--center">
               <a
                 class="fr-btn fr-btn--lg"
-                href="https://www.demarches-simplifiees.fr/commencer/rejoindre-protect-envi-pour-mieux-lutter-contre-les-depots-sauvages"
+                href="https://demarche.numerique.gouv.fr/commencer/rejoindre-protect-envi-pour-mieux-lutter-contre-les-depots-sauvages"
                 target="_blank"
                 rel="noreferrer noopener"
                 aria-label="Je candidate pour ma collectivité (nouvel onglet)"
