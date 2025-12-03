@@ -4,17 +4,17 @@
       <div class="fr-container">
         <div class="fr-grid-row fr-grid-row--center">
           <div class="fr-col-12 fr-col-md-10 fr-col-lg-8">
-            <h1 class="fr-hero__title fr-text--center">
-              <template v-if="dossierData?.auteur_identifie">Téléchargez vos documents</template>
-              <template v-else>Téléchargez votre document</template>
-            </h1>
+            <h1 class="fr-hero__title fr-text--center">Télécharger et compléter les documents</h1>
             <p class="fr-hero__text fr-text--lg fr-text--center">
-              <template v-if="dossierData?.auteur_identifie">
-                Téléchargez le rapport de constatation et la lettre d'information associée au
-                signalement de dépôt sauvage.
+              <template v-if="auteurIdentifie">
+                Vous trouverez ci-dessous vos pièces de procédure <strong>pré-remplies</strong>, à
+                compléter avec les éléments manquants (charte graphique de la mairie, date et
+                signature du rédacteur du document, etc.).
               </template>
               <template v-else>
-                Téléchargez le rapport de constatation associé au signalement de dépôt sauvage.
+                Vous trouverez ci-dessous votre rapport de constatation <strong>pré-rempli</strong>,
+                à compléter avec les éléments manquants (charte graphique de la mairie, date et
+                signature du rédacteur du document, etc.).
               </template>
             </p>
           </div>
@@ -25,8 +25,14 @@
     <div v-if="showLoading" class="fr-container fr-pb-4w">
       <div class="fr-grid-row fr-grid-row--center">
         <div class="fr-col-12 fr-col-md-8 fr-col-lg-6">
-          <div class="loading-section fr-p-4w fr-text--center">
-            <VIcon name="ri-loader-4-line" :scale="3" animation="spin" class="fr-mb-2w" />
+          <div class="loading-section fr-p-4w fr-text--center" role="status" aria-live="polite">
+            <VIcon
+              name="ri-loader-4-line"
+              :scale="3"
+              animation="spin"
+              class="fr-mb-2w"
+              aria-hidden="true"
+            />
             <p class="fr-text--lg fr-mb-0">Préparation de vos documents en cours...</p>
             <p class="fr-text--sm fr-text-mention--grey">Veuillez patienter quelques instants.</p>
           </div>
@@ -35,7 +41,7 @@
     </div>
 
     <div v-else class="fr-container fr-pb-4w">
-      <div v-if="error" class="fr-alert fr-alert--error fr-mb-4w">
+      <div v-if="error" class="fr-alert fr-alert--error fr-mb-4w" role="alert" aria-live="polite">
         <p class="fr-alert__title">Erreur</p>
         <p>{{ error }}</p>
       </div>
@@ -62,12 +68,11 @@
         <div v-if="dossierData.ds_numero_dossier" class="fr-col-12 fr-col-md-6">
           <DsfrCard
             title="Modifier votre dossier"
-            description="Vous pouvez consulter ou modifier votre dossier sur le site Démarches Simplifiées."
+            description="Si vous avez besoin de modifier les informations, merci de modifier votre dossier sur votre démarche numérique."
             :buttons="[
               {
                 label: 'Consulter ou modifier',
                 icon: { name: 'ri-external-link-line', scale: 1.5, class: 'fr-mr-1w' },
-                iconOnly: false,
                 secondary: true,
                 onClick: () => openDocument(getDsModifyUrl(dossierData.ds_numero_dossier)),
               },
@@ -80,15 +85,14 @@
       </div>
 
       <div class="fr-grid-row fr-grid-row--gutters">
-        <div v-if="dossierData?.auteur_identifie" class="fr-col-12 fr-col-md-6">
+        <div v-if="auteurIdentifie" class="fr-col-12 fr-col-md-6">
           <DsfrCard
             title="Lettre d'information"
-            description="Courrier rappelant les faits constatés et les obligations du détenteur."
+            description="Courrier rappelant les faits constatés et les obligations de l'auteur du responsable probable du dépôt sauvage. À envoyer à l'auteur probable des faits (avec accusé de réception)."
             :buttons="[
               {
                 label: 'Télécharger',
                 icon: { name: 'ri-download-line', scale: 1.5, class: 'fr-mr-1w' },
-                iconOnly: false,
                 onClick: () => openDocument(getDsLettreInfoUrl(dossierData?.id ?? null)),
               },
             ]"
@@ -98,18 +102,14 @@
           />
         </div>
 
-        <div
-          class="fr-col-12"
-          :class="dossierData?.auteur_identifie ? 'fr-col-md-6' : 'fr-col-lg-12'"
-        >
+        <div :class="rapportColClass">
           <DsfrCard
             title="Rapport de constatation"
-            description="Résumé des observations de terrain et des préjudices causés."
+            description="Résumé des observations de terrain et des préjudices causés. À conserver en mairie ou à transmettre lors d'un dépôt de plainte."
             :buttons="[
               {
                 label: 'Télécharger',
                 icon: { name: 'ri-download-line', scale: 1.5, class: 'fr-mr-1w' },
-                iconOnly: false,
                 onClick: () => openDocument(getDsDocConstatUrl(dossierData?.id ?? null)),
               },
             ]"
@@ -122,7 +122,7 @@
 
       <div v-if="dossierData">
         <DsInfoAuteurIdentifie
-          v-if="dossierData.auteur_identifie"
+          v-if="auteurIdentifie"
           :modify-url="getDsModifyUrl(dossierData.ds_numero_dossier)"
         />
         <DsInfoAuteurNonIdentifie
@@ -136,7 +136,7 @@
 
 <script setup lang="ts">
 import { DsfrCard } from '@gouvminint/vue-dsfr'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import DsInfoAuteurIdentifie from '../components/ds/DsInfoAuteurIdentifie.vue'
 import DsInfoAuteurNonIdentifie from '../components/ds/DsInfoAuteurNonIdentifie.vue'
@@ -145,13 +145,17 @@ import { getDsDocConstatUrl, getDsLettreInfoUrl, getDsModifyUrl } from '../servi
 
 const route = useRoute()
 const showLoading = ref(true)
-const isLoading = ref(false)
 const error = ref<string | null>(null)
 const dossierData = ref<any>(null)
 
+const auteurIdentifie = computed(() => dossierData.value?.auteur_identifie ?? false)
+const rapportColClass = computed(() =>
+  auteurIdentifie.value ? 'fr-col-12 fr-col-md-6' : 'fr-col-12 fr-col-lg-12'
+)
+
 const openDocument = (url: string) => {
   if (!url) return
-  window.open(url, '_blank', 'noopener')
+  window.open(url, '_blank', 'noopener,noreferrer')
 }
 
 const formatDate = (dateString: string) => {
@@ -173,7 +177,6 @@ onMounted(async () => {
     showLoading.value = false
     return
   }
-  isLoading.value = true
   error.value = null
   try {
     dossierData.value = await createResource(API_URLS.processDossier, {
@@ -182,7 +185,6 @@ onMounted(async () => {
   } catch (err: any) {
     error.value = err.error || 'An error occurred while processing the dossier'
   } finally {
-    isLoading.value = false
     showLoading.value = false
   }
 })

@@ -1,146 +1,151 @@
 <template>
-  <div class="fr-container fr-mt-4w">
-    <section class="fr-p-4w fr-bg--g100 fr-mb-4w">
-      <h2 class="fr-h3 fr-mb-2w">Télécharger et compléter les documents</h2>
-      <p>
-        Vous trouverez ci-dessous des pièces de procédure
-        <span class="fr-text--bold">pré-remplies</span>, à compléter avec les éléments manquants
-        (charte graphique de la mairie, date et signature du rédacteur du document, etc.).
-      </p>
+  <div class="fr-grid-row fr-grid-row--gutters fr-mt-4w">
+    <div class="fr-col-12">
+      <div class="fr-card fr-card--lg fr-mb-4w">
+        <div class="fr-card__body">
+          <h2 class="fr-card__title">
+            <VIcon name="ri-pushpin-line" class="fr-mr-1w" /> Ce qu'il vous reste à faire
+          </h2>
+          <div class="fr-card__desc">
+            <DsfrNotice class="fr-mb-3w">Avant d'entamer la procédure</DsfrNotice>
+            <p class="fr-mb-3w">
+              Pour lancer officiellement une procédure à l'encontre de l'auteur présumé de ce dépôt
+              sauvage :
+            </p>
+            <div class="fr-mb-3w">
+              <div class="fr-mb-2w">
+                <VIcon name="ri-download-line" class="fr-mr-1w" /> Téléchargez le rapport de
+                constatation et la lettre d'information
+              </div>
+              <div>
+                <VIcon name="ri-edit-line" class="fr-mr-1w" /> Relisez, complétez et signez ces deux
+                documents (ou faites-les signer par votre autorité compétente : maire ou personne
+                habilitée à réaliser des constatations).
+              </div>
+            </div>
 
-      <h3 class="fr-h4 fr-mt-3w fr-mb-2w">Lettre d'information</h3>
-      <p>
-        Courrier rappelant les faits constatés et les obligations de l'auteur du responsable
-        probable du dépôt sauvage.
-      </p>
-      <p><span aria-hidden="true">📨</span> à envoyer à l'auteur probable des faits</p>
-
-      <h3 class="fr-h4 fr-mt-3w fr-mb-2w">Rapport de constatation</h3>
-      <p>Résumé des observations de terrain et des préjudices causés</p>
-      <p>
-        <span aria-hidden="true">📄</span> à conserver en mairie ou à transmettre lors d'un dépôt de
-        plainte
-      </p>
-
-      <p v-if="modifyUrl" class="fr-mt-3w">
-        Si vous avez besoin de modifier les informations merci de
-        <a
-          :href="modifyUrl"
-          class="fr-link fr-icon-external-link-line fr-link--icon-right"
-          target="_blank"
-          rel="nopener"
-        >
-          modifier votre dossier sur votre démarche numérique
-        </a>
-      </p>
-    </section>
-
-    <section class="fr-p-4w fr-bg--g100 fr-mb-4w">
-      <h2 class="fr-h3 fr-mb-2w"><span aria-hidden="true">📌</span> Ce qu'il vous reste à faire</h2>
-
-      <h3 class="fr-h4 fr-mb-2w">Avant d'entamer la procédure</h3>
-      <p>
-        Pour lancer officiellement une procédure à l'encontre de l'auteur présumé de ce dépôt
-        sauvage :
-      </p>
-      <ul class="fr-mb-3w">
-        <li>
-          <span aria-hidden="true">📥</span> Téléchargez le rapport de constatation et la lettre
-          d'information
-        </li>
-        <li>
-          <span aria-hidden="true">✍️</span> Relisez, complétez et signez ces deux documents (ou
-          faites-les signer par votre autorité compétente : maire ou personne habilitée à réaliser
-          des constatations).
-        </li>
-      </ul>
-
-      <div class="fr-alert fr-alert--info fr-alert--sm fr-mt-3w" role="status">
-        <h4 class="fr-alert__title">Procédure administrative</h4>
-        <ul class="fr-mb-0">
-          <li>
-            <span aria-hidden="true">📬</span> Envoyez la lettre d'information en recommandé avec
-            accusé de réception à l'auteur présumé ;
-          </li>
-          <li>
-            <span aria-hidden="true">🗂️</span> Conservez une copie de tous les documents pour vos
-            archives ;
-          </li>
-          <li>
-            <span aria-hidden="true">⏳</span> À la fin de la période du contradictoire (10 jours
-            minimum), contactez l'équipe <span class="fr-text--bold">Protect'Envi</span> pour être
-            aidé pour rédiger la mise en demeure et l'amende administrative.
-          </li>
-        </ul>
+            <div class="fr-tabs fr-mt-3w fr-background-alt--grey fr-p-3w tabs-section">
+              <ul class="fr-tabs__list" role="tablist" aria-label="Procédures">
+                <li role="presentation">
+                  <button
+                    id="admin-tab"
+                    class="fr-tabs__tab"
+                    :class="{ 'fr-tabs__tab--selected': selectedTab === 0 }"
+                    :aria-selected="selectedTab === 0"
+                    :tabindex="selectedTab === 0 ? 0 : -1"
+                    role="tab"
+                    aria-controls="admin-panel"
+                    @click="selectedTab = 0"
+                  >
+                    Procédure administrative (recommandé)
+                  </button>
+                </li>
+                <li role="presentation">
+                  <button
+                    id="judicial-tab"
+                    class="fr-tabs__tab"
+                    :class="{ 'fr-tabs__tab--selected': selectedTab === 1 }"
+                    :aria-selected="selectedTab === 1"
+                    :tabindex="selectedTab === 1 ? 0 : -1"
+                    role="tab"
+                    aria-controls="judicial-panel"
+                    @click="selectedTab = 1"
+                  >
+                    Procédure judiciaire (facultatif)
+                  </button>
+                </li>
+              </ul>
+              <div
+                id="admin-panel"
+                class="fr-tabs__panel"
+                :class="{ 'fr-tabs__panel--selected': selectedTab === 0 }"
+                role="tabpanel"
+                aria-labelledby="admin-tab"
+                :hidden="selectedTab !== 0"
+              >
+                <ProcedureAdministrative />
+              </div>
+              <div
+                id="judicial-panel"
+                class="fr-tabs__panel"
+                :class="{ 'fr-tabs__panel--selected': selectedTab === 1 }"
+                role="tabpanel"
+                aria-labelledby="judicial-tab"
+                :hidden="selectedTab !== 1"
+              >
+                <ProcedureJudiciaire />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
 
-      <div class="fr-alert fr-alert--info fr-alert--sm fr-mt-3w" role="status">
-        <h4 class="fr-alert__title">Procédure judiciaire</h4>
-        <ul class="fr-mb-0">
-          <li>
-            <span aria-hidden="true">📝</span> Envoyez le rapport de constatation à la brigade ;
-          </li>
-          <li>
-            <span aria-hidden="true">🧾</span> Prenez rendez-vous
-            <a
-              href="https://www.masecurite.interieur.gouv.fr/fr/trouver-un-commissariat-une-gendarmerie"
-              class="fr-link fr-icon-external-link-line fr-link--icon-right"
-              target="_blank"
-              rel="noreferrer noopener"
-            >
-              auprès de la brigade de gendarmerie ou du commissariat
-            </a>
-            pour déposer plainte.
-          </li>
-        </ul>
+    <div class="fr-col-12">
+      <div class="fr-card fr-card--lg">
+        <div class="fr-card__body">
+          <h3 class="fr-card__title">Ressources utiles</h3>
+          <div class="fr-card__desc">
+            <p class="fr-mb-2w">
+              <VIcon name="ri-arrow-right-line" class="fr-mr-1w" /> Pour un accompagnement pas à
+              pas, consultez le
+              <a
+                href="https://acdechets.smartidf.services/aide-verbalisation"
+                class="fr-link fr-icon-external-link-line fr-link--icon-right"
+                target="_blank"
+                rel="nopener"
+              >
+                guide ACDéchets de la Région Île-de-France
+              </a>
+            </p>
+            <p class="fr-mb-2w">
+              <VIcon name="ri-arrow-right-line" class="fr-mr-1w" /> Retrouvez des conseils pratiques
+              sur l'application à destination des élus, Gend'élus, accessible à tout le monde :
+            </p>
+            <ul class="fr-pl-4w fr-mb-0">
+              <li>
+                <a
+                  href="https://play.google.com/store/apps/details?id=com.gendelus&hl=fr&pli=1"
+                  class="fr-link fr-icon-external-link-line fr-link--icon-right"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                >
+                  Télécharger sur le Play Store
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://apps.apple.com/fr/app/gend%C3%A9lus/id6444316373"
+                  class="fr-link fr-icon-external-link-line fr-link--icon-right"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                >
+                  Télécharger sur l'App Store
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
-    </section>
-
-    <section class="fr-p-4w fr-bg--g100">
-      <h3 class="fr-h3 fr-mb-2w">Ressources utiles</h3>
-      <p class="fr-mt-3w">
-        <span aria-hidden="true">👉</span> Pour un accompagnement pas à pas, consultez le
-        <a
-          href="https://acdechets.smartidf.services/aide-verbalisation"
-          class="fr-link fr-icon-external-link-line fr-link--icon-right"
-          target="_blank"
-          rel="nopener"
-        >
-          guide ACDéchets de la Région Île-de-France
-        </a>
-      </p>
-      <p>
-        <span aria-hidden="true">👉</span> Retrouvez des conseils pratiques sur l'application à
-        destination des élus, Gend'élus, accessible à tout le monde :
-      </p>
-      <ul>
-        <li>
-          <a
-            href="https://play.google.com/store/apps/details?id=com.gendelus&hl=fr&pli=1"
-            class="fr-link fr-icon-external-link-line fr-link--icon-right"
-            target="_blank"
-            rel="noreferrer noopener"
-          >
-            Télécharger sur le Play Store
-          </a>
-        </li>
-        <li>
-          <a
-            href="https://apps.apple.com/fr/app/gend%C3%A9lus/id6444316373"
-            class="fr-link fr-icon-external-link-line fr-link--icon-right"
-            target="_blank"
-            rel="noreferrer noopener"
-          >
-            Télécharger sur l'App Store
-          </a>
-        </li>
-      </ul>
-    </section>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { DsfrNotice } from '@gouvminint/vue-dsfr'
+import { ref } from 'vue'
+import ProcedureAdministrative from './tabs/ProcedureAdministrative.vue'
+import ProcedureJudiciaire from './tabs/ProcedureJudiciaire.vue'
+
 defineProps<{
   modifyUrl?: string | null
 }>()
+
+const selectedTab = ref(0)
 </script>
+
+<style scoped>
+.tabs-section {
+  border-radius: 4px;
+}
+</style>
