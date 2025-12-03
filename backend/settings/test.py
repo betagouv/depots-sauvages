@@ -21,4 +21,5 @@ SIGNALEMENT_RATE_LIMIT = "100/hour"
 EMAIL_RATE_LIMIT = "100/hour"
 
 # DS Integration Settings for tests
+DS_GRAPHQL_ENDPOINT = "https://demarche.numerique.gouv.fr/api/v2/graphql"
 DS_API_TOKEN = "test-token"

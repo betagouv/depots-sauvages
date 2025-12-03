@@ -29,9 +29,11 @@ class ProcessDossierView(APIView):
         try:
             ds_client = DSGraphQLClient()
             dossier = ds_client.get_dossier(numero_dossier)
-        except Exception:
+        except Exception as e:
             logging.exception("Error fetching dossier with id %s", dossier_id)
-            return self.bad_request("An internal error occurred.")
+            return self.bad_request(
+                f"Il y a eu une erreur lors de la récupération du dossier." f" {e}"
+            )
         if not dossier:
             return self.bad_request(f"Dossier {dossier_id} not found")
         signalement_data = self.dossier_to_model_data(dossier)

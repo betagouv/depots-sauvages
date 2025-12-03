@@ -165,6 +165,6 @@ ANYMAIL = {
 }
 
 # DS Integration Settings - Démarches Simplifiées
-DS_GRAPHQL_ENDPOINT = "https://www.demarches-simplifiees.fr/api/v2/graphql"
+DS_GRAPHQL_ENDPOINT = "https://demarche.numerique.gouv.fr/api/v2/graphql"
 DS_REQUEST_TIMEOUT = 30
 DS_MAX_RETRIES = 3
