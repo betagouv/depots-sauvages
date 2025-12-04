@@ -121,11 +121,11 @@
       </div>
 
       <div v-if="dossierData">
-        <DsInfoAuteurIdentifie
+        <InfoAuteurIdentifie
           v-if="auteurIdentifie"
           :modify-url="getDsModifyUrl(dossierData.ds_numero_dossier)"
         />
-        <DsInfoAuteurNonIdentifie
+        <InfoAuteurNonIdentifie
           v-else
           :modify-url="getDsModifyUrl(dossierData.ds_numero_dossier)"
         />
@@ -189,8 +189,8 @@
 import { DsfrCard } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import DsInfoAuteurIdentifie from '../components/ds/DsInfoAuteurIdentifie.vue'
-import DsInfoAuteurNonIdentifie from '../components/ds/DsInfoAuteurNonIdentifie.vue'
+import InfoAuteurIdentifie from '../components/ds/InfoAuteurIdentifie.vue'
+import InfoAuteurNonIdentifie from '../components/ds/InfoAuteurNonIdentifie.vue'
 import { API_URLS, createResource } from '../services/api'
 import { getDsDocConstatUrl, getDsLettreInfoUrl, getDsModifyUrl } from '../services/urls'
 
