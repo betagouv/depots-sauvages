@@ -99,7 +99,13 @@
             size="large"
             no-arrow
             title-tag="h2"
-          />
+          >
+            <template #end-details>
+              <DsfrNotice class="fr-mt-2w"
+                >Si vous décidez de faire la procédure administrative</DsfrNotice
+              >
+            </template>
+          </DsfrCard>
         </div>
 
         <div :class="rapportColClass">
@@ -186,7 +192,7 @@
 </template>
 
 <script setup lang="ts">
-import { DsfrCard } from '@gouvminint/vue-dsfr'
+import { DsfrCard, DsfrNotice } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import InfoAuteurIdentifie from '../components/ds/InfoAuteurIdentifie.vue'
