@@ -22,6 +22,46 @@
       </div>
     </div>
 
+    <div class="fr-grid-row fr-grid-row--gutters">
+      <div :class="rapportColClass">
+        <DsfrCard
+          title="Rapport de constatation"
+          description="Résumé des observations de terrain et des préjudices causés. À conserver en mairie ou à transmettre lors d'un dépôt de plainte."
+          :buttons="[
+            {
+              label: 'Télécharger',
+              icon: { name: 'ri-download-line', scale: 1.5, class: 'fr-mr-1w' },
+              onClick: () => openDocument(getDsDocConstatUrl(dossierData?.id ?? null)),
+            },
+          ]"
+          size="large"
+          no-arrow
+          title-tag="h2"
+        />
+      </div>
+      <div v-if="auteurIdentifie" class="fr-col-12 fr-col-md-6">
+        <DsfrCard
+          title="Lettre d'information"
+          description="Courrier rappelant les faits constatés et les obligations de l'auteur du responsable probable du dépôt sauvage. À envoyer à l'auteur probable des faits (avec accusé de réception)."
+          :buttons="[
+            {
+              label: 'Télécharger',
+              icon: { name: 'ri-download-line', scale: 1.5, class: 'fr-mr-1w' },
+              onClick: () => openDocument(getDsLettreInfoUrl(dossierData?.id ?? null)),
+            },
+          ]"
+          size="large"
+          no-arrow
+          title-tag="h2"
+        >
+          <template #end-details>
+            <DsfrNotice class="fr-mt-2w"
+              >Si vous décidez de faire la procédure administrative</DsfrNotice
+            >
+          </template>
+        </DsfrCard>
+      </div>
+    </div>
     <div v-if="showLoading" class="fr-container fr-pb-4w">
       <div class="fr-grid-row fr-grid-row--center">
         <div class="fr-col-12 fr-col-md-8 fr-col-lg-6">
@@ -75,48 +115,6 @@
                 icon: { name: 'ri-external-link-line', scale: 1.5, class: 'fr-mr-1w' },
                 secondary: true,
                 onClick: () => openDocument(getDsModifyUrl(dossierData.ds_numero_dossier)),
-              },
-            ]"
-            size="large"
-            no-arrow
-            title-tag="h2"
-          />
-        </div>
-      </div>
-
-      <div class="fr-grid-row fr-grid-row--gutters">
-        <div v-if="auteurIdentifie" class="fr-col-12 fr-col-md-6">
-          <DsfrCard
-            title="Lettre d'information"
-            description="Courrier rappelant les faits constatés et les obligations de l'auteur du responsable probable du dépôt sauvage. À envoyer à l'auteur probable des faits (avec accusé de réception)."
-            :buttons="[
-              {
-                label: 'Télécharger',
-                icon: { name: 'ri-download-line', scale: 1.5, class: 'fr-mr-1w' },
-                onClick: () => openDocument(getDsLettreInfoUrl(dossierData?.id ?? null)),
-              },
-            ]"
-            size="large"
-            no-arrow
-            title-tag="h2"
-          >
-            <template #end-details>
-              <DsfrNotice class="fr-mt-2w"
-                >Si vous décidez de faire la procédure administrative</DsfrNotice
-              >
-            </template>
-          </DsfrCard>
-        </div>
-
-        <div :class="rapportColClass">
-          <DsfrCard
-            title="Rapport de constatation"
-            description="Résumé des observations de terrain et des préjudices causés. À conserver en mairie ou à transmettre lors d'un dépôt de plainte."
-            :buttons="[
-              {
-                label: 'Télécharger',
-                icon: { name: 'ri-download-line', scale: 1.5, class: 'fr-mr-1w' },
-                onClick: () => openDocument(getDsDocConstatUrl(dossierData?.id ?? null)),
               },
             ]"
             size="large"
