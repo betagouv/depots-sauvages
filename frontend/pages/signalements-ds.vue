@@ -55,9 +55,10 @@
           title-tag="h2"
         >
           <template #end-details>
-            <DsfrNotice class="fr-mt-2w"
-              >Si vous décidez de faire la procédure administrative</DsfrNotice
-            >
+            <p class="fr-text--sm fr-text-mention--grey fr-mt-2w fr-mb-0">
+              <VIcon name="ri-information-line" class="fr-mr-1w" />
+              Si vous décidez de faire la procédure administrative
+            </p>
           </template>
         </DsfrCard>
       </div>
@@ -190,7 +191,7 @@
 </template>
 
 <script setup lang="ts">
-import { DsfrCard, DsfrNotice } from '@gouvminint/vue-dsfr'
+import { DsfrCard } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import InfoAuteurIdentifie from '../components/ds/InfoAuteurIdentifie.vue'
