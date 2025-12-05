@@ -58,7 +58,7 @@ SIGNALEMENT_RATE_LIMIT = env("SIGNALEMENT_RATE_LIMIT", default="10/hour")
 DS_GRAPHQL_ENDPOINT = env.str(
     "DS_GRAPHQL_ENDPOINT", default="https://demarche.numerique.gouv.fr/api/v2/graphql"
 )
-DS_API_TOKEN = env("DS_API_TOKEN", default=None)
+DEMARCHE_NUMERIQUE_API_TOKEN = env("DEMARCHE_NUMERIQUE_API_TOKEN", default=None)
 DS_REQUEST_TIMEOUT = env.int("DS_REQUEST_TIMEOUT", default=30)
 DS_MAX_RETRIES = env.int("DS_MAX_RETRIES", default=3)
 
