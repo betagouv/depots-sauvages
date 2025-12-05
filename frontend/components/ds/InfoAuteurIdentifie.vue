@@ -22,10 +22,7 @@
               compétente : maire ou personne habilitée à réaliser des constatations.
             </div>
           </div>
-
-          <div
-            class="fr-tabs fr-tabs--viewport-width fr-mt-3w fr-background-alt--grey fr-p-0w tabs-section"
-          >
+          <div class="fr-tabs fr-background-alt--grey fr-mt-3w">
             <ul class="fr-tabs__list" role="tablist" aria-label="Procédures">
               <li role="presentation">
                 <button
@@ -85,9 +82,3 @@ defineProps<{
   modifyUrl?: string | null
 }>()
 </script>
-
-<style scoped>
-.tabs-section {
-  border-radius: 4px;
-}
-</style>
