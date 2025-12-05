@@ -18,7 +18,7 @@ class DSGraphQLClient:
         """
         Configure DS GraphQL client.
         """
-        self.api_token = api_token or settings.DS_API_TOKEN
+        self.api_token = api_token or settings.DEMARCHE_NUMERIQUE_API_TOKEN
         if not self.api_token:
             raise ValueError("API token is required")
         self.endpoint = settings.DS_GRAPHQL_ENDPOINT

@@ -21,7 +21,7 @@ DS_MAX_RETRIES = 3
 ### Environment-Specific Settings
 
 ```python
-DS_API_TOKEN = "SOME-KEY"
+DEMARCHE_NUMERIQUE_API_TOKEN = "SOME-KEY"
 ```
 
 ## Usage
