@@ -44,9 +44,9 @@ const router = createRouter({
       meta: { hideNavigation: true, hideFeedback: true },
     },
     {
-      path: '/signalements-ds/:dossier_id',
-      name: 'SignalementsDS',
-      component: () => import('./pages/signalements-ds.vue'),
+      path: '/signalements-dn/:dossier_id',
+      name: 'SignalementsDN',
+      component: () => import('./pages/signalements-dn.vue'),
       meta: { hideNavigation: true, hideFeedback: true },
     },
     {
@@ -56,9 +56,9 @@ const router = createRouter({
       meta: { hideNavigation: true, hideFeedback: true },
     },
     {
-      path: '/demarches-simplifiees-rejoindre-protectenvi',
-      name: 'DemarchesSimplifieesRejoindreProtectEnvi',
-      component: () => import('./pages/demarches-simplifiees-rejoindre-protectenvi.vue'),
+      path: '/demarche-numerique-rejoindre-protectenvi',
+      name: 'DemarcheNumeriqueRejoindreProtectEnvi',
+      component: () => import('./pages/demarche-numerique-rejoindre-protectenvi.vue'),
       meta: { hideNavigation: true, hideFeedback: true },
     },
   ],

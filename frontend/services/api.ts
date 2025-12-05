@@ -1,7 +1,7 @@
 // URLs from environment variables
 export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'
 export const API_URL = `${BACKEND_URL}/api`
-export const DS_BASE_URL = import.meta.env.VITE_DS_BASE_URL || 'https://demarche.numerique.gouv.fr'
+export const DN_BASE_URL = import.meta.env.VITE_DN_BASE_URL || 'https://demarche.numerique.gouv.fr'
 
 // Helper to get CSRF token
 const getCSRFToken = (): string => {
@@ -28,7 +28,7 @@ const getCSRFToken = (): string => {
 // API endpoints
 export const API_URLS = {
   signalements: `${API_URL}/signalements/`,
-  processDossier: `${API_URL}/signalements/process-ds-dossier/`,
+  processDossier: `${API_URL}/signalements/process-dn-dossier/`,
 }
 
 // API functions

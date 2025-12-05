@@ -5,15 +5,15 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from backend.ds.champs import DSChamp
-from backend.ds.client import DSGraphQLClient
-from backend.ds_signalements.ds_mappings import (
+from backend.dn.champs import DNChamp
+from backend.dn.client import DNGraphQLClient
+from backend.dn_signalements.ds_mappings import (
     ADDRESS_CHAMP_ID,
     CHAMP_ID_TO_FIELD,
     DATE_CONSTAT_CHAMP_ID,
     PROCEDURE_JUDICIAIRE_CHAMP_ID,
 )
-from backend.ds_signalements.models import DSSignalement
+from backend.dn_signalements.models import DNSignalement
 from backend.signalements.serializers import SignalementSerializer
 from backend.signalements.view_mixins import (
     SignalementDocumentDownloadViewMixin,
@@ -28,8 +28,8 @@ class ProcessDossierView(APIView):
             return self.bad_request("dossier_id is required and must be an integer")
         numero_dossier = int(dossier_id)
         try:
-            ds_client = DSGraphQLClient()
-            dossier = ds_client.get_dossier(numero_dossier)
+            dn_client = DNGraphQLClient()
+            dossier = dn_client.get_dossier(numero_dossier)
         except Exception as e:
             logging.exception("Error fetching dossier with id %s", dossier_id)
             return self.bad_request(
@@ -38,23 +38,23 @@ class ProcessDossierView(APIView):
         if not dossier:
             return self.bad_request(f"Dossier {dossier_id} not found")
         signalement_data = self.dossier_to_model_data(dossier)
-        signalement, _ = DSSignalement.objects.update_or_create(
-            ds_numero_dossier=numero_dossier, defaults=signalement_data
+        signalement, _ = DNSignalement.objects.update_or_create(
+            dn_numero_dossier=numero_dossier, defaults=signalement_data
         )
         signalement.doc_constat_should_generate = True
         signalement.lettre_info_should_generate = True
         signalement.save()
         signalement_data["id"] = signalement.id
-        return Response({**signalement_data, "ds_numero_dossier": numero_dossier})
+        return Response({**signalement_data, "dn_numero_dossier": numero_dossier})
 
     def dossier_to_model_data(self, dossier):
-        ds_champ = DSChamp(dossier)
-        ds_date_depot = self.parse_datetime(dossier.get("dateDepot"))
-        ds_date_modification = self.parse_datetime(dossier.get("dateDerniereModification"))
-        champs_data = ds_champ.get_data()
+        dn_champ = DNChamp(dossier)
+        dn_date_depot = self.parse_datetime(dossier.get("dateDepot"))
+        dn_date_modification = self.parse_datetime(dossier.get("dateDerniereModification"))
+        champs_data = dn_champ.get_data()
         data = {
-            "ds_date_depot": ds_date_depot,
-            "ds_date_modification": ds_date_modification,
+            "dn_date_depot": dn_date_depot,
+            "dn_date_modification": dn_date_modification,
         }
         for champ_id, value in champs_data.items():
             field_name = CHAMP_ID_TO_FIELD.get(champ_id)
@@ -101,20 +101,20 @@ class ProcessDossierView(APIView):
         return Response({"error": message}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class DSSignalementViewSet(SignalementViewSetMixin):
+class DNSignalementViewSet(SignalementViewSetMixin):
     """
-    ViewSet for DSSignalement model.
+    ViewSet for DNSignalement model.
     """
 
-    model_class = DSSignalement
+    model_class = DNSignalement
     serializer_class = SignalementSerializer
-    model_label = "ds_signalements.DSSignalement"
+    model_label = "dn_signalements.DNSignalement"
     send_contact_email_enabled = False
 
 
-class DSSignalementDocumentDownloadView(SignalementDocumentDownloadViewMixin):
+class DNSignalementDocumentDownloadView(SignalementDocumentDownloadViewMixin):
     """
-    Download documents for DSSignalement instances.
+    Download documents for DNSignalement instances.
     """
 
-    model_class = DSSignalement
+    model_class = DNSignalement

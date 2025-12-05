@@ -93,8 +93,8 @@
 <script setup lang="ts">
 import { DsfrPicture } from '@gouvminint/vue-dsfr'
 
-const isDemarcheNumeriqueEnabled = import.meta.env.VITE_DEMARCHE_NUMERIQUE_ENABLED === 'true'
-const demarcheNumeriqueUrl = import.meta.env.VITE_DEMARCHE_NUMERIQUE_URL
+const isDemarcheNumeriqueEnabled = import.meta.env.VITE_DN_ENABLED === 'true'
+const demarcheNumeriqueUrl = import.meta.env.VITE_DN_URL
 
 const useExternalLink = isDemarcheNumeriqueEnabled && demarcheNumeriqueUrl
 

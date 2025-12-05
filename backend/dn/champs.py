@@ -1,9 +1,9 @@
 from django.utils import dateparse
 
 
-class DSChamp:
+class DNChamp:
     """
-    Wrapper class for accessing DS dossier champs easily.
+    Wrapper class for accessing DN dossier champs easily.
     """
 
     def __init__(self, dossier):
@@ -22,7 +22,7 @@ class DSChamp:
 
     def get_champ_value(self, champ):
         """
-        Extract the value from a DS GraphQL champ based on its type.
+        Extract the value from a DN GraphQL champ based on its type.
         """
         typename = champ.get("__typename") or ""
         if typename == "MultipleDropDownListChamp":
