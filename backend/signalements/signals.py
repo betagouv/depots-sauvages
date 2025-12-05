@@ -7,8 +7,8 @@ from django.dispatch import receiver
 from django.utils import timezone
 from django_tasks import task
 
+from backend.dn_signalements.models import DNSignalement
 from backend.doc_maker import odt_utils
-from backend.ds_signalements.models import DSSignalement
 from backend.signalements.models import Signalement
 
 logger = logging.getLogger(__name__)
@@ -101,11 +101,11 @@ def generate_document_task(signalement_id, doc_base_name, model_label):
 
 
 @receiver(post_save, sender=Signalement)
-@receiver(post_save, sender=DSSignalement)
+@receiver(post_save, sender=DNSignalement)
 def generate_doc_constat(sender, instance, created, **kwargs):
     """
     Signal handler to trigger rapport de constatation generation when a Signalement or
-    DSSignalement is saved. Only triggers if doc_constat_should_generate flag is True.
+    DNSignalement is saved. Only triggers if doc_constat_should_generate flag is True.
     """
     logger.debug(
         f"Signal for {instance.id} with generate doc: " f"{instance.doc_constat_should_generate}"
@@ -123,10 +123,10 @@ def generate_doc_constat(sender, instance, created, **kwargs):
 
 
 @receiver(post_save, sender=Signalement)
-@receiver(post_save, sender=DSSignalement)
+@receiver(post_save, sender=DNSignalement)
 def generate_lettre_info(sender, instance, created, **kwargs):
     """
-    Signal handler to trigger lettre info generation when a Signalement or DSSignalement
+    Signal handler to trigger lettre info generation when a Signalement or DNSignalement
     is saved. Only triggers if lettre_info_should_generate flag is True.
     """
     logger.debug(

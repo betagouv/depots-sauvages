@@ -1,5 +1,4 @@
 CHAMP_ID_TO_FIELD = {
-    "Q2hhbXAtNTYxNzM1MQ==": "localisation_depot",
     "Q2hhbXAtNTYxNzM1Ng==": "nature_terrain",
     "Q2hhbXAtNTYxNzM1OA==": "auteur_signalement",
     "Q2hhbXAtNTYxNzM3MA==": "photo_dispo",
@@ -28,5 +27,6 @@ CHAMP_ID_TO_FIELD = {
     "Q2hhbXAtNTYxNzM4Nw==": "precisions_indices",
 }
 
+ADDRESS_CHAMP_ID = "Q2hhbXAtNTYxNzM1MQ=="  # Adresse du dépôt
 DATE_CONSTAT_CHAMP_ID = "Q2hhbXAtNTYxNzM2MQ=="  # Date et Heure de la constatation
 PROCEDURE_JUDICIAIRE_CHAMP_ID = "Q2hhbXAtNTYxNzM4NQ=="  # Procédure judiciaire
