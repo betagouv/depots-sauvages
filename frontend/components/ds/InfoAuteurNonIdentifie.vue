@@ -20,7 +20,9 @@
             </div>
           </div>
 
-          <div class="fr-tabs fr-mt-3w fr-background-alt--grey fr-p-3w tabs-section">
+          <div
+            class="fr-tabs fr-tabs--viewport-width fr-mt-3w fr-background-alt--grey fr-p-3w tabs-section"
+          >
             <ul class="fr-tabs__list" role="tablist" aria-label="Procédures">
               <li role="presentation">
                 <button
