@@ -4,17 +4,22 @@
       <div class="fr-container">
         <div class="fr-grid-row fr-grid-row--center">
           <div class="fr-col-12 fr-col-md-10 fr-col-lg-8">
-            <h1 class="fr-hero__title fr-text--center">Télécharger et compléter les documents</h1>
+            <h1 class="fr-hero__title fr-text--center">
+              <template v-if="auteurIdentifie">Télécharger les pièces de procédure</template>
+              <template v-else>Télécharger le rapport de constatation</template>
+            </h1>
             <p class="fr-hero__text fr-text--lg fr-text--center">
               <template v-if="auteurIdentifie">
                 Vous trouverez ci-dessous vos pièces de procédure <strong>pré-remplies</strong>, à
-                compléter avec les éléments manquants (charte graphique de la mairie, date et
-                signature du rédacteur du document, etc.).
+                compléter avec les éléments manquants, par exemple la charte graphique de la mairie,
+                la date et la signature de l'autorité compétente (maire ou personne habilitée à
+                réaliser des constatations).
               </template>
               <template v-else>
                 Vous trouverez ci-dessous votre rapport de constatation <strong>pré-rempli</strong>,
-                à compléter avec les éléments manquants (charte graphique de la mairie, date et
-                signature du rédacteur du document, etc.).
+                à compléter avec les éléments manquants, par exemple la charte graphique de la
+                mairie, la date et la signature de la personne habilitée à réaliser des
+                constatations.
               </template>
             </p>
           </div>
@@ -58,7 +63,7 @@
             <template #end-details>
               <p class="fr-text--sm fr-text-mention--grey fr-mt-2w fr-mb-0">
                 <VIcon name="ri-information-line" class="fr-mr-1w" />
-                Si vous décidez de faire la procédure administrative
+                Utile uniquement pour la procédure administrative
               </p>
             </template>
           </DsfrCard>

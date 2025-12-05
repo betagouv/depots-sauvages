@@ -11,7 +11,7 @@
     <li>
       <VIcon name="ri-time-line" class="fr-mr-1w" /> À la fin de la période du contradictoire (10
       jours minimum), contactez l'équipe <strong>Protect'Envi</strong> pour être aidé pour rédiger
-      la mise en demeure et l'amende administrative.
+      l'amende administrative.
     </li>
   </ul>
 </template>

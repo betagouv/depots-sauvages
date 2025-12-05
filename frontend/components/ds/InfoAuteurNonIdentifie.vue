@@ -15,8 +15,8 @@
             </div>
             <div>
               <VIcon name="ri-edit-line" class="fr-mr-1w" /> Relisez, complétez et signez ce
-              document (ou faites-le signer par votre autorité compétente : maire ou personne
-              habilitée à réaliser des constatations).
+              document. Si vous êtes un agent municipal, faites-le signer par votre autorité
+              compétente : maire ou personne habilitée à réaliser des constatations.
             </div>
           </div>
 
