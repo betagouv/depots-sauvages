@@ -25,13 +25,11 @@
               <li role="presentation">
                 <button
                   id="judicial-tab"
-                  class="fr-tabs__tab"
-                  :class="{ 'fr-tabs__tab--selected': selectedTab === 0 }"
-                  :aria-selected="selectedTab === 0"
-                  :tabindex="selectedTab === 0 ? 0 : -1"
+                  class="fr-tabs__tab fr-tabs__tab--selected"
+                  aria-selected="true"
+                  tabindex="0"
                   role="tab"
                   aria-controls="judicial-panel"
-                  @click="selectedTab = 0"
                 >
                   Procédure judiciaire
                 </button>
@@ -40,12 +38,10 @@
                 <button
                   id="admin-tab"
                   class="fr-tabs__tab"
-                  :class="{ 'fr-tabs__tab--selected': selectedTab === 1 }"
-                  :aria-selected="selectedTab === 1"
-                  :tabindex="selectedTab === 1 ? 0 : -1"
+                  aria-selected="false"
+                  tabindex="-1"
                   role="tab"
                   aria-controls="admin-panel"
-                  @click="selectedTab = 1"
                 >
                   Procédure administrative
                 </button>
@@ -53,21 +49,18 @@
             </ul>
             <div
               id="judicial-panel"
-              class="fr-tabs__panel"
-              :class="{ 'fr-tabs__panel--selected': selectedTab === 0 }"
+              class="fr-tabs__panel fr-tabs__panel--selected"
               role="tabpanel"
               aria-labelledby="judicial-tab"
-              :hidden="selectedTab !== 0"
             >
               <ProcedureJudiciaire />
             </div>
             <div
               id="admin-panel"
               class="fr-tabs__panel"
-              :class="{ 'fr-tabs__panel--selected': selectedTab === 1 }"
               role="tabpanel"
               aria-labelledby="admin-tab"
-              :hidden="selectedTab !== 1"
+              hidden
             >
               <ProcedureAdministrativeNonIdentifie :modify-url="modifyUrl" />
             </div>
@@ -80,15 +73,12 @@
 
 <script setup lang="ts">
 import { DsfrNotice } from '@gouvminint/vue-dsfr'
-import { ref } from 'vue'
 import ProcedureAdministrativeNonIdentifie from './tabs/ProcedureAdministrativeNonIdentifie.vue'
 import ProcedureJudiciaire from './tabs/ProcedureJudiciaire.vue'
 
 defineProps<{
   modifyUrl?: string | null
 }>()
-
-const selectedTab = ref(0)
 </script>
 
 <style scoped>
