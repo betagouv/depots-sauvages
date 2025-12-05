@@ -23,45 +23,45 @@
             <ul class="fr-tabs__list" role="tablist" aria-label="Procédures">
               <li role="presentation">
                 <button
-                  id="judicial-tab"
+                  id="admin-tab"
                   class="fr-tabs__tab fr-tabs__tab--selected"
                   aria-selected="true"
                   tabindex="0"
-                  role="tab"
-                  aria-controls="judicial-panel"
-                >
-                  Procédure judiciaire
-                </button>
-              </li>
-              <li role="presentation">
-                <button
-                  id="admin-tab"
-                  class="fr-tabs__tab"
-                  aria-selected="false"
-                  tabindex="-1"
                   role="tab"
                   aria-controls="admin-panel"
                 >
                   Procédure administrative
                 </button>
               </li>
+              <li role="presentation">
+                <button
+                  id="judicial-tab"
+                  class="fr-tabs__tab"
+                  aria-selected="false"
+                  tabindex="-1"
+                  role="tab"
+                  aria-controls="judicial-panel"
+                >
+                  Procédure judiciaire
+                </button>
+              </li>
             </ul>
             <div
-              id="judicial-panel"
+              id="admin-panel"
               class="fr-tabs__panel fr-tabs__panel--selected"
               role="tabpanel"
-              aria-labelledby="judicial-tab"
-            >
-              <ProcedureJudiciaire />
-            </div>
-            <div
-              id="admin-panel"
-              class="fr-tabs__panel"
-              role="tabpanel"
               aria-labelledby="admin-tab"
-              hidden
             >
               <ProcedureAdministrativeNonIdentifie :modify-url="modifyUrl" />
+            </div>
+            <div
+              id="judicial-panel"
+              class="fr-tabs__panel"
+              role="tabpanel"
+              aria-labelledby="judicial-tab"
+              hidden
+            >
+              <ProcedureJudiciaire />
             </div>
           </div>
         </div>

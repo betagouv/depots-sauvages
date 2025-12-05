@@ -33,7 +33,7 @@
                   role="tab"
                   aria-controls="admin-panel"
                 >
-                  Procédure administrative (recommandé)
+                  Procédure administrative
                 </button>
               </li>
               <li role="presentation">
@@ -45,7 +45,7 @@
                   role="tab"
                   aria-controls="judicial-panel"
                 >
-                  Procédure judiciaire (facultatif)
+                  Procédure judiciaire
                 </button>
               </li>
             </ul>
@@ -55,6 +55,7 @@
               role="tabpanel"
               aria-labelledby="admin-tab"
             >
+              <DsfrNotice type="info" class="fr-mb-3w"> Procédure recommandée </DsfrNotice>
               <ProcedureAdministrative />
             </div>
             <div
@@ -64,6 +65,7 @@
               aria-labelledby="judicial-tab"
               hidden
             >
+              <DsfrNotice type="info" class="fr-mb-3w"> Procédure facultative </DsfrNotice>
               <ProcedureJudiciaire />
             </div>
           </div>
@@ -77,8 +79,4 @@
 import { DsfrNotice } from '@gouvminint/vue-dsfr'
 import ProcedureAdministrative from './tabs/ProcedureAdministrative.vue'
 import ProcedureJudiciaire from './tabs/ProcedureJudiciaire.vue'
-
-defineProps<{
-  modifyUrl?: string | null
-}>()
 </script>

@@ -95,10 +95,7 @@
       </div>
 
       <div v-if="dossierData">
-        <InfoAuteurIdentifie
-          v-if="auteurIdentifie"
-          :modify-url="getDsModifyUrl(dossierData.ds_numero_dossier)"
-        />
+        <InfoAuteurIdentifie v-if="auteurIdentifie" />
         <InfoAuteurNonIdentifie
           v-else
           :modify-url="getDsModifyUrl(dossierData.ds_numero_dossier)"
