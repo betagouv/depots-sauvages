@@ -37,7 +37,7 @@
               {
                 label: 'Télécharger',
                 icon: { name: 'ri-download-line', scale: 1.5, class: 'fr-mr-1w' },
-                onClick: () => openDocument(getDsDocConstatUrl(dossierData?.id ?? null)),
+                onClick: () => openDocument(getDnDocConstatUrl(dossierData?.id ?? null)),
               },
             ]"
             size="large"
@@ -53,7 +53,7 @@
               {
                 label: 'Télécharger',
                 icon: { name: 'ri-download-line', scale: 1.5, class: 'fr-mr-1w' },
-                onClick: () => openDocument(getDsLettreInfoUrl(dossierData?.id ?? null)),
+                onClick: () => openDocument(getDnLettreInfoUrl(dossierData?.id ?? null)),
               },
             ]"
             size="large"
@@ -98,7 +98,7 @@
         <InfoAuteurIdentifie v-if="auteurIdentifie" />
         <InfoAuteurNonIdentifie
           v-else
-          :modify-url="getDsModifyUrl(dossierData.ds_numero_dossier)"
+          :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
         />
       </div>
 
@@ -108,20 +108,20 @@
             <div class="fr-card__body">
               <h2 class="fr-card__title">Informations du dossier</h2>
               <div class="fr-card__desc">
-                <p><strong>Numéro de dossier:</strong> {{ dossierData.ds_numero_dossier }}</p>
-                <p v-if="dossierData.ds_date_depot">
-                  <strong>Date de dépôt:</strong> {{ formatDate(dossierData.ds_date_depot) }}
+                <p><strong>Numéro de dossier:</strong> {{ dossierData.dn_numero_dossier }}</p>
+                <p v-if="dossierData.dn_date_depot">
+                  <strong>Date de dépôt:</strong> {{ formatDate(dossierData.dn_date_depot) }}
                 </p>
-                <p v-if="dossierData.ds_date_modification">
+                <p v-if="dossierData.dn_date_modification">
                   <strong>Dernière modification:</strong>
-                  {{ formatDate(dossierData.ds_date_modification) }}
+                  {{ formatDate(dossierData.dn_date_modification) }}
                 </p>
               </div>
             </div>
           </div>
         </div>
 
-        <div v-if="dossierData.ds_numero_dossier" class="fr-col-12 fr-col-md-6">
+        <div v-if="dossierData.dn_numero_dossier" class="fr-col-12 fr-col-md-6">
           <DsfrCard
             title="Modifier votre dossier"
             description="Si vous avez besoin de modifier les informations, merci de modifier votre dossier sur votre démarche numérique."
@@ -130,7 +130,7 @@
                 label: 'Consulter ou modifier',
                 icon: { name: 'ri-external-link-line', scale: 1.5, class: 'fr-mr-1w' },
                 secondary: true,
-                onClick: () => openDocument(getDsModifyUrl(dossierData.ds_numero_dossier)),
+                onClick: () => openDocument(getDnModifyUrl(dossierData.dn_numero_dossier)),
               },
             ]"
             size="large"
@@ -198,10 +198,10 @@
 import { DsfrCard } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import InfoAuteurIdentifie from '../components/ds/InfoAuteurIdentifie.vue'
-import InfoAuteurNonIdentifie from '../components/ds/InfoAuteurNonIdentifie.vue'
+import InfoAuteurIdentifie from '../components/dn/InfoAuteurIdentifie.vue'
+import InfoAuteurNonIdentifie from '../components/dn/InfoAuteurNonIdentifie.vue'
 import { API_URLS, createResource } from '../services/api'
-import { getDsDocConstatUrl, getDsLettreInfoUrl, getDsModifyUrl } from '../services/urls'
+import { getDnDocConstatUrl, getDnLettreInfoUrl, getDnModifyUrl } from '../services/urls'
 
 const route = useRoute()
 const showLoading = ref(true)

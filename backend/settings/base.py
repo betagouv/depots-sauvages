@@ -28,8 +28,8 @@ INSTALLED_APPS = [
     "backend.throttling",
     "backend.home",
     "backend.signalements",
-    "backend.ds",
-    "backend.ds_signalements",
+    "backend.dn",
+    "backend.dn_signalements",
 ]
 
 MIDDLEWARE = [
@@ -164,7 +164,7 @@ ANYMAIL = {
     "TEST_MODE": True,
 }
 
-# DS Integration Settings - Démarches Simplifiées
-DS_GRAPHQL_ENDPOINT = "https://demarche.numerique.gouv.fr/api/v2/graphql"
-DS_REQUEST_TIMEOUT = 30
-DS_MAX_RETRIES = 3
+# DN Integration Settings - Démarche Numérique
+DN_GRAPHQL_ENDPOINT = "https://demarche.numerique.gouv.fr/api/v2/graphql"
+DN_REQUEST_TIMEOUT = 30
+DN_MAX_RETRIES = 3
