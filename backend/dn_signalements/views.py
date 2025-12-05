@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 
 from backend.dn.champs import DNChamp
 from backend.dn.client import DNGraphQLClient
-from backend.dn_signalements.ds_mappings import (
+from backend.dn_signalements.dn_mappings import (
     ADDRESS_CHAMP_ID,
     CHAMP_ID_TO_FIELD,
     DATE_CONSTAT_CHAMP_ID,
