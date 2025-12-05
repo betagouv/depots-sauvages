@@ -59,5 +59,3 @@ query GetSignalementDossier($dossierNumber: Int!) {
     }
 }
 """
-
-__all__ = ["GET_SIGNALEMENT_DOSSIER_QUERY"]
