@@ -8,6 +8,7 @@ from rest_framework.views import APIView
 from backend.ds.champs import DSChamp
 from backend.ds.client import DSGraphQLClient
 from backend.ds_signalements.ds_mappings import (
+    ADDRESS_CHAMP_ID,
     CHAMP_ID_TO_FIELD,
     DATE_CONSTAT_CHAMP_ID,
     PROCEDURE_JUDICIAIRE_CHAMP_ID,
@@ -59,6 +60,13 @@ class ProcessDossierView(APIView):
             field_name = CHAMP_ID_TO_FIELD.get(champ_id)
             if field_name and value not in (None, "", []):
                 data[field_name] = value
+        address_data = champs_data.get(ADDRESS_CHAMP_ID)
+        if address_data and isinstance(address_data, dict):
+            if address_data.get("label"):
+                data["localisation_depot"] = address_data["label"]
+            if address_data.get("cityName"):
+                data["commune"] = address_data["cityName"]
+
         datetime_constat = champs_data.get(DATE_CONSTAT_CHAMP_ID)
         if datetime_constat:
             data["date_constat"] = datetime_constat.date()
@@ -74,8 +82,6 @@ class ProcessDossierView(APIView):
                 data["statut_auteur"] = "entreprise"
             elif "particulier" in statut_lower:
                 data["statut_auteur"] = "particulier"
-        if data.get("localisation_depot"):
-            data["commune"] = data["localisation_depot"].split(" ")[-1]
         usager = dossier.get("usager", {})
         if usager.get("email"):
             data["contact_email"] = usager["email"]
