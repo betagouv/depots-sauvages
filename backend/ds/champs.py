@@ -33,6 +33,8 @@ class DSChamp:
             return self.get_champ_integer_value(champ)
         elif typename == "DatetimeChamp":
             return self.get_champ_datetime(champ)
+        elif typename == "AddressChamp":
+            return self.get_champ_address_value(champ)
         else:
             return self.get_champ_string_value(champ)
 
@@ -74,4 +76,9 @@ class DSChamp:
     def get_champ_datetime(self, champ):
         if champ.get("datetime"):
             return dateparse.parse_datetime(champ["datetime"])
+        return None
+
+    def get_champ_address_value(self, champ):
+        if champ.get("address"):
+            return champ["address"]
         return None
