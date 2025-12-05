@@ -22,45 +22,47 @@
       </div>
     </div>
 
-    <div class="fr-grid-row fr-grid-row--gutters">
-      <div :class="rapportColClass">
-        <DsfrCard
-          title="Rapport de constatation"
-          description="Résumé des observations de terrain et des préjudices causés. À conserver en mairie ou à transmettre lors d'un dépôt de plainte."
-          :buttons="[
-            {
-              label: 'Télécharger',
-              icon: { name: 'ri-download-line', scale: 1.5, class: 'fr-mr-1w' },
-              onClick: () => openDocument(getDsDocConstatUrl(dossierData?.id ?? null)),
-            },
-          ]"
-          size="large"
-          no-arrow
-          title-tag="h2"
-        />
-      </div>
-      <div v-if="auteurIdentifie" class="fr-col-12 fr-col-md-6">
-        <DsfrCard
-          title="Lettre d'information"
-          description="Courrier rappelant les faits constatés et les obligations de l'auteur du responsable probable du dépôt sauvage. À envoyer à l'auteur probable des faits (avec accusé de réception)."
-          :buttons="[
-            {
-              label: 'Télécharger',
-              icon: { name: 'ri-download-line', scale: 1.5, class: 'fr-mr-1w' },
-              onClick: () => openDocument(getDsLettreInfoUrl(dossierData?.id ?? null)),
-            },
-          ]"
-          size="large"
-          no-arrow
-          title-tag="h2"
-        >
-          <template #end-details>
-            <p class="fr-text--sm fr-text-mention--grey fr-mt-2w fr-mb-0">
-              <VIcon name="ri-information-line" class="fr-mr-1w" />
-              Si vous décidez de faire la procédure administrative
-            </p>
-          </template>
-        </DsfrCard>
+    <div class="fr-container fr-pb-4w">
+      <div class="fr-grid-row fr-grid-row--gutters">
+        <div :class="rapportColClass">
+          <DsfrCard
+            title="Rapport de constatation"
+            description="Résumé des observations de terrain et des préjudices causés. À conserver en mairie ou à transmettre lors d'un dépôt de plainte."
+            :buttons="[
+              {
+                label: 'Télécharger',
+                icon: { name: 'ri-download-line', scale: 1.5, class: 'fr-mr-1w' },
+                onClick: () => openDocument(getDsDocConstatUrl(dossierData?.id ?? null)),
+              },
+            ]"
+            size="large"
+            no-arrow
+            title-tag="h2"
+          />
+        </div>
+        <div v-if="auteurIdentifie" class="fr-col-12 fr-col-md-6">
+          <DsfrCard
+            title="Lettre d'information"
+            description="Courrier rappelant les faits constatés et les obligations de l'auteur du responsable probable du dépôt sauvage. À envoyer à l'auteur probable des faits (avec accusé de réception)."
+            :buttons="[
+              {
+                label: 'Télécharger',
+                icon: { name: 'ri-download-line', scale: 1.5, class: 'fr-mr-1w' },
+                onClick: () => openDocument(getDsLettreInfoUrl(dossierData?.id ?? null)),
+              },
+            ]"
+            size="large"
+            no-arrow
+            title-tag="h2"
+          >
+            <template #end-details>
+              <p class="fr-text--sm fr-text-mention--grey fr-mt-2w fr-mb-0">
+                <VIcon name="ri-information-line" class="fr-mr-1w" />
+                Si vous décidez de faire la procédure administrative
+              </p>
+            </template>
+          </DsfrCard>
+        </div>
       </div>
     </div>
     <div v-if="showLoading" class="fr-container fr-pb-4w">
@@ -87,7 +89,18 @@
         <p>{{ error }}</p>
       </div>
 
-      <div v-else-if="dossierData" class="fr-grid-row fr-grid-row--gutters">
+      <div v-if="dossierData">
+        <InfoAuteurIdentifie
+          v-if="auteurIdentifie"
+          :modify-url="getDsModifyUrl(dossierData.ds_numero_dossier)"
+        />
+        <InfoAuteurNonIdentifie
+          v-else
+          :modify-url="getDsModifyUrl(dossierData.ds_numero_dossier)"
+        />
+      </div>
+
+      <div v-if="dossierData" class="fr-grid-row fr-grid-row--gutters">
         <div class="fr-col-12 fr-col-md-6">
           <div class="fr-card fr-card--lg">
             <div class="fr-card__body">
@@ -123,17 +136,6 @@
             title-tag="h2"
           />
         </div>
-      </div>
-
-      <div v-if="dossierData">
-        <InfoAuteurIdentifie
-          v-if="auteurIdentifie"
-          :modify-url="getDsModifyUrl(dossierData.ds_numero_dossier)"
-        />
-        <InfoAuteurNonIdentifie
-          v-else
-          :modify-url="getDsModifyUrl(dossierData.ds_numero_dossier)"
-        />
       </div>
 
       <div class="fr-grid-row fr-grid-row--gutters fr-mt-4w">
