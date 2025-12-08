@@ -16,7 +16,6 @@ class SignalementViewSetMixin(
     mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
-    mixins.ListModelMixin,
     viewsets.GenericViewSet,
 ):
     """
