@@ -44,9 +44,18 @@ query GetSignalementDossier($dossierNumber: Int!) {
             ... on SiretChamp {
                 stringValue
             }
+            ... on AddressChamp {
+                address {
+                    postalCode
+                    cityName
+                    cityCode
+                    label
+                    streetAddress
+                    streetName
+                    streetNumber
+                }
+            }
         }
     }
 }
 """
-
-__all__ = ["GET_SIGNALEMENT_DOSSIER_QUERY"]

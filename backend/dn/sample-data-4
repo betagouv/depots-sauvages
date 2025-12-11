@@ -1,0 +1,252 @@
+{
+  "dossier": {
+    "id": "RG9zc2llci0yNzkyMTc3Nw==",
+    "number": 27921777,
+    "state": "en_construction",
+    "dateDepot": "2025-11-26T15:41:09+01:00",
+    "dateDerniereModification": "2025-11-26T15:41:09+01:00",
+    "usager": {
+      "email": "sylvain.toe@beta.gouv.fr"
+    },
+    "demandeur": {
+      "nom": "Toe",
+      "prenom": "Sylvain"
+    },
+    "champs": [
+      {
+        "id": "Q2hhbXAtNTg0MzY0Mg==",
+        "label": "Que peut faire une collectivit\u00e9 en cas de d\u00e9p\u00f4t sauvage ?",
+        "stringValue": "",
+        "__typename": "TextChamp"
+      },
+      {
+        "id": "Q2hhbXAtNTg0MzYzOQ==",
+        "label": "Cette d\u00e9marche vous permet d'\u00e9valuer la proc\u00e9dure (administrative et/ou judiciaire) la plus adapt\u00e9e \u00e0 votre situation",
+        "stringValue": "",
+        "__typename": "TextChamp"
+      },
+      {
+        "id": "Q2hhbXAtNTYxNzM2Mg==",
+        "label": "Information sur le d\u00e9p\u00f4t sauvage",
+        "stringValue": "",
+        "__typename": "TextChamp"
+      },
+      {
+        "id": "Q2hhbXAtNTYxNzM2Ng==",
+        "label": "Localisation du d\u00e9p\u00f4t",
+        "stringValue": "",
+        "__typename": "TextChamp"
+      },
+      {
+        "id": "Q2hhbXAtNTYxNzM1MQ==",
+        "label": "Adresse du d\u00e9p\u00f4t",
+        "stringValue": "36 Rue Cuvier 59100 Roubaix",
+        "__typename": "AddressChamp",
+        "address": {
+          "postalCode": "59100",
+          "cityName": "Roubaix",
+          "cityCode": "59512",
+          "label": "36 Rue Cuvier 59100 Roubaix",
+          "streetAddress": "36 Rue Cuvier",
+          "streetName": "Rue Cuvier",
+          "streetNumber": "36"
+        }
+      },
+      {
+        "id": "Q2hhbXAtNTYxNzM1Ng==",
+        "label": "Nature du terrain",
+        "stringValue": "Terrain public, F\u00f4ret domaniale",
+        "__typename": "MultipleDropDownListChamp",
+        "values": [
+          "Terrain public",
+          "F\u00f4ret domaniale"
+        ]
+      },
+      {
+        "id": "Q2hhbXAtNTYxNzM2Nw==",
+        "label": "D\u00e9tail de la constatation",
+        "stringValue": "",
+        "__typename": "TextChamp"
+      },
+      {
+        "id": "Q2hhbXAtNTYxNzM1OA==",
+        "label": "Qui a constat\u00e9 le d\u00e9p\u00f4t ?",
+        "stringValue": "Un agent de l'ONF",
+        "__typename": "TextChamp"
+      },
+      {
+        "id": "Q2hhbXAtNTYxNzM2MQ==",
+        "label": "Date et Heure de la constatation",
+        "stringValue": "25 novembre 2025 20:43",
+        "__typename": "DatetimeChamp",
+        "datetime": "2025-11-25T20:43:00+01:00"
+      },
+      {
+        "id": "Q2hhbXAtNTYxNzM2OA==",
+        "label": "Description du d\u00e9p\u00f4t",
+        "stringValue": "",
+        "__typename": "TextChamp"
+      },
+      {
+        "id": "Q2hhbXAtNTYxNzM3MA==",
+        "label": "Disposez vous de photos du d\u00e9p\u00f4t ?",
+        "stringValue": "false",
+        "__typename": "YesNoChamp",
+        "value": false
+      },
+      {
+        "id": "Q2hhbXAtNTYxNzM3Mg==",
+        "label": "Existe-t-il un risque d\u2019\u00e9coulement ?",
+        "stringValue": "true",
+        "__typename": "YesNoChamp",
+        "value": true
+      },
+      {
+        "id": "Q2hhbXAtNTYxNzM3Mw==",
+        "label": "Volume estim\u00e9",
+        "stringValue": "Entre 1 et 3m3",
+        "__typename": "TextChamp"
+      },
+      {
+        "id": "Q2hhbXAtNTYxNzM3NQ==",
+        "label": "Types de d\u00e9p\u00f4ts",
+        "stringValue": "D\u00e9chets m\u00e9dicaux, Textiles, Peintures et essences",
+        "__typename": "MultipleDropDownListChamp",
+        "values": [
+          "D\u00e9chets m\u00e9dicaux",
+          "Textiles",
+          "Peintures et essences"
+        ]
+      },
+      {
+        "id": "Q2hhbXAtNTYxNzM3Nw==",
+        "label": "Descriptions du d\u00e9p\u00f4t",
+        "stringValue": "test 1",
+        "__typename": "TextChamp"
+      },
+      {
+        "id": "Q2hhbXAtNTYxNzM3OA==",
+        "label": "Informations utiles pour le traitement",
+        "stringValue": "",
+        "__typename": "TextChamp"
+      },
+      {
+        "id": "Q2hhbXAtNTYxNzM4MA==",
+        "label": "\u00c0 propos de l\u2019auteur des faits",
+        "stringValue": "",
+        "__typename": "TextChamp"
+      },
+      {
+        "id": "Q2hhbXAtNTYxNzM4MQ==",
+        "label": "L\u2019auteur des faits est-il identifi\u00e9 ou identifiable  ? *",
+        "stringValue": "true",
+        "__typename": "YesNoChamp",
+        "value": true
+      },
+      {
+        "id": "Q2hhbXAtNTg2NjU4OQ==",
+        "label": "Qu'est ce qu'un auteur identifi\u00e9 ou identifiable ?",
+        "stringValue": "",
+        "__typename": "TextChamp"
+      },
+      {
+        "id": "Q2hhbXAtNTYxNzQ5Mw==",
+        "label": "S'agit-il d'une entreprise ou d'un particulier ? *",
+        "stringValue": "Personne morale (entreprise)",
+        "__typename": "TextChamp"
+      },
+      {
+        "id": "Q2hhbXAtNTg0MzM2OQ==",
+        "label": "Nom de l'entreprise pr\u00e9sum\u00e9e responsable",
+        "stringValue": "",
+        "__typename": "TextChamp"
+      },
+      {
+        "id": "Q2hhbXAtNTYxNzQ5NA==",
+        "label": "Num\u00e9ro SIRET de l'entreprise pr\u00e9sum\u00e9e responsable",
+        "stringValue": "78467169500095",
+        "__typename": "SiretChamp"
+      },
+      {
+        "id": "Q2hhbXAtNTYxNzM4Mw==",
+        "label": "Par quel moyens l'auteur peut ou pourrait-il \u00eatre identifi\u00e9 ?",
+        "stringValue": "Cam\u00e9ra de vid\u00e9o-surveillance, Pi\u00e8ges photographiques",
+        "__typename": "MultipleDropDownListChamp",
+        "values": [
+          "Cam\u00e9ra de vid\u00e9o-surveillance",
+          "Pi\u00e8ges photographiques"
+        ]
+      },
+      {
+        "id": "Q2hhbXAtNTYxNzM4Nw==",
+        "label": "D\u00e9crivez bri\u00e8vement les faits constat\u00e9s et comment les auteurs pourraient \u00eatre identifi\u00e9s",
+        "stringValue": "test 2",
+        "__typename": "TextChamp"
+      },
+      {
+        "id": "Q2hhbXAtNTYxNzM4NQ==",
+        "label": "Proc\u00e9dure judiciaire",
+        "stringValue": "J'ai d\u00e9j\u00e0 d\u00e9pos\u00e9 plainte",
+        "__typename": "TextChamp"
+      },
+      {
+        "id": "Q2hhbXAtNTYxNzM4OA==",
+        "label": "Estimation du pr\u00e9judice",
+        "stringValue": "",
+        "__typename": "TextChamp"
+      },
+      {
+        "id": "Q2hhbXAtNTg0MzkzNw==",
+        "label": "Pourquoi \u00e9valuer le pr\u00e9judice ?",
+        "stringValue": "",
+        "__typename": "TextChamp"
+      },
+      {
+        "id": "Q2hhbXAtNTYxNzM4OQ==",
+        "label": "Disposez-vous d'un arr\u00eat\u00e9 ou d'une d\u00e9lib\u00e9ration municipale encadrant ce type d'infraction et fixant le montant d'un forfait d'enl\u00e8vement ?  *",
+        "stringValue": "false",
+        "__typename": "YesNoChamp",
+        "value": false
+      },
+      {
+        "id": "Q2hhbXAtNTYxNzM5MA==",
+        "label": "Connaissez-vous le montant du pr\u00e9judice (en euros) ?",
+        "stringValue": "true",
+        "__typename": "YesNoChamp",
+        "value": true
+      },
+      {
+        "id": "Q2hhbXAtNTYxNzM5MQ==",
+        "label": "Montant du pr\u00e9judice (en euros) *",
+        "stringValue": "2500",
+        "__typename": "DecimalNumberChamp",
+        "value": 2500.0
+      },
+      {
+        "id": "Q2hhbXAtNTYxNzQ4MA==",
+        "label": "Finalisation de la d\u00e9marche",
+        "stringValue": "",
+        "__typename": "TextChamp"
+      },
+      {
+        "id": "Q2hhbXAtNTYxNzQ4Mw==",
+        "label": "Je comprends que je peux \u00eatre recontact\u00e9(e) dans le cadre d'un accompagnement personnalis\u00e9.",
+        "stringValue": "true",
+        "__typename": "CheckboxChamp",
+        "value": true
+      },
+      {
+        "id": "Q2hhbXAtNTYxNzQ4NA==",
+        "label": "Num\u00e9ro de t\u00e9l\u00e9phone (optionnel)",
+        "stringValue": "07 82 44 82 72",
+        "__typename": "TextChamp"
+      },
+      {
+        "id": "Q2hhbXAtNTg0Mzk2MQ==",
+        "label": "Concernant la d\u00e9marche que vous venez de remplir :",
+        "stringValue": "",
+        "__typename": "TextChamp"
+      }
+    ]
+  }
+}

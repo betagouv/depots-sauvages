@@ -2,17 +2,27 @@
   <div class="fr-container--sm fr-py-5w">
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12 fr-col-md-6">
-        <h1 class="fr-h1 fr-mb-3w">Accompagner les collectivités pour mieux lutter contre les dépôts sauvages.</h1>
+        <h1 class="fr-h1 fr-mb-3w">
+          Accompagner les collectivités pour mieux lutter contre les dépôts sauvages.
+        </h1>
         <p class="fr-text fr-mb-2w">Simplifier le signalement des dépôts sauvages</p>
         <p>
-          Protect’Envi est l'outil qui vous accompagne et vous aide à produire des rapports pour faciliter la
-          procédure administrative et judiciaire.
+          Protect’Envi est l'outil qui vous accompagne et vous aide à produire des rapports pour
+          faciliter la procédure administrative et judiciaire.
         </p>
         <p>
           Notre objectif : améliorer l’efficacité des services publics, faciliter les procédures et
           contribuer à la réduction durable des dépôts sauvages sur le territoire.
         </p>
-        <RouterLink to="/debuter-procedure" class="fr-btn fr-mt-3w"
+        <a
+          v-if="useExternalLink"
+          :href="demarcheNumeriqueUrl"
+          class="fr-btn fr-mt-3w"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Débuter une procédure
+        </a>
+        <RouterLink v-else to="/debuter-procedure" class="fr-btn fr-mt-3w"
           >Débuter une procédure
         </RouterLink>
       </div>
@@ -82,6 +92,11 @@
 
 <script setup lang="ts">
 import { DsfrPicture } from '@gouvminint/vue-dsfr'
+
+const isDemarcheNumeriqueEnabled = import.meta.env.VITE_DN_ENABLED === 'true'
+const demarcheNumeriqueUrl = import.meta.env.VITE_DN_URL
+
+const useExternalLink = isDemarcheNumeriqueEnabled && demarcheNumeriqueUrl
 
 const cardsFonctionnement = [
   {

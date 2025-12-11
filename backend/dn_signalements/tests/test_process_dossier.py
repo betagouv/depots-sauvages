@@ -8,7 +8,7 @@ pytestmark = pytest.mark.django_db(databases=settings.DATABASES.keys())
 
 @pytest.mark.skip(reason="Skipped to avoid triggering API call")
 def test_process_dossier_returns_success_with_valid_dossier_id(client):
-    url = reverse("signalements-process-ds-dossier")
+    url = reverse("signalements-process-dn-dossier")
     data = {"dossier_id": 12345}
     response = client.post(url, data, content_type="application/json")
     assert response.status_code == status.HTTP_200_OK
@@ -18,7 +18,7 @@ def test_process_dossier_returns_success_with_valid_dossier_id(client):
 
 
 def test_process_dossier_returns_error_when_dossier_id_is_missing(client):
-    url = reverse("signalements-process-ds-dossier")
+    url = reverse("signalements-process-dn-dossier")
     data = {}
     response = client.post(url, data, content_type="application/json")
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -27,7 +27,7 @@ def test_process_dossier_returns_error_when_dossier_id_is_missing(client):
 
 
 def test_process_dossier_returns_error_when_dossier_id_is_none(client):
-    url = reverse("signalements-process-ds-dossier")
+    url = reverse("signalements-process-dn-dossier")
     data = {"dossier_id": None}
     response = client.post(url, data, content_type="application/json")
     assert response.status_code == status.HTTP_400_BAD_REQUEST
