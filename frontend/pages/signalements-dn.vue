@@ -243,7 +243,7 @@ onMounted(async () => {
       dossier_id: dossierId,
     })
   } catch (err: any) {
-    error.value = err.error || 'An error occurred while processing the dossier'
+    error.value = err.error || 'Une erreur est survenue lors du traitement du dossier'
   } finally {
     showLoading.value = false
   }
