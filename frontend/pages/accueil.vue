@@ -5,14 +5,18 @@
         <h1 class="fr-h1 fr-mb-3w">
           Accompagner les collectivités pour mieux lutter contre les dépôts sauvages.
         </h1>
-        <p class="fr-text fr-mb-2w">Simplifier le signalement des dépôts sauvages</p>
-        <p>
-          Protect’Envi est l'outil qui vous accompagne et vous aide à produire des rapports pour
-          faciliter la procédure administrative et judiciaire.
+        <p class="fr-text fr-mb-2w">
+          Lorsqu'une commune constate un dépôt sauvage, elle dispose de deux leviers d'action :
         </p>
-        <p>
-          Notre objectif : améliorer l’efficacité des services publics, faciliter les procédures et
-          contribuer à la réduction durable des dépôts sauvages sur le territoire.
+        <ul class="fr-text fr-mb-2w">
+          <li>Déposer plainte pour initier une procédure judiciaire</li>
+          <li>
+            Mettre en œuvre une procédure administrative qui permet d'émettre une amende pouvant
+            aller jusqu'à 15 000 €, recouvrée au profit de la mairie.
+          </li>
+        </ul>
+        <p class="fr-text fr-mb-2w">
+          Vous êtes victime d'un dépôt sauvage, Protect'Envi peut vous aider à agir.
         </p>
         <a
           v-if="useExternalLink"
@@ -20,7 +24,7 @@
           class="fr-btn fr-mt-3w"
           target="_blank"
           rel="noopener noreferrer"
-          >Débuter une procédure
+          >Débuter une procédure via Démarche Numérique
         </a>
         <RouterLink v-else to="/debuter-procedure" class="fr-btn fr-mt-3w"
           >Débuter une procédure
