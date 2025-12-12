@@ -27,16 +27,6 @@
     </nav>
 
     <main class="fr-container fr-py-3w" role="main" id="content">
-      <DsfrNotice v-if="!route.meta.hideFeedback">
-        <a
-          href="https://docs.google.com/forms/d/e/1FAIpQLSe73qnFQje6_hdhKv1VeyZVQOIeRzn0Q7ahRI4hlBjq8atG8Q/viewform"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          Partagez-vous votre avis !
-        </a>
-        Vos retours sont précieux pour faire évoluer l'outil.
-      </DsfrNotice>
       <slot />
     </main>
     <DsfrFooter :logo-text="logoText">
@@ -75,7 +65,7 @@
 </template>
 
 <script setup lang="ts">
-import { DsfrFooter, DsfrFooterLinkList, DsfrHeader, DsfrNotice } from '@gouvminint/vue-dsfr'
+import { DsfrFooter, DsfrFooterLinkList, DsfrHeader } from '@gouvminint/vue-dsfr'
 import { useRoute } from 'vue-router'
 interface FooterLink {
   text: string
