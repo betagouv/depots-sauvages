@@ -20,7 +20,7 @@
           class="fr-btn fr-mt-3w"
           target="_blank"
           rel="noopener noreferrer"
-          >Débuter une procédure
+          >Débuter une procédure via Démarche Numérique
         </a>
         <RouterLink v-else to="/debuter-procedure" class="fr-btn fr-mt-3w"
           >Débuter une procédure
