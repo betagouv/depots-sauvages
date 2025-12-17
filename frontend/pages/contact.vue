@@ -34,7 +34,7 @@
           description="Réservez un créneau pour une session d'accompagnement ou un webinaire avec notre équipe. Vous pourrez poser vos questions et obtenir des conseils adaptés à votre situation."
           :buttons="[
             {
-              label: 'Prendre rendez-vous (nouvel onglet)',
+              label: 'Prendre rendez-vous',
               icon: { name: 'ri-external-link-line', scale: 1.5, class: 'fr-mr-1w' },
               secondary: true,
               onClick: openRdvPage,
