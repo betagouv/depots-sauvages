@@ -159,7 +159,7 @@
           <ul>
             <li>
               <span aria-hidden="true">🔍</span> Retrouver de l'aide dans la section
-              <a href="/accompagnement" rel="noreferrer noopener">Être accompagné</a>
+              <a href="/contact" rel="noreferrer noopener">Nous contacter</a>
             </li>
             <li>
               <span aria-hidden="true">🔁</span> Démarrer une nouvelle procédure si nécessaire
@@ -205,7 +205,7 @@ const goHome = () => {
 }
 
 const goToAccompagnement = () => {
-  window.location.href = '/accompagnement'
+  window.location.href = '/contact'
 }
 
 // Control buttons delay

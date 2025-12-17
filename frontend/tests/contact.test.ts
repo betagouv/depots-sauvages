@@ -2,7 +2,7 @@ import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/vue'
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 import { axe } from 'vitest-axe'
-import Accompagnement from '../pages/accompagnement.vue'
+import Contact from '../pages/contact.vue'
 
 const replace = vi.fn()
 vi.mock('vue-router', () => ({
@@ -11,7 +11,7 @@ vi.mock('vue-router', () => ({
   }),
 }))
 
-describe('Page Accueil', () => {
+describe('Page Contact', () => {
   beforeAll(() => {
     HTMLCanvasElement.prototype.getContext = vi.fn()
   })
@@ -19,7 +19,7 @@ describe('Page Accueil', () => {
   beforeEach(() => {
     vi.stubEnv('VITE_CONTACT_EMAIL', 'contact@test.com')
 
-    render(Accompagnement, {
+    render(Contact, {
       global: {
         mocks: {
           $router: { replace },
@@ -40,7 +40,7 @@ describe('Page Accueil', () => {
   })
 
   it('vérifie l’accessibilité de la page', async () => {
-    const { container } = render(Accompagnement, {
+    const { container } = render(Contact, {
       global: {
         stubs: { DsfrCard: true },
       },
