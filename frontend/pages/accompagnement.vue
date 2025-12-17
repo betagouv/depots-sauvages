@@ -17,6 +17,7 @@
               label: 'Envoyer un e-mail',
               icon: { name: 'ri-mail-line', scale: 1.5, class: 'fr-mr-1w' },
               onClick: sendEmail,
+              disabled: !contactEmail,
             },
           ]"
           size="large"
@@ -33,7 +34,7 @@
           description="Réservez un créneau pour une session d'accompagnement ou un webinaire avec notre équipe. Vous pourrez poser vos questions et obtenir des conseils adaptés à votre situation."
           :buttons="[
             {
-              label: 'Prendre rendez-vous',
+              label: 'Prendre rendez-vous (nouvel onglet)',
               icon: { name: 'ri-external-link-line', scale: 1.5, class: 'fr-mr-1w' },
               secondary: true,
               onClick: openRdvPage,
@@ -56,15 +57,11 @@ import { DsfrCard } from '@gouvminint/vue-dsfr'
 const contactEmail = import.meta.env.VITE_CONTACT_EMAIL
 
 const sendEmail = () => {
-  if (typeof window !== 'undefined') {
-    window.location.href = `mailto:${contactEmail}`
-  }
+  window.location.href = `mailto:${contactEmail}`
 }
 
 const openRdvPage = () => {
-  if (typeof window !== 'undefined') {
-    window.open('https://rdv.anct.gouv.fr/org/1769/protect-envi', '_blank', 'noopener,noreferrer')
-  }
+  window.open('https://rdv.anct.gouv.fr/org/1769/protect-envi', '_blank', 'noopener,noreferrer')
 }
 </script>
 
