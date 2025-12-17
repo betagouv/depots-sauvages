@@ -1,12 +1,11 @@
 <template>
   <div class="fr-container--sm fr-py-5w">
     <div class="fr-grid-row fr-grid-row--gutters">
-      <div class="fr-col-12 fr-col-md-6">
-        <h1 class="fr-h1 fr-mb-3w">Un accompagnement personnalisé pour mieux agir</h1>
+      <div class="fr-col-12">
+        <h1 class="fr-h1 fr-mb-3w">Contactez-nous</h1>
       </div>
 
       <div class="fr-container">
-        <h2>Contactez-nous</h2>
         <p class="fr-mb-4w">
           Choisissez votre mode de contact préféré pour démarrer votre démarche :
         </p>
@@ -19,26 +18,29 @@
             >
               Envoyer un e-mail
             </a>
-            <p class="fr-text--bold">Besoin d’aide ou d’informations détaillées ?</p>
+            <p class="fr-text--bold">Besoin d'aide ou d'informations détaillées ?</p>
             <p>
-              Envoyez-nous un e-mail en cliquant sur le bouton ci-dessus. Vous pouvez poser vos questions, joindre des documents et expliquer votre situation en détail. Notre équipe vous répondra dans les meilleurs délais.
+              Envoyez-nous un e-mail en cliquant sur le bouton ci-dessus. Vous pouvez poser vos
+              questions, joindre des documents et expliquer votre situation en détail. Notre équipe
+              vous répondra dans les meilleurs délais.
             </p>
           </div>
 
           <div class="fr-col-12 fr-col-md-6">
             <a
-              :href="whatsappLink"
+              href="https://rdv.anct.gouv.fr/org/1769/protect-envi"
               target="_blank"
               rel="noopener noreferrer"
               class="fr-btn fr-btn--secondary fr-mb-2w"
             >
-            Démarrer une conversation WhatsApp
+              Prendre rendez-vous
             </a>
-            <p class="fr-text--bold">Pour une réponse rapide et un échange direct</p>
+            <p class="fr-text--bold">Pour un accompagnement personnalisé</p>
             <p>
-              Discutez directement avec notre équipe sur WhatsApp pour obtenir une aide rapide et personnalisée.
+              Réservez un créneau pour une session d'accompagnement ou un webinaire avec notre
+              équipe. Vous pourrez poser vos questions et obtenir des conseils adaptés à votre
+              situation.
             </p>
-            <p>Vous serez redirigé vers un groupe WhatsApp d’accueil, où un conseiller vous répondra rapidement.</p>
           </div>
         </div>
       </div>
@@ -47,6 +49,5 @@
 </template>
 
 <script setup lang="ts">
-const contactEmail = import.meta.env.VITE_CONTACT_EMAIL;
-const whatsappLink = import.meta.env.VITE_WHATSAPP_LINK;
+const contactEmail = import.meta.env.VITE_CONTACT_EMAIL
 </script>
