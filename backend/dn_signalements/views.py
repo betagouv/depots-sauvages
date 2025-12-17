@@ -1,4 +1,5 @@
 import logging
+from datetime import date, time
 
 from django.utils import dateparse
 from rest_framework import status
@@ -66,11 +67,18 @@ class ProcessDossierView(APIView):
                 data["localisation_depot"] = address_data["label"]
             if address_data.get("cityName"):
                 data["commune"] = address_data["cityName"]
-
         datetime_constat = champs_data.get(DATE_CONSTAT_CHAMP_ID)
-        if datetime_constat:
+        try:
             data["date_constat"] = datetime_constat.date()
             data["heure_constat"] = datetime_constat.time()
+        except (AttributeError, TypeError) as e:
+            logging.warning(
+                "Unable to parse constat date for dossier %s: %s. ",
+                dossier.get("number"),
+                e,
+            )
+            data["date_constat"] = date(1900, 1, 1)  # Invalid date, but valid for the DB
+            data["heure_constat"] = time(0, 0)
         procedure_judiciaire = champs_data.get(PROCEDURE_JUDICIAIRE_CHAMP_ID)
         if procedure_judiciaire:
             procedure_lower = str(procedure_judiciaire).lower()
