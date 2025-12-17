@@ -31,7 +31,7 @@
       <div class="fr-col-12 fr-col-md-6">
         <DsfrCard
           title="Prendre rendez-vous"
-          description="Réservez un créneau pour une session d'accompagnement ou un webinaire avec notre équipe. Vous pourrez poser vos questions et obtenir des conseils adaptés à votre situation."
+          description="Réservez un créneau via RDV Service Public, pour une session d'accompagnement ou un webinaire avec notre équipe. Vous pourrez poser vos questions et obtenir des conseils adaptés à votre situation."
           :buttons="[
             {
               label: 'Prendre rendez-vous',
