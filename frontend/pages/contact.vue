@@ -34,8 +34,8 @@
 
       <div class="fr-col-12 fr-col-md-6">
         <DsfrCard
-          title="Besoin d'un accompagnement spécifique ?"
-          description="Participez à un webinaire ou réservez une session d'accompagnement individuelle pour votre cas concret."
+          title="Besoin d'un accompagnement ?"
+          description="Participez à un webinaire collectif ou réservez une session d'accompagnement individuelle pour votre cas concret."
           :buttons="[
             {
               label: 'Prendre rendez-vous',
