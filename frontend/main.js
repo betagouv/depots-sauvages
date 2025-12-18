@@ -33,9 +33,9 @@ const router = createRouter({
       component: () => import('./pages/debuter-procedure.vue'),
     },
     {
-      path: '/accompagnement',
-      name: 'Accompagnement',
-      component: () => import('./pages/accompagnement.vue'),
+      path: '/contact',
+      name: 'Contact',
+      component: () => import('./pages/contact.vue'),
     },
     {
       path: '/joindre',

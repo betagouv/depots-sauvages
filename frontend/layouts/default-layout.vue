@@ -84,7 +84,7 @@ const breadcrumbLinks: BreadcrumbLink[] = []
 const navLinks = [
   { text: 'Accueil', href: '/' },
   { text: 'Comprendre la procédure', href: '/comprendre-la-procedure' },
-  { text: 'Être accompagné', href: '/accompagnement' },
+  { text: 'Contact', href: '/contact' },
 ]
 
 const footerLinks: FooterLink[] = [
