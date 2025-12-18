@@ -3,8 +3,7 @@
     <header class="hero-section fr-mb-6w fr-p-4w">
       <h1 class="fr-h1 fr-mb-3w">Contactez-nous</h1>
       <p class="fr-text fr-text--lead">
-        Échangez avec nos équipes pour répondre à toutes vos questions sur Protect'Envi et les
-        procédures dépôts sauvages.
+        Contactez-nous et posez vos questions sur Protect’Envi et les procédures dépôts sauvages
       </p>
     </header>
 
