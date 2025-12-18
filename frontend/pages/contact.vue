@@ -57,6 +57,7 @@
 import { DsfrCard } from '@gouvminint/vue-dsfr'
 
 const contactEmail = import.meta.env.VITE_CONTACT_EMAIL
+const rdvPageUrl = import.meta.env.VITE_RDV_PAGE_URL || 'https://rdv.anct.gouv.fr/prendre_rdv'
 
 const chatIcon = { name: 'ri-chat-1-line', scale: 1.5, class: 'fr-mr-1w' }
 const emailIcon = { name: 'ri-mail-line', scale: 1.5, class: 'fr-mr-1w' }
@@ -67,11 +68,7 @@ const sendEmail = () => {
 }
 
 const openRdvPage = () => {
-  window.open(
-    'https://rdv.anct.gouv.fr/prendre_rdv?departement=&public_link_organisation_id=1769',
-    '_blank',
-    'noopener,noreferrer'
-  )
+  window.open(rdvPageUrl, '_blank', 'noopener,noreferrer')
 }
 
 const openCrispChat = () => {
