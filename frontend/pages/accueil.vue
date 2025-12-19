@@ -46,27 +46,29 @@
       </div>
 
       <section>
-        <h2>Le fléau des dépôts sauvages</h2>
-        <p>
-          Les dépôts sauvages dégradent notre environnement et représentent un coût important pour
-          les communes.
-        </p>
-        <p>
-          Malgré leur engagement, les collectivités manquent souvent de ressources, de temps et
-          d’accompagnement pour agir efficacement.
-        </p>
-        <p>
-          La procédure administrative donne des pouvoirs importants aux Maires (et permet à la
-          collectivité de verbaliser) mais elle est très mal connue et peu utilisée.
-        </p>
-        <p>
-          La procédure judiciaire génère de la frustration car les plaintes sont très souvent
-          classées sans suite.
-        </p>
-        <p>
-          Protect’Envi vous accompagne dans ces procédures en vous guidant pas à pas et en vous
-          fournissant des documents conformes pré-remplis.
-        </p>
+        <div class="fr-background-alt--grey fr-p-4w fr-border-radius--8 fr-mt-4w">
+          <h2 class="fr-h3 fr-mb-2w">Le fléau des dépôts sauvages</h2>
+          <p class="fr-text">
+            Les dépôts sauvages dégradent notre environnement et représentent un coût important pour
+            les communes. Malgré leur engagement, les collectivités manquent souvent de ressources,
+            de temps et d’accompagnement pour agir efficacement.
+          </p>
+          <p class="fr-text">
+            <ul class="fr-text fr-pl-2w">
+              <li>
+                La procédure administrative donne des pouvoirs importants aux maires (et permet à la collectivité de verbaliser) mais elle est très mal connue et peu utilisée.
+          </li>
+            <li>
+                La procédure judiciaire génère de la frustration car les plaintes sont très souvent classées sans
+            suite.
+          </li>
+          </ul>
+          </p>
+          <p class="fr-text">
+            Protect’Envi vous accompagne dans ces procédures en vous guidant pas à pas et en vous
+            fournissant des documents conformes pré-remplis.
+          </p>
+        </div>
       </section>
 
       <section class="fr-container fr-my-6w">
