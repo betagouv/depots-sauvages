@@ -6,29 +6,21 @@
           Accompagner les collectivités pour mieux lutter contre les dépôts sauvages.
         </h1>
         <p class="fr-text fr-mb-2w">
-          Lorsqu'une commune constate un dépôt sauvage, elle dispose de deux leviers d'action :
-        </p>
-        <ul class="fr-text fr-mb-2w">
-          <li>Déposer plainte pour initier une procédure judiciaire</li>
-          <li>
-            Mettre en œuvre une procédure administrative qui permet d'émettre une amende pouvant
-            aller jusqu'à 15 000 €, recouvrée au profit de la mairie.
-          </li>
-        </ul>
-        <p class="fr-text fr-mb-2w">
           Vous êtes victime d'un dépôt sauvage, Protect'Envi peut vous aider à agir.
         </p>
-        <a
-          v-if="useExternalLink"
-          :href="demarcheNumeriqueUrl"
-          class="fr-btn fr-mt-3w"
-          target="_blank"
-          rel="noopener noreferrer"
-          >Débuter une procédure via Démarche Numérique
-        </a>
-        <RouterLink v-else to="/debuter-procedure" class="fr-btn fr-mt-3w"
-          >Débuter une procédure
-        </RouterLink>
+        <div class="fr-btns-group fr-btns-group--center fr-mt-3w">
+            <a
+              v-if="useExternalLink"
+              :href="demarcheNumeriqueUrl"
+              class="fr-btn"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Débuter une procédure via Démarche Numérique
+            </a>
+            <RouterLink v-else to="/debuter-procedure" class="fr-btn"
+              >Débuter une procédure
+            </RouterLink>
+          </div>
         <DsfrNotice class="fr-my-3w">
           Pour débuter une procédure, vous devez vous connecter avec ProConnect.
           <a href="/contact">Contactez-nous</a> si vous avez des difficultés à vous connecter.
@@ -44,6 +36,17 @@
           title="Dépôt sauvage"
         />
       </div>
+      <p class="fr-text fr-mb-2w">
+          Lorsqu'une commune constate un dépôt sauvage, elle dispose de deux leviers d'action :
+        </p>
+        <ul class="fr-text fr-mb-2w">
+          <li>Déposer plainte pour initier une procédure judiciaire</li>
+          <li>
+            Mettre en œuvre une procédure administrative qui permet d'émettre une amende pouvant
+            aller jusqu'à 15 000 €, recouvrée au profit de la mairie.
+          </li>
+        </ul>
+
 
       <section>
         <div class="fr-background-alt--grey fr-p-4w fr-border-radius--8 fr-mt-4w">
