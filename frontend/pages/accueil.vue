@@ -29,6 +29,10 @@
         <RouterLink v-else to="/debuter-procedure" class="fr-btn fr-mt-3w"
           >Débuter une procédure
         </RouterLink>
+        <DsfrNotice class="fr-my-3w">
+          Pour débuter une procédure, vous devez vous connecter avec ProConnect.
+          <a href="/contact">Contactez-nous</a> si vous avez des difficultés à vous connecter.
+        </DsfrNotice>
       </div>
 
       <div class="fr-col-12 fr-col-md-6">
