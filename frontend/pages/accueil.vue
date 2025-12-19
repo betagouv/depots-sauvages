@@ -47,11 +47,11 @@
       <DsfrCallout title="Vos deux leviers d'action" content="" class="fr-callout--blue-ecume">
         <p class="fr-text">Lorsqu'une commune constate un dépôt sauvage, elle peut :</p>
         <ul class="fr-text fr-mb-0">
-          <li>Déposer plainte <strong>pour initier une procédure judiciaire</strong></li>
           <li>
             Mettre en œuvre une <strong>procédure administrative</strong> qui permet d'émettre une
             amende pouvant aller jusqu'à 15 000 €, recouvrée au profit de la mairie.
           </li>
+          <li>Déposer plainte <strong>pour initier une procédure judiciaire</strong></li>
         </ul>
       </DsfrCallout>
 
