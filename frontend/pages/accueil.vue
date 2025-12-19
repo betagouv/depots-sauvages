@@ -23,7 +23,14 @@
         </div>
         <DsfrNotice class="fr-mt-2w">
           Vous aurez besoin de vous connecter avec ProConnect.
-          <a href="/contact">Contactez-nous</a> si vous avez des difficultés.
+          <br />En cas de difficultés,
+          <a
+            href="https://proconnect.crisp.help/fr/article/utiliser-proconnect-au-sein-dune-collectivite-ou-dune-mairie-1mobnb6"
+            target="_blank"
+            rel="noopener noreferrer"
+            style="white-space: nowrap"
+            >consultez cette documentation</a
+          >
         </DsfrNotice>
       </div>
 
