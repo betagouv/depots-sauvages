@@ -75,13 +75,3 @@ if PROCONNECT_ENABLED:
     OIDC_OP_TOKEN_ENDPOINT = env("OIDC_OP_TOKEN_ENDPOINT")
     OIDC_OP_USER_ENDPOINT = env("OIDC_OP_USER_ENDPOINT")
     OIDC_RP_SIGN_ALGO = "RS256"
-
-    LOGIN_URL = "oidc_authentication_init"
-    LOGIN_REDIRECT_URL = "index"
-    LOGOUT_REDIRECT_URL = "index"
-
-    LOGIN_REQUIRED_IGNORE_PATHS = [
-        r"^/oidc/",
-        r"^/admin/",
-        r"^/static/",
-    ]

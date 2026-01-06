@@ -26,3 +26,10 @@ DN_API_TOKEN = "test-token"
 
 # ProConnect / OIDC Settings
 PROCONNECT_ENABLED = False
+
+login_middleware = "login_required.middleware.LoginRequiredMiddleware"
+if login_middleware in MIDDLEWARE:
+    MIDDLEWARE.remove(login_middleware)
+
+if "mozilla_django_oidc" in INSTALLED_APPS:
+    INSTALLED_APPS.remove("mozilla_django_oidc")

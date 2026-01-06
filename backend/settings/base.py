@@ -169,5 +169,11 @@ DN_GRAPHQL_ENDPOINT = "https://demarche.numerique.gouv.fr/api/v2/graphql"
 DN_REQUEST_TIMEOUT = 30
 DN_MAX_RETRIES = 3
 
-# ProConnect / OIDC Settings
-PROCONNECT_ENABLED = False
+# ProConnect / OIDC / Login Required
+LOGIN_URL = "oidc_authentication_init"
+LOGIN_REDIRECT_URL = "index"
+LOGOUT_REDIRECT_URL = "index"
+
+LOGIN_REQUIRED_IGNORE_PATHS = [
+    r"^(?!/(api|signalements|signalements-dn)/).*$",
+]
