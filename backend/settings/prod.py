@@ -79,3 +79,30 @@ if redis_url:
             },
         }
     }
+
+# ProConnect / OIDC Settings
+PROCONNECT_ENABLED = env.bool("PROCONNECT_ENABLED", default=False)
+
+if PROCONNECT_ENABLED:
+    INSTALLED_APPS += ["mozilla_django_oidc"]
+    MIDDLEWARE += ["login_required.middleware.LoginRequiredMiddleware"]
+    AUTHENTICATION_BACKENDS = [
+        "mozilla_django_oidc.auth.OIDCAuthenticationBackend",
+        "django.contrib.auth.backends.ModelBackend",
+    ]
+    OIDC_RP_CLIENT_ID = env("OIDC_RP_CLIENT_ID")
+    OIDC_RP_CLIENT_SECRET = env("OIDC_RP_CLIENT_SECRET")
+    OIDC_OP_AUTHORIZATION_ENDPOINT = env("OIDC_OP_AUTHORIZATION_ENDPOINT")
+    OIDC_OP_TOKEN_ENDPOINT = env("OIDC_OP_TOKEN_ENDPOINT")
+    OIDC_OP_USER_ENDPOINT = env("OIDC_OP_USER_ENDPOINT")
+    OIDC_RP_SIGN_ALGO = "RS256"
+
+    LOGIN_URL = "oidc_authentication_init"
+    LOGIN_REDIRECT_URL = "index"
+    LOGOUT_REDIRECT_URL = "index"
+
+    LOGIN_REQUIRED_IGNORE_PATHS = [
+        r"^/oidc/",
+        r"^/admin/",
+        r"^/static/",
+    ]
