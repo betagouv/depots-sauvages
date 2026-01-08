@@ -64,7 +64,6 @@ PROCONNECT_ENABLED = env.bool("PROCONNECT_ENABLED", default=False)
 
 if PROCONNECT_ENABLED:
     INSTALLED_APPS += ["mozilla_django_oidc"]
-    MIDDLEWARE += ["login_required.middleware.LoginRequiredMiddleware"]
     AUTHENTICATION_BACKENDS = [
         "mozilla_django_oidc.auth.OIDCAuthenticationBackend",
         "django.contrib.auth.backends.ModelBackend",
@@ -76,3 +75,12 @@ if PROCONNECT_ENABLED:
     OIDC_OP_USER_ENDPOINT = env("OIDC_OP_USER_ENDPOINT")
     OIDC_OP_JWKS_ENDPOINT = env("OIDC_OP_JWKS_ENDPOINT")
     OIDC_RP_SIGN_ALGO = "RS256"
+
+
+# Auth Configuration
+API_AUTH_ENABLED = env.bool("API_AUTH_ENABLED", default=False)
+
+if not API_AUTH_ENABLED:
+    REST_FRAMEWORK["DEFAULT_PERMISSION_CLASSES"] = [
+        "rest_framework.permissions.AllowAny",
+    ]

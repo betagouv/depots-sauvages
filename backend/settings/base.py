@@ -105,7 +105,10 @@ STATICFILES_DIRS = [
 # DRF Settings
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.AllowAny",
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
     ],
 }
 
@@ -173,7 +176,3 @@ DN_MAX_RETRIES = 3
 LOGIN_URL = "oidc_authentication_init"
 LOGIN_REDIRECT_URL = "index"
 LOGOUT_REDIRECT_URL = "index"
-
-LOGIN_REQUIRED_IGNORE_PATHS = [
-    r"^(?!/(api|signalements|signalements-dn)/).*$",
-]
