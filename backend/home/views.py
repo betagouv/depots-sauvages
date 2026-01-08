@@ -1,4 +1,4 @@
-from urllib.parse import quote_plus
+from urllib.parse import urlencode
 
 from django.conf import settings
 from django.contrib.auth import logout
@@ -30,9 +30,21 @@ class UserInfoViewSet(viewsets.ViewSet):
 
 
 def logout_view(request):
+    """
+    Handles user logout.
+    If ProConnect is enabled, it redirects to the ProConnect logout endpoint
+    to ensure the user is logged out from the identity provider as well.
+    It passes 'id_token_hint' to identifies the user to the IDP and avoid prompt,
+    and 'post_logout_redirect_uri' to redirect back to our app after IDP logout.
+    """
+    id_token = request.session.get("oidc_id_token")
     logout(request)
-    if settings.PROCONNECT_ENABLED and getattr(settings, "OIDC_OP_LOGOUT_ENDPOINT", None):
-        logout_url = settings.OIDC_OP_LOGOUT_ENDPOINT
-        redirect_url = request.build_absolute_uri(reverse("index"))
-        return redirect(f"{logout_url}?post_logout_redirect_uri={quote_plus(redirect_url)}")
+    oidc_logout_endpoint = getattr(settings, "OIDC_OP_LOGOUT_ENDPOINT", None)
+    if settings.PROCONNECT_ENABLED and oidc_logout_endpoint:
+        params = {
+            "post_logout_redirect_uri": request.build_absolute_uri(reverse("index")),
+        }
+        if id_token:
+            params["id_token_hint"] = id_token
+        return redirect(f"{oidc_logout_endpoint}?{urlencode(params)}")
     return redirect("index")
