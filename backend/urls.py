@@ -9,13 +9,14 @@ from backend.dn_signalements.views import (
     DNSignalementViewSet,
     ProcessDossierView,
 )
-from backend.home.views import index_view
+from backend.home.views import UserInfoViewSet, index_view, logout_view
 from backend.signalements.views import SignalementDocumentDownloadView, SignalementViewSet
 
 # API Routes registration
 router = DefaultRouter()
 router.register("signalements", SignalementViewSet, basename="signalement")
 router.register("dn-signalements", DNSignalementViewSet, basename="dn-signalement")
+router.register("user-info", UserInfoViewSet, basename="user-info")
 
 # Admin Routes
 urlpatterns = [path("admin/", admin.site.urls)]
@@ -39,6 +40,7 @@ urlpatterns.extend(
             name="signalements-process-dn-dossier",
         ),
         path("api/", include(router.urls)),
+        path("logout/", logout_view, name="logout"),
     ]
 )
 
