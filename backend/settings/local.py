@@ -78,9 +78,9 @@ if PROCONNECT_ENABLED:
 
 
 # Auth Configuration
-API_AUTH_ENABLED = env.bool("API_AUTH_ENABLED", default=False)
+LOGIN_REQUIRED = env.bool("LOGIN_REQUIRED", default=False)
 
-if not API_AUTH_ENABLED:
+if not LOGIN_REQUIRED:
     REST_FRAMEWORK["DEFAULT_PERMISSION_CLASSES"] = [
         "rest_framework.permissions.AllowAny",
     ]

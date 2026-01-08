@@ -47,7 +47,10 @@ if settings.PROCONNECT_ENABLED:
     urlpatterns.append(path("oidc/", include("mozilla_django_oidc.urls")))
 
 # Protected Frontend Routes
-urlpatterns.append(re_path(r"^signalements-dn/.*", login_required(index_view)))
+if settings.LOGIN_REQUIRED:
+    urlpatterns.append(re_path(r"^signalements-dn/.*", login_required(index_view)))
+else:
+    urlpatterns.append(re_path(r"^signalements-dn/.*", index_view))
 
 # Frontend Routes
 # This is a catch-all pattern that serves the compiled frontend.

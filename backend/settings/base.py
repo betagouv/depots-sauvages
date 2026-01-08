@@ -176,3 +176,5 @@ DN_MAX_RETRIES = 3
 LOGIN_URL = "oidc_authentication_init"
 LOGIN_REDIRECT_URL = "index"
 LOGOUT_REDIRECT_URL = "index"
+
+LOGIN_REQUIRED = True
