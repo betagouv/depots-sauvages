@@ -24,13 +24,21 @@ const router = createRouter({
     },
     {
       path: '/debuter-procedure',
-      name: 'Introduction',
-      component: () => import('./pages/introduction-formulaire.vue'),
+      ...(import.meta.env.VITE_DN_ENABLED === 'true'
+        ? { redirect: '/' }
+        : {
+            name: 'Introduction',
+            component: () => import('./pages/introduction-formulaire.vue'),
+          }),
     },
     {
       path: '/debuter-procedure/formulaire',
-      name: 'Formulaire',
-      component: () => import('./pages/debuter-procedure.vue'),
+      ...(import.meta.env.VITE_DN_ENABLED === 'true'
+        ? { redirect: '/' }
+        : {
+            name: 'Formulaire',
+            component: () => import('./pages/debuter-procedure.vue'),
+          }),
     },
     {
       path: '/contact',
@@ -39,9 +47,7 @@ const router = createRouter({
     },
     {
       path: '/joindre',
-      name: 'Joindre',
-      component: () => import('./pages/joindre.vue'),
-      meta: { hideNavigation: true },
+      redirect: '/demarche-numerique-rejoindre-protectenvi',
     },
     {
       path: '/signalements-dn/:dossier_id',
@@ -51,9 +57,7 @@ const router = createRouter({
     },
     {
       path: '/rejoindre-le-dispositif',
-      name: 'RejoindreDispositif',
-      component: () => import('./pages/rejoindre-le-dispositif.vue'),
-      meta: { hideNavigation: true },
+      redirect: '/demarche-numerique-rejoindre-protectenvi',
     },
     {
       path: '/demarche-numerique-rejoindre-protectenvi',
@@ -62,12 +66,6 @@ const router = createRouter({
       meta: { hideNavigation: true },
     },
   ],
-})
-
-router.beforeEach((to) => {
-  if (import.meta.env.VITE_DN_ENABLED === 'true' && to.path.startsWith('/debuter-procedure')) {
-    return '/'
-  }
 })
 
 const app = createApp(App)
