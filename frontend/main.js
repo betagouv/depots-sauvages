@@ -24,13 +24,21 @@ const router = createRouter({
     },
     {
       path: '/debuter-procedure',
-      name: 'Introduction',
-      component: () => import('./pages/introduction-formulaire.vue'),
+      ...(import.meta.env.VITE_DN_ENABLED === 'true'
+        ? { redirect: '/' }
+        : {
+            name: 'Introduction',
+            component: () => import('./pages/introduction-formulaire.vue'),
+          }),
     },
     {
       path: '/debuter-procedure/formulaire',
-      name: 'Formulaire',
-      component: () => import('./pages/debuter-procedure.vue'),
+      ...(import.meta.env.VITE_DN_ENABLED === 'true'
+        ? { redirect: '/' }
+        : {
+            name: 'Formulaire',
+            component: () => import('./pages/debuter-procedure.vue'),
+          }),
     },
     {
       path: '/contact',
@@ -58,12 +66,6 @@ const router = createRouter({
       meta: { hideNavigation: true },
     },
   ],
-})
-
-router.beforeEach((to) => {
-  if (import.meta.env.VITE_DN_ENABLED === 'true' && to.path.startsWith('/debuter-procedure')) {
-    return '/'
-  }
 })
 
 const app = createApp(App)
