@@ -64,6 +64,12 @@ const router = createRouter({
   ],
 })
 
+router.beforeEach((to) => {
+  if (import.meta.env.VITE_DN_ENABLED === 'true' && to.path.startsWith('/debuter-procedure')) {
+    return '/'
+  }
+})
+
 const app = createApp(App)
 
 app.use(router)
