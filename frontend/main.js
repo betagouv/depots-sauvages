@@ -39,9 +39,7 @@ const router = createRouter({
     },
     {
       path: '/joindre',
-      name: 'Joindre',
-      component: () => import('./pages/joindre.vue'),
-      meta: { hideNavigation: true },
+      redirect: '/demarche-numerique-rejoindre-protectenvi',
     },
     {
       path: '/signalements-dn/:dossier_id',
@@ -51,9 +49,7 @@ const router = createRouter({
     },
     {
       path: '/rejoindre-le-dispositif',
-      name: 'RejoindreDispositif',
-      component: () => import('./pages/rejoindre-le-dispositif.vue'),
-      meta: { hideNavigation: true },
+      redirect: '/demarche-numerique-rejoindre-protectenvi',
     },
     {
       path: '/demarche-numerique-rejoindre-protectenvi',
