@@ -4,6 +4,7 @@
       service-title="Protect’Envi"
       service-description="Accompagner les collectivités pour mieux lutter contre les dépôts sauvages."
       :logoText="logoText"
+      :quick-links="quickLinks"
     />
 
     <nav
@@ -89,6 +90,18 @@ const navLinks = ref([
   { text: 'Contact', href: '/contact' },
 ])
 
+interface QuickLink {
+  label: string
+  href?: string
+  to?: string
+  icon?: string
+  iconRight?: boolean
+  button?: boolean
+  onClick?: (event: MouseEvent) => void
+}
+
+const quickLinks = ref<QuickLink[]>([])
+
 const isAuthenticated = ref(false)
 
 onMounted(async () => {
@@ -96,7 +109,15 @@ onMounted(async () => {
     const userInfo = await getUserInfo()
     if (userInfo.is_authenticated) {
       isAuthenticated.value = true
-      navLinks.value.push({ text: 'Se déconnecter', href: '/logout/' })
+      quickLinks.value.push({
+        label: 'Se déconnecter',
+        button: true,
+        icon: 'ri-logout-box-r-line',
+        iconRight: false,
+        onClick: () => {
+          window.location.href = '/logout/'
+        },
+      })
     }
   } catch (error) {
     console.error('Failed to fetch user info:', error)
