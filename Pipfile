@@ -20,6 +20,8 @@ django-tasks = "*"
 django-anymail = {extras = ["brevo"], version = "*"}
 django-redis = "*"
 django-model-utils = "*"
+mozilla-django-oidc = "*"
+django-login-required-middleware = "*"
 
 [dev-packages]
 black = "*"
