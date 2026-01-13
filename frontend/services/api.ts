@@ -29,6 +29,7 @@ const getCSRFToken = (): string => {
 export const API_URLS = {
   signalements: `${API_URL}/signalements/`,
   processDossier: `${API_URL}/signalements/process-dn-dossier/`,
+  userInfo: `${API_URL}/user-info/`,
 }
 
 // API functions
@@ -62,3 +63,5 @@ export const createResource = (url: string, data: any) => makeRequest(url, 'POST
 export const updateResource = (url: string, data: any) => makeRequest(url, 'PUT', data)
 
 export const fetchResource = (url: string) => makeRequest(url, 'GET', {})
+
+export const getUserInfo = () => makeRequest(API_URLS.userInfo, 'GET', {})

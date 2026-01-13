@@ -1,6 +1,8 @@
 import logging
 
+from django.contrib.auth.decorators import login_required
 from django.utils import dateparse
+from django.utils.decorators import method_decorator
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -112,6 +114,7 @@ class DNSignalementViewSet(SignalementViewSetMixin):
     send_contact_email_enabled = False
 
 
+@method_decorator(login_required, name="dispatch")
 class DNSignalementDocumentDownloadView(SignalementDocumentDownloadViewMixin):
     """
     Download documents for DNSignalement instances.

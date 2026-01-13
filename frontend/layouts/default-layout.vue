@@ -4,6 +4,7 @@
       service-title="Protect’Envi"
       service-description="Accompagner les collectivités pour mieux lutter contre les dépôts sauvages."
       :logoText="logoText"
+      :quick-links="quickLinks"
     />
 
     <nav
@@ -66,7 +67,9 @@
 
 <script setup lang="ts">
 import { DsfrFooter, DsfrFooterLinkList, DsfrHeader } from '@gouvminint/vue-dsfr'
+import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { getUserInfo } from '../services/api'
 interface FooterLink {
   text: string
   href: string
@@ -81,11 +84,45 @@ const route = useRoute()
 const logoText = ['Ministère', 'de l’intérieur']
 const breadcrumbLinks: BreadcrumbLink[] = []
 
-const navLinks = [
+const navLinks = ref([
   { text: 'Accueil', href: '/' },
   { text: 'Comprendre la procédure', href: '/comprendre-la-procedure' },
   { text: 'Contact', href: '/contact' },
-]
+])
+
+interface QuickLink {
+  label: string
+  href?: string
+  to?: string
+  icon?: string
+  iconRight?: boolean
+  button?: boolean
+  onClick?: (event: MouseEvent) => void
+}
+
+const quickLinks = ref<QuickLink[]>([])
+
+const isAuthenticated = ref(false)
+
+onMounted(async () => {
+  try {
+    const userInfo = await getUserInfo()
+    if (userInfo.is_authenticated) {
+      isAuthenticated.value = true
+      quickLinks.value.push({
+        label: 'Se déconnecter',
+        button: true,
+        icon: 'ri-logout-box-r-line',
+        iconRight: false,
+        onClick: () => {
+          window.location.href = '/logout/'
+        },
+      })
+    }
+  } catch (error) {
+    console.error('Failed to fetch user info:', error)
+  }
+})
 
 const footerLinks: FooterLink[] = [
   { text: 'legifrance.gouv.fr', href: 'https://legifrance.gouv.fr' },
