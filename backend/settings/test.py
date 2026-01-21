@@ -23,3 +23,9 @@ EMAIL_RATE_LIMIT = "100/hour"
 # DN Integration Settings for tests
 DN_GRAPHQL_ENDPOINT = "https://demarche.numerique.gouv.fr/api/v2/graphql"
 DN_API_TOKEN = "test-token"
+
+# ProConnect / OIDC Settings
+PROCONNECT_ENABLED = False
+
+if "mozilla_django_oidc" in INSTALLED_APPS:
+    INSTALLED_APPS.remove("mozilla_django_oidc")

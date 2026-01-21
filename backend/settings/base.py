@@ -105,7 +105,10 @@ STATICFILES_DIRS = [
 # DRF Settings
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.AllowAny",
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
     ],
 }
 
@@ -168,3 +171,11 @@ ANYMAIL = {
 DN_GRAPHQL_ENDPOINT = "https://demarche.numerique.gouv.fr/api/v2/graphql"
 DN_REQUEST_TIMEOUT = 30
 DN_MAX_RETRIES = 3
+
+# ProConnect / OIDC / Login Required
+LOGIN_URL = "oidc_authentication_init"
+LOGIN_REDIRECT_URL = "index"
+LOGOUT_REDIRECT_URL = "index"
+OIDC_STORE_ID_TOKEN = True
+
+LOGIN_REQUIRED = True
