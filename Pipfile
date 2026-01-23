@@ -21,6 +21,7 @@ django-anymail = {extras = ["brevo"], version = "*"}
 django-redis = "*"
 django-model-utils = "*"
 mozilla-django-oidc = "*"
+typing-extensions = "*"
 
 [dev-packages]
 black = "*"
