@@ -10,7 +10,7 @@ class AbstractSignalementBase(models.Model):
     localisation_depot = models.CharField("localisation", max_length=255, blank=True)
     date_constat = models.DateField("date de constatation")
     heure_constat = models.TimeField("heure de constatation")
-    auteur_signalement = models.CharField("auteur signalement", max_length=255, blank=True)
+    constatant = models.CharField("constatant", max_length=255, blank=True)
     nature_terrain = models.JSONField("terrain", default=list, blank=True, null=True)
     volume_depot = models.CharField("volume", max_length=255, blank=True)
     risque_ecoulement = models.BooleanField("risque d'écoulement", default=False)

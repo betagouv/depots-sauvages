@@ -1,6 +1,6 @@
 CHAMP_ID_TO_FIELD = {
     "Q2hhbXAtNTYxNzM1Ng==": "nature_terrain",
-    "Q2hhbXAtNTYxNzM1OA==": "auteur_signalement",
+    "Q2hhbXAtNTYxNzM1OA==": "constatant",
     "Q2hhbXAtNTYxNzM3MA==": "photo_dispo",
     "Q2hhbXAtNTYxNzM3Mg==": "risque_ecoulement",
     "Q2hhbXAtNTYxNzM3Mw==": "volume_depot",

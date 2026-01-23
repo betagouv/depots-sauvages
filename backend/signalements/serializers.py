@@ -21,5 +21,5 @@ class SignalementSerializer(serializers.ModelSerializer):
             "contact_prenom",
             "contact_email",
             "contact_telephone",
-            "auteur_signalement",
+            "constatant",
         ]

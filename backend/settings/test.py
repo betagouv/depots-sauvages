@@ -29,3 +29,6 @@ PROCONNECT_ENABLED = False
 
 if "mozilla_django_oidc" in INSTALLED_APPS:
     INSTALLED_APPS.remove("mozilla_django_oidc")
+
+if "anymail" in INSTALLED_APPS:
+    INSTALLED_APPS.remove("anymail")

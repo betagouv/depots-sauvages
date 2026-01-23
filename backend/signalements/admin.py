@@ -7,7 +7,7 @@ class BaseSignalementAdminMixin:
     list_display = [
         "commune",
         "date_constat",
-        "auteur_signalement",
+        "constatant",
         "auteur_identifie",
         "souhaite_porter_plainte",
         "contact_nom",
@@ -31,7 +31,7 @@ class BaseSignalementAdminMixin:
     search_fields = [
         "commune",
         "localisation_depot",
-        "auteur_signalement",
+        "constatant",
         "precisions_depot",
         "nom_entreprise",
         "nom_particulier",
@@ -54,7 +54,7 @@ class BaseSignalementAdminMixin:
                     "commune",
                     "date_constat",
                     "heure_constat",
-                    "auteur_signalement",
+                    "constatant",
                 )
             },
         ),
