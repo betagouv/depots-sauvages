@@ -78,6 +78,8 @@ class ProcessDossierView(APIView):
                 data["statut_auteur"] = "entreprise"
             elif "particulier" in statut_lower:
                 data["statut_auteur"] = "particulier"
+        if data.get("nature_terrain") and isinstance(data["nature_terrain"], list):
+            data["nature_terrain"] = [str(item).lower() for item in data["nature_terrain"]]
         usager = dossier.get("usager", {})
         if usager.get("email"):
             data["contact_email"] = usager["email"]
