@@ -13,7 +13,6 @@ class AbstractSignalementBase(models.Model):
     constatant = models.CharField("constatant", max_length=255, blank=True)
     nature_terrain = models.JSONField("terrain", default=list, blank=True, null=True)
     volume_depot = models.CharField("volume", max_length=255, blank=True)
-    risque_ecoulement = models.BooleanField("risque d'écoulement", default=False)
     types_depot = models.JSONField("types", default=list, blank=True, null=True)
     precisions_depot = models.TextField("précisions", blank=True)
     photo_dispo = models.BooleanField("photos", default=False)

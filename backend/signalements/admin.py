@@ -64,7 +64,6 @@ class BaseSignalementAdminMixin:
                     "localisation_depot",
                     "nature_terrain",
                     "volume_depot",
-                    "risque_ecoulement",
                     "types_depot",
                     "precisions_depot",
                     "photo_dispo",
