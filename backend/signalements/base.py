@@ -18,7 +18,6 @@ class AbstractSignalementBase(models.Model):
     precisions_depot = models.TextField("précisions", blank=True)
     photo_dispo = models.BooleanField("photos", default=False)
     auteur_identifie = models.BooleanField("auteur identifié", default=False)
-    souhaite_porter_plainte = models.BooleanField("souhaite porter plainte", default=False)
     indices_disponibles = models.JSONField("indices", default=list, blank=True, null=True)
     precisions_indices = models.TextField("précisions indices", blank=True)
     arrete_municipal_existe = models.BooleanField("arrêté municipal existe", default=False)

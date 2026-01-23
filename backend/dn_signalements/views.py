@@ -13,7 +13,6 @@ from backend.dn_signalements.dn_mappings import (
     ADDRESS_CHAMP_ID,
     CHAMP_ID_TO_FIELD,
     DATE_CONSTAT_CHAMP_ID,
-    PROCEDURE_JUDICIAIRE_CHAMP_ID,
 )
 from backend.dn_signalements.models import DNSignalement
 from backend.signalements.serializers import SignalementSerializer
@@ -73,11 +72,6 @@ class ProcessDossierView(APIView):
         if datetime_constat:
             data["date_constat"] = datetime_constat.date()
             data["heure_constat"] = datetime_constat.time()
-        procedure_judiciaire = champs_data.get(PROCEDURE_JUDICIAIRE_CHAMP_ID)
-        if procedure_judiciaire:
-            procedure_lower = str(procedure_judiciaire).lower()
-            if "plainte" in procedure_lower or "déposé" in procedure_lower:
-                data["souhaite_porter_plainte"] = True
         if data.get("statut_auteur"):
             statut_lower = str(data["statut_auteur"]).lower()
             if "entreprise" in statut_lower:
