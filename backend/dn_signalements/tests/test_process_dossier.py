@@ -33,3 +33,20 @@ def test_process_dossier_returns_error_when_dossier_id_is_none(client):
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     response_data = response.json()
     assert "error" in response_data
+
+
+def test_process_dossier_returns_no_procedure_when_date_depot_missing(client, mocker):
+    """Test that a dossier without dateDepot is not processed (no procedure)."""
+    url = reverse("signalements-process-dn-dossier")
+    data = {"dossier_id": 12345}
+    mock_dossier = {
+        "champs": [],
+        "usager": {"email": "test@example.com"},
+        # No dateDepot - simulates dossier without "signalement"
+    }
+    mocker.patch("backend.dn.client.DNGraphQLClient.get_dossier", return_value=mock_dossier)
+    response = client.post(url, data, content_type="application/json")
+    assert response.status_code == status.HTTP_200_OK
+    response_data = response.json()
+    assert response_data["created"] is False
+    assert response_data["reason"] == "no_procedure_or_missing_info"

@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     "django_tasks",
     "django_tasks.backends.database",
     "anymail",
+    "python_odt_template",
     #
     # Project apps
     "backend.throttling",

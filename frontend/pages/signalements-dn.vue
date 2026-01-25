@@ -1,6 +1,19 @@
 <template>
   <div>
-    <div class="hero-section fr-mb-4w fr-py-4w">
+    <div v-if="!hasProcedure" class="hero-section fr-mb-4w fr-py-4w">
+      <div class="fr-container">
+        <div class="fr-grid-row fr-grid-row--center">
+          <div class="fr-col-12 fr-col-md-10 fr-col-lg-8">
+            <h1 class="fr-hero__title fr-text--center">Dossier sans procédure</h1>
+            <p class="fr-hero__text fr-text--lg fr-text--center">
+              Le dossier n'est pas associé à une procédure de dépôt sauvage.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div v-else class="hero-section fr-mb-4w fr-py-4w">
       <div class="fr-container">
         <div class="fr-grid-row fr-grid-row--center">
           <div class="fr-col-12 fr-col-md-10 fr-col-lg-8">
@@ -27,7 +40,7 @@
       </div>
     </div>
 
-    <div class="fr-container fr-pb-4w">
+    <div class="fr-container fr-pb-4w" v-if="hasProcedure">
       <div class="fr-grid-row fr-grid-row--gutters">
         <div :class="rapportColClass">
           <DsfrCard
@@ -94,7 +107,7 @@
         <p>{{ error }}</p>
       </div>
 
-      <div v-if="dossierData">
+      <div v-if="dossierData && hasProcedure">
         <InfoAuteurIdentifie v-if="auteurIdentifie" />
         <InfoAuteurNonIdentifie
           v-else
@@ -113,7 +126,7 @@
                   <strong>Date de dépôt:</strong> {{ formatDate(dossierData.dn_date_depot) }}
                 </p>
                 <p v-if="dossierData.dn_date_modification">
-                  <strong>Dernière modification:</strong>
+                  <strong>Dernière modification dossier:</strong>
                   {{ formatDate(dossierData.dn_date_modification) }}
                 </p>
               </div>
@@ -140,54 +153,9 @@
         </div>
       </div>
 
-      <div class="fr-grid-row fr-grid-row--gutters fr-mt-4w">
+      <div v-if="hasProcedure" class="fr-grid-row fr-grid-row--gutters fr-mt-4w">
         <div class="fr-col-12">
-          <div class="fr-card fr-card--lg">
-            <div class="fr-card__body">
-              <h3 class="fr-card__title">Ressources utiles</h3>
-              <div class="fr-card__desc">
-                <p class="fr-mb-2w">
-                  <VIcon name="ri-arrow-right-line" class="fr-mr-1w" /> Pour un accompagnement pas à
-                  pas, consultez le
-                  <a
-                    href="https://acdechets.smartidf.services/aide-verbalisation"
-                    class="fr-link fr-icon-external-link-line fr-link--icon-right"
-                    target="_blank"
-                    rel="nopener"
-                  >
-                    guide ACDéchets de la Région Île-de-France
-                  </a>
-                </p>
-                <p class="fr-mb-2w">
-                  <VIcon name="ri-arrow-right-line" class="fr-mr-1w" /> Retrouvez des conseils
-                  pratiques sur l'application à destination des élus, Gend'élus, accessible à tout
-                  le monde :
-                </p>
-                <ul class="fr-pl-4w fr-mb-0">
-                  <li>
-                    <a
-                      href="https://play.google.com/store/apps/details?id=com.gendelus&hl=fr&pli=1"
-                      class="fr-link fr-icon-external-link-line fr-link--icon-right"
-                      target="_blank"
-                      rel="noreferrer noopener"
-                    >
-                      Télécharger sur le Play Store
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="https://apps.apple.com/fr/app/gend%C3%A9lus/id6444316373"
-                      class="fr-link fr-icon-external-link-line fr-link--icon-right"
-                      target="_blank"
-                      rel="noreferrer noopener"
-                    >
-                      Télécharger sur l'App Store
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
+          <RessourcesUtiles />
         </div>
       </div>
     </div>
@@ -200,6 +168,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import InfoAuteurIdentifie from '../components/dn/InfoAuteurIdentifie.vue'
 import InfoAuteurNonIdentifie from '../components/dn/InfoAuteurNonIdentifie.vue'
+import RessourcesUtiles from '../components/dn/RessourcesUtiles.vue'
 import { API_URLS, createResource } from '../services/api'
 import { getDnDocConstatUrl, getDnLettreInfoUrl, getDnModifyUrl } from '../services/urls'
 
@@ -207,6 +176,10 @@ const route = useRoute()
 const showLoading = ref(true)
 const error = ref<string | null>(null)
 const dossierData = ref<any>(null)
+
+const hasProcedure = computed(() => {
+  return dossierData.value && dossierData.value.created !== false
+})
 
 const auteurIdentifie = computed(() => dossierData.value?.auteur_identifie ?? false)
 const rapportColClass = computed(() =>

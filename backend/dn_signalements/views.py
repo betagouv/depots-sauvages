@@ -39,6 +39,14 @@ class ProcessDossierView(APIView):
         if not dossier:
             return self.bad_request(f"Dossier {dossier_id} not found")
         signalement_data = self.dossier_to_model_data(dossier)
+        if signalement_data is None:
+            return Response(
+                {
+                    "created": False,
+                    "dn_numero_dossier": numero_dossier,
+                    "reason": "no_procedure_or_missing_info",
+                }
+            )
         signalement, _ = DNSignalement.objects.update_or_create(
             dn_numero_dossier=numero_dossier, defaults=signalement_data
         )
@@ -46,11 +54,14 @@ class ProcessDossierView(APIView):
         signalement.lettre_info_should_generate = True
         signalement.save()
         signalement_data["id"] = signalement.id
-        return Response({**signalement_data, "dn_numero_dossier": numero_dossier})
+        return Response({**signalement_data, "dn_numero_dossier": numero_dossier, "created": True})
 
     def dossier_to_model_data(self, dossier):
         dn_champ = DNChamp(dossier)
         dn_date_depot = self.parse_datetime(dossier.get("dateDepot"))
+        # If there is no date, there is no "dossier"
+        if not dn_date_depot:
+            return None
         dn_date_modification = self.parse_datetime(dossier.get("dateDerniereModification"))
         champs_data = dn_champ.get_data()
         data = {

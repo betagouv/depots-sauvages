@@ -32,3 +32,6 @@ if "mozilla_django_oidc" in INSTALLED_APPS:
 
 if "anymail" in INSTALLED_APPS:
     INSTALLED_APPS.remove("anymail")
+
+LOGIN_REQUIRED = False
+PROCONNECT_ENABLED = False
