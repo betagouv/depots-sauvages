@@ -54,3 +54,4 @@ def test_process_dossier_returns_no_procedure_when_date_constat_missing(client, 
     response_data = response.json()
     assert response_data["created"] is False
     assert response_data["reason"] == "no_procedure_or_missing_info"
+    assert "dn_date_creation" in response_data

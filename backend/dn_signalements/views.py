@@ -62,7 +62,7 @@ class ProcessDossierView(APIView):
     def extract_dn_metadata(self, dossier):
         """Extract DN administrative metadata."""
         return {
-            "dn_date_depot": self.parse_datetime(dossier.get("dateDepot")),
+            "dn_date_creation": self.parse_datetime(dossier.get("dateDepot")),
             "dn_date_modification": self.parse_datetime(dossier.get("dateDerniereModification")),
         }
 

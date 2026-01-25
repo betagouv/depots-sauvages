@@ -122,8 +122,8 @@
               <h2 class="fr-card__title">Informations du dossier</h2>
               <div class="fr-card__desc">
                 <p><strong>Numéro de dossier:</strong> {{ dossierData.dn_numero_dossier }}</p>
-                <p v-if="dossierData.dn_date_depot">
-                  <strong>Date de dépôt:</strong> {{ formatDate(dossierData.dn_date_depot) }}
+                <p v-if="dossierData.dn_date_creation">
+                  <strong>Date de création:</strong> {{ formatDate(dossierData.dn_date_creation) }}
                 </p>
                 <p v-if="dossierData.dn_date_modification">
                   <strong>Dernière modification dossier:</strong>
