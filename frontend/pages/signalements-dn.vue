@@ -115,7 +115,7 @@
         />
       </div>
 
-      <div v-if="dossierData" class="fr-grid-row fr-grid-row--gutters">
+      <div v-if="dossierData.dn_numero_dossier" class="fr-grid-row fr-grid-row--gutters">
         <div class="fr-col-12 fr-col-md-6">
           <div class="fr-card fr-card--lg">
             <div class="fr-card__body">

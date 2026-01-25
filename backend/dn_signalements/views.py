@@ -38,6 +38,7 @@ class ProcessDossierView(APIView):
             )
         if not dossier:
             return self.bad_request(f"Dossier {dossier_id} not found")
+        dn_metadata = self.extract_dn_metadata(dossier)
         signalement_data = self.dossier_to_model_data(dossier)
         if signalement_data is None:
             return Response(
@@ -45,8 +46,10 @@ class ProcessDossierView(APIView):
                     "created": False,
                     "dn_numero_dossier": numero_dossier,
                     "reason": "no_procedure_or_missing_info",
+                    **dn_metadata,
                 }
             )
+        signalement_data.update(dn_metadata)
         signalement, _ = DNSignalement.objects.update_or_create(
             dn_numero_dossier=numero_dossier, defaults=signalement_data
         )
@@ -56,20 +59,22 @@ class ProcessDossierView(APIView):
         signalement_data["id"] = signalement.id
         return Response({**signalement_data, "dn_numero_dossier": numero_dossier, "created": True})
 
-    def dossier_to_model_data(self, dossier):
-        dn_champ = DNChamp(dossier)
-        dn_date_depot = self.parse_datetime(dossier.get("dateDepot"))
-        dn_date_modification = self.parse_datetime(dossier.get("dateDerniereModification"))
-        champs_data = dn_champ.get_data()
+    def extract_dn_metadata(self, dossier):
+        """Extract DN administrative metadata."""
+        return {
+            "dn_date_depot": self.parse_datetime(dossier.get("dateDepot")),
+            "dn_date_modification": self.parse_datetime(dossier.get("dateDerniereModification")),
+        }
 
-        # Check if we have date_constat (required for signalement)
+    def dossier_to_model_data(self, dossier):
+        """Extract signalement data from DN dossier. Returns None if no signalement exists."""
+        dn_champ = DNChamp(dossier)
+        champs_data = dn_champ.get_data()
         # If there is no date_constat, there is no actual "signalement"
         datetime_constat = champs_data.get(DATE_CONSTAT_CHAMP_ID)
         if not datetime_constat:
             return None
         data = {
-            "dn_date_depot": dn_date_depot,
-            "dn_date_modification": dn_date_modification,
             "date_constat": datetime_constat.date(),
             "heure_constat": datetime_constat.time(),
         }
