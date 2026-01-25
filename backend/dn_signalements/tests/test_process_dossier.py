@@ -35,17 +35,21 @@ def test_process_dossier_returns_error_when_dossier_id_is_none(client):
     assert "error" in response_data
 
 
-def test_process_dossier_returns_no_procedure_when_date_depot_missing(client, mocker):
-    """Test that a dossier without dateDepot is not processed (no procedure)."""
+def test_process_dossier_returns_no_procedure_when_date_constat_missing(client, mocker):
+    """Test that a dossier without date_constat is not processed (no signalement)."""
     url = reverse("signalements-process-dn-dossier")
     data = {"dossier_id": 12345}
+
+    # Mock DN client to return a dossier without date_constat
     mock_dossier = {
-        "champs": [],
+        "champs": [],  # No DATE_CONSTAT_CHAMP_ID in champs
         "usager": {"email": "test@example.com"},
-        # No dateDepot - simulates dossier without "signalement"
+        "dateDepot": "2023-01-01T10:00:00Z",
     }
     mocker.patch("backend.dn.client.DNGraphQLClient.get_dossier", return_value=mock_dossier)
+
     response = client.post(url, data, content_type="application/json")
+
     assert response.status_code == status.HTTP_200_OK
     response_data = response.json()
     assert response_data["created"] is False

@@ -59,14 +59,19 @@ class ProcessDossierView(APIView):
     def dossier_to_model_data(self, dossier):
         dn_champ = DNChamp(dossier)
         dn_date_depot = self.parse_datetime(dossier.get("dateDepot"))
-        # If there is no date, there is no "dossier"
-        if not dn_date_depot:
-            return None
         dn_date_modification = self.parse_datetime(dossier.get("dateDerniereModification"))
         champs_data = dn_champ.get_data()
+
+        # Check if we have date_constat (required for signalement)
+        # If there is no date_constat, there is no actual "signalement"
+        datetime_constat = champs_data.get(DATE_CONSTAT_CHAMP_ID)
+        if not datetime_constat:
+            return None
         data = {
             "dn_date_depot": dn_date_depot,
             "dn_date_modification": dn_date_modification,
+            "date_constat": datetime_constat.date(),
+            "heure_constat": datetime_constat.time(),
         }
         for champ_id, value in champs_data.items():
             field_name = CHAMP_ID_TO_FIELD.get(champ_id)
@@ -78,11 +83,6 @@ class ProcessDossierView(APIView):
                 data["localisation_depot"] = address_data["label"]
             if address_data.get("cityName"):
                 data["commune"] = address_data["cityName"]
-
-        datetime_constat = champs_data.get(DATE_CONSTAT_CHAMP_ID)
-        if datetime_constat:
-            data["date_constat"] = datetime_constat.date()
-            data["heure_constat"] = datetime_constat.time()
         if data.get("statut_auteur"):
             statut_lower = str(data["statut_auteur"]).lower()
             if "entreprise" in statut_lower:
