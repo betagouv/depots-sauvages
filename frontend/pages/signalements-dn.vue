@@ -1,161 +1,45 @@
 <template>
   <div>
-    <div v-if="!hasProcedure" class="hero-section fr-mb-4w fr-py-4w">
-      <div class="fr-container">
-        <div class="fr-grid-row fr-grid-row--center">
-          <div class="fr-col-12 fr-col-md-10 fr-col-lg-8">
-            <h1 class="fr-hero__title fr-text--center">Dossier sans procédure</h1>
-            <p class="fr-hero__text fr-text--lg fr-text--center">
-              Le dossier n'est pas associé à une procédure de dépôt sauvage.
-            </p>
-          </div>
+    <DnLoading v-if="showLoading" />
+    <div v-else>
+      <div v-if="error" class="fr-container fr-mb-4w fr-mt-4w" role="alert" aria-live="polite">
+        <div class="fr-alert fr-alert--error">
+          <p class="fr-alert__title">Erreur</p>
+          <p>{{ error }}</p>
         </div>
       </div>
-    </div>
 
-    <div v-else class="hero-section fr-mb-4w fr-py-4w">
-      <div class="fr-container">
-        <div class="fr-grid-row fr-grid-row--center">
-          <div class="fr-col-12 fr-col-md-10 fr-col-lg-8">
-            <h1 class="fr-hero__title fr-text--center">
-              <template v-if="auteurIdentifie">Télécharger les pièces de procédure</template>
-              <template v-else>Télécharger le rapport de constatation</template>
-            </h1>
-            <p class="fr-hero__text fr-text--lg fr-text--center">
-              <template v-if="auteurIdentifie">
-                Vous trouverez ci-dessous vos pièces de procédure <strong>pré-remplies</strong>, à
-                compléter avec les éléments manquants, par exemple la charte graphique de la mairie,
-                la date et la signature de l'autorité compétente (maire ou personne habilitée à
-                réaliser des constatations).
-              </template>
-              <template v-else>
-                Vous trouverez ci-dessous votre rapport de constatation <strong>pré-rempli</strong>,
-                à compléter avec les éléments manquants, par exemple la charte graphique de la
-                mairie, la date et la signature de la personne habilitée à réaliser des
-                constatations.
-              </template>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+      <div v-else-if="dossierData">
+        <DnHero :has-procedure="hasProcedure" :auteur-identifie="auteurIdentifie" />
 
-    <div class="fr-container fr-pb-4w" v-if="hasProcedure">
-      <div class="fr-grid-row fr-grid-row--gutters">
-        <div :class="rapportColClass">
-          <DsfrCard
-            title="Rapport de constatation"
-            description="Résumé des observations de terrain et des préjudices causés. À conserver en mairie ou à transmettre lors d'un dépôt de plainte."
-            :buttons="[
-              {
-                label: 'Télécharger',
-                icon: { name: 'ri-download-line', scale: 1.5, class: 'fr-mr-1w' },
-                onClick: () => openDocument(getDnDocConstatUrl(dossierData?.id ?? null)),
-              },
-            ]"
-            size="large"
-            no-arrow
-            title-tag="h2"
+        <div class="fr-container fr-pb-4w">
+          <DnDocuments
+            v-if="hasProcedure"
+            :auteur-identifie="auteurIdentifie"
+            :doc-constat-url="getDnDocConstatUrl(dossierData?.id ?? null)"
+            :lettre-info-url="getDnLettreInfoUrl(dossierData?.id ?? null)"
           />
-        </div>
-        <div v-if="auteurIdentifie" class="fr-col-12 fr-col-md-6">
-          <DsfrCard
-            title="Lettre d'information"
-            description="Courrier rappelant les faits constatés et les obligations de l'auteur du responsable probable du dépôt sauvage. À envoyer à l'auteur probable des faits (avec accusé de réception)."
-            :buttons="[
-              {
-                label: 'Télécharger',
-                icon: { name: 'ri-download-line', scale: 1.5, class: 'fr-mr-1w' },
-                onClick: () => openDocument(getDnLettreInfoUrl(dossierData?.id ?? null)),
-              },
-            ]"
-            size="large"
-            no-arrow
-            title-tag="h2"
-          >
-            <template #end-details>
-              <p class="fr-text--sm fr-text-mention--grey fr-mt-2w fr-mb-0">
-                <VIcon name="ri-information-line" class="fr-mr-1w" />
-                Utile uniquement pour la procédure administrative
-              </p>
-            </template>
-          </DsfrCard>
-        </div>
-      </div>
-    </div>
-    <div v-if="showLoading" class="fr-container fr-pb-4w">
-      <div class="fr-grid-row fr-grid-row--center">
-        <div class="fr-col-12 fr-col-md-8 fr-col-lg-6">
-          <div class="loading-section fr-p-4w fr-text--center" role="status" aria-live="polite">
-            <VIcon
-              name="ri-loader-4-line"
-              :scale="3"
-              animation="spin"
-              class="fr-mb-2w"
-              aria-hidden="true"
+
+          <div v-if="hasProcedure">
+            <InfoAuteurIdentifie v-if="auteurIdentifie" />
+            <InfoAuteurNonIdentifie
+              v-else
+              :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
             />
-            <p class="fr-text--lg fr-mb-0">Préparation de vos documents en cours...</p>
-            <p class="fr-text--sm fr-text-mention--grey">Veuillez patienter quelques instants.</p>
           </div>
-        </div>
-      </div>
-    </div>
 
-    <div v-else class="fr-container fr-pb-4w">
-      <div v-if="error" class="fr-alert fr-alert--error fr-mb-4w" role="alert" aria-live="polite">
-        <p class="fr-alert__title">Erreur</p>
-        <p>{{ error }}</p>
-      </div>
+          <DnInfos
+            :dn-numero-dossier="dossierData.dn_numero_dossier"
+            :dn-date-creation="dossierData.dn_date_creation"
+            :dn-date-modification="dossierData.dn_date_modification"
+            :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
+          />
 
-      <div v-if="dossierData && hasProcedure">
-        <InfoAuteurIdentifie v-if="auteurIdentifie" />
-        <InfoAuteurNonIdentifie
-          v-else
-          :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
-        />
-      </div>
-
-      <div v-if="dossierData.dn_numero_dossier" class="fr-grid-row fr-grid-row--gutters">
-        <div class="fr-col-12 fr-col-md-6">
-          <div class="fr-card fr-card--lg">
-            <div class="fr-card__body">
-              <h2 class="fr-card__title">Informations du dossier</h2>
-              <div class="fr-card__desc">
-                <p><strong>Numéro de dossier:</strong> {{ dossierData.dn_numero_dossier }}</p>
-                <p v-if="dossierData.dn_date_creation">
-                  <strong>Date de création:</strong> {{ formatDate(dossierData.dn_date_creation) }}
-                </p>
-                <p v-if="dossierData.dn_date_modification">
-                  <strong>Dernière modification dossier:</strong>
-                  {{ formatDate(dossierData.dn_date_modification) }}
-                </p>
-              </div>
+          <div v-if="hasProcedure" class="fr-grid-row fr-grid-row--gutters fr-mt-4w">
+            <div class="fr-col-12">
+              <RessourcesUtiles />
             </div>
           </div>
-        </div>
-
-        <div v-if="dossierData.dn_numero_dossier" class="fr-col-12 fr-col-md-6">
-          <DsfrCard
-            title="Modifier votre dossier"
-            description="Si vous avez besoin de modifier les informations, merci de modifier votre dossier sur votre démarche numérique."
-            :buttons="[
-              {
-                label: 'Consulter ou modifier',
-                icon: { name: 'ri-external-link-line', scale: 1.5, class: 'fr-mr-1w' },
-                secondary: true,
-                onClick: () => openDocument(getDnModifyUrl(dossierData.dn_numero_dossier)),
-              },
-            ]"
-            size="large"
-            no-arrow
-            title-tag="h2"
-          />
-        </div>
-      </div>
-
-      <div v-if="hasProcedure" class="fr-grid-row fr-grid-row--gutters fr-mt-4w">
-        <div class="fr-col-12">
-          <RessourcesUtiles />
         </div>
       </div>
     </div>
@@ -163,12 +47,17 @@
 </template>
 
 <script setup lang="ts">
-import { DsfrCard } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+
+import DnDocuments from '../components/dn/DnDocuments.vue'
+import DnHero from '../components/dn/DnHero.vue'
+import DnInfos from '../components/dn/DnInfos.vue'
+import DnLoading from '../components/dn/DnLoading.vue'
 import InfoAuteurIdentifie from '../components/dn/InfoAuteurIdentifie.vue'
 import InfoAuteurNonIdentifie from '../components/dn/InfoAuteurNonIdentifie.vue'
 import RessourcesUtiles from '../components/dn/RessourcesUtiles.vue'
+
 import { API_URLS, createResource } from '../services/api'
 import { getDnDocConstatUrl, getDnLettreInfoUrl, getDnModifyUrl } from '../services/urls'
 
@@ -182,26 +71,6 @@ const hasProcedure = computed(() => {
 })
 
 const auteurIdentifie = computed(() => dossierData.value?.auteur_identifie ?? false)
-const rapportColClass = computed(() =>
-  auteurIdentifie.value ? 'fr-col-12 fr-col-md-6' : 'fr-col-12 fr-col-lg-12'
-)
-
-const openDocument = (url: string) => {
-  if (!url) return
-  window.open(url, '_blank', 'noopener,noreferrer')
-}
-
-const formatDate = (dateString: string) => {
-  if (!dateString) return ''
-  const date = new Date(dateString)
-  return date.toLocaleDateString('fr-FR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  })
-}
 
 onMounted(async () => {
   const dossierId = (route.params.dossier_id as string) || (route.query.dossier_id as string)

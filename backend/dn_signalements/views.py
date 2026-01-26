@@ -32,10 +32,8 @@ class ProcessDossierView(APIView):
             dn_client = DNGraphQLClient()
             dossier = dn_client.get_dossier(numero_dossier)
         except Exception as e:
-            logging.exception("Error fetching dossier with id %s", dossier_id)
-            return self.bad_request(
-                f"Il y a eu une erreur lors de la récupération du dossier." f" {e}"
-            )
+            logging.exception(f"Error fetching dossier with id %s. \n {e}", dossier_id)
+            return self.bad_request(f"Une erreur est survenue lors de la récupération du dossier")
         if not dossier:
             return self.bad_request(f"Dossier {dossier_id} not found")
         dn_metadata = self.extract_dn_metadata(dossier)

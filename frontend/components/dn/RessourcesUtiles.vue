@@ -1,3 +1,4 @@
+https://ui-ux-pro-max-skill.nextlevelbuilder.io/
 <template>
   <div class="fr-card fr-card--lg">
     <div class="fr-card__body">
