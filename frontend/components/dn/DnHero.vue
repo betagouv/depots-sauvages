@@ -14,8 +14,8 @@
             <h1 class="fr-hero__title fr-text--center">
               {{
                 auteurIdentifie
-                  ? 'Télécharger les pièces de procédure'
-                  : 'Télécharger le rapport de constatation'
+                  ? 'Télécharger les pièces de procédure pré-remplies'
+                  : 'Vous pouvez les télécharger et les compléter avec les éléments manquants'
               }}
             </h1>
             <p class="fr-hero__text fr-text--lg fr-text--center">
