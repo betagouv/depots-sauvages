@@ -15,21 +15,15 @@
               {{
                 auteurIdentifie
                   ? 'Télécharger les pièces de procédure pré-remplies'
-                  : 'Vous pouvez les télécharger et les compléter avec les éléments manquants'
+                  : 'Télécharger le rapport de constatation pré-rempli'
               }}
             </h1>
             <p class="fr-hero__text fr-text--lg fr-text--center">
               <template v-if="auteurIdentifie">
-                Vous trouverez ci-dessous vos pièces de procédure <strong>pré-remplies</strong>, à
-                compléter avec les éléments manquants, par exemple la charte graphique de la mairie,
-                la date et la signature de l'autorité compétente (maire ou personne habilitée à
-                réaliser des constatations).
+                Vous pouvez les télécharger et les compléter avec les éléments manquants
               </template>
               <template v-else>
-                Vous trouverez ci-dessous votre rapport de constatation
-                <strong>pré-rempli</strong>, à compléter avec les éléments manquants, par exemple la
-                charte graphique de la mairie, la date et la signature de la personne habilitée à
-                réaliser des constatations.
+                Vous pouvez le télécharger et le compléter avec les éléments manquants.
               </template>
             </p>
           </template>
