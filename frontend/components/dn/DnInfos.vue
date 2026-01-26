@@ -20,7 +20,7 @@
     <div class="fr-col-12 fr-col-md-6">
       <DsfrCard
         title="Modifier votre dossier"
-        description="Si vous avez besoin de modifier les informations, merci de modifier votre dossier sur votre démarche numérique."
+        description="Si vous avez besoin de modifier les informations et de mettre à jour vos documents, merci de modifier votre dossier sur démarche numérique."
         :buttons="[
           {
             label: 'Consulter ou modifier',
