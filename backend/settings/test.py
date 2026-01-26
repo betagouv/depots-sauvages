@@ -35,3 +35,4 @@ if "anymail" in INSTALLED_APPS:
 
 LOGIN_REQUIRED = False
 PROCONNECT_ENABLED = False
+LOGIN_URL = "/login/"  # Override base setting to avoid reversing missing oidc url

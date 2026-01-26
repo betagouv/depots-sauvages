@@ -25,7 +25,7 @@ from backend.signalements.view_mixins import (
 class ProcessDossierView(APIView):
     def post(self, request):
         dossier_id = request.data.get("dossier_id")
-        if not dossier_id or not dossier_id.isdigit():
+        if not dossier_id or not str(dossier_id).isdigit():
             return self.bad_request("dossier_id is required and must be an integer")
         numero_dossier = int(dossier_id)
         try:
