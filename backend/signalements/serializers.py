@@ -13,9 +13,5 @@ class SignalementSerializer(serializers.ModelSerializer):
         exclude = [
             "doc_constat",
             "lettre_info",
-            "contact_nom",
-            "contact_prenom",
-            "contact_email",
-            "contact_telephone",
             "constatant",
         ]
