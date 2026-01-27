@@ -1,5 +1,5 @@
 <template>
-  <div class="fr-grid-row fr-grid-row--gutters fr-mb-4w">
+  <div class="fr-grid-row fr-grid-row--gutters fr-mb-2w">
     <div :class="rapportColClass">
       <DsfrCard
         title="Rapport de constatation"
@@ -12,12 +12,13 @@
           },
         ]"
         no-arrow
+        size="large"
         title-tag="h2"
       >
         <template #end-details>
           <p class="fr-text-mention--grey">
             <VIcon name="ri-folder-line" class="fr-mr-1w" />
-            À conserver en mairie ou à transmettre lors d'un dépôt de plainte.
+            À conserver en mairie.
           </p>
         </template>
       </DsfrCard>
@@ -34,12 +35,13 @@
           },
         ]"
         no-arrow
+        size="large"
         title-tag="h2"
       >
         <template #end-details>
           <p class="fr-text-mention--grey">
             <VIcon name="ri-mail-send-line" class="fr-mr-1w" />
-            À envoyer à l'auteur probable des faits (avec accusé de réception).
+            À envoyer à l'auteur probable des faits.
           </p>
         </template>
       </DsfrCard>

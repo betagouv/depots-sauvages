@@ -12,7 +12,7 @@
       <div v-else-if="dossierData">
         <DnHero :has-procedure="hasProcedure" :auteur-identifie="auteurIdentifie" />
 
-        <div class="fr-container fr-pb-4w">
+        <div class="fr-container">
           <DnDocuments
             v-if="hasProcedure"
             :auteur-identifie="auteurIdentifie"
@@ -35,7 +35,7 @@
             :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
           />
 
-          <div v-if="hasProcedure" class="fr-grid-row fr-grid-row--gutters fr-mt-4w">
+          <div v-if="hasProcedure" class="fr-grid-row fr-grid-row--gutters fr-mt-2w">
             <div class="fr-col-12">
               <RessourcesUtiles />
             </div>
@@ -71,6 +71,7 @@ const hasProcedure = computed(() => {
 })
 
 const auteurIdentifie = computed(() => dossierData.value?.auteur_identifie ?? false)
+//const auteurIdentifie = computed(() => false)
 
 onMounted(async () => {
   const dossierId = (route.params.dossier_id as string) || (route.query.dossier_id as string)

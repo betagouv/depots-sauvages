@@ -1,5 +1,5 @@
 <template>
-  <div class="fr-mt-4w">
+  <div class="">
     <div class="fr-card fr-card--lg fr-mb-4w">
       <div class="fr-card__body">
         <h2 class="fr-card__title">
