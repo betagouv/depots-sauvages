@@ -46,7 +46,7 @@
       </div>
 
       <section>
-        <div class="fr-background-alt--grey fr-p-4w fr-border-radius--8 fr-mt-4w">
+        <div class="fr-background-alt--grey fr-p-4w fr-border-radius--8 fr-mb-4w">
           <h2 class="fr-h3 fr-mb-2w">Le fléau des dépôts sauvages</h2>
           <p class="fr-text">
             Les dépôts sauvages dégradent notre environnement et représentent un coût important pour
@@ -71,7 +71,7 @@
         </p>
       </DsfrCallout>
 
-      <section class="fr-container fr-my-6w">
+      <section class="fr-container fr-my-4w">
         <h2 class="fr-h2 fr-mb-4w">Comment fonctionne Protect’Envi ?</h2>
         <div class="fr-grid-row fr-grid-row--gutters">
           <div
