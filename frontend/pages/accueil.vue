@@ -53,7 +53,7 @@
           <p class="fr-text">
             Les dépôts sauvages dégradent notre environnement et représentent un coût important pour
             les communes. Malgré leur engagement, les collectivités manquent souvent de ressources,
-            de temps et d’accompagnement pour agir efficacement.
+            de temps et d'accompagnement pour agir efficacement.
           </p>
         </div>
       </section>
@@ -61,11 +61,12 @@
       <DsfrCallout title="Vos deux leviers d'action" content="" class="fr-callout--blue-ecume">
         <p class="fr-text">Lorsqu'une commune constate un dépôt sauvage, elle peut :</p>
         <ul class="fr-text fr-mb-0">
+          <li>Déposer plainte <strong>pour initier une procédure judiciaire ;</strong></li>
           <li>
-            Mettre en œuvre une <strong>procédure administrative</strong> qui permet d'émettre une
-            amende pouvant aller jusqu'à 15 000 €, recouvrée au profit de la mairie.
+            Mettre en œuvre une <strong>procédure administrative</strong>, plus efficace et plus
+            rapide, quand l'auteur est identifié. Cette procédure permet d'émettre une amende
+            pouvant aller jusqu'à 15 000 €, recouvrée au profit de la mairie.
           </li>
-          <li>Déposer plainte <strong>pour initier une procédure judiciaire</strong></li>
         </ul>
         <p class="fr-text fr-mt-2w">
           Protect’Envi vous accompagne dans ces procédures en vous guidant pas à pas et en vous

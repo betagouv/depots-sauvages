@@ -12,8 +12,8 @@
                 <button
                   id="judicial-tab"
                   class="fr-tabs__tab"
-                  aria-selected="false"
-                  tabindex="-1"
+                  aria-selected="true"
+                  tabindex="0"
                   role="tab"
                   aria-controls="judicial-panel"
                 >
@@ -24,8 +24,8 @@
                 <button
                   id="admin-tab"
                   class="fr-tabs__tab fr-tabs__tab--selected"
-                  aria-selected="true"
-                  tabindex="0"
+                  aria-selected="false"
+                  tabindex="-1"
                   role="tab"
                   aria-controls="admin-panel"
                 >
