@@ -11,7 +11,6 @@
             onClick: () => openUrl(docConstatUrl),
           },
         ]"
-        size="large"
         no-arrow
         title-tag="h2"
       >
@@ -34,7 +33,6 @@
             onClick: () => openUrl(lettreInfoUrl),
           },
         ]"
-        size="large"
         no-arrow
         title-tag="h2"
       >
