@@ -29,3 +29,10 @@ PROCONNECT_ENABLED = False
 
 if "mozilla_django_oidc" in INSTALLED_APPS:
     INSTALLED_APPS.remove("mozilla_django_oidc")
+
+if "anymail" in INSTALLED_APPS:
+    INSTALLED_APPS.remove("anymail")
+
+LOGIN_REQUIRED = False
+PROCONNECT_ENABLED = False
+LOGIN_URL = "/login/"  # Override base setting to avoid reversing missing oidc url

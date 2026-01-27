@@ -11,7 +11,7 @@ class DNSignalement(AbstractSignalementBase, PrejudiceMixin, TimeStampedModel):
     """
 
     dn_numero_dossier = models.IntegerField("numéro DN", unique=True)
-    dn_date_depot = models.DateTimeField("date de dépôt DN", null=True, blank=True)
+    dn_date_creation = models.DateTimeField("date de création DN", null=True, blank=True)
     dn_date_modification = models.DateTimeField("date modification DN", null=True, blank=True)
 
     class Meta:

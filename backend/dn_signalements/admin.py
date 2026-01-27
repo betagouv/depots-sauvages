@@ -9,7 +9,7 @@ DN_SIGNALEMENTS_FIELDSETS = (
         {
             "fields": (
                 "dn_numero_dossier",
-                "dn_date_depot",
+                "dn_date_creation",
                 "dn_date_modification",
             )
         },
@@ -26,7 +26,7 @@ class DNSignalementAdmin(
     search_fields = ["dn_numero_dossier"] + BaseSignalementAdminMixin.search_fields
     readonly_fields = [
         # "dn_numero_dossier",
-        "dn_date_depot",
+        "dn_date_creation",
         "dn_date_modification",
     ] + BaseSignalementAdminMixin.readonly_fields
     fieldsets = DN_SIGNALEMENTS_FIELDSETS + BaseSignalementAdminMixin.fieldsets

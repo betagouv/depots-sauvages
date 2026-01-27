@@ -1,27 +1,11 @@
 <template>
-  <div class="fr-mt-4w">
+  <div class="">
     <div class="fr-card fr-card--lg fr-mb-4w">
       <div class="fr-card__body">
         <h2 class="fr-card__title">
           <VIcon name="ri-pushpin-line" class="fr-mr-1w" /> Ce qu'il vous reste à faire
         </h2>
         <div class="fr-card__desc">
-          <DsfrNotice class="fr-mb-3w">Avant d'entamer la procédure</DsfrNotice>
-          <p class="fr-mb-3w">
-            Pour lancer officiellement une procédure à l'encontre de l'auteur présumé de ce dépôt
-            sauvage :
-          </p>
-          <div class="fr-mb-3w">
-            <div class="fr-mb-2w">
-              <VIcon name="ri-download-line" class="fr-mr-1w" /> Téléchargez le rapport de
-              constatation et la lettre d'information
-            </div>
-            <div>
-              <VIcon name="ri-edit-line" class="fr-mr-1w" /> Relisez, complétez et signez ces deux
-              documents. Si vous êtes un agent municipal, faites-les signer par votre autorité
-              compétente : maire ou personne habilitée à réaliser des constatations.
-            </div>
-          </div>
           <div class="fr-tabs fr-background-alt--grey fr-mt-3w">
             <ul class="fr-tabs__list" role="tablist" aria-label="Procédures">
               <li role="presentation">
@@ -55,7 +39,6 @@
               role="tabpanel"
               aria-labelledby="admin-tab"
             >
-              <DsfrNotice type="info" class="fr-mb-3w"> Procédure recommandée </DsfrNotice>
               <ProcedureAdministrative />
             </div>
             <div

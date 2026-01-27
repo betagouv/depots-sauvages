@@ -3,14 +3,40 @@ import '@gouvfr/dsfr/dist/dsfr.module.min.js'
 import '@gouvfr/dsfr/dist/utility/utility.min.css'
 import VueDsfr from '@gouvminint/vue-dsfr'
 import { OhVueIcon, addIcons } from 'oh-vue-icons'
-import { RiLogoutBoxRLine } from 'oh-vue-icons/icons/ri'
+import {
+  RiCalendarLine,
+  RiDownloadLine,
+  RiEditLine,
+  RiFileEditLine,
+  RiFileListLine,
+  RiFolderLine,
+  RiLogoutBoxRLine,
+  RiMailSendLine,
+  RiMoneyEuroCircleLine,
+  RiPenNibLine,
+  RiSearchEyeLine,
+  RiTimeLine,
+} from 'oh-vue-icons/icons/ri'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 import VueMatomo from 'vue-matomo'
 import { createRouter, createWebHistory } from 'vue-router'
 import App from './app.vue'
 
-addIcons(RiLogoutBoxRLine)
+addIcons(
+  RiCalendarLine,
+  RiDownloadLine,
+  RiEditLine,
+  RiFileEditLine,
+  RiFileListLine,
+  RiFolderLine,
+  RiLogoutBoxRLine,
+  RiMailSendLine,
+  RiMoneyEuroCircleLine,
+  RiPenNibLine,
+  RiSearchEyeLine,
+  RiTimeLine
+)
 
 const pinia = createPinia()
 

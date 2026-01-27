@@ -6,7 +6,10 @@
           Accompagner les collectivités pour mieux lutter contre les dépôts sauvages.
         </h1>
         <p class="fr-text fr-mb-2w">
-          Vous êtes victime d'un dépôt sauvage, Protect'Envi peut vous aider à agir.
+          Votre collectivité est victime d'un dépôt sauvage, Protect'Envi vous aide à initier la
+          procédure administrative. Cette procédure ne nécessite pas de dépôt de plainte et permet
+          de sanctionner l’auteur avec une amende pouvant aller jusqu'à 15 000 €, recouvrée au
+          profit de la mairie.
         </p>
         <div class="fr-btns-group fr-btns-group--center fr-mt-3w">
           <a
@@ -15,7 +18,7 @@
             class="fr-btn"
             target="_blank"
             rel="noopener noreferrer"
-            >Débuter une procédure via Démarche Numérique
+            >Débuter une procédure administrative via Démarche Numérique
           </a>
           <RouterLink v-else to="/debuter-procedure" class="fr-btn"
             >Débuter une procédure
@@ -44,43 +47,34 @@
         />
       </div>
 
-      <DsfrCallout title="Vos deux leviers d'action" content="" class="fr-callout--blue-ecume">
-        <p class="fr-text">Lorsqu'une commune constate un dépôt sauvage, elle peut :</p>
-        <ul class="fr-text fr-mb-0">
-          <li>
-            Mettre en œuvre une <strong>procédure administrative</strong> qui permet d'émettre une
-            amende pouvant aller jusqu'à 15 000 €, recouvrée au profit de la mairie.
-          </li>
-          <li>Déposer plainte <strong>pour initier une procédure judiciaire</strong></li>
-        </ul>
-      </DsfrCallout>
-
       <section>
-        <div class="fr-background-alt--grey fr-p-4w fr-border-radius--8 fr-mt-4w">
+        <div class="fr-background-alt--grey fr-p-4w fr-border-radius--8 fr-mb-4w">
           <h2 class="fr-h3 fr-mb-2w">Le fléau des dépôts sauvages</h2>
           <p class="fr-text">
             Les dépôts sauvages dégradent notre environnement et représentent un coût important pour
             les communes. Malgré leur engagement, les collectivités manquent souvent de ressources,
-            de temps et d’accompagnement pour agir efficacement.
-          </p>
-          <ul class="fr-text fr-pl-2w">
-            <li>
-              La procédure administrative donne des pouvoirs importants aux maires (et permet à la
-              collectivité de verbaliser) mais elle est très mal connue et peu utilisée.
-            </li>
-            <li>
-              La procédure judiciaire génère de la frustration car les plaintes sont très souvent
-              classées sans suite.
-            </li>
-          </ul>
-          <p class="fr-text">
-            Protect’Envi vous accompagne dans ces procédures en vous guidant pas à pas et en vous
-            fournissant des documents conformes pré-remplis.
+            de temps et d'accompagnement pour agir efficacement.
           </p>
         </div>
       </section>
 
-      <section class="fr-container fr-my-6w">
+      <DsfrCallout title="Vos deux leviers d'action" content="" class="fr-callout--blue-ecume">
+        <p class="fr-text">Lorsqu'une commune constate un dépôt sauvage, elle peut :</p>
+        <ul class="fr-text fr-mb-0">
+          <li>Déposer plainte <strong>pour initier une procédure judiciaire ;</strong></li>
+          <li>
+            Mettre en œuvre une <strong>procédure administrative</strong>, plus efficace et plus
+            rapide, quand l'auteur est identifié. Cette procédure permet d'émettre une amende
+            pouvant aller jusqu'à 15 000 €, recouvrée au profit de la mairie.
+          </li>
+        </ul>
+        <p class="fr-text fr-mt-2w">
+          Protect’Envi vous accompagne dans ces procédures en vous guidant pas à pas et en vous
+          fournissant des documents conformes pré-remplis.
+        </p>
+      </DsfrCallout>
+
+      <section class="fr-container fr-my-4w">
         <h2 class="fr-h2 fr-mb-4w">Comment fonctionne Protect’Envi ?</h2>
         <div class="fr-grid-row fr-grid-row--gutters">
           <div

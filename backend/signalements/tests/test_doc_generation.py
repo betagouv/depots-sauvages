@@ -4,12 +4,14 @@ from django.urls import reverse
 
 from backend.signalements.models import Signalement
 from backend.signalements.signals import generate_document
-from backend.unit_tests.factories import SignalementFactory
+from backend.unit_tests.factories import SignalementFactory, UserFactory
 
 pytestmark = pytest.mark.django_db(databases=settings.DATABASES.keys())
 
 
 def test_doc_constat_download_works(client):
+    user = UserFactory()
+    client.force_login(user)
     signalement = SignalementFactory(commune="Test Commune")
     signalement.doc_constat = b"fake document content"
     signalement.save()
@@ -34,6 +36,8 @@ def test_doc_constat_generation_works(client):
 
 
 def test_lettre_info_download_works(client):
+    user = UserFactory()
+    client.force_login(user)
     signalement = SignalementFactory(commune="Test Commune")
     signalement.lettre_info = b"fake letter content"
     signalement.save()
@@ -58,6 +62,8 @@ def test_lettre_info_generation_works(client):
 
 
 def test_if_document_does_not_exist_then_404(client):
+    user = UserFactory()
+    client.force_login(user)
     signalement = SignalementFactory(commune="Test Commune")
     url = reverse(
         "signalement-document-download", kwargs={"pk": signalement.id, "doc_type": "doc-constat"}
@@ -67,6 +73,8 @@ def test_if_document_does_not_exist_then_404(client):
 
 
 def test_if_invalid_document_type_then_404(client):
+    user = UserFactory()
+    client.force_login(user)
     signalement = SignalementFactory(commune="Test Commune")
     signalement.doc_constat = b"fake document content"
     signalement.save()
@@ -78,6 +86,8 @@ def test_if_invalid_document_type_then_404(client):
 
 
 def test_if_non_existent_signalement_then_404(client):
+    user = UserFactory()
+    client.force_login(user)
     url = reverse("signalement-document-download", kwargs={"pk": 99999, "doc_type": "doc-constat"})
     response = client.get(url)
     assert response.status_code == 404

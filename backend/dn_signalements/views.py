@@ -13,7 +13,6 @@ from backend.dn_signalements.dn_mappings import (
     ADDRESS_CHAMP_ID,
     CHAMP_ID_TO_FIELD,
     DATE_CONSTAT_CHAMP_ID,
-    PROCEDURE_JUDICIAIRE_CHAMP_ID,
 )
 from backend.dn_signalements.models import DNSignalement
 from backend.signalements.serializers import SignalementSerializer
@@ -26,20 +25,29 @@ from backend.signalements.view_mixins import (
 class ProcessDossierView(APIView):
     def post(self, request):
         dossier_id = request.data.get("dossier_id")
-        if not dossier_id or not dossier_id.isdigit():
+        if not dossier_id or not str(dossier_id).isdigit():
             return self.bad_request("dossier_id is required and must be an integer")
         numero_dossier = int(dossier_id)
         try:
             dn_client = DNGraphQLClient()
             dossier = dn_client.get_dossier(numero_dossier)
         except Exception as e:
-            logging.exception("Error fetching dossier with id %s", dossier_id)
-            return self.bad_request(
-                f"Il y a eu une erreur lors de la récupération du dossier." f" {e}"
-            )
+            logging.exception(f"Error fetching dossier with id %s. \n {e}", dossier_id)
+            return self.bad_request(f"Une erreur est survenue lors de la récupération du dossier")
         if not dossier:
             return self.bad_request(f"Dossier {dossier_id} not found")
+        dn_metadata = self.extract_dn_metadata(dossier)
         signalement_data = self.dossier_to_model_data(dossier)
+        if signalement_data is None:
+            return Response(
+                {
+                    "created": False,
+                    "dn_numero_dossier": numero_dossier,
+                    "reason": "no_procedure_or_missing_info",
+                    **dn_metadata,
+                }
+            )
+        signalement_data.update(dn_metadata)
         signalement, _ = DNSignalement.objects.update_or_create(
             dn_numero_dossier=numero_dossier, defaults=signalement_data
         )
@@ -47,16 +55,26 @@ class ProcessDossierView(APIView):
         signalement.lettre_info_should_generate = True
         signalement.save()
         signalement_data["id"] = signalement.id
-        return Response({**signalement_data, "dn_numero_dossier": numero_dossier})
+        return Response({**signalement_data, "dn_numero_dossier": numero_dossier, "created": True})
+
+    def extract_dn_metadata(self, dossier):
+        """Extract DN administrative metadata."""
+        return {
+            "dn_date_creation": self.parse_datetime(dossier.get("dateDepot")),
+            "dn_date_modification": self.parse_datetime(dossier.get("dateDerniereModification")),
+        }
 
     def dossier_to_model_data(self, dossier):
+        """Extract signalement data from DN dossier. Returns None if no signalement exists."""
         dn_champ = DNChamp(dossier)
-        dn_date_depot = self.parse_datetime(dossier.get("dateDepot"))
-        dn_date_modification = self.parse_datetime(dossier.get("dateDerniereModification"))
         champs_data = dn_champ.get_data()
+        # If there is no date_constat, there is no actual "signalement"
+        datetime_constat = champs_data.get(DATE_CONSTAT_CHAMP_ID)
+        if not datetime_constat:
+            return None
         data = {
-            "dn_date_depot": dn_date_depot,
-            "dn_date_modification": dn_date_modification,
+            "date_constat": datetime_constat.date(),
+            "heure_constat": datetime_constat.time(),
         }
         for champ_id, value in champs_data.items():
             field_name = CHAMP_ID_TO_FIELD.get(champ_id)
@@ -68,22 +86,14 @@ class ProcessDossierView(APIView):
                 data["localisation_depot"] = address_data["label"]
             if address_data.get("cityName"):
                 data["commune"] = address_data["cityName"]
-
-        datetime_constat = champs_data.get(DATE_CONSTAT_CHAMP_ID)
-        if datetime_constat:
-            data["date_constat"] = datetime_constat.date()
-            data["heure_constat"] = datetime_constat.time()
-        procedure_judiciaire = champs_data.get(PROCEDURE_JUDICIAIRE_CHAMP_ID)
-        if procedure_judiciaire:
-            procedure_lower = str(procedure_judiciaire).lower()
-            if "plainte" in procedure_lower or "déposé" in procedure_lower:
-                data["souhaite_porter_plainte"] = True
         if data.get("statut_auteur"):
             statut_lower = str(data["statut_auteur"]).lower()
             if "entreprise" in statut_lower:
                 data["statut_auteur"] = "entreprise"
             elif "particulier" in statut_lower:
                 data["statut_auteur"] = "particulier"
+        if data.get("nature_terrain") and isinstance(data["nature_terrain"], list):
+            data["nature_terrain"] = [str(item).lower() for item in data["nature_terrain"]]
         usager = dossier.get("usager", {})
         if usager.get("email"):
             data["contact_email"] = usager["email"]

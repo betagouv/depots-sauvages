@@ -17,11 +17,11 @@ django-downloadview = "*"
 jinja2 = "*"
 ipdb = "*"
 django-tasks = "*"
-django-anymail = {extras = ["brevo"], version = "*"}
 django-redis = "*"
 django-model-utils = "*"
 mozilla-django-oidc = "*"
 typing-extensions = "*"
+django-anymail = {extras = ["brevo"], version = "*"}
 
 [dev-packages]
 black = "*"
@@ -32,6 +32,7 @@ pytest = "*"
 pytest-django = "*"
 pytest-cov = "*"
 factory-boy = "*"
+pytest-mock = "*"
 
 [requires]
 python_version = "3.12"
