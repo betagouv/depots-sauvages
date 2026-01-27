@@ -67,3 +67,9 @@ const openUrl = (url: string) => {
   }
 }
 </script>
+
+<style scoped>
+:deep(.fr-card__content) {
+  padding-bottom: 0;
+}
+</style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="hero-section fr-mb-4w fr-py-4w">
+  <div class="hero-section fr-mb-4w fr-pt-2w">
     <div class="fr-container">
       <div class="fr-grid-row fr-grid-row--center">
         <div class="fr-col-12 fr-col-md-10 fr-col-lg-8">
