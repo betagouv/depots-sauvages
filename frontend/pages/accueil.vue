@@ -7,7 +7,9 @@
         </h1>
         <p class="fr-text fr-mb-2w">
           Votre collectivité est victime d'un dépôt sauvage, Protect'Envi vous aide à initier la
-          procédure administrative
+          procédure administrative. Cette procédure ne nécessite pas de dépôt de plainte et permet
+          de sanctionner l’auteur avec une amende pouvant aller jusqu'à 15 000 €, recouvrée au
+          profit de la mairie.
         </p>
         <div class="fr-btns-group fr-btns-group--center fr-mt-3w">
           <a
