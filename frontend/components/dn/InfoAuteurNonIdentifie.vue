@@ -6,33 +6,8 @@
           <VIcon name="ri-pushpin-line" class="fr-mr-1w" /> Ce qu'il vous reste à faire
         </h2>
         <div class="fr-card__desc">
-          <DsfrNotice class="fr-mb-3w">Avant d'entamer la procédure</DsfrNotice>
-          <p class="fr-mb-3w">Pour lancer officiellement une procédure :</p>
-          <div class="fr-mb-3w">
-            <div class="fr-mb-2w">
-              <VIcon name="ri-download-line" class="fr-mr-1w" /> Téléchargez le rapport de
-              constatation
-            </div>
-            <div>
-              <VIcon name="ri-edit-line" class="fr-mr-1w" /> Relisez, complétez et signez ce
-              document. Si vous êtes un agent municipal, faites-le signer par votre autorité
-              compétente : maire ou personne habilitée à réaliser des constatations.
-            </div>
-          </div>
           <div class="fr-tabs fr-background-alt--grey fr-mt-3w">
             <ul class="fr-tabs__list" role="tablist" aria-label="Procédures">
-              <li role="presentation">
-                <button
-                  id="admin-tab"
-                  class="fr-tabs__tab fr-tabs__tab--selected"
-                  aria-selected="true"
-                  tabindex="0"
-                  role="tab"
-                  aria-controls="admin-panel"
-                >
-                  Procédure administrative
-                </button>
-              </li>
               <li role="presentation">
                 <button
                   id="judicial-tab"
@@ -43,6 +18,18 @@
                   aria-controls="judicial-panel"
                 >
                   Procédure judiciaire
+                </button>
+              </li>
+              <li role="presentation">
+                <button
+                  id="admin-tab"
+                  class="fr-tabs__tab fr-tabs__tab--selected"
+                  aria-selected="true"
+                  tabindex="0"
+                  role="tab"
+                  aria-controls="admin-panel"
+                >
+                  Procédure administrative
                 </button>
               </li>
             </ul>
@@ -71,7 +58,6 @@
 </template>
 
 <script setup lang="ts">
-import { DsfrNotice } from '@gouvminint/vue-dsfr'
 import ProcedureAdministrativeNonIdentifie from './tabs/ProcedureAdministrativeNonIdentifie.vue'
 import ProcedureJudiciaire from './tabs/ProcedureJudiciaire.vue'
 
