@@ -16,7 +16,7 @@
         >
           modifier les informations sur votre démarche numérique
         </a>
-        pour mettre à jour vos documents.
+        pour mettre à jour les données et générer les nouveaux documents pré-remplis.
       </span>
     </p>
   </div>
