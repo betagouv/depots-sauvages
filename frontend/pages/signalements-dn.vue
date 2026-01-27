@@ -71,7 +71,6 @@ const hasProcedure = computed(() => {
 })
 
 const auteurIdentifie = computed(() => dossierData.value?.auteur_identifie ?? false)
-//const auteurIdentifie = computed(() => false)
 
 onMounted(async () => {
   const dossierId = (route.params.dossier_id as string) || (route.query.dossier_id as string)
