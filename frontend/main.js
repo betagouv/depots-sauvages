@@ -53,6 +53,11 @@ const router = createRouter({
       component: () => import('./pages/comprendre-la-procedure.vue'),
     },
     {
+      path: '/mes-dossiers',
+      name: 'MesDossiers',
+      component: () => import('./pages/mes-dossiers.vue'),
+    },
+    {
       path: '/debuter-procedure',
       ...(import.meta.env.VITE_DN_ENABLED === 'true'
         ? { redirect: '/' }

@@ -87,6 +87,7 @@ const breadcrumbLinks: BreadcrumbLink[] = []
 const navLinks = ref([
   { text: 'Accueil', href: '/' },
   { text: 'Comprendre la procédure', href: '/comprendre-la-procedure' },
+  { text: 'Mes dossiers', href: '/mes-dossiers' },
   { text: 'Contact', href: '/contact' },
 ])
 
