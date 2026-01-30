@@ -67,7 +67,7 @@
 
 <script setup lang="ts">
 import { DsfrFooter, DsfrFooterLinkList, DsfrHeader } from '@gouvminint/vue-dsfr'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { getUserInfo } from '../services/api'
 interface FooterLink {
@@ -84,12 +84,17 @@ const route = useRoute()
 const logoText = ['Ministère', 'de l’intérieur']
 const breadcrumbLinks: BreadcrumbLink[] = []
 
-const navLinks = ref([
-  { text: 'Accueil', href: '/' },
-  { text: 'Comprendre la procédure', href: '/comprendre-la-procedure' },
-  { text: 'Mes dossiers', href: '/mes-dossiers' },
-  { text: 'Contact', href: '/contact' },
-])
+const navLinks = computed(() => {
+  const links = [
+    { text: 'Accueil', href: '/' },
+    { text: 'Comprendre la procédure', href: '/comprendre-la-procedure' },
+  ]
+  if (isAuthenticated.value) {
+    links.push({ text: 'Mes dossiers', href: '/mes-dossiers' })
+  }
+  links.push({ text: 'Contact', href: '/contact' })
+  return links
+})
 
 interface QuickLink {
   label: string

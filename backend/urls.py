@@ -51,6 +51,7 @@ if settings.PROCONNECT_ENABLED:
 # Protected Frontend Routes
 if settings.LOGIN_REQUIRED:
     urlpatterns.append(re_path(r"^signalements-dn/.*", login_required(index_view)))
+    urlpatterns.append(re_path(r"^mes-dossiers/?$", login_required(index_view)))
 else:
     urlpatterns.append(re_path(r"^signalements-dn/.*", index_view))
 
