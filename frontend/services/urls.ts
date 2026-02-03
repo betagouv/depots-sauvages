@@ -25,3 +25,6 @@ export const getDnModifyUrl = (numeroDossier: string | null) => {
   if (!numeroDossier) return ''
   return `${DN_BASE_URL}/dossiers/${numeroDossier}/modifier`
 }
+
+export const LOGIN_URL = '/oidc/authenticate/'
+export const LOGOUT_URL = '/logout/'

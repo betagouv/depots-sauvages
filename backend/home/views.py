@@ -26,7 +26,12 @@ class UserInfoViewSet(viewsets.ViewSet):
     permission_classes = [AllowAny]
 
     def list(self, request):
-        return Response({"is_authenticated": request.user.is_authenticated})
+        return Response(
+            {
+                "is_authenticated": request.user.is_authenticated,
+                "proconnect_enabled": settings.PROCONNECT_ENABLED,
+            }
+        )
 
 
 def logout_view(request):

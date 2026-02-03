@@ -70,6 +70,7 @@ import { DsfrFooter, DsfrFooterLinkList, DsfrHeader } from '@gouvminint/vue-dsfr
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { getUserInfo } from '../services/api'
+import { LOGIN_URL, LOGOUT_URL } from '../services/urls'
 interface FooterLink {
   text: string
   href: string
@@ -121,7 +122,17 @@ onMounted(async () => {
         icon: 'ri-logout-box-r-line',
         iconRight: false,
         onClick: () => {
-          window.location.href = '/logout/'
+          window.location.href = LOGOUT_URL
+        },
+      })
+    } else if (userInfo.proconnect_enabled) {
+      quickLinks.value.push({
+        label: 'Se connecter via ProConnect',
+        button: true,
+        icon: 'ri-login-box-line',
+        iconRight: false,
+        onClick: () => {
+          window.location.href = LOGIN_URL
         },
       })
     }
