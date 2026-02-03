@@ -26,9 +26,19 @@ class UserInfoViewSet(viewsets.ViewSet):
     permission_classes = [AllowAny]
 
     def list(self, request):
+        if request.user.is_authenticated:
+            return Response(
+                {
+                    "is_authenticated": True,
+                    "proconnect_enabled": settings.PROCONNECT_ENABLED,
+                    "first_name": request.user.first_name,
+                    "last_name": request.user.last_name,
+                    "email": request.user.username,
+                }
+            )
         return Response(
             {
-                "is_authenticated": request.user.is_authenticated,
+                "is_authenticated": False,
                 "proconnect_enabled": settings.PROCONNECT_ENABLED,
             }
         )

@@ -64,4 +64,12 @@ export const updateResource = (url: string, data: any) => makeRequest(url, 'PUT'
 
 export const fetchResource = (url: string) => makeRequest(url, 'GET', {})
 
-export const getUserInfo = () => makeRequest(API_URLS.userInfo, 'GET', {})
+export interface UserInfo {
+  is_authenticated: boolean
+  proconnect_enabled: boolean
+  first_name?: string
+  last_name?: string
+  email?: string
+}
+
+export const getUserInfo = (): Promise<UserInfo> => makeRequest(API_URLS.userInfo, 'GET', {})

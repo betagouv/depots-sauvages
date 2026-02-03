@@ -86,7 +86,7 @@ PROCONNECT_ENABLED = env.bool("PROCONNECT_ENABLED", default=False)
 if PROCONNECT_ENABLED:
     INSTALLED_APPS += ["mozilla_django_oidc"]
     AUTHENTICATION_BACKENDS = [
-        "mozilla_django_oidc.auth.OIDCAuthenticationBackend",
+        "backend.home.auth.ProConnectOIDCBackend",
         "django.contrib.auth.backends.ModelBackend",
     ]
     OIDC_RP_CLIENT_ID = env("OIDC_RP_CLIENT_ID")
