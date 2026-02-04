@@ -90,7 +90,7 @@ const router = createRouter({
       path: '/signalements-dn/:dossier_id',
       name: 'SignalementsDN',
       component: () => import('./pages/signalements-dn.vue'),
-      meta: { hideNavigation: true, requiresAuth: true },
+      meta: { requiresAuth: true },
     },
     {
       path: '/rejoindre-le-dispositif',
