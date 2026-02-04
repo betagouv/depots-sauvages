@@ -60,7 +60,7 @@
                     <DsfrButton
                       label="Voir sur Démarche Numérique"
                       class="fr-btn--secondary"
-                      icon="ri-external-link-line"
+                      :icon="{ name: 'ri-external-link-line', class: 'fr-mr-1w' }"
                       icon-right
                       @click="openExternalLink(getDnModifyUrl(String(dossier.numero_dossier)))"
                     />
@@ -68,7 +68,7 @@
                   <li>
                     <DsfrButton
                       label="Documents de procédure"
-                      icon="ri-file-list-line"
+                      :icon="{ name: 'ri-file-list-line', class: 'fr-mr-1w' }"
                       icon-right
                       @click="router.push(getSignalementDocumentsUrl(dossier.id))"
                     />
