@@ -30,6 +30,7 @@ export const API_URLS = {
   signalements: `${API_URL}/signalements/`,
   processDossier: `${API_URL}/signalements/process-dn-dossier/`,
   userInfo: `${API_URL}/user-info/`,
+  myDossiers: `${API_URL}/my-dossiers/`,
 }
 
 // API functions
@@ -73,3 +74,13 @@ export interface UserInfo {
 }
 
 export const getUserInfo = (): Promise<UserInfo> => makeRequest(API_URLS.userInfo, 'GET', {})
+
+export interface UserDossier {
+  id: number
+  numero_dossier: number
+  title: string
+  date_creation?: string
+}
+
+export const getUserDossiers = (): Promise<UserDossier[]> =>
+  makeRequest(API_URLS.myDossiers, 'GET', {})

@@ -61,6 +61,7 @@ DN_GRAPHQL_ENDPOINT = env.str(
 DN_API_TOKEN = env("DN_API_TOKEN", default=None)
 DN_REQUEST_TIMEOUT = env.int("DN_REQUEST_TIMEOUT", default=30)
 DN_MAX_RETRIES = env.int("DN_MAX_RETRIES", default=3)
+DN_DEMARCHE_NUMBER = env.int("DN_DEMARCHE_NUMBER")
 
 # Reverse proxy settings
 USE_X_FORWARDED_HOST = True

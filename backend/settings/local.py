@@ -58,6 +58,7 @@ DN_GRAPHQL_ENDPOINT = env.str(
     "DN_GRAPHQL_ENDPOINT", default="https://demarche.numerique.gouv.fr/api/v2/graphql"
 )
 DN_API_TOKEN = env("DN_API_TOKEN", default="")
+DN_DEMARCHE_NUMBER = env.int("DN_DEMARCHE_NUMBER", default=123456)
 
 # ProConnect / OIDC Settings
 PROCONNECT_ENABLED = env.bool("PROCONNECT_ENABLED", default=False)

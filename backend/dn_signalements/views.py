@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils import dateparse
 from django.utils.decorators import method_decorator
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -33,7 +34,7 @@ class ProcessDossierView(APIView):
             dossier = dn_client.get_dossier(numero_dossier)
         except Exception as e:
             logging.exception(f"Error fetching dossier with id %s. \n {e}", dossier_id)
-            return self.bad_request(f"Une erreur est survenue lors de la récupération du dossier")
+            return self.bad_request("Une erreur est survenue lors de la récupération du dossier")
         if not dossier:
             return self.bad_request(f"Dossier {dossier_id} not found")
         dn_metadata = self.extract_dn_metadata(dossier)
@@ -131,3 +132,33 @@ class DNSignalementDocumentDownloadView(SignalementDocumentDownloadViewMixin):
     """
 
     model_class = DNSignalement
+
+
+class UserDossiersView(APIView):
+    """
+    List user dossiers with live status from DN.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user_email = request.user.email or request.user.username
+        if not user_email:
+            return Response([])
+        dn_client = DNGraphQLClient()
+        try:
+            dossiers = dn_client.get_dossiers_for_user(user_email)
+        except Exception as e:
+            logging.exception(f"Failed to fetch dossiers for user {user_email}: {e}")
+            return Response({"error": "Erreur lors de la récupération des dossiers"}, status=503)
+        results = []
+        for dossier in dossiers:
+            item = {
+                "id": dossier["number"],
+                "numero_dossier": dossier["number"],
+                "title": f"Dossier #{dossier['number']}",
+                "date_creation": dossier.get("dateDepot"),
+            }
+            results.append(item)
+        # Sort by date creation desc
+        results.sort(key=lambda x: x["date_creation"] or "", reverse=True)

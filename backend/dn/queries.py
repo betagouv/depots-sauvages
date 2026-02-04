@@ -59,3 +59,26 @@ query GetSignalementDossier($dossierNumber: Int!) {
     }
 }
 """
+
+
+GET_DEMARCHE_DOSSIERS_QUERY = """
+query GetDemarcheDossiers($demarcheNumber: Int!, $after: String) {
+    demarche(number: $demarcheNumber) {
+        dossiers(after: $after) {
+            pageInfo {
+                endCursor
+                hasNextPage
+            }
+            nodes {
+                number
+                state
+                dateDepot
+                dateDerniereModification
+                usager {
+                    email
+                }
+            }
+        }
+    }
+}
+"""
