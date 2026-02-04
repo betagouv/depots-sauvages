@@ -47,20 +47,23 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { getUserDossiers, getUserInfo, type UserDossier, type UserInfo } from '../services/api'
+import { getUserInfo, type UserDossier, type UserInfo } from '../services/api'
 import { getDnModifyUrl, getSignalementDocumentsUrl } from '../services/urls'
+import { useDossierStore } from '../stores/dossier'
 
 const router = useRouter()
 const userInfo = ref<UserInfo | null>(null)
-const dossiers = ref<UserDossier[]>([])
+const dossierStore = useDossierStore()
+
+const dossiers = computed(() => dossierStore.dossiers)
 
 onMounted(async () => {
   try {
     userInfo.value = await getUserInfo()
     if (userInfo.value?.is_authenticated) {
-      dossiers.value = await getUserDossiers()
+      await dossierStore.fetchDossiers()
     }
   } catch (error) {
     console.error('Failed to fetch data:', error)
