@@ -2,46 +2,52 @@
   <div class="fr-container fr-py-5w">
     <h1>Mes dossiers</h1>
 
-    <div v-if="userInfo && userInfo.is_authenticated" class="fr-mb-4w">
-      <p v-if="userInfo.first_name && userInfo.last_name" class="fr-text--lead">
-        Utilisateur connecté :
-        <strong>{{ userInfo.first_name }} {{ userInfo.last_name }}</strong>
-        <span v-if="userInfo.email"> - {{ userInfo.email }}</span>
-      </p>
-    </div>
+    <DnLoading v-if="showLoading" message="Récupération de vos dossiers..." />
 
-    <div v-if="dossiers.length > 0" class="fr-mb-2w">
-      <p class="fr-text--bold">{{ dossiers.length }} dossier{{ dossiers.length > 1 ? 's' : '' }}</p>
-    </div>
+    <div v-else>
+      <div v-if="userInfo && userInfo.is_authenticated" class="fr-mb-4w">
+        <p v-if="userInfo.first_name && userInfo.last_name" class="fr-text--lead">
+          Utilisateur connecté :
+          <strong>{{ userInfo.first_name }} {{ userInfo.last_name }}</strong>
+          <span v-if="userInfo.email"> - {{ userInfo.email }}</span>
+        </p>
+      </div>
 
-    <div class="fr-grid-row fr-grid-row--gutters">
-      <div v-for="dossier in dossiers" :key="dossier.id" class="fr-col-12">
-        <DsfrCard
-          :title="dossier.title"
-          :description="getDossierDescription(dossier)"
-          :buttons="[
-            {
-              label: 'Voir sur Démarche Numérique',
-              onClick: () => openExternalLink(getDnModifyUrl(String(dossier.numero_dossier))),
-              icon: { name: 'ri-external-link-line', scale: 1.5, class: 'fr-mr-1w' },
-              class: 'fr-btn--secondary',
-            },
-            {
-              label: 'Documents de procédure',
-              onClick: () => router.push(getSignalementDocumentsUrl(dossier.id)),
-              icon: { name: 'ri-file-list-line', scale: 1.5, class: 'fr-mr-1w' },
-            },
-          ]"
+      <div v-if="dossiers.length > 0" class="fr-mb-2w">
+        <p class="fr-text--bold">
+          {{ dossiers.length }} dossier{{ dossiers.length > 1 ? 's' : '' }}
+        </p>
+      </div>
+
+      <div class="fr-grid-row fr-grid-row--gutters">
+        <div v-for="dossier in dossiers" :key="dossier.id" class="fr-col-12">
+          <DsfrCard
+            :title="dossier.title"
+            :description="getDossierDescription(dossier)"
+            :buttons="[
+              {
+                label: 'Voir sur Démarche Numérique',
+                onClick: () => openExternalLink(getDnModifyUrl(String(dossier.numero_dossier))),
+                icon: { name: 'ri-external-link-line', scale: 1.5, class: 'fr-mr-1w' },
+                class: 'fr-btn--secondary',
+              },
+              {
+                label: 'Documents de procédure',
+                onClick: () => router.push(getSignalementDocumentsUrl(dossier.id)),
+                icon: { name: 'ri-file-list-line', scale: 1.5, class: 'fr-mr-1w' },
+              },
+            ]"
+          />
+        </div>
+      </div>
+
+      <div v-if="dossiers.length === 0 && userInfo?.is_authenticated" class="fr-mt-5w">
+        <DsfrAlert
+          title="Aucun dossier trouvé"
+          description="Aucun dossier trouvé sur Démarche Numérique."
+          type="info"
         />
       </div>
-    </div>
-
-    <div v-if="dossiers.length === 0 && userInfo?.is_authenticated" class="fr-mt-5w">
-      <DsfrAlert
-        title="Aucun dossier trouvé"
-        description="Aucun dossier trouvé sur Démarche Numérique."
-        type="info"
-      />
     </div>
   </div>
 </template>
@@ -49,6 +55,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import DnLoading from '../components/dn/DnLoading.vue'
 import { getUserInfo, type UserDossier, type UserInfo } from '../services/api'
 import { getDnModifyUrl, getSignalementDocumentsUrl } from '../services/urls'
 import { useDossierStore } from '../stores/dossier'
@@ -56,6 +63,7 @@ import { useDossierStore } from '../stores/dossier'
 const router = useRouter()
 const userInfo = ref<UserInfo | null>(null)
 const dossierStore = useDossierStore()
+const showLoading = ref(true)
 
 const dossiers = computed(() => dossierStore.dossiers)
 
@@ -67,6 +75,8 @@ onMounted(async () => {
     }
   } catch (error) {
     console.error('Failed to fetch data:', error)
+  } finally {
+    showLoading.value = false
   }
 })
 
