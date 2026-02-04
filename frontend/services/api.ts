@@ -80,6 +80,8 @@ export interface UserDossier {
   numero_dossier: number
   title: string
   date_creation?: string
+  date_modification?: string
+  state?: string
 }
 
 export const getUserDossiers = (): Promise<UserDossier[]> =>

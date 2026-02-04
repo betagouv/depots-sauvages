@@ -158,7 +158,10 @@ class UserDossiersView(APIView):
                 "numero_dossier": dossier["number"],
                 "title": f"Dossier #{dossier['number']}",
                 "date_creation": dossier.get("dateDepot"),
+                "date_modification": dossier.get("dateDerniereModification"),
+                "state": dossier.get("state"),
             }
             results.append(item)
         # Sort by date creation desc
         results.sort(key=lambda x: x["date_creation"] or "", reverse=True)
+        return Response(results)

@@ -19,9 +19,18 @@ Documentation disponible en :
 - [🛠️ Commandes Docker](#️-commandes-docker)
   - [Backend](#backend)
   - [Frontend](#frontend)
+  - [Frontend](#frontend)
   - [Les deux conteneurs](#les-deux-conteneurs)
+- [✨ Fonctionnalités](#-fonctionnalités-clés)
 
 ---
+
+## ✨ Fonctionnalités
+
+### Mes Dossiers
+
+La page "Mes dossiers" permet aux utilisateurs connectés de consulter l'état de leurs procédures en cours.
+Les données - numéro de dossier, date de dépôt, état d'avancement, sont récupérées **en temps réel** depuis l'API Démarches Numériques, c'est à dire qu'on ne stocke pas les données à cette étape-là.
 
 ## 🚀 Démarrage rapide avec Docker
 
@@ -39,7 +48,6 @@ Accès local :
 - Frontend : [http://localhost:5173](http://localhost:5173)
 - Backend : [http://localhost:8000](http://localhost:8000)
 - Admin : [http://localhost:8000/admin/](http://localhost:8000/admin/)
-
   - utilisateur : admin
   - mot de passe : admin
 

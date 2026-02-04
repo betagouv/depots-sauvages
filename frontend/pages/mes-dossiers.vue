@@ -10,25 +10,38 @@
       </p>
     </div>
 
+    <div v-if="dossiers.length > 0" class="fr-mb-2w">
+      <p class="fr-text--bold">{{ dossiers.length }} dossier{{ dossiers.length > 1 ? 's' : '' }}</p>
+    </div>
+
     <div class="fr-grid-row fr-grid-row--gutters">
-      <div v-for="dossier in dossiers" :key="dossier.id" class="fr-col-12 fr-col-md-6">
+      <div v-for="dossier in dossiers" :key="dossier.id" class="fr-col-12">
         <DsfrCard
-          :title="formatTitle(dossier)"
-          no-arrow
+          :title="dossier.title"
+          :description="getDossierDescription(dossier)"
           :buttons="[
             {
               label: 'Voir sur Démarche Numérique',
-              secondary: true,
-              icon: { name: 'ri-external-link-line', scale: 1, class: 'fr-mr-1w' },
-              onClick: () => openDn(dossier),
+              onClick: () => openExternalLink(getDnModifyUrl(String(dossier.numero_dossier))),
+              icon: { name: 'ri-external-link-line', scale: 1.5, class: 'fr-mr-1w' },
+              class: 'fr-btn--secondary',
             },
             {
               label: 'Documents de procédure',
-              onClick: () => openLocal(dossier.id),
+              onClick: () => router.push(getSignalementDocumentsUrl(dossier.id)),
+              icon: { name: 'ri-file-list-line', scale: 1.5, class: 'fr-mr-1w' },
             },
           ]"
         />
       </div>
+    </div>
+
+    <div v-if="dossiers.length === 0 && userInfo?.is_authenticated" class="fr-mt-5w">
+      <DsfrAlert
+        title="Aucun dossier trouvé"
+        description="Aucun dossier trouvé sur Démarche Numérique."
+        type="info"
+      />
     </div>
   </div>
 </template>
@@ -37,7 +50,7 @@
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { getUserDossiers, getUserInfo, type UserDossier, type UserInfo } from '../services/api'
-import { getDnModifyUrl } from '../services/urls'
+import { getDnModifyUrl, getSignalementDocumentsUrl } from '../services/urls'
 
 const router = useRouter()
 const userInfo = ref<UserInfo | null>(null)
@@ -54,21 +67,35 @@ onMounted(async () => {
   }
 })
 
-const openDn = (dossier: UserDossier) => {
-  const url = getDnModifyUrl(String(dossier.numero_dossier))
+const openExternalLink = (url: string) => {
   if (url) {
     window.open(url, '_blank', 'noopener,noreferrer')
   }
 }
 
-const openLocal = (id: number) => {
-  router.push(`/signalements-dn/${id}`)
+const getDossierDescription = (dossier: UserDossier) => {
+  let desc = `Créé le ${formatDate(dossier.date_creation)}`
+  if (dossier.date_modification) {
+    desc += ` · Modifié le ${formatDate(dossier.date_modification)}`
+  }
+  return desc
 }
 
-const formatTitle = (dossier: UserDossier) => {
-  const dateStr = dossier.date_creation
-    ? new Date(dossier.date_creation).toLocaleDateString('fr-FR')
-    : 'Date inconnue'
-  return `Dossier #${dossier.numero_dossier} - Créé le ${dateStr}`
+const formatDate = (dateStr?: string) => {
+  if (!dateStr) return 'Date inconnue'
+  return new Date(dateStr).toLocaleString('fr-FR', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
 }
 </script>
+
+<style scoped>
+.shadow-card {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e5e5;
+}
+</style>
