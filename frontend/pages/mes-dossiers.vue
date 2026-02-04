@@ -1,8 +1,8 @@
 <template>
   <div class="fr-container fr-py-5w">
-    <h1>Mes dossiers</h1>
+    <h1>Mes procédures</h1>
 
-    <DnLoading v-if="showLoading" message="Récupération de vos dossiers..." />
+    <DnLoading v-if="showLoading" message="Récupération de vos procédures..." />
 
     <div v-else>
       <div v-if="userInfo && userInfo.is_authenticated" class="fr-mb-4w">
@@ -15,7 +15,7 @@
 
       <div v-if="dossiers.length > 0" class="fr-mb-2w">
         <p class="fr-text--bold">
-          {{ dossiers.length }} dossier{{ dossiers.length > 1 ? 's' : '' }}
+          {{ dossiers.length }} procédure{{ dossiers.length > 1 ? 's' : '' }}
         </p>
       </div>
 
@@ -43,8 +43,8 @@
 
       <div v-if="dossiers.length === 0 && userInfo?.is_authenticated" class="fr-mt-5w">
         <DsfrAlert
-          title="Aucun dossier trouvé"
-          description="Aucun dossier trouvé sur Démarche Numérique."
+          title="Aucune procédure trouvée"
+          description="Aucune procédure trouvée sur Démarche Numérique."
           type="info"
         />
       </div>

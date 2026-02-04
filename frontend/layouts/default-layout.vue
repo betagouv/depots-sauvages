@@ -91,7 +91,7 @@ const navLinks = computed(() => {
     { text: 'Comprendre la procédure', href: '/comprendre-la-procedure' },
   ]
   if (isAuthenticated.value) {
-    links.push({ text: 'Mes dossiers', href: '/mes-dossiers' })
+    links.push({ text: 'Mes procédures', href: '/mes-dossiers' })
   }
   links.push({ text: 'Contact', href: '/contact' })
   return links
