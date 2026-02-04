@@ -40,13 +40,15 @@
                   </div>
 
                   <div v-if="dossier.date_constat || dossier.localisation_depot">
-                    <div v-if="dossier.date_constat" class="fr-mb-1w">
-                      <strong>Date de constatation :</strong> <br />
-                      {{ formatDate(dossier.date_constat) }}
-                    </div>
-                    <div v-if="dossier.localisation_depot">
-                      <strong>Adresse du dépôt :</strong> <br />
-                      {{ dossier.localisation_depot }}
+                    <div class="fr-grid-row fr-grid-row--gutters">
+                      <div v-if="dossier.date_constat" class="fr-col-12 fr-col-md-6">
+                        <strong>Date de constatation :</strong> <br />
+                        {{ formatDate(dossier.date_constat) }}
+                      </div>
+                      <div v-if="dossier.localisation_depot" class="fr-col-12 fr-col-md-6">
+                        <strong>Adresse du dépôt :</strong> <br />
+                        {{ dossier.localisation_depot }}
+                      </div>
                     </div>
                   </div>
                 </div>
