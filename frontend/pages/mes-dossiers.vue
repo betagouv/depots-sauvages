@@ -53,12 +53,12 @@
 </template>
 
 <script setup lang="ts">
+import { useDossierStore } from '@/stores/dossier'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import DnLoading from '../components/dn/DnLoading.vue'
 import { getUserInfo, type UserDossier, type UserInfo } from '../services/api'
 import { getDnModifyUrl, getSignalementDocumentsUrl } from '../services/urls'
-import { useDossierStore } from '../stores/dossier'
 
 const router = useRouter()
 const userInfo = ref<UserInfo | null>(null)
