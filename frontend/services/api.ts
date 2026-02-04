@@ -82,6 +82,8 @@ export interface UserDossier {
   date_creation?: string
   date_modification?: string
   state?: string
+  date_constat?: string
+  localisation_depot?: string
 }
 
 export const getUserDossiers = (): Promise<UserDossier[]> =>

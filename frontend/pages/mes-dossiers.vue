@@ -21,23 +21,60 @@
 
       <div class="fr-grid-row fr-grid-row--gutters">
         <div v-for="dossier in dossiers" :key="dossier.id" class="fr-col-12">
-          <DsfrCard
-            :title="dossier.title"
-            :description="getDossierDescription(dossier)"
-            :buttons="[
-              {
-                label: 'Voir sur Démarche Numérique',
-                onClick: () => openExternalLink(getDnModifyUrl(String(dossier.numero_dossier))),
-                icon: { name: 'ri-external-link-line', scale: 1.5, class: 'fr-mr-1w' },
-                class: 'fr-btn--secondary',
-              },
-              {
-                label: 'Documents de procédure',
-                onClick: () => router.push(getSignalementDocumentsUrl(dossier.id)),
-                icon: { name: 'ri-file-list-line', scale: 1.5, class: 'fr-mr-1w' },
-              },
-            ]"
-          />
+          <div class="fr-card fr-card--no-arrow">
+            <div class="fr-card__body">
+              <div class="fr-card__content">
+                <h3 class="fr-card__title">
+                  {{ dossier.title }}
+                </h3>
+                <div class="fr-card__desc">
+                  <div class="fr-text--xs fr-mb-2w">
+                    <span
+                      class="fr-icon-calendar-line fr-icon--sm fr-mr-1v"
+                      aria-hidden="true"
+                    ></span>
+                    Créé le {{ formatDate(dossier.date_creation) }}
+                    <span v-if="dossier.date_modification">
+                      &middot; Modifié le {{ formatDate(dossier.date_modification) }}
+                    </span>
+                  </div>
+
+                  <div v-if="dossier.date_constat || dossier.localisation_depot">
+                    <div v-if="dossier.date_constat" class="fr-mb-1w">
+                      <strong>Date de constatation :</strong> <br />
+                      {{ formatDate(dossier.date_constat) }}
+                    </div>
+                    <div v-if="dossier.localisation_depot">
+                      <strong>Adresse du dépôt :</strong> <br />
+                      {{ dossier.localisation_depot }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="fr-card__footer">
+                <ul class="fr-btns-group fr-btns-group--inline-lg">
+                  <li>
+                    <DsfrButton
+                      label="Voir sur Démarche Numérique"
+                      class="fr-btn--secondary"
+                      icon="ri-external-link-line"
+                      icon-right
+                      @click="openExternalLink(getDnModifyUrl(String(dossier.numero_dossier)))"
+                    />
+                  </li>
+                  <li>
+                    <DsfrButton
+                      label="Documents de procédure"
+                      icon="ri-file-list-line"
+                      icon-right
+                      @click="router.push(getSignalementDocumentsUrl(dossier.id))"
+                    />
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -57,7 +94,7 @@ import { useDossierStore } from '@/stores/dossier.ts'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import DnLoading from '../components/dn/DnLoading.vue'
-import { getUserInfo, type UserDossier, type UserInfo } from '../services/api'
+import { getUserInfo, type UserInfo } from '../services/api'
 import { getDnModifyUrl, getSignalementDocumentsUrl } from '../services/urls'
 
 const router = useRouter()
@@ -84,14 +121,6 @@ const openExternalLink = (url: string) => {
   if (url) {
     window.open(url, '_blank', 'noopener,noreferrer')
   }
-}
-
-const getDossierDescription = (dossier: UserDossier) => {
-  let desc = `Créé le ${formatDate(dossier.date_creation)}`
-  if (dossier.date_modification) {
-    desc += ` · Modifié le ${formatDate(dossier.date_modification)}`
-  }
-  return desc
 }
 
 const formatDate = (dateStr?: string) => {

@@ -77,6 +77,47 @@ query GetDemarcheDossiers($demarcheNumber: Int!, $after: String) {
                 usager {
                     email
                 }
+                champs {
+                    id
+                    label
+                    stringValue
+                    __typename
+                    ... on TextChamp {
+                        stringValue
+                    }
+                    ... on YesNoChamp {
+                        value
+                    }
+                    ... on MultipleDropDownListChamp {
+                        values
+                    }
+                    ... on DatetimeChamp {
+                        datetime
+                    }
+                    ... on DecimalNumberChamp {
+                        value
+                    }
+                    ... on IntegerNumberChamp {
+                        value
+                    }
+                    ... on CheckboxChamp {
+                        value
+                    }
+                    ... on SiretChamp {
+                        stringValue
+                    }
+                    ... on AddressChamp {
+                        address {
+                            postalCode
+                            cityName
+                            cityCode
+                            label
+                            streetAddress
+                            streetName
+                            streetNumber
+                        }
+                    }
+                }
             }
         }
     }

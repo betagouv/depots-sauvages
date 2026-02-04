@@ -153,6 +153,20 @@ class UserDossiersView(APIView):
             return Response({"error": "Erreur lors de la récupération des dossiers"}, status=503)
         results = []
         for dossier in dossiers:
+            # Use DNChamp to extract fields cleanly
+            dn_champ = DNChamp(dossier)
+            champs_data = dn_champ.get_data()
+
+            date_constat = None
+            datetime_constat = champs_data.get(DATE_CONSTAT_CHAMP_ID)
+            if datetime_constat:
+                date_constat = datetime_constat.isoformat()
+
+            localisation_depot = None
+            address_data = champs_data.get(ADDRESS_CHAMP_ID)
+            if address_data and isinstance(address_data, dict):
+                localisation_depot = address_data.get("label")
+
             item = {
                 "id": dossier["number"],
                 "numero_dossier": dossier["number"],
@@ -160,6 +174,8 @@ class UserDossiersView(APIView):
                 "date_creation": dossier.get("dateDepot"),
                 "date_modification": dossier.get("dateDerniereModification"),
                 "state": dossier.get("state"),
+                "date_constat": date_constat,
+                "localisation_depot": localisation_depot,
             }
             results.append(item)
         # Sort by date creation desc
