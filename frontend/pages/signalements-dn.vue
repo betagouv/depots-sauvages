@@ -47,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDossierStore } from '@/stores/dossier'
+import { useDossierStore } from '@/stores/dossier.ts'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
