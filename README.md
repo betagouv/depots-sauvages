@@ -32,6 +32,13 @@ Documentation disponible en :
 La page "Mes dossiers" permet aux utilisateurs connectés de consulter l'état de leurs procédures en cours.
 Les données - numéro de dossier, date de dépôt, état d'avancement, sont récupérées **en temps réel** depuis l'API Démarches Numériques, c'est à dire qu'on ne stocke pas les données à cette étape-là.
 
+### Téléchargement des documents
+
+Une page de récupération des documents permet aux utilisateurs de télécharger un rapport de constatation et une lettre d'information.
+Ces documents sont générés sur la base des données récupérées depuis l'API Démarches Numériques. Il y a un stokage local des données pour faciliter le traitement de génération des documents.
+
+L'accès à cette page est restreint au propriétaire du dossier.
+
 ## 🚀 Démarrage rapide avec Docker
 
 Lancez le projet en local à l'aide de Docker et Docker Compose V2 :
