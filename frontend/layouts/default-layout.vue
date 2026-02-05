@@ -67,9 +67,10 @@
 
 <script setup lang="ts">
 import { DsfrFooter, DsfrFooterLinkList, DsfrHeader } from '@gouvminint/vue-dsfr'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { getUserInfo } from '../services/api'
+import { LOGIN_URL, LOGOUT_URL } from '../services/urls'
 interface FooterLink {
   text: string
   href: string
@@ -84,11 +85,17 @@ const route = useRoute()
 const logoText = ['Ministère', 'de l’intérieur']
 const breadcrumbLinks: BreadcrumbLink[] = []
 
-const navLinks = ref([
-  { text: 'Accueil', href: '/' },
-  { text: 'Comprendre la procédure', href: '/comprendre-la-procedure' },
-  { text: 'Contact', href: '/contact' },
-])
+const navLinks = computed(() => {
+  const links = [
+    { text: 'Accueil', href: '/' },
+    { text: 'Comprendre la procédure', href: '/comprendre-la-procedure' },
+  ]
+  if (isAuthenticated.value) {
+    links.push({ text: 'Mes procédures', href: '/mes-dossiers' })
+  }
+  links.push({ text: 'Contact', href: '/contact' })
+  return links
+})
 
 interface QuickLink {
   label: string
@@ -115,7 +122,17 @@ onMounted(async () => {
         icon: 'ri-logout-box-r-line',
         iconRight: false,
         onClick: () => {
-          window.location.href = '/logout/'
+          window.location.href = LOGOUT_URL
+        },
+      })
+    } else if (userInfo.proconnect_enabled) {
+      quickLinks.value.push({
+        label: 'Se connecter via ProConnect',
+        button: true,
+        icon: 'ri-login-box-line',
+        iconRight: false,
+        onClick: () => {
+          window.location.href = LOGIN_URL
         },
       })
     }

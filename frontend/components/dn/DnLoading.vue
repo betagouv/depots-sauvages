@@ -10,13 +10,24 @@
             class="fr-mb-2w"
             aria-hidden="true"
           />
-          <p class="fr-text--lg fr-mb-0">Récupération des informations du dossier...</p>
+          <p class="fr-text--lg fr-mb-0">{{ message }}</p>
           <p class="fr-text--sm fr-text-mention--grey">Veuillez patienter quelques instants.</p>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+withDefaults(
+  defineProps<{
+    message?: string
+  }>(),
+  {
+    message: 'Récupération des informations du dossier...',
+  }
+)
+</script>
 
 <style scoped>
 .loading-section {

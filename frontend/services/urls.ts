@@ -21,7 +21,14 @@ export const getDnLettreInfoUrl = (id: number | null) => {
   return `${API_URL}/dn-signalements/${id}/documents/lettre-info/`
 }
 
+export const getSignalementDocumentsUrl = (id: number | string) => {
+  return `/signalements-dn/${id}`
+}
+
 export const getDnModifyUrl = (numeroDossier: string | null) => {
   if (!numeroDossier) return ''
   return `${DN_BASE_URL}/dossiers/${numeroDossier}/modifier`
 }
+
+export const LOGIN_URL = '/oidc/authenticate/'
+export const LOGOUT_URL = '/logout/'

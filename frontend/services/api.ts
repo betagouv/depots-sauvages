@@ -30,6 +30,7 @@ export const API_URLS = {
   signalements: `${API_URL}/signalements/`,
   processDossier: `${API_URL}/signalements/process-dn-dossier/`,
   userInfo: `${API_URL}/user-info/`,
+  myDossiers: `${API_URL}/my-dossiers/`,
 }
 
 // API functions
@@ -64,4 +65,26 @@ export const updateResource = (url: string, data: any) => makeRequest(url, 'PUT'
 
 export const fetchResource = (url: string) => makeRequest(url, 'GET', {})
 
-export const getUserInfo = () => makeRequest(API_URLS.userInfo, 'GET', {})
+export interface UserInfo {
+  is_authenticated: boolean
+  proconnect_enabled: boolean
+  first_name?: string
+  last_name?: string
+  email?: string
+}
+
+export const getUserInfo = (): Promise<UserInfo> => makeRequest(API_URLS.userInfo, 'GET', {})
+
+export interface UserDossier {
+  id: number
+  numero_dossier: number
+  title: string
+  date_creation?: string
+  date_modification?: string
+  state?: string
+  date_constat?: string
+  localisation_depot?: string
+}
+
+export const getUserDossiers = (): Promise<UserDossier[]> =>
+  makeRequest(API_URLS.myDossiers, 'GET', {})

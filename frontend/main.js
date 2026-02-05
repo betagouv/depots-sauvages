@@ -22,6 +22,7 @@ import { createApp } from 'vue'
 import VueMatomo from 'vue-matomo'
 import { createRouter, createWebHistory } from 'vue-router'
 import App from './app.vue'
+import { getUserInfo } from './services/api'
 
 addIcons(
   RiCalendarLine,
@@ -51,6 +52,12 @@ const router = createRouter({
       path: '/comprendre-la-procedure',
       name: 'ComprendreProcedure',
       component: () => import('./pages/comprendre-la-procedure.vue'),
+    },
+    {
+      path: '/mes-dossiers',
+      name: 'MesDossiers',
+      component: () => import('./pages/mes-dossiers.vue'),
+      meta: { requiresAuth: true },
     },
     {
       path: '/debuter-procedure',
@@ -83,7 +90,7 @@ const router = createRouter({
       path: '/signalements-dn/:dossier_id',
       name: 'SignalementsDN',
       component: () => import('./pages/signalements-dn.vue'),
-      meta: { hideNavigation: true },
+      meta: { requiresAuth: true },
     },
     {
       path: '/rejoindre-le-dispositif',
@@ -96,6 +103,23 @@ const router = createRouter({
       meta: { hideNavigation: true },
     },
   ],
+})
+
+router.beforeEach(async (to, from, next) => {
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    try {
+      const userInfo = await getUserInfo()
+      if (!userInfo.is_authenticated) {
+        next('/')
+        return
+      }
+    } catch (error) {
+      console.error('Error checking auth:', error)
+      next('/')
+      return
+    }
+  }
+  next()
 })
 
 const app = createApp(App)

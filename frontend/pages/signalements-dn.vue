@@ -47,6 +47,7 @@
 </template>
 
 <script setup lang="ts">
+import { useDossierStore } from '@/stores/dossier.ts'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -62,6 +63,7 @@ import { API_URLS, createResource } from '../services/api'
 import { getDnDocConstatUrl, getDnLettreInfoUrl, getDnModifyUrl } from '../services/urls'
 
 const route = useRoute()
+const dossierStore = useDossierStore()
 const showLoading = ref(true)
 const error = ref<string | null>(null)
 const dossierData = ref<any>(null)
@@ -74,12 +76,25 @@ const auteurIdentifie = computed(() => dossierData.value?.auteur_identifie ?? fa
 
 onMounted(async () => {
   const dossierId = (route.params.dossier_id as string) || (route.query.dossier_id as string)
+
   if (!dossierId) {
     error.value = 'dossier_id is required in the URL'
     showLoading.value = false
     return
   }
+
   error.value = null
+
+  // Verify ownership via store
+  await dossierStore.fetchDossiers()
+  const dossier = dossierStore.getDossierById(dossierId)
+
+  if (!dossier) {
+    error.value = "Vous n'avez pas les droits pour accéder à ce dossier ou il n'existe pas."
+    showLoading.value = false
+    return
+  }
+
   try {
     dossierData.value = await createResource(API_URLS.processDossier, {
       dossier_id: dossierId,

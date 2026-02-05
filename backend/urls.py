@@ -8,6 +8,7 @@ from backend.dn_signalements.views import (
     DNSignalementDocumentDownloadView,
     DNSignalementViewSet,
     ProcessDossierView,
+    UserDossiersView,
 )
 from backend.home.views import UserInfoViewSet, index_view, logout_view
 from backend.signalements.views import SignalementDocumentDownloadView, SignalementViewSet
@@ -39,6 +40,11 @@ urlpatterns.extend(
             ProcessDossierView.as_view(),
             name="signalements-process-dn-dossier",
         ),
+        path(
+            "api/my-dossiers/",
+            UserDossiersView.as_view(),
+            name="user-dossiers",
+        ),
         path("api/", include(router.urls)),
         path("logout/", logout_view, name="logout"),
     ]
@@ -51,6 +57,7 @@ if settings.PROCONNECT_ENABLED:
 # Protected Frontend Routes
 if settings.LOGIN_REQUIRED:
     urlpatterns.append(re_path(r"^signalements-dn/.*", login_required(index_view)))
+    urlpatterns.append(re_path(r"^mes-dossiers/?$", login_required(index_view)))
 else:
     urlpatterns.append(re_path(r"^signalements-dn/.*", index_view))
 
