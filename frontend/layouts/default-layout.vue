@@ -114,26 +114,23 @@ const isAuthenticated = ref(false)
 onMounted(async () => {
   try {
     const userInfo = await getUserInfo()
+
     if (userInfo.is_authenticated) {
       isAuthenticated.value = true
       quickLinks.value.push({
         label: 'Se déconnecter',
-        button: true,
         icon: 'ri-logout-box-r-line',
         iconRight: false,
-        onClick: () => {
-          window.location.href = LOGOUT_URL
-        },
+        href: LOGOUT_URL,
+        to: LOGOUT_URL,
       })
     } else if (userInfo.proconnect_enabled) {
       quickLinks.value.push({
         label: 'Se connecter via ProConnect',
-        button: true,
         icon: 'ri-login-box-line',
         iconRight: false,
-        onClick: () => {
-          window.location.href = LOGIN_URL
-        },
+        href: LOGIN_URL,
+        to: LOGIN_URL,
       })
     }
   } catch (error) {
