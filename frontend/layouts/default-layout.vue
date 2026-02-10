@@ -26,8 +26,6 @@
           </button>
         </div>
       </template>
-      ...
-
       <template #mainnav>
         <nav
           v-if="!route.meta.hideNavigation"
