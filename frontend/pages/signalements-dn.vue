@@ -86,13 +86,16 @@ onMounted(async () => {
   error.value = null
 
   // Verify ownership via store
-  await dossierStore.fetchDossiers()
-  const dossier = dossierStore.getDossierById(dossierId)
+  const loginRequired = import.meta.env.VITE_LOGIN_REQUIRED !== 'false'
+  if (loginRequired) {
+    await dossierStore.fetchDossiers()
+    const dossier = dossierStore.getDossierById(dossierId)
 
-  if (!dossier) {
-    error.value = "Vous n'avez pas les droits pour accéder à ce dossier ou il n'existe pas."
-    showLoading.value = false
-    return
+    if (!dossier) {
+      error.value = "Vous n'avez pas les droits pour accéder à ce dossier ou il n'existe pas."
+      showLoading.value = false
+      return
+    }
   }
 
   try {

@@ -111,7 +111,8 @@ router.beforeEach(async (to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     try {
       const userInfo = await getUserInfo()
-      if (!userInfo.is_authenticated) {
+      const loginRequired = import.meta.env.VITE_LOGIN_REQUIRED !== 'false'
+      if (loginRequired && !userInfo.is_authenticated) {
         next('/')
         return
       }
