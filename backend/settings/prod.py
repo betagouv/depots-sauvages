@@ -82,7 +82,7 @@ if redis_url:
     }
 
 # ProConnect / OIDC Settings
-PROCONNECT_ENABLED = env.bool("PROCONNECT_ENABLED", default=False)
+PROCONNECT_ENABLED = env.bool("VITE_PROCONNECT_ENABLED", default=False)
 
 if PROCONNECT_ENABLED:
     INSTALLED_APPS += ["mozilla_django_oidc"]
@@ -101,7 +101,7 @@ if PROCONNECT_ENABLED:
 
 
 # Auth Configuration
-LOGIN_REQUIRED = env.bool("LOGIN_REQUIRED", default=True)
+LOGIN_REQUIRED = env.bool("VITE_LOGIN_REQUIRED", default=True)
 
 if not LOGIN_REQUIRED:
     REST_FRAMEWORK["DEFAULT_PERMISSION_CLASSES"] = [

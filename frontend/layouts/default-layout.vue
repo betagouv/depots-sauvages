@@ -5,27 +5,49 @@
       service-description="Accompagner les collectivités pour mieux lutter contre les dépôts sauvages."
       :logoText="logoText"
       :quick-links="quickLinks"
-    />
-
-    <nav
-      v-if="!route.meta.hideNavigation"
-      class="fr-container"
-      role="navigation"
-      aria-label="Menu principal"
     >
-      <ul class="fr-nav__list">
-        <li v-for="lien in navLinks" :key="lien.href" class="fr-nav__item">
-          <a
-            class="fr-nav__link"
-            :class="{ 'fr-nav__link--active': route.path === lien.href }"
-            :aria-current="route.path === lien.href ? 'page' : undefined"
-            :href="lien.href"
+      <template #operator>
+        <div class="mobile-login-btn fr-hidden-lg">
+          <button
+            v-if="!isAuthenticated && isProConnectEnabled"
+            class="fr-btn fr-btn--tertiary-no-outline fr-icon-account-circle-line fr-p-2v"
+            title="Se connecter via ProConnect"
+            @click="goToLogin"
           >
-            {{ lien.text }}
-          </a>
-        </li>
-      </ul>
-    </nav>
+            Se connecter
+          </button>
+          <button
+            v-if="isAuthenticated"
+            class="fr-btn fr-btn--tertiary-no-outline fr-icon-logout-box-r-line fr-p-2v"
+            title="Se déconnecter"
+            @click="goToLogout"
+          >
+            Se déconnecter
+          </button>
+        </div>
+      </template>
+      <template #mainnav>
+        <nav
+          v-if="!route.meta.hideNavigation"
+          class="fr-nav"
+          role="navigation"
+          aria-label="Menu principal"
+        >
+          <ul class="fr-nav__list">
+            <li v-for="lien in navLinks" :key="lien.href" class="fr-nav__item">
+              <a
+                class="fr-nav__link"
+                :class="{ 'fr-nav__link--active': route.path === lien.href }"
+                :aria-current="route.path === lien.href ? 'page' : undefined"
+                :href="lien.href"
+              >
+                {{ lien.text }}
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </template>
+    </DsfrHeader>
 
     <main class="fr-container fr-py-3w" role="main" id="content">
       <slot />
@@ -110,34 +132,53 @@ interface QuickLink {
 const quickLinks = ref<QuickLink[]>([])
 
 const isAuthenticated = ref(false)
+const userInfo = ref<any>(null)
+
+const goToLogin = () => {
+  window.location.href = LOGIN_URL
+}
+
+const goToLogout = () => {
+  window.location.href = LOGOUT_URL
+}
+
+const isProConnectEnabled = import.meta.env.VITE_PROCONNECT_ENABLED === 'true'
 
 onMounted(async () => {
   try {
-    const userInfo = await getUserInfo()
-    if (userInfo.is_authenticated) {
+    const info = await getUserInfo()
+    userInfo.value = info
+
+    if (info.is_authenticated) {
       isAuthenticated.value = true
       quickLinks.value.push({
         label: 'Se déconnecter',
-        button: true,
         icon: 'ri-logout-box-r-line',
         iconRight: false,
-        onClick: () => {
-          window.location.href = LOGOUT_URL
-        },
+        href: LOGOUT_URL,
+        to: LOGOUT_URL,
       })
-    } else if (userInfo.proconnect_enabled) {
+    } else if (isProConnectEnabled) {
       quickLinks.value.push({
         label: 'Se connecter via ProConnect',
-        button: true,
         icon: 'ri-login-box-line',
         iconRight: false,
-        onClick: () => {
-          window.location.href = LOGIN_URL
-        },
+        href: LOGIN_URL,
+        to: LOGIN_URL,
       })
     }
   } catch (error) {
     console.error('Failed to fetch user info:', error)
+
+    if (isProConnectEnabled) {
+      quickLinks.value.push({
+        label: 'Se connecter via ProConnect',
+        icon: 'ri-login-box-line',
+        iconRight: false,
+        href: LOGIN_URL,
+        to: LOGIN_URL,
+      })
+    }
   }
 })
 
@@ -148,3 +189,38 @@ const footerLinks: FooterLink[] = [
   { text: 'data.gouv.fr', href: 'https://data.gouv.fr' },
 ]
 </script>
+
+<style>
+/* 
+  Custom styles for mobile login button positioning.
+  We keep these because standard utility classes cannot handle this specific 
+  absolute positioning relative to the header structure.
+*/
+@media (max-width: 991px) {
+  .mobile-login-btn {
+    display: flex;
+    position: absolute;
+    top: 0.25rem; /* Checked for alignment with menu button */
+    right: 3.5rem; /* Left of the burger menu (approx) */
+    z-index: 1000;
+  }
+
+  /* Font size 0 to hide text, but keep icon visible */
+  .mobile-login-btn .fr-btn {
+    min-height: auto;
+    font-size: 0;
+  }
+
+  .mobile-login-btn .fr-btn::before {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+
+  /* Fix for mobile menu button alignment and styling */
+  .fr-header__navbar .fr-btn--menu {
+    border: 1px solid var(--border-default-grey);
+    margin-right: 0.25rem;
+    align-self: center;
+  }
+}
+</style>
