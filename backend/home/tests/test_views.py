@@ -14,7 +14,9 @@ def test_home_page_loads_correctly(client):
 
 @pytest.mark.django_db
 def test_user_info_authenticated(client):
-    user = UserFactory(first_name="John", last_name="Doe", email="john@example.com")
+    user = UserFactory(
+        first_name="John", last_name="Doe", email="john@example.com", username="john@example.com"
+    )
     client.force_login(user)
     url = reverse("user-info-list")
     response = client.get(url)
