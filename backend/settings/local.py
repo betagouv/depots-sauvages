@@ -61,7 +61,7 @@ DN_API_TOKEN = env("DN_API_TOKEN", default="")
 DN_DEMARCHE_NUMBER = env.int("DN_DEMARCHE_NUMBER", default=0)
 
 # ProConnect / OIDC Settings
-PROCONNECT_ENABLED = env.bool("PROCONNECT_ENABLED", default=False)
+PROCONNECT_ENABLED = env.bool("VITE_PROCONNECT_ENABLED", default=False)
 
 if PROCONNECT_ENABLED:
     INSTALLED_APPS += ["mozilla_django_oidc"]

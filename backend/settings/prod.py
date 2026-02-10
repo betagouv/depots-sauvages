@@ -82,7 +82,7 @@ if redis_url:
     }
 
 # ProConnect / OIDC Settings
-PROCONNECT_ENABLED = env.bool("PROCONNECT_ENABLED", default=False)
+PROCONNECT_ENABLED = env.bool("VITE_PROCONNECT_ENABLED", default=False)
 
 if PROCONNECT_ENABLED:
     INSTALLED_APPS += ["mozilla_django_oidc"]

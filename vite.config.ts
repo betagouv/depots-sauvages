@@ -11,9 +11,6 @@ export default defineConfig(({ mode }) => {
         '@': path.resolve(__dirname, 'frontend'),
       },
     },
-    define: {
-      'import.meta.env.VITE_PROCONNECT_ENABLED': JSON.stringify(env.PROCONNECT_ENABLED),
-    },
     server: {
       allowedHosts: ['localhost', '.local', '.protect-envi.beta.gouv.fr'],
       fs: {
