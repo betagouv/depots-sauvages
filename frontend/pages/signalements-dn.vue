@@ -20,6 +20,18 @@
             :lettre-info-url="getDnLettreInfoUrl(dossierData?.id ?? null)"
           />
 
+          <div v-else class="fr-my-4w">
+            <p class="">
+              Pour récupérer vos documents, merci de mettre à jour votre dossier sur la plateforme
+              Démarches Numériques.
+            </p>
+            <DsfrAlert
+              type="info"
+              title="Note"
+              description="Les formulaires de Protect’Envi évoluent régulièrement. Si vous avez rempli une version antérieure, une mise à jour de certaines informations peut être nécessaire pour accéder à vos documents."
+            />
+          </div>
+
           <div v-if="hasProcedure">
             <InfoAuteurIdentifie v-if="auteurIdentifie" />
             <InfoAuteurNonIdentifie
