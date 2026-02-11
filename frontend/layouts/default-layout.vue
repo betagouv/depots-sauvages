@@ -134,11 +134,17 @@ const quickLinks = ref<QuickLink[]>([])
 const isAuthenticated = ref(false)
 const userInfo = ref<any>(null)
 
-const goToLogin = () => {
+const goToLogin = (event?: MouseEvent) => {
+  if (event) {
+    event.preventDefault()
+  }
   window.location.href = LOGIN_URL
 }
 
-const goToLogout = () => {
+const goToLogout = (event?: MouseEvent) => {
+  if (event) {
+    event.preventDefault()
+  }
   window.location.href = LOGOUT_URL
 }
 
@@ -156,7 +162,8 @@ onMounted(async () => {
         icon: 'ri-logout-box-r-line',
         iconRight: false,
         href: LOGOUT_URL,
-        to: LOGOUT_URL,
+        to: LOGOUT_URL, // for styling
+        onClick: goToLogout,
       })
     } else if (isProConnectEnabled) {
       quickLinks.value.push({
@@ -164,7 +171,8 @@ onMounted(async () => {
         icon: 'ri-login-box-line',
         iconRight: false,
         href: LOGIN_URL,
-        to: LOGIN_URL,
+        to: LOGIN_URL, // for styling
+        onClick: goToLogin,
       })
     }
   } catch (error) {
@@ -176,7 +184,8 @@ onMounted(async () => {
         icon: 'ri-login-box-line',
         iconRight: false,
         href: LOGIN_URL,
-        to: LOGIN_URL,
+        to: LOGIN_URL, // for styling
+        onClick: goToLogin,
       })
     }
   }
