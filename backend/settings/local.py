@@ -80,7 +80,7 @@ if PROCONNECT_ENABLED:
 
 
 # Auth Configuration
-LOGIN_REQUIRED = env.bool("LOGIN_REQUIRED", default=False)
+LOGIN_REQUIRED = env.bool("VITE_LOGIN_REQUIRED", default=False)
 
 if not LOGIN_REQUIRED:
     REST_FRAMEWORK["DEFAULT_PERMISSION_CLASSES"] = [
