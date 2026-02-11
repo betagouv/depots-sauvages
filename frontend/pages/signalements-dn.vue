@@ -22,8 +22,14 @@
 
           <div v-else class="fr-my-4w">
             <p class="">
-              Pour récupérer vos documents, merci de mettre à jour votre dossier sur la plateforme
-              Démarches Numériques.
+              Pour récupérer vos documents, merci de
+              <a
+                :href="getDnModifyUrl(dossierData.dn_numero_dossier)"
+                class="fr-link fr-icon-external-link-line fr-link--icon-right"
+                target="_blank"
+                rel="noopener noreferrer"
+                >mettre à jour votre dossier sur la plateforme Démarches Numériques</a
+              >.
             </p>
             <DsfrAlert
               type="info"
