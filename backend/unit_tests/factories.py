@@ -36,3 +36,12 @@ class SignalementFactory(factory.django.DjangoModelFactory):
     contact_email = factory.Faker("email")
     contact_telephone = factory.Faker("phone_number")
     accepte_accompagnement = factory.Faker("boolean")
+
+
+class DNSignalementFactory(SignalementFactory):
+    """Factory for creating DNSignalement instances for testing."""
+
+    class Meta:
+        model = "dn_signalements.DNSignalement"
+
+    dn_numero_dossier = factory.Sequence(lambda n: n + 10000)
