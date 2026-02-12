@@ -12,17 +12,9 @@
           profit de la mairie.
         </p>
         <div class="fr-btns-group fr-btns-group--center fr-mt-3w">
-          <a
-            v-if="useExternalLink"
-            :href="demarcheNumeriqueUrl"
-            class="fr-btn"
-            target="_blank"
-            rel="noopener noreferrer"
+          <a :href="demarcheNumeriqueUrl" class="fr-btn" target="_blank" rel="noopener noreferrer"
             >Débuter une procédure administrative via Démarche Numérique
           </a>
-          <RouterLink v-else to="/debuter-procedure" class="fr-btn"
-            >Débuter une procédure
-          </RouterLink>
         </div>
         <DsfrNotice class="fr-mt-2w">
           Vous aurez besoin de vous connecter avec ProConnect.
@@ -106,10 +98,7 @@
 <script setup lang="ts">
 import { DsfrCallout, DsfrPicture } from '@gouvminint/vue-dsfr'
 
-const isDemarcheNumeriqueEnabled = import.meta.env.VITE_DN_ENABLED === 'true'
 const demarcheNumeriqueUrl = import.meta.env.VITE_DN_URL
-
-const useExternalLink = isDemarcheNumeriqueEnabled && demarcheNumeriqueUrl
 
 const cardsFonctionnement = [
   {

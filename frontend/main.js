@@ -62,24 +62,6 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
-      path: '/debuter-procedure',
-      ...(import.meta.env.VITE_DN_ENABLED === 'true'
-        ? { redirect: '/' }
-        : {
-            name: 'Introduction',
-            component: () => import('./pages/introduction-formulaire.vue'),
-          }),
-    },
-    {
-      path: '/debuter-procedure/formulaire',
-      ...(import.meta.env.VITE_DN_ENABLED === 'true'
-        ? { redirect: '/' }
-        : {
-            name: 'Formulaire',
-            component: () => import('./pages/debuter-procedure.vue'),
-          }),
-    },
-    {
       path: '/contact',
       name: 'Contact',
       component: () => import('./pages/contact.vue'),
