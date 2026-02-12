@@ -22,6 +22,8 @@ django-model-utils = "*"
 mozilla-django-oidc = "*"
 typing-extensions = "*"
 django-anymail = {extras = ["brevo"], version = "*"}
+django-import-export = "*"
+tablib = {extras = ["xlsx"], version = "*"}
 
 [dev-packages]
 black = "*"

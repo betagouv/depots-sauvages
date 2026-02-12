@@ -1,6 +1,8 @@
 from django.contrib import admin
+from import_export.admin import ExportActionModelAdmin
 
 from .models import Signalement
+from .resources import SignalementResource
 
 
 class BaseSignalementAdminMixin:
@@ -133,6 +135,6 @@ class BaseSignalementAdminMixin:
 @admin.register(Signalement)
 class SignalementAdmin(
     BaseSignalementAdminMixin,
-    admin.ModelAdmin,
+    ExportActionModelAdmin,
 ):
-    pass
+    resource_class = SignalementResource
