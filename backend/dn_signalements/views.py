@@ -16,11 +16,8 @@ from backend.dn_signalements.dn_mappings import (
     DATE_CONSTAT_CHAMP_ID,
 )
 from backend.dn_signalements.models import DNSignalement
-from backend.signalements.serializers import SignalementSerializer
-from backend.signalements.view_mixins import (
-    SignalementDocumentDownloadViewMixin,
-    SignalementViewSetMixin,
-)
+from backend.dn_signalements.serializers import SignalementSerializer
+from backend.signalements.views import SignalementDocumentDownloadViewMixin, SignalementViewSetMixin
 
 
 class ProcessDossierView(APIView):

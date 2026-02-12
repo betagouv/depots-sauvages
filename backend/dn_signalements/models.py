@@ -1,7 +1,7 @@
 from django.db import models
 from model_utils.models import TimeStampedModel
 
-from backend.signalements.base import AbstractSignalementBase
+from backend.signalements.models import AbstractSignalementBase
 from backend.signalements.prejudice import PrejudiceMixin
 
 

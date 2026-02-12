@@ -2,14 +2,14 @@
 
 from rest_framework import serializers
 
-from backend.signalements.models import Signalement
+from backend.dn_signalements.models import DNSignalement
 
 
 class SignalementSerializer(serializers.ModelSerializer):
     """Serializer for Signalement model."""
 
     class Meta:
-        model = Signalement
+        model = DNSignalement
         exclude = [
             "doc_constat",
             "lettre_info",

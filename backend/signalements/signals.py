@@ -9,7 +9,6 @@ from django_tasks import task
 
 from backend.dn_signalements.models import DNSignalement
 from backend.doc_maker import odt_utils
-from backend.signalements.models import Signalement
 
 logger = logging.getLogger(__name__)
 
@@ -100,7 +99,6 @@ def generate_document_task(signalement_id, doc_base_name, model_label):
         raise
 
 
-@receiver(post_save, sender=Signalement)
 @receiver(post_save, sender=DNSignalement)
 def generate_doc_constat(sender, instance, created, **kwargs):
     """
@@ -122,7 +120,6 @@ def generate_doc_constat(sender, instance, created, **kwargs):
     logger.info(f"Document generation task enqueued for signalement {instance.id}")
 
 
-@receiver(post_save, sender=Signalement)
 @receiver(post_save, sender=DNSignalement)
 def generate_lettre_info(sender, instance, created, **kwargs):
     """
