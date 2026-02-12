@@ -4,11 +4,8 @@ from django.core.exceptions import ImproperlyConfigured
 from django.http import FileResponse, Http404
 from django.shortcuts import get_object_or_404
 from django.views.generic import View
-from rest_framework import mixins, status, viewsets
-from rest_framework.decorators import action
-from rest_framework.response import Response
+from rest_framework import mixins, viewsets
 
-from backend.signalements.signals import send_contact_email_task
 from backend.throttling.throttles import SignalementRateThrottle
 
 
@@ -25,29 +22,12 @@ class SignalementViewSetMixin(
     model_class = None
     serializer_class = None
     model_label = None
-    send_contact_email_enabled = True
     throttle_classes = [SignalementRateThrottle]
 
     def get_queryset(self):
         if not self.model_class:
             raise ImproperlyConfigured("model_class must be set")
         return self.model_class.objects.all()
-
-    @action(detail=True, methods=["post"])
-    def send_contact_email(self, request, pk=None):
-        """
-        Queue email sending for a signalement.
-        """
-        if not self.send_contact_email_enabled:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        signalement = self.get_object()
-        if not signalement.contact_email:
-            return Response(
-                {"error": "No contact email available for this signalement"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        send_contact_email_task.enqueue(signalement.id, model_label=self.model_label)
-        return Response({"message": "Contact email queued for sending"})
 
 
 class SignalementDocumentDownloadViewMixin(View):

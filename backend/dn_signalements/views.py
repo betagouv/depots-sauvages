@@ -122,7 +122,6 @@ class DNSignalementViewSet(SignalementViewSetMixin):
     model_class = DNSignalement
     serializer_class = SignalementSerializer
     model_label = "dn_signalements.DNSignalement"
-    send_contact_email_enabled = False
 
 
 @method_decorator(login_required, name="dispatch")
