@@ -19,7 +19,7 @@ class SignalementViewSetMixin(
     viewsets.GenericViewSet,
 ):
     """
-    Shared behavior for signalement viewsets.
+    This mixin contains the core logic for handling signalements
     """
 
     model_class = None
@@ -52,7 +52,8 @@ class SignalementViewSetMixin(
 
 class SignalementDocumentDownloadViewMixin(View):
     """
-    Shared logic to download generated documents for a signalement model.
+    This mixin contains the core logic for handling document downloads
+    for a signalement-liked models.
     """
 
     model_class = None
