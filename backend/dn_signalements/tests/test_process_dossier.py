@@ -3,11 +3,15 @@ from django.conf import settings
 from django.urls import reverse
 from rest_framework import status
 
+from backend.unit_tests.factories import UserFactory
+
 pytestmark = pytest.mark.django_db(databases=settings.DATABASES.keys())
 
 
 @pytest.mark.skip(reason="Skipped to avoid triggering API call")
 def test_process_dossier_returns_success_with_valid_dossier_id(client):
+    user = UserFactory()
+    client.force_login(user)
     url = reverse("signalements-process-dn-dossier")
     data = {"dossier_id": 12345}
     response = client.post(url, data, content_type="application/json")
@@ -18,6 +22,8 @@ def test_process_dossier_returns_success_with_valid_dossier_id(client):
 
 
 def test_process_dossier_returns_error_when_dossier_id_is_missing(client):
+    user = UserFactory()
+    client.force_login(user)
     url = reverse("signalements-process-dn-dossier")
     data = {}
     response = client.post(url, data, content_type="application/json")
@@ -27,6 +33,8 @@ def test_process_dossier_returns_error_when_dossier_id_is_missing(client):
 
 
 def test_process_dossier_returns_error_when_dossier_id_is_none(client):
+    user = UserFactory()
+    client.force_login(user)
     url = reverse("signalements-process-dn-dossier")
     data = {"dossier_id": None}
     response = client.post(url, data, content_type="application/json")
@@ -37,6 +45,8 @@ def test_process_dossier_returns_error_when_dossier_id_is_none(client):
 
 def test_process_dossier_returns_no_procedure_when_date_constat_missing(client, mocker):
     """Test that a dossier without date_constat is not processed (no signalement)."""
+    user = UserFactory()
+    client.force_login(user)
     url = reverse("signalements-process-dn-dossier")
     data = {"dossier_id": 12345}
     # Mock DN client to return a dossier without date_constat
@@ -56,6 +66,8 @@ def test_process_dossier_returns_no_procedure_when_date_constat_missing(client, 
 
 def test_process_dossier_returns_error_on_permission_issue(client, mocker):
     """Test returning a clean error message when permission is denied."""
+    user = UserFactory()
+    client.force_login(user)
     url = reverse("signalements-process-dn-dossier")
     data = {"dossier_id": 12345}
     # Mock DN client to raise ValueError with permission message

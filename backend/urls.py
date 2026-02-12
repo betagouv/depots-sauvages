@@ -11,11 +11,9 @@ from backend.dn_signalements.views import (
     UserDossiersView,
 )
 from backend.home.views import UserInfoViewSet, index_view, logout_view
-from backend.signalements.views import SignalementDocumentDownloadView, SignalementViewSet
 
 # API Routes registration
 router = DefaultRouter()
-router.register("signalements", SignalementViewSet, basename="signalement")
 router.register("dn-signalements", DNSignalementViewSet, basename="dn-signalement")
 router.register("user-info", UserInfoViewSet, basename="user-info")
 
@@ -25,11 +23,6 @@ urlpatterns = [path("admin/", admin.site.urls)]
 # API Routes
 urlpatterns.extend(
     [
-        path(
-            "api/signalements/<int:pk>/documents/<str:doc_type>/",
-            SignalementDocumentDownloadView.as_view(),
-            name="signalement-document-download",
-        ),
         path(
             "api/dn-signalements/<int:pk>/documents/<str:doc_type>/",
             DNSignalementDocumentDownloadView.as_view(),

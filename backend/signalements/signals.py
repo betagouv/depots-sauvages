@@ -9,7 +9,6 @@ from django_tasks import task
 
 from backend.dn_signalements.models import DNSignalement
 from backend.doc_maker import odt_utils
-from backend.signalements.models import Signalement
 
 logger = logging.getLogger(__name__)
 
@@ -100,7 +99,6 @@ def generate_document_task(signalement_id, doc_base_name, model_label):
         raise
 
 
-@receiver(post_save, sender=Signalement)
 @receiver(post_save, sender=DNSignalement)
 def generate_doc_constat(sender, instance, created, **kwargs):
     """
@@ -122,7 +120,6 @@ def generate_doc_constat(sender, instance, created, **kwargs):
     logger.info(f"Document generation task enqueued for signalement {instance.id}")
 
 
-@receiver(post_save, sender=Signalement)
 @receiver(post_save, sender=DNSignalement)
 def generate_lettre_info(sender, instance, created, **kwargs):
     """
@@ -144,20 +141,4 @@ def generate_lettre_info(sender, instance, created, **kwargs):
     )
     logger.info(f"Lettre info generation task enqueued for signalement {instance.id}")
 
-
-@task(queue_name="default")
-def send_contact_email_task(signalement_id):
-    """
-    Send email to contact person in background.
-    """
-    logger.info(f"Starting contact email sending for signalement {signalement_id}")
-    try:
-        signalement = Signalement.objects.get(id=signalement_id)
-        signalement.send_contact_person_email()
-        logger.info(f"Contact email sent successfully for signalement {signalement_id}")
-        return {"status": "success", "signalement_id": signalement_id}
-    except Exception as e:
-        logger.error(
-            f"Error sending contact email for signalement {signalement_id}: {e}", exc_info=True
-        )
-        raise
+    logger.info(f"Lettre info generation task enqueued for signalement {instance.id}")

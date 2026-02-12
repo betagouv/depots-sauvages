@@ -27,7 +27,6 @@ const getCSRFToken = (): string => {
 
 // API endpoints
 export const API_URLS = {
-  signalements: `${API_URL}/signalements/`,
   processDossier: `${API_URL}/signalements/process-dn-dossier/`,
   userInfo: `${API_URL}/user-info/`,
   myDossiers: `${API_URL}/my-dossiers/`,

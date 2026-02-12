@@ -1,7 +1,5 @@
 from django.contrib import admin
 
-from .models import Signalement
-
 
 class BaseSignalementAdminMixin:
     list_display = [
@@ -128,11 +126,3 @@ class BaseSignalementAdminMixin:
             },
         ),
     )
-
-
-@admin.register(Signalement)
-class SignalementAdmin(
-    BaseSignalementAdminMixin,
-    admin.ModelAdmin,
-):
-    pass
