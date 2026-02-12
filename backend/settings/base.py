@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     "django_tasks",
+    "django_tasks.backends.database",
     "anymail",
     "python_odt_template",
     "import_export",
