@@ -54,8 +54,17 @@ if settings.LOGIN_REQUIRED:
 else:
     urlpatterns.append(re_path(r"^signalements-dn/.*", index_view))
 
+# Sentry Debug
+if getattr(settings, "SENTRY_DEBUG", False):
+
+    def trigger_error(request):
+        division_by_zero = 1 / 0  # noqa
+
+    urlpatterns.append(path("sentry-debug/", trigger_error))
+
+
 # Frontend Routes
 # This is a catch-all pattern that serves the compiled frontend.
 # It must be placed at the very end of urlpatterns so that it doesn't
 # intercept requests intended for other routes like API, Admin, or OIDC.
-urlpatterns.append(re_path(r"^(?!admin|api|oidc).*", index_view, name="index"))
+urlpatterns.append(re_path(r"^(?!admin|api|oidc|sentry-debug).*", index_view, name="index"))

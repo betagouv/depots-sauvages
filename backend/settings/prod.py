@@ -1,4 +1,6 @@
 import environ
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 from backend.settings.base import *  # noqa
 
@@ -9,6 +11,19 @@ ENV_NAME = env("ENV_NAME")
 SECRET_KEY = env("SECRET_KEY")
 
 DEBUG = env.bool("DEBUG", default=False)
+SENTRY_DEBUG = env.bool("SENTRY_DEBUG", default=False)
+SENTRY_ENABLED = env.bool("SENTRY_ENABLED", default=False)
+
+if SENTRY_ENABLED:
+    sentry_sdk.init(
+        dsn=env("SENTRY_DSN"),
+        integrations=[DjangoIntegration()],
+        traces_sample_rate=env.float("SENTRY_TRACES_SAMPLE_RATE", default=0.1),
+        profiles_sample_rate=env.float("SENTRY_PROFILES_SAMPLE_RATE", default=0.1),
+        send_default_pii=env.bool("SENTRY_SEND_DEFAULT_PII", default=False),
+        environment=ENV_NAME,
+    )
+
 
 LOGGING_LEVEL = env("LOGGING_LEVEL", default="INFO")
 
@@ -21,6 +36,7 @@ LOGGING["loggers"]["backend.signalements"] = {
 DATABASES = {
     "default": env.db("DATABASE_URL", default=f"file:///{PROJECT_ROOT / 'db.sqlite3'}"),
 }
+
 # Security settings for production
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 
