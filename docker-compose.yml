@@ -31,27 +31,3 @@ services:
     depends_on:
       - backend
     command: dev
-    healthcheck:
-      test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://127.0.0.1:5173']
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
-  e2e:
-    build:
-      context: .
-      dockerfile: Dockerfile.e2e
-    ports:
-      - '9323:9323'
-    environment:
-      - BASE_URL=http://frontend:5173
-    depends_on:
-      frontend:
-        condition: service_healthy
-      backend:
-        condition: service_started
-    volumes:
-      - .:/app
-      - /app/node_modules
-      - /app/test-results
-      - /app/playwright-report

@@ -12,7 +12,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     server: {
-      allowedHosts: ['localhost', 'frontend', '.local', '.protect-envi.beta.gouv.fr'],
+      allowedHosts: ['localhost', '.local', '.protect-envi.beta.gouv.fr'],
       fs: {
         allow: [
           '.', // Project root and node_modules

@@ -34,24 +34,3 @@ Vue + Vitest. Situés dans `frontend/tests/`
   # Ou via Docker
   docker compose run --rm frontend yarn test
   ```
-
-## 3. Tests de Bout en Bout
-
-E2E - Playwright. Situés dans `e2e/`
-
-- **Outil** : [Playwright](https://playwright.dev/)
-- **Lancer les tests** :
-
-  ```bash
-  # Via Docker (Recommandé - évite les problèmes de dépendances locales)
-  yarn test:e2e
-
-  # Voir le rapport de tests (via Docker)
-  yarn test:e2e:report
-
-  # En local (nécessite l'installation des dépendances système)
-  yarn playwright install
-  yarn playwright test
-  ```
-
-- **Note** : En mode Docker, les tests s'exécutent contre les conteneurs `frontend` et `backend`. En local, Playwright tentera de lancer le serveur de développement lui-même.
