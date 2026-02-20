@@ -2,11 +2,6 @@
 
 Application de signalement des dépôts sauvages destinée aux communes.
 
-Documentation disponible en :
-
-- 🇫🇷 [Français](README)
-- 🇬🇧 [English](README.en.md)
-
 ## 📑 Sommaire
 
 - [🚀 Démarrage rapide avec Docker](#-démarrage-rapide-avec-docker)
