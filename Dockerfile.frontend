@@ -2,16 +2,13 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-COPY package.json yarn.lock ./
+RUN corepack enable
 
-# Create a clean .yarnrc.yml file for Docker
-RUN echo 'nodeLinker: node-modules' > .yarnrc.yml
-
-# Copy the application code
-COPY . .
+COPY package.json yarn.lock .yarnrc.yml ./
+COPY .yarn ./.yarn
 
 # Pre-install dependencies
-RUN yarn install
+RUN yarn install --immutable
 
 EXPOSE 5173
 

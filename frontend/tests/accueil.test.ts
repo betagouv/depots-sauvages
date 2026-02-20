@@ -12,7 +12,7 @@ vi.mock('vue-router', () => ({
 }))
 
 describe('Page Accueil', () => {
-  it('vérifie l’accessibilité de la page', async () => {
+  it('doit être accessible (A11y)', async () => {
     const { container } = render(Accueil, {
       global: {
         stubs: {

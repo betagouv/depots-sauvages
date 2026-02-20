@@ -2,11 +2,6 @@
 
 Application de signalement des dépôts sauvages destinée aux communes.
 
-Documentation disponible en :
-
-- 🇫🇷 [Français](README)
-- 🇬🇧 [English](README.en.md)
-
 ## 📑 Sommaire
 
 - [🚀 Démarrage rapide avec Docker](#-démarrage-rapide-avec-docker)
@@ -20,6 +15,7 @@ Documentation disponible en :
   - [Backend](#backend)
   - [Frontend](#frontend)
   - [Les deux conteneurs](#les-deux-conteneurs)
+- [🧪 Tests](#-tests)
 - [✨ Fonctionnalités](#-fonctionnalités-clés)
 
 ---
@@ -194,6 +190,12 @@ Pour assurer la lisibilité et la cohérence, nous appliquons les règles suivan
 - Les PRs et leurs descriptions sont en français.
 
 Certaines notions intermédiaires comme « étape » peuvent relever du métier ou de la technique. Ici, nous utilisons « EtapeXForm.vue » (et non « StepXForm.vue ») car ces étapes correspondent à des phases du parcours utilisateur, et non à des composants techniques abstraits.
+
+---
+
+## 🧪 Tests
+
+Pour plus de détails sur la stratégie de test et les commandes d'exécution, consultez le fichier [TESTING.md](./TESTING.md).
 
 ---
 
