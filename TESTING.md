@@ -22,9 +22,7 @@ Situés dans `backend/*/tests/`, ils testent la logique métier, les modèles et
 
 ## 2. Tests Frontend
 
-Vue + Vitest
-
-Situés dans `frontend/tests/`, ils testent les composants UI de manière isolée et l'accessibilité.
+Vue + Vitest. Situés dans `frontend/tests/`
 
 - **Outil** : [Vitest](https://vitest.dev/) + [Vue Test Library](https://testing-library.com/docs/vue-testing-library/intro/)
 - **Lancer les tests** :
@@ -39,9 +37,7 @@ Situés dans `frontend/tests/`, ils testent les composants UI de manière isolé
 
 ## 3. Tests de Bout en Bout
 
-E2E - Playwright
-
-Situés dans `e2e/`, ils simulent un utilisateur réel dans un vrai navigateur. Ils vérifient que le frontend communique bien avec le backend.
+E2E - Playwright. Situés dans `e2e/`
 
 - **Outil** : [Playwright](https://playwright.dev/)
 - **Lancer les tests** :

@@ -1,7 +1,7 @@
 # Yarn files
-.yarn/
-.yarnrc.yml
-.pnp.*
+# .yarn/
+# .yarnrc.yml
+# .pnp.*
 
 # Node modules
 node_modules/
