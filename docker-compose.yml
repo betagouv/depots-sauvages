@@ -41,6 +41,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.e2e
+    ports:
+      - '9323:9323'
     environment:
       - BASE_URL=http://frontend:5173
     depends_on:

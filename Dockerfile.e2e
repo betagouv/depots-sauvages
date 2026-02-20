@@ -8,7 +8,7 @@ COPY package.json yarn.lock .yarnrc.yml ./
 COPY .yarn ./.yarn
 
 # Install dependencies including playwright
-RUN yarn install --immutable
+RUN yarn install --immutable && yarn playwright install --with-deps
 
 # Copy the rest of the application
 COPY . .

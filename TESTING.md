@@ -43,8 +43,11 @@ E2E - Playwright. Situés dans `e2e/`
 - **Lancer les tests** :
 
   ```bash
-  # Via Docker (Recommandé)
-  docker compose run --rm e2e
+  # Via Docker (Recommandé - évite les problèmes de dépendances locales)
+  yarn test:e2e
+
+  # Voir le rapport de tests (via Docker)
+  yarn test:e2e:report
 
   # En local (nécessite l'installation des dépendances système)
   yarn playwright install
