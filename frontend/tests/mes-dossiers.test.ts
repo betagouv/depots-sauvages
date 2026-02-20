@@ -4,6 +4,7 @@ import { render, screen, waitFor } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
 import MesDossiers from '../pages/mes-dossiers.vue'
 import * as api from '../services/api'
+import { useDossierStore } from '../stores/dossier'
 
 vi.mock('../services/api', async () => {
   const actual = await vi.importActual('../services/api')
@@ -21,7 +22,7 @@ vi.mock('vue-router', () => ({
 }))
 
 describe('Page Mes Dossiers', () => {
-  it('affiche les informations de l’utilisateur connecté', async () => {
+  it('doit afficher l’identité de l’utilisateur connecté', async () => {
     // Mock user info
     ;(api.getUserInfo as any).mockResolvedValue({
       is_authenticated: true,
@@ -39,7 +40,10 @@ describe('Page Mes Dossiers', () => {
         stubs: {
           DsfrCard: true,
           DsfrButton: true,
-          DsfrAlert: true,
+          DsfrAlert: {
+            props: ['title', 'description'],
+            template: '<div>{{ title }} {{ description }}</div>',
+          },
           DnLoading: true,
         },
       },
@@ -53,7 +57,7 @@ describe('Page Mes Dossiers', () => {
     })
   })
 
-  it('n’affiche pas d’erreur si l’utilisateur n’est pas connecté (ou info manquante)', async () => {
+  it('doit rester stable si l’utilisateur n’est pas connecté', async () => {
     // Mock unauthenticated or null
     ;(api.getUserInfo as any).mockResolvedValue({
       is_authenticated: false,
@@ -66,7 +70,10 @@ describe('Page Mes Dossiers', () => {
         stubs: {
           DsfrCard: true,
           DsfrButton: true,
-          DsfrAlert: true,
+          DsfrAlert: {
+            props: ['title', 'description'],
+            template: '<div>{{ title }} {{ description }}</div>',
+          },
           DnLoading: true,
         },
       },
@@ -76,6 +83,42 @@ describe('Page Mes Dossiers', () => {
     await waitFor(() => {
       expect(screen.queryByText('Jean Dupont')).not.toBeInTheDocument()
       expect(screen.getByRole('heading', { level: 1, name: 'Mes procédures' })).toBeInTheDocument()
+    })
+  })
+
+  it('doit afficher un message d’information quand aucun dossier n’est trouvé', async () => {
+    // Mock user info authenticated
+    ;(api.getUserInfo as any).mockResolvedValue({
+      is_authenticated: true,
+      proconnect_enabled: true,
+      first_name: 'Jean',
+      last_name: 'Dupont',
+    })
+
+    const pinia = createTestingPinia({ stubActions: true })
+    const dossierStore = useDossierStore(pinia)
+    dossierStore.dossiers = []
+
+    render(MesDossiers, {
+      global: {
+        plugins: [pinia],
+        stubs: {
+          DsfrCard: true,
+          DsfrButton: true,
+          DsfrAlert: {
+            props: ['title', 'description'],
+            template: '<div>{{ title }} {{ description }}</div>',
+          },
+          DnLoading: true,
+        },
+      },
+    })
+
+    await waitFor(() => {
+      expect(screen.getByText(/Aucune procédure trouvée/)).toBeInTheDocument()
+      expect(
+        screen.getByText(/Aucune procédure trouvée sur Démarche Numérique\./)
+      ).toBeInTheDocument()
     })
   })
 })

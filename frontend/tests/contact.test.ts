@@ -36,7 +36,7 @@ describe('Page Contact', () => {
     vi.unstubAllEnvs()
   })
 
-  it('vérifie l’accessibilité de la page', async () => {
+  it('doit être accessible (A11y)', async () => {
     const { container } = render(Contact, {
       global: {
         stubs: {
@@ -49,7 +49,7 @@ describe('Page Contact', () => {
     const results = await axe(container)
   })
 
-  it('affiche le contenu', async () => {
+  it('doit afficher le titre principal', async () => {
     expect(
       screen.getByRole('heading', {
         level: 1,
