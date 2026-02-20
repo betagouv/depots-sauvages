@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile.backend
     ports:
-      - "8000:8000"
+      - '8000:8000'
     volumes:
       - .:/app
       - ./documents:/app/documents
@@ -22,13 +22,34 @@ services:
       context: .
       dockerfile: Dockerfile.frontend
     ports:
-      - "5173:5173"
+      - '5173:5173'
     volumes:
       - .:/app
-      - /app/node_modules  # Avoids node_modules from being copied into the container
+      - /app/node_modules
     environment:
       - VITE_BACKEND_URL=http://localhost:8000
     depends_on:
       - backend
     command: dev
+    healthcheck:
+      test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://127.0.0.1:5173']
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
+  e2e:
+    build:
+      context: .
+      dockerfile: Dockerfile.e2e
+    environment:
+      - BASE_URL=http://frontend:5173
+    depends_on:
+      frontend:
+        condition: service_healthy
+      backend:
+        condition: service_started
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/test-results
+      - /app/playwright-report

@@ -41,10 +41,14 @@ E2E - Playwright. Situés dans `e2e/`
 
 - **Outil** : [Playwright](https://playwright.dev/)
 - **Lancer les tests** :
+
   ```bash
-  # Installer les navigateurs (une seule fois)
+  # Via Docker (Recommandé)
+  docker compose run --rm e2e
+
+  # En local (nécessite l'installation des dépendances système)
   yarn playwright install
-  # Lancer les tests
   yarn playwright test
   ```
-- **Note** : L'application doit être lancée (`docker compose up`) ou Playwright tentera de la lancer lui-même via la commande configurée dans `playwright.config.ts`.
+
+- **Note** : En mode Docker, les tests s'exécutent contre les conteneurs `frontend` et `backend`. En local, Playwright tentera de lancer le serveur de développement lui-même.
