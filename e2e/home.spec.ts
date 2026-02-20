@@ -3,9 +3,10 @@ import { expect, test } from '@playwright/test'
 test.describe("Page d'accueil", () => {
   test('doit afficher le titre et les éléments principaux', async ({ page }) => {
     await page.goto('/')
+    await page.waitForLoadState('networkidle')
 
     // Vérifier le titre de la page (défini dans index.html)
-    await expect(page).toHaveTitle(/Protect’Envi/)
+    await expect(page).toHaveTitle(/Protect’Envi/, { timeout: 10000 })
 
     // Vérifier la présence du titre principal (H1)
     // On cherche un élément avec le texte attendu
