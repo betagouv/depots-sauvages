@@ -32,7 +32,7 @@ Situés dans `frontend/tests/`, ils testent les composants UI de manière isolé
   # Installation préalable
   yarn install
   # Lancement
-  npm run test
+  yarn test
   # Ou via Docker
   docker compose run --rm frontend yarn test
   ```
@@ -47,8 +47,8 @@ Situés dans `e2e/`, ils simulent un utilisateur réel dans un vrai navigateur. 
 - **Lancer les tests** :
   ```bash
   # Installer les navigateurs (une seule fois)
-  npx playwright install
+  yarn playwright install
   # Lancer les tests
-  npx playwright test
+  yarn playwright test
   ```
 - **Note** : L'application doit être lancée (`docker compose up`) ou Playwright tentera de la lancer lui-même via la commande configurée dans `playwright.config.ts`.
