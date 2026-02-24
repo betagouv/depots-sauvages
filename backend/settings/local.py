@@ -62,8 +62,8 @@ SERVER_EMAIL = env("SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
 
 # Anymail Brevo settings
 ANYMAIL = {
-    "BREVO_API_KEY": env("BREVO_API_KEY"),
-    "BREVO_SENDER_DOMAIN": env("BREVO_SENDER_DOMAIN"),
+    "BREVO_API_KEY": env("BREVO_API_KEY", default=""),
+    "BREVO_SENDER_DOMAIN": env("BREVO_SENDER_DOMAIN", default=""),
 }
 
 # Rate limiting
