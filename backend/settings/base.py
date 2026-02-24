@@ -21,7 +21,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     "django_tasks",
-    "django_tasks.backends.database",
+    "django_tasks_db",
     "anymail",
     "python_odt_template",
     #

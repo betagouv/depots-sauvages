@@ -52,7 +52,7 @@ CSRF_COOKIE_HTTPONLY = False  # Needed to access the token in JavaScript
 SESSION_COOKIE_SAMESITE = "Lax"
 
 # Django Tasks Settings
-TASKS["default"]["BACKEND"] = "django_tasks.backends.database.DatabaseBackend"
+TASKS["default"]["BACKEND"] = "django_tasks_db.DatabaseBackend"
 
 # Email Configuration
 EMAIL_BACKEND = env("EMAIL_BACKEND", default="anymail.backends.brevo.EmailBackend")
