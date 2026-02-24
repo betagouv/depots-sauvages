@@ -1,3 +1,5 @@
+from backend.settings.base import PROJECT_ROOT, TEMPLATES
+
 from .local import *  # noqa
 
 DJANGO_SETTINGS_MODULE = "backend.settings.test"
@@ -17,8 +19,6 @@ LOGGING = {
 }
 
 # Ensure templates can be found during tests, especially index.html.
-from backend.settings.base import PROJECT_ROOT, TEMPLATES
-
 TEMPLATES[0]["DIRS"].append(PROJECT_ROOT)
 
 # Disable rate limiting in tests by setting very high limits
@@ -32,6 +32,7 @@ DN_DEMARCHE_NUMBER = 123456
 
 # ProConnect / OIDC Settings
 PROCONNECT_ENABLED = False
+SENTRY_ENABLED = False
 
 if "mozilla_django_oidc" in INSTALLED_APPS:
     INSTALLED_APPS.remove("mozilla_django_oidc")
