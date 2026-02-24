@@ -1,4 +1,6 @@
 name: CI - Backend Quality Checks
+permissions:
+  contents: read
 
 on:
   push:
