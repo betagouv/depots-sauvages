@@ -16,6 +16,11 @@ LOGGING = {
     "disable_existing_loggers": True,
 }
 
+# Ensure templates can be found during tests, especially index.html.
+from backend.settings.base import PROJECT_ROOT, TEMPLATES
+
+TEMPLATES[0]["DIRS"].append(PROJECT_ROOT)
+
 # Disable rate limiting in tests by setting very high limits
 SIGNALEMENT_RATE_LIMIT = "100/hour"
 EMAIL_RATE_LIMIT = "100/hour"
