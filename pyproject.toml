@@ -34,3 +34,6 @@ per-file-ignores = [
 [tool.pytest.ini_options]
 addopts = "--ds=backend.settings.test --reuse-db --no-migrations"
 testpaths = ["backend"]
+filterwarnings = [
+    "ignore:No directory at.*dist/static:UserWarning",
+]

@@ -16,6 +16,10 @@ LOGGING = {
     "disable_existing_loggers": True,
 }
 
+# Ensure templates can be found during tests, especially index.html.
+if PROJECT_ROOT not in TEMPLATES[0]["DIRS"]:
+    TEMPLATES[0]["DIRS"].append(PROJECT_ROOT)
+
 # Disable rate limiting in tests by setting very high limits
 SIGNALEMENT_RATE_LIMIT = "100/hour"
 EMAIL_RATE_LIMIT = "100/hour"
@@ -27,6 +31,7 @@ DN_DEMARCHE_NUMBER = 123456
 
 # ProConnect / OIDC Settings
 PROCONNECT_ENABLED = False
+SENTRY_ENABLED = False
 
 if "mozilla_django_oidc" in INSTALLED_APPS:
     INSTALLED_APPS.remove("mozilla_django_oidc")
@@ -34,6 +39,10 @@ if "mozilla_django_oidc" in INSTALLED_APPS:
 if "anymail" in INSTALLED_APPS:
     INSTALLED_APPS.remove("anymail")
 
+# Authentication and Authorization Overrides for Tests
 LOGIN_REQUIRED = False
-PROCONNECT_ENABLED = False
 LOGIN_URL = "/login/"  # Override base setting to avoid reversing missing oidc url
+
+REST_FRAMEWORK["DEFAULT_PERMISSION_CLASSES"] = [
+    "rest_framework.permissions.AllowAny",
+]

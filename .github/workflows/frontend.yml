@@ -1,4 +1,6 @@
 name: CI - Frontend Quality Checks
+permissions:
+  contents: read
 
 on:
   push:
