@@ -11,7 +11,13 @@ class UserFactory(factory.django.DjangoModelFactory):
 
     username = factory.Faker("user_name")
     email = factory.Faker("email")
-    password = factory.PostGenerationMethodCall("set_password", "password")
+
+    @factory.post_generation
+    def password(obj, create, extracted, **kwargs):
+        password = extracted or "password"
+        obj.set_password(password)
+        if create:
+            obj.save()
 
 
 class DNSignalementFactory(factory.django.DjangoModelFactory):
