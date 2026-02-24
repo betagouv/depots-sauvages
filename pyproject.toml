@@ -35,5 +35,5 @@ per-file-ignores = [
 addopts = "--ds=backend.settings.test --reuse-db --no-migrations"
 testpaths = ["backend"]
 filterwarnings = [
-    "ignore:No directory at.+,/dist/static/:UserWarning",
+    "ignore:No directory at.*dist/static:UserWarning",
 ]
