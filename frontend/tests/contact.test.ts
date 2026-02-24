@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/vue'
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { axe } from 'vitest-axe'
 import Contact from '../pages/contact.vue'
 
@@ -12,10 +12,6 @@ vi.mock('vue-router', () => ({
 }))
 
 describe('Page Contact', () => {
-  beforeAll(() => {
-    HTMLCanvasElement.prototype.getContext = vi.fn()
-  })
-
   beforeEach(() => {
     vi.stubEnv('VITE_CONTACT_EMAIL', 'contact@test.com')
 
@@ -26,6 +22,7 @@ describe('Page Contact', () => {
         },
         stubs: {
           DsfrCard: true,
+          DsfrCallout: true,
           RouterLink: {
             props: ['to'],
             template: `<a href="to"><slot /></a>`,
@@ -39,17 +36,20 @@ describe('Page Contact', () => {
     vi.unstubAllEnvs()
   })
 
-  it('vérifie l’accessibilité de la page', async () => {
+  it('doit être accessible (A11y)', async () => {
     const { container } = render(Contact, {
       global: {
-        stubs: { DsfrCard: true },
+        stubs: {
+          DsfrCard: true,
+          DsfrCallout: true,
+        },
       },
     })
 
     const results = await axe(container)
   })
 
-  it('affiche le contenu', async () => {
+  it('doit afficher le titre principal', async () => {
     expect(
       screen.getByRole('heading', {
         level: 1,

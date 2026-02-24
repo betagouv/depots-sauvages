@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile.backend
     ports:
-      - "8000:8000"
+      - '8000:8000'
     volumes:
       - .:/app
       - ./documents:/app/documents
@@ -22,13 +22,12 @@ services:
       context: .
       dockerfile: Dockerfile.frontend
     ports:
-      - "5173:5173"
+      - '5173:5173'
     volumes:
       - .:/app
-      - /app/node_modules  # Avoids node_modules from being copied into the container
+      - /app/node_modules
     environment:
       - VITE_BACKEND_URL=http://localhost:8000
     depends_on:
       - backend
     command: dev
-
