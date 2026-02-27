@@ -18,7 +18,7 @@ INSTALLED_APPS = ["whitenoise.runserver_nostatic"] + INSTALLED_APPS
 DEBUG = True
 
 SENTRY_DEBUG = env.bool("SENTRY_DEBUG", default=DEBUG)
-SENTRY_ENABLED = env.bool("SENTRY_ENABLED", default=True)
+SENTRY_ENABLED = env.bool("SENTRY_ENABLED", default=False)
 
 if SENTRY_ENABLED:
     sentry_sdk.init(
