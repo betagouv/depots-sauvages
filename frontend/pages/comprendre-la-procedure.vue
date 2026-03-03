@@ -8,12 +8,12 @@
       </p>
       <ol class="fr-pl-4w fr-mb-2w fr-text">
         <li>
-          <strong>Déposer plainte</strong> pour initier une procédure
-          <strong>judiciaire</strong> auprès de la police ou de la gendarmerie ;
-        </li>
-        <li>
           <strong>Mettre en œuvre une procédure administrative</strong> sur le fondement de
           l'article <strong>L.541-3 du Code de l'environnement</strong>.
+        </li>
+        <li>
+          <strong>Déposer plainte</strong> pour initier une procédure
+          <strong>judiciaire</strong> auprès de la police ou de la gendarmerie ;
         </li>
       </ol>
       <p class="fr-text fr-mb-3w">
