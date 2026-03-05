@@ -93,9 +93,9 @@ const router = createRouter({
       meta: { hideNavigation: true },
     },
     {
-      path: '/procedure-etapes/:dossier_id',
-      name: 'ProcedureEtapes',
-      component: () => import('./pages/procedure-etapes.vue'),
+      path: '/suivi-procedure/:dossier_id',
+      name: 'SuiviProcedure',
+      component: () => import('./pages/suivi-procedure.vue'),
       meta: { requiresAuth: true },
     },
   ],

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <DnLoading v-if="showLoading" />
+    <ChargementDossier v-if="showLoading" />
     <div v-else>
       <div v-if="error" class="fr-container fr-mb-4w fr-mt-4w" role="alert" aria-live="polite">
         <div class="fr-alert fr-alert--error">
@@ -10,7 +10,7 @@
       </div>
 
       <div v-else-if="dossierData">
-        <DnHero :has-procedure="hasProcedure" :auteur-identifie="auteurIdentifie" />
+        <DnBandeauAccueil :has-procedure="hasProcedure" :auteur-identifie="auteurIdentifie" />
 
         <div class="fr-container">
           <DnDocuments
@@ -69,10 +69,10 @@ import { useDossierStore } from '@/stores/dossier'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
+import ChargementDossier from '../components/dn/ChargementDossier.vue'
+import DnBandeauAccueil from '../components/dn/DnBandeauAccueil.vue'
 import DnDocuments from '../components/dn/DnDocuments.vue'
-import DnHero from '../components/dn/DnHero.vue'
 import DnInfos from '../components/dn/DnInfos.vue'
-import DnLoading from '../components/dn/DnLoading.vue'
 import InfoAuteurIdentifie from '../components/dn/InfoAuteurIdentifie.vue'
 import InfoAuteurNonIdentifie from '../components/dn/InfoAuteurNonIdentifie.vue'
 import RessourcesUtiles from '../components/dn/RessourcesUtiles.vue'

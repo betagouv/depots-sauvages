@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <DnLoading
+    <ChargementDossier
       v-if="showLoading || dossierStore.syncing"
       :message="
         dossierStore.syncing
@@ -90,7 +90,7 @@
                       label="Suivre la procédure"
                       :icon="{ name: 'ri-file-list-line', class: 'fr-mr-1w' }"
                       icon-right
-                      @click="router.push(getProcedureEtapesUrl(dossier.id))"
+                      @click="router.push(getSuiviProcedureUrl(dossier.id))"
                     />
                   </li>
                 </ul>
@@ -115,9 +115,9 @@
 import { useDossierStore } from '@/stores/dossier'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import DnLoading from '../components/dn/DnLoading.vue'
+import ChargementDossier from '../components/dn/ChargementDossier.vue'
 import { getUserInfo, type UserInfo } from '../services/api'
-import { getDnModifyUrl, getProcedureEtapesUrl } from '../services/urls'
+import { getDnModifyUrl, getSuiviProcedureUrl } from '../services/urls'
 
 const router = useRouter()
 const userInfo = ref<UserInfo | null>(null)

@@ -1,6 +1,6 @@
 <template>
   <div class="fr-container fr-py-6w">
-    <DnLoading v-if="showLoading" />
+    <ChargementDossier v-if="showLoading" />
     <div v-else-if="error" class="fr-alert fr-alert--error fr-mb-4w">
       <p>{{ error }}</p>
     </div>
@@ -29,9 +29,9 @@
             </div>
           </header>
 
-          <ProceduralStepper :steps="steps" v-model:currentStep="activeStep">
+          <StepperProcedure :steps="steps" v-model:currentStep="activeStep">
             <template #step-0>
-              <StepDocuments
+              <Documents
                 :dossier-data="dossierData"
                 :has-procedure="hasProcedure"
                 :auteur-identifie="auteurIdentifie"
@@ -41,21 +41,21 @@
               />
             </template>
             <template #step-1>
-              <StepConstatation />
+              <Constatation />
             </template>
             <template #step-2>
-              <StepNotification />
+              <Notification />
             </template>
             <template #step-3>
-              <StepSuiviSanction />
+              <SuiviSanction />
             </template>
             <template #step-4>
-              <StepCloture />
+              <Cloture />
             </template>
             <template #step-5>
-              <StepJudiciaire />
+              <Judiciaire />
             </template>
-          </ProceduralStepper>
+          </StepperProcedure>
         </div>
       </div>
     </div>
@@ -67,14 +67,14 @@ import { DsfrBadge } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
-import ProceduralStepper from '@/components/ProceduralStepper.vue'
-import DnLoading from '@/components/dn/DnLoading.vue'
-import StepCloture from '@/components/steps/StepCloture.vue'
-import StepConstatation from '@/components/steps/StepConstatation.vue'
-import StepDocuments from '@/components/steps/StepDocuments.vue'
-import StepJudiciaire from '@/components/steps/StepJudiciaire.vue'
-import StepNotification from '@/components/steps/StepNotification.vue'
-import StepSuiviSanction from '@/components/steps/StepSuiviSanction.vue'
+import StepperProcedure from '@/components/StepperProcedure.vue'
+import ChargementDossier from '@/components/dn/ChargementDossier.vue'
+import Cloture from '@/components/steps/Cloture.vue'
+import Constatation from '@/components/steps/Constatation.vue'
+import Documents from '@/components/steps/Documents.vue'
+import Judiciaire from '@/components/steps/Judiciaire.vue'
+import Notification from '@/components/steps/Notification.vue'
+import SuiviSanction from '@/components/steps/SuiviSanction.vue'
 
 import { API_URLS, createResource } from '@/services/api'
 import { getDnDocConstatUrl, getDnLettreInfoUrl, getDnModifyUrl } from '@/services/urls'
