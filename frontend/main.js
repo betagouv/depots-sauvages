@@ -4,10 +4,13 @@ import '@gouvfr/dsfr/dist/utility/utility.min.css'
 import VueDsfr from '@gouvminint/vue-dsfr'
 import { OhVueIcon, addIcons } from 'oh-vue-icons'
 import {
+  RiAlertLine,
   RiCalendarLine,
+  RiCheckLine,
   RiDownloadLine,
   RiEditLine,
   RiFileEditLine,
+  RiFileList3Line,
   RiFileListLine,
   RiFolderLine,
   RiLoginBoxLine,
@@ -26,10 +29,13 @@ import App from './app.vue'
 import { getUserInfo } from './services/api'
 
 addIcons(
+  RiAlertLine,
   RiCalendarLine,
+  RiCheckLine,
   RiDownloadLine,
   RiEditLine,
   RiFileEditLine,
+  RiFileList3Line,
   RiFileListLine,
   RiFolderLine,
   RiLoginBoxLine,
@@ -85,6 +91,12 @@ const router = createRouter({
       name: 'DemarcheNumeriqueRejoindreProtectEnvi',
       component: () => import('./pages/demarche-numerique-rejoindre-protectenvi.vue'),
       meta: { hideNavigation: true },
+    },
+    {
+      path: '/procedure-etapes/:dossier_id',
+      name: 'ProcedureEtapes',
+      component: () => import('./pages/procedure-etapes.vue'),
+      meta: { requiresAuth: true },
     },
   ],
 })

@@ -87,10 +87,10 @@
                   </li>
                   <li>
                     <DsfrButton
-                      label="Documents de procédure"
+                      label="Suivre la procédure"
                       :icon="{ name: 'ri-file-list-line', class: 'fr-mr-1w' }"
                       icon-right
-                      @click="router.push(getSignalementDocumentsUrl(dossier.numero_dossier))"
+                      @click="router.push(getProcedureEtapesUrl(dossier.id))"
                     />
                   </li>
                 </ul>
@@ -117,7 +117,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import DnLoading from '../components/dn/DnLoading.vue'
 import { getUserInfo, type UserInfo } from '../services/api'
-import { getDnModifyUrl, getSignalementDocumentsUrl } from '../services/urls'
+import { getDnModifyUrl, getProcedureEtapesUrl } from '../services/urls'
 
 const router = useRouter()
 const userInfo = ref<UserInfo | null>(null)
