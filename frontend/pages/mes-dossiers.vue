@@ -2,7 +2,7 @@
   <div class="fr-container fr-py-5w">
     <h1>Mes procédures</h1>
 
-    <DnLoading v-if="showLoading" message="Récupération de vos procédures..." />
+    <ChargementDossier v-if="showLoading" message="Récupération de vos procédures..." />
 
     <div v-else>
       <div v-if="userInfo && userInfo.is_authenticated" class="fr-mb-4w">
@@ -70,7 +70,7 @@
                       label="Suivre la procédure"
                       :icon="{ name: 'ri-file-list-line', class: 'fr-mr-1w' }"
                       icon-right
-                      @click="router.push(getProcedureEtapesUrl(dossier.id))"
+                      @click="router.push(getSuiviProcedureUrl(dossier.id))"
                     />
                   </li>
                 </ul>
@@ -95,9 +95,9 @@
 import { useDossierStore } from '@/stores/dossier.ts'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import DnLoading from '../components/dn/DnLoading.vue'
+import ChargementDossier from '../components/dn/ChargementDossier.vue'
 import { getUserInfo, type UserInfo } from '../services/api'
-import { getDnModifyUrl, getProcedureEtapesUrl } from '../services/urls'
+import { getDnModifyUrl, getSuiviProcedureUrl } from '../services/urls'
 
 const router = useRouter()
 const userInfo = ref<UserInfo | null>(null)
