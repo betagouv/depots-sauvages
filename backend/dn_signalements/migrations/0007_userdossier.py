@@ -62,8 +62,8 @@ class Migration(migrations.Migration):
                 ),
             ],
             options={
-                "verbose_name": "dossier utilisateur",
-                "verbose_name_plural": "dossiers utilisateurs",
+                "verbose_name": "dossier",
+                "verbose_name_plural": "dossiers",
             },
         ),
     ]

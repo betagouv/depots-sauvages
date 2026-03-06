@@ -38,8 +38,8 @@ class UserDossier(TimeStampedModel):
     localisation_depot = models.TextField("localisation", blank=True)
 
     class Meta:
-        verbose_name = "dossier utilisateur"
-        verbose_name_plural = "dossiers utilisateurs"
+        verbose_name = "dossier"
+        verbose_name_plural = "dossiers"
 
     @property
     def title(self):
