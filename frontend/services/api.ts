@@ -29,7 +29,7 @@ const getCSRFToken = (): string => {
 export const API_URLS = {
   processDossier: `${API_URL}/signalements/process-dn-dossier/`,
   userInfo: `${API_URL}/user-info/`,
-  myDossiers: `${API_URL}/dossiers/`,
+  userDossiers: `${API_URL}/dossiers/`,
 }
 
 // API functions
@@ -86,4 +86,4 @@ export interface UserDossier {
 }
 
 export const getUserDossiers = (): Promise<UserDossier[]> =>
-  makeRequest(API_URLS.myDossiers, 'GET', {})
+  makeRequest(API_URLS.userDossiers, 'GET', {})
