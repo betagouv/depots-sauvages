@@ -8,7 +8,7 @@ from backend.dn_signalements.views import (
     DNSignalementDocumentDownloadView,
     DNSignalementViewSet,
     ProcessDossierView,
-    UserDossiersView,
+    UserDossierViewSet,
 )
 from backend.home.views import UserInfoViewSet, index_view, logout_view
 
@@ -16,6 +16,7 @@ from backend.home.views import UserInfoViewSet, index_view, logout_view
 router = DefaultRouter()
 router.register("dn-signalements", DNSignalementViewSet, basename="dn-signalement")
 router.register("user-info", UserInfoViewSet, basename="user-info")
+router.register("dossiers", UserDossierViewSet, basename="user-dossier")
 
 # Admin Routes
 urlpatterns = [path("admin/", admin.site.urls)]
@@ -32,11 +33,6 @@ urlpatterns.extend(
             "api/signalements/process-dn-dossier/",
             ProcessDossierView.as_view(),
             name="signalements-process-dn-dossier",
-        ),
-        path(
-            "api/my-dossiers/",
-            UserDossiersView.as_view(),
-            name="user-dossiers",
         ),
         path("api/", include(router.urls)),
         path("logout/", logout_view, name="logout"),

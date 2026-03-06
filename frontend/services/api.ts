@@ -25,11 +25,13 @@ const getCSRFToken = (): string => {
   return ''
 }
 
+export type APIResponseStatus = 'success' | 'error' | 'sync_triggered'
+
 // API endpoints
 export const API_URLS = {
   processDossier: `${API_URL}/signalements/process-dn-dossier/`,
   userInfo: `${API_URL}/user-info/`,
-  myDossiers: `${API_URL}/my-dossiers/`,
+  userDossiers: `${API_URL}/dossiers/`,
 }
 
 // API functions
@@ -73,17 +75,17 @@ export interface UserInfo {
 }
 
 export const getUserInfo = (): Promise<UserInfo> => makeRequest(API_URLS.userInfo, 'GET', {})
-
 export interface UserDossier {
   id: number
   numero_dossier: number
   title: string
   date_creation?: string
-  date_modification?: string
+  date_modification: string | null
   state?: string
-  date_constat?: string
-  localisation_depot?: string
+  date_constat: string | null
+  localisation_depot: string | null
+  last_sync: string | null
 }
 
 export const getUserDossiers = (): Promise<UserDossier[]> =>
-  makeRequest(API_URLS.myDossiers, 'GET', {})
+  makeRequest(API_URLS.userDossiers, 'GET', {})
