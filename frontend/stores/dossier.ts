@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import { getUserDossiers, type UserDossier } from '../services/api'
+import type { UserDossier } from '../services/api'
+import { getUserDossiers } from '../services/api'
 
 export const useDossierStore = defineStore('dossier', {
   state: () => ({
@@ -10,20 +11,15 @@ export const useDossierStore = defineStore('dossier', {
   }),
 
   actions: {
-    async fetchDossiers(force = false) {
-      if (this.loaded && !force) {
-        return
-      }
-
+    async fetchDossiers() {
       this.loading = true
-      this.error = null
-
       try {
-        this.dossiers = await getUserDossiers()
+        const dossiers = await getUserDossiers()
+        this.dossiers = dossiers
         this.loaded = true
-      } catch (err: any) {
-        this.error = err.message || 'Failed to fetch dossiers'
-        console.error('Error fetching dossiers:', err)
+      } catch (error) {
+        this.error = 'Erreur lors de la récupération des dossiers'
+        console.error('Error fetching dossiers:', error)
       } finally {
         this.loading = false
       }

@@ -3,7 +3,7 @@ import logging
 from django.contrib.auth.decorators import login_required
 from django.utils import dateparse
 from django.utils.decorators import method_decorator
-from rest_framework import generics, status
+from rest_framework import status, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -130,9 +130,9 @@ class DNSignalementDocumentDownloadView(SignalementDocumentDownloadViewMixin):
     model_class = DNSignalement
 
 
-class UserDossiersView(generics.ListAPIView):
+class UserDossierViewSet(viewsets.ReadOnlyModelViewSet):
     """
-    List user dossiers with status from local database (synced in background).
+    List user dossiers with statuses, from the database.
     """
 
     serializer_class = UserDossierSerializer
