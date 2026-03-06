@@ -29,7 +29,7 @@ const getCSRFToken = (): string => {
 export const API_URLS = {
   processDossier: `${API_URL}/signalements/process-dn-dossier/`,
   userInfo: `${API_URL}/user-info/`,
-  myDossiers: `${API_URL}/my-dossiers/`,
+  myDossiers: `${API_URL}/dossiers/`,
 }
 
 // API functions

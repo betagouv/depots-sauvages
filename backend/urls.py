@@ -34,7 +34,7 @@ urlpatterns.extend(
             name="signalements-process-dn-dossier",
         ),
         path(
-            "api/my-dossiers/",
+            "api/dossiers/",
             UserDossiersView.as_view(),
             name="user-dossiers",
         ),
