@@ -5,6 +5,7 @@ from django_tasks import task
 
 from backend.dn.champs import DNChamp
 from backend.dn.client import DNGraphQLClient
+from backend.dn.queries import GET_DEMARCHE_DOSSIERS_LEAN_QUERY
 from backend.dn_signalements.dn_mappings import ADDRESS_CHAMP_ID, DATE_CONSTAT_CHAMP_ID
 from backend.dn_signalements.models import UserDossier
 
@@ -25,7 +26,9 @@ def sync_user_dossiers(user_id: int):
         if not user_email:
             logger.warning(f"User {user_id} has no email or username, skipping sync.")
             return
-        dossiers = dn_client.get_dossiers_for_user(user_email)
+        dossiers = dn_client.get_dossiers_for_user(
+            user_email, query=GET_DEMARCHE_DOSSIERS_LEAN_QUERY
+        )
         for dossier in dossiers:
             dn_champ = DNChamp(dossier)
             champs_data = dn_champ.get_data()

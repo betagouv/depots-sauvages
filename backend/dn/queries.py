@@ -123,3 +123,38 @@ query GetDemarcheDossiers($demarcheNumber: Int!, $after: String) {
     }
 }
 """
+
+
+GET_DEMARCHE_DOSSIERS_LEAN_QUERY = """
+query GetDemarcheDossiersLean($demarcheNumber: Int!, $after: String) {
+    demarche(number: $demarcheNumber) {
+        dossiers(after: $after) {
+            pageInfo {
+                endCursor
+                hasNextPage
+            }
+            nodes {
+                number
+                dateDepot
+                dateDerniereModification
+                usager {
+                    email
+                }
+                champs {
+                    id
+                    __typename
+                    stringValue
+                    ... on DatetimeChamp {
+                        datetime
+                    }
+                    ... on AddressChamp {
+                        address {
+                            label
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+"""
