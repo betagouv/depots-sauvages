@@ -169,7 +169,6 @@ class UserDossiersView(APIView):
                 "title": f"Dossier #{dossier['number']}",
                 "date_creation": dossier.get("dateDepot"),
                 "date_modification": dossier.get("dateDerniereModification"),
-                "state": dossier.get("state"),
                 "date_constat": date_constat,
                 "localisation_depot": localisation_depot,
             }
