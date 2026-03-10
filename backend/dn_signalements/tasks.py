@@ -15,6 +15,10 @@ User = get_user_model()
 
 @task()
 def sync_user_dossiers(user_id: int):
+    return sync_user_dossiers_func(user_id)
+
+
+def sync_user_dossiers_func(user_id: int):
     """
     Synchronize user dossiers from Démarches Simplifiées.
     """

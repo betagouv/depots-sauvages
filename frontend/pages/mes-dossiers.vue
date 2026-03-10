@@ -92,7 +92,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDossierStore } from '@/stores/dossier.ts'
+import { useDossierStore } from '@/stores/dossier'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import DnLoading from '../components/dn/DnLoading.vue'
@@ -110,6 +110,7 @@ onMounted(async () => {
   try {
     userInfo.value = await getUserInfo()
     if (userInfo.value?.is_authenticated) {
+      // Wait for global fetch to complete to ensure data is ready before hiding spinner
       await dossierStore.fetchDossiers()
     }
   } catch (error) {

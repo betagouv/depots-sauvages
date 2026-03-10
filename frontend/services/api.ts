@@ -32,6 +32,7 @@ export const API_URLS = {
   processDossier: `${API_URL}/signalements/process-dn-dossier/`,
   userInfo: `${API_URL}/user-info/`,
   userDossiers: `${API_URL}/dossiers/`,
+  syncDossiers: `${API_URL}/dossiers/sync/`,
 }
 
 // API functions
@@ -89,3 +90,6 @@ export interface UserDossier {
 
 export const getUserDossiers = (): Promise<UserDossier[]> =>
   makeRequest(API_URLS.userDossiers, 'GET', {})
+
+export const syncDossiers = (): Promise<{ status: string }> =>
+  makeRequest(API_URLS.syncDossiers, 'POST', {})

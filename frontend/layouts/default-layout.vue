@@ -34,16 +34,25 @@
           aria-label="Menu principal"
         >
           <ul class="fr-nav__list">
-            <li v-for="lien in navLinks" :key="lien.href" class="fr-nav__item">
-              <a
-                class="fr-nav__link"
-                :class="{ 'fr-nav__link--active': route.path === lien.href }"
-                :aria-current="route.path === lien.href ? 'page' : undefined"
-                :href="lien.href"
-              >
-                {{ lien.text }}
-              </a>
-            </li>
+            <router-link
+              v-for="lien in navLinks"
+              :key="lien.href"
+              :to="lien.href"
+              custom
+              v-slot="{ href, navigate, isActive }"
+            >
+              <li class="fr-nav__item">
+                <a
+                  class="fr-nav__link"
+                  :class="{ 'fr-nav__link--active': isActive }"
+                  :aria-current="isActive ? 'page' : undefined"
+                  :href="href"
+                  @click="navigate"
+                >
+                  {{ lien.text }}
+                </a>
+              </li>
+            </router-link>
           </ul>
         </nav>
       </template>

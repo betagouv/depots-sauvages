@@ -17,6 +17,7 @@ from backend.dn_signalements.dn_mappings import (
 )
 from backend.dn_signalements.models import DNSignalement, UserDossier
 from backend.dn_signalements.serializers import SignalementSerializer, UserDossierSerializer
+from backend.dn_signalements.tasks import sync_user_dossiers
 from backend.signalements.views import SignalementDocumentDownloadViewMixin, SignalementViewSetMixin
 
 
@@ -140,3 +141,15 @@ class UserDossierViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return UserDossier.objects.filter(user=self.request.user).order_by("-date_creation")
+
+
+class SyncUserDossiersView(APIView):
+    """
+    Trigger a background synchronization of user dossiers.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        sync_user_dossiers.enqueue(request.user.id)
+        return Response({"status": "sync_triggered"}, status=status.HTTP_202_ACCEPTED)

@@ -8,6 +8,7 @@ from backend.dn_signalements.views import (
     DNSignalementDocumentDownloadView,
     DNSignalementViewSet,
     ProcessDossierView,
+    SyncUserDossiersView,
     UserDossierViewSet,
 )
 from backend.home.views import UserInfoViewSet, index_view, logout_view
@@ -33,6 +34,11 @@ urlpatterns.extend(
             "api/signalements/process-dn-dossier/",
             ProcessDossierView.as_view(),
             name="signalements-process-dn-dossier",
+        ),
+        path(
+            "api/dossiers/sync/",
+            SyncUserDossiersView.as_view(),
+            name="dossiers-sync",
         ),
         path("api/", include(router.urls)),
         path("logout/", logout_view, name="logout"),

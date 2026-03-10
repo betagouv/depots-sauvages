@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import type { UserDossier } from '../services/api'
-import { getUserDossiers } from '../services/api'
+import { getUserDossiers, syncDossiers } from '../services/api'
 
 export const useDossierStore = defineStore('dossier', {
   state: () => ({
@@ -8,20 +8,41 @@ export const useDossierStore = defineStore('dossier', {
     loading: false,
     error: null as string | null,
     loaded: false,
+    isSynced: false,
+    _fetchPromise: null as Promise<void> | null,
   }),
 
   actions: {
     async fetchDossiers() {
-      this.loading = true
+      if (this.loaded) return
+      if (this._fetchPromise) return this._fetchPromise
+
+      this._fetchPromise = (async () => {
+        this.loading = true
+        try {
+          const dossiers = await getUserDossiers()
+          this.dossiers = dossiers
+          this.loaded = true
+        } catch (error) {
+          this.error = 'Erreur lors de la récupération des dossiers'
+          console.error('Error fetching dossiers:', error)
+        } finally {
+          this.loading = false
+          this._fetchPromise = null
+        }
+      })()
+
+      return this._fetchPromise
+    },
+    async syncDossiers() {
+      if (this.isSynced) {
+        return
+      }
       try {
-        const dossiers = await getUserDossiers()
-        this.dossiers = dossiers
-        this.loaded = true
+        await syncDossiers()
+        this.isSynced = true
       } catch (error) {
-        this.error = 'Erreur lors de la récupération des dossiers'
-        console.error('Error fetching dossiers:', error)
-      } finally {
-        this.loading = false
+        console.error('Error syncing dossiers:', error)
       }
     },
 
