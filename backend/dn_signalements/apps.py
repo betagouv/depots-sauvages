@@ -5,3 +5,6 @@ class DnSignalementsConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "backend.dn_signalements"
     verbose_name = "DN Signalements"
+
+    def ready(self):
+        import backend.dn_signalements.signals  # noqa
