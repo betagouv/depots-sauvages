@@ -90,7 +90,7 @@
                       label="Documents de procédure"
                       :icon="{ name: 'ri-file-list-line', class: 'fr-mr-1w' }"
                       icon-right
-                      @click="router.push(getSignalementDocumentsUrl(dossier.id))"
+                      @click="router.push(getSignalementDocumentsUrl(dossier.numero_dossier))"
                     />
                   </li>
                 </ul>
