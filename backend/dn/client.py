@@ -57,10 +57,12 @@ class DNGraphQLClient:
         data = self.make_request(GET_SIGNALEMENT_DOSSIER_QUERY, params)
         return data.get("dossier", {})
 
-    def get_dossiers_for_demarche(self, demarche_number=None):
+    def get_dossiers_for_demarche(self, demarche_number=None, query=None):
         """
         Fetch all dossiers for a given demarche.
         """
+        if not query:
+            query = GET_DEMARCHE_DOSSIERS_QUERY
         if not demarche_number:
             demarche_number = self.demarche_number
         if not demarche_number:
@@ -70,7 +72,7 @@ class DNGraphQLClient:
         after_cursor = None
         while has_next_page:
             params = {"demarcheNumber": demarche_number, "after": after_cursor}
-            data = self.make_request(GET_DEMARCHE_DOSSIERS_QUERY, params)
+            data = self.make_request(query, params)
             demarche_data = data.get("demarche", {})
             if not demarche_data:
                 break
@@ -83,14 +85,14 @@ class DNGraphQLClient:
 
         return dossiers
 
-    def get_dossiers_for_user(self, user_email):
+    def get_dossiers_for_user(self, user_email, query=None):
         """
         Fetch dossiers for a specific user email.
         """
         if not user_email:
             return []
-        # Optimize: Filter on client side for now as API might not support email filter
-        all_dossiers = self.get_dossiers_for_demarche()
+        # Optimize: Filter on client side since DN API does not support email filter
+        all_dossiers = self.get_dossiers_for_demarche(query=query)
         user_dossiers = [
             d
             for d in all_dossiers

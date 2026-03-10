@@ -1,8 +1,28 @@
 <template>
   <div class="fr-container fr-py-5w">
-    <h1>Mes procédures</h1>
+    <div class="fr-grid-row fr-grid-row--middle fr-mb-2w">
+      <div class="fr-col">
+        <h1>Mes procédures</h1>
+      </div>
+      <div v-if="userInfo?.is_authenticated" class="fr-col-auto">
+        <DsfrButton
+          label="Synchroniser avec Démarche Numérique"
+          class="fr-btn--secondary"
+          :icon="{ name: 'ri-refresh-line', class: 'fr-mr-1w' }"
+          :disabled="dossierStore.syncing"
+          @click="handleManualSync"
+        />
+      </div>
+    </div>
 
-    <DnLoading v-if="showLoading" message="Récupération de vos procédures..." />
+    <DnLoading
+      v-if="showLoading || dossierStore.syncing"
+      :message="
+        dossierStore.syncing
+          ? 'Synchronisation avec Démarche Numérique...'
+          : 'Récupération de vos procédures...'
+      "
+    />
 
     <div v-else>
       <div v-if="userInfo && userInfo.is_authenticated" class="fr-mb-4w">
@@ -92,7 +112,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDossierStore } from '@/stores/dossier.ts'
+import { useDossierStore } from '@/stores/dossier'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import DnLoading from '../components/dn/DnLoading.vue'
@@ -110,6 +130,7 @@ onMounted(async () => {
   try {
     userInfo.value = await getUserInfo()
     if (userInfo.value?.is_authenticated) {
+      // Wait for global fetch to complete to ensure data is ready before hiding spinner
       await dossierStore.fetchDossiers()
     }
   } catch (error) {
@@ -134,6 +155,14 @@ const formatDate = (dateStr?: string) => {
     hour: '2-digit',
     minute: '2-digit',
   })
+}
+
+const handleManualSync = async () => {
+  try {
+    await dossierStore.syncDossiers(true)
+  } catch (error) {
+    console.error('Manual sync failed:', error)
+  }
 }
 </script>
 

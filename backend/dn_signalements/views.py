@@ -3,7 +3,7 @@ import logging
 from django.contrib.auth.decorators import login_required
 from django.utils import dateparse
 from django.utils.decorators import method_decorator
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -15,8 +15,9 @@ from backend.dn_signalements.dn_mappings import (
     CHAMP_ID_TO_FIELD,
     DATE_CONSTAT_CHAMP_ID,
 )
-from backend.dn_signalements.models import DNSignalement
-from backend.dn_signalements.serializers import SignalementSerializer
+from backend.dn_signalements.models import DNSignalement, UserDossier
+from backend.dn_signalements.serializers import SignalementSerializer, UserDossierSerializer
+from backend.dn_signalements.tasks import sync_user_dossiers
 from backend.signalements.views import SignalementDocumentDownloadViewMixin, SignalementViewSetMixin
 
 
@@ -130,50 +131,25 @@ class DNSignalementDocumentDownloadView(SignalementDocumentDownloadViewMixin):
     model_class = DNSignalement
 
 
-class UserDossiersView(APIView):
+class UserDossierViewSet(viewsets.ReadOnlyModelViewSet):
     """
-    List user dossiers with live status from DN.
+    List user dossiers with statuses, from the database.
+    """
+
+    serializer_class = UserDossierSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return UserDossier.objects.filter(user=self.request.user).order_by("-date_creation")
+
+
+class SyncUserDossiersView(APIView):
+    """
+    Trigger a background synchronization of user dossiers.
     """
 
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
-        user_email = request.user.email or request.user.username
-        if not user_email:
-            return Response([])
-        dn_client = DNGraphQLClient()
-        try:
-            dossiers = dn_client.get_dossiers_for_user(user_email)
-        except Exception as e:
-            logging.exception(f"Failed to fetch dossiers for user {user_email}: {e}")
-            return Response({"error": "Erreur lors de la récupération des dossiers"}, status=503)
-        results = []
-        for dossier in dossiers:
-            # Use DNChamp to extract fields cleanly
-            dn_champ = DNChamp(dossier)
-            champs_data = dn_champ.get_data()
-
-            date_constat = None
-            datetime_constat = champs_data.get(DATE_CONSTAT_CHAMP_ID)
-            if datetime_constat:
-                date_constat = datetime_constat.isoformat()
-
-            localisation_depot = None
-            address_data = champs_data.get(ADDRESS_CHAMP_ID)
-            if address_data and isinstance(address_data, dict):
-                localisation_depot = address_data.get("label")
-
-            item = {
-                "id": dossier["number"],
-                "numero_dossier": dossier["number"],
-                "title": f"Dossier #{dossier['number']}",
-                "date_creation": dossier.get("dateDepot"),
-                "date_modification": dossier.get("dateDerniereModification"),
-                "state": dossier.get("state"),
-                "date_constat": date_constat,
-                "localisation_depot": localisation_depot,
-            }
-            results.append(item)
-        # Sort by date creation desc
-        results.sort(key=lambda x: x["date_creation"] or "", reverse=True)
-        return Response(results)
+    def post(self, request):
+        sync_user_dossiers.enqueue(request.user.id)
+        return Response({"status": "sync_triggered"}, status=status.HTTP_202_ACCEPTED)

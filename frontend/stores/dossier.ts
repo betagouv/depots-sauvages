@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import { getUserDossiers, type UserDossier } from '../services/api'
+import type { UserDossier } from '../services/api'
+import { getUserDossiers, syncDossiers } from '../services/api'
 
 export const useDossierStore = defineStore('dossier', {
   state: () => ({
@@ -7,25 +8,50 @@ export const useDossierStore = defineStore('dossier', {
     loading: false,
     error: null as string | null,
     loaded: false,
+    isSynced: false,
+    syncing: false,
+    _fetchPromise: null as Promise<void> | null,
   }),
 
   actions: {
     async fetchDossiers(force = false) {
-      if (this.loaded && !force) {
+      if (this.loaded && !force) return
+      if (this._fetchPromise) return this._fetchPromise
+
+      this._fetchPromise = (async () => {
+        this.loading = true
+        try {
+          const dossiers = await getUserDossiers()
+          this.dossiers = dossiers
+          this.loaded = true
+        } catch (error) {
+          this.error = 'Erreur lors de la récupération des dossiers'
+          console.error('Error fetching dossiers:', error)
+        } finally {
+          this.loading = false
+          this._fetchPromise = null
+        }
+      })()
+
+      return this._fetchPromise
+    },
+    async syncDossiers(force = false) {
+      if (this.isSynced && !force) {
         return
       }
-
-      this.loading = true
-      this.error = null
-
+      this.syncing = true
       try {
-        this.dossiers = await getUserDossiers()
-        this.loaded = true
-      } catch (err: any) {
-        this.error = err.message || 'Failed to fetch dossiers'
-        console.error('Error fetching dossiers:', err)
+        await syncDossiers()
+        this.isSynced = true
+        // If it was forced, we should reload the data afterwards
+        if (force) {
+          this.loaded = false
+          await this.fetchDossiers(true)
+        }
+      } catch (error) {
+        console.error('Error syncing dossiers:', error)
       } finally {
-        this.loading = false
+        this.syncing = false
       }
     },
 
