@@ -56,9 +56,9 @@ export const useDossierStore = defineStore('dossier', {
     },
 
     getDossierById(id: number | string): UserDossier | undefined {
-      // id can be a string or number, doing loose comparison or ensuring type match
+      // We look up by numero_dossier (DN ID) which is what is passed in the URL
       const numericId = Number(id)
-      return this.dossiers.find((d) => d.id === numericId)
+      return this.dossiers.find((d) => d.numero_dossier === numericId)
     },
   },
 })
