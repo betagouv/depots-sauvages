@@ -15,7 +15,14 @@
       </div>
     </div>
 
-    <DnLoading v-if="showLoading" message="Récupération de vos procédures..." />
+    <DnLoading
+      v-if="showLoading || dossierStore.syncing"
+      :message="
+        dossierStore.syncing
+          ? 'Synchronisation avec Démarche Numérique...'
+          : 'Récupération de vos procédures...'
+      "
+    />
 
     <div v-else>
       <div v-if="userInfo && userInfo.is_authenticated" class="fr-mb-4w">
