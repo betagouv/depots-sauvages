@@ -1,6 +1,19 @@
 <template>
   <div class="fr-container fr-py-5w">
-    <h1>Mes procédures</h1>
+    <div class="fr-grid-row fr-grid-row--middle fr-mb-2w">
+      <div class="fr-col">
+        <h1>Mes procédures</h1>
+      </div>
+      <div v-if="userInfo?.is_authenticated" class="fr-col-auto">
+        <DsfrButton
+          label="Synchroniser avec Démarche Numérique"
+          class="fr-btn--secondary"
+          :icon="{ name: 'ri-refresh-line', class: 'fr-mr-1w' }"
+          :disabled="dossierStore.syncing"
+          @click="handleManualSync"
+        />
+      </div>
+    </div>
 
     <DnLoading v-if="showLoading" message="Récupération de vos procédures..." />
 
@@ -135,6 +148,14 @@ const formatDate = (dateStr?: string) => {
     hour: '2-digit',
     minute: '2-digit',
   })
+}
+
+const handleManualSync = async () => {
+  try {
+    await dossierStore.syncDossiers(true)
+  } catch (error) {
+    console.error('Manual sync failed:', error)
+  }
 }
 </script>
 

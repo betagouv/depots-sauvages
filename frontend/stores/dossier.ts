@@ -9,12 +9,13 @@ export const useDossierStore = defineStore('dossier', {
     error: null as string | null,
     loaded: false,
     isSynced: false,
+    syncing: false,
     _fetchPromise: null as Promise<void> | null,
   }),
 
   actions: {
-    async fetchDossiers() {
-      if (this.loaded) return
+    async fetchDossiers(force = false) {
+      if (this.loaded && !force) return
       if (this._fetchPromise) return this._fetchPromise
 
       this._fetchPromise = (async () => {
@@ -34,15 +35,23 @@ export const useDossierStore = defineStore('dossier', {
 
       return this._fetchPromise
     },
-    async syncDossiers() {
-      if (this.isSynced) {
+    async syncDossiers(force = false) {
+      if (this.isSynced && !force) {
         return
       }
+      this.syncing = true
       try {
         await syncDossiers()
         this.isSynced = true
+        // If it was forced, we should reload the data afterwards
+        if (force) {
+          this.loaded = false
+          await this.fetchDossiers(true)
+        }
       } catch (error) {
         console.error('Error syncing dossiers:', error)
+      } finally {
+        this.syncing = false
       }
     },
 
