@@ -70,7 +70,7 @@
 
 <script setup lang="ts">
 import { DsfrAlert } from '@gouvminint/vue-dsfr'
-import { reactive } from 'vue'
+import { computed } from 'vue'
 
 import DnBandeauAccueil from '../dn/DnBandeauAccueil.vue'
 import DnDocuments from '../dn/DnDocuments.vue'
@@ -80,28 +80,31 @@ import InfoAuteurNonIdentifie from '../dn/InfoAuteurNonIdentifie.vue'
 import RessourcesUtiles from '../dn/RessourcesUtiles.vue'
 import ListeActions from './ListeActions.vue'
 
-const actions = reactive([
+const actions = computed(() => [
   {
     label: 'Remplir le formulaire de la procédure administrative sur Démarche Numérique',
     completed: true,
     readonly: true,
   },
   {
-    label:
-      "Numériser et conserver les éléments d'identification de l'auteur et de constat du dépôt",
+    label: props.auteurIdentifie
+      ? "Numériser et conserver les éléments d'identification de l'auteur et de constat du dépôt"
+      : 'Numériser et conserver les éléments de constat du dépôt',
     completed: false,
   },
   {
-    label: "Télécharger, compléter le rapport de constatation et/ou lettre d'information",
+    label: props.auteurIdentifie
+      ? "Télécharger, compléter le rapport de constatation et la lettre d'information"
+      : 'Télécharger et compléter le rapport de constatation',
     completed: false,
   },
   {
-    label: "Faire signer par le Maire ou l'autorité compétente",
+    label: "Faire signer par le maire ou l'autorité compétente",
     completed: false,
   },
 ])
 
-defineProps<{
+const props = defineProps<{
   dossierData: any
   hasProcedure: boolean
   auteurIdentifie: boolean

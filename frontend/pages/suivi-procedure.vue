@@ -23,7 +23,7 @@
             <div class="fr-display-flex fr-flex-between fr-flex-center fr-flex-wrap">
               <p class="fr-text--lead fr-mb-0">Dossier #{{ dossierData.dn_numero_dossier }}</p>
               <DsfrBadge
-                :type="auteurIdentifie ? 'success' : 'warning'"
+                :type="auteurIdentifie ? 'success' : 'info'"
                 :label="auteurIdentifie ? 'Auteur identifié' : 'Auteur non identifié'"
               />
             </div>
