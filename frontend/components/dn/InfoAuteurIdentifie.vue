@@ -3,7 +3,7 @@
     <div class="fr-card fr-card--lg fr-mb-4w">
       <div class="fr-card__body">
         <h2 class="fr-card__title">
-          <VIcon name="ri-pushpin-line" class="fr-mr-1w" /> Ce qu'il vous reste à faire
+          <VIcon name="ri-pushpin-line" class="fr-mr-1w" /> Les procédures, en bref
         </h2>
         <div class="fr-card__desc">
           <div class="fr-tabs fr-background-alt--grey fr-mt-3w">

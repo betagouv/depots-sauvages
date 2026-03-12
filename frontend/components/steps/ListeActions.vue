@@ -9,10 +9,13 @@
         type="checkbox"
         :id="`action-${stepId}-${index}`"
         :checked="action.completed"
-        @change="(e) => $emit('updateCase', action, (e.target as HTMLInputElement).checked)"
+        :disabled="action.readonly"
+        @change="
+          (e) =>
+            !action.readonly && $emit('updateCase', action, (e.target as HTMLInputElement).checked)
+        "
       />
       <label class="fr-label fr-display-flex fr-flex-center" :for="`action-${stepId}-${index}`">
-        <VIcon v-if="action.icon" :name="action.icon" class="fr-mr-2w" scale="1.1" />
         {{ action.label }}
       </label>
     </div>
@@ -27,7 +30,7 @@
 export interface Action {
   label: string
   completed?: boolean
-  icon?: string
+  readonly?: boolean
 }
 
 defineProps<{
@@ -62,5 +65,14 @@ defineEmits(['updateCase'])
 .action-item .fr-label {
   margin-bottom: 0;
   cursor: pointer;
+}
+
+.action-item input[type='checkbox']:disabled + .fr-label {
+  cursor: default;
+  color: var(--text-default-grey);
+}
+
+.action-item input[type='checkbox']:disabled {
+  cursor: default;
 }
 </style>

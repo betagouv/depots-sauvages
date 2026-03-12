@@ -41,18 +41,15 @@
               />
             </template>
             <template #step-1>
-              <Constatation />
-            </template>
-            <template #step-2>
               <Notification />
             </template>
-            <template #step-3>
+            <template #step-2>
               <SuiviSanction />
             </template>
-            <template #step-4>
+            <template #step-3>
               <Cloture />
             </template>
-            <template #step-5>
+            <template #step-4>
               <Judiciaire />
             </template>
           </StepperProcedure>
@@ -70,7 +67,6 @@ import { useRoute } from 'vue-router'
 import StepperProcedure from '@/components/StepperProcedure.vue'
 import ChargementDossier from '@/components/dn/ChargementDossier.vue'
 import Cloture from '@/components/steps/Cloture.vue'
-import Constatation from '@/components/steps/Constatation.vue'
 import Documents from '@/components/steps/Documents.vue'
 import Judiciaire from '@/components/steps/Judiciaire.vue'
 import Notification from '@/components/steps/Notification.vue'
@@ -90,12 +86,8 @@ const auteurIdentifie = computed(() => dossierData.value?.auteur_identifie ?? fa
 
 const steps = [
   {
-    title: 'Documents & État Civil',
-    description: "Récupération des documents types et vérification de l'auteur.",
-  },
-  {
-    title: 'Constatation & Saisie',
-    description: 'Remplir le dossier et collecter les preuves.',
+    title: 'Constatation & Documents',
+    description: 'Remplir le dossier, collecter les preuves et récupérer les documents types.',
   },
   {
     title: 'Notification',

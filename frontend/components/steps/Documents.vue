@@ -51,12 +51,26 @@
           <RessourcesUtiles />
         </div>
       </div>
+
+      <!-- Procedure Actions -->
+      <div v-if="hasProcedure" class="fr-mb-4w fr-mt-4w">
+        <h4 class="fr-h6 fr-mb-2w">Ce qu'il vous reste à faire</h4>
+        <p class="fr-text--sm">
+          Actions à réaliser pour constituer votre dossier de procédure administrative.
+        </p>
+        <ListeActions
+          step-id="constat-documents"
+          :actions="actions"
+          @updateCase="(action, val) => (action.completed = val)"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { DsfrAlert } from '@gouvminint/vue-dsfr'
+import { reactive } from 'vue'
 
 import DnBandeauAccueil from '../dn/DnBandeauAccueil.vue'
 import DnDocuments from '../dn/DnDocuments.vue'
@@ -64,6 +78,31 @@ import DnInfos from '../dn/DnInfos.vue'
 import InfoAuteurIdentifie from '../dn/InfoAuteurIdentifie.vue'
 import InfoAuteurNonIdentifie from '../dn/InfoAuteurNonIdentifie.vue'
 import RessourcesUtiles from '../dn/RessourcesUtiles.vue'
+import ListeActions from './ListeActions.vue'
+
+const actions = reactive([
+  {
+    label: 'Remplir le formulaire de la procédure administrative sur Démarche Numérique',
+    completed: true,
+    readonly: true,
+  },
+  {
+    label: "Numériser et conserver les éléments d'identification de l'auteur",
+    completed: false,
+  },
+  {
+    label: 'Prendre et conserver les photos du constat sur le terrain',
+    completed: false,
+  },
+  {
+    label: "Télécharger et compléter le rapport de constatation et/ou lettre d'information.",
+    completed: false,
+  },
+  {
+    label: "Faire signer par l'autorité compétente (Maire ou Adjoint)",
+    completed: false,
+  },
+])
 
 defineProps<{
   dossierData: any

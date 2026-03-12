@@ -32,7 +32,7 @@ const actions = reactive([
     icon: 'ri-camera-line',
   },
   {
-    label: 'Relire et compléter les documents pré-remplis (charte mairie, date, signature)',
+    label: "Télécharger et compléter le rapport de constatation et/ou lettre d'information.",
     completed: false,
     icon: 'ri-file-edit-line',
   },
