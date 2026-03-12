@@ -9,11 +9,7 @@
         type="checkbox"
         :id="`action-${stepId}-${index}`"
         :checked="action.completed"
-        :disabled="action.readonly"
-        @change="
-          (e) =>
-            !action.readonly && $emit('updateCase', action, (e.target as HTMLInputElement).checked)
-        "
+        disabled
       />
       <label class="fr-label fr-display-flex fr-flex-center" :for="`action-${stepId}-${index}`">
         {{ action.label }}

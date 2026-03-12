@@ -13,10 +13,7 @@
     >
       <div class="step-sidebar">
         <div class="step-icon-container" @click="$emit('update:currentStep', index)">
-          <div v-if="index < currentStep" class="step-icon step-icon--completed">
-            <VIcon name="ri-check-line" scale="1.1" />
-          </div>
-          <div v-else-if="currentStep === index" class="step-icon step-icon--active">
+          <div v-if="currentStep === index" class="step-icon step-icon--active">
             {{ index + 1 }}
           </div>
           <div v-else class="step-icon step-icon--pending">
@@ -33,17 +30,12 @@
             <div class="fr-display-flex fr-gap-1w">
               <span
                 v-if="step.optional"
-                class="fr-badge fr-badge--sm fr-badge--info fr-badge--no-icon"
+                class="fr-badge fr-badge--sm fr-badge--info fr-badge--no-icon fr-ml-1w"
                 >Optionnel</span
               >
               <span
-                v-if="index < currentStep"
-                class="fr-badge fr-badge--sm fr-badge--success fr-badge--no-icon"
-                >Terminé</span
-              >
-              <span
-                v-else-if="currentStep === index"
-                class="fr-badge fr-badge--sm fr-badge--info fr-badge--no-icon"
+                v-if="currentStep === index"
+                class="fr-badge fr-badge--sm fr-badge--info fr-badge--no-icon fr-ml-1w"
                 >En cours</span
               >
             </div>
@@ -98,6 +90,7 @@ defineEmits(['update:currentStep'])
 .step-icon-container {
   z-index: 1;
   cursor: pointer;
+  margin-top: 0.25rem; /* Align with title text better */
 }
 
 .step-icon {
@@ -139,8 +132,8 @@ defineEmits(['update:currentStep'])
   margin-bottom: 5px;
 }
 
-.step--completed .step-line {
-  background-color: var(--background-flat-success);
+.step--active .step-line {
+  background-color: var(--border-active-blue-france);
 }
 
 .step-content {
@@ -163,6 +156,7 @@ defineEmits(['update:currentStep'])
 .step-title {
   color: var(--text-title-grey);
   font-size: 1.125rem;
+  line-height: normal;
 }
 
 .step--active .step-title {

@@ -5,17 +5,6 @@
       <p>{{ error }}</p>
     </div>
     <div v-else-if="dossierData">
-      <nav class="fr-breadcrumb fr-mb-4w" aria-label="vous êtes ici :">
-        <ol class="fr-breadcrumb__list">
-          <li>
-            <router-link to="/mes-dossiers" class="fr-breadcrumb__link">Mes procédures</router-link>
-          </li>
-          <li>
-            <a class="fr-breadcrumb__link" aria-current="page">Suivi de la procédure</a>
-          </li>
-        </ol>
-      </nav>
-
       <div class="fr-grid-row">
         <div class="fr-col-12 fr-col-md-10 fr-col-offset-md-1">
           <header class="fr-mb-6w">
@@ -25,6 +14,7 @@
               <DsfrBadge
                 :type="auteurIdentifie ? 'success' : 'info'"
                 :label="auteurIdentifie ? 'Auteur identifié' : 'Auteur non identifié'"
+                class="fr-mt-1w"
               />
             </div>
           </header>
