@@ -79,7 +79,7 @@ const steps = computed(() => {
   if (!auteurIdentifie.value) {
     return [
       {
-        title: 'Constatation & Documents',
+        title: 'Documents de procédure',
         description:
           'Remplir le dossier, collecter les preuves et récupérer le rapport de constatation.',
       },
@@ -92,19 +92,19 @@ const steps = computed(() => {
 
   return [
     {
-      title: 'Constatation & Documents',
+      title: 'Documents de procédure',
       description: 'Remplir le dossier, collecter les preuves et récupérer les documents types.',
     },
     {
-      title: 'Notification',
+      title: "Notifier l'auteur",
       description: 'Envoi du courrier recommandé au responsable.',
     },
     {
-      title: 'Suivi & Sanction',
+      title: "Suivi de l'amende et remise en état",
       description: 'Remise en état et amende administrative.',
     },
     {
-      title: 'Suivi & Clôture',
+      title: 'Clôture',
       description: 'Recouvrement, archivage et clôture.',
     },
     {
