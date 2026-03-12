@@ -25,14 +25,12 @@ const actions = reactive([
   {
     label: "Confirmer la réception du paiement de l'amende administrative",
     completed: false,
-    icon: 'ri-money-euro-circle-line',
   },
   {
     label: 'Signaler le recouvrement au Trésor Public',
     completed: false,
-    icon: 'ri-government-line',
   },
-  { label: 'Clôturer officiellement le dossier', completed: false, icon: 'ri-folder-zip-line' },
-  { label: 'Dossier archivé en mairie', completed: false, icon: 'ri-archive-line' },
+  { label: 'Clôturer officiellement le dossier', completed: false },
+  { label: 'Dossier archivé en mairie', completed: false },
 ])
 </script>

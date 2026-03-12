@@ -87,19 +87,16 @@ const actions = reactive([
     readonly: true,
   },
   {
-    label: "Numériser et conserver les éléments d'identification de l'auteur",
+    label:
+      "Numériser et conserver les éléments d'identification de l'auteur et de constat du dépôt",
     completed: false,
   },
   {
-    label: 'Prendre et conserver les photos du constat sur le terrain',
+    label: "Télécharger, compléter le rapport de constatation et/ou lettre d'information",
     completed: false,
   },
   {
-    label: "Télécharger et compléter le rapport de constatation et/ou lettre d'information.",
-    completed: false,
-  },
-  {
-    label: "Faire signer par l'autorité compétente (Maire ou Adjoint)",
+    label: "Faire signer par le Maire ou l'autorité compétente",
     completed: false,
   },
 ])

@@ -26,22 +26,18 @@ const actions = reactive([
   {
     label: "Signer ou faire signer par l'autorité compétente",
     completed: false,
-    icon: 'ri-pen-nib-line',
   },
   {
     label: "Envoyer la lettre d'information en recommandé avec AR",
     completed: false,
-    icon: 'ri-mail-send-line',
   },
   {
     label: 'Conserver une copie de tous les documents pour vos archives',
     completed: false,
-    icon: 'ri-archive-line',
   },
   {
     label: "Réception de l'accusé de réception (point de départ du contradictoire)",
     completed: false,
-    icon: 'ri-check-double-line',
   },
 ])
 </script>

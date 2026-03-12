@@ -25,22 +25,18 @@ const actions = reactive([
   {
     label: 'Relire et compléter le rapport de constatation pré-rempli',
     completed: false,
-    icon: 'ri-file-edit-line',
   },
   {
     label: "Signer par l'autorité compétente (Maire, Adjoint, etc.)",
     completed: false,
-    icon: 'ri-pen-nib-line',
   },
   {
     label: 'Prendre rendez-vous auprès de la gendarmerie ou du commissariat',
     completed: false,
-    icon: 'ri-calendar-event-line',
   },
   {
     label: 'Déposer plainte et transmettre une copie du rapport',
     completed: false,
-    icon: 'ri-police-car-line',
   },
 ])
 </script>

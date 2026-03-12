@@ -23,22 +23,18 @@ const actions = reactive([
   {
     label: 'La période du contradictoire (10 jours minimum) est écoulée',
     completed: false,
-    icon: 'ri-calendar-todo-line',
   },
   {
     label: "Analyser les éventuelles observations de l'auteur",
     completed: false,
-    icon: 'ri-chat-check-line',
   },
   {
     label: "Déterminer le montant de l'amende administrative (jusqu'à 15 000 €)",
     completed: false,
-    icon: 'ri-money-euro-box-line',
   },
   {
     label: "Rédiger l'arrêté de sanction administrative",
     completed: false,
-    icon: 'ri-edit-2-line',
   },
 ])
 </script>
