@@ -41,16 +41,17 @@
               />
             </template>
             <template #step-1>
-              <Notification />
+              <Notification v-if="auteurIdentifie" />
+              <Judiciaire v-else :auteur-identifie="auteurIdentifie" />
             </template>
             <template #step-2>
-              <SuiviSanction />
+              <SuiviSanction v-if="auteurIdentifie" />
             </template>
             <template #step-3>
-              <Cloture />
+              <Cloture v-if="auteurIdentifie" />
             </template>
             <template #step-4>
-              <Judiciaire />
+              <Judiciaire v-if="auteurIdentifie" :auteur-identifie="auteurIdentifie" />
             </template>
           </StepperProcedure>
         </div>
@@ -84,29 +85,45 @@ const activeStep = ref(0)
 const hasProcedure = computed(() => dossierData.value?.created !== false)
 const auteurIdentifie = computed(() => dossierData.value?.auteur_identifie ?? false)
 
-const steps = [
-  {
-    title: 'Constatation & Documents',
-    description: 'Remplir le dossier, collecter les preuves et récupérer les documents types.',
-  },
-  {
-    title: 'Notification',
-    description: 'Envoi du courrier recommandé au responsable.',
-  },
-  {
-    title: 'Suivi & Sanction',
-    description: 'Remise en état et amende administrative.',
-  },
-  {
-    title: 'Suivi & Clôture',
-    description: 'Recouvrement, archivage et clôture.',
-  },
-  {
-    title: 'Procédure Judiciaire',
-    description: 'Dépôt de plainte (optionnelle).',
-    optional: true,
-  },
-]
+const steps = computed(() => {
+  if (!auteurIdentifie.value) {
+    return [
+      {
+        title: 'Constatation & Documents',
+        description:
+          'Remplir le dossier, collecter les preuves et récupérer le rapport de constatation.',
+      },
+      {
+        title: 'Procédure Judiciaire',
+        description: 'Dépôt de plainte auprès des services de police ou gendarmerie.',
+      },
+    ]
+  }
+
+  return [
+    {
+      title: 'Constatation & Documents',
+      description: 'Remplir le dossier, collecter les preuves et récupérer les documents types.',
+    },
+    {
+      title: 'Notification',
+      description: 'Envoi du courrier recommandé au responsable.',
+    },
+    {
+      title: 'Suivi & Sanction',
+      description: 'Remise en état et amende administrative.',
+    },
+    {
+      title: 'Suivi & Clôture',
+      description: 'Recouvrement, archivage et clôture.',
+    },
+    {
+      title: 'Procédure Judiciaire',
+      description: 'Dépôt de plainte (optionnelle).',
+      optional: true,
+    },
+  ]
+})
 
 onMounted(async () => {
   const dossierId = (route.params.dossier_id as string) || (route.query.dossier_id as string)

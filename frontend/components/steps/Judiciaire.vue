@@ -1,6 +1,12 @@
 <template>
   <div class="judiciaire">
-    <p class="fr-text--sm">Procédure optionnelle en cas d'échec de la procédure administrative.</p>
+    <p class="fr-text--sm">
+      {{
+        auteurIdentifie
+          ? "Procédure optionnelle en cas d'échec de la procédure administrative."
+          : 'Procédure judiciaire pour donner suite au constat du dépôt.'
+      }}
+    </p>
     <DsfrAlert
       type="info"
       title="Note"
@@ -20,6 +26,10 @@
 import { DsfrAlert } from '@gouvminint/vue-dsfr'
 import { reactive } from 'vue'
 import ListeActions from './ListeActions.vue'
+
+defineProps<{
+  auteurIdentifie?: boolean
+}>()
 
 const actions = reactive([
   {
