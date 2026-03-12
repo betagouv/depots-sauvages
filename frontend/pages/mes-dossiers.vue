@@ -90,7 +90,7 @@
                       label="Suivre la procédure"
                       :icon="{ name: 'ri-file-list-line', class: 'fr-mr-1w' }"
                       icon-right
-                      @click="router.push(getSuiviProcedureUrl(dossier.id))"
+                      @click="router.push(getSuiviProcedureUrl(dossier.numero_dossier))"
                     />
                   </li>
                 </ul>
