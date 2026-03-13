@@ -37,13 +37,6 @@
         <InfoAuteurNonIdentifie v-else :modify-url="modifyUrl" />
       </div> -->
 
-      <!-- Resource links reproduced exactly -->
-      <div v-if="hasProcedure" class="fr-grid-row fr-grid-row--gutters fr-mt-2w">
-        <div class="fr-col-12">
-          <RessourcesUtiles />
-        </div>
-      </div>
-
       <!-- Procedure Actions -->
       <div v-if="hasProcedure" class="fr-mb-4w fr-mt-4w">
         <h4 class="fr-h6 fr-mb-2w">Ce qu'il vous reste à faire</h4>
@@ -52,6 +45,13 @@
           :actions="actions"
           @updateCase="(action, val) => (action.completed = val)"
         />
+      </div>
+
+      <!-- Resource links reproduced exactly -->
+      <div v-if="hasProcedure" class="fr-grid-row fr-grid-row--gutters fr-mt-2w">
+        <div class="fr-col-12">
+          <RessourcesUtiles />
+        </div>
       </div>
     </div>
   </div>
