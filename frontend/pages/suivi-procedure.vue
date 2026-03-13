@@ -7,16 +7,22 @@
     <div v-else-if="dossierData">
       <div class="fr-grid-row">
         <div class="fr-col-12 fr-col-md-10 fr-col-offset-md-1">
-          <header class="fr-mb-6w">
-            <h1 class="fr-h1 fr-mb-1w">Ma procédure de dépôt sauvage</h1>
-            <div class="fr-display-flex fr-flex-between fr-flex-center fr-flex-wrap">
-              <p class="fr-text--lead fr-mb-0">Dossier #{{ dossierData.dn_numero_dossier }}</p>
-              <DsfrBadge
-                :type="auteurIdentifie ? 'success' : 'info'"
-                :label="auteurIdentifie ? 'Auteur identifié' : 'Auteur non identifié'"
-                class="fr-mt-1w"
-              />
-            </div>
+          <header class="fr-mb-4w">
+            <h1 class="fr-h1 fr-mb-2w">Ma procédure de dépôt sauvage</h1>
+            <p class="fr-text--lead fr-mb-2w">
+              Dossier #{{ dossierData.dn_numero_dossier }}
+            </p>
+            <DsfrBadge
+              :type="auteurIdentifie ? 'success' : 'info'"
+              :label="auteurIdentifie ? 'Auteur identifié' : 'Auteur non identifié'"
+              class="fr-badge--no-icon fr-mb-3w"
+            />
+            <DsfrAlert
+              description="Suivez toutes les étapes ci-dessous pour finaliser votre procédure de dépôt sauvage."
+              type="info"
+              small
+              class="fr-mb-4w"
+            />
           </header>
 
           <StepperProcedure :steps="steps" v-model:currentStep="activeStep">
@@ -51,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import { DsfrBadge } from '@gouvminint/vue-dsfr'
+import { DsfrAlert, DsfrBadge } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 

@@ -25,17 +25,17 @@
 
       <div class="step-content">
         <header class="step-header fr-mb-1w" @click="$emit('update:currentStep', index)">
-          <div class="fr-display-flex fr-flex-between fr-flex-center">
+          <div class="step-header-container">
             <h3 class="step-title fr-h6 fr-mb-0">{{ step.title }}</h3>
-            <div class="fr-display-flex fr-gap-1w">
+            <div class="step-badges">
               <span
                 v-if="step.optional"
-                class="fr-badge fr-badge--sm fr-badge--info fr-badge--no-icon fr-ml-1w"
+                class="fr-badge fr-badge--sm fr-badge--info fr-badge--no-icon"
                 >Optionnel</span
               >
               <span
                 v-if="currentStep === index"
-                class="fr-badge fr-badge--sm fr-badge--info fr-badge--no-icon fr-ml-1w"
+                class="fr-badge fr-badge--sm fr-badge--info fr-badge--no-icon"
                 >En cours</span
               >
             </div>
@@ -157,6 +157,19 @@ defineEmits(['update:currentStep'])
   color: var(--text-title-grey);
   font-size: 1.125rem;
   line-height: normal;
+}
+
+.step-header-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.step-badges {
+  display: flex;
+  gap: 0.5rem;
 }
 
 .step--active .step-title {
