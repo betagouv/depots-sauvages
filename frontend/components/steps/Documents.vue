@@ -32,11 +32,10 @@
       </div>
 
       <!-- Author Identification Logic reproduced exactly -->
-      <div v-if="hasProcedure" class="fr-mb-4w">
+      <!-- <div v-if="hasProcedure" class="fr-mb-4w">
         <InfoAuteurIdentifie v-if="auteurIdentifie" />
         <InfoAuteurNonIdentifie v-else :modify-url="modifyUrl" />
-      </div>
-
+      </div> -->
 
       <!-- Resource links reproduced exactly -->
       <div v-if="hasProcedure" class="fr-grid-row fr-grid-row--gutters fr-mt-2w">
@@ -48,9 +47,6 @@
       <!-- Procedure Actions -->
       <div v-if="hasProcedure" class="fr-mb-4w fr-mt-4w">
         <h4 class="fr-h6 fr-mb-2w">Ce qu'il vous reste à faire</h4>
-        <p class="fr-text--sm">
-          Actions à réaliser pour constituer votre dossier de procédure administrative.
-        </p>
         <ListeActions
           step-id="constat-documents"
           :actions="actions"
@@ -67,9 +63,6 @@ import { computed } from 'vue'
 
 import DnBandeauAccueil from '../dn/DnBandeauAccueil.vue'
 import DnDocuments from '../dn/DnDocuments.vue'
-import DnInfos from '../dn/DnInfos.vue'
-import InfoAuteurIdentifie from '../dn/InfoAuteurIdentifie.vue'
-import InfoAuteurNonIdentifie from '../dn/InfoAuteurNonIdentifie.vue'
 import RessourcesUtiles from '../dn/RessourcesUtiles.vue'
 import ListeActions from './ListeActions.vue'
 
