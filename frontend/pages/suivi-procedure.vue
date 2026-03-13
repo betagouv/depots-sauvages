@@ -8,10 +8,31 @@
       <div class="fr-grid-row">
         <div class="fr-col-12 fr-col-md-10 fr-col-offset-md-1">
           <header class="fr-mb-4w">
-            <h1 class="fr-h1 fr-mb-2w">Ma procédure de dépôt sauvage</h1>
-            <p class="fr-text--lead fr-mb-2w">
-              Dossier #{{ dossierData.dn_numero_dossier }}
-            </p>
+            <div class="fr-grid-row fr-grid-row--middle fr-mb-2w">
+              <div class="fr-col">
+                <h1 class="fr-h1 fr-mb-0">Ma procédure de dépôt sauvage</h1>
+              </div>
+              <div class="fr-col-auto">
+                <DsfrButton
+                  label="Modifier votre dossier sur Démarche Numérique"
+                  class="fr-btn--secondary"
+                  :icon="{ name: 'ri-external-link-line', class: 'fr-mr-1w' }"
+                  icon-right
+                  @click="openExternalLink(getDnModifyUrl(dossierData.dn_numero_dossier))"
+                />
+              </div>
+            </div>
+
+            <p class="fr-text--lead fr-mb-1w"> Dossier #{{ dossierData.dn_numero_dossier }} </p>
+
+            <div v-if="dossierData.date_creation" class="fr-text--xs fr-mb-2w fr-text-mention--grey">
+              <span class="fr-icon-calendar-line fr-icon--sm fr-mr-1v" aria-hidden="true"></span>
+              Créé le {{ formatDate(dossierData.date_creation) }}
+              <span v-if="shouldShowModificationDate(dossierData.date_creation, dossierData.date_modification)">
+                &middot; Modifié le {{ formatDate(dossierData.date_modification) }}
+              </span>
+            </div>
+
             <DsfrBadge
               :type="auteurIdentifie ? 'success' : 'info'"
               :label="auteurIdentifie ? 'Auteur identifié' : 'Auteur non identifié'"
@@ -57,7 +78,8 @@
 </template>
 
 <script setup lang="ts">
-import { DsfrAlert, DsfrBadge } from '@gouvminint/vue-dsfr'
+import { formatDate, shouldShowModificationDate } from '@/utils/date'
+import { DsfrAlert, DsfrBadge, DsfrButton } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -142,6 +164,13 @@ onMounted(async () => {
     showLoading.value = false
   }
 })
+
+const openExternalLink = (url: string) => {
+  if (url) {
+    window.open(url, '_blank', 'noopener,noreferrer')
+  }
+}
+
 </script>
 
 <style scoped>

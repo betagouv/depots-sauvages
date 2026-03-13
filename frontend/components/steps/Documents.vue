@@ -37,13 +37,6 @@
         <InfoAuteurNonIdentifie v-else :modify-url="modifyUrl" />
       </div>
 
-      <!-- Dossier Info reproduced exactly -->
-      <DnInfos
-        :dn-numero-dossier="dossierData.dn_numero_dossier"
-        :dn-date-creation="dossierData.dn_date_creation"
-        :dn-date-modification="dossierData.dn_date_modification"
-        :modify-url="modifyUrl"
-      />
 
       <!-- Resource links reproduced exactly -->
       <div v-if="hasProcedure" class="fr-grid-row fr-grid-row--gutters fr-mt-2w">

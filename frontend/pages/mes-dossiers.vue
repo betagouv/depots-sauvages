@@ -54,7 +54,7 @@
                       aria-hidden="true"
                     ></span>
                     Créé le {{ formatDate(dossier.date_creation) }}
-                    <span v-if="dossier.date_modification">
+                    <span v-if="shouldShowModificationDate(dossier.date_creation, dossier.date_modification)">
                       &middot; Modifié le {{ formatDate(dossier.date_modification) }}
                     </span>
                   </div>
@@ -112,6 +112,7 @@
 </template>
 
 <script setup lang="ts">
+import { formatDate, shouldShowModificationDate } from '@/utils/date'
 import { useDossierStore } from '@/stores/dossier'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -146,16 +147,6 @@ const openExternalLink = (url: string) => {
   }
 }
 
-const formatDate = (dateStr?: string) => {
-  if (!dateStr) return 'Date inconnue'
-  return new Date(dateStr).toLocaleString('fr-FR', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  })
-}
 
 const handleManualSync = async () => {
   try {
