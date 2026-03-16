@@ -68,9 +68,6 @@
             <template #step-3>
               <Cloture v-if="auteurIdentifie" />
             </template>
-            <template #step-4>
-              <Judiciaire v-if="auteurIdentifie" :auteur-identifie="auteurIdentifie" />
-            </template>
           </StepperProcedure>
         </div>
       </div>
@@ -135,11 +132,6 @@ const steps = computed(() => {
     {
       title: 'Clôture',
       description: 'Finalisation et archivage du dossier après information du Trésor Public.',
-    },
-    {
-      title: 'Procédure Judiciaire',
-      description: "Procédure optionnelle en cas d'échec de la procédure administrative.",
-      optional: true,
     },
   ]
 })
