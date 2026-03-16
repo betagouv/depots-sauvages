@@ -20,7 +20,7 @@
             {{ index + 1 }}
           </div>
         </div>
-        <div v-if="index < steps.length - 1" class="step-line"></div>
+        <div class="step-line"></div>
       </div>
 
       <div class="step-content">
@@ -131,6 +131,7 @@ defineEmits(['update:currentStep'])
   background-color: var(--border-default-grey);
   margin-top: 5px;
   margin-bottom: 5px;
+  border-radius: 4px;
 }
 
 .step--active .step-line {
