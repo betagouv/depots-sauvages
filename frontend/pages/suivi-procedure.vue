@@ -10,13 +10,6 @@
           <header class="fr-mb-4w">
             <div class="fr-mb-3w">
               <h1 class="fr-h1 fr-mb-2w">Ma procédure de dépôt sauvage</h1>
-              <DsfrButton
-                label="Modifier sur Démarche Numérique"
-                class="fr-btn--secondary"
-                :icon="{ name: 'ri-external-link-line', class: 'fr-mr-1w' }"
-                icon-right
-                @click="openExternalLink(getDnModifyUrl(dossierData.dn_numero_dossier))"
-              />
             </div>
 
             <p class="fr-text--lead fr-mb-1w">Dossier #{{ dossierData.dn_numero_dossier }}</p>
@@ -38,17 +31,19 @@
                 &middot; Modifié le {{ formatDate(dossierData.date_modification) }}
               </span>
             </div>
-
-            <DsfrBadge
-              :type="auteurIdentifie ? 'success' : 'info'"
-              :label="auteurIdentifie ? 'Auteur identifié' : 'Auteur non identifié'"
-              class="fr-badge--no-icon fr-mb-3w"
-            />
-            <DsfrAlert
-              description="Suivez toutes les étapes ci-dessous pour finaliser votre procédure de dépôt sauvage."
-              type="info"
-              small
-              class="fr-mb-4w"
+            <div>
+              <DsfrBadge
+                :type="auteurIdentifie ? 'success' : 'info'"
+                :label="auteurIdentifie ? 'Auteur identifié' : 'Auteur non identifié'"
+                class="fr-badge--no-icon fr-mb-3w"
+              />
+            </div>
+            <DsfrButton
+              label="Modifier sur Démarche Numérique"
+              class="fr-btn--secondary"
+              :icon="{ name: 'ri-external-link-line', class: 'fr-mr-1w' }"
+              icon-right
+              @click="openExternalLink(getDnModifyUrl(dossierData.dn_numero_dossier))"
             />
           </header>
 
@@ -85,7 +80,7 @@
 
 <script setup lang="ts">
 import { formatDate, shouldShowModificationDate } from '@/utils/date'
-import { DsfrAlert, DsfrBadge, DsfrButton } from '@gouvminint/vue-dsfr'
+import { DsfrBadge, DsfrButton } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
