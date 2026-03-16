@@ -53,11 +53,6 @@
             :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
           />
 
-          <div v-if="hasProcedure" class="fr-grid-row fr-grid-row--gutters fr-mt-2w">
-            <div class="fr-col-12">
-              <RessourcesUtiles />
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -75,7 +70,6 @@ import DnDocuments from '../components/dn/DnDocuments.vue'
 import DnInfos from '../components/dn/DnInfos.vue'
 import InfoAuteurIdentifie from '../components/dn/InfoAuteurIdentifie.vue'
 import InfoAuteurNonIdentifie from '../components/dn/InfoAuteurNonIdentifie.vue'
-import RessourcesUtiles from '../components/dn/RessourcesUtiles.vue'
 
 import { API_URLS, createResource } from '../services/api'
 import { getDnDocConstatUrl, getDnLettreInfoUrl, getDnModifyUrl } from '../services/urls'

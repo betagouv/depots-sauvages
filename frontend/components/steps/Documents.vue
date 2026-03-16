@@ -47,12 +47,6 @@
         />
       </div>
 
-      <!-- Resource links reproduced exactly -->
-      <div v-if="hasProcedure" class="fr-grid-row fr-grid-row--gutters fr-mt-2w">
-        <div class="fr-col-12">
-          <RessourcesUtiles />
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -63,7 +57,6 @@ import { computed } from 'vue'
 
 import DnBandeauAccueil from '../dn/DnBandeauAccueil.vue'
 import DnDocuments from '../dn/DnDocuments.vue'
-import RessourcesUtiles from '../dn/RessourcesUtiles.vue'
 import ListeActions from './ListeActions.vue'
 
 const actions = computed(() => [
