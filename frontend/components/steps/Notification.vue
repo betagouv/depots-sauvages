@@ -1,6 +1,6 @@
 <template>
   <div class="notification">
-    <p class="fr-text--sm">Envoyez la notification officielle à l'auteur présumé.</p>
+    <h4 class="fr-h6 fr-mb-2w">Envoyez la notification officielle à l'auteur présumé</h4>
     <ListeActions
       step-id="notif"
       :actions="actions"

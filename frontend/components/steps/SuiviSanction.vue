@@ -1,6 +1,6 @@
 <template>
   <div class="step-suivi">
-    <p class="fr-text--sm">Gérez les suites de la mise en demeure et déterminez les sanctions.</p>
+    <h4 class="fr-h6 fr-mb-2w">Gérez les suites de la mise en demeure et déterminez les sanctions</h4>
     <ListeActions
       step-id="suivi"
       :actions="actions"

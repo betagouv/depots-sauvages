@@ -1,8 +1,6 @@
 <template>
   <div class="cloture">
-    <p class="fr-text--sm">
-      Finalisation et archivage du dossier après information du Trésor Public.
-    </p>
+    <h4 class="fr-h6 fr-mb-2w">Finalisation et archivage du dossier</h4>
     <ListeActions
       step-id="cloture"
       :actions="actions"

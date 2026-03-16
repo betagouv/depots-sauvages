@@ -1,12 +1,12 @@
 <template>
   <div class="judiciaire">
-    <p class="fr-text--sm">
+    <h4 class="fr-h6 fr-mb-2w">
       {{
         auteurIdentifie
-          ? "Procédure optionnelle en cas d'échec de la procédure administrative."
-          : 'Procédure judiciaire pour donner suite au constat du dépôt.'
+          ? "Procédure optionnelle en cas d'échec de la procédure administrative"
+          : 'Procédure judiciaire pour donner suite au constat du dépôt'
       }}
-    </p>
+    </h4>
     <DsfrAlert
       type="info"
       title="Note"
