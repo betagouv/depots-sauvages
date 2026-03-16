@@ -8,19 +8,15 @@
       <div class="fr-grid-row">
         <div class="fr-col-12 fr-col-md-10 fr-col-offset-md-1">
           <header class="fr-mb-4w">
-            <div class="fr-grid-row fr-grid-row--middle fr-mb-2w">
-              <div class="fr-col">
-                <h1 class="fr-h1 fr-mb-0">Ma procédure de dépôt sauvage</h1>
-              </div>
-              <div class="fr-col-auto">
-                <DsfrButton
-                  label="Modifier votre dossier sur Démarche Numérique"
-                  class="fr-btn--secondary"
-                  :icon="{ name: 'ri-external-link-line', class: 'fr-mr-1w' }"
-                  icon-right
-                  @click="openExternalLink(getDnModifyUrl(dossierData.dn_numero_dossier))"
-                />
-              </div>
+            <div class="fr-mb-3w">
+              <h1 class="fr-h1 fr-mb-2w">Ma procédure de dépôt sauvage</h1>
+              <DsfrButton
+                label="Modifier sur Démarche Numérique"
+                class="fr-btn--secondary"
+                :icon="{ name: 'ri-external-link-line', class: 'fr-mr-1w' }"
+                icon-right
+                @click="openExternalLink(getDnModifyUrl(dossierData.dn_numero_dossier))"
+              />
             </div>
 
             <p class="fr-text--lead fr-mb-1w">Dossier #{{ dossierData.dn_numero_dossier }}</p>
