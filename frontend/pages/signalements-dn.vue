@@ -38,13 +38,6 @@
             />
           </div>
 
-          <div v-if="hasProcedure">
-            <InfoAuteurIdentifie v-if="auteurIdentifie" />
-            <InfoAuteurNonIdentifie
-              v-else
-              :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
-            />
-          </div>
 
           <DnInfos
             :dn-numero-dossier="dossierData.dn_numero_dossier"
@@ -68,8 +61,6 @@ import ChargementDossier from '../components/dn/ChargementDossier.vue'
 import DnBandeauAccueil from '../components/dn/DnBandeauAccueil.vue'
 import DnDocuments from '../components/dn/DnDocuments.vue'
 import DnInfos from '../components/dn/DnInfos.vue'
-import InfoAuteurIdentifie from '../components/dn/InfoAuteurIdentifie.vue'
-import InfoAuteurNonIdentifie from '../components/dn/InfoAuteurNonIdentifie.vue'
 
 import { API_URLS, createResource } from '../services/api'
 import { getDnDocConstatUrl, getDnLettreInfoUrl, getDnModifyUrl } from '../services/urls'

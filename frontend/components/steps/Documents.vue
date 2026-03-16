@@ -1,6 +1,5 @@
 <template>
   <div class="documents-integration">
-    <!-- Hero / Header accurately reproduced -->
     <DnBandeauAccueil :has-procedure="hasProcedure" :auteur-identifie="auteurIdentifie" />
 
     <div class="fr-mt-2w">
@@ -11,7 +10,6 @@
         :lettre-info-url="lettreInfoUrl"
       />
 
-      <!-- "Dossier sans procédure" case reproduced exactly -->
       <div v-else class="fr-mb-4w">
         <p class="">
           Pour récupérer vos documents, merci de
@@ -31,13 +29,6 @@
         />
       </div>
 
-      <!-- Author Identification Logic reproduced exactly -->
-      <!-- <div v-if="hasProcedure" class="fr-mb-4w">
-        <InfoAuteurIdentifie v-if="auteurIdentifie" />
-        <InfoAuteurNonIdentifie v-else :modify-url="modifyUrl" />
-      </div> -->
-
-      <!-- Procedure Actions -->
       <div v-if="hasProcedure" class="fr-mb-4w fr-mt-4w">
         <h4 class="fr-h6 fr-mb-2w">Ce qu'il vous reste à faire</h4>
         <ListeActions
@@ -46,7 +37,6 @@
           @updateCase="(action, val) => (action.completed = val)"
         />
       </div>
-
     </div>
   </div>
 </template>
