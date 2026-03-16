@@ -8,16 +8,11 @@
       :actions="actions"
       @updateCase="(action, val) => (action.completed = val)"
     >
-      <template #actions>
-        <DsfrButton label="Confirmer le paiement" icon="ri-check-line" size="sm" />
-        <DsfrButton label="Clôturer le dossier" variant="secondary" size="sm" />
-      </template>
     </ListeActions>
   </div>
 </template>
 
 <script setup lang="ts">
-import { DsfrButton } from '@gouvminint/vue-dsfr'
 import { reactive } from 'vue'
 import ListeActions from './ListeActions.vue'
 

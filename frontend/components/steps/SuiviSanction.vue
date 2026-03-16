@@ -7,8 +7,9 @@
       @updateCase="(action, val) => (action.completed = val)"
     >
       <template #actions>
+        <!-- Boutons retirés pour l'instant :
         <DsfrButton label="Rédiger l'arrêté" icon="ri-edit-line" size="sm" />
-        <DsfrButton label="Notifier la sanction" variant="secondary" size="sm" />
+        <DsfrButton label="Notifier la sanction" variant="secondary" size="sm" />-->
       </template>
     </ListeActions>
   </div>

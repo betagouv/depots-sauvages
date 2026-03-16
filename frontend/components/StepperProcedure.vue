@@ -58,6 +58,7 @@ export interface Step {
   title: string
   description: string
   optional?: boolean
+  showBracket?: boolean
 }
 
 defineProps<{
@@ -178,10 +179,7 @@ defineEmits(['update:currentStep'])
 }
 
 .step-details {
-  border-radius: 12px;
-  border-left: 3px solid var(--border-active-blue-france);
   background-color: white;
-  padding-left: 1.5rem;
 }
 
 /* Transitions */

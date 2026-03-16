@@ -110,10 +110,10 @@ const props = defineProps<{
 }
 
 .documents-integration :deep(.hero-section) {
-  margin-left: -1.5rem; /* Offset the stepper padding to make hero full width */
-  margin-right: -1rem;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.documents-integration :deep(.hero-section) {
+  margin-bottom: 1rem;
 }
 </style>

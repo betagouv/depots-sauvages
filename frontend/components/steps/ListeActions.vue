@@ -1,19 +1,21 @@
 <template>
   <div class="action-list fr-mt-2w">
-    <div
-      v-for="(action, index) in actions"
-      :key="index"
-      class="action-item fr-checkbox-group fr-checkbox-group--sm"
-    >
-      <input
-        type="checkbox"
-        :id="`action-${stepId}-${index}`"
-        :checked="action.completed"
-        disabled
-      />
-      <label class="fr-label fr-display-flex fr-flex-center" :for="`action-${stepId}-${index}`">
-        {{ action.label }}
-      </label>
+    <div class="action-checkboxes">
+      <div
+        v-for="(action, index) in actions"
+        :key="index"
+        class="action-item fr-checkbox-group fr-checkbox-group--sm"
+      >
+        <input
+          type="checkbox"
+          :id="`action-${stepId}-${index}`"
+          :checked="action.completed"
+          disabled
+        />
+        <label class="fr-label fr-display-flex fr-flex-center" :for="`action-${stepId}-${index}`">
+          {{ action.label }}
+        </label>
+      </div>
     </div>
 
     <div v-if="$slots.actions" class="fr-mt-3w fr-display-flex fr-gap-1w fr-flex-wrap">
@@ -41,7 +43,17 @@ defineEmits(['updateCase'])
 .action-list {
   display: flex;
   flex-direction: column;
+}
+
+.action-checkboxes {
+  display: flex;
+  flex-direction: column;
   gap: 0.75rem;
+  padding-left: 1.5rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  border-left: 3px solid var(--border-active-blue-france);
+  border-radius: 12px;
 }
 
 .action-item {

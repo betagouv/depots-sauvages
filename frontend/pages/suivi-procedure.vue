@@ -23,12 +23,22 @@
               </div>
             </div>
 
-            <p class="fr-text--lead fr-mb-1w"> Dossier #{{ dossierData.dn_numero_dossier }} </p>
+            <p class="fr-text--lead fr-mb-1w">Dossier #{{ dossierData.dn_numero_dossier }}</p>
 
-            <div v-if="dossierData.date_creation" class="fr-text--xs fr-mb-2w fr-text-mention--grey">
+            <div
+              v-if="dossierData.date_creation"
+              class="fr-text--xs fr-mb-2w fr-text-mention--grey"
+            >
               <span class="fr-icon-calendar-line fr-icon--sm fr-mr-1v" aria-hidden="true"></span>
               Créé le {{ formatDate(dossierData.date_creation) }}
-              <span v-if="shouldShowModificationDate(dossierData.date_creation, dossierData.date_modification)">
+              <span
+                v-if="
+                  shouldShowModificationDate(
+                    dossierData.date_creation,
+                    dossierData.date_modification
+                  )
+                "
+              >
                 &middot; Modifié le {{ formatDate(dossierData.date_modification) }}
               </span>
             </div>
@@ -124,7 +134,7 @@ const steps = computed(() => {
       description: 'Remplir le dossier, collecter les preuves et récupérer les documents types.',
     },
     {
-      title: "Notifier l'auteur",
+      title: "Notifier l'auteur des faits",
       description: 'Envoi du courrier recommandé au responsable.',
     },
     {
@@ -170,7 +180,6 @@ const openExternalLink = (url: string) => {
     window.open(url, '_blank', 'noopener,noreferrer')
   }
 }
-
 </script>
 
 <style scoped>
