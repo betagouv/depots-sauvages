@@ -51,11 +51,6 @@ import ListeActions from './ListeActions.vue'
 
 const actions = computed(() => [
   {
-    label: 'Remplir le formulaire de la procédure administrative sur Démarche Numérique',
-    completed: true,
-    readonly: true,
-  },
-  {
     label: props.auteurIdentifie
       ? "Numériser et conserver les éléments d'identification de l'auteur et de constat du dépôt"
       : 'Numériser et conserver les éléments de constat du dépôt',

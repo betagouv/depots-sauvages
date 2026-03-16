@@ -13,11 +13,14 @@
     >
       <div class="step-sidebar">
         <div class="step-icon-container" @click="$emit('update:currentStep', index)">
-          <div v-if="currentStep === index" class="step-icon step-icon--active">
-            {{ index + 1 }}
+          <div v-if="index < currentStep" class="step-icon step-icon--completed">
+            <span class="fr-icon-check-line fr-icon--sm" aria-hidden="true"></span>
+          </div>
+          <div v-else-if="currentStep === index" class="step-icon step-icon--active">
+            {{ index }}
           </div>
           <div v-else class="step-icon step-icon--pending">
-            {{ index + 1 }}
+            {{ index }}
           </div>
         </div>
         <div class="step-line"></div>
@@ -38,16 +41,19 @@
                 class="fr-badge fr-badge--sm fr-badge--info fr-badge--no-icon"
                 >En cours</span
               >
+              <span
+                v-if="index < currentStep"
+                class="fr-badge fr-badge--sm fr-badge--success fr-badge--no-icon"
+                >Fait</span
+              >
             </div>
           </div>
           <p class="fr-text--xs fr-mb-0 fr-mt-1v fr-text-mention--grey">{{ step.description }}</p>
         </header>
 
-        <transition name="expand">
-          <div v-if="currentStep === index" class="step-details fr-mt-2w">
-            <slot :name="`step-${index}`"></slot>
-          </div>
-        </transition>
+        <div v-if="currentStep === index" :key="index" class="step-details fr-mt-2w">
+          <slot :name="`step-${index}`"></slot>
+        </div>
       </div>
     </div>
   </div>

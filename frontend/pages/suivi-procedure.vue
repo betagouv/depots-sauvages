@@ -49,6 +49,9 @@
 
           <StepperProcedure :steps="steps" v-model:currentStep="activeStep">
             <template #step-0>
+              <Constatation :auteur-identifie="auteurIdentifie" />
+            </template>
+            <template #step-1>
               <Documents
                 :dossier-data="dossierData"
                 :has-procedure="hasProcedure"
@@ -58,14 +61,14 @@
                 :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
               />
             </template>
-            <template #step-1>
+            <template #step-2>
               <Notification v-if="auteurIdentifie" />
               <Judiciaire v-else :auteur-identifie="auteurIdentifie" />
             </template>
-            <template #step-2>
+            <template #step-3>
               <SuiviSanction v-if="auteurIdentifie" />
             </template>
-            <template #step-3>
+            <template #step-4>
               <Cloture v-if="auteurIdentifie" />
             </template>
           </StepperProcedure>
@@ -81,13 +84,14 @@ import { DsfrBadge, DsfrButton } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
-import StepperProcedure from '@/components/StepperProcedure.vue'
-import ChargementDossier from '@/components/dn/ChargementDossier.vue'
-import Cloture from '@/components/steps/Cloture.vue'
-import Documents from '@/components/steps/Documents.vue'
-import Judiciaire from '@/components/steps/Judiciaire.vue'
-import Notification from '@/components/steps/Notification.vue'
-import SuiviSanction from '@/components/steps/SuiviSanction.vue'
+import StepperProcedure from '../components/StepperProcedure.vue'
+import ChargementDossier from '../components/dn/ChargementDossier.vue'
+import Cloture from '../components/steps/Cloture.vue'
+import Constatation from '../components/steps/Constatation.vue'
+import Documents from '../components/steps/Documents.vue'
+import Judiciaire from '../components/steps/Judiciaire.vue'
+import Notification from '../components/steps/Notification.vue'
+import SuiviSanction from '../components/steps/SuiviSanction.vue'
 
 import { API_URLS, createResource } from '@/services/api'
 import { getDnDocConstatUrl, getDnLettreInfoUrl, getDnModifyUrl } from '@/services/urls'
@@ -96,7 +100,7 @@ const route = useRoute()
 const showLoading = ref(true)
 const error = ref<string | null>(null)
 const dossierData = ref<any>(null)
-const activeStep = ref(0)
+const activeStep = ref(1)
 
 const hasProcedure = computed(() => dossierData.value?.created !== false)
 const auteurIdentifie = computed(() => dossierData.value?.auteur_identifie ?? false)
@@ -104,6 +108,10 @@ const auteurIdentifie = computed(() => dossierData.value?.auteur_identifie ?? fa
 const steps = computed(() => {
   if (!auteurIdentifie.value) {
     return [
+      {
+        title: 'Constatation',
+        description: 'Constat du dépôt et identification du responsable.',
+      },
       {
         title: 'Documents de procédure',
         description:
@@ -117,6 +125,10 @@ const steps = computed(() => {
   }
 
   return [
+    {
+      title: 'Constatation',
+      description: 'Constat du dépôt et identification du responsable.',
+    },
     {
       title: 'Documents de procédure',
       description: 'Remplir le dossier, collecter les preuves et récupérer les documents types.',
