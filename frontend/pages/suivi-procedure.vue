@@ -114,7 +114,7 @@ const steps = computed(() => {
       },
       {
         title: 'Procédure Judiciaire',
-        description: 'Dépôt de plainte auprès des services de police ou gendarmerie.',
+        description: 'Procédure judiciaire pour donner suite au constat du dépôt.',
       },
     ]
   }
@@ -126,19 +126,19 @@ const steps = computed(() => {
     },
     {
       title: "Notifier l'auteur présumé",
-      description: 'Envoyer le courrier recommandé.',
+      description: "Envoyer la notification officielle à l'auteur présumé.",
     },
     {
       title: "Suivi de l'amende et remise en état",
-      description: 'Remise en état et amende administrative.',
+      description: 'Gérez les suites de la mise en demeure et déterminez les sanctions.',
     },
     {
       title: 'Clôture',
-      description: 'Recouvrement, archivage et clôture.',
+      description: 'Finalisation et archivage du dossier après information du Trésor Public.',
     },
     {
       title: 'Procédure Judiciaire',
-      description: 'Dépôt de plainte (optionnelle).',
+      description: "Procédure optionnelle en cas d'échec de la procédure administrative.",
       optional: true,
     },
   ]

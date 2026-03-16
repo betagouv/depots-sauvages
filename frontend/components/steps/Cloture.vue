@@ -1,6 +1,6 @@
 <template>
   <div class="cloture">
-    <h4 class="fr-h6 fr-mb-2w">Finalisation et archivage du dossier</h4>
+    <h4 class="fr-h6 fr-mb-2w">Ce qu'il vous reste à faire</h4>
     <ListeActions
       step-id="cloture"
       :actions="actions"
