@@ -3,7 +3,7 @@
     <!-- Hero / Header accurately reproduced -->
     <DnBandeauAccueil :has-procedure="hasProcedure" :auteur-identifie="auteurIdentifie" />
 
-    <div class="fr-mt-4w">
+    <div class="fr-mt-2w">
       <DnDocuments
         v-if="hasProcedure"
         :auteur-identifie="auteurIdentifie"
