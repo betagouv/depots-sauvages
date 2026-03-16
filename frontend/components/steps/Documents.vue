@@ -85,7 +85,8 @@ const actions = computed(() => [
     completed: false,
   },
   {
-    label: "Faire signer par le maire ou l'autorité compétente",
+    label:
+      "Signer ou faire signer par l'autorité compétente : maire, adjoint par délégation, ou président d'EPCI par transfert de compétence",
     completed: false,
   },
 ])
