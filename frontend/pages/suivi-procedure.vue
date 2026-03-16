@@ -130,8 +130,8 @@ const steps = computed(() => {
       description: 'Remplir le dossier, collecter les preuves et récupérer les documents types.',
     },
     {
-      title: "Notifier l'auteur des faits",
-      description: 'Envoi du courrier recommandé au responsable.',
+      title: "Notifier l'auteur présumé",
+      description: 'Envoyer le courrier recommandé.',
     },
     {
       title: "Suivi de l'amende et remise en état",
