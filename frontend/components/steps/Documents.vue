@@ -49,23 +49,35 @@ import DnBandeauAccueil from '../dn/DnBandeauAccueil.vue'
 import DnDocuments from '../dn/DnDocuments.vue'
 import ListeActions from './ListeActions.vue'
 
-const actions = computed(() => [
-  {
-    label: props.auteurIdentifie
-      ? "Télécharger, compléter le rapport de constatation et la lettre d'information"
-      : 'Télécharger et compléter le rapport de constatation',
-    completed: false,
-  },
-  {
-    label: 'Joindre les éléments de preuve et les photos au rapport de constatation',
-    completed: false,
-  },
-  {
-    label:
-      "Signer ou faire signer par l'autorité compétente : maire, adjoint par délégation, ou président d'EPCI par transfert de compétence",
-    completed: false,
-  },
-])
+const actions = computed(() => {
+  const baseActions = [
+    {
+      label: props.auteurIdentifie
+        ? "Télécharger le rapport de constatation et la lettre d'information"
+        : 'Télécharger le rapport de constatation',
+      completed: false,
+    },
+    {
+      label: 'Joindre les éléments de preuve et les photos au rapport de constatation',
+      completed: false,
+    },
+    {
+      label:
+        "Compléter et faire signer le rapport de constatation par un agent habilité : le maire, ses adjoints ou conseillers délégués, les policiers municipaux ou gardes champêtres, les agents commissionnés et/ou assermentés de la commune ou de l'EPCI",
+      completed: false,
+    },
+  ]
+
+  if (props.auteurIdentifie) {
+    baseActions.push({
+      label:
+        "Compléter et faire signer la lettre d'information par l'autorité titulaire du pouvoir de police administrative : le maire, adjoints ou conseillers par délégation, président d'EPCI par transfert de compétence",
+      completed: false,
+    })
+  }
+
+  return baseActions
+})
 
 const props = defineProps<{
   dossierData: any

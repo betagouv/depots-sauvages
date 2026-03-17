@@ -3,8 +3,8 @@
     <DsfrHighlight class="fr-ml-0 fr-mb-4w">
       Le délai de contradictoire s’étend sur un minimum de <strong>10 jours</strong> à compter de la
       réception de la lettre d'information. Une fois ce délai écoulé, vous pouvez agir en fonction
-      des éventuelles observations formulées par l’auteur. Plusieurs scénarios sont alors possibles
-      : <strong>Poursuivre la procédure contre l'auteur du dépôt sauvage</strong> ou
+      des éventuelles observations formulées par l’auteur. Plusieurs scénarios sont alors
+      possibles : <strong>Poursuivre la procédure contre l'auteur du dépôt sauvage</strong> ou
       <strong>abandonner les poursuites</strong>.
     </DsfrHighlight>
 
