@@ -143,5 +143,10 @@ import { DsfrHighlight } from '@gouvminint/vue-dsfr'
 .action-icon {
   color: var(--text-active-blue-france);
   flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+li.fr-display-flex {
+  align-items: flex-start;
 }
 </style>

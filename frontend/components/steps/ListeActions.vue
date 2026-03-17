@@ -4,22 +4,20 @@
       <div
         v-for="(action, index) in actions"
         :key="index"
-        class="action-item fr-checkbox-group fr-checkbox-group--sm"
+        class="action-item fr-display-flex"
       >
-        <input
-          type="checkbox"
-          :id="`action-${stepId}-${index}`"
-          :checked="action.completed"
-          disabled
-        />
-        <label class="fr-label fr-display-flex fr-flex-center" :for="`action-${stepId}-${index}`">
+        <span
+          class="fr-icon-checkbox-circle-line fr-mr-1w action-icon"
+          aria-hidden="true"
+        ></span>
+        <span class="action-label">
           {{ action.label }}
           <span
             v-if="action.icon"
-            :class="[action.icon, 'fr-ml-1w', 'action-icon']"
+            :class="[action.icon, 'fr-ml-1w', 'extra-icon']"
             aria-hidden="true"
           ></span>
-        </label>
+        </span>
       </div>
     </div>
 
@@ -63,6 +61,8 @@ defineEmits(['updateCase'])
 }
 
 .action-item {
+  display: flex;
+  align-items: flex-start;
   margin-bottom: 0 !important;
   padding: 0.75rem 1rem;
   background-color: var(--background-alt-grey);
@@ -76,22 +76,18 @@ defineEmits(['updateCase'])
   border-color: var(--border-default-blue-france);
 }
 
-.action-item .fr-label {
+.action-item .action-label {
   margin-bottom: 0;
-  cursor: pointer;
-}
-
-.action-item input[type='checkbox']:disabled + .fr-label {
-  cursor: default;
-  color: var(--text-default-grey);
-}
-
-.action-item input[type='checkbox']:disabled {
-  cursor: default;
 }
 
 .action-icon {
-  font-size: 0.9rem;
   color: var(--text-active-blue-france);
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.extra-icon {
+  font-size: 0.9rem;
+  color: var(--text-mention-grey);
 }
 </style>
