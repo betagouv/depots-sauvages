@@ -16,9 +16,8 @@
           {{ action.label }}
           <span
             v-if="action.icon"
-            :class="[action.icon, 'fr-ml-1w']"
+            :class="[action.icon, 'fr-ml-1w', 'action-icon']"
             aria-hidden="true"
-            style="font-size: 0.9rem; color: var(--text-active-blue-france)"
           ></span>
         </label>
       </div>
@@ -89,5 +88,10 @@ defineEmits(['updateCase'])
 
 .action-item input[type='checkbox']:disabled {
   cursor: default;
+}
+
+.action-icon {
+  font-size: 0.9rem;
+  color: var(--text-active-blue-france);
 }
 </style>
