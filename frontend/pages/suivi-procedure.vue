@@ -144,8 +144,8 @@ const steps = computed(() => {
       description: 'Déterminez les suites à donner à la procédure.',
     },
     {
-      title: 'Clôture du dossier',
-      description: 'Finaliser et archiver le dossier.',
+      title: 'Clôture de la procédure',
+      description: 'Finaliser et archiver la procédure.',
     },
   ]
 })
