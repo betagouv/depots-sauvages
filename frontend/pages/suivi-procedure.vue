@@ -110,7 +110,7 @@ const steps = computed(() => {
     return [
       {
         title: 'Constatation',
-        description: 'Constat du dépôt et identification du responsable.',
+        description: 'Constat du dépôt et début de la procédure.',
       },
       {
         title: 'Documents de procédure',
@@ -127,7 +127,7 @@ const steps = computed(() => {
   return [
     {
       title: 'Constatation',
-      description: 'Constat du dépôt et identification du responsable.',
+      description: 'Constat du dépôt et début de la procédure.',
     },
     {
       title: 'Documents de procédure',

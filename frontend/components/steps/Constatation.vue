@@ -15,11 +15,11 @@ const props = defineProps<{
 
 const actions = computed(() => [
   {
-    label: 'Constat du dépôt sauvage',
+    label: 'Constater le dépôt sauvage',
     completed: true,
   },
   {
-    label: 'Remplissage du formulaire de la procédure administrative sur Démarches Numériques',
+    label: 'Remplir le formulaire sur Démarches Numériques',
     completed: true,
   },
 ])
