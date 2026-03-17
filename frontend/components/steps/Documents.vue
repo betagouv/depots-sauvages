@@ -63,6 +63,10 @@ const actions = computed(() => [
     completed: false,
   },
   {
+    label: 'Joindre les éléments de preuve et les photos au rapport de constatation',
+    completed: false,
+  },
+  {
     label:
       "Signer ou faire signer par l'autorité compétente : maire, adjoint par délégation, ou président d'EPCI par transfert de compétence",
     completed: false,
