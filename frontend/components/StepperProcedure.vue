@@ -6,14 +6,14 @@
       class="step-item"
       :class="{
         'step--active': currentStep === index,
-        'step--completed': index < currentStep,
-        'step--pending': index > currentStep,
+        'step--completed': index === 0 && currentStep > 0,
+        'step--pending': index !== currentStep && (index > 0 || currentStep === 0),
         'step--optional': step.optional,
       }"
     >
       <div class="step-sidebar">
         <div class="step-icon-container" @click="$emit('update:currentStep', index)">
-          <div v-if="index < currentStep" class="step-icon step-icon--completed">
+          <div v-if="index === 0 && currentStep > 0" class="step-icon step-icon--completed">
             <span class="fr-icon-check-line fr-icon--sm" aria-hidden="true"></span>
           </div>
           <div v-else-if="currentStep === index" class="step-icon step-icon--active">
@@ -37,12 +37,7 @@
                 >Optionnel</span
               >
               <span
-                v-if="currentStep === index"
-                class="fr-badge fr-badge--sm fr-badge--info fr-badge--no-icon"
-                >En cours</span
-              >
-              <span
-                v-if="index < currentStep"
+                v-if="index === 0 && currentStep > 0"
                 class="fr-badge fr-badge--sm fr-badge--success fr-badge--no-icon"
                 >Fait</span
               >
@@ -126,9 +121,9 @@ defineEmits(['update:currentStep'])
 }
 
 .step-icon--pending {
-  background-color: var(--background-alt-grey);
-  color: var(--text-mention-grey);
-  border: 1px solid var(--border-default-grey);
+  background-color: white;
+  color: var(--text-active-blue-france);
+  border: 1px solid var(--border-active-blue-france);
 }
 
 .step-line {
@@ -187,20 +182,5 @@ defineEmits(['update:currentStep'])
 
 .step-details {
   background-color: white;
-}
-
-/* Transitions */
-.expand-enter-active,
-.expand-leave-active {
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  max-height: 1000px;
-  overflow: hidden;
-}
-
-.expand-enter-from,
-.expand-leave-to {
-  max-height: 0;
-  opacity: 0;
-  transform: translateY(-10px);
 }
 </style>
