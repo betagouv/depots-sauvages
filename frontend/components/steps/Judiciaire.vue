@@ -1,13 +1,9 @@
 <template>
   <div class="judiciaire">
+    <DsfrHighlight class="fr-ml-0 fr-mb-2w">
+      Déposer plainte en Gendarmerie ou Police Nationale. Utilisez le document de constatation déjà rédigé pour appuyer votre dépôt.
+    </DsfrHighlight>
     <h4 class="fr-h6 fr-mb-2w">Ce qu'il vous reste à faire</h4>
-    <DsfrAlert
-      type="info"
-      title="Note"
-      description="Déposer plainte en Gendarmerie ou Police Nationale. Utilisez le document de constatation déjà rédigé pour appuyer votre dépôt."
-      small
-      class="fr-mb-2w"
-    />
     <ListeActions
       step-id="judiciaire"
       :actions="actions"
@@ -17,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { DsfrAlert } from '@gouvminint/vue-dsfr'
+import { DsfrHighlight } from '@gouvminint/vue-dsfr'
 import { reactive } from 'vue'
 import ListeActions from './ListeActions.vue'
 
