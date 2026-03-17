@@ -114,8 +114,7 @@ const steps = computed(() => {
       },
       {
         title: 'Documents de procédure',
-        description:
-          'Remplir le dossier, collecter les preuves et récupérer le rapport de constatation.',
+        description: 'Collecter les preuves et compléter le rapport de constatation.',
       },
       {
         title: 'Procédure Judiciaire',
@@ -131,7 +130,7 @@ const steps = computed(() => {
     },
     {
       title: 'Documents de procédure',
-      description: 'Remplir le dossier, collecter les preuves et récupérer les documents types.',
+      description: 'Collecter les preuves et compléter les documents.',
     },
     {
       title: "Notifier l'auteur présumé",

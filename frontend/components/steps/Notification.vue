@@ -25,7 +25,7 @@ const actions = reactive([
     completed: false,
   },
   {
-    label: "Réception de l'accusé de réception (point de départ du contradictoire)",
+    label: "Réceptionner l'accusé de réception : point de départ de la période du contradictoire",
     completed: false,
   },
 ])
