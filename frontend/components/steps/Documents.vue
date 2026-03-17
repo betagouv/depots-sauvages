@@ -52,12 +52,6 @@ import ListeActions from './ListeActions.vue'
 const actions = computed(() => [
   {
     label: props.auteurIdentifie
-      ? "Numériser et conserver les éléments d'identification de l'auteur et de constat du dépôt"
-      : 'Numériser et conserver les éléments de constat du dépôt',
-    completed: false,
-  },
-  {
-    label: props.auteurIdentifie
       ? "Télécharger, compléter le rapport de constatation et la lettre d'information"
       : 'Télécharger et compléter le rapport de constatation',
     completed: false,
