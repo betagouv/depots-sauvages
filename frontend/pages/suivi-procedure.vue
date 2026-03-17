@@ -137,7 +137,7 @@ const steps = computed(() => {
       description: "Envoyer la notification officielle à l'auteur présumé.",
     },
     {
-      title: "Suivi de l'amende et remise en état",
+      title: "Poursuites éventuelles de l'auteur présumé",
       description: 'Gérez les suites de la mise en demeure et déterminez les sanctions.',
     },
     {
