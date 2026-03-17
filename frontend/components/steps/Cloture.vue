@@ -9,7 +9,7 @@
     </ListeActions>
 
     <DsfrHighlight class="fr-ml-0 fr-mt-4w">
-      <span class="fr-icon-info-line fr-icon--sm fr-mr-1v" aria-hidden="true"></span>
+      <span class="fr-icon-info-line" aria-hidden="true"></span>
       Le Trésor public se charge de la perception de l'amende. En cas d'insolvabilité de l'auteur,
       la mairie n'est évidemment pas redevable de ce montant.
     </DsfrHighlight>
