@@ -14,6 +14,12 @@
         />
         <label class="fr-label fr-display-flex fr-flex-center" :for="`action-${stepId}-${index}`">
           {{ action.label }}
+          <span
+            v-if="action.icon"
+            :class="[action.icon, 'fr-ml-1w']"
+            aria-hidden="true"
+            style="font-size: 0.9rem; color: var(--text-active-blue-france)"
+          ></span>
         </label>
       </div>
     </div>
@@ -29,6 +35,7 @@ export interface Action {
   label: string
   completed?: boolean
   readonly?: boolean
+  icon?: string
 }
 
 defineProps<{

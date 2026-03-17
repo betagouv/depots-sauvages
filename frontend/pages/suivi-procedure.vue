@@ -118,7 +118,7 @@ const steps = computed(() => {
       },
       {
         title: 'Procédure Judiciaire',
-        description: 'Procédure judiciaire pour donner suite au constat du dépôt.',
+        description: 'Déposer plainte pour initier une procédure judiciaire.',
       },
     ]
   }
@@ -137,12 +137,12 @@ const steps = computed(() => {
       description: "Envoyer la notification officielle à l'auteur présumé.",
     },
     {
-      title: "Poursuites éventuelles de l'auteur présumé",
+      title: "Poursuites éventuelles de l'auteur présumé.",
       description: 'Gérez les suites de la mise en demeure et déterminez les sanctions.',
     },
     {
-      title: 'Clôture',
-      description: 'Finalisation et archivage du dossier après information du Trésor Public.',
+      title: 'Clôture du dossier',
+      description: 'Finaliser et archiver le dossier.',
     },
   ]
 })
