@@ -17,7 +17,7 @@ import ListeActions from './ListeActions.vue'
 
 const actions = reactive([
   {
-    label: "Envoyer la lettre d'information en recommandé avec AR",
+    label: "Envoyer la lettre d'information en recommandé avec accusé de réception",
     completed: false,
   },
   {
@@ -25,7 +25,8 @@ const actions = reactive([
     completed: false,
   },
   {
-    label: "Réceptionner l'accusé de réception : point de départ de la période du contradictoire",
+    label:
+      "Réceptionner l'accusé de réception : c'est le point de départ de la période du contradictoire",
     completed: false,
   },
 ])

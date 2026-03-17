@@ -134,7 +134,7 @@ const steps = computed(() => {
     },
     {
       title: "Notifier l'auteur présumé",
-      description: "Envoyer la notification officielle à l'auteur présumé.",
+      description: "Envoyer la lettre d'information à l'auteur présumé.",
     },
     {
       title: "Poursuites éventuelles de l'auteur présumé.",
