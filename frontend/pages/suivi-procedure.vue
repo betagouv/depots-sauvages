@@ -63,7 +63,11 @@
             </template>
             <template #step-2>
               <Notification v-if="auteurIdentifie" />
-              <Judiciaire v-else :auteur-identifie="auteurIdentifie" />
+              <Identification
+                v-else
+                :auteur-identifie="auteurIdentifie"
+                :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
+              />
             </template>
             <template #step-3>
               <SuiviSanction
@@ -92,7 +96,7 @@ import ChargementDossier from '../components/dn/ChargementDossier.vue'
 import Cloture from '../components/steps/Cloture.vue'
 import Constatation from '../components/steps/Constatation.vue'
 import Documents from '../components/steps/Documents.vue'
-import Judiciaire from '../components/steps/Judiciaire.vue'
+import Identification from '../components/steps/Identification.vue'
 import Notification from '../components/steps/Notification.vue'
 import SuiviSanction from '../components/steps/SuiviSanction.vue'
 
@@ -120,8 +124,8 @@ const steps = computed(() => {
         description: 'Télécharger et compléter les pièces de procédure.',
       },
       {
-        title: 'Procédure Judiciaire',
-        description: 'Déposer plainte pour initier une procédure judiciaire.',
+        title: "Identification de l'auteur",
+        description: "Identifier l'auteur des faits. Porter plainte.",
       },
     ]
   }
