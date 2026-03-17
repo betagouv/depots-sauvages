@@ -66,7 +66,10 @@
               <Judiciaire v-else :auteur-identifie="auteurIdentifie" />
             </template>
             <template #step-3>
-              <SuiviSanction v-if="auteurIdentifie" />
+              <SuiviSanction
+                v-if="auteurIdentifie"
+                :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
+              />
             </template>
             <template #step-4>
               <Cloture v-if="auteurIdentifie" />
@@ -138,7 +141,7 @@ const steps = computed(() => {
     },
     {
       title: "Poursuites éventuelles de l'auteur présumé.",
-      description: 'Gérez les suites de la mise en demeure et déterminez les sanctions.',
+      description: 'Déterminez les suites à donner à la procédure.',
     },
     {
       title: 'Clôture du dossier',
