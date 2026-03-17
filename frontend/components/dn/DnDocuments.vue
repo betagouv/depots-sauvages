@@ -26,7 +26,7 @@
     <div v-if="auteurIdentifie" class="fr-col-12 fr-col-md-6">
       <DsfrCard
         title="Lettre d'information"
-        description="Courrier rappelant les faits constatés et les obligations de l'auteur du responsable probable du dépôt sauvage."
+        description="Courrier rappelant les faits constatés et les obligations de l'auteur présumé du dépôt sauvage."
         :buttons="[
           {
             label: 'Télécharger',
@@ -41,7 +41,7 @@
         <template #end-details>
           <p class="fr-text-mention--grey">
             <VIcon name="ri-mail-send-line" class="fr-mr-1w" />
-            À envoyer à l'auteur probable des faits.
+            À envoyer à l'auteur présumé des faits.
           </p>
         </template>
       </DsfrCard>

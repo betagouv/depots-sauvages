@@ -107,7 +107,7 @@ const cardsFonctionnement = [
       'Un formulaire simple et rapide à remplir pour identifier le dépôt sauvage (lieu, type de déchets, photos...).',
   },
   {
-    titre: 'Récupérer mes documents de procédure',
+    titre: 'Récupérer mes pièces de procédure',
     description:
       'À partir de ces informations, Protect’Envi génère des documents pré-remplis, conformes aux exigences administratives (lettre d’information, rapport de constatation).',
   },

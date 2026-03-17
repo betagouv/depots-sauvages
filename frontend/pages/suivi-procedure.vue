@@ -113,8 +113,8 @@ const steps = computed(() => {
         description: 'Constater le dépôt et débuter de la procédure.',
       },
       {
-        title: 'Documents de procédure',
-        description: 'Collecter les preuves et compléter le rapport de constatation.',
+        title: 'Pièces de procédure',
+        description: 'Télécharger et compléter les pièces de procédure.',
       },
       {
         title: 'Procédure Judiciaire',
@@ -129,8 +129,8 @@ const steps = computed(() => {
       description: 'Constater le dépôt et débuter de la procédure.',
     },
     {
-      title: 'Documents de procédure',
-      description: 'Collecter les preuves et compléter les documents.',
+      title: 'Pièces de procédure',
+      description: 'Télécharger et compléter les pièces de procédure.',
     },
     {
       title: "Notifier l'auteur présumé",
