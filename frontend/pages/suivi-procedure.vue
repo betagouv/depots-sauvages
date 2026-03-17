@@ -31,6 +31,38 @@
                 &middot; Modifié le {{ formatDate(dossierData.date_modification) }}
               </span>
             </div>
+
+            <div v-if="dossierData.date_constat || dossierData.localisation_depot" class="fr-mb-4w">
+              <div class="fr-grid-row fr-grid-row--gutters">
+                <div
+                  v-if="dossierData.date_constat"
+                  class="fr-col-12 fr-col-md-6 fr-text--sm fr-mb-2w fr-mb-md-0"
+                >
+                  <div class="fr-display-flex fr-align-items-center fr-mb-1v">
+                    <span
+                      class="fr-icon-calendar-line fr-icon--sm fr-mr-1v fr-text-active--blue-france"
+                      aria-hidden="true"
+                    ></span>
+                    <strong>Date de constatation :</strong>
+                  </div>
+                  <div class="fr-ml-3w fr-text--bold fr-text-title--grey">
+                    {{ formatDate(dossierData.date_constat) }}
+                  </div>
+                </div>
+                <div v-if="dossierData.localisation_depot" class="fr-col-12 fr-col-md-6 fr-text--sm">
+                  <div class="fr-display-flex fr-align-items-center fr-mb-1v">
+                    <span
+                      class="fr-icon-map-pin-2-line fr-icon--sm fr-mr-1v fr-text-active--blue-france"
+                      aria-hidden="true"
+                    ></span>
+                    <strong>Adresse du dépôt :</strong>
+                  </div>
+                  <div class="fr-ml-3w fr-text-title--grey">
+                    {{ dossierData.localisation_depot }}
+                  </div>
+                </div>
+              </div>
+            </div>
             <div>
               <DsfrBadge
                 :type="auteurIdentifie ? 'success' : 'info'"
