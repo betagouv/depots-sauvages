@@ -156,11 +156,11 @@ const steps = computed(() => {
       },
       {
         title: 'Pièces de procédure',
-        description: 'Télécharger et compléter les pièces de procédure.',
+        description: 'Télécharger et compléter le rapport de constatation.',
       },
       {
         title: "Identification de l'auteur",
-        description: "Identifier l'auteur des faits. Porter plainte.",
+        description: "Identifier l'auteur des faits ou porter plainte.",
       },
     ]
   }
