@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <DnLoading
+    <ChargementDossier
       v-if="showLoading || dossierStore.syncing"
       :message="
         dossierStore.syncing
@@ -54,7 +54,7 @@
                       aria-hidden="true"
                     ></span>
                     Créé le {{ formatDate(dossier.date_creation) }}
-                    <span v-if="dossier.date_modification">
+                    <span v-if="shouldShowModificationDate(dossier.date_creation, dossier.date_modification)">
                       &middot; Modifié le {{ formatDate(dossier.date_modification) }}
                     </span>
                   </div>
@@ -87,10 +87,10 @@
                   </li>
                   <li>
                     <DsfrButton
-                      label="Documents de procédure"
+                      label="Suivre la procédure"
                       :icon="{ name: 'ri-file-list-line', class: 'fr-mr-1w' }"
                       icon-right
-                      @click="router.push(getSignalementDocumentsUrl(dossier.numero_dossier))"
+                      @click="router.push(getSuiviProcedureUrl(dossier.numero_dossier))"
                     />
                   </li>
                 </ul>
@@ -112,12 +112,13 @@
 </template>
 
 <script setup lang="ts">
+import { formatDate, shouldShowModificationDate } from '@/utils/date'
 import { useDossierStore } from '@/stores/dossier'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import DnLoading from '../components/dn/DnLoading.vue'
+import ChargementDossier from '../components/dn/ChargementDossier.vue'
 import { getUserInfo, type UserInfo } from '../services/api'
-import { getDnModifyUrl, getSignalementDocumentsUrl } from '../services/urls'
+import { getDnModifyUrl, getSuiviProcedureUrl } from '../services/urls'
 
 const router = useRouter()
 const userInfo = ref<UserInfo | null>(null)
@@ -146,16 +147,6 @@ const openExternalLink = (url: string) => {
   }
 }
 
-const formatDate = (dateStr?: string) => {
-  if (!dateStr) return 'Date inconnue'
-  return new Date(dateStr).toLocaleString('fr-FR', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  })
-}
 
 const handleManualSync = async () => {
   try {

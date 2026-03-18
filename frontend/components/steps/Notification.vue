@@ -1,0 +1,33 @@
+<template>
+  <div class="notification">
+    <h4 class="fr-h6 fr-mb-2w">Ce qu'il vous reste à faire</h4>
+    <ListeActions
+      step-id="notif"
+      :actions="actions"
+      @updateCase="(action, val) => (action.completed = val)"
+    >
+      <template #actions> </template>
+    </ListeActions>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { reactive } from 'vue'
+import ListeActions from './ListeActions.vue'
+
+const actions = reactive([
+  {
+    label: "Envoyer la lettre d'information en recommandé avec accusé de réception",
+    completed: false,
+  },
+  {
+    label: 'Conserver une copie de tous les documents pour vos archives',
+    completed: false,
+  },
+  {
+    label:
+      "Réceptionner l'accusé de réception : c'est le point de départ de la période du contradictoire",
+    completed: false,
+  },
+])
+</script>

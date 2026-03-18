@@ -25,6 +25,10 @@ export const getSignalementDocumentsUrl = (id: number | string) => {
   return `/signalements-dn/${id}`
 }
 
+export const getSuiviProcedureUrl = (id: number | string) => {
+  return `/suivi-procedure/${id}`
+}
+
 export const getDnModifyUrl = (numeroDossier: string | null) => {
   if (!numeroDossier) return ''
   return `${DN_BASE_URL}/dossiers/${numeroDossier}/modifier`

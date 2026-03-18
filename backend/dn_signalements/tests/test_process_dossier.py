@@ -83,3 +83,31 @@ def test_process_dossier_returns_error_on_permission_issue(client):
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         response_data = response.json()
         assert "error" in response_data
+
+
+def test_process_dossier_returns_full_date_constat(client):
+    """Test that date_constat in response is a full ISO datetime string."""
+    user = UserFactory()
+    client.force_login(user)
+    url = reverse("signalements-process-dn-dossier")
+    data = {"dossier_id": 12345}
+    # Mock DN client to return a dossier with date_constat
+    mock_dossier = {
+        "champs": [
+            {
+                "id": "Q2hhbXAtNTYxNzM2MQ==",
+                "datetime": "2026-03-11T12:16:00Z",
+                "__typename": "DatetimeChamp",
+            }
+        ],
+        "usager": {"email": "test@example.com"},
+        "dateDepot": "2026-01-01T10:00:00Z",
+    }
+    with patch("backend.dn.client.DNGraphQLClient.get_dossier", return_value=mock_dossier):
+        response = client.post(url, data, content_type="application/json")
+        assert response.status_code == status.HTTP_200_OK
+        response_data = response.json()
+        assert response_data["created"] is True
+        # The date_constat should be a full ISO string (including time)
+        # Note: DRF serializes datetime as "YYYY-MM-DDTHH:MM:SSZ" (UTC)
+        assert response_data["date_constat"].startswith("2026-03-11T12:16:00")

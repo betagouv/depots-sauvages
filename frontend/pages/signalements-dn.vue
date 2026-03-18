@@ -1,6 +1,6 @@
 <template>
   <div>
-    <DnLoading v-if="showLoading" />
+    <ChargementDossier v-if="showLoading" />
     <div v-else>
       <div v-if="error" class="fr-container fr-mb-4w fr-mt-4w" role="alert" aria-live="polite">
         <div class="fr-alert fr-alert--error">
@@ -10,7 +10,7 @@
       </div>
 
       <div v-else-if="dossierData">
-        <DnHero :has-procedure="hasProcedure" :auteur-identifie="auteurIdentifie" />
+        <DnBandeauAccueil :has-procedure="hasProcedure" :auteur-identifie="auteurIdentifie" />
 
         <div class="fr-container">
           <DnDocuments
@@ -38,13 +38,6 @@
             />
           </div>
 
-          <div v-if="hasProcedure">
-            <InfoAuteurIdentifie v-if="auteurIdentifie" />
-            <InfoAuteurNonIdentifie
-              v-else
-              :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
-            />
-          </div>
 
           <DnInfos
             :dn-numero-dossier="dossierData.dn_numero_dossier"
@@ -53,11 +46,6 @@
             :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
           />
 
-          <div v-if="hasProcedure" class="fr-grid-row fr-grid-row--gutters fr-mt-2w">
-            <div class="fr-col-12">
-              <RessourcesUtiles />
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -69,13 +57,10 @@ import { useDossierStore } from '@/stores/dossier'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
+import ChargementDossier from '../components/dn/ChargementDossier.vue'
+import DnBandeauAccueil from '../components/dn/DnBandeauAccueil.vue'
 import DnDocuments from '../components/dn/DnDocuments.vue'
-import DnHero from '../components/dn/DnHero.vue'
 import DnInfos from '../components/dn/DnInfos.vue'
-import DnLoading from '../components/dn/DnLoading.vue'
-import InfoAuteurIdentifie from '../components/dn/InfoAuteurIdentifie.vue'
-import InfoAuteurNonIdentifie from '../components/dn/InfoAuteurNonIdentifie.vue'
-import RessourcesUtiles from '../components/dn/RessourcesUtiles.vue'
 
 import { API_URLS, createResource } from '../services/api'
 import { getDnDocConstatUrl, getDnLettreInfoUrl, getDnModifyUrl } from '../services/urls'
