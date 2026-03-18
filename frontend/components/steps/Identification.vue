@@ -19,14 +19,14 @@
             </li>
             <li class="fr-mb-1w">
               La <strong>gendarmerie peut communiquer à la police municipale</strong> les
-              informations du SIV (système d’immatriculation des véhicules).
+              informations du SIV (système d'immatriculation des véhicules).
             </li>
             <li class="fr-mb-1w">
-              Si la mairie n’a pas de police municipale, rapprochez-vous de la brigade de
-              gendarmerie pour connaître les modalités de communication d’identité (selon la
+              Si la mairie n'a pas de police municipale, rapprochez-vous de la brigade de
+              gendarmerie pour connaître les modalités de communication d'identité (selon la
               politique pénale locale).
               <a
-                href="https://fichiers.numerique.gouv.fr/explorer/items/50055a0b-bcfc-472c-8ec1-9f267a11e2c4"
+                href="https://fichiers.numerique.gouv.fr/explorer/items/files/c7935d81-0c1d-488f-b7ab-9e3686cc7858"
                 target="_blank"
                 >(Modèle de courrier)</a
               >.
@@ -37,7 +37,7 @@
             <a
               :href="modifyUrl"
               target="_blank"
-              class="fr-link fr-icon-external-link-line fr-link--icon-right"
+              class="fr-text--sm fr-link fr-icon-external-link-line fr-link--icon-right"
             >
               Modifier la procédure sur Démarche Numérique
             </a>
@@ -67,7 +67,7 @@
               de plainte.
             </li>
             <li class="fr-mb-1w">
-              En tant qu’OPJ, le maire peut demander la communication de l’adresse de l’auteur
+              En tant qu'OPJ, le maire peut demander la communication de l'adresse de l'auteur
               potentiel au procureur de la République.
               <a
                 href="https://docs.numerique.gouv.fr/docs/a89aad6d-bcdf-4f28-b6f2-e34c83e62313/"
