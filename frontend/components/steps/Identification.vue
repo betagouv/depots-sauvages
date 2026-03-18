@@ -3,7 +3,7 @@
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12 fr-col-md-6">
         <div class="procedure-choice fr-p-3w">
-          <h5 class="fr-h5 fr-mb-2w">Identification de l'auteur via l'immatriculation</h5>
+          <h5 class="fr-h5 fr-mb-2w">Identifier l'auteur via l'immatriculation</h5>
           <p class="fr-text--sm">
             Vous avez l'immatriculation du véhicule de l'auteur présumé, mais vous n'avez pas
             l'identité complète (Nom, prénom, adresse postale) :
@@ -33,14 +33,13 @@
             </li>
           </ul>
           <p class="fr-text--sm fr-mb-0">
-            Une fois l'identité déterminée, vous pouvez mettre à jour votre dossier afin d'initier
-            une procédure administrative :
+            Une fois l'identité déterminée, vous pouvez mettre à jour votre procédure :
             <a
               :href="modifyUrl"
               target="_blank"
               class="fr-link fr-icon-external-link-line fr-link--icon-right"
             >
-              Modifier le dossier sur Démarche Numérique
+              Modifier la procédure sur Démarche Numérique
             </a>
           </p>
         </div>
@@ -48,10 +47,10 @@
 
       <div class="fr-col-12 fr-col-md-6">
         <div class="procedure-choice fr-p-3w">
-          <h5 class="fr-h5 fr-mb-2w">Vous n'avez pas l'identité complète : porter plainte</h5>
+          <h5 class="fr-h5 fr-mb-2w">Identifier l'auteur via une enquête judiciaire</h5>
           <p class="fr-text--sm">
-            Vous n'avez pas l'identité complète (Nom, Prénom, adresse postale), vous devez porter
-            plainte.
+            Vous n'avez pas l'identité complète (Nom, Prénom, adresse postale), vous pouvez porter
+            plainte pour que l'auteur soit identifié par une enquête judiciaire.
           </p>
           <ul class="fr-pl-2w fr-mb-2w fr-text--sm">
             <li class="fr-mb-1w">
