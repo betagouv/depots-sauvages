@@ -32,7 +32,7 @@
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12 fr-col-md-6">
         <div class="procedure-choice fr-p-3w">
-          <h5 class="fr-h5 fr-mb-2w">1. Sanctionner l'auteur</h5>
+          <h5 class="fr-h5 fr-mb-2w">Sanctionner l'auteur</h5>
           <ul class="fr-p-0 fr-m-0" style="list-style: none">
             <li class="fr-mb-2w fr-display-flex">
               <span
@@ -93,7 +93,7 @@
 
       <div class="fr-col-12 fr-col-md-6">
         <div class="procedure-choice fr-p-3w">
-          <h5 class="fr-h5 fr-mb-2w">2. Abandonner les poursuites</h5>
+          <h5 class="fr-h5 fr-mb-2w">Abandonner les poursuites</h5>
           <ul class="fr-p-0 fr-m-0" style="list-style: none">
             <li class="fr-mb-2w fr-display-flex">
               <span
