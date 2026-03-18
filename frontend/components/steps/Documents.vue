@@ -4,32 +4,12 @@
 
     <div class="fr-mt-2w">
       <DnDocuments
-        v-if="hasProcedure"
         :auteur-identifie="auteurIdentifie"
         :doc-constat-url="docConstatUrl"
         :lettre-info-url="lettreInfoUrl"
       />
 
-      <div v-else class="fr-mb-4w">
-        <p class="">
-          Pour récupérer vos documents, merci de
-          <a
-            :href="modifyUrl"
-            class="fr-link fr-icon-external-link-line fr-link--icon-right"
-            target="_blank"
-            rel="noopener noreferrer"
-            >mettre à jour votre dossier sur la plateforme Démarches Numériques</a
-          >.
-        </p>
-        <DsfrAlert
-          type="info"
-          title="Note"
-          description="Les formulaires de Protect’Envi évoluent régulièrement. Si vous avez rempli une version antérieure, une mise à jour de certaines informations peut être nécessaire pour accéder à vos documents."
-          small
-        />
-      </div>
-
-      <div v-if="hasProcedure" class="fr-mb-4w fr-mt-4w">
+      <div class="fr-mb-4w fr-mt-4w">
         <h4 class="fr-h6 fr-mb-2w">Ce qu'il vous reste à faire</h4>
         <ListeActions
           step-id="constat-documents"

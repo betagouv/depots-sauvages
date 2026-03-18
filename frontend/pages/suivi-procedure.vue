@@ -66,7 +66,7 @@
                 </div>
               </div>
             </div>
-            <div>
+            <div v-if="hasProcedure">
               <DsfrBadge
                 :type="auteurIdentifie ? 'success' : 'info'"
                 :label="auteurIdentifie ? 'Auteur identifié' : 'Auteur non identifié'"
@@ -87,7 +87,9 @@
               <Constatation :auteur-identifie="auteurIdentifie" />
             </template>
             <template #step-1>
+              <NoProcedure v-if="!hasProcedure" :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)" />
               <Documents
+                v-else
                 :dossier-data="dossierData"
                 :has-procedure="hasProcedure"
                 :auteur-identifie="auteurIdentifie"
@@ -96,7 +98,7 @@
                 :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
               />
             </template>
-            <template #step-2>
+            <template v-if="hasProcedure" #step-2>
               <Notification v-if="auteurIdentifie" />
               <Identification
                 v-else
@@ -104,13 +106,13 @@
                 :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
               />
             </template>
-            <template #step-3>
+            <template v-if="hasProcedure" #step-3>
               <SuiviSanction
                 v-if="auteurIdentifie"
                 :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
               />
             </template>
-            <template #step-4>
+            <template v-if="hasProcedure" #step-4>
               <Cloture v-if="auteurIdentifie" />
             </template>
           </StepperProcedure>
@@ -132,6 +134,7 @@ import Cloture from '../components/steps/Cloture.vue'
 import Constatation from '../components/steps/Constatation.vue'
 import Documents from '../components/steps/Documents.vue'
 import Identification from '../components/steps/Identification.vue'
+import NoProcedure from '../components/steps/NoProcedure.vue'
 import Notification from '../components/steps/Notification.vue'
 import SuiviSanction from '../components/steps/SuiviSanction.vue'
 
@@ -148,6 +151,19 @@ const hasProcedure = computed(() => dossierData.value?.created !== false)
 const auteurIdentifie = computed(() => dossierData.value?.auteur_identifie ?? false)
 
 const steps = computed(() => {
+  if (!hasProcedure.value) {
+    return [
+      {
+        title: 'Constatation',
+        description: 'Constater le dépôt et remplir le formulaire.',
+      },
+      {
+        title: 'Procédure à mettre à jour',
+        description: 'Mettre à jour la procédure sur Démarches Numériques.',
+      },
+    ]
+  }
+
   if (!auteurIdentifie.value) {
     return [
       {
