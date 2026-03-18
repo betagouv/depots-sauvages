@@ -49,8 +49,8 @@ class ProcessDossierView(APIView):
         # Map metadata back to model fields since model is not changing yet
         model_defaults = {
             **signalement_data,
-            "dn_date_creation": dn_metadata.get("date_creation"),
-            "dn_date_modification": dn_metadata.get("date_modification"),
+            "dn_date_creation": dn_metadata.get("dn_date_creation"),
+            "dn_date_modification": dn_metadata.get("dn_date_modification"),
         }
         signalement, _ = DNSignalement.objects.update_or_create(
             dn_numero_dossier=numero_dossier, defaults=model_defaults
@@ -65,9 +65,13 @@ class ProcessDossierView(APIView):
 
     def extract_dn_metadata(self, dossier):
         """Extract DN administrative metadata."""
+        date_creation = self.parse_datetime(dossier.get("dateDepot"))
+        date_modification = self.parse_datetime(dossier.get("dateDerniereModification"))
         return {
-            "date_creation": self.parse_datetime(dossier.get("dateDepot")),
-            "date_modification": self.parse_datetime(dossier.get("dateDerniereModification")),
+            "date_creation": date_creation,
+            "date_modification": date_modification,
+            "dn_date_creation": date_creation,
+            "dn_date_modification": date_modification,
         }
 
     def dossier_to_model_data(self, dossier):
@@ -79,7 +83,7 @@ class ProcessDossierView(APIView):
         if not datetime_constat:
             return None
         data = {
-            "date_constat": datetime_constat.date(),
+            "date_constat": datetime_constat,
             "heure_constat": datetime_constat.time(),
         }
         for champ_id, value in champs_data.items():
