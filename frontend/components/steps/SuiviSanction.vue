@@ -40,8 +40,8 @@
                 aria-hidden="true"
               ></span>
               <span>
-                Fixer le montant de l'amende administrative (montant proportionné avec un maximum de
-                15 000 €).
+                Fixer le montant de l'amende administrative (montant proportionné à la gravité des
+                faits, jusqu'à 15 000 € maximum).
                 <a
                   href="https://fichiers.numerique.gouv.fr/explorer/items/files/df51fe02-90dd-4afc-9346-8ae9b56fcea4"
                   target="_blank"
@@ -80,7 +80,7 @@
               <span>
                 Notifier l'auteur.
                 <a
-                  href="https://fichiers.numerique.gouv.fr/explorer/items/50055a0b-bcfc-472c-8ec1-9f267a11e2c4"
+                  href="https://fichiers.numerique.gouv.fr/explorer/items/files/563be397-7e6d-4d69-b1aa-42598d2f71c6"
                   target="_blank"
                 >
                   Voir le modèle de courrier de notification d'amende.</a
@@ -120,7 +120,8 @@
                 Le cas échéant, la procédure peut être établie à l'encontre d'un autre auteur
                 identifié (ex. prestataire, sous-traitant, fournisseur, client, intermédiaire).
                 <a :href="modifyUrl" target="_blank">
-                  Modifier la procédure sur Démarche Numérique.</a>
+                  Modifier la procédure sur Démarche Numérique.</a
+                >
               </span>
             </li>
           </ul>
