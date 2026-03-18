@@ -152,7 +152,7 @@ const steps = computed(() => {
     return [
       {
         title: 'Constatation',
-        description: 'Constater le dépôt et débuter de la procédure.',
+        description: 'Constater le dépôt et remplir le formulaire.',
       },
       {
         title: 'Pièces de procédure',
@@ -168,7 +168,7 @@ const steps = computed(() => {
   return [
     {
       title: 'Constatation',
-      description: 'Constater le dépôt et débuter de la procédure.',
+      description: 'Constater le dépôt et remplir le formulaire.',
     },
     {
       title: 'Pièces de procédure',
