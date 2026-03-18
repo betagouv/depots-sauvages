@@ -63,7 +63,7 @@ const actions = computed(() => {
     },
     {
       label:
-        "Compléter et faire signer le rapport de constatation par un agent habilité : le maire, ses adjoints ou conseillers délégués, les policiers municipaux ou gardes champêtres, les agents commissionnés et/ou assermentés de la commune ou de l'EPCI",
+        "Compléter et faire signer le <strong>rapport de constatation</strong> par un agent habilité : le maire, ses adjoints ou conseillers délégués, les policiers municipaux ou gardes champêtres, les agents commissionnés et/ou assermentés de la commune ou de l'EPCI",
       completed: false,
     },
   ]
@@ -71,7 +71,7 @@ const actions = computed(() => {
   if (props.auteurIdentifie) {
     baseActions.push({
       label:
-        "Compléter et faire signer la lettre d'information par l'autorité titulaire du pouvoir de police administrative : le maire, adjoints ou conseillers par délégation, président d'EPCI par transfert de compétence",
+        "Compléter et faire signer la <strong>lettre d'information</strong> par l'autorité titulaire du pouvoir de police administrative : le maire, adjoints ou conseillers par délégation, président d'EPCI par transfert de compétence",
       completed: false,
     })
   }

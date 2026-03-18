@@ -11,7 +11,7 @@
           aria-hidden="true"
         ></span>
         <span class="action-label">
-          {{ action.label }}
+          <span v-html="action.label"></span>
           <span
             v-if="action.icon"
             :class="[action.icon, 'fr-ml-1w', 'extra-icon']"
