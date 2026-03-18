@@ -117,7 +117,7 @@
                 aria-hidden="true"
               ></span>
               <span>
-                Le cas échéant, la procédure peut être établie à l'encontre d'un autre auteur
+                Le cas échéant, la procédure peut être poursuivie à l'encontre d'un autre auteur
                 identifié (ex. prestataire, sous-traitant, fournisseur, client, intermédiaire).
                 <a :href="modifyUrl" target="_blank">
                   Modifier la procédure sur Démarche Numérique.</a
