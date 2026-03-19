@@ -19,7 +19,10 @@ router.register("user-info", UserInfoViewSet, basename="user-info")
 router.register("dossiers", UserDossierViewSet, basename="user-dossier")
 
 # Admin Routes
-urlpatterns = [path("admin/", admin.site.urls)]
+if settings.ENABLE_ADMIN:
+    urlpatterns = [path(f"{settings.ADMIN_URL_NAME}/", admin.site.urls)]
+else:
+    urlpatterns = []
 
 # API Routes
 urlpatterns.extend(
@@ -72,4 +75,7 @@ if getattr(settings, "SENTRY_DEBUG", False):
 # This is a catch-all pattern that serves the compiled frontend.
 # It must be placed at the very end of urlpatterns so that it doesn't
 # intercept requests intended for other routes like API, Admin, or OIDC.
-urlpatterns.append(re_path(r"^(?!admin|api|oidc|sentry-debug).*", index_view, name="index"))
+admin_url = settings.ADMIN_URL_NAME.rstrip("/")
+urlpatterns.append(
+    re_path(r"^(?!%s|api|oidc|sentry-debug).*" % admin_url, index_view, name="index")
+)

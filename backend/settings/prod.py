@@ -119,6 +119,10 @@ if PROCONNECT_ENABLED:
 # Auth Configuration
 LOGIN_REQUIRED = env.bool("VITE_LOGIN_REQUIRED", default=True)
 
+# Admin configuration
+ENABLE_ADMIN = env.bool("ENABLE_ADMIN", default=True)
+ADMIN_URL_NAME = env.str("ADMIN_URL_NAME", default="admin")
+
 if not LOGIN_REQUIRED:
     REST_FRAMEWORK["DEFAULT_PERMISSION_CLASSES"] = [
         "rest_framework.permissions.AllowAny",
