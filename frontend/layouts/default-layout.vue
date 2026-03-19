@@ -129,7 +129,7 @@ const navLinks = computed<NavLink[]>(() => {
   if (isAuthenticated.value) {
     links.push({
       text: 'Mes procédures',
-      href: '/mes-dossiers',
+      href: '/mes-procedures',
     })
   }
   links.push({ text: 'Contact', href: '/contact' })

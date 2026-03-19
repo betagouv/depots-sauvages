@@ -72,9 +72,9 @@ const router = createRouter({
       component: () => import('./pages/comprendre-la-procedure.vue'),
     },
     {
-      path: '/mes-dossiers',
-      name: 'MesDossiers',
-      component: () => import('./pages/mes-dossiers.vue'),
+      path: '/mes-procedures',
+      name: 'MesProcedures',
+      component: () => import('./pages/mes-procedures.vue'),
       meta: { requiresAuth: true },
     },
     {
@@ -106,7 +106,7 @@ const router = createRouter({
       path: '/suivi-procedure/:dossier_id',
       name: 'SuiviProcedure',
       component: () => import('./pages/suivi-procedure.vue'),
-      meta: { requiresAuth: true, activeMenu: '/mes-dossiers' },
+      meta: { requiresAuth: true, activeMenu: '/mes-procedures' },
     },
   ],
 })
