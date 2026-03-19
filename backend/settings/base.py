@@ -180,3 +180,7 @@ LOGOUT_REDIRECT_URL = "index"
 OIDC_STORE_ID_TOKEN = True
 
 LOGIN_REQUIRED = True
+
+# Admin configuration
+ENABLE_ADMIN = True
+ADMIN_URL_NAME = "admin"
