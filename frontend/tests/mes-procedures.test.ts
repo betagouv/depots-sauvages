@@ -2,7 +2,7 @@ import { createTestingPinia } from '@pinia/testing'
 import '@testing-library/jest-dom'
 import { render, screen, waitFor } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
-import MesDossiers from '../pages/mes-dossiers.vue'
+import MesProcedures from '../pages/mes-procedures.vue'
 import * as api from '../services/api'
 import { useDossierStore } from '../stores/dossier'
 
@@ -21,7 +21,7 @@ vi.mock('vue-router', () => ({
   }),
 }))
 
-describe('Page Mes Dossiers', () => {
+describe('Page Mes Procédures', () => {
   it('doit afficher l’identité de l’utilisateur connecté', async () => {
     // Mock user info
     ;(api.getUserInfo as any).mockResolvedValue({
@@ -34,7 +34,7 @@ describe('Page Mes Dossiers', () => {
 
     const pinia = createTestingPinia({ stubActions: true })
 
-    render(MesDossiers, {
+    render(MesProcedures, {
       global: {
         plugins: [pinia],
         stubs: {
@@ -64,7 +64,7 @@ describe('Page Mes Dossiers', () => {
       proconnect_enabled: true,
     })
 
-    render(MesDossiers, {
+    render(MesProcedures, {
       global: {
         plugins: [createTestingPinia({ stubActions: true })],
         stubs: {
@@ -99,7 +99,7 @@ describe('Page Mes Dossiers', () => {
     const dossierStore = useDossierStore(pinia)
     dossierStore.dossiers = []
 
-    render(MesDossiers, {
+    render(MesProcedures, {
       global: {
         plugins: [pinia],
         stubs: {

@@ -44,8 +44,8 @@
               <li class="fr-nav__item">
                 <a
                   class="fr-nav__link"
-                  :class="{ 'fr-nav__link--active': isActive }"
-                  :aria-current="isActive ? 'page' : undefined"
+                  :class="{ 'fr-nav__link--active': isActive || route.meta.activeMenu === lien.href }"
+                  :aria-current="isActive || route.meta.activeMenu === lien.href ? 'page' : undefined"
                   :href="href"
                   @click="navigate"
                 >
@@ -116,13 +116,21 @@ const route = useRoute()
 const logoText = ['Ministère', 'de l’intérieur']
 const breadcrumbLinks: BreadcrumbLink[] = []
 
-const navLinks = computed(() => {
-  const links = [
+interface NavLink {
+  text: string
+  href: string
+}
+
+const navLinks = computed<NavLink[]>(() => {
+  const links: NavLink[] = [
     { text: 'Accueil', href: '/' },
     { text: 'Comprendre la procédure', href: '/comprendre-la-procedure' },
   ]
   if (isAuthenticated.value) {
-    links.push({ text: 'Mes procédures', href: '/mes-dossiers' })
+    links.push({
+      text: 'Mes procédures',
+      href: '/mes-procedures',
+    })
   }
   links.push({ text: 'Contact', href: '/contact' })
   return links
