@@ -123,14 +123,6 @@ class ProcessDossierView(APIView):
         return Response({"error": message}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class DNSignalementViewSet(SignalementViewSetMixin):
-    """
-    ViewSet for DNSignalement model.
-    """
-
-    model_class = DNSignalement
-    serializer_class = SignalementSerializer
-    model_label = "dn_signalements.DNSignalement"
 
 
 @method_decorator(login_required, name="dispatch")

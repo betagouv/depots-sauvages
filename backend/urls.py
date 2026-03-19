@@ -2,11 +2,11 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.urls import include, path, re_path
+from django.views.generic import RedirectView
 from rest_framework.routers import DefaultRouter
 
 from backend.dn_signalements.views import (
     DNSignalementDocumentDownloadView,
-    DNSignalementViewSet,
     ProcessDossierView,
     SyncUserDossiersView,
     UserDossierViewSet,
@@ -15,7 +15,6 @@ from backend.home.views import UserInfoViewSet, index_view, logout_view
 
 # API Routes registration
 router = DefaultRouter()
-router.register("dn-signalements", DNSignalementViewSet, basename="dn-signalement")
 router.register("user-info", UserInfoViewSet, basename="user-info")
 router.register("dossiers", UserDossierViewSet, basename="user-dossier")
 
@@ -50,11 +49,15 @@ if settings.PROCONNECT_ENABLED:
     urlpatterns.append(path("oidc/", include("mozilla_django_oidc.urls")))
 
 # Protected Frontend Routes
+urlpatterns.append(
+    re_path(
+        r"^signalements-dn/(?P<dossier_id>\d+)/?$",
+        RedirectView.as_view(url="/suivi-procedure/%(dossier_id)s/", permanent=True),
+    )
+)
+
 if settings.LOGIN_REQUIRED:
-    urlpatterns.append(re_path(r"^signalements-dn/.*", login_required(index_view)))
     urlpatterns.append(re_path(r"^mes-procedures/?$", login_required(index_view)))
-else:
-    urlpatterns.append(re_path(r"^signalements-dn/.*", index_view))
 
 # Sentry Debug
 if getattr(settings, "SENTRY_DEBUG", False):
