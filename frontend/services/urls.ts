@@ -22,7 +22,7 @@ export const getDnLettreInfoUrl = (id: number | null) => {
 }
 
 export const getSignalementDocumentsUrl = (id: number | string) => {
-  return `/signalements-dn/${id}`
+  return `/suivi-procedure/${id}`
 }
 
 export const getSuiviProcedureUrl = (id: number | string) => {

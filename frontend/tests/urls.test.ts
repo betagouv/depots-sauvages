@@ -14,13 +14,13 @@ describe('Services URLs', () => {
     it('doit générer l’URL interne pour les documents d’un signalement', () => {
       const id = 42
       const url = getSignalementDocumentsUrl(id)
-      expect(url).toBe('/signalements-dn/42')
+      expect(url).toBe('/suivi-procedure/42')
     })
 
     it('doit gérer les IDs sous forme de chaîne', () => {
       const id = '42'
       const url = getSignalementDocumentsUrl(id)
-      expect(url).toBe('/signalements-dn/42')
+      expect(url).toBe('/suivi-procedure/42')
     })
   })
 })

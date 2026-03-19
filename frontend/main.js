@@ -88,9 +88,7 @@ const router = createRouter({
     },
     {
       path: '/signalements-dn/:dossier_id',
-      name: 'SignalementsDN',
-      component: () => import('./pages/signalements-dn.vue'),
-      meta: { requiresAuth: true },
+      redirect: (to) => ({ name: 'SuiviProcedure', params: { dossier_id: to.params.dossier_id } }),
     },
     {
       path: '/rejoindre-le-dispositif',
