@@ -21,8 +21,15 @@ CHAMP_ID_TO_FIELD = {
     "Q2hhbXAtNTYxNzQ4Mw==": "accepte_accompagnement",
     "Q2hhbXAtNTYxNzQ4NA==": "contact_telephone",
     "Q2hhbXAtNTYxNzM4Nw==": "precisions_indices",
+    "Q2hhbXAtNjI1Mzg1NA==": "auteur_civilite",
+    "Q2hhbXAtNjI1Mzg1Ng==": "auteur_nom",
+    "Q2hhbXAtNjI1Mzg1OQ==": "auteur_prenom",
+    "Q2hhbXAtNTYxNzQ5NA==": "auteur_siret",
 }
 
-ADDRESS_CHAMP_ID = "Q2hhbXAtNTYxNzM1MQ=="  # Adresse du dépôt
+# IDs des champs de type Adresse
+CHAMP_ID_ADRESSE_DEPOT = "Q2hhbXAtNTYxNzM1MQ=="
+CHAMP_ID_ADRESSE_AUTEUR = "Q2hhbXAtNjI1Mzg2MA=="
+
 DATE_CONSTAT_CHAMP_ID = "Q2hhbXAtNTYxNzM2MQ=="  # Date et Heure de la constatation
 PROCEDURE_JUDICIAIRE_CHAMP_ID = "Q2hhbXAtNTYxNzM4NQ=="  # Procédure judiciaire

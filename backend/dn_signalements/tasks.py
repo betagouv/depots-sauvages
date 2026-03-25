@@ -6,7 +6,7 @@ from django_tasks import task
 from backend.dn.champs import DNChamp
 from backend.dn.client import DNGraphQLClient
 from backend.dn.queries import GET_DEMARCHE_DOSSIERS_LEAN_QUERY
-from backend.dn_signalements.dn_mappings import ADDRESS_CHAMP_ID, DATE_CONSTAT_CHAMP_ID
+from backend.dn_signalements.dn_mappings import CHAMP_ID_ADRESSE_DEPOT, DATE_CONSTAT_CHAMP_ID
 from backend.dn_signalements.models import UserDossier
 
 logger = logging.getLogger(__name__)
@@ -38,7 +38,7 @@ def sync_user_dossiers_func(user_id: int):
             champs_data = dn_champ.get_data()
             datetime_constat = champs_data.get(DATE_CONSTAT_CHAMP_ID)
             localisation_depot = None
-            address_data = champs_data.get(ADDRESS_CHAMP_ID)
+            address_data = champs_data.get(CHAMP_ID_ADRESSE_DEPOT)
             if address_data and isinstance(address_data, dict):
                 localisation_depot = address_data.get("label")
             UserDossier.objects.update_or_create(

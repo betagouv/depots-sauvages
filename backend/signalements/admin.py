@@ -83,6 +83,11 @@ class BaseSignalementAdminMixin:
                 "fields": (
                     "auteur_identifie",
                     "statut_auteur",
+                    "auteur_civilite",
+                    "auteur_nom",
+                    "auteur_prenom",
+                    "auteur_adresse",
+                    "auteur_siret",
                     "indices_disponibles",
                     "precisions_indices",
                     "arrete_municipal_existe",

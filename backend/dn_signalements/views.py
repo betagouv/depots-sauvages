@@ -11,14 +11,15 @@ from rest_framework.views import APIView
 from backend.dn.champs import DNChamp
 from backend.dn.client import DNGraphQLClient
 from backend.dn_signalements.dn_mappings import (
-    ADDRESS_CHAMP_ID,
+    CHAMP_ID_ADRESSE_AUTEUR,
+    CHAMP_ID_ADRESSE_DEPOT,
     CHAMP_ID_TO_FIELD,
     DATE_CONSTAT_CHAMP_ID,
 )
 from backend.dn_signalements.models import DNSignalement, UserDossier
-from backend.dn_signalements.serializers import SignalementSerializer, UserDossierSerializer
+from backend.dn_signalements.serializers import UserDossierSerializer
 from backend.dn_signalements.tasks import sync_user_dossiers
-from backend.signalements.views import SignalementDocumentDownloadViewMixin, SignalementViewSetMixin
+from backend.signalements.views import SignalementDocumentDownloadViewMixin
 
 
 class ProcessDossierView(APIView):
@@ -60,7 +61,12 @@ class ProcessDossierView(APIView):
         signalement.save()
         signalement_data["id"] = signalement.id
         return Response(
-            {**signalement_data, "dn_numero_dossier": numero_dossier, "created": True, **dn_metadata}
+            {
+                **signalement_data,
+                "dn_numero_dossier": numero_dossier,
+                "created": True,
+                **dn_metadata,
+            }
         )
 
     def extract_dn_metadata(self, dossier):
@@ -90,12 +96,19 @@ class ProcessDossierView(APIView):
             field_name = CHAMP_ID_TO_FIELD.get(champ_id)
             if field_name and value not in (None, "", []):
                 data[field_name] = value
-        address_data = champs_data.get(ADDRESS_CHAMP_ID)
-        if address_data and isinstance(address_data, dict):
-            if address_data.get("label"):
-                data["localisation_depot"] = address_data["label"]
-            if address_data.get("cityName"):
-                data["commune"] = address_data["cityName"]
+
+        # Gestion des adresses (champs complexes)
+        depot_address_data = champs_data.get(CHAMP_ID_ADRESSE_DEPOT)
+        if depot_address_data and isinstance(depot_address_data, dict):
+            if depot_address_data.get("label"):
+                data["localisation_depot"] = depot_address_data["label"]
+            if depot_address_data.get("cityName"):
+                data["commune"] = depot_address_data["cityName"]
+
+        auteur_address_data = champs_data.get(CHAMP_ID_ADRESSE_AUTEUR)
+        if auteur_address_data and isinstance(auteur_address_data, dict):
+            if auteur_address_data.get("label"):
+                data["auteur_adresse"] = auteur_address_data["label"]
         if data.get("statut_auteur"):
             statut_lower = str(data["statut_auteur"]).lower()
             if "entreprise" in statut_lower:
@@ -121,8 +134,6 @@ class ProcessDossierView(APIView):
 
     def bad_request(self, message):
         return Response({"error": message}, status=status.HTTP_400_BAD_REQUEST)
-
-
 
 
 @method_decorator(login_required, name="dispatch")
