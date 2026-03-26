@@ -21,10 +21,12 @@ CHAMP_ID_TO_FIELD = {
     "Q2hhbXAtNTYxNzQ4Mw==": "accepte_accompagnement",
     "Q2hhbXAtNTYxNzQ4NA==": "contact_telephone",
     "Q2hhbXAtNTYxNzM4Nw==": "precisions_indices",
+    "Q2hhbXAtNjI1Mzg1Ng==": "auteur_nom",  # Nom de famille
+    "Q2hhbXAtNTg0MzM2OQ==": "auteur_nom",  # Nom de l'entreprise
     "Q2hhbXAtNjI1Mzg1NA==": "auteur_civilite",
-    "Q2hhbXAtNjI1Mzg1Ng==": "auteur_nom",
     "Q2hhbXAtNjI1Mzg1OQ==": "auteur_prenom",
     "Q2hhbXAtNTYxNzQ5NA==": "auteur_siret",
+    "Q2hhbXAtNjMxOTc4Nw==": "auteur_adresse",  # Adresse entreprise étrangère (Texte Libre)
 }
 
 # IDs des champs de type Adresse
