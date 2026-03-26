@@ -108,33 +108,40 @@ class ProcessDossierView(APIView):
         if siret_data and isinstance(siret_data, dict):
             updates["auteur_siret"] = siret_data.get("siret", "")
             name = siret_data.get("nom")
-            address = siret_data.get("adresse")
+            address_dict = siret_data.get("adresse_dict")
             if name and not data.get("auteur_nom"):
                 updates["auteur_nom"] = name
-            if address and not data.get("auteur_adresse"):
-                if name and address.startswith(name):
-                    address = address[len(name) :]
-                updates["auteur_adresse"] = self.clean_text(address)
+            if address_dict and not data.get("auteur_adresse"):
+                updates["auteur_adresse"] = self.format_address(address_dict)
         return updates
 
     def get_address_data(self, fields_data):
         updates = {}
         depot_address_data = fields_data.get(CHAMP_ID_ADRESSE_DEPOT)
         if depot_address_data and isinstance(depot_address_data, dict):
-            if depot_address_data.get("label"):
-                updates["localisation_depot"] = self.clean_text(depot_address_data["label"])
+            label = depot_address_data.get("label", "")
+            updates["localisation_depot"] = self.clean_text(label, join_with=" ")
             if depot_address_data.get("cityName"):
                 updates["commune"] = depot_address_data["cityName"]
         author_address_data = fields_data.get(CHAMP_ID_ADRESSE_AUTEUR)
         if author_address_data and isinstance(author_address_data, dict):
-            if author_address_data.get("label"):
-                updates["auteur_adresse"] = self.clean_text(author_address_data["label"])
+            updates["auteur_adresse"] = self.format_address(author_address_data)
         return updates
 
-    def clean_text(self, text):
+    def format_address(self, address_dict):
+        if not address_dict or not isinstance(address_dict, dict):
+            return ""
+        street = address_dict.get("streetAddress")
+        zip_code = address_dict.get("postalCode")
+        city = address_dict.get("cityName")
+        if street and zip_code:
+            return self.clean_text(f"{street}\n{zip_code} {city or ''}")
+        return self.clean_text(address_dict.get("label", ""))
+
+    def clean_text(self, text, join_with="\n"):
         if not text:
             return ""
-        return "\n".join([line.strip() for line in text.splitlines() if line.strip()])
+        return join_with.join([line.strip() for line in text.splitlines() if line.strip()])
 
     def get_normalized_data(self, data):
         updates = {}

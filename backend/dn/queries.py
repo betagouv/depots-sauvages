@@ -49,6 +49,9 @@ query GetSignalementDossier($dossierNumber: Int!) {
                     }
                     address {
                         label
+                        streetAddress
+                        postalCode
+                        cityName
                     }
                 }
             }

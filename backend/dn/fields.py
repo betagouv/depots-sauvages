@@ -86,5 +86,6 @@ class DNField:
             if etablissement.get("entreprise"):
                 data["nom"] = etablissement["entreprise"].get("raisonSociale")
             if etablissement.get("address"):
+                data["adresse_dict"] = etablissement["address"]
                 data["adresse"] = etablissement["address"].get("label")
         return data
