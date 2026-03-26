@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from backend.dn.champs import DNChamp
+from backend.dn.fields import DNField
 from backend.dn.client import DNGraphQLClient
 from backend.dn_signalements.dn_mappings import (
     CHAMP_ID_ADRESSE_AUTEUR,
@@ -83,28 +83,28 @@ class ProcessDossierView(APIView):
 
     def dossier_to_model_data(self, dossier):
         """Extract signalement data from DN dossier. Returns None if no signalement exists."""
-        dn_champ = DNChamp(dossier)
-        champs_data = dn_champ.get_data()
-        datetime_constat = champs_data.get(DATE_CONSTAT_CHAMP_ID)
+        dn_field = DNField(dossier)
+        fields_data = dn_field.get_data()
+        datetime_constat = fields_data.get(DATE_CONSTAT_CHAMP_ID)
         if not datetime_constat:
             return None
         data = {
             "date_constat": datetime_constat,
             "heure_constat": datetime_constat.time(),
         }
-        for champ_id, value in champs_data.items():
+        for champ_id, value in fields_data.items():
             field_name = CHAMP_ID_TO_FIELD.get(champ_id)
             if field_name and value not in (None, "", []):
                 data[field_name] = value
-        data.update(self.get_siret_auto_completion_data(champs_data, data))
-        data.update(self.get_address_data(champs_data))
+        data.update(self.get_siret_auto_completion_data(fields_data, data))
+        data.update(self.get_address_data(fields_data))
         data.update(self.get_normalized_data(data))
         data.update(self.get_usager_contact_data(dossier))
         return data
 
-    def get_siret_auto_completion_data(self, champs_data, data):
+    def get_siret_auto_completion_data(self, fields_data, data):
         updates = {}
-        siret_data = champs_data.get(CHAMP_ID_SIRET)
+        siret_data = fields_data.get(CHAMP_ID_SIRET)
         if siret_data and isinstance(siret_data, dict):
             updates["auteur_siret"] = siret_data.get("siret", "")
             name = siret_data.get("nom")
@@ -117,15 +117,15 @@ class ProcessDossierView(APIView):
                 updates["auteur_adresse"] = address
         return updates
 
-    def get_address_data(self, champs_data):
+    def get_address_data(self, fields_data):
         updates = {}
-        depot_address_data = champs_data.get(CHAMP_ID_ADRESSE_DEPOT)
+        depot_address_data = fields_data.get(CHAMP_ID_ADRESSE_DEPOT)
         if depot_address_data and isinstance(depot_address_data, dict):
             if depot_address_data.get("label"):
                 updates["localisation_depot"] = depot_address_data["label"]
             if depot_address_data.get("cityName"):
                 updates["commune"] = depot_address_data["cityName"]
-        author_address_data = champs_data.get(CHAMP_ID_ADRESSE_AUTEUR)
+        author_address_data = fields_data.get(CHAMP_ID_ADRESSE_AUTEUR)
         if author_address_data and isinstance(author_address_data, dict):
             if author_address_data.get("label"):
                 updates["auteur_adresse"] = author_address_data["label"]
