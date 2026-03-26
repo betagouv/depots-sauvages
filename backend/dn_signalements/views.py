@@ -113,8 +113,8 @@ class ProcessDossierView(APIView):
                 updates["auteur_nom"] = name
             if address and not data.get("auteur_adresse"):
                 if name and address.startswith(name):
-                    address = address[len(name) :].lstrip("\r\n ")
-                updates["auteur_adresse"] = address
+                    address = address[len(name) :]
+                updates["auteur_adresse"] = self.clean_text(address)
         return updates
 
     def get_address_data(self, fields_data):
@@ -122,14 +122,19 @@ class ProcessDossierView(APIView):
         depot_address_data = fields_data.get(CHAMP_ID_ADRESSE_DEPOT)
         if depot_address_data and isinstance(depot_address_data, dict):
             if depot_address_data.get("label"):
-                updates["localisation_depot"] = depot_address_data["label"]
+                updates["localisation_depot"] = self.clean_text(depot_address_data["label"])
             if depot_address_data.get("cityName"):
                 updates["commune"] = depot_address_data["cityName"]
         author_address_data = fields_data.get(CHAMP_ID_ADRESSE_AUTEUR)
         if author_address_data and isinstance(author_address_data, dict):
             if author_address_data.get("label"):
-                updates["auteur_adresse"] = author_address_data["label"]
+                updates["auteur_adresse"] = self.clean_text(author_address_data["label"])
         return updates
+
+    def clean_text(self, text):
+        if not text:
+            return ""
+        return "\n".join([line.strip() for line in text.splitlines() if line.strip()])
 
     def get_normalized_data(self, data):
         updates = {}
