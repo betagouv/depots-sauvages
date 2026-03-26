@@ -35,6 +35,8 @@ class DNChamp:
             return self.get_champ_datetime(champ)
         elif typename == "AddressChamp":
             return self.get_champ_address_value(champ)
+        elif typename == "SiretChamp":
+            return self.get_champ_siret_value(champ)
         else:
             return self.get_champ_string_value(champ)
 
@@ -82,3 +84,13 @@ class DNChamp:
         if champ.get("address"):
             return champ["address"]
         return None
+
+    def get_champ_siret_value(self, champ):
+        data = {"siret": champ.get("stringValue") or ""}
+        etablissement = champ.get("etablissement")
+        if etablissement:
+            if etablissement.get("entreprise"):
+                data["nom"] = etablissement["entreprise"].get("raisonSociale")
+            if etablissement.get("address"):
+                data["adresse"] = etablissement["address"].get("label")
+        return data

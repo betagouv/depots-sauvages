@@ -25,13 +25,13 @@ CHAMP_ID_TO_FIELD = {
     "Q2hhbXAtNTg0MzM2OQ==": "auteur_nom",  # Nom de l'entreprise
     "Q2hhbXAtNjI1Mzg1NA==": "auteur_civilite",
     "Q2hhbXAtNjI1Mzg1OQ==": "auteur_prenom",
-    "Q2hhbXAtNTYxNzQ5NA==": "auteur_siret",
     "Q2hhbXAtNjMxOTc4Nw==": "auteur_adresse",  # Adresse entreprise étrangère (Texte Libre)
 }
 
-# IDs des champs de type Adresse
+# IDs of fields that need special handling
 CHAMP_ID_ADRESSE_DEPOT = "Q2hhbXAtNTYxNzM1MQ=="
 CHAMP_ID_ADRESSE_AUTEUR = "Q2hhbXAtNjI1Mzg2MA=="
+CHAMP_ID_SIRET = "Q2hhbXAtNTYxNzQ5NA=="
 
 DATE_CONSTAT_CHAMP_ID = "Q2hhbXAtNTYxNzM2MQ=="  # Date et Heure de la constatation
 PROCEDURE_JUDICIAIRE_CHAMP_ID = "Q2hhbXAtNTYxNzM4NQ=="  # Procédure judiciaire

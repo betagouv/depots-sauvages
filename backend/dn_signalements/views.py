@@ -13,6 +13,7 @@ from backend.dn.client import DNGraphQLClient
 from backend.dn_signalements.dn_mappings import (
     CHAMP_ID_ADRESSE_AUTEUR,
     CHAMP_ID_ADRESSE_DEPOT,
+    CHAMP_ID_SIRET,
     CHAMP_ID_TO_FIELD,
     DATE_CONSTAT_CHAMP_ID,
 )
@@ -96,7 +97,22 @@ class ProcessDossierView(APIView):
             field_name = CHAMP_ID_TO_FIELD.get(champ_id)
             if field_name and value not in (None, "", []):
                 data[field_name] = value
+        # Gestion du SIRET et auto-complétion
+        siret_data = champs_data.get(CHAMP_ID_SIRET)
+        if siret_data and isinstance(siret_data, dict):
+            data["auteur_siret"] = siret_data.get("siret", "")
+            # Auto-remplissage du nom et de l'adresse si non saisis
+            name = siret_data.get("nom")
+            address = siret_data.get("adresse")
 
+            if name and not data.get("auteur_nom"):
+                data["auteur_nom"] = name
+
+            if address and not data.get("auteur_adresse"):
+                # Nettoyage : retirer le nom du début de l'adresse si redondant
+                if name and address.startswith(name):
+                    address = address[len(name) :].lstrip("\r\n ")
+                data["auteur_adresse"] = address
         # Gestion des adresses (champs complexes)
         depot_address_data = champs_data.get(CHAMP_ID_ADRESSE_DEPOT)
         if depot_address_data and isinstance(depot_address_data, dict):
@@ -104,7 +120,6 @@ class ProcessDossierView(APIView):
                 data["localisation_depot"] = depot_address_data["label"]
             if depot_address_data.get("cityName"):
                 data["commune"] = depot_address_data["cityName"]
-
         auteur_address_data = champs_data.get(CHAMP_ID_ADRESSE_AUTEUR)
         if auteur_address_data and isinstance(auteur_address_data, dict):
             if auteur_address_data.get("label"):

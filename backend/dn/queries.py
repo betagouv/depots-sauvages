@@ -43,6 +43,14 @@ query GetSignalementDossier($dossierNumber: Int!) {
             }
             ... on SiretChamp {
                 stringValue
+                etablissement {
+                    entreprise {
+                        raisonSociale
+                    }
+                    address {
+                        label
+                    }
+                }
             }
             ... on AddressChamp {
                 address {
@@ -105,6 +113,14 @@ query GetDemarcheDossiers($demarcheNumber: Int!, $after: String) {
                     }
                     ... on SiretChamp {
                         stringValue
+                        etablissement {
+                            entreprise {
+                                raisonSociale
+                            }
+                            address {
+                                label
+                            }
+                        }
                     }
                     ... on AddressChamp {
                         address {
