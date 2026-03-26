@@ -85,7 +85,6 @@ class ProcessDossierView(APIView):
         """Extract signalement data from DN dossier. Returns None if no signalement exists."""
         dn_champ = DNChamp(dossier)
         champs_data = dn_champ.get_data()
-        # If there is no date_constat, there is no actual "signalement"
         datetime_constat = champs_data.get(DATE_CONSTAT_CHAMP_ID)
         if not datetime_constat:
             return None
@@ -97,50 +96,64 @@ class ProcessDossierView(APIView):
             field_name = CHAMP_ID_TO_FIELD.get(champ_id)
             if field_name and value not in (None, "", []):
                 data[field_name] = value
-        # Gestion du SIRET et auto-complétion
+        data.update(self.get_siret_auto_completion_data(champs_data, data))
+        data.update(self.get_address_data(champs_data))
+        data.update(self.get_normalized_data(data))
+        data.update(self.get_usager_contact_data(dossier))
+        return data
+
+    def get_siret_auto_completion_data(self, champs_data, data):
+        updates = {}
         siret_data = champs_data.get(CHAMP_ID_SIRET)
         if siret_data and isinstance(siret_data, dict):
-            data["auteur_siret"] = siret_data.get("siret", "")
-            # Auto-remplissage du nom et de l'adresse si non saisis
+            updates["auteur_siret"] = siret_data.get("siret", "")
             name = siret_data.get("nom")
             address = siret_data.get("adresse")
-
             if name and not data.get("auteur_nom"):
-                data["auteur_nom"] = name
-
+                updates["auteur_nom"] = name
             if address and not data.get("auteur_adresse"):
-                # Nettoyage : retirer le nom du début de l'adresse si redondant
                 if name and address.startswith(name):
                     address = address[len(name) :].lstrip("\r\n ")
-                data["auteur_adresse"] = address
-        # Gestion des adresses (champs complexes)
+                updates["auteur_adresse"] = address
+        return updates
+
+    def get_address_data(self, champs_data):
+        updates = {}
         depot_address_data = champs_data.get(CHAMP_ID_ADRESSE_DEPOT)
         if depot_address_data and isinstance(depot_address_data, dict):
             if depot_address_data.get("label"):
-                data["localisation_depot"] = depot_address_data["label"]
+                updates["localisation_depot"] = depot_address_data["label"]
             if depot_address_data.get("cityName"):
-                data["commune"] = depot_address_data["cityName"]
-        auteur_address_data = champs_data.get(CHAMP_ID_ADRESSE_AUTEUR)
-        if auteur_address_data and isinstance(auteur_address_data, dict):
-            if auteur_address_data.get("label"):
-                data["auteur_adresse"] = auteur_address_data["label"]
+                updates["commune"] = depot_address_data["cityName"]
+        author_address_data = champs_data.get(CHAMP_ID_ADRESSE_AUTEUR)
+        if author_address_data and isinstance(author_address_data, dict):
+            if author_address_data.get("label"):
+                updates["auteur_adresse"] = author_address_data["label"]
+        return updates
+
+    def get_normalized_data(self, data):
+        updates = {}
         if data.get("statut_auteur"):
             statut_lower = str(data["statut_auteur"]).lower()
             if "entreprise" in statut_lower:
-                data["statut_auteur"] = "entreprise"
+                updates["statut_auteur"] = "entreprise"
             elif "particulier" in statut_lower:
-                data["statut_auteur"] = "particulier"
+                updates["statut_auteur"] = "particulier"
         if data.get("nature_terrain") and isinstance(data["nature_terrain"], list):
-            data["nature_terrain"] = [str(item).lower() for item in data["nature_terrain"]]
+            updates["nature_terrain"] = [str(item).lower() for item in data["nature_terrain"]]
+        return updates
+
+    def get_usager_contact_data(self, dossier):
+        updates = {}
         usager = dossier.get("usager", {})
         if usager.get("email"):
-            data["contact_email"] = usager["email"]
+            updates["contact_email"] = usager["email"]
         demandeur = dossier.get("demandeur", {})
         if demandeur.get("nom"):
-            data["contact_nom"] = demandeur["nom"]
+            updates["contact_nom"] = demandeur["nom"]
         if demandeur.get("prenom"):
-            data["contact_prenom"] = demandeur["prenom"]
-        return data
+            updates["contact_prenom"] = demandeur["prenom"]
+        return updates
 
     def parse_datetime(self, date_string):
         if not date_string:
