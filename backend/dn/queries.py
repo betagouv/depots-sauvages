@@ -11,6 +11,7 @@ query GetSignalementDossier($dossierNumber: Int!) {
         }
         demandeur {
             ... on PersonnePhysique {
+                civilite
                 nom
                 prenom
             }
@@ -20,6 +21,9 @@ query GetSignalementDossier($dossierNumber: Int!) {
             label
             stringValue
             __typename
+            ... on CiviliteChamp {
+                value
+            }
             ... on TextChamp {
                 stringValue
             }
@@ -93,6 +97,9 @@ query GetDemarcheDossiers($demarcheNumber: Int!, $after: String) {
                     label
                     stringValue
                     __typename
+                    ... on CiviliteChamp {
+                        value
+                    }
                     ... on TextChamp {
                         stringValue
                     }

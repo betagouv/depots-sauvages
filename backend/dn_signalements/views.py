@@ -113,6 +113,8 @@ class ProcessDossierView(APIView):
         # If is_filler is explicitly True, we use the demandeur info
         if is_filler is True:
             demandeur = dossier.get("demandeur", {})
+            if demandeur.get("civilite"):
+                updates["constatant_civilite"] = demandeur["civilite"]
             if demandeur.get("nom"):
                 updates["constatant_nom"] = demandeur["nom"]
             if demandeur.get("prenom"):

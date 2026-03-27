@@ -23,6 +23,8 @@ class DNField:
             return self.get_list_value(field)
         elif typename in ("YesNoChamp", "CheckboxChamp"):
             return self.get_boolean_value(field)
+        elif typename == "CiviliteChamp":
+            return self.get_civilite_value(field)
         elif typename in ("IntegerNumberChamp", "DecimalNumberChamp"):
             return self.get_numeric_value(field)
         elif typename == "DatetimeChamp":
@@ -40,6 +42,11 @@ class DNField:
         if field.get("value") is not None:
             return str(field["value"])
         return ""
+
+    def get_civilite_value(self, field):
+        if field.get("value") is not None:
+            return field["value"]
+        return self.get_string_value(field)
 
     def get_boolean_value(self, field):
         if field.get("value") is not None:
