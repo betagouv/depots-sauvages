@@ -8,11 +8,12 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from backend.dn.fields import DNField
 from backend.dn.client import DNGraphQLClient
+from backend.dn.fields import DNField
 from backend.dn_signalements.dn_mappings import (
     CHAMP_ID_ADRESSE_AUTEUR,
     CHAMP_ID_ADRESSE_DEPOT,
+    CHAMP_ID_CONSTATANT_IS_FILLER,
     CHAMP_ID_SIRET,
     CHAMP_ID_TO_FIELD,
     DATE_CONSTAT_CHAMP_ID,
@@ -98,9 +99,27 @@ class ProcessDossierView(APIView):
                 data[field_name] = value
         data.update(self.get_siret_auto_completion_data(fields_data, data))
         data.update(self.get_address_data(fields_data))
+        data.update(self.get_data_when_constatant_is_filler(fields_data, dossier))
         data.update(self.get_normalized_data(data))
         data.update(self.get_usager_contact_data(dossier))
         return data
+
+    def get_data_when_constatant_is_filler(self, fields_data, dossier):
+        """
+        Handle constatant information based on whether the filler is the same person.
+        """
+        updates = {}
+        is_filler = fields_data.get(CHAMP_ID_CONSTATANT_IS_FILLER)
+        # If is_filler is explicitly True, we use the demandeur info
+        if is_filler is True:
+            demandeur = dossier.get("demandeur", {})
+            if demandeur.get("nom"):
+                updates["constatant_nom"] = demandeur["nom"]
+            if demandeur.get("prenom"):
+                updates["constatant_prenom"] = demandeur["prenom"]
+        # If is_filler is False, the fields mapped via CHAMP_ID_TO_FIELD (nom, prenom, civilite)
+        # will already be in 'data' from the loop in 'dossier_to_model_data'.
+        return updates
 
     def get_siret_auto_completion_data(self, fields_data, data):
         updates = {}

@@ -1,6 +1,6 @@
 CHAMP_ID_TO_FIELD = {
     "Q2hhbXAtNTYxNzM1Ng==": "nature_terrain",
-    "Q2hhbXAtNTYxNzM1OA==": "constatant",
+    "Q2hhbXAtNTYxNzM1OA==": "constatant_role",
     "Q2hhbXAtNTYxNzM3MA==": "photo_dispo",
     "Q2hhbXAtNTYxNzM3Mw==": "volume_depot",
     "Q2hhbXAtNTYxNzM3NQ==": "types_depot",
@@ -26,12 +26,17 @@ CHAMP_ID_TO_FIELD = {
     "Q2hhbXAtNjI1Mzg1NA==": "auteur_civilite",
     "Q2hhbXAtNjI1Mzg1OQ==": "auteur_prenom",
     "Q2hhbXAtNjMxOTc4Nw==": "auteur_adresse",  # Adresse entreprise étrangère (Texte Libre)
+    "Q2hhbXAtNjMyODgzNQ==": "constatant_civilite",
+    "Q2hhbXAtNjMyODg0MA==": "constatant_prenom",
+    "Q2hhbXAtNjMyODg0Mg==": "constatant_nom",
 }
 
 # IDs of fields that need special handling
 CHAMP_ID_ADRESSE_DEPOT = "Q2hhbXAtNTYxNzM1MQ=="
 CHAMP_ID_ADRESSE_AUTEUR = "Q2hhbXAtNjI1Mzg2MA=="
 CHAMP_ID_SIRET = "Q2hhbXAtNTYxNzQ5NA=="
+
+CHAMP_ID_CONSTATANT_IS_FILLER = "Q2hhbXAtNjMyODgxMg=="
 
 DATE_CONSTAT_CHAMP_ID = "Q2hhbXAtNTYxNzM2MQ=="  # Date et Heure de la constatation
 PROCEDURE_JUDICIAIRE_CHAMP_ID = "Q2hhbXAtNTYxNzM4NQ=="  # Procédure judiciaire
