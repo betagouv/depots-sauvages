@@ -31,6 +31,12 @@ def prepare_context(instance):
         context["date_constat"] = date_constat.strftime("%-d %B %Y")
     if heure_constat:
         context["heure_constat"] = heure_constat.strftime("%H:%M")
+
+    role = context.get("constatant_role")
+    if role:
+        vowels = "aeiouyàâéèêëîïôûù"
+        context["constatant_role_needs_elision"] = role[0].lower() in vowels
+
     return context
 
 
