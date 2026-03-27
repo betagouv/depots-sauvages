@@ -17,7 +17,7 @@ class BaseSignalementAdminMixin:
     list_display = [
         "commune",
         "date_constat",
-        "constatant",
+        "constatant_role",
         "auteur_identifie",
         "contact_nom",
         "contact_prenom",
@@ -40,7 +40,9 @@ class BaseSignalementAdminMixin:
     search_fields = [
         "commune",
         "localisation_depot",
-        "constatant",
+        "constatant_role",
+        "constatant_nom",
+        "constatant_prenom",
         "precisions_depot",
         "contact_nom",
         "contact_prenom",
@@ -60,7 +62,10 @@ class BaseSignalementAdminMixin:
                     "commune",
                     "date_constat",
                     "heure_constat",
-                    "constatant",
+                    "constatant_role",
+                    "constatant_civilite",
+                    "constatant_prenom",
+                    "constatant_nom",
                 )
             },
         ),
