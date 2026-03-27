@@ -141,6 +141,7 @@ class ProcessDossierView(APIView):
     def clean_text(self, text, join_with="\n"):
         if not text:
             return ""
+        text = text.replace("\r\n", "\n").replace("\r", "\n")
         return join_with.join([line.strip() for line in text.splitlines() if line.strip()])
 
     def get_normalized_data(self, data):
@@ -153,6 +154,8 @@ class ProcessDossierView(APIView):
                 updates["statut_auteur"] = "particulier"
         if data.get("nature_terrain") and isinstance(data["nature_terrain"], list):
             updates["nature_terrain"] = [str(item).lower() for item in data["nature_terrain"]]
+        if data.get("auteur_adresse"):
+            updates["auteur_adresse"] = self.clean_text(data["auteur_adresse"])
         return updates
 
     def get_usager_contact_data(self, dossier):
