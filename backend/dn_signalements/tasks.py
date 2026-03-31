@@ -7,7 +7,8 @@ from backend.dn.fields import DNField
 from backend.dn.client import DNGraphQLClient
 from backend.dn.queries import GET_DEMARCHE_DOSSIERS_LEAN_QUERY
 from backend.dn_signalements.dn_mappings import CHAMP_ID_ADRESSE_DEPOT, DATE_CONSTAT_CHAMP_ID
-from backend.dn_signalements.models import UserDossier
+from backend.dn_signalements.models import DNSignalement
+
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
@@ -41,13 +42,14 @@ def sync_user_dossiers_func(user_id: int):
             address_data = fields_data.get(CHAMP_ID_ADRESSE_DEPOT)
             if address_data and isinstance(address_data, dict):
                 localisation_depot = address_data.get("label")
-            UserDossier.objects.update_or_create(
-                numero_dossier=dossier["number"],
+            DNSignalement.objects.update_or_create(
+                dn_numero_dossier=dossier["number"],
                 defaults={
                     "user": user,
-                    "date_creation": dossier.get("dateDepot"),
-                    "date_modification": dossier.get("dateDerniereModification"),
+                    "dn_date_creation": dossier.get("dateDepot"),
+                    "dn_date_modification": dossier.get("dateDerniereModification"),
                     "date_constat": datetime_constat,
+                    "heure_constat": datetime_constat.time() if datetime_constat else None,
                     "localisation_depot": localisation_depot or "",
                 },
             )
