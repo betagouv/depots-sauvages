@@ -116,7 +116,7 @@ import { formatDate, shouldShowModificationDate } from '@/utils/date'
 import { useDossierStore } from '@/stores/dossier'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import ChargementDossier from '../components/dn/ChargementDossier.vue'
+import ChargementDossier from '../components/dossiers/ChargementDossier.vue'
 import { getUserInfo, type UserInfo } from '../services/api'
 import { getDnModifyUrl, getSuiviProcedureUrl } from '../services/urls'
 

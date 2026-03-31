@@ -87,7 +87,7 @@
               <Constatation :auteur-identifie="auteurIdentifie" />
             </template>
             <template #step-1>
-              <NoProcedure v-if="!hasProcedure" :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)" />
+              <AucuneProcedure v-if="!hasProcedure" :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)" />
               <Documents
                 v-else
                 :dossier-data="dossierData"
@@ -129,12 +129,12 @@ import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 import StepperProcedure from '../components/StepperProcedure.vue'
-import ChargementDossier from '../components/dn/ChargementDossier.vue'
+import ChargementDossier from '../components/dossiers/ChargementDossier.vue'
 import Cloture from '../components/steps/Cloture.vue'
 import Constatation from '../components/steps/Constatation.vue'
 import Documents from '../components/steps/Documents.vue'
 import Identification from '../components/steps/Identification.vue'
-import NoProcedure from '../components/steps/NoProcedure.vue'
+import AucuneProcedure from '../components/steps/AucuneProcedure.vue'
 import Notification from '../components/steps/Notification.vue'
 import SuiviSanction from '../components/steps/SuiviSanction.vue'
 

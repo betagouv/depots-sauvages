@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
-import type { UserDossier } from '../services/api'
-import { getUserDossiers, syncDossiers } from '../services/api'
+import type { UserSignalement } from '../services/api'
+import { getUserSignalements, syncDossiers } from '../services/api'
 
 export const useDossierStore = defineStore('dossier', {
   state: () => ({
-    dossiers: [] as UserDossier[],
+    dossiers: [] as UserSignalement[],
     loading: false,
     error: null as string | null,
     loaded: false,
@@ -21,7 +21,7 @@ export const useDossierStore = defineStore('dossier', {
       this._fetchPromise = (async () => {
         this.loading = true
         try {
-          const dossiers = await getUserDossiers()
+          const dossiers = await getUserSignalements()
           this.dossiers = dossiers
           this.loaded = true
         } catch (error) {
@@ -55,7 +55,7 @@ export const useDossierStore = defineStore('dossier', {
       }
     },
 
-    getDossierById(id: number | string): UserDossier | undefined {
+    getDossierById(id: number | string): UserSignalement | undefined {
       // We look up by numero_dossier (DN ID) which is what is passed in the URL
       const numericId = Number(id)
       return this.dossiers.find((d) => d.numero_dossier === numericId)
