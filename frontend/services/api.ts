@@ -76,7 +76,7 @@ export interface UserInfo {
 }
 
 export const getUserInfo = (): Promise<UserInfo> => makeRequest(API_URLS.userInfo, 'GET', {})
-export interface UserDossier {
+export interface UserSignalement {
   id: number
   numero_dossier: number
   title: string
@@ -88,7 +88,7 @@ export interface UserDossier {
   last_sync: string | null
 }
 
-export const getUserDossiers = (): Promise<UserDossier[]> =>
+export const getUserSignalements = (): Promise<UserSignalement[]> =>
   makeRequest(API_URLS.userDossiers, 'GET', {})
 
 export const syncDossiers = (): Promise<{ status: string }> =>
