@@ -14,58 +14,7 @@
 
             <p class="fr-text--lead fr-mb-1w">Dossier #{{ dossierData.dn_numero_dossier }}</p>
 
-            <div
-              v-if="dossierData.date_creation"
-              class="fr-text--xs fr-mb-2w fr-text-mention--grey"
-            >
-              <span class="fr-icon-calendar-line fr-icon--sm fr-mr-1v" aria-hidden="true"></span>
-              Créé le {{ formatDate(dossierData.date_creation) }}
-              <span
-                v-if="
-                  shouldShowModificationDate(
-                    dossierData.date_creation,
-                    dossierData.date_modification
-                  )
-                "
-              >
-                &middot; Modifié le {{ formatDate(dossierData.date_modification) }}
-              </span>
-            </div>
-
-            <div v-if="dossierData.date_constat || dossierData.localisation_depot" class="fr-mb-4w">
-              <div class="fr-grid-row fr-grid-row--gutters">
-                <div
-                  v-if="dossierData.date_constat"
-                  class="fr-col-12 fr-col-md-6 fr-text--sm fr-mb-2w fr-mb-md-0"
-                >
-                  <div class="fr-display-flex fr-align-items-center fr-mb-1v">
-                    <span
-                      class="fr-icon-calendar-line fr-icon--sm fr-mr-1v fr-text-active--blue-france"
-                      aria-hidden="true"
-                    ></span>
-                    <strong>Date de constatation :</strong>
-                  </div>
-                  <div class="fr-ml-3w fr-text-title--grey">
-                    {{ formatDate(dossierData.date_constat) }}
-                  </div>
-                </div>
-                <div
-                  v-if="dossierData.localisation_depot"
-                  class="fr-col-12 fr-col-md-6 fr-text--sm"
-                >
-                  <div class="fr-display-flex fr-align-items-center fr-mb-1v">
-                    <span
-                      class="fr-icon-map-pin-2-line fr-icon--sm fr-mr-1v fr-text-active--blue-france"
-                      aria-hidden="true"
-                    ></span>
-                    <strong>Adresse du dépôt :</strong>
-                  </div>
-                  <div class="fr-ml-3w fr-text-title--grey">
-                    {{ dossierData.localisation_depot }}
-                  </div>
-                </div>
-              </div>
-            </div>
+            <DossierMetadata :dossier="dossierData" />
             <div v-if="hasProcedure">
               <DsfrBadge
                 :type="auteurIdentifie ? 'success' : 'info'"
@@ -123,12 +72,11 @@
 </template>
 
 <script setup lang="ts">
-import { formatDate, shouldShowModificationDate } from '@/utils/date'
-import { DsfrBadge, DsfrButton } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 import StepperProcedure from '../components/StepperProcedure.vue'
+import DossierMetadata from '../components/dossiers/DossierMetadata.vue'
 import ChargementDossier from '../components/dossiers/ChargementDossier.vue'
 import Cloture from '../components/steps/Cloture.vue'
 import Constatation from '../components/steps/Constatation.vue'
@@ -140,6 +88,7 @@ import SuiviSanction from '../components/steps/SuiviSanction.vue'
 
 import { API_URLS, createResource } from '@/services/api'
 import { getDnDocConstatUrl, getDnLettreInfoUrl, getDnModifyUrl } from '@/services/urls'
+import { openExternalLink } from '../utils/browser'
 
 const route = useRoute()
 const showLoading = ref(true)
@@ -227,11 +176,7 @@ onMounted(async () => {
   }
 })
 
-const openExternalLink = (url: string) => {
-  if (url) {
-    window.open(url, '_blank', 'noopener,noreferrer')
-  }
-}
+
 </script>
 
 <style scoped>
