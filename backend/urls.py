@@ -8,15 +8,15 @@ from rest_framework.routers import DefaultRouter
 from backend.dn_signalements.views import (
     DNSignalementDocumentDownloadView,
     ProcessDossierView,
-    SyncUserDossiersView,
-    UserDossierViewSet,
+    SyncUserSignalementsView,
+    UserSignalementViewSet,
 )
 from backend.home.views import UserInfoViewSet, index_view, logout_view
 
 # API Routes registration
 router = DefaultRouter()
 router.register("user-info", UserInfoViewSet, basename="user-info")
-router.register("dossiers", UserDossierViewSet, basename="user-dossier")
+router.register("dossiers", UserSignalementViewSet, basename="user-dossier")
 
 # Admin Routes
 if settings.ENABLE_ADMIN:
@@ -39,7 +39,7 @@ urlpatterns.extend(
         ),
         path(
             "api/dossiers/sync/",
-            SyncUserDossiersView.as_view(),
+            SyncUserSignalementsView.as_view(),
             name="dossiers-sync",
         ),
         path("api/", include(router.urls)),

@@ -209,7 +209,7 @@ class DNSignalementDocumentDownloadView(SignalementDocumentDownloadViewMixin):
     model_class = DNSignalement
 
 
-class UserDossierViewSet(viewsets.ReadOnlyModelViewSet):
+class UserSignalementViewSet(viewsets.ReadOnlyModelViewSet):
     """
     List user dossiers with statuses, from the database.
     """
@@ -221,7 +221,7 @@ class UserDossierViewSet(viewsets.ReadOnlyModelViewSet):
         return DNSignalement.objects.filter(user=self.request.user).order_by("-dn_date_creation")
 
 
-class SyncUserDossiersView(APIView):
+class SyncUserSignalementsView(APIView):
     """
     Trigger a background synchronization of user dossiers.
     """
