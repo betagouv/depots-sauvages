@@ -1,9 +1,9 @@
 <template>
   <div class="documents-integration">
-    <DnBandeauAccueil :has-procedure="hasProcedure" :auteur-identifie="auteurIdentifie" />
+    <BandeauInformation :has-procedure="hasProcedure" :auteur-identifie="auteurIdentifie" />
 
     <div class="fr-mt-2w">
-      <DnDocuments
+      <CartesDocuments
         :auteur-identifie="auteurIdentifie"
         :doc-constat-url="docConstatUrl"
         :lettre-info-url="lettreInfoUrl"
@@ -25,8 +25,8 @@
 import { DsfrAlert } from '@gouvminint/vue-dsfr'
 import { computed } from 'vue'
 
-import DnBandeauAccueil from '../dn/DnBandeauAccueil.vue'
-import DnDocuments from '../dn/DnDocuments.vue'
+import BandeauInformation from '../dossiers/BandeauInformation.vue'
+import CartesDocuments from '../dossiers/CartesDocuments.vue'
 import ListeActions from './ListeActions.vue'
 
 const actions = computed(() => {

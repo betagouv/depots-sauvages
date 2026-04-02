@@ -6,10 +6,10 @@ class AbstractSignalementBase(models.Model):
     Abstract base model containing all common signalement fields.
     """
 
-    commune = models.CharField("commune", max_length=255)
+    commune = models.CharField("commune", max_length=255, null=True, blank=True)
     localisation_depot = models.CharField("localisation", max_length=255, blank=True)
-    date_constat = models.DateField("date de constatation")
-    heure_constat = models.TimeField("heure de constatation")
+    date_constat = models.DateField("date de constatation", null=True, blank=True)
+    heure_constat = models.TimeField("heure de constatation", null=True, blank=True)
     constatant_role = models.CharField("rôle du constatant", max_length=255, blank=True)
     constatant_civilite = models.CharField("civilité du constatant", max_length=20, blank=True)
     constatant_prenom = models.CharField("prénom du constatant", max_length=255, blank=True)

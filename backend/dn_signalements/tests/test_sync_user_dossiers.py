@@ -2,7 +2,7 @@ from unittest.mock import patch
 
 import pytest
 
-from backend.dn_signalements.models import UserDossier
+from backend.dn_signalements.models import DNSignalement
 from backend.unit_tests.factories import UserFactory
 
 
@@ -27,7 +27,7 @@ def test_login_syncs_dossiers_from_api(client):
         client.force_login(user)
         # Verification: The task should have called the API client
         mock_get_dossiers.assert_called_once()
-        # Verification: UserDossier should be created in DB
-        assert UserDossier.objects.filter(user=user, numero_dossier=12345).exists()
-        dossier = UserDossier.objects.get(numero_dossier=12345)
-        assert dossier.numero_dossier == 12345
+        # Verification: DNSignalement should be created in DB
+        assert DNSignalement.objects.filter(user=user, dn_numero_dossier=12345).exists()
+        dossier = DNSignalement.objects.get(dn_numero_dossier=12345)
+        assert dossier.dn_numero_dossier == 12345

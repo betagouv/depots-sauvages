@@ -48,29 +48,7 @@
                   {{ dossier.title }}
                 </h3>
                 <div class="fr-card__desc">
-                  <div class="fr-text--xs fr-mb-2w">
-                    <span
-                      class="fr-icon-calendar-line fr-icon--sm fr-mr-1v"
-                      aria-hidden="true"
-                    ></span>
-                    Créé le {{ formatDate(dossier.date_creation) }}
-                    <span v-if="shouldShowModificationDate(dossier.date_creation, dossier.date_modification)">
-                      &middot; Modifié le {{ formatDate(dossier.date_modification) }}
-                    </span>
-                  </div>
-
-                  <div v-if="dossier.date_constat || dossier.localisation_depot">
-                    <div class="fr-grid-row fr-grid-row--gutters">
-                      <div v-if="dossier.date_constat" class="fr-col-12 fr-col-md-6">
-                        <strong>Date de constatation :</strong> <br />
-                        {{ formatDate(dossier.date_constat) }}
-                      </div>
-                      <div v-if="dossier.localisation_depot" class="fr-col-12 fr-col-md-6">
-                        <strong>Adresse du dépôt :</strong> <br />
-                        {{ dossier.localisation_depot }}
-                      </div>
-                    </div>
-                  </div>
+                  <DossierMetadata :dossier="dossier" />
                 </div>
               </div>
 
@@ -112,13 +90,14 @@
 </template>
 
 <script setup lang="ts">
-import { formatDate, shouldShowModificationDate } from '@/utils/date'
 import { useDossierStore } from '@/stores/dossier'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import ChargementDossier from '../components/dn/ChargementDossier.vue'
+import DossierMetadata from '../components/dossiers/DossierMetadata.vue'
+import ChargementDossier from '../components/dossiers/ChargementDossier.vue'
 import { getUserInfo, type UserInfo } from '../services/api'
 import { getDnModifyUrl, getSuiviProcedureUrl } from '../services/urls'
+import { openExternalLink } from '../utils/browser'
 
 const router = useRouter()
 const userInfo = ref<UserInfo | null>(null)
@@ -141,11 +120,7 @@ onMounted(async () => {
   }
 })
 
-const openExternalLink = (url: string) => {
-  if (url) {
-    window.open(url, '_blank', 'noopener,noreferrer')
-  }
-}
+
 
 
 const handleManualSync = async () => {

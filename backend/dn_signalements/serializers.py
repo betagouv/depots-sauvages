@@ -2,26 +2,18 @@
 
 from rest_framework import serializers
 
-from backend.dn_signalements.models import DNSignalement, UserDossier
+from backend.dn_signalements.models import DNSignalement
 
 
-class SignalementSerializer(serializers.ModelSerializer):
-    """Serializer for Signalement model."""
+class UserSignalementSerializer(serializers.ModelSerializer):
+    """Serializer for Signalement/user."""
+
+    numero_dossier = serializers.IntegerField(source="dn_numero_dossier")
+    date_creation = serializers.DateTimeField(source="dn_date_creation")
+    date_modification = serializers.DateTimeField(source="dn_date_modification")
 
     class Meta:
         model = DNSignalement
-        exclude = [
-            "doc_constat",
-            "lettre_info",
-            "constatant",
-        ]
-
-
-class UserDossierSerializer(serializers.ModelSerializer):
-    """Serializer for UserDossier model."""
-
-    class Meta:
-        model = UserDossier
         fields = [
             "id",
             "numero_dossier",
