@@ -17,10 +17,12 @@ const actions = computed(() => [
   {
     label: 'Constater le dépôt sauvage',
     completed: true,
+    readonly: true,
   },
   {
     label: 'Remplir le formulaire sur Démarches Numériques',
     completed: true,
+    readonly: true,
   },
 ])
 </script>

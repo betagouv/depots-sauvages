@@ -48,11 +48,11 @@
               />
             </template>
             <template v-if="hasProcedure" #step-2>
-              <Notification v-if="auteurIdentifie" />
+              <Notification v-if="auteurIdentifie" :suivi="suiviProcedure" />
               <Identification
                 v-else
                 :auteur-identifie="auteurIdentifie"
-                :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
+                :modify-url="getDnModifyUrl(dossierData.id)"
               />
             </template>
             <template v-if="hasProcedure" #step-3>
@@ -84,13 +84,16 @@ import Documents from '../components/steps/Documents.vue'
 import Identification from '../components/steps/Identification.vue'
 import AucuneProcedure from '../components/steps/AucuneProcedure.vue'
 import Notification from '../components/steps/Notification.vue'
-import SuiviSanction from '../components/steps/SuiviSanction.vue'
-
-import { API_URLS, createResource } from '@/services/api'
-import { getDnDocConstatUrl, getDnLettreInfoUrl, getDnModifyUrl } from '@/services/urls'
+import { API_URLS, createResource } from '../services/api'
+import { getDnDocConstatUrl, getDnLettreInfoUrl, getDnModifyUrl } from '../services/urls'
 import { openExternalLink } from '../utils/browser'
+import { useSuiviStore } from '../stores/suivi-procedure'
 
 const route = useRoute()
+const suiviStore = useSuiviStore()
+
+const dossierId = computed(() => (route.params.dossier_id as string) || (route.query.dossier_id as string))
+const suiviProcedure = computed(() => suiviStore.getOrCreateSuivi(dossierId.value))
 const showLoading = ref(true)
 const error = ref<string | null>(null)
 const dossierData = ref<any>(null)
