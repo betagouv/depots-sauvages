@@ -1,52 +1,58 @@
 <template>
-  <div class="notification">
-    <h4 class="fr-h6 fr-mb-2w">Ce qu'il vous reste à faire</h4>
+  <div class="step-notification">
+    <h4 class="fr-h6 fr-mb-2w">Suivi de la notification</h4>
     <ListeActions step-id="notification" :actions="actions" @update-case="onUpdateCase">
-      <template #extra-0>
-        <div class="fr-col-12 fr-col-md-6 fr-mb-2w">
+      <template #extra-lettre_envoyee>
+        <div class="fr-col-12 fr-col-md-6">
           <DsfrInput
             v-model="suivi.lettre_envoyee_date"
-            label="Date d'envoi de la lettre d'information"
+            label="Date d'envoi du courrier"
             label-visible
             type="date"
           />
         </div>
       </template>
 
-      <template #extra-2>
-        <div class="fr-col-12 fr-col-md-6">
-          <DsfrSelect
-            v-model="suivi.ar_statut"
-            label="Quel est le statut de l'accusé de réception ?"
-            :options="arStatusOptions"
-            class="fr-mb-2w"
-          />
-
-          <transition name="slide-up">
-            <div v-if="showDatePresentation" class="fr-mt-2w">
-              <DsfrInput
-                v-model="suivi.ar_presentation_date"
-                label="Date de présentation du courrier recommandé"
-                label-visible
-                type="date"
-                hint="C'est le point de départ de la période du contradictoire (10 jours)"
-              />
-            </div>
-          </transition>
-
-          <transition name="slide-up">
-            <DsfrAlert
-              v-if="suivi.ar_statut === 'NPAI'"
-              class="fr-mt-2w"
-              type="info"
-              title="L'auteur n'habite pas à l'adresse indiquée"
-              description="Vous pouvez directement passer à l'étape de clôture de la procédure."
-              small
+      <template #extra-ar_recu>
+        <div class="fr-grid-row fr-grid-row--gutters">
+          <div class="fr-col-12 fr-col-md-6">
+            <DsfrSelect
+              v-model="suivi.ar_statut"
+              label="Statut du recommandé"
+              :options="arStatusOptions"
             />
-          </transition>
+          </div>
+          <div class="fr-col-12 fr-col-md-6">
+            <DsfrInput
+              v-model="suivi.ar_presentation_date"
+              label="Date de présentation / réception"
+              label-visible
+              type="date"
+              hint="Utilisée pour calculer le délai de contradictoire"
+            />
+          </div>
         </div>
       </template>
     </ListeActions>
+
+    <!-- Info complémentaire sur le contradictoire -->
+    <transition name="fade-slide">
+      <div v-if="suivi.ar_presentation_date && suivi.ar_recu" class="fr-mt-4w">
+        <DsfrAlert
+          type="info"
+          :title="`Délai de contradictoire : jusqu'au ${contradictoire.dateFin}`"
+        >
+          <p>
+            L'auteur a jusqu'à cette date pour présenter ses observations.
+            <br />
+            État actuel :
+            <span :class="{ 'text-warning-custom': contradictoire.isClose }">
+              {{ contradictoire.joursRestantsLabel }}
+            </span>
+          </p>
+        </DsfrAlert>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -54,40 +60,39 @@
 import { computed } from 'vue'
 import ListeActions, { type Action } from './ListeActions.vue'
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
+import { calculateContradictoire } from '../../utils/procedure'
 
 const props = defineProps<{
   suivi: SuiviProcedure
 }>()
 
+const contradictoire = computed(() => calculateContradictoire(props.suivi.ar_presentation_date))
+
+const arStatusOptions = [
+  { text: 'Distribué', value: 'distribue' },
+  { text: 'Remis à un tiers', value: 'tiers' },
+  { text: 'Refusé', value: 'refuse' },
+  { text: 'Non réclamé (Pli avisé non réclamé)', value: 'non_reclame' },
+  { text: 'Adresse incomplète / Inconnu à cette adresse', value: 'inconnu' },
+]
+
 const actions = computed((): Action[] => [
   {
     id: 'lettre_envoyee',
-    label: "Envoyer la lettre d'information en recommandé avec accusé de réception",
+    label: "Envoyer la lettre d'information (recommandé avec accusé de réception)",
     completed: props.suivi.lettre_envoyee,
   },
   {
     id: 'copie_archives',
-    label: 'Conserver une copie de tous les documents pour vos archives',
+    label: 'Verser une copie au dossier et aux archives',
     completed: props.suivi.copie_archives,
   },
   {
     id: 'ar_recu',
-    label:
-      "Réceptionner l'accusé de réception : c'est le point de départ de la période du contradictoire",
+    label: "Réceptionner l'avis de réception (AR) ou le pli non distribué",
     completed: props.suivi.ar_recu,
   },
 ])
-
-const arStatusOptions = [
-  { text: 'Distribué', value: 'Distribué' },
-  { text: 'Refusé', value: 'Refusé' },
-  { text: 'Non réclamé', value: 'Non réclamé' },
-  { text: 'NPAI', value: 'NPAI' },
-]
-
-const showDatePresentation = computed(() =>
-  ['Distribué', 'Refusé', 'Non réclamé'].includes(props.suivi.ar_statut)
-)
 
 const onUpdateCase = (action: Action, val: boolean) => {
   switch (action.id) {
@@ -103,19 +108,3 @@ const onUpdateCase = (action: Action, val: boolean) => {
   }
 }
 </script>
-
-<style scoped>
-.slide-up-enter-active,
-.slide-up-leave-active {
-  transition: all 0.3s ease-out;
-  max-height: 500px;
-  opacity: 1;
-}
-
-.slide-up-enter-from,
-.slide-up-leave-to {
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-}
-</style>

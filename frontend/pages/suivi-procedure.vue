@@ -63,7 +63,7 @@
               />
             </template>
             <template v-if="hasProcedure" #step-4>
-              <Cloture v-if="auteurIdentifie" />
+              <Cloture v-if="auteurIdentifie" :suivi="suiviProcedure" />
             </template>
           </StepperProcedure>
         </div>

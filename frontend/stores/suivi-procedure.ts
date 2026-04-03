@@ -21,9 +21,16 @@ export interface SuiviProcedure {
   montant_amende: number | null
   motif_abandon: string
   date_recouvrement: string
+  date_recouvrement_effective: string
   nettoyage_fait: boolean | null
   nettoyage_par: string
   observations_internes: string
+
+  // Étape 5 : Clôture
+  nettoyage_confirme: boolean
+  titre_recette_confirme: boolean
+  montant_recouvre: boolean
+  dossier_archive: boolean
 }
 
 export const useSuiviStore = defineStore('suiviProcedure', () => {
@@ -47,9 +54,14 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
         montant_amende: null,
         motif_abandon: '',
         date_recouvrement: '',
+        date_recouvrement_effective: '',
         nettoyage_fait: null,
         nettoyage_par: '',
         observations_internes: '',
+        nettoyage_confirme: false,
+        titre_recette_confirme: false,
+        montant_recouvre: false,
+        dossier_archive: false,
       }
     }
     return procedures[dossierId]

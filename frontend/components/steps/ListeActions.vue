@@ -29,8 +29,8 @@
         </div>
 
         <transition name="slide-up">
-          <div v-if="action.completed && $slots[`extra-${index}`]" class="action-details fr-p-3w">
-            <slot :name="`extra-${index}`"></slot>
+          <div v-if="action.completed && ($slots[`extra-${action.id}`] || $slots[`extra-${index}`])" class="action-details fr-p-3w">
+            <slot :name="action.id ? `extra-${action.id}` : `extra-${index}`"></slot>
           </div>
         </transition>
       </div>
