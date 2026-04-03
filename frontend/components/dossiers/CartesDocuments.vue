@@ -2,7 +2,7 @@
   <div class="fr-grid-row fr-grid-row--gutters fr-mb-2w">
     <div :class="rapportColClass">
       <DsfrCard
-        title="Rapport de constatation"
+        title="Télécharger le rapport de constatation"
         description="Résumé des observations de terrain et des préjudices causés."
         :buttons="[
           {
@@ -25,7 +25,7 @@
     </div>
     <div v-if="auteurIdentifie" class="fr-col-12 fr-col-md-6">
       <DsfrCard
-        title="Lettre d'information"
+        title="Télécharger la lettre d'information"
         description="Courrier rappelant les faits constatés et les obligations de l'auteur présumé du dépôt sauvage."
         :buttons="[
           {

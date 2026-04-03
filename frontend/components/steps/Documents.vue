@@ -22,7 +22,6 @@
 </template>
 
 <script setup lang="ts">
-import { DsfrAlert } from '@gouvminint/vue-dsfr'
 import { computed } from 'vue'
 
 import BandeauInformation from '../dossiers/BandeauInformation.vue'
@@ -31,12 +30,6 @@ import ListeActions from './ListeActions.vue'
 
 const actions = computed(() => {
   const baseActions = [
-    {
-      label: props.auteurIdentifie
-        ? "Télécharger le rapport de constatation et la lettre d'information"
-        : 'Télécharger le rapport de constatation',
-      completed: false,
-    },
     {
       label: 'Joindre les éléments de preuve et les photos au rapport de constatation',
       completed: false,
