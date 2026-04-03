@@ -58,7 +58,8 @@
             <template v-if="hasProcedure" #step-3>
               <SuiviSanction
                 v-if="auteurIdentifie"
-                :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
+                :suivi="suiviProcedure"
+                :modify-url="getDnModifyUrl(dossierData.id)"
               />
             </template>
             <template v-if="hasProcedure" #step-4>
@@ -84,6 +85,7 @@ import Documents from '../components/steps/Documents.vue'
 import Identification from '../components/steps/Identification.vue'
 import AucuneProcedure from '../components/steps/AucuneProcedure.vue'
 import Notification from '../components/steps/Notification.vue'
+import SuiviSanction from '../components/steps/SuiviSanction.vue'
 import { API_URLS, createResource } from '../services/api'
 import { getDnDocConstatUrl, getDnLettreInfoUrl, getDnModifyUrl } from '../services/urls'
 import { openExternalLink } from '../utils/browser'

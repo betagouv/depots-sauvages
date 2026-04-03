@@ -10,7 +10,7 @@
             v-if="!action.readonly"
             :model-value="action.completed"
             :name="`${stepId}-action-${index}`"
-            @update:model-value="(val: boolean) => $emit('updateCase', action, val)"
+            @update:model-value="(val: boolean) => $emit('update-case', action, val)"
           >
             <template #label>
               <span class="action-label" v-html="action.label"></span>
@@ -44,6 +44,7 @@
 
 <script setup lang="ts">
 export interface Action {
+  id?: string
   label: string
   completed?: boolean
   readonly?: boolean
@@ -55,7 +56,7 @@ defineProps<{
   actions: Action[]
 }>()
 
-defineEmits(['updateCase'])
+defineEmits(['update-case'])
 </script>
 
 <style scoped>
@@ -94,13 +95,26 @@ defineEmits(['updateCase'])
 }
 
 .action-details {
-  margin-top: -0.5rem;
+  margin-top: -1px;
   margin-left: 2.5rem;
   background-color: var(--background-alt-grey);
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
-  border-top: 1px dashed var(--border-default-grey);
-  border-left: 2px solid var(--border-default-blue-france);
+  /* Retrait de la bordure gauche pour plus de légèreté */
+}
+
+@media (max-width: 767px) {
+  .action-bracket {
+    padding-left: 0.5rem !important;
+  }
+  .action-details {
+    margin-left: 1rem;
+    padding: 1rem !important;
+  }
+}
+
+.is-completed + .action-details {
+  background-color: var(--background-alt-blue-france);
 }
 
 .action-label {

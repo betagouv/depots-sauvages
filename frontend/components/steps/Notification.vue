@@ -1,11 +1,7 @@
 <template>
   <div class="notification">
     <h4 class="fr-h6 fr-mb-2w">Ce qu'il vous reste à faire</h4>
-    <ListeActions
-      step-id="notification"
-      :actions="actions"
-      @updateCase="onUpdateCase"
-    >
+    <ListeActions step-id="notification" :actions="actions" @update-case="onUpdateCase">
       <template #extra-0>
         <div class="fr-col-12 fr-col-md-6 fr-mb-2w">
           <DsfrInput
@@ -56,23 +52,26 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import ListeActions from './ListeActions.vue'
+import ListeActions, { type Action } from './ListeActions.vue'
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
 
 const props = defineProps<{
   suivi: SuiviProcedure
 }>()
 
-const actions = computed(() => [
+const actions = computed((): Action[] => [
   {
+    id: 'lettre_envoyee',
     label: "Envoyer la lettre d'information en recommandé avec accusé de réception",
     completed: props.suivi.lettre_envoyee,
   },
   {
+    id: 'copie_archives',
     label: 'Conserver une copie de tous les documents pour vos archives',
     completed: props.suivi.copie_archives,
   },
   {
+    id: 'ar_recu',
     label:
       "Réceptionner l'accusé de réception : c'est le point de départ de la période du contradictoire",
     completed: props.suivi.ar_recu,
@@ -80,23 +79,27 @@ const actions = computed(() => [
 ])
 
 const arStatusOptions = [
-  { label: 'Distribué', value: 'Distribué' },
-  { label: 'Refusé', value: 'Refusé' },
-  { label: 'Non réclamé', value: 'Non réclamé' },
-  { label: 'NPAI', value: 'NPAI' },
+  { text: 'Distribué', value: 'Distribué' },
+  { text: 'Refusé', value: 'Refusé' },
+  { text: 'Non réclamé', value: 'Non réclamé' },
+  { text: 'NPAI', value: 'NPAI' },
 ]
 
 const showDatePresentation = computed(() =>
   ['Distribué', 'Refusé', 'Non réclamé'].includes(props.suivi.ar_statut)
 )
 
-const onUpdateCase = (action: any, val: boolean) => {
-  if (action.label.includes('Envoyer la lettre')) {
-    props.suivi.lettre_envoyee = val
-  } else if (action.label.includes('Conserver une copie')) {
-    props.suivi.copie_archives = val
-  } else if (action.label.includes("Réceptionner l'accusé")) {
-    props.suivi.ar_recu = val
+const onUpdateCase = (action: Action, val: boolean) => {
+  switch (action.id) {
+    case 'lettre_envoyee':
+      props.suivi.lettre_envoyee = val
+      break
+    case 'copie_archives':
+      props.suivi.copie_archives = val
+      break
+    case 'ar_recu':
+      props.suivi.ar_recu = val
+      break
   }
 }
 </script>

@@ -10,8 +10,14 @@ export interface SuiviProcedure {
   ar_statut: string
   ar_presentation_date: string
   
-  // Autres étapes (préparation)
+  // Étape 4 : Actions selon décision
+  montant_fixe: boolean
+  arrete_redige: boolean
+  titre_recette_emis: boolean
+  notification_sanction_envoyee: boolean
+  notification_abandon_envoyee: boolean
   decision_poursuite: string // 'sanction' | 'abandon' | ''
+  
   montant_amende: number | null
   motif_abandon: string
   date_recouvrement: string
@@ -32,6 +38,11 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
         ar_recu: false,
         ar_statut: '',
         ar_presentation_date: '',
+        montant_fixe: false,
+        arrete_redige: false,
+        titre_recette_emis: false,
+        notification_sanction_envoyee: false,
+        notification_abandon_envoyee: false,
         decision_poursuite: '',
         montant_amende: null,
         motif_abandon: '',
