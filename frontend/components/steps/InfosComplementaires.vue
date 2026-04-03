@@ -6,7 +6,7 @@
         <div class="fr-col-12 fr-mb-3w">
           <DsfrRadioButtonSet
             v-model="suivi.nettoyage_fait"
-            legend="Dépôt nettoyé ?"
+            legend="Le dépôt sauvage est nettoyé ?"
             :options="nettoyageOptions"
             name="nettoyage-radios"
             inline
@@ -28,10 +28,10 @@
         <div class="fr-col-12">
           <DsfrInput
             v-model="suivi.observations_internes"
-            label="Observations internes (mairie)"
+            label="Observations internes"
             is-textarea
-            placeholder="Notes, détails sur le contrevenant, historique..."
-            hint="Ces informations ne sont pas transmises à l'auteur."
+            placeholder=""
+            hint="Dans ce champs vous pouvez ajouter toutes les informations utiles au suivi du dossier. Ces notes internes ne sont pas intégrées aux différents documents de procédures mais peuvent vous aider à ajouter des commentaires complémentaires."
             rows="3"
           />
         </div>
@@ -53,9 +53,9 @@ const nettoyageOptions = [
 ]
 
 const nettoyageParOptions = [
-  { text: 'L\'auteur du dépôt', value: 'auteur' },
-  { text: 'La collectivité (Régie)', value: 'mairie' },
-  { text: 'Prestataire tiers', value: 'prestataire' },
+  { text: 'L’auteur', value: 'auteur' },
+  { text: 'La collectivité', value: 'mairie' },
+  { text: 'Un tiers inconnu / prestataire', value: 'prestataire' },
 ]
 </script>
 

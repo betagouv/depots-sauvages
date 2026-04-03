@@ -1,6 +1,6 @@
 <template>
   <div class="cloture">
-    <h4 class="fr-h6 fr-mb-2w">Étapes avant de clôturer la procédure</h4>
+    <h4 class="fr-h6 fr-mb-2w">Actions pour clôturer la procédure</h4>
     <ListeActions step-id="cloture" :actions="actions" @update-case="onUpdateCase">
       <template #extra-montant_recouvre>
         <transition name="fade-slide">

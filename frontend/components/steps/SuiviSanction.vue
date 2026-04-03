@@ -8,11 +8,31 @@
           {{ contradictoire.joursRestantsLabel }}
         </span>
       </p>
-      <p v-else>
-        La période du contradictoire s'étend sur un minimum de <strong>10 jours</strong> à compter
-        de la réception de la lettre d'information. Une fois ce délai écoulé, vous devez décider de
-        la suite à donner :
-      </p>
+      <div v-else>
+        <p>
+          La période du contradictoire s'étend sur un minimum de <strong>10 jours</strong> à compter
+          de la réception de la lettre d'information. Une fois ce délai écoulé, deux issues sont possibles selon la réponse de l'auteur présumé :
+        </p>
+        <ul class="fr-mb-0">
+          <li>
+            <strong>Soit sanctionner l'auteur du dépôt sauvage</strong>
+            <ul>
+              <li>S'il a reconnu les faits ;</li>
+              <li>S'il n'a pas répondu à la lettre d'information avant la fin de la période du contradictoire ;</li>
+              <li>S'il nie les faits, mais les preuves contre lui sont accablantes.</li>
+            </ul>
+          </li>
+          <li class="fr-mt-1w">
+            <strong>Soit abandonner les poursuites</strong>
+            <ul>
+              <li>S'il y a un doute sur sa culpabilité ;</li>
+              <li>Si les éléments fournis par l'auteur présumé sont jugés convaincants ;</li>
+              <li>Si l'on souhaite faire preuve d'indulgence ;</li>
+              <li>Si la réponse à la lettre d'information désigne un autre auteur présumé.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
     </DsfrHighlight>
 
     <div class="decision-section fr-mb-4w fr-p-2w">
@@ -160,7 +180,7 @@ const decisionOptions = [
 ]
 
 const motifAbandonOptions = [
-  { text: 'Indulgence de l’autorité', value: 'Indulgence' },
+  { text: 'Indulgence', value: 'Indulgence' },
   { text: 'Autre motif de classement sans suite', value: 'Autre motif de classement sans suite' },
   { text: 'Un autre auteur a été identifié', value: 'Un auteur identifié' },
   { text: 'Les éléments fournis par l’auteur sont convaincants', value: 'Éléments convaincants' },
@@ -174,12 +194,12 @@ const deadlineTitle = computed(() => (contradictoire.value.dateFin ? 'Suivi du c
 const sanctionActions = computed((): Action[] => [
   {
     id: 'fixer_montant',
-    label: "Fixer le montant de l'amende administrative",
+    label: "Fixer le montant de l'amende administrative (montant proportionné à la gravité des faits, jusqu'à 15 000 € maximum)",
     completed: props.suivi.montant_fixe,
   },
   {
     id: 'arrete_redige',
-    label: "Rédiger l'arrêté de sanction administrative et le soumettre au contrôle de légalité",
+    label: "Rédiger l'arrêté de sanction administrative relatif à l'amende et le soumettre au contrôle de légalité",
     completed: props.suivi.arrete_redige,
   },
   {

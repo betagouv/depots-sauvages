@@ -145,16 +145,16 @@ const steps = computed(() => {
       description: 'Constater le dépôt et remplir le formulaire.',
     },
     {
-      title: 'Pièces de procédure',
-      description: 'Télécharger et compléter les pièces de procédure.',
+      title: 'Compléter les pièces de procédure',
+      description: 'Joindre les documents nécessaires au dossier.',
     },
     {
-      title: "Notifier l'auteur présumé",
-      description: "Envoyer la lettre d'information à l'auteur présumé.",
+      title: 'Notifier l\'auteur présumé :',
+      description: "Envoyer la lettre d'information en recommandé.",
     },
     {
-      title: "Poursuites éventuelles de l'auteur présumé.",
-      description: 'Déterminez les suites à donner à la procédure.',
+      title: 'Décider des poursuites :',
+      description: 'Déterminer les suites à donner à la procédure.',
     },
     {
       title: 'Clôture de la procédure',

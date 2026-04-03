@@ -53,6 +53,17 @@
         </DsfrAlert>
       </div>
     </transition>
+
+    <!-- Alerte spécifique NPAI -->
+    <transition name="fade-slide">
+      <div v-if="suivi.ar_statut === 'inconnu' && suivi.ar_recu" class="fr-mt-2w">
+        <DsfrAlert
+          type="info"
+          title="Adresse incomplète (NPAI)"
+          description="L'auteur n'habite pas à l'adresse indiquée vous pouvez directement passer à l'étape de clôture de la procédure."
+        />
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -70,26 +81,25 @@ const contradictoire = computed(() => calculateContradictoire(props.suivi.ar_pre
 
 const arStatusOptions = [
   { text: 'Distribué', value: 'distribue' },
-  { text: 'Remis à un tiers', value: 'tiers' },
   { text: 'Refusé', value: 'refuse' },
   { text: 'Non réclamé (Pli avisé non réclamé)', value: 'non_reclame' },
-  { text: 'Adresse incomplète / Inconnu à cette adresse', value: 'inconnu' },
+  { text: 'NPAI (Adresse incomplète / Inconnu à cette adresse)', value: 'inconnu' },
 ]
 
 const actions = computed((): Action[] => [
   {
     id: 'lettre_envoyee',
-    label: "Envoyer la lettre d'information (recommandé avec accusé de réception)",
+    label: "Envoyer la lettre d'information en recommandé avec accusé de réception",
     completed: props.suivi.lettre_envoyee,
   },
   {
     id: 'copie_archives',
-    label: 'Verser une copie au dossier et aux archives',
+    label: "Conserver une copie de tous les documents pour vos archives",
     completed: props.suivi.copie_archives,
   },
   {
     id: 'ar_recu',
-    label: "Réceptionner l'avis de réception (AR) ou le pli non distribué",
+    label: "Réceptionner l'accusé de réception : c'est le point de départ de la période du contradictoire",
     completed: props.suivi.ar_recu,
   },
 ])
