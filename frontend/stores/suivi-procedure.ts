@@ -2,6 +2,11 @@ import { defineStore } from 'pinia'
 import { reactive } from 'vue'
 
 export interface SuiviProcedure {
+  // Étape 1 : Pièces de procédure
+  preuve_photos_jointes: boolean
+  rapport_constat_signe: boolean
+  lettre_info_signee: boolean
+
   // Étape 2 : Notification
   lettre_envoyee: boolean
   lettre_envoyee_date: string
@@ -39,6 +44,9 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
   const getOrCreateSuivi = (dossierId: string): SuiviProcedure => {
     if (!procedures[dossierId]) {
       procedures[dossierId] = {
+        preuve_photos_jointes: false,
+        rapport_constat_signe: false,
+        lettre_info_signee: false,
         lettre_envoyee: false,
         lettre_envoyee_date: '',
         copie_archives: false,

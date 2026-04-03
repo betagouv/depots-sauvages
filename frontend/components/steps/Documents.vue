@@ -11,11 +11,7 @@
 
       <div class="fr-mb-4w fr-mt-4w">
         <h4 class="fr-h6 fr-mb-2w">Ce qu'il vous reste à faire</h4>
-        <ListeActions
-          step-id="constat-documents"
-          :actions="actions"
-          @updateCase="(action, val) => (action.completed = val)"
-        />
+        <ListeActions step-id="constat-documents" :actions="actions" @update-case="onUpdateCase" />
       </div>
     </div>
   </div>
@@ -26,40 +22,58 @@ import { computed } from 'vue'
 
 import BandeauInformation from '../dossiers/BandeauInformation.vue'
 import CartesDocuments from '../dossiers/CartesDocuments.vue'
-import ListeActions from './ListeActions.vue'
-
-const actions = computed(() => {
-  const baseActions = [
-    {
-      label: 'Joindre les éléments de preuve et les photos au rapport de constatation',
-      completed: false,
-    },
-    {
-      label:
-        "Compléter et faire signer le <strong>rapport de constatation</strong> par un agent habilité : le maire, ses adjoints ou conseillers délégués, les policiers municipaux ou gardes champêtres, les agents commissionnés et/ou assermentés de la commune ou de l'EPCI",
-      completed: false,
-    },
-  ]
-
-  if (props.auteurIdentifie) {
-    baseActions.push({
-      label:
-        "Compléter et faire signer la <strong>lettre d'information</strong> par l'autorité titulaire du pouvoir de police administrative : le maire, adjoints ou conseillers par délégation, président d'EPCI par transfert de compétence",
-      completed: false,
-    })
-  }
-
-  return baseActions
-})
+import ListeActions, { type Action } from './ListeActions.vue'
+import type { SuiviProcedure } from '../../stores/suivi-procedure'
 
 const props = defineProps<{
-  dossierData: any
+  suivi: SuiviProcedure
   hasProcedure: boolean
   auteurIdentifie: boolean
   docConstatUrl: string
   lettreInfoUrl: string
   modifyUrl: string
 }>()
+
+const actions = computed((): Action[] => {
+  const baseActions: Action[] = [
+    {
+      id: 'preuve_photos',
+      label: 'Joindre les éléments de preuve et les photos au rapport de constatation',
+      completed: props.suivi.preuve_photos_jointes,
+    },
+    {
+      id: 'rapport_signe',
+      label:
+        "Compléter et faire signer le <strong>rapport de constatation</strong> par un agent habilité : le maire, ses adjoints ou conseillers délégués, les policiers municipaux ou gardes champêtres, les agents commissionnés et/ou assermentés de la commune ou de l'EPCI",
+      completed: props.suivi.rapport_constat_signe,
+    },
+  ]
+
+  if (props.auteurIdentifie) {
+    baseActions.push({
+      id: 'lettre_signee',
+      label:
+        "Compléter et faire signer la <strong>lettre d'information</strong> par l'autorité titulaire du pouvoir de police administrative : le maire, adjoints ou conseillers par délégation, président d'EPCI par transfert de compétence",
+      completed: props.suivi.lettre_info_signee,
+    })
+  }
+
+  return baseActions
+})
+
+const onUpdateCase = (action: Action, val: boolean) => {
+  switch (action.id) {
+    case 'preuve_photos':
+      props.suivi.preuve_photos_jointes = val
+      break
+    case 'rapport_signe':
+      props.suivi.rapport_constat_signe = val
+      break
+    case 'lettre_signee':
+      props.suivi.lettre_info_signee = val
+      break
+  }
+}
 </script>
 
 <style scoped>
@@ -69,10 +83,6 @@ const props = defineProps<{
   margin-left: 0;
   margin-right: 0;
   max-width: 100%;
-}
-
-.documents-integration :deep(.hero-section) {
-  margin-bottom: 1rem;
 }
 
 .documents-integration :deep(.hero-section) {

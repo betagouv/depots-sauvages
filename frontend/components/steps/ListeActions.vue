@@ -1,6 +1,6 @@
 <template>
   <div class="action-list fr-mt-2w">
-    <div class="action-bracket fr-pl-3w fr-py-1v">
+    <div class="action-bracket fr-pl-1w fr-py-1v">
       <div v-for="(action, index) in actions" :key="index" class="action-row">
         <div
           class="action-item fr-display-flex fr-p-2w"
@@ -90,32 +90,28 @@ defineEmits(['update-case'])
   border-color: var(--border-default-blue-france);
 }
 
-.action-item.is-completed {
-  background-color: var(--background-alt-blue-france);
-}
+/* Background bleus supprimés pour alléger le design */
+
 
 .action-details {
   margin-top: -1px;
-  margin-left: 2.5rem;
-  background-color: var(--background-alt-grey);
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
-  /* Retrait de la bordure gauche pour plus de légèreté */
+  margin-left: 1.15rem;
+  padding-left: 1rem !important;
+  border-left: 2px solid var(--border-default-blue-france);
+  /* Suppression du fond pour alléger : background-color: var(--background-alt-grey); */
 }
 
 @media (max-width: 767px) {
   .action-bracket {
-    padding-left: 0.5rem !important;
+    padding-left: 0.25rem !important;
   }
   .action-details {
-    margin-left: 1rem;
-    padding: 1rem !important;
+    margin-left: 0.5rem;
+    padding: 0.75rem !important;
   }
 }
 
-.is-completed + .action-details {
-  background-color: var(--background-alt-blue-france);
-}
+
 
 .action-label {
   font-weight: 500;

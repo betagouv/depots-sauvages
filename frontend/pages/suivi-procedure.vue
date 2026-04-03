@@ -31,6 +31,8 @@
             />
           </header>
 
+          <InfosComplementaires v-if="hasProcedure && auteurIdentifie" :suivi="suiviProcedure" />
+
           <StepperProcedure :steps="steps" v-model:currentStep="activeStep">
             <template #step-0>
               <Constatation :auteur-identifie="auteurIdentifie" />
@@ -39,6 +41,7 @@
               <AucuneProcedure v-if="!hasProcedure" :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)" />
               <Documents
                 v-else
+                :suivi="suiviProcedure"
                 :dossier-data="dossierData"
                 :has-procedure="hasProcedure"
                 :auteur-identifie="auteurIdentifie"
@@ -86,6 +89,7 @@ import Identification from '../components/steps/Identification.vue'
 import AucuneProcedure from '../components/steps/AucuneProcedure.vue'
 import Notification from '../components/steps/Notification.vue'
 import SuiviSanction from '../components/steps/SuiviSanction.vue'
+import InfosComplementaires from '../components/steps/InfosComplementaires.vue'
 import { API_URLS, createResource } from '../services/api'
 import { getDnDocConstatUrl, getDnLettreInfoUrl, getDnModifyUrl } from '../services/urls'
 import { openExternalLink } from '../utils/browser'
