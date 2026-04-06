@@ -38,7 +38,10 @@
               <Constatation :auteur-identifie="auteurIdentifie" />
             </template>
             <template #step-1>
-              <AucuneProcedure v-if="!hasProcedure" :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)" />
+              <AucuneProcedure
+                v-if="!hasProcedure"
+                :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
+              />
               <Documents
                 v-else
                 :suivi="suiviProcedure"
@@ -59,13 +62,17 @@
               />
             </template>
             <template v-if="hasProcedure" #step-3>
-              <SuiviSanction
-                v-if="auteurIdentifie"
-                :suivi="suiviProcedure"
-                :modify-url="getDnModifyUrl(dossierData.id)"
-              />
+              <SuiviDecision v-if="auteurIdentifie" :suivi="suiviProcedure" />
             </template>
             <template v-if="hasProcedure" #step-4>
+              <SuiviActions
+                v-if="auteurIdentifie"
+                :suivi="suiviProcedure"
+                :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
+                @back-to-decision="activeStep = 3"
+              />
+            </template>
+            <template v-if="hasProcedure" #step-5>
               <Cloture v-if="auteurIdentifie" :suivi="suiviProcedure" />
             </template>
           </StepperProcedure>
@@ -80,25 +87,28 @@ import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 import StepperProcedure from '../components/StepperProcedure.vue'
-import DossierMetadata from '../components/dossiers/DossierMetadata.vue'
 import ChargementDossier from '../components/dossiers/ChargementDossier.vue'
+import DossierMetadata from '../components/dossiers/DossierMetadata.vue'
+import AucuneProcedure from '../components/steps/AucuneProcedure.vue'
 import Cloture from '../components/steps/Cloture.vue'
 import Constatation from '../components/steps/Constatation.vue'
 import Documents from '../components/steps/Documents.vue'
 import Identification from '../components/steps/Identification.vue'
-import AucuneProcedure from '../components/steps/AucuneProcedure.vue'
-import Notification from '../components/steps/Notification.vue'
-import SuiviSanction from '../components/steps/SuiviSanction.vue'
 import InfosComplementaires from '../components/steps/InfosComplementaires.vue'
+import Notification from '../components/steps/Notification.vue'
+import SuiviActions from '../components/steps/SuiviActions.vue'
+import SuiviDecision from '../components/steps/SuiviDecision.vue'
 import { API_URLS, createResource } from '../services/api'
 import { getDnDocConstatUrl, getDnLettreInfoUrl, getDnModifyUrl } from '../services/urls'
-import { openExternalLink } from '../utils/browser'
 import { useSuiviStore } from '../stores/suivi-procedure'
+import { openExternalLink } from '../utils/browser'
 
 const route = useRoute()
 const suiviStore = useSuiviStore()
 
-const dossierId = computed(() => (route.params.dossier_id as string) || (route.query.dossier_id as string))
+const dossierId = computed(
+  () => (route.params.dossier_id as string) || (route.query.dossier_id as string)
+)
 const suiviProcedure = computed(() => suiviStore.getOrCreateSuivi(dossierId.value))
 const showLoading = ref(true)
 const error = ref<string | null>(null)
@@ -149,12 +159,26 @@ const steps = computed(() => {
       description: 'Joindre les documents nécessaires au dossier.',
     },
     {
-      title: 'Notifier l\'auteur présumé :',
+      title: "Notifier l'auteur présumé :",
       description: "Envoyer la lettre d'information en recommandé.",
     },
     {
       title: 'Décider des poursuites :',
       description: 'Déterminer les suites à donner à la procédure.',
+    },
+    {
+      title:
+        suiviProcedure.value.decision_poursuite === 'sanction'
+          ? "Sanctionner l'auteur"
+          : suiviProcedure.value.decision_poursuite === 'abandon'
+            ? 'Abandonner les poursuites'
+            : 'Action de poursuite',
+      description:
+        suiviProcedure.value.decision_poursuite === 'sanction'
+          ? 'Suivi de la procédure de sanction administrative.'
+          : suiviProcedure.value.decision_poursuite === 'abandon'
+            ? "Suivi de l'abandon de la procédure."
+            : "Engager la sanction ou l'abandon des poursuites.",
     },
     {
       title: 'Clôture de la procédure',
@@ -184,8 +208,6 @@ onMounted(async () => {
     showLoading.value = false
   }
 })
-
-
 </script>
 
 <style scoped>

@@ -90,7 +90,6 @@ defineEmits(['update-case'])
   border-color: var(--border-default-blue-france);
 }
 
-/* Background bleus supprimés pour alléger le design */
 
 
 .action-details {
@@ -98,7 +97,6 @@ defineEmits(['update-case'])
   margin-left: 1.15rem;
   padding-left: 1rem !important;
   border-left: 2px solid var(--border-default-blue-france);
-  /* Suppression du fond pour alléger : background-color: var(--background-alt-grey); */
 }
 
 @media (max-width: 767px) {

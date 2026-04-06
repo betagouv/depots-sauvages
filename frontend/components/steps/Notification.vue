@@ -1,6 +1,6 @@
 <template>
   <div class="step-notification">
-    <h4 class="fr-h6 fr-mb-2w">Suivi de la notification</h4>
+    <h4 class="fr-h6 fr-mb-2w">Ce qu'il vous reste à faire</h4>
     <ListeActions step-id="notification" :actions="actions" @update-case="onUpdateCase">
       <template #extra-lettre_envoyee>
         <div class="fr-col-12 fr-col-md-6">

@@ -1,7 +1,3 @@
-/**
- * Utilitaires pour le suivi de procédure
- */
-
 export interface ContradictoireInfo {
   dateFin: string | null
   joursRestants: number
