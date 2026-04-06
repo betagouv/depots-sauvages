@@ -33,6 +33,7 @@
                     label="Date prévisionnelle de recouvrement"
                     label-visible
                     type="date"
+                    :max="today"
                     hint="Date indicative pour le suivi"
                   />
                 </div>
@@ -144,12 +145,15 @@
 import { computed } from 'vue'
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
 import { openExternalLink } from '../../utils/browser'
+import { getTodayISOString } from '../../utils/date'
 import ListeActions, { type Action } from './ListeActions.vue'
 
 const props = defineProps<{
   suivi: SuiviProcedure
   modifyUrl: string
 }>()
+
+const today = getTodayISOString()
 
 defineEmits(['back-to-decision'])
 

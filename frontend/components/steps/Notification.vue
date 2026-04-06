@@ -9,6 +9,7 @@
             label="Date d'envoi du courrier"
             label-visible
             type="date"
+            :max="today"
           />
         </div>
       </template>
@@ -28,6 +29,7 @@
               label="Date de présentation du courrier recommandé"
               label-visible
               type="date"
+              :max="today"
               hint="Utilisée pour calculer le délai du contradictoire"
             />
           </div>
@@ -66,12 +68,15 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
+import { getTodayISOString } from '../../utils/date'
 import { calculateContradictoire } from '../../utils/procedure'
 import ListeActions, { type Action } from './ListeActions.vue'
 
 const props = defineProps<{
   suivi: SuiviProcedure
 }>()
+
+const today = getTodayISOString()
 
 const contradictoire = computed(() => calculateContradictoire(props.suivi.ar_presentation_date))
 

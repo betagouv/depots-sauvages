@@ -33,11 +33,11 @@ export const calculateContradictoire = (arDate: string | null | undefined): Cont
 
   let label = ''
   if (joursRestants < 0) {
-    label = 'Le délai de contradictoire est expiré'
+    label = 'Le délai du contradictoire est expiré : vous pouvez continuer la procédure.'
   } else if (joursRestants === 0) {
-    label = "Ce délai expire aujourd'hui"
+    label = "Le délai du contradictoire expire aujourd'hui : vous pouvez continuer la procédure."
   } else {
-    label = `Ce délai sera écoulé dans ${joursRestants} jour${joursRestants > 1 ? 's' : ''}`
+    label = `La période du contradictoire sera écoulée dans ${joursRestants} jour${joursRestants > 1 ? 's' : ''} : vous pourrez alors continuer la procédure.`
   }
 
   return {

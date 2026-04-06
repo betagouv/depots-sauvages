@@ -10,6 +10,7 @@
               label="Date de recouvrement"
               label-visible
               type="date"
+              :max="today"
               hint="Date à laquelle la mairie a acté le recouvrement"
             />
           </div>
@@ -29,11 +30,14 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
+import { getTodayISOString } from '../../utils/date'
 import ListeActions, { type Action } from './ListeActions.vue'
 
 const props = defineProps<{
   suivi: SuiviProcedure
 }>()
+
+const today = getTodayISOString()
 
 const actions = computed((): Action[] => {
   const items: Action[] = []
