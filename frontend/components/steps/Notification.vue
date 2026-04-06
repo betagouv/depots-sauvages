@@ -14,18 +14,18 @@
       </template>
 
       <template #extra-ar_recu>
-        <div class="fr-grid-row fr-grid-row--gutters">
+        <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--bottom">
           <div class="fr-col-12 fr-col-md-6">
             <DsfrSelect
               v-model="suivi.ar_statut"
-              label="Statut du recommandé"
+              label="Quel est le statut de l'accusé réception ?"
               :options="arStatusOptions"
             />
           </div>
           <div class="fr-col-12 fr-col-md-6">
             <DsfrInput
               v-model="suivi.ar_presentation_date"
-              label="Date de présentation / réception"
+              label="Date de présentation du courrier recommandé"
               label-visible
               type="date"
               hint="Utilisée pour calculer le délai de contradictoire"
@@ -35,7 +35,6 @@
       </template>
     </ListeActions>
 
-    <!-- Info complémentaire sur le contradictoire -->
     <transition name="fade-slide">
       <div v-if="suivi.ar_presentation_date && suivi.ar_recu" class="fr-mt-4w">
         <DsfrAlert
@@ -49,7 +48,6 @@
       </div>
     </transition>
 
-    <!-- Alerte spécifique NPAI -->
     <transition name="fade-slide">
       <div v-if="suivi.ar_statut === 'inconnu' && suivi.ar_recu" class="fr-mt-2w">
         <DsfrAlert
@@ -64,9 +62,9 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import ListeActions, { type Action } from './ListeActions.vue'
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
 import { calculateContradictoire } from '../../utils/procedure'
+import ListeActions, { type Action } from './ListeActions.vue'
 
 const props = defineProps<{
   suivi: SuiviProcedure
@@ -77,8 +75,8 @@ const contradictoire = computed(() => calculateContradictoire(props.suivi.ar_pre
 const arStatusOptions = [
   { text: 'Distribué', value: 'distribue' },
   { text: 'Refusé', value: 'refuse' },
-  { text: 'Non réclamé (Pli avisé non réclamé)', value: 'non_reclame' },
-  { text: 'NPAI (Adresse incomplète / Inconnu à cette adresse)', value: 'inconnu' },
+  { text: 'Non réclamé', value: 'non_reclame' },
+  { text: 'NPAI', value: 'inconnu' },
 ]
 
 const actions = computed((): Action[] => [
@@ -89,12 +87,13 @@ const actions = computed((): Action[] => [
   },
   {
     id: 'copie_archives',
-    label: "Conserver une copie de tous les documents pour vos archives",
+    label: 'Conserver une copie de tous les documents pour vos archives',
     completed: props.suivi.copie_archives,
   },
   {
     id: 'ar_recu',
-    label: "Réceptionner l'accusé de réception : c'est le point de départ de la période du contradictoire",
+    label:
+      "Réceptionner l'accusé de réception : c'est le point de départ de la période du contradictoire",
     completed: props.suivi.ar_recu,
   },
 ])
