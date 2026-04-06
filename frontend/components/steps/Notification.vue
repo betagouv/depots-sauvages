@@ -40,15 +40,10 @@
       <div v-if="suivi.ar_presentation_date && suivi.ar_recu" class="fr-mt-4w">
         <DsfrAlert
           type="info"
-          :title="`Délai de contradictoire : jusqu'au ${contradictoire.dateFin}`"
+          :title="`Fin de la période du contradictoire : ${contradictoire.dateFin}`"
         >
           <p>
-            L'auteur a jusqu'à cette date pour présenter ses observations.
-            <br />
-            État actuel :
-            <span :class="{ 'text-warning-custom': contradictoire.isClose }">
-              {{ contradictoire.joursRestantsLabel }}
-            </span>
+            {{ contradictoire.joursRestantsLabel }}
           </p>
         </DsfrAlert>
       </div>

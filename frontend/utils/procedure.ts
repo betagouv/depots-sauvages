@@ -3,7 +3,6 @@ export interface ContradictoireInfo {
   joursRestants: number
   joursRestantsLabel: string
   isExpired: boolean
-  isClose: boolean // Moins de 3 jours
 }
 
 /**
@@ -17,7 +16,6 @@ export const calculateContradictoire = (arDate: string | null | undefined): Cont
       joursRestants: 0,
       joursRestantsLabel: '',
       isExpired: false,
-      isClose: false,
     }
   }
 
@@ -26,7 +24,7 @@ export const calculateContradictoire = (arDate: string | null | undefined): Cont
 
   const today = new Date()
   today.setHours(0, 0, 0, 0)
-  
+
   const fin = new Date(dateFin)
   fin.setHours(0, 0, 0, 0)
 
@@ -35,11 +33,11 @@ export const calculateContradictoire = (arDate: string | null | undefined): Cont
 
   let label = ''
   if (joursRestants < 0) {
-    label = 'Délai expiré'
+    label = 'Le délai de contradictoire est expiré'
   } else if (joursRestants === 0) {
-    label = "Aujourd'hui"
+    label = "Ce délai expire aujourd'hui"
   } else {
-    label = `${joursRestants} jour${joursRestants > 1 ? 's' : ''} restant${joursRestants > 1 ? 's' : ''}`
+    label = `Ce délai sera écoulé dans ${joursRestants} jour${joursRestants > 1 ? 's' : ''}`
   }
 
   return {
@@ -47,6 +45,5 @@ export const calculateContradictoire = (arDate: string | null | undefined): Cont
     joursRestants,
     joursRestantsLabel: label,
     isExpired: joursRestants < 0,
-    isClose: joursRestants >= 0 && joursRestants < 3,
   }
 }

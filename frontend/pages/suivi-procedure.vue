@@ -156,7 +156,7 @@ const steps = computed(() => {
     },
     {
       title: 'Compléter les pièces de procédure',
-      description: 'Joindre les documents nécessaires au dossier.',
+      description: 'Télécharger et compléter les pièces de procédure.',
     },
     {
       title: "Notifier l'auteur présumé :",

@@ -20,10 +20,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
+import type { SuiviProcedure } from '../../stores/suivi-procedure'
 import BandeauInformation from '../dossiers/BandeauInformation.vue'
 import CartesDocuments from '../dossiers/CartesDocuments.vue'
 import ListeActions, { type Action } from './ListeActions.vue'
-import type { SuiviProcedure } from '../../stores/suivi-procedure'
 
 const props = defineProps<{
   suivi: SuiviProcedure
@@ -44,8 +44,8 @@ const actions = computed((): Action[] => {
     {
       id: 'rapport_signe',
       label:
-        (props.auteurIdentifie ? "" : "Compléter et ") +
-        "faire signer le <strong>rapport de constatation</strong> par un agent habilité : le maire, ses adjoints ou conseillers délégués, les policiers municipaux ou gardes champêtres, les agents commissionnés et/ou assermentés de la commune ou de l'EPCI",
+        (props.auteurIdentifie ? '' : 'Compléter et ') +
+        "Faire signer le <strong>rapport de constatation</strong> par un agent habilité : le maire, ses adjoints ou conseillers délégués, les policiers municipaux ou gardes champêtres, les agents commissionnés et/ou assermentés de la commune ou de l'EPCI",
       completed: props.suivi.rapport_constat_signe,
     },
   ]
