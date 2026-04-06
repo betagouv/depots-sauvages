@@ -120,23 +120,7 @@
         </ListeActions>
       </div>
 
-      <div v-else key="no-decision" class="fr-p-4w text-center">
-        <span
-          class="fr-icon-warning-line fr-icon--lg fr-mb-2w"
-          aria-hidden="true"
-          style="color: var(--text-mention-grey)"
-        ></span>
-        <p class="fr-text--lead">D'abord décidez de l'issue de la procédure</p>
-        <p>
-          Veuillez choisir de sanctionner l'auteur ou d'abandonner les poursuites à l'étape
-          précédente.
-        </p>
-        <DsfrButton
-          label="Revenir à la décision"
-          class="fr-btn--secondary fr-btn--sm fr-mt-2w"
-          @click="$emit('back-to-decision')"
-        />
-      </div>
+      <AttenteDecision v-else key="no-decision" @action="$emit('back-to-decision')" />
     </transition>
   </div>
 </template>
@@ -147,6 +131,7 @@ import type { SuiviProcedure } from '../../stores/suivi-procedure'
 import { openExternalLink } from '../../utils/browser'
 import { getTodayISOString } from '../../utils/date'
 import ListeActions, { type Action } from './ListeActions.vue'
+import AttenteDecision from './AttenteDecision.vue'
 
 const props = defineProps<{
   suivi: SuiviProcedure

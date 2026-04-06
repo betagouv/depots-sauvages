@@ -73,7 +73,11 @@
               />
             </template>
             <template v-if="hasProcedure" #step-5>
-              <Cloture v-if="auteurIdentifie" :suivi="suiviProcedure" />
+              <Cloture
+                v-if="auteurIdentifie"
+                :suivi="suiviProcedure"
+                @back-to-decision="activeStep = 3"
+              />
             </template>
           </StepperProcedure>
         </div>

@@ -1,29 +1,35 @@
 <template>
   <div class="cloture">
-    <h4 class="fr-h6 fr-mb-2w">Actions pour clôturer la procédure</h4>
-    <ListeActions step-id="cloture" :actions="actions" @update-case="onUpdateCase">
-      <template #extra-montant_recouvre>
-        <transition name="fade-slide">
-          <div v-if="suivi.montant_recouvre" class="fr-col-12 fr-col-md-6 fr-pt-2w">
-            <DsfrInput
-              v-model="suivi.date_recouvrement_effective"
-              label="Date de recouvrement"
-              label-visible
-              type="date"
-              :max="today"
-              hint="Date à laquelle la mairie a acté le recouvrement"
-            />
-          </div>
-        </transition>
-      </template>
-    </ListeActions>
+    <transition name="fade-slide" mode="out-in">
+      <div v-if="suivi.decision_poursuite" key="content">
+        <h4 class="fr-h6 fr-mb-2w">Actions pour clôturer la procédure</h4>
+        <ListeActions step-id="cloture" :actions="actions" @update-case="onUpdateCase">
+          <template #extra-montant_recouvre>
+            <transition name="fade-slide">
+              <div v-if="suivi.montant_recouvre" class="fr-col-12 fr-col-md-6 fr-pt-2w">
+                <DsfrInput
+                  v-model="suivi.date_recouvrement_effective"
+                  label="Date de recouvrement"
+                  label-visible
+                  type="date"
+                  :max="today"
+                  hint="Date à laquelle la mairie a acté le recouvrement"
+                />
+              </div>
+            </transition>
+          </template>
+        </ListeActions>
 
-    <DsfrHighlight v-if="suivi.decision_poursuite === 'sanction'" class="fr-ml-0 fr-mt-4w">
-      <span class="fr-icon-info-line" aria-hidden="true"></span>
-      Le Trésor public se charge de la perception de l'amende. En cas d'insolvabilité de l'auteur,
-      la mairie n'est évidemment pas redevable de ce montant. La mairie actera le non-recouvrement
-      de l'amende en conseil municipal.
-    </DsfrHighlight>
+        <DsfrHighlight v-if="suivi.decision_poursuite === 'sanction'" class="fr-ml-0 fr-mt-4w">
+          <span class="fr-icon-info-line" aria-hidden="true"></span>
+          Le Trésor public se charge de la perception de l'amende. En cas d'insolvabilité de l'auteur,
+          la mairie n'est évidemment pas redevable de ce montant. La mairie actera le non-recouvrement
+          de l'amende en conseil municipal.
+        </DsfrHighlight>
+      </div>
+
+      <AttenteDecision v-else key="no-decision" @action="$emit('back-to-decision')" />
+    </transition>
   </div>
 </template>
 
@@ -32,12 +38,15 @@ import { computed } from 'vue'
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
 import { getTodayISOString } from '../../utils/date'
 import ListeActions, { type Action } from './ListeActions.vue'
+import AttenteDecision from './AttenteDecision.vue'
 
 const props = defineProps<{
   suivi: SuiviProcedure
 }>()
 
 const today = getTodayISOString()
+
+defineEmits(['back-to-decision'])
 
 const actions = computed((): Action[] => {
   const items: Action[] = []
@@ -78,3 +87,9 @@ const onUpdateCase = (action: Action, val: boolean) => {
   }
 }
 </script>
+
+<style scoped>
+.text-center {
+  text-align: center;
+}
+</style>
