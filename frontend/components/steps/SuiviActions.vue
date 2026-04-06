@@ -6,37 +6,29 @@
         <ListeActions step-id="sanction" :actions="sanctionActions" @update-case="onUpdateSanction">
           <template #extra-fixer_montant>
             <transition name="fade-slide">
-              <div v-if="suivi.montant_fixe" class="fr-grid-row fr-grid-row--gutters fr-pt-2w">
-                <div class="fr-col-12 fr-col-md-6">
-                  <DsfrInput
-                    v-model="suivi.montant_amende"
-                    label="Montant de l'amende fixée (€)"
-                    label-visible
-                    type="number"
-                    hint="Montant proportionné à la gravité des faits (max 15 000 €, 2 décimales max)"
-                    :min="0"
-                    :max="15000"
-                    step="0.01"
-                  />
-                  <a
-                    href="https://fichiers.numerique.gouv.fr/explorer/items/files/df51fe02-90dd-4afc-9346-8ae9b56fcea4"
-                    target="_blank"
-                    class="fr-text--xs fr-mt-1w fr-display-block"
-                  >
-                    <span class="fr-icon-links-line fr-icon--sm" aria-hidden="true"></span>
-                    Consulter l'aide à l'évaluation
-                  </a>
+              <div v-if="suivi.montant_fixe" class="fr-pt-2w">
+                <div class="fr-grid-row">
+                  <div class="fr-col-12 fr-col-md-6">
+                    <DsfrInput
+                      v-model="suivi.montant_amende"
+                      label="Montant de l'amende fixée (€)"
+                      label-visible
+                      type="number"
+                      hint="Maximum 15 000 €"
+                      :min="0"
+                      :max="15000"
+                      step="50"
+                    />
+                  </div>
                 </div>
-                <div class="fr-col-12 fr-col-md-6">
-                  <DsfrInput
-                    v-model="suivi.date_recouvrement"
-                    label="Date prévisionnelle de recouvrement"
-                    label-visible
-                    type="date"
-                    :max="today"
-                    hint="Date indicative pour le suivi"
-                  />
-                </div>
+                <a
+                  href="https://fichiers.numerique.gouv.fr/explorer/items/files/df51fe02-90dd-4afc-9346-8ae9b56fcea4"
+                  target="_blank"
+                  class="fr-text--xs fr-mt-1w fr-display-block"
+                >
+                  <span class="fr-icon-links-line fr-icon--sm" aria-hidden="true"></span>
+                  Consulter l'aide à l'évaluation
+                </a>
               </div>
             </transition>
           </template>
@@ -44,9 +36,6 @@
           <template #extra-arrete_redige>
             <transition name="fade-slide">
               <div v-if="suivi.arrete_redige" class="fr-pt-2w">
-                <p class="fr-text--sm fr-mb-1w">
-                  L'arrêté doit être transmis en préfecture pour le contrôle de légalité.
-                </p>
                 <a
                   href="https://fichiers.numerique.gouv.fr/explorer/items/files/7b97c0e9-ffc9-4863-834f-759821aa1e0a"
                   target="_blank"
@@ -129,16 +118,13 @@
 import { computed } from 'vue'
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
 import { openExternalLink } from '../../utils/browser'
-import { getTodayISOString } from '../../utils/date'
-import ListeActions, { type Action } from './ListeActions.vue'
 import AttenteDecision from './AttenteDecision.vue'
+import ListeActions, { type Action } from './ListeActions.vue'
 
 const props = defineProps<{
   suivi: SuiviProcedure
   modifyUrl: string
 }>()
-
-const today = getTodayISOString()
 
 defineEmits(['back-to-decision'])
 

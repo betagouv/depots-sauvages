@@ -26,7 +26,6 @@ export interface SuiviProcedure {
 
   montant_amende: number | null
   motif_abandon: string
-  date_recouvrement: string
   date_recouvrement_effective: string
   nettoyage_fait: boolean | null
   nettoyage_par: string
@@ -63,7 +62,6 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
         motif_abandon_choisi: false,
         montant_amende: null,
         motif_abandon: '',
-        date_recouvrement: '',
         date_recouvrement_effective: '',
         nettoyage_fait: null,
         nettoyage_par: '',
