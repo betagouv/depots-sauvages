@@ -22,13 +22,13 @@
               :options="arStatusOptions"
             />
           </div>
-          <div class="fr-col-12 fr-col-md-6">
+          <div v-if="suivi.ar_statut && suivi.ar_statut !== 'npai'" class="fr-col-12 fr-col-md-6">
             <DsfrInput
               v-model="suivi.ar_presentation_date"
               label="Date de présentation du courrier recommandé"
               label-visible
               type="date"
-              hint="Utilisée pour calculer le délai de contradictoire"
+              hint="Utilisée pour calculer le délai du contradictoire"
             />
           </div>
         </div>
@@ -36,7 +36,10 @@
     </ListeActions>
 
     <transition name="fade-slide">
-      <div v-if="suivi.ar_presentation_date && suivi.ar_recu" class="fr-mt-4w">
+      <div
+        v-if="suivi.ar_presentation_date && suivi.ar_recu && suivi.ar_statut !== 'npai'"
+        class="fr-mt-4w"
+      >
         <DsfrAlert
           type="info"
           :title="`Fin de la période du contradictoire : ${contradictoire.dateFin}`"
@@ -49,11 +52,11 @@
     </transition>
 
     <transition name="fade-slide">
-      <div v-if="suivi.ar_statut === 'inconnu' && suivi.ar_recu" class="fr-mt-2w">
+      <div v-if="suivi.ar_statut === 'npai' && suivi.ar_recu" class="fr-mt-2w">
         <DsfrAlert
           type="info"
-          title="Adresse incomplète (NPAI)"
-          description="L'auteur n'habite pas à l'adresse indiquée vous pouvez directement passer à l'étape de clôture de la procédure."
+          title="NPAI : N'habite Plus à l'Adresse Indiquée"
+          description="L'auteur n'habite pas à l'adresse indiquée, vous pouvez directement passer à l'étape de clôture de la procédure."
         />
       </div>
     </transition>
@@ -73,10 +76,11 @@ const props = defineProps<{
 const contradictoire = computed(() => calculateContradictoire(props.suivi.ar_presentation_date))
 
 const arStatusOptions = [
+  { text: 'Sélectionnez un statut', value: '' },
   { text: 'Distribué', value: 'distribue' },
   { text: 'Refusé', value: 'refuse' },
   { text: 'Non réclamé', value: 'non_reclame' },
-  { text: 'NPAI', value: 'inconnu' },
+  { text: 'NPAI', value: 'npai' },
 ]
 
 const actions = computed((): Action[] => [

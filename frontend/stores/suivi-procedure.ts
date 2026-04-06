@@ -14,7 +14,7 @@ export interface SuiviProcedure {
   ar_recu: boolean
   ar_statut: string
   ar_presentation_date: string
-  
+
   // Étape 4 : Actions selon décision
   montant_fixe: boolean
   arrete_redige: boolean
@@ -23,7 +23,7 @@ export interface SuiviProcedure {
   notification_abandon_envoyee: boolean
   decision_poursuite: string // 'sanction' | 'abandon' | ''
   motif_abandon_choisi: boolean
-  
+
   montant_amende: number | null
   motif_abandon: string
   date_recouvrement: string
