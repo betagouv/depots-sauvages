@@ -9,16 +9,19 @@
               <div v-if="suivi.montant_fixe" class="fr-pt-2w">
                 <div class="fr-grid-row">
                   <div class="fr-col-12 fr-col-md-6">
-                    <DsfrInput
-                      v-model="suivi.montant_amende"
+                    <DsfrInputGroup
+                      :error-message="montantError"
                       label="Montant de l'amende fixée (€)"
                       label-visible
-                      type="number"
-                      hint="Maximum 15 000 €"
-                      :min="0"
-                      :max="15000"
-                      step="50"
-                    />
+                    >
+                      <DsfrInput
+                        v-model="suivi.montant_amende"
+                        type="number"
+                        :is-invalid="!!montantError"
+                        :min="0"
+                        step="50"
+                      />
+                    </DsfrInputGroup>
                   </div>
                 </div>
                 <a
@@ -127,6 +130,13 @@ const props = defineProps<{
 }>()
 
 defineEmits(['back-to-decision'])
+
+const montantError = computed(() => {
+  if (props.suivi.montant_amende && props.suivi.montant_amende > 15000) {
+    return 'Le montant ne peut pas dépasser 15 000 €'
+  }
+  return ''
+})
 
 const motifAbandonOptions = [
   { text: 'Indulgence', value: 'Indulgence' },
