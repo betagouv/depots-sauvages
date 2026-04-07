@@ -17,7 +17,8 @@
                   />
                 </div>
 
-                <p class="fr-hint-text fr-mt-4w fr-mb-0">
+                <p class="fr-mt-4w fr-mb-0">
+                  <span class="fr-icon-info-line fr-mr-1v" aria-hidden="true"></span>
                   Le Trésor public se charge de la perception de l'amende. En cas d'insolvabilité de
                   l'auteur, la mairie n'est évidemment pas redevable de ce montant. La mairie actera
                   le non-recouvrement de l'amende en conseil municipal.
@@ -88,5 +89,4 @@ const onUpdateCase = (action: Action, val: boolean) => {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
