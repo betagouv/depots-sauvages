@@ -13,12 +13,11 @@
             @update:model-value="(val: boolean) => $emit('update-case', action, val)"
           >
             <template #label>
-              <span class="action-label" v-html="action.label"></span>
-              <span
-                v-if="action.icon"
-                :class="[action.icon, 'fr-ml-1w', 'extra-icon']"
-                aria-hidden="true"
-              ></span>
+              <div v-if="action.icon" class="fr-display-flex fr-align-items-center">
+                <span class="action-label" v-html="action.label"></span>
+                <span :class="[action.icon, 'fr-ml-1w', 'extra-icon']" aria-hidden="true"></span>
+              </div>
+              <span v-else class="action-label" v-html="action.label"></span>
             </template>
           </DsfrCheckbox>
 
@@ -29,7 +28,10 @@
         </div>
 
         <transition name="slide-up">
-          <div v-if="action.completed && ($slots[`extra-${action.id}`] || $slots[`extra-${index}`])" class="action-details fr-p-3w">
+          <div
+            v-if="action.completed && ($slots[`extra-${action.id}`] || $slots[`extra-${index}`])"
+            class="action-details fr-p-3w"
+          >
             <slot :name="action.id ? `extra-${action.id}` : `extra-${index}`"></slot>
           </div>
         </transition>
@@ -90,8 +92,6 @@ defineEmits(['update-case'])
   border-color: var(--border-default-blue-france);
 }
 
-
-
 .action-details {
   margin-top: -1px;
   margin-left: 1.15rem;
@@ -108,8 +108,6 @@ defineEmits(['update-case'])
     padding: 0.75rem !important;
   }
 }
-
-
 
 .action-label {
   font-weight: 500;
