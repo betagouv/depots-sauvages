@@ -23,7 +23,7 @@
               />
             </div>
             <DsfrButton
-              label="Modifier sur Démarche Numérique"
+              label="Modifier le dossier de constatation sur Démarche numérique"
               class="fr-btn--secondary"
               :icon="{ name: 'ri-external-link-line', class: 'fr-mr-1w' }"
               icon-right
