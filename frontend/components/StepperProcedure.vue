@@ -43,7 +43,9 @@
               >
             </div>
           </div>
-          <p class="fr-text--xs fr-mb-0 fr-mt-1v fr-text-mention--grey">{{ step.description }}</p>
+          <p v-if="step.description" class="fr-text--xs fr-mb-0 fr-mt-1v fr-text-mention--grey">
+            {{ step.description }}
+          </p>
         </header>
 
         <div v-if="currentStep === index" :key="index" class="step-details fr-mt-2w">
@@ -57,7 +59,7 @@
 <script setup lang="ts">
 export interface Step {
   title: string
-  description: string
+  description?: string
   completed?: boolean
   optional?: boolean
   showBracket?: boolean
