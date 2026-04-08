@@ -75,8 +75,62 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
     return procedures[dossierId]
   }
 
+  const isStepCompleted = (
+    dossierId: string,
+    stepIndex: number,
+    context: { auteurIdentifie: boolean; currentStep: number }
+  ): boolean => {
+    const suivi = procedures[dossierId]
+    if (!suivi && stepIndex > 0) return false
+
+    // Pour l'étape 0, on se base sur le fait qu'on a avancé dans le stepper
+    if (stepIndex === 0) {
+      return context.currentStep > 0
+    }
+
+    if (!suivi) return false
+
+    switch (stepIndex) {
+      case 1:
+        return (
+          suivi.preuve_photos_jointes &&
+          suivi.rapport_constat_signe &&
+          (!context.auteurIdentifie || suivi.lettre_info_signee)
+        )
+      case 2:
+        if (!context.auteurIdentifie) return false
+        return suivi.lettre_envoyee && suivi.copie_archives && suivi.ar_recu
+      case 3:
+        return suivi.decision_poursuite !== ''
+      case 4:
+        if (suivi.decision_poursuite === 'sanction') {
+          return (
+            suivi.montant_fixe &&
+            suivi.arrete_redige &&
+            suivi.titre_recette_emis &&
+            suivi.notification_sanction_envoyee
+          )
+        }
+        if (suivi.decision_poursuite === 'abandon') {
+          return (
+            suivi.motif_abandon_choisi &&
+            (suivi.motif_abandon === 'Un auteur identifié' || suivi.notification_abandon_envoyee)
+          )
+        }
+        return false
+      case 5:
+        if (suivi.decision_poursuite === 'sanction') {
+          return suivi.titre_recette_confirme && suivi.montant_recouvre && suivi.dossier_archive
+        }
+        return suivi.dossier_archive
+      default:
+        return false
+    }
+  }
+
   return {
     procedures,
     getOrCreateSuivi,
+    isStepCompleted,
   }
 })

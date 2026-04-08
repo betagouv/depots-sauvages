@@ -6,14 +6,14 @@
       class="step-item"
       :class="{
         'step--active': currentStep === index,
-        'step--completed': index === 0 && currentStep > 0,
-        'step--pending': index !== currentStep && (index > 0 || currentStep === 0),
+        'step--completed': step.completed,
+        'step--pending': index !== currentStep && !step.completed,
         'step--optional': step.optional,
       }"
     >
       <div class="step-sidebar">
         <div class="step-icon-container" @click="$emit('update:currentStep', index)">
-          <div v-if="index === 0 && currentStep > 0" class="step-icon step-icon--completed">
+          <div v-if="step.completed" class="step-icon step-icon--completed">
             <span class="fr-icon-check-line fr-icon--sm" aria-hidden="true"></span>
           </div>
           <div v-else-if="currentStep === index" class="step-icon step-icon--active">
@@ -37,7 +37,7 @@
                 >Optionnel</span
               >
               <span
-                v-if="index === 0 && currentStep > 0"
+                v-if="step.completed"
                 class="fr-badge fr-badge--sm fr-badge--success fr-badge--no-icon"
                 >Fait</span
               >
@@ -58,6 +58,7 @@
 export interface Step {
   title: string
   description: string
+  completed?: boolean
   optional?: boolean
   showBracket?: boolean
 }

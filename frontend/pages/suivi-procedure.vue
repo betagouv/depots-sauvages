@@ -128,10 +128,15 @@ const steps = computed(() => {
       {
         title: 'Constatation',
         description: 'Constater le dépôt et remplir le formulaire.',
+        completed: suiviStore.isStepCompleted(dossierId.value, 0, {
+          auteurIdentifie: auteurIdentifie.value,
+          currentStep: activeStep.value,
+        }),
       },
       {
         title: 'Procédure à mettre à jour',
         description: 'Mettre à jour la procédure sur Démarches Numériques.',
+        completed: false,
       },
     ]
   }
@@ -141,14 +146,23 @@ const steps = computed(() => {
       {
         title: 'Constatation',
         description: 'Constater le dépôt et remplir le formulaire.',
+        completed: suiviStore.isStepCompleted(dossierId.value, 0, {
+          auteurIdentifie: auteurIdentifie.value,
+          currentStep: activeStep.value,
+        }),
       },
       {
         title: 'Pièces de procédure',
         description: 'Télécharger et compléter le rapport de constatation.',
+        completed: suiviStore.isStepCompleted(dossierId.value, 1, {
+          auteurIdentifie: auteurIdentifie.value,
+          currentStep: activeStep.value,
+        }),
       },
       {
         title: "Identification de l'auteur",
         description: "Identifier l'auteur des faits ou porter plainte.",
+        completed: false,
       },
     ]
   }
@@ -157,18 +171,34 @@ const steps = computed(() => {
     {
       title: 'Constatation',
       description: 'Constater le dépôt et remplir le formulaire.',
+      completed: suiviStore.isStepCompleted(dossierId.value, 0, {
+          auteurIdentifie: auteurIdentifie.value,
+          currentStep: activeStep.value,
+        }),
     },
     {
       title: 'Compléter les pièces de procédure',
       description: 'Télécharger et compléter les pièces de procédure.',
+      completed: suiviStore.isStepCompleted(dossierId.value, 1, {
+          auteurIdentifie: auteurIdentifie.value,
+          currentStep: activeStep.value,
+        }),
     },
     {
       title: "Notifier l'auteur présumé :",
       description: "Envoyer la lettre d'information en recommandé.",
+      completed: suiviStore.isStepCompleted(dossierId.value, 2, {
+          auteurIdentifie: auteurIdentifie.value,
+          currentStep: activeStep.value,
+        }),
     },
     {
       title: 'Décider des poursuites :',
       description: 'Déterminer les suites à donner à la procédure.',
+      completed: suiviStore.isStepCompleted(dossierId.value, 3, {
+          auteurIdentifie: auteurIdentifie.value,
+          currentStep: activeStep.value,
+        }),
     },
     {
       title:
@@ -183,10 +213,18 @@ const steps = computed(() => {
           : suiviProcedure.value.decision_poursuite === 'abandon'
             ? "Suivi de l'abandon de la procédure."
             : "Engager la sanction ou l'abandon des poursuites.",
+      completed: suiviStore.isStepCompleted(dossierId.value, 4, {
+          auteurIdentifie: auteurIdentifie.value,
+          currentStep: activeStep.value,
+        }),
     },
     {
       title: 'Clôture de la procédure',
       description: 'Finaliser et archiver la procédure.',
+      completed: suiviStore.isStepCompleted(dossierId.value, 5, {
+          auteurIdentifie: auteurIdentifie.value,
+          currentStep: activeStep.value,
+        }),
     },
   ]
 })
