@@ -1,20 +1,10 @@
 <template>
   <div class="step-decision">
-    <DsfrHighlight class="fr-ml-0 fr-mb-4w" :title="deadlineTitle">
-      <template v-if="contradictoire.dateFin">
-        <p class="fr-mb-2w">
-          <strong>Fin de la période du contradictoire : {{ contradictoire.dateFin }}</strong>
-          <br />
-          {{ contradictoire.joursRestantsLabel }}
-        </p>
-      </template>
-
-      <p v-if="!contradictoire.dateFin">
-        La période du contradictoire s'étend sur un minimum de <strong>10 jours</strong> à compter
-        de la réception de la lettre d'information.
+    <DsfrHighlight class="fr-ml-0 fr-mb-4w">
+      <p class="fr-mb-1w">
+        Une fois le délai du contradictoire écoulé, deux issues sont possibles selon la réponse de
+        l'auteur présumé :
       </p>
-
-      <p class="fr-mb-1w">Une fois ce délai écoulé, deux issues sont possibles selon la réponse de l'auteur présumé :</p>
       <ul class="fr-mb-0">
         <li>
           <strong>Soit sanctionner l'auteur du dépôt sauvage</strong>
@@ -52,11 +42,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
-import { calculateContradictoire } from '../../utils/procedure'
 
-const props = defineProps<{
+defineProps<{
   suivi: SuiviProcedure
 }>()
 
@@ -72,12 +60,6 @@ const decisionOptions = [
     value: 'abandon',
   },
 ]
-
-const contradictoire = computed(() => calculateContradictoire(props.suivi.ar_presentation_date))
-
-const deadlineTitle = computed(() =>
-  contradictoire.value.dateFin ? 'Suivi du contradictoire' : ''
-)
 </script>
 
 <style scoped>
