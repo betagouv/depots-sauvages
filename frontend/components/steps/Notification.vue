@@ -53,15 +53,7 @@
       </div>
     </transition>
 
-    <transition name="fade-slide">
-      <div v-if="suivi.ar_statut === 'npai' && suivi.ar_recu" class="fr-mt-2w">
-        <DsfrAlert
-          type="info"
-          title="NPAI : N'habite Plus à l'Adresse Indiquée"
-          description="L'auteur n'habite pas à l'adresse indiquée, vous pouvez directement passer à l'étape de clôture de la procédure."
-        />
-      </div>
-    </transition>
+
   </div>
 </template>
 

@@ -101,6 +101,7 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
         if (!context.auteurIdentifie) return false
         return suivi.lettre_envoyee && suivi.copie_archives && suivi.ar_recu
       case 3:
+        if (suivi.decision_poursuite === 'nouvelle_adresse') return false
         return suivi.decision_poursuite !== ''
       case 4:
         if (suivi.decision_poursuite === 'sanction') {
