@@ -7,26 +7,27 @@
         </p>
       </DsfrAlert>
 
-      <div class="decision-section fr-mb-4w fr-p-2w">
-        <DsfrRadioButtonSet
-          v-model="suivi.decision_poursuite"
-          legend="Que souhaitez-vous faire ?"
-          :options="decisionOptionsNpai"
-          name="decision-npai-radios"
-          inline
-        />
-
-        <transition name="fade-slide">
-          <div
-            v-if="suivi.decision_poursuite === 'nouvelle_adresse'"
-            class="fr-mt-3w fr-ml-1w border-left-blue fr-pl-2w"
-          >
-            <p class="fr-mb-0 fr-text--sm">
-              Vous pouvez rechercher une nouvelle adresse par vos propres moyens. Vous pouvez aussi
-              vous rapprocher de la gendarmerie ou écrire au parquet pour obtenir de l'aide.
-            </p>
-          </div>
-        </transition>
+      <div class="fr-mb-4w">
+        <ListeActions step-id="decision-npai" :actions="npaiActions" @update-case="onUpdateCase">
+          <template #extra-decision_npai>
+            <DsfrRadioButtonSet
+              v-model="suivi.decision_poursuite"
+              legend="Que souhaitez-vous faire ?"
+              :options="decisionOptionsNpai"
+              name="decision-npai-radios"
+              inline
+            />
+            <transition name="fade-slide">
+              <div v-if="suivi.decision_poursuite === 'nouvelle_adresse'" class="fr-mt-2w">
+                <p class="fr-mb-0 fr-text--sm">
+                  Vous pouvez rechercher une nouvelle adresse par vos propres moyens. Vous pouvez
+                  aussi vous rapprocher de la gendarmerie ou écrire au parquet pour obtenir de
+                  l'aide.
+                </p>
+              </div>
+            </transition>
+          </template>
+        </ListeActions>
       </div>
     </template>
 
@@ -60,25 +61,58 @@
         </ul>
       </DsfrHighlight>
 
-      <div class="decision-section fr-mb-4w fr-p-2w">
-        <DsfrRadioButtonSet
-          v-model="suivi.decision_poursuite"
-          legend="Quelle issue souhaitez-vous donner à la procédure ?"
-          :options="decisionOptions"
-          name="decision-radios"
-          inline
-        />
+      <div class="fr-mb-4w">
+        <ListeActions step-id="decision" :actions="decisionActions" @update-case="onUpdateCase">
+          <template #extra-decision_poursuite>
+            <DsfrRadioButtonSet
+              v-model="suivi.decision_poursuite"
+              legend="Quelle issue souhaitez-vous donner à la procédure ?"
+              :options="decisionOptions"
+              name="decision-radios"
+              inline
+            />
+          </template>
+        </ListeActions>
       </div>
     </template>
   </div>
 </template>
 
 <script setup lang="ts">
+import { computed, ref } from 'vue'
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
+import ListeActions, { type Action } from './ListeActions.vue'
 
-defineProps<{
+const props = defineProps<{
   suivi: SuiviProcedure
 }>()
+
+const isDecisionBoxChecked = ref(false)
+
+const isCompleted = computed(() => !!props.suivi.decision_poursuite || isDecisionBoxChecked.value)
+
+const npaiActions = computed((): Action[] => [
+  {
+    id: 'decision_npai',
+    label: 'Décider de la suite à donner',
+    completed: isCompleted.value,
+  },
+])
+
+const decisionActions = computed((): Action[] => [
+  {
+    id: 'decision_poursuite',
+    label: "Décider de l'issue que vous souhaitez donner à la procédure",
+    completed: isCompleted.value,
+  },
+])
+
+const onUpdateCase = (action: Action, val: boolean) => {
+  isDecisionBoxChecked.value = val
+  if (!val) {
+    props.suivi.decision_poursuite = ''
+  }
+}
 
 const decisionOptions = [
   {
@@ -108,23 +142,6 @@ const decisionOptionsNpai = [
 </script>
 
 <style scoped>
-.decision-section {
-  background-color: var(--background-alt-grey);
-  border-radius: 8px;
-  border: 1px solid var(--border-default-blue-france);
-}
-
-.border-left-blue {
-  border-left: 2px solid var(--border-default-blue-france);
-}
-
-@media (max-width: 767px) {
-  .decision-section {
-    padding: 1rem !important;
-    margin-bottom: 1.5rem !important;
-  }
-}
-
 :deep(.fr-fieldset__legend) {
   font-weight: 500;
   margin-bottom: 0.8rem;
