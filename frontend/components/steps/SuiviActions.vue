@@ -139,6 +139,7 @@ const montantError = computed(() => {
 })
 
 const motifAbandonOptions = [
+  { text: 'Sélectionnez une option', value: '', disabled: true },
   { text: 'Indulgence', value: 'Indulgence' },
   { text: 'Autre motif de classement sans suite', value: 'Autre motif de classement sans suite' },
   { text: 'Un autre auteur a été identifié', value: 'Un auteur identifié' },
