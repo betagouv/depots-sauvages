@@ -40,7 +40,10 @@
             inline
           />
           <transition name="fade-slide">
-            <div v-if="suivi.ar_statut === 'npai' && suivi.decision_poursuite === 'nouvelle_adresse'" class="fr-mt-2w">
+            <div
+              v-if="suivi.ar_statut === 'npai' && suivi.decision_poursuite === 'nouvelle_adresse'"
+              class="fr-mt-2w"
+            >
               <DsfrAlert type="info">
                 <p class="fr-text--sm fr-mb-2w">
                   La procédure est en pause. Vous pouvez rechercher une nouvelle adresse par vos
@@ -48,9 +51,12 @@
                   obtenir de l'aide.
                 </p>
                 <p class="fr-text--sm fr-mb-0">
-                  <strong>Une fois la nouvelle adresse trouvée et un nouveau courrier envoyé,</strong>
-                  retournez à <a href="#" @click.prevent="$emit('back-to-notification')">l'étape précédente</a> pour y indiquer la nouvelle date d'envoi et le
-                  statut de l'accusé de réception.
+                  <strong
+                    >Une fois la nouvelle adresse trouvée et un nouveau courrier envoyé,</strong
+                  >
+                  retournez à
+                  <a href="#" @click.prevent="$emit('back-to-notification')">l'étape précédente</a>
+                  pour y indiquer la nouvelle date d'envoi et le statut de l'accusé de réception.
                 </p>
               </DsfrAlert>
             </div>
@@ -62,7 +68,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
 import ListeActions, { type Action } from './ListeActions.vue'
 
@@ -80,7 +86,9 @@ const isNpai = computed(() => props.suivi.ar_statut === 'npai')
 const currentActions = computed((): Action[] => [
   {
     id: 'decision_poursuite',
-    label: isNpai.value ? 'Décider de la suite à donner' : "Décider de l'issue que vous souhaitez donner à la procédure",
+    label: isNpai.value
+      ? 'Décider de la suite à donner'
+      : "Décider de l'issue que vous souhaitez donner à la procédure",
     completed: isCompleted.value,
   },
 ])
@@ -88,7 +96,7 @@ const currentActions = computed((): Action[] => [
 const currentLegend = computed(() =>
   isNpai.value
     ? "Suite au retour NPAI de la lettre d'information, quelle orientation souhaitez-vous donner au dossier ?"
-    : "Quelle issue souhaitez-vous donner à la procédure ?"
+    : 'Quelle issue souhaitez-vous donner à la procédure ?'
 )
 
 const decisionOptions = [
@@ -125,6 +133,16 @@ const onUpdateCase = (action: Action, val: boolean) => {
     props.suivi.decision_poursuite = ''
   }
 }
+
+watch(
+  () => props.suivi.decision_poursuite,
+  (newVal) => {
+    if (newVal === 'abandon' && isNpai.value) {
+      props.suivi.motif_abandon = 'Auteur introuvable (NPAI)'
+      props.suivi.motif_abandon_choisi = true
+    }
+  }
+)
 </script>
 
 <style scoped>

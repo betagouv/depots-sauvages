@@ -67,49 +67,62 @@
       </div>
 
       <div v-else-if="suivi.decision_poursuite === 'abandon'" key="abandon" class="action-block">
-        <h4 class="fr-h6 fr-mb-2w">Ce qu'il vous reste à faire</h4>
-        <ListeActions step-id="abandon" :actions="abandonActions" @update-case="onUpdateAbandon">
-          <template #extra-motif_abandon>
-            <div class="fr-col-12 fr-col-md-8">
-              <DsfrSelect
-                v-model="suivi.motif_abandon"
-                label="Choisir le motif d'abandon de la procédure"
-                :options="motifAbandonOptions"
-                class="fr-mb-2w"
-              />
-              <div v-if="suivi.motif_abandon === 'Un auteur identifié'" class="fr-pt-2w">
-                <DsfrAlert
-                  type="info"
-                  title="Poursuite à l'encontre d'un autre auteur"
-                  description="La procédure peut être poursuivie à l'encontre d'un autre auteur identifié (ex. prestataire, sous-traitant, fournisseur, client, intermédiaire), vous pouvez démarrer une nouvelle procédure."
+        <template v-if="suivi.ar_statut === 'npai'">
+          <DsfrAlert type="success" title="Aucune action requise" class="fr-mb-4w">
+            Le statut NPAI a automatiquement validé l'abandon pour "Auteur introuvable". Dans ce cas
+            précis, aucun courrier de notification n'est à envoyer.
+            <div class="fr-mt-2w">
+              <DsfrButton @click="$emit('go-to-cloture')" size="sm">
+                Passer directement à la clôture
+              </DsfrButton>
+            </div>
+          </DsfrAlert>
+        </template>
+        <template v-else>
+          <h4 class="fr-h6 fr-mb-2w">Ce qu'il vous reste à faire</h4>
+          <ListeActions step-id="abandon" :actions="abandonActions" @update-case="onUpdateAbandon">
+            <template #extra-motif_abandon>
+              <div class="fr-col-12 fr-col-md-8">
+                <DsfrSelect
+                  v-model="suivi.motif_abandon"
+                  label="Choisir le motif d'abandon de la procédure"
+                  :options="motifAbandonOptions"
                   class="fr-mb-2w"
                 />
-                <a
-                  :href="modifyUrl"
-                  target="_blank"
-                  class="fr-link fr-icon-add-circle-line fr-link--icon-left fr-mt-1w"
-                  @click.prevent="openExternalLink(modifyUrl)"
-                >
-                  Démarrer une nouvelle procédure
-                </a>
+                <div v-if="suivi.motif_abandon === 'Un auteur identifié'" class="fr-pt-2w">
+                  <DsfrAlert
+                    type="info"
+                    title="Poursuite à l'encontre d'un autre auteur"
+                    description="La procédure peut être poursuivie à l'encontre d'un autre auteur identifié (ex. prestataire, sous-traitant, fournisseur, client, intermédiaire), vous pouvez démarrer une nouvelle procédure."
+                    class="fr-mb-2w"
+                  />
+                  <a
+                    :href="modifyUrl"
+                    target="_blank"
+                    class="fr-link fr-icon-add-circle-line fr-link--icon-left fr-mt-1w"
+                    @click.prevent="openExternalLink(modifyUrl)"
+                  >
+                    Démarrer une nouvelle procédure
+                  </a>
+                </div>
               </div>
-            </div>
-          </template>
+            </template>
 
-          <template #extra-notification_abandon>
-            <transition name="fade-slide">
-              <div v-if="suivi.notification_abandon_envoyee" class="fr-pt-2w">
-                <a
-                  href="https://fichiers.numerique.gouv.fr/explorer/items/files/25afb89c-abbe-434c-b498-596c12eb60bd"
-                  target="_blank"
-                  class="fr-btn fr-btn--secondary fr-btn--sm"
-                >
-                  Modèle de notification d'abandon
-                </a>
-              </div>
-            </transition>
-          </template>
-        </ListeActions>
+            <template #extra-notification_abandon>
+              <transition name="fade-slide">
+                <div v-if="suivi.notification_abandon_envoyee" class="fr-pt-2w">
+                  <a
+                    href="https://fichiers.numerique.gouv.fr/explorer/items/files/25afb89c-abbe-434c-b498-596c12eb60bd"
+                    target="_blank"
+                    class="fr-btn fr-btn--secondary fr-btn--sm"
+                  >
+                    Modèle de notification d'abandon
+                  </a>
+                </div>
+              </transition>
+            </template>
+          </ListeActions>
+        </template>
       </div>
 
       <AttenteDecision v-else key="no-decision" @action="$emit('back-to-decision')" />
@@ -129,7 +142,7 @@ const props = defineProps<{
   modifyUrl: string
 }>()
 
-defineEmits(['back-to-decision'])
+defineEmits(['back-to-decision', 'go-to-cloture'])
 
 const montantError = computed(() => {
   if (props.suivi.montant_amende && props.suivi.montant_amende > 15000) {

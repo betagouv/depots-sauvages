@@ -78,6 +78,7 @@
                 :suivi="suiviProcedure"
                 :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
                 @back-to-decision="activeStep = 3"
+                @go-to-cloture="activeStep = 5"
               />
             </template>
             <template v-if="hasProcedure" #step-5>
