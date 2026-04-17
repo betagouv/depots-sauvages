@@ -3,13 +3,14 @@
     <div class="action-bracket fr-pl-1w fr-py-1v">
       <div v-for="(action, index) in actions" :key="index" class="action-row">
         <div
-          class="action-item fr-display-flex fr-p-2w"
-          :class="{ 'is-completed': action.completed, 'is-readonly': action.readonly }"
+          class="action-item fr-display-flex fr-align-items-center fr-pt-2w fr-px-2w"
+          :class="{ 'is-completed fr-pb-2w': action.completed }"
         >
           <DsfrCheckbox
             v-if="!action.readonly"
             :model-value="action.completed"
             :name="`${stepId}-action-${index}`"
+            class="fr-p-2w"
             @update:model-value="(val: boolean) => $emit('update-case', action, val)"
           >
             <template #label>
@@ -22,7 +23,10 @@
           </DsfrCheckbox>
 
           <div v-else class="fr-display-flex fr-align-items-center">
-            <span class="fr-icon-checkbox-circle-line fr-mr-1w action-icon" aria-hidden="true"></span>
+            <span
+              class="fr-icon-checkbox-circle-line fr-mr-1w action-icon"
+              aria-hidden="true"
+            ></span>
             <span class="action-label" v-html="action.label"></span>
           </div>
         </div>
@@ -83,7 +87,9 @@ defineEmits(['update-case'])
 .action-item {
   background-color: var(--background-alt-grey);
   border-radius: 8px;
-  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  transition:
+    background-color 0.2s ease-in-out,
+    border-color 0.2s ease-in-out;
   border: 1px solid transparent;
 }
 
@@ -144,12 +150,6 @@ defineEmits(['update-case'])
 
 :deep(.fr-checkbox-group input[type='checkbox']:checked + label::after) {
   display: none !important;
-}
-
-:deep(.fr-checkbox-group input[type='checkbox'] + label) {
-  margin-bottom: 0;
-  display: flex;
-  align-items: center;
 }
 
 /* Transitions */
