@@ -113,6 +113,9 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
           )
         }
         if (suivi.decision_poursuite === 'abandon') {
+          if (suivi.motif_abandon === 'Auteur introuvable (NPAI)') {
+            return true
+          }
           return (
             suivi.motif_abandon_choisi &&
             (suivi.motif_abandon === 'Un auteur identifié' || suivi.notification_abandon_envoyee)
