@@ -53,7 +53,17 @@
       </div>
     </transition>
 
-
+    <transition name="fade-slide">
+      <div v-if="suivi.ar_statut === 'npai' && suivi.ar_recu" class="fr-mt-4w">
+        <DsfrAlert type="info" title="L'auteur n'habite pas à l'adresse indiquée">
+          <p class="fr-mb-0 fr-text--sm">
+            Pour continuer la procédure, il est indispensable de notifier l'auteur présumé.
+            Rendez-vous à <a href="#" @click.prevent="$emit('next-step')">l'étape suivante</a> pour
+            décider de la suite à donner.
+          </p>
+        </DsfrAlert>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -67,6 +77,8 @@ import ListeActions, { type Action } from './ListeActions.vue'
 const props = defineProps<{
   suivi: SuiviProcedure
 }>()
+
+defineEmits(['next-step'])
 
 const today = getTodayISOString()
 

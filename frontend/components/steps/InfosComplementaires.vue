@@ -2,7 +2,6 @@
   <div class="infos-complementaires fr-mb-4w">
     <div class="fr-card fr-card--no-border fr-p-3w">
       <div class="fr-grid-row">
-        <!-- Nettoyage -->
         <div class="fr-col-12 fr-mb-3w">
           <DsfrRadioButtonSet
             v-model="suivi.nettoyage_fait"
@@ -12,7 +11,6 @@
             inline
             class="compact-radios"
           />
-          
           <transition name="fade-slide">
             <div v-if="suivi.nettoyage_fait" class="fr-col-12 fr-col-md-4 fr-mt-1w">
               <DsfrSelect
@@ -24,7 +22,6 @@
           </transition>
         </div>
 
-        <!-- Observations -->
         <div class="fr-col-12">
           <DsfrInput
             v-model="suivi.observations_internes"

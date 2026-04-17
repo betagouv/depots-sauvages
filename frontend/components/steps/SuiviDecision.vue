@@ -1,80 +1,63 @@
 <template>
   <div class="step-decision">
-    <template v-if="suivi.ar_statut === 'npai'">
-      <DsfrAlert type="info" class="fr-mb-4w" title="L'auteur n'habite pas à l'adresse indiquée">
-        <p class="fr-mb-0">
-          Pour continuer la procédure, il est indispensable de notifier l'auteur présumé.
-        </p>
-      </DsfrAlert>
+    <DsfrHighlight v-if="suivi.ar_statut !== 'npai'" class="fr-ml-0 fr-mb-4w">
+      <p class="fr-mb-1w">
+        Une fois le délai du contradictoire écoulé, deux issues sont possibles selon la réponse de
+        l'auteur présumé :
+      </p>
+      <ul class="fr-mb-0">
+        <li>
+          <strong>Soit sanctionner l'auteur du dépôt sauvage</strong>
+          <ul>
+            <li>S'il a reconnu les faits ;</li>
+            <li>
+              S'il n'a pas répondu à la lettre d'information avant la fin de la période du
+              contradictoire ;
+            </li>
+            <li>S'il nie les faits, mais les preuves contre lui sont accablantes.</li>
+          </ul>
+        </li>
+        <li class="fr-mt-1w">
+          <strong>Soit abandonner les poursuites</strong>
+          <ul>
+            <li>S'il y a un doute sur sa culpabilité ;</li>
+            <li>Si les éléments fournis par l'auteur présumé sont jugés convaincants ;</li>
+            <li>Si l'on souhaite faire preuve d'indulgence ;</li>
+            <li>Si la réponse à la lettre d'information désigne un autre auteur présumé.</li>
+          </ul>
+        </li>
+      </ul>
+    </DsfrHighlight>
 
-      <div class="fr-mb-4w">
-        <ListeActions step-id="decision-npai" :actions="npaiActions" @update-case="onUpdateCase">
-          <template #extra-decision_npai>
-            <DsfrRadioButtonSet
-              v-model="suivi.decision_poursuite"
-              legend="Que souhaitez-vous faire ?"
-              :options="decisionOptionsNpai"
-              name="decision-npai-radios"
-              inline
-            />
-            <transition name="fade-slide">
-              <div v-if="suivi.decision_poursuite === 'nouvelle_adresse'" class="fr-mt-2w">
-                <p class="fr-mb-0 fr-text--sm">
-                  Vous pouvez rechercher une nouvelle adresse par vos propres moyens. Vous pouvez
-                  aussi vous rapprocher de la gendarmerie ou écrire au parquet pour obtenir de
-                  l'aide.
+    <div class="fr-mb-4w">
+      <ListeActions step-id="decision" :actions="currentActions" @update-case="onUpdateCase">
+        <template #extra-decision_poursuite>
+          <DsfrRadioButtonSet
+            v-model="suivi.decision_poursuite"
+            :legend="currentLegend"
+            :options="currentOptions"
+            name="decision-radios"
+            inline
+          />
+          <transition name="fade-slide">
+            <div v-if="suivi.ar_statut === 'npai' && suivi.decision_poursuite === 'nouvelle_adresse'" class="fr-mt-2w">
+              <DsfrAlert type="info">
+                <p class="fr-text--sm fr-mb-2w">
+                  La procédure est en pause. Vous pouvez rechercher une nouvelle adresse par vos
+                  propres moyens, vous rapprocher de la gendarmerie ou écrire au parquet pour
+                  obtenir de l'aide.
                 </p>
-              </div>
-            </transition>
-          </template>
-        </ListeActions>
-      </div>
-    </template>
-
-    <template v-else>
-      <DsfrHighlight class="fr-ml-0 fr-mb-4w">
-        <p class="fr-mb-1w">
-          Une fois le délai du contradictoire écoulé, deux issues sont possibles selon la réponse de
-          l'auteur présumé :
-        </p>
-        <ul class="fr-mb-0">
-          <li>
-            <strong>Soit sanctionner l'auteur du dépôt sauvage</strong>
-            <ul>
-              <li>S'il a reconnu les faits ;</li>
-              <li>
-                S'il n'a pas répondu à la lettre d'information avant la fin de la période du
-                contradictoire ;
-              </li>
-              <li>S'il nie les faits, mais les preuves contre lui sont accablantes.</li>
-            </ul>
-          </li>
-          <li class="fr-mt-1w">
-            <strong>Soit abandonner les poursuites</strong>
-            <ul>
-              <li>S'il y a un doute sur sa culpabilité ;</li>
-              <li>Si les éléments fournis par l'auteur présumé sont jugés convaincants ;</li>
-              <li>Si l'on souhaite faire preuve d'indulgence ;</li>
-              <li>Si la réponse à la lettre d'information désigne un autre auteur présumé.</li>
-            </ul>
-          </li>
-        </ul>
-      </DsfrHighlight>
-
-      <div class="fr-mb-4w">
-        <ListeActions step-id="decision" :actions="decisionActions" @update-case="onUpdateCase">
-          <template #extra-decision_poursuite>
-            <DsfrRadioButtonSet
-              v-model="suivi.decision_poursuite"
-              legend="Quelle issue souhaitez-vous donner à la procédure ?"
-              :options="decisionOptions"
-              name="decision-radios"
-              inline
-            />
-          </template>
-        </ListeActions>
-      </div>
-    </template>
+                <p class="fr-text--sm fr-mb-0">
+                  <strong>Une fois la nouvelle adresse trouvée et un nouveau courrier envoyé,</strong>
+                  retournez à <a href="#" @click.prevent="$emit('back-to-notification')">l'étape précédente</a> pour y indiquer la nouvelle date d'envoi et le
+                  statut de l'accusé de réception.
+                </p>
+              </DsfrAlert>
+            </div>
+          </transition>
+        </template>
+      </ListeActions>
+    </div>
   </div>
 </template>
 
@@ -87,32 +70,26 @@ const props = defineProps<{
   suivi: SuiviProcedure
 }>()
 
+defineEmits(['back-to-notification'])
+
 const isDecisionBoxChecked = ref(false)
 
 const isCompleted = computed(() => !!props.suivi.decision_poursuite || isDecisionBoxChecked.value)
+const isNpai = computed(() => props.suivi.ar_statut === 'npai')
 
-const npaiActions = computed((): Action[] => [
-  {
-    id: 'decision_npai',
-    label: 'Décider de la suite à donner',
-    completed: isCompleted.value,
-  },
-])
-
-const decisionActions = computed((): Action[] => [
+const currentActions = computed((): Action[] => [
   {
     id: 'decision_poursuite',
-    label: "Décider de l'issue que vous souhaitez donner à la procédure",
+    label: isNpai.value ? 'Décider de la suite à donner' : "Décider de l'issue que vous souhaitez donner à la procédure",
     completed: isCompleted.value,
   },
 ])
 
-const onUpdateCase = (action: Action, val: boolean) => {
-  isDecisionBoxChecked.value = val
-  if (!val) {
-    props.suivi.decision_poursuite = ''
-  }
-}
+const currentLegend = computed(() =>
+  isNpai.value
+    ? "Suite au retour NPAI de la lettre d'information, quelle orientation souhaitez-vous donner au dossier ?"
+    : "Quelle issue souhaitez-vous donner à la procédure ?"
+)
 
 const decisionOptions = [
   {
@@ -139,6 +116,15 @@ const decisionOptionsNpai = [
     value: 'nouvelle_adresse',
   },
 ]
+
+const currentOptions = computed(() => (isNpai.value ? decisionOptionsNpai : decisionOptions))
+
+const onUpdateCase = (action: Action, val: boolean) => {
+  isDecisionBoxChecked.value = val
+  if (!val) {
+    props.suivi.decision_poursuite = ''
+  }
+}
 </script>
 
 <style scoped>

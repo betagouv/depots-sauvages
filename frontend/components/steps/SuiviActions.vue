@@ -144,6 +144,7 @@ const motifAbandonOptions = [
   { text: 'Autre motif de classement sans suite', value: 'Autre motif de classement sans suite' },
   { text: 'Un autre auteur a été identifié', value: 'Un auteur identifié' },
   { text: 'Les éléments fournis par l’auteur sont convaincants', value: 'Éléments convaincants' },
+  { text: 'Auteur introuvable (NPAI)', value: 'Auteur introuvable (NPAI)' },
 ]
 
 const sanctionActions = computed((): Action[] => [
@@ -180,7 +181,11 @@ const abandonActions = computed((): Action[] => {
     },
   ]
 
-  if (props.suivi.motif_abandon && props.suivi.motif_abandon !== 'Un auteur identifié') {
+  if (
+    props.suivi.motif_abandon &&
+    props.suivi.motif_abandon !== 'Un auteur identifié' &&
+    props.suivi.motif_abandon !== 'Auteur introuvable (NPAI)'
+  ) {
     items.push({
       id: 'notification_abandon',
       label: "Notifier la personne concernée de la décision d'abandon",

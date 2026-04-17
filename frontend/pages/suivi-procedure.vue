@@ -54,7 +54,11 @@
               />
             </template>
             <template v-if="hasProcedure" #step-2>
-              <Notification v-if="auteurIdentifie" :suivi="suiviProcedure" />
+              <Notification
+                v-if="auteurIdentifie"
+                :suivi="suiviProcedure"
+                @next-step="activeStep = 3"
+              />
               <Identification
                 v-else
                 :auteur-identifie="auteurIdentifie"
@@ -62,7 +66,11 @@
               />
             </template>
             <template v-if="hasProcedure" #step-3>
-              <SuiviDecision v-if="auteurIdentifie" :suivi="suiviProcedure" />
+              <SuiviDecision
+                v-if="auteurIdentifie"
+                :suivi="suiviProcedure"
+                @back-to-notification="activeStep = 2"
+              />
             </template>
             <template v-if="hasProcedure" #step-4>
               <SuiviActions
