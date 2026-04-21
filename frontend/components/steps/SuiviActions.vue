@@ -111,10 +111,10 @@
                     class="fr-mb-2w"
                   />
                   <a
-                    :href="modifyUrl"
+                    :href="newProcedureUrl"
                     target="_blank"
                     class="fr-link fr-icon-add-circle-line fr-link--icon-left fr-mt-1w"
-                    @click.prevent="openExternalLink(modifyUrl)"
+                    @click.prevent="openExternalLink(newProcedureUrl)"
                   >
                     Démarrer une nouvelle procédure
                   </a>
@@ -142,6 +142,8 @@ const props = defineProps<{
   suivi: SuiviProcedure
   modifyUrl: string
 }>()
+
+const newProcedureUrl = import.meta.env.VITE_DN_URL
 
 defineEmits(['back-to-decision', 'go-to-cloture'])
 
