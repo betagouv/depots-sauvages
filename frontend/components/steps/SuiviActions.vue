@@ -119,6 +119,22 @@
                     Démarrer une nouvelle procédure
                   </a>
                 </div>
+                <div
+                  v-if="
+                    suivi.motif_abandon &&
+                    suivi.motif_abandon !== 'Un auteur identifié' &&
+                    suivi.ar_statut !== 'npai'
+                  "
+                  class="fr-pt-2w"
+                >
+                  <DsfrRadioButtonSet
+                    v-model="suivi.souhaite_notifier_abandon"
+                    legend="Souhaitez vous notifier la personne concernée de la décision d'abandon de la procédure administrative"
+                    :options="notificationChoiceOptions"
+                    name="notifier-abandon-radios"
+                    inline
+                  />
+                </div>
               </div>
             </template>
 
@@ -163,6 +179,11 @@ const motifAbandonOptions = [
   { text: 'Auteur introuvable (NPAI)', value: 'Auteur introuvable (NPAI)' },
 ]
 
+const notificationChoiceOptions = [
+  { label: 'Oui', value: true, id: 'notifier-oui' },
+  { label: 'Non', value: false, id: 'notifier-non' },
+]
+
 const sanctionActions = computed((): Action[] => [
   {
     id: 'fixer_montant',
@@ -200,11 +221,12 @@ const abandonActions = computed((): Action[] => {
   if (
     props.suivi.motif_abandon &&
     props.suivi.motif_abandon !== 'Un auteur identifié' &&
-    props.suivi.motif_abandon !== 'Auteur introuvable (NPAI)'
+    props.suivi.motif_abandon !== 'Auteur introuvable (NPAI)' &&
+    props.suivi.souhaite_notifier_abandon === true
   ) {
     items.push({
       id: 'notification_abandon',
-      label: "Notifier la personne concernée de la décision d'abandon",
+      label: "Rédiger et envoyer la notification d'abandon",
       completed: props.suivi.notification_abandon_envoyee,
     })
   }
@@ -234,6 +256,8 @@ const onUpdateAbandon = (action: Action, val: boolean) => {
     props.suivi.motif_abandon_choisi = val
     if (!val) {
       props.suivi.motif_abandon = '' // Reset on uncheck
+      props.suivi.souhaite_notifier_abandon = null
+      props.suivi.notification_abandon_envoyee = false
     }
   } else if (action.id === 'notification_abandon') {
     props.suivi.notification_abandon_envoyee = val

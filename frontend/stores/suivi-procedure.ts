@@ -23,6 +23,7 @@ export interface SuiviProcedure {
   notification_abandon_envoyee: boolean
   decision_poursuite: string // 'sanction' | 'abandon' | ''
   motif_abandon_choisi: boolean
+  souhaite_notifier_abandon: boolean | null
 
   montant_amende: number | null
   motif_abandon: string
@@ -60,6 +61,7 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
         notification_abandon_envoyee: false,
         decision_poursuite: '',
         motif_abandon_choisi: false,
+        souhaite_notifier_abandon: null,
         montant_amende: null,
         motif_abandon: '',
         date_recouvrement_effective: '',
@@ -118,7 +120,9 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
           }
           return (
             suivi.motif_abandon_choisi &&
-            (suivi.motif_abandon === 'Un auteur identifié' || suivi.notification_abandon_envoyee)
+            (suivi.motif_abandon === 'Un auteur identifié' ||
+              suivi.souhaite_notifier_abandon === false ||
+              (suivi.souhaite_notifier_abandon === true && suivi.notification_abandon_envoyee))
           )
         }
         return false
