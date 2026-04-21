@@ -59,7 +59,6 @@
               </div>
             </transition>
           </template>
-
         </ListeActions>
       </div>
 
@@ -137,7 +136,6 @@
                 </div>
               </div>
             </template>
-
           </ListeActions>
         </template>
       </div>
@@ -173,10 +171,10 @@ const montantError = computed(() => {
 const motifAbandonOptions = [
   { text: 'Sélectionnez une option', value: '', disabled: true },
   { text: 'Indulgence', value: 'Indulgence' },
-  { text: 'Autre motif de classement sans suite', value: 'Autre motif de classement sans suite' },
-  { text: 'Un autre auteur a été identifié', value: 'Un auteur identifié' },
   { text: 'Les éléments fournis par l’auteur sont convaincants', value: 'Éléments convaincants' },
+  { text: 'Un autre auteur a été identifié', value: 'Un auteur identifié' },
   { text: 'Auteur introuvable (NPAI)', value: 'Auteur introuvable (NPAI)' },
+  { text: 'Autre motif de classement sans suite', value: 'Autre motif de classement sans suite' },
 ]
 
 const notificationChoiceOptions = [
