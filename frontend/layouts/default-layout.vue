@@ -44,8 +44,12 @@
               <li class="fr-nav__item">
                 <a
                   class="fr-nav__link"
-                  :class="{ 'fr-nav__link--active': isActive || route.meta.activeMenu === lien.href }"
-                  :aria-current="isActive || route.meta.activeMenu === lien.href ? 'page' : undefined"
+                  :class="{
+                    'fr-nav__link--active': isActive || route.meta.activeMenu === lien.href,
+                  }"
+                  :aria-current="
+                    isActive || route.meta.activeMenu === lien.href ? 'page' : undefined
+                  "
                   :href="href"
                   @click="navigate"
                 >
@@ -58,7 +62,7 @@
       </template>
     </DsfrHeader>
 
-    <main class="fr-container fr-py-3w" role="main" id="content">
+    <main role="main" id="content">
       <slot />
     </main>
     <DsfrFooter :logo-text="logoText">

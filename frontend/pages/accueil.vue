@@ -1,5 +1,5 @@
 <template>
-  <div class="fr-container--sm fr-py-5w">
+  <div class="fr-container fr-py-5w">
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12 fr-col-md-6">
         <h1 class="fr-h1 fr-mb-3w">
