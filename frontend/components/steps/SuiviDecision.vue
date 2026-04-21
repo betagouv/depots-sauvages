@@ -46,17 +46,27 @@
             >
               <DsfrAlert type="info">
                 <p class="fr-text--sm fr-mb-2w">
-                  La procédure est en pause. Vous pouvez rechercher une nouvelle adresse par vos
-                  propres moyens, vous rapprocher de la gendarmerie ou écrire au parquet pour
-                  obtenir de l'aide.
+                  La procédure est en pause. Vous pouvez rechercher une nouvelle adresse :
                 </p>
+                <ul class="fr-text--sm fr-mb-2w">
+                  <li>Par vos propres moyens, notamment par internet.</li>
+                  <li>
+                    En allant porter plainte à la brigade ou au commissariat, et en écrivant par la
+                    suite au procureur de la République pour demander l'adresse de l'auteur.
+                    <a
+                      href="https://fichiers.numerique.gouv.fr/explorer/items/files/0b9b0e3b-f25a-4848-ba5f-991e27dd25cd"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      >Modèle de lettre au procureur</a
+                    >
+                  </li>
+                </ul>
                 <p class="fr-text--sm fr-mb-0">
-                  <strong
-                    >Une fois la nouvelle adresse trouvée et un nouveau courrier envoyé,</strong
-                  >
-                  retournez à
+                  <strong>Une fois la nouvelle adresse trouvée, </strong>
+                  <a :href="modifyUrl" target="_blank" rel="noopener noreferrer">mettez à jour</a>
+                  le rapport de constatation et la lettre d'information puis retournez à
                   <a href="#" @click.prevent="$emit('back-to-notification')">l'étape précédente</a>
-                  pour y indiquer la nouvelle date d'envoi et le statut de l'accusé de réception.
+                  pour indiquer la nouvelle date d'envoi et le statut de l'accusé de réception.
                 </p>
               </DsfrAlert>
             </div>
@@ -74,6 +84,7 @@ import ListeActions, { type Action } from './ListeActions.vue'
 
 const props = defineProps<{
   suivi: SuiviProcedure
+  modifyUrl?: string
 }>()
 
 defineEmits(['back-to-notification'])

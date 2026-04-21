@@ -70,6 +70,7 @@
               <SuiviDecision
                 v-if="auteurIdentifie"
                 :suivi="suiviProcedure"
+                :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
                 @back-to-notification="activeStep = 2"
               />
             </template>
