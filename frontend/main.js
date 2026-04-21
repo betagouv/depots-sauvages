@@ -106,6 +106,11 @@ const router = createRouter({
       component: () => import('./pages/suivi-procedure.vue'),
       meta: { requiresAuth: true, activeMenu: '/mes-procedures' },
     },
+    {
+      path: '/rdv',
+      name: 'RDV',
+      component: () => import('./pages/rdv.vue'),
+    },
   ],
 })
 
