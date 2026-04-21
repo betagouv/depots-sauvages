@@ -122,6 +122,7 @@
                   v-if="
                     suivi.motif_abandon &&
                     suivi.motif_abandon !== 'Un auteur identifié' &&
+                    suivi.motif_abandon !== 'Auteur introuvable (NPAI)' &&
                     suivi.ar_statut !== 'npai'
                   "
                   class="fr-pt-2w"
