@@ -44,19 +44,16 @@
               <div v-if="suivi.montant_fixe" class="fr-pt-2w">
                 <div class="fr-grid-row">
                   <div class="fr-col-12 fr-col-md-6">
-                    <DsfrInputGroup
-                      :error-message="montantError"
-                      label="Montant de l'amende fixée (€)"
+                    <DsfrInput
+                      v-model="suivi.montant_amende"
+                      type="number"
+                      label="Montant de l'amende (€)"
                       label-visible
-                    >
-                      <DsfrInput
-                        v-model="suivi.montant_amende"
-                        type="number"
-                        :is-invalid="!!montantError"
-                        :min="0"
-                        step="50"
-                      />
-                    </DsfrInputGroup>
+                      :error-message="montantError"
+                      :is-invalid="!!montantError"
+                      :min="0"
+                      step="50"
+                    />
                   </div>
                 </div>
               </div>
@@ -83,15 +80,17 @@
             <p class="fr-mb-2w">
               Pour vous accompagner dans vos démarches, un modèle est à votre disposition :
             </p>
-            <div class="fr-btns-group fr-btns-group--sm fr-mb-0">
-              <a
-                href="https://fichiers.numerique.gouv.fr/explorer/items/files/25afb89c-abbe-434c-b498-596c12eb60bd"
-                target="_blank"
-                class="fr-btn fr-btn--secondary"
-              >
-                Modèle de notification d'abandon
-              </a>
-            </div>
+            <ul class="fr-btns-group fr-btns-group--inline fr-btns-group--sm fr-mb-0">
+              <li>
+                <a
+                  href="https://fichiers.numerique.gouv.fr/explorer/items/files/25afb89c-abbe-434c-b498-596c12eb60bd"
+                  target="_blank"
+                  class="fr-btn fr-btn--secondary"
+                >
+                  Modèle de notification d'abandon
+                </a>
+              </li>
+            </ul>
           </DsfrAlert>
 
           <h4 class="fr-h6 fr-mb-2w">Ce qu'il vous reste à faire</h4>
