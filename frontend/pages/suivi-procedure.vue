@@ -57,6 +57,7 @@
               <Notification
                 v-if="auteurIdentifie"
                 :suivi="suiviProcedure"
+                :lettre-info-url="getDnLettreInfoUrl(dossierData.id)"
                 @next-step="activeStep = 3"
               />
               <Identification

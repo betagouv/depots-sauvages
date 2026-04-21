@@ -4,7 +4,7 @@
       <div v-for="(action, index) in actions" :key="index" class="action-row">
         <div
           class="action-item fr-display-flex fr-align-items-center fr-pt-2w fr-px-2w"
-          :class="{ 'is-completed fr-pb-2w': action.completed }"
+          :class="{ 'is-completed': action.completed }"
         >
           <DsfrCheckbox
             v-if="!action.readonly"

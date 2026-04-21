@@ -1,5 +1,19 @@
 <template>
   <div class="step-notification">
+    <DsfrAlert type="info" title="Documents pour cette étape" class="fr-mb-4w">
+      <p class="fr-mb-2w">
+        Vous devez envoyer la lettre d'information à l'auteur présumé. Si vous ne l'avez pas
+        encore téléchargée :
+      </p>
+      <DsfrButton
+        label="Télécharger la lettre d'information"
+        :icon="{ name: 'ri-download-line', class: 'fr-mr-1w' }"
+        size="sm"
+        secondary
+        @click="openUrl(lettreInfoUrl)"
+      />
+    </DsfrAlert>
+
     <h4 class="fr-h6 fr-mb-2w">Ce qu'il vous reste à faire</h4>
     <ListeActions step-id="notification" :actions="actions" @update-case="onUpdateCase">
       <template #extra-lettre_envoyee>
@@ -76,7 +90,14 @@ import ListeActions, { type Action } from './ListeActions.vue'
 
 const props = defineProps<{
   suivi: SuiviProcedure
+  lettreInfoUrl: string
 }>()
+
+const openUrl = (url: string) => {
+  if (url) {
+    window.open(url, '_blank', 'noopener,noreferrer')
+  }
+}
 
 defineEmits(['next-step'])
 

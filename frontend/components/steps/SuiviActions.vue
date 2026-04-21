@@ -2,6 +2,41 @@
   <div class="step-actions">
     <transition name="fade-slide" mode="out-in">
       <div v-if="suivi.decision_poursuite === 'sanction'" key="sanction" class="action-block">
+        <DsfrAlert type="info" title="Modèles de documents" class="fr-mb-4w">
+          <p class="fr-mb-2w">
+            Pour vous accompagner dans vos démarches, des modèles sont à votre disposition :
+          </p>
+          <ul class="fr-btns-group fr-btns-group--inline fr-btns-group--sm fr-mb-0">
+            <li>
+              <a
+                href="https://fichiers.numerique.gouv.fr/explorer/items/files/7b97c0e9-ffc9-4863-834f-759821aa1e0a"
+                target="_blank"
+                class="fr-btn fr-btn--secondary"
+              >
+                Modèle d'arrêté de sanction
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://fichiers.numerique.gouv.fr/explorer/items/files/563be397-7e6d-4d69-b1aa-42598d2f71c6"
+                target="_blank"
+                class="fr-btn fr-btn--secondary"
+              >
+                Modèle de courrier de notification
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://fichiers.numerique.gouv.fr/explorer/items/files/df51fe02-90dd-4afc-9346-8ae9b56fcea4"
+                target="_blank"
+                class="fr-btn fr-btn--secondary"
+              >
+                Aide à l'évaluation
+              </a>
+            </li>
+          </ul>
+        </DsfrAlert>
+
         <h4 class="fr-h6 fr-mb-2w">Ce qu'il vous reste à faire</h4>
         <ListeActions step-id="sanction" :actions="sanctionActions" @update-case="onUpdateSanction">
           <template #extra-fixer_montant>
@@ -24,45 +59,10 @@
                     </DsfrInputGroup>
                   </div>
                 </div>
-                <a
-                  href="https://fichiers.numerique.gouv.fr/explorer/items/files/df51fe02-90dd-4afc-9346-8ae9b56fcea4"
-                  target="_blank"
-                  class="fr-text--xs fr-mt-1w fr-display-block"
-                >
-                  <span class="fr-icon-links-line fr-icon--sm" aria-hidden="true"></span>
-                  Consulter l'aide à l'évaluation
-                </a>
               </div>
             </transition>
           </template>
 
-          <template #extra-arrete_redige>
-            <transition name="fade-slide">
-              <div v-if="suivi.arrete_redige" class="fr-pt-2w">
-                <a
-                  href="https://fichiers.numerique.gouv.fr/explorer/items/files/7b97c0e9-ffc9-4863-834f-759821aa1e0a"
-                  target="_blank"
-                  class="fr-btn fr-btn--secondary fr-btn--sm"
-                >
-                  Voir le modèle d'arrêté
-                </a>
-              </div>
-            </transition>
-          </template>
-
-          <template #extra-notification_sanction>
-            <transition name="fade-slide">
-              <div v-if="suivi.notification_sanction_envoyee" class="fr-pt-2w">
-                <a
-                  href="https://fichiers.numerique.gouv.fr/explorer/items/files/563be397-7e6d-4d69-b1aa-42598d2f71c6"
-                  target="_blank"
-                  class="fr-btn fr-btn--secondary fr-btn--sm"
-                >
-                  Modèle de courrier de notification
-                </a>
-              </div>
-            </transition>
-          </template>
         </ListeActions>
       </div>
 
@@ -79,6 +79,21 @@
           </DsfrAlert>
         </template>
         <template v-else>
+          <DsfrAlert type="info" title="Modèles de documents" class="fr-mb-4w">
+            <p class="fr-mb-2w">
+              Pour vous accompagner dans vos démarches, un modèle est à votre disposition :
+            </p>
+            <div class="fr-btns-group fr-btns-group--sm fr-mb-0">
+              <a
+                href="https://fichiers.numerique.gouv.fr/explorer/items/files/25afb89c-abbe-434c-b498-596c12eb60bd"
+                target="_blank"
+                class="fr-btn fr-btn--secondary"
+              >
+                Modèle de notification d'abandon
+              </a>
+            </div>
+          </DsfrAlert>
+
           <h4 class="fr-h6 fr-mb-2w">Ce qu'il vous reste à faire</h4>
           <ListeActions step-id="abandon" :actions="abandonActions" @update-case="onUpdateAbandon">
             <template #extra-motif_abandon>
@@ -108,19 +123,6 @@
               </div>
             </template>
 
-            <template #extra-notification_abandon>
-              <transition name="fade-slide">
-                <div v-if="suivi.notification_abandon_envoyee" class="fr-pt-2w">
-                  <a
-                    href="https://fichiers.numerique.gouv.fr/explorer/items/files/25afb89c-abbe-434c-b498-596c12eb60bd"
-                    target="_blank"
-                    class="fr-btn fr-btn--secondary fr-btn--sm"
-                  >
-                    Modèle de notification d'abandon
-                  </a>
-                </div>
-              </transition>
-            </template>
           </ListeActions>
         </template>
       </div>
