@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="hero-section fr-mb-6w fr-py-6w">
+    <div class="fr-background-alt--blue-france fr-mb-6w fr-py-6w">
       <div class="fr-container">
         <h1 class="fr-h1 fr-mb-3w">Prenez rendez-vous avec Protect'Envi</h1>
         <p class="fr-text fr-text--lead fr-mb-0">
@@ -14,7 +14,7 @@
       <div class="fr-grid-row">
         <div class="fr-col-12 fr-col-md-10">
           <DsfrCard :link="anctLink" enlarge-link class="rdv-card fr-p-2w" :title="title">
-            <template #title>
+            <template #start-details>
               <div class="fr-badges-group fr-mb-2v">
                 <span class="fr-badge fr-badge--info fr-badge--sm fr-badge--no-icon">
                   <span
@@ -28,9 +28,6 @@
                   RDV COLLECTIF
                 </span>
               </div>
-              <h2 class="fr-card__title fr-text--lg fr-mb-0 fr-mt-1w">
-                {{ title }}
-              </h2>
             </template>
           </DsfrCard>
         </div>
@@ -49,10 +46,6 @@ const anctLink =
 </script>
 
 <style scoped>
-.hero-section {
-  background-color: #f5f5fe;
-}
-
 .rdv-card {
   background-color: var(--background-default-grey);
   border: 1px solid var(--border-default-grey);

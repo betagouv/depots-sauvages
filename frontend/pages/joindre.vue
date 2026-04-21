@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="hero-section fr-mb-4w fr-py-4w">
+    <div class="fr-background-alt--blue-france fr-mb-4w fr-py-4w">
       <div class="fr-container">
         <div class="fr-grid-row fr-grid-row--center">
           <div class="fr-col-12 fr-col-md-10 fr-col-lg-8">
@@ -151,11 +151,6 @@ import { DsfrCard } from '@gouvminint/vue-dsfr';
 /* Smooth scroll behavior for anchor links */
 html {
   scroll-behavior: smooth;
-}
-
-/* Hero section with consistent background color */
-.hero-section {
-  background-color: #f5f5fe;
 }
 
 /* Disable iframe scrolling */
