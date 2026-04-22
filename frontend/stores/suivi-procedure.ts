@@ -138,8 +138,28 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
     }
   }
 
-      default:
-        return false
+  const fetchSuivi = async (dossierId: string) => {
+    try {
+      const data = await $fetch<SuiviProcedure>(`/api/suivi-procedure/${dossierId}/`)
+      if (data) {
+        procedures[dossierId] = data
+      }
+    } catch (e) {
+      console.error('Erreur lors du chargement du suivi:', e)
+    }
+  }
+
+  const saveSuivi = async (dossierId: string) => {
+    const suivi = procedures[dossierId]
+    if (!suivi) return
+
+    try {
+      await $fetch(`/api/suivi-procedure/${dossierId}/`, {
+        method: 'PATCH',
+        body: suivi,
+      })
+    } catch (e) {
+      console.error('Erreur lors de la sauvegarde du suivi:', e)
     }
   }
 
@@ -147,5 +167,8 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
     procedures,
     getOrCreateSuivi,
     isStepCompleted,
+    fetchSuivi,
+    saveSuivi,
   }
 })
+

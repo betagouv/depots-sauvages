@@ -101,7 +101,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 import StepperProcedure from '../components/StepperProcedure.vue'
@@ -120,6 +120,7 @@ import { API_URLS, createResource } from '../services/api'
 import { getDnDocConstatUrl, getDnLettreInfoUrl, getDnModifyUrl } from '../services/urls'
 import { useSuiviStore } from '../stores/suivi-procedure'
 import { openExternalLink } from '../utils/browser'
+import { debounce } from '../utils/debounce'
 
 const route = useRoute()
 const suiviStore = useSuiviStore()
@@ -138,6 +139,21 @@ const activeStep = computed({
 
 const hasProcedure = computed(() => dossierData.value?.created !== false)
 const auteurIdentifie = computed(() => dossierData.value?.auteur_identifie ?? false)
+
+// Auto-save logic with debounce
+const debouncedSave = debounce(() => {
+  if (dossierId.value) {
+    suiviStore.saveSuivi(dossierId.value)
+  }
+}, 1000)
+
+watch(
+  () => suiviProcedure.value,
+  () => {
+    debouncedSave()
+  },
+  { deep: true }
+)
 
 const steps = computed(() => {
   if (!hasProcedure.value) {
@@ -242,9 +258,12 @@ onMounted(async () => {
   }
 
   try {
-    dossierData.value = await createResource(API_URLS.processDossier, {
-      dossier_id: dossierId,
-    })
+    // Fetch both dossier data and procedure tracking data
+    const [dossierRes] = await Promise.all([
+      createResource(API_URLS.processDossier, { dossier_id: dossierId }),
+      suiviStore.fetchSuivi(dossierId),
+    ])
+    dossierData.value = dossierRes
   } catch (err: any) {
     error.value = err.error || 'Une erreur est survenue lors de la récupération du dossier.'
   } finally {
