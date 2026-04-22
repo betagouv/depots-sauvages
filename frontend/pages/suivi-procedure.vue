@@ -185,21 +185,21 @@ const steps = computed(() => {
       }),
     },
     {
-      title: 'Compléter les pièces de procédure',
+      title: 'Signer les pièces de procédure',
       completed: suiviStore.isStepCompleted(dossierId.value, 1, {
         auteurIdentifie: auteurIdentifie.value,
         currentStep: activeStep.value,
       }),
     },
     {
-      title: "Notifier l'auteur présumé :",
+      title: "Notifier l'auteur présumé",
       completed: suiviStore.isStepCompleted(dossierId.value, 2, {
         auteurIdentifie: auteurIdentifie.value,
         currentStep: activeStep.value,
       }),
     },
     {
-      title: 'Décider des poursuites :',
+      title: 'Décider des poursuites',
       completed: suiviStore.isStepCompleted(dossierId.value, 3, {
         auteurIdentifie: auteurIdentifie.value,
         currentStep: activeStep.value,

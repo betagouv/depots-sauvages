@@ -15,9 +15,7 @@
                 />
               </li>
             </ul>
-            <p class="fr-card__desc fr-text--sm">
-              Résumé des observations de terrain et des préjudices causés.
-            </p>
+
             <div class="fr-card__end fr-mt-1w">
               <p class="fr-text-mention--grey fr-mb-0 fr-text--xs">
                 <VIcon name="ri-folder-line" class="fr-mr-1w" scale="0.8" />
@@ -44,9 +42,7 @@
                 />
               </li>
             </ul>
-            <p class="fr-card__desc fr-text--sm">
-              Courrier rappelant les faits constatés et les obligations de l'auteur présumé.
-            </p>
+
             <div class="fr-card__end fr-mt-1w">
               <p class="fr-text-mention--grey fr-mb-0 fr-text--xs">
                 <VIcon name="ri-mail-send-line" class="fr-mr-1w" scale="0.8" />

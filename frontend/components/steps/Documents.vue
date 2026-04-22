@@ -10,7 +10,7 @@
       />
 
       <div class="fr-mb-4w fr-mt-4w">
-        <h4 class="fr-h6 fr-mb-2w">Ce qu'il vous reste à faire</h4>
+        <h4 class="fr-h6 fr-mb-2w">Ce qu'il vous reste à faire :</h4>
         <ListeActions step-id="constat-documents" :actions="actions" @update-case="onUpdateCase" />
       </div>
     </div>
@@ -45,7 +45,7 @@ const actions = computed((): Action[] => {
       id: 'rapport_signe',
       label:
         (props.auteurIdentifie ? '' : 'Compléter et ') +
-        "Faire signer le <strong>rapport de constatation</strong> par un agent habilité : le maire, ses adjoints ou conseillers délégués, les policiers municipaux ou gardes champêtres, les agents commissionnés et/ou assermentés de la commune ou de l'EPCI",
+        "<strong>Faire signer le rapport de constatation</strong> par un agent habilité : le maire, ses adjoints ou conseillers délégués, les policiers municipaux ou gardes champêtres, les agents commissionnés et/ou assermentés de la commune ou de l'EPCI",
       completed: props.suivi.rapport_constat_signe,
     },
   ]
@@ -54,7 +54,7 @@ const actions = computed((): Action[] => {
     baseActions.push({
       id: 'lettre_signee',
       label:
-        "Faire signer la <strong>lettre d'information</strong> par l'autorité titulaire du pouvoir de police administrative : le maire, adjoints ou conseillers par délégation, président d'EPCI par transfert de compétence",
+        "<strong>Faire signer la lettre d'information</strong> par l'autorité titulaire du pouvoir de police administrative : le maire, adjoints ou conseillers par délégation, président d'EPCI par transfert de compétence",
       completed: props.suivi.lettre_info_signee,
     })
   }

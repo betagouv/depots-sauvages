@@ -25,10 +25,10 @@
         <div class="fr-col-12">
           <DsfrInput
             v-model="suivi.observations_internes"
-            label="Observations internes"
+            label="Notes internes"
             is-textarea
             placeholder=""
-            hint="Dans ce champs vous pouvez ajouter toutes les informations utiles au suivi du dossier. Ces notes internes ne sont pas intégrées aux différents documents de procédures mais peuvent vous aider à ajouter des commentaires complémentaires."
+            hint="Vous pouvez ajouter ici des notes et des observations qui ne seront pas intégrées à la procédure."
             rows="3"
           />
         </div>
