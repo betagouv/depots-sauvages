@@ -8,20 +8,23 @@
       <div class="fr-grid-row">
         <div class="fr-col-12 fr-col-md-10 fr-col-offset-md-1">
           <header class="fr-mb-4w">
-            <div class="fr-mb-3w">
-              <h1 class="fr-h1 fr-mb-2w">Ma procédure de dépôt sauvage</h1>
+            <div class="fr-grid-row fr-grid-row--middle fr-mb-3w">
+              <div class="fr-col-auto fr-mr-3w">
+                <h1 class="fr-h1 fr-mb-0">Procédure #{{ dossierData.dn_numero_dossier }}</h1>
+              </div>
+              <div class="fr-col-auto" v-if="hasProcedure">
+                <DsfrBadge
+                  :type="auteurIdentifie ? 'success' : 'info'"
+                  :label="auteurIdentifie ? 'Auteur identifié' : 'Auteur non identifié'"
+                  class="fr-badge--no-icon"
+                />
+              </div>
             </div>
 
-            <p class="fr-text--lead fr-mb-1w">Dossier #{{ dossierData.dn_numero_dossier }}</p>
+            <p class="fr-text--lead fr-mb-4w">Suivi des actions que vous devez réaliser.</p>
 
-            <DossierMetadata :dossier="dossierData" />
-            <div v-if="hasProcedure">
-              <DsfrBadge
-                :type="auteurIdentifie ? 'success' : 'info'"
-                :label="auteurIdentifie ? 'Auteur identifié' : 'Auteur non identifié'"
-                class="fr-badge--no-icon fr-mb-3w"
-              />
-            </div>
+            <DossierMetadata :dossier="dossierData" class="fr-mb-3w" />
+
             <DsfrButton
               label="Modifier le dossier de constatation sur Démarche numérique"
               class="fr-btn--secondary"
