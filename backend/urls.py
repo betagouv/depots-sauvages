@@ -12,11 +12,14 @@ from backend.dn_signalements.views import (
     UserSignalementViewSet,
 )
 from backend.home.views import UserInfoViewSet, index_view, logout_view
+from backend.procedures.views import SuiviProcedureViewSet
 
 # API Routes registration
 router = DefaultRouter()
 router.register("user-info", UserInfoViewSet, basename="user-info")
 router.register("dossiers", UserSignalementViewSet, basename="user-dossier")
+router.register("suivi-procedure", SuiviProcedureViewSet, basename="suivi-procedure")
+
 
 # Admin Routes
 if settings.ENABLE_ADMIN:
