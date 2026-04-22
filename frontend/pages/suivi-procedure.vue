@@ -66,7 +66,6 @@
               <Identification
                 v-else
                 :auteur-identifie="auteurIdentifie"
-                :modify-url="getDnModifyUrl(dossierData.id)"
               />
             </template>
             <template v-if="hasProcedure" #step-3>
@@ -189,7 +188,7 @@ const steps = computed(() => {
         }),
       },
       {
-        title: "Identification de l'auteur",
+        title: "Identifier l'auteur",
         completed: false,
       },
     ]

@@ -3,7 +3,7 @@
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12 fr-col-md-6">
         <div class="procedure-choice fr-p-3w">
-          <h5 class="fr-h5 fr-mb-2w">Identifier l'auteur via l'immatriculation</h5>
+          <h5 class="fr-h5 fr-mb-2w">Identifier avec l'immatriculation</h5>
 
           <DsfrAlert type="info" title="Modèle de document" class="fr-mb-2w">
             <a
@@ -39,13 +39,14 @@
             </li>
           </ul>
           <p class="fr-text--sm fr-mb-0">
-            Une fois l'identité déterminée, vous pouvez mettre à jour votre procédure :
+            Une fois l'identité déterminée, vous pouvez démarrer une nouvelle procédure :
             <a
-              :href="modifyUrl"
+              :href="newProcedureUrl"
               target="_blank"
-              class="fr-text--sm fr-link fr-icon-external-link-line fr-link--icon-right"
+              class="fr-text--sm fr-link fr-link--icon-left"
+              @click.prevent="openExternalLink(newProcedureUrl)"
             >
-              Modifier la procédure sur Démarche Numérique
+              Démarrer une nouvelle procédure sur Démarche Numérique
             </a>
           </p>
         </div>
@@ -53,7 +54,7 @@
 
       <div class="fr-col-12 fr-col-md-6">
         <div class="procedure-choice fr-p-3w">
-          <h5 class="fr-h5 fr-mb-2w">Identifier l'auteur via une enquête judiciaire</h5>
+          <h5 class="fr-h5 fr-mb-2w">Identifier par l'enquête judiciaire</h5>
 
           <DsfrAlert type="info" title="Modèle de document" class="fr-mb-2w">
             <a
@@ -95,10 +96,13 @@
 </template>
 
 <script setup lang="ts">
+import { openExternalLink } from '../../utils/browser'
+
 defineProps<{
   auteurIdentifie?: boolean
-  modifyUrl?: string
 }>()
+
+const newProcedureUrl = import.meta.env.VITE_DN_URL
 </script>
 
 <style scoped>
