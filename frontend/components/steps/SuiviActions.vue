@@ -186,8 +186,7 @@ const notificationChoiceOptions = [
 const sanctionActions = computed((): Action[] => [
   {
     id: 'fixer_montant',
-    label:
-      "Fixer le montant de l'amende administrative avec un montant proportionné à la gravité des faits, jusqu'à 15 000 € maximum. Utiliser l'aide à l'évaluation fournie",
+    label: "Fixer le montant de l'amende administrative en utilisant l'aide à l'évaluation fournie",
     completed: props.suivi.montant_fixe,
   },
   {
