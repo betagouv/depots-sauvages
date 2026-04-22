@@ -5,7 +5,7 @@
         <div class="fr-col-12 fr-mb-3w">
           <DsfrRadioButtonSet
             v-model="suivi.nettoyage_fait"
-            legend="Le dépôt sauvage est nettoyé ?"
+            legend="Le dépôt sauvage a-t-il été nettoyé ?"
             :options="nettoyageOptions"
             name="nettoyage-radios"
             inline
