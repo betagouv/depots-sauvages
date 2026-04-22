@@ -26,3 +26,7 @@ export const shouldShowModificationDate = (
   // Only show if modification is more than 1 minute after creation
   return modification - creation > 60000
 }
+
+export const getTodayISOString = () => {
+  return new Date().toISOString().split('T')[0]
+}

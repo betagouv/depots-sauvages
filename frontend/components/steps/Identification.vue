@@ -4,6 +4,17 @@
       <div class="fr-col-12 fr-col-md-6">
         <div class="procedure-choice fr-p-3w">
           <h5 class="fr-h5 fr-mb-2w">Identifier l'auteur via l'immatriculation</h5>
+
+          <DsfrAlert type="info" title="Modèle de document" class="fr-mb-2w">
+            <a
+              href="https://fichiers.numerique.gouv.fr/explorer/items/files/c7935d81-0c1d-488f-b7ab-9e3686cc7858"
+              target="_blank"
+              class="fr-btn fr-btn--secondary fr-btn--sm"
+            >
+              Demander l'identité à la gendarmerie
+            </a>
+          </DsfrAlert>
+
           <p class="fr-text--sm">
             Vous avez l'immatriculation du véhicule de l'auteur présumé, mais vous n'avez pas
             l'identité complète (Nom, prénom, adresse postale) :
@@ -25,11 +36,6 @@
               Si la mairie n'a pas de police municipale, rapprochez-vous de la brigade de
               gendarmerie pour connaître les modalités de communication d'identité (selon la
               politique pénale locale).
-              <a
-                href="https://fichiers.numerique.gouv.fr/explorer/items/files/c7935d81-0c1d-488f-b7ab-9e3686cc7858"
-                target="_blank"
-                >(Modèle de courrier)</a
-              >.
             </li>
           </ul>
           <p class="fr-text--sm fr-mb-0">
@@ -48,6 +54,17 @@
       <div class="fr-col-12 fr-col-md-6">
         <div class="procedure-choice fr-p-3w">
           <h5 class="fr-h5 fr-mb-2w">Identifier l'auteur via une enquête judiciaire</h5>
+
+          <DsfrAlert type="info" title="Modèle de document" class="fr-mb-2w">
+            <a
+              href="https://docs.numerique.gouv.fr/docs/a89aad6d-bcdf-4f28-b6f2-e34c83e62313/"
+              target="_blank"
+              class="fr-btn fr-btn--secondary fr-btn--sm"
+            >
+              Demander l'adresse au Procureur
+            </a>
+          </DsfrAlert>
+
           <p class="fr-text--sm">
             Vous n'avez pas l'identité complète (Nom, Prénom, adresse postale), vous pouvez porter
             plainte pour que l'auteur soit identifié par une enquête judiciaire.
@@ -69,11 +86,6 @@
             <li class="fr-mb-1w">
               En tant qu'OPJ, le maire peut demander la communication de l'adresse de l'auteur
               potentiel au procureur de la République.
-              <a
-                href="https://docs.numerique.gouv.fr/docs/a89aad6d-bcdf-4f28-b6f2-e34c83e62313/"
-                target="_blank"
-                >(Modèle de courrier)</a
-              >
             </li>
           </ul>
         </div>
