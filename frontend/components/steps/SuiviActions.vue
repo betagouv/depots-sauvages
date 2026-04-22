@@ -34,6 +34,15 @@
                 Aide à l'évaluation de l'amende
               </a>
             </li>
+            <li>
+              <a
+                href="https://fichiers.numerique.gouv.fr/explorer/items/files/5f899dd5-ff04-4115-856a-31bfd29006cb"
+                target="_blank"
+                class="fr-btn fr-btn--secondary"
+              >
+                Exemple de titre de recette
+              </a>
+            </li>
           </ul>
         </DsfrAlert>
 
@@ -192,17 +201,18 @@ const sanctionActions = computed((): Action[] => [
   {
     id: 'arrete_redige',
     label:
-      "Rédiger l'arrêté de sanction administrative relatif à l'amende et le soumettre au contrôle de légalité. Utiliser le modèle d'arrêté fourni",
+      "Rédiger l'arrêté de sanction administrative relatif à l'amende et le soumettre au contrôle de légalité  : utiliser le modèle d'arrêté fourni",
     completed: props.suivi.arrete_redige,
   },
   {
     id: 'titre_recette',
-    label: 'Émettre un titre de recette à destination du Trésor public',
+    label:
+      "Émettre un titre de recette à destination du Trésor public  : utiliser l'exemple fourni",
     completed: props.suivi.titre_recette_emis,
   },
   {
     id: 'notification_sanction',
-    label: "Notifier l'auteur. Utiliser le modèle de notification fourni",
+    label: "Notifier l'auteur  : utiliser le modèle de notification fourni",
     completed: props.suivi.notification_sanction_envoyee,
   },
 ])
@@ -225,7 +235,7 @@ const abandonActions = computed((): Action[] => {
     items.push({
       id: 'notification_abandon',
       label:
-        "Rédiger et envoyer la notification d'abandon. Utiliser le modèle de notification fourni",
+        "Rédiger et envoyer la notification d'abandon  : utiliser le modèle de notification fourni",
       completed: props.suivi.notification_abandon_envoyee,
     })
   }

@@ -55,7 +55,7 @@ const actions = computed((): Action[] => {
   if (props.suivi.decision_poursuite === 'sanction') {
     items.push({
       id: 'titre_recette_confirme',
-      label: "S'assurer que le titre de recette a été émis par le Trésor public",
+      label: "S'assurer auprès du Trésor public que l'amende a été payée",
       completed: props.suivi.titre_recette_confirme,
     })
     items.push({
