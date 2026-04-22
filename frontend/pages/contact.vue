@@ -42,8 +42,7 @@
             :buttons="[
               {
                 label: 'Prendre rendez-vous',
-                icon: externalLinkIcon,
-                onClick: openRdvPage,
+                onClick: () => router.push({ name: 'RDV' }),
                 secondary: true,
               },
             ]"
@@ -106,20 +105,16 @@
 
 <script setup lang="ts">
 import { DsfrCard } from '@gouvminint/vue-dsfr'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const contactEmail = import.meta.env.VITE_CONTACT_EMAIL
-const rdvPageUrl = import.meta.env.VITE_RDV_PAGE_URL || 'https://rdv.anct.gouv.fr/prendre_rdv'
 
 const chatIcon = { name: 'ri-chat-1-line', scale: 1.5, class: 'fr-mr-1w' }
 const emailIcon = { name: 'ri-mail-line', scale: 1.5, class: 'fr-mr-1w' }
-const externalLinkIcon = { name: 'ri-external-link-line', scale: 1.5, class: 'fr-mr-1w' }
 
 const sendEmail = () => {
   window.location.href = `mailto:${contactEmail}`
-}
-
-const openRdvPage = () => {
-  window.open(rdvPageUrl, '_blank', 'noopener,noreferrer')
 }
 
 const openCrispChat = () => {
