@@ -2,10 +2,13 @@ import { defineStore } from 'pinia'
 import { reactive } from 'vue'
 
 export interface SuiviProcedure {
+  // Méta
+  etape_en_cours: number
+
   // Étape 1 : Pièces de procédure
-  preuve_photos_jointes: boolean
-  rapport_constat_signe: boolean
-  lettre_info_signee: boolean
+  preuves_fournies: boolean
+  constatation_signee: boolean
+  lettre_signe: boolean
 
   // Étape 2 : Notification
   lettre_envoyee: boolean
@@ -21,7 +24,7 @@ export interface SuiviProcedure {
   titre_recette_emis: boolean
   notification_sanction_envoyee: boolean
   notification_abandon_envoyee: boolean
-  decision_poursuite: string // 'sanction' | 'abandon' | ''
+  decision_poursuite: string // 'sanction' | 'abandon' | 'recherche_adresse' | ''
   motif_abandon_choisi: boolean
   souhaite_notifier_abandon: boolean | null
 
@@ -33,7 +36,6 @@ export interface SuiviProcedure {
   observations_internes: string
 
   // Étape 5 : Clôture
-  nettoyage_confirme: boolean
   titre_recette_confirme: boolean
   montant_recouvre: boolean
   dossier_archive: boolean
@@ -45,9 +47,10 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
   const getOrCreateSuivi = (dossierId: string): SuiviProcedure => {
     if (!procedures[dossierId]) {
       procedures[dossierId] = {
-        preuve_photos_jointes: false,
-        rapport_constat_signe: false,
-        lettre_info_signee: false,
+        etape_en_cours: 1,
+        preuves_fournies: false,
+        constatation_signee: false,
+        lettre_signe: false,
         lettre_envoyee: false,
         lettre_envoyee_date: '',
         copie_archives: false,
@@ -68,7 +71,6 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
         nettoyage_fait: null,
         nettoyage_par: '',
         observations_internes: '',
-        nettoyage_confirme: false,
         titre_recette_confirme: false,
         montant_recouvre: false,
         dossier_archive: false,
@@ -95,15 +97,15 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
     switch (stepIndex) {
       case 1:
         return (
-          suivi.preuve_photos_jointes &&
-          suivi.rapport_constat_signe &&
-          (!context.auteurIdentifie || suivi.lettre_info_signee)
+          suivi.preuves_fournies &&
+          suivi.constatation_signee &&
+          (!context.auteurIdentifie || suivi.lettre_signe)
         )
       case 2:
         if (!context.auteurIdentifie) return false
         return suivi.lettre_envoyee && suivi.copie_archives && suivi.ar_recu
       case 3:
-        if (suivi.decision_poursuite === 'nouvelle_adresse') return false
+        if (suivi.decision_poursuite === 'recherche_adresse') return false
         return suivi.decision_poursuite !== ''
       case 4:
         if (suivi.decision_poursuite === 'sanction') {
@@ -131,6 +133,11 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
           return suivi.titre_recette_confirme && suivi.montant_recouvre && suivi.dossier_archive
         }
         return suivi.dossier_archive
+      default:
+        return false
+    }
+  }
+
       default:
         return false
     }

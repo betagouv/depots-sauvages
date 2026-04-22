@@ -41,7 +41,7 @@
           />
           <transition name="fade-slide">
             <div
-              v-if="suivi.ar_statut === 'npai' && suivi.decision_poursuite === 'nouvelle_adresse'"
+              v-if="suivi.ar_statut === 'npai' && suivi.decision_poursuite === 'recherche_adresse'"
               class="fr-mt-2w"
             >
               <DsfrAlert type="info">
@@ -132,11 +132,12 @@ const decisionOptionsNpai = [
   {
     id: 'decision-npai-recherche',
     label: 'Rechercher une nouvelle adresse',
-    value: 'nouvelle_adresse',
+    value: 'recherche_adresse',
   },
 ]
 
 const currentOptions = computed(() => (isNpai.value ? decisionOptionsNpai : decisionOptions))
+
 
 const onUpdateCase = (action: Action, val: boolean) => {
   isDecisionBoxChecked.value = val

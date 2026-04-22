@@ -39,14 +39,14 @@ const actions = computed((): Action[] => {
     {
       id: 'preuve_photos',
       label: 'Joindre les éléments de preuve et les photos au rapport de constatation',
-      completed: props.suivi.preuve_photos_jointes,
+      completed: props.suivi.preuves_fournies,
     },
     {
       id: 'rapport_signe',
       label:
         (props.auteurIdentifie ? '' : 'Compléter et ') +
         "<strong>Faire signer le rapport de constatation</strong> par un agent habilité : le maire, ses adjoints ou conseillers délégués, les policiers municipaux ou gardes champêtres, les agents commissionnés et/ou assermentés de la commune ou de l'EPCI",
-      completed: props.suivi.rapport_constat_signe,
+      completed: props.suivi.constatation_signee,
     },
   ]
 
@@ -55,7 +55,7 @@ const actions = computed((): Action[] => {
       id: 'lettre_signee',
       label:
         "<strong>Faire signer la lettre d'information</strong> par l'autorité titulaire du pouvoir de police administrative : le maire, adjoints ou conseillers par délégation, président d'EPCI par transfert de compétence",
-      completed: props.suivi.lettre_info_signee,
+      completed: props.suivi.lettre_signe,
     })
   }
 
@@ -65,16 +65,17 @@ const actions = computed((): Action[] => {
 const onUpdateCase = (action: Action, val: boolean) => {
   switch (action.id) {
     case 'preuve_photos':
-      props.suivi.preuve_photos_jointes = val
+      props.suivi.preuves_fournies = val
       break
     case 'rapport_signe':
-      props.suivi.rapport_constat_signe = val
+      props.suivi.constatation_signee = val
       break
     case 'lettre_signee':
-      props.suivi.lettre_info_signee = val
+      props.suivi.lettre_signe = val
       break
   }
 }
+
 </script>
 
 <style scoped>

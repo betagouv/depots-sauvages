@@ -131,7 +131,10 @@ const suiviProcedure = computed(() => suiviStore.getOrCreateSuivi(dossierId.valu
 const showLoading = ref(true)
 const error = ref<string | null>(null)
 const dossierData = ref<any>(null)
-const activeStep = ref(1)
+const activeStep = computed({
+  get: () => suiviProcedure.value.etape_en_cours,
+  set: (val) => (suiviProcedure.value.etape_en_cours = val),
+})
 
 const hasProcedure = computed(() => dossierData.value?.created !== false)
 const auteurIdentifie = computed(() => dossierData.value?.auteur_identifie ?? false)
