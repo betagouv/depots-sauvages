@@ -37,7 +37,7 @@ export const calculateContradictoire = (arDate: string | null | undefined): Cont
   } else if (joursRestants === 0) {
     label = "Le délai du contradictoire expire aujourd'hui : vous pouvez continuer la procédure."
   } else {
-    label = `La période du contradictoire sera écoulée dans ${joursRestants} jour${joursRestants > 1 ? 's' : ''} : vous pourrez alors continuer la procédure.`
+    label = 'La période du contradictoire débute à la réception de l\'accusé de réception, même si le courrier est refusé ou non réclamé. Vous pourrez continuer la procédure à la fin de cette période.'
   }
 
   return {

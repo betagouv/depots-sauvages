@@ -58,7 +58,7 @@
       >
         <DsfrAlert
           type="info"
-          :title="`Fin de la période du contradictoire : ${contradictoire.dateFin}`"
+          :title="`La période du contradictoire se termine le ${contradictoire.dateFin}`"
         >
           <p>
             {{ contradictoire.joursRestantsLabel }}

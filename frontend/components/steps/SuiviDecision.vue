@@ -21,7 +21,7 @@
           <strong>Soit abandonner les poursuites</strong>
           <ul>
             <li>S'il y a un doute sur sa culpabilité ;</li>
-            <li>Si les éléments fournis par l'auteur présumé sont jugés convaincants ;</li>
+            <li>Si la responsabilité de l'auteur présumé n'est pas clairement établie ;</li>
             <li>Si l'on souhaite faire preuve d'indulgence ;</li>
             <li>Si la réponse à la lettre d'information désigne un autre auteur présumé.</li>
           </ul>
