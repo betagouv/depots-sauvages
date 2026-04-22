@@ -31,7 +31,7 @@
                 target="_blank"
                 class="fr-btn fr-btn--secondary"
               >
-                Aide à l'évaluation
+                Aide à l'évaluation de l'amende
               </a>
             </li>
           </ul>
@@ -187,13 +187,13 @@ const sanctionActions = computed((): Action[] => [
   {
     id: 'fixer_montant',
     label:
-      "Fixer le montant de l'amende administrative (montant proportionné à la gravité des faits, jusqu'à 15 000 € maximum)",
+      "Fixer le montant de l'amende administrative avec un montant proportionné à la gravité des faits, jusqu'à 15 000 € maximum. Utiliser l'aide à l'évaluation fournie",
     completed: props.suivi.montant_fixe,
   },
   {
     id: 'arrete_redige',
     label:
-      "Rédiger l'arrêté de sanction administrative relatif à l'amende et le soumettre au contrôle de légalité",
+      "Rédiger l'arrêté de sanction administrative relatif à l'amende et le soumettre au contrôle de légalité. Utiliser le modèle d'arrêté fourni",
     completed: props.suivi.arrete_redige,
   },
   {
@@ -203,7 +203,7 @@ const sanctionActions = computed((): Action[] => [
   },
   {
     id: 'notification_sanction',
-    label: "Notifier l'auteur",
+    label: "Notifier l'auteur. Utiliser le modèle de notification fourni",
     completed: props.suivi.notification_sanction_envoyee,
   },
 ])
@@ -225,7 +225,8 @@ const abandonActions = computed((): Action[] => {
   ) {
     items.push({
       id: 'notification_abandon',
-      label: "Rédiger et envoyer la notification d'abandon",
+      label:
+        "Rédiger et envoyer la notification d'abandon. Utiliser le modèle de notification fourni",
       completed: props.suivi.notification_abandon_envoyee,
     })
   }
