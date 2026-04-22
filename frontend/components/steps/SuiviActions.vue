@@ -107,7 +107,6 @@
               <div class="fr-col-12 fr-col-md-8">
                 <DsfrSelect
                   v-model="suivi.motif_abandon"
-                  label="Choisir le motif d'abandon de la procédure"
                   :options="motifAbandonOptions"
                   class="fr-mb-2w"
                 />
@@ -138,7 +137,7 @@
                 >
                   <DsfrRadioButtonSet
                     v-model="suivi.souhaite_notifier_abandon"
-                    legend="Souhaitez vous notifier la personne concernée de la décision d'abandon de la procédure administrative"
+                    legend="Souhaitez-vous notifier la personne concernée de la décision d'abandon de la procédure administrative ?"
                     :options="notificationChoiceOptions"
                     name="notifier-abandon-radios"
                     inline
@@ -181,7 +180,10 @@ const montantError = computed(() => {
 const motifAbandonOptions = [
   { text: 'Sélectionnez une option', value: '', disabled: true },
   { text: 'Indulgence', value: 'Indulgence' },
-  { text: 'Les éléments fournis par l’auteur sont convaincants', value: 'Éléments convaincants' },
+  {
+    text: "La responsabilité de l'auteur présumé n'est pas clairement établie",
+    value: 'Éléments convaincants',
+  },
   { text: 'Un autre auteur a été identifié', value: 'Un auteur identifié' },
   { text: 'Auteur introuvable (NPAI)', value: 'Auteur introuvable (NPAI)' },
   { text: 'Autre motif de classement sans suite', value: 'Autre motif de classement sans suite' },
@@ -221,7 +223,7 @@ const abandonActions = computed((): Action[] => {
   const items: Action[] = [
     {
       id: 'motif_abandon',
-      label: "Choisir le motif d'abandon de poursuite",
+      label: "Choisir le motif d'abandon de la poursuite",
       completed: props.suivi.motif_abandon_choisi,
     },
   ]
