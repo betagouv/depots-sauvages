@@ -101,51 +101,56 @@
             </ul>
           </DsfrAlert>
 
-          <h4 class="fr-h6 fr-mb-2w">Ce qu'il vous reste à faire :</h4>
-          <ListeActions step-id="abandon" :actions="abandonActions" @update-case="onUpdateAbandon">
-            <template #extra-motif_abandon>
-              <div class="fr-col-12 fr-col-md-8">
-                <DsfrSelect
-                  v-model="suivi.motif_abandon"
-                  :options="motifAbandonOptions"
-                  class="fr-mb-2w"
+          <SelectableChoices
+            v-model="suivi.motif_abandon"
+            legend="Quel est le motif d'abandon de la poursuite ?"
+            :options="motifAbandonOptions"
+            layout="list"
+            class="fr-my-4w"
+            @update:model-value="onMotifUpdate"
+          />
+
+          <transition name="fade-slide">
+            <div v-if="suivi.motif_abandon === 'Un auteur identifié'" class="fr-mt-3w">
+              <DsfrAlert type="info" title="Poursuite à l'encontre d'un autre auteur">
+                <p class="fr-text--sm fr-mb-2w">
+                  La procédure peut être poursuivie à l'encontre d'un autre auteur identifié (ex.
+                  prestataire, sous-traitant, fournisseur, client, intermédiaire).
+                </p>
+                <DsfrButton
+                  label="Démarrer une nouvelle procédure"
+                  :icon="{ name: 'ri-add-circle-line', class: 'fr-mr-1w' }"
+                  class="fr-btn--sm fr-btn--secondary"
+                  @click="openExternalLink(newProcedureUrl)"
                 />
-                <div v-if="suivi.motif_abandon === 'Un auteur identifié'" class="fr-pt-2w">
-                  <DsfrAlert
-                    type="info"
-                    title="Poursuite à l'encontre d'un autre auteur"
-                    description="La procédure peut être poursuivie à l'encontre d'un autre auteur identifié (ex. prestataire, sous-traitant, fournisseur, client, intermédiaire), vous pouvez démarrer une nouvelle procédure."
-                    class="fr-mb-2w"
-                  />
-                  <a
-                    :href="newProcedureUrl"
-                    target="_blank"
-                    class="fr-link fr-icon-add-circle-line fr-link--icon-left fr-mt-1w"
-                    @click.prevent="openExternalLink(newProcedureUrl)"
-                  >
-                    Démarrer une nouvelle procédure
-                  </a>
-                </div>
-                <div
-                  v-if="
-                    suivi.motif_abandon &&
-                    suivi.motif_abandon !== 'Un auteur identifié' &&
-                    suivi.motif_abandon !== 'Auteur introuvable (NPAI)' &&
-                    suivi.ar_statut !== 'npai'
-                  "
-                  class="fr-pt-2w"
-                >
-                  <DsfrRadioButtonSet
-                    v-model="suivi.souhaite_notifier_abandon"
-                    legend="Souhaitez-vous notifier la personne concernée de la décision d'abandon de la procédure administrative ?"
-                    :options="notificationChoiceOptions"
-                    name="notifier-abandon-radios"
-                    inline
-                  />
-                </div>
-              </div>
-            </template>
-          </ListeActions>
+              </DsfrAlert>
+            </div>
+          </transition>
+
+          <transition name="fade-slide">
+            <SelectableChoices
+              v-if="
+                suivi.motif_abandon &&
+                suivi.motif_abandon !== 'Un auteur identifié' &&
+                suivi.motif_abandon !== 'Auteur introuvable (NPAI)'
+              "
+              v-model="suivi.souhaite_notifier_abandon"
+              legend="Souhaitez-vous notifier la personne de l'abandon ?"
+              :options="notificationOptions"
+              class="fr-mt-4w"
+            />
+          </transition>
+
+          <transition name="fade-slide">
+            <div v-if="showActionsList" class="actions-list-container">
+              <h4 class="fr-h6 fr-mb-2w">Ce qu'il vous reste à faire :</h4>
+              <ListeActions
+                step-id="abandon"
+                :actions="abandonActions"
+                @update-case="onUpdateAbandon"
+              />
+            </div>
+          </transition>
         </template>
       </div>
 
@@ -157,7 +162,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
-import { openExternalLink } from '../../utils/browser'
+import SelectableChoices from '../shared/SelectableChoices.vue'
 import AttenteDecision from './AttenteDecision.vue'
 import ListeActions, { type Action } from './ListeActions.vue'
 
@@ -166,7 +171,11 @@ const props = defineProps<{
   modifyUrl: string
 }>()
 
-const newProcedureUrl = import.meta.env.VITE_DN_URL
+const newProcedureUrl = 'https://www.demarches-simplifiees.fr/commencer/sa-depot-sauvage'
+
+const openExternalLink = (url: string) => {
+  window.open(url, '_blank')
+}
 
 defineEmits(['back-to-decision', 'go-to-cloture'])
 
@@ -178,21 +187,44 @@ const montantError = computed(() => {
 })
 
 const motifAbandonOptions = [
-  { text: 'Sélectionnez une option', value: '', disabled: true },
-  { text: 'Indulgence', value: 'Indulgence' },
+  { id: 'motif-indulgence', label: 'Indulgence', value: 'Indulgence' },
   {
-    text: "La responsabilité de l'auteur présumé n'est pas clairement établie",
+    id: 'motif-elements',
+    label: "La responsabilité de l'auteur présumé n'est pas clairement établie",
     value: 'Éléments convaincants',
   },
-  { text: 'Un autre auteur a été identifié', value: 'Un auteur identifié' },
-  { text: 'Auteur introuvable (NPAI)', value: 'Auteur introuvable (NPAI)' },
-  { text: 'Autre motif de classement sans suite', value: 'Autre motif de classement sans suite' },
+  { id: 'motif-autre-auteur', label: 'Un autre auteur a été identifié', value: 'Un auteur identifié' },
+  { id: 'motif-npai', label: 'Auteur introuvable (NPAI)', value: 'Auteur introuvable (NPAI)' },
+  {
+    id: 'motif-autre',
+    label: 'Autre motif de classement sans suite',
+    value: 'Autre motif de classement sans suite',
+  },
 ]
 
-const notificationChoiceOptions = [
-  { label: 'Oui', value: true, id: 'notifier-oui' },
-  { label: 'Non', value: false, id: 'notifier-non' },
+const notificationOptions = [
+  { id: 'notify-yes', label: 'Oui, notifier', value: true },
+  { id: 'notify-no', label: 'Non, ne pas notifier', value: false },
 ]
+
+const onMotifUpdate = (val: string) => {
+  // Si NPAI ou Autre auteur, on ne notifie pas (déjà géré ou pas pertinent)
+  if (val === 'Auteur introuvable (NPAI)' || val === 'Un auteur identifié') {
+    props.suivi.souhaite_notifier_abandon = false
+  } else if (!val) {
+    props.suivi.souhaite_notifier_abandon = null
+  }
+}
+
+const showActionsList = computed(() => {
+  if (!props.suivi.motif_abandon) return false
+  if (
+    props.suivi.motif_abandon === 'Auteur introuvable (NPAI)' ||
+    props.suivi.motif_abandon === 'Un auteur identifié'
+  )
+    return false
+  return props.suivi.souhaite_notifier_abandon === true
+})
 
 const sanctionActions = computed((): Action[] => [
   {
@@ -220,13 +252,7 @@ const sanctionActions = computed((): Action[] => [
 ])
 
 const abandonActions = computed((): Action[] => {
-  const items: Action[] = [
-    {
-      id: 'motif_abandon',
-      label: "Choisir le motif d'abandon de la poursuite",
-      completed: props.suivi.motif_abandon_choisi,
-    },
-  ]
+  const items: Action[] = []
 
   if (
     props.suivi.motif_abandon &&
@@ -263,21 +289,20 @@ const onUpdateSanction = (action: Action, val: boolean) => {
 }
 
 const onUpdateAbandon = (action: Action, val: boolean) => {
-  if (action.id === 'motif_abandon') {
-    props.suivi.motif_abandon_choisi = val
-    if (!val) {
-      props.suivi.motif_abandon = '' // Reset on uncheck
-      props.suivi.souhaite_notifier_abandon = null
-      props.suivi.notification_abandon_envoyee = false
-    }
-  } else if (action.id === 'notification_abandon') {
+  if (action.id === 'notification_abandon') {
     props.suivi.notification_abandon_envoyee = val
   }
 }
 </script>
 
 <style scoped>
-.text-center {
-  text-align: center;
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: all 0.3s ease;
+}
+.fade-slide-enter-from,
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
 }
 </style>

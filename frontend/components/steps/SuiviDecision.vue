@@ -29,55 +29,49 @@
       </ul>
     </DsfrHighlight>
 
-    <div class="decision-outcome fr-p-3w fr-mt-4w">
-      <h5 class="fr-h5 fr-mb-3w text-center">{{ currentLegend }}</h5>
-      <div class="fr-grid-row fr-grid-row--center fr-grid-row--gutters fr-grid-row--stretch">
-        <div v-for="option in currentOptions" :key="option.value" class="fr-col-12 fr-col-md-6">
-          <DsfrCheckbox
-            :name="option.id"
-            :label="option.label"
-            :model-value="suivi.decision_poursuite === option.value"
-            @update:model-value="toggleDecision(option.value)"
-          />
-        </div>
-      </div>
+    <SelectableChoices
+      v-model="suivi.decision_poursuite"
+      :legend="currentLegend"
+      :options="currentOptions"
+      class="fr-mt-4w"
+    />
 
-      <transition name="fade-slide">
-        <div v-if="isNpai && suivi.decision_poursuite === 'recherche_adresse'" class="fr-mt-3w">
-          <DsfrAlert type="info">
-            <p class="fr-text--sm fr-mb-2w">
-              La procédure est en pause. Vous pouvez rechercher une nouvelle adresse :
-            </p>
-            <ul class="fr-text--sm fr-mb-2w">
-              <li>Par vos propres moyens, notamment par internet.</li>
-              <li>
-                En allant porter plainte à la brigade ou au commissariat, et en écrivant par la
-                suite au procureur de la République pour demander l'adresse de l'auteur.
-                <a
-                  href="https://fichiers.numerique.gouv.fr/explorer/items/files/0b9b0e3b-f25a-4848-ba5f-991e27dd25cd"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  >Modèle de lettre au procureur</a
-                >
-              </li>
-            </ul>
-            <p class="fr-text--sm fr-mb-0">
-              <strong>Une fois la nouvelle adresse trouvée, </strong>
-              <a :href="modifyUrl" target="_blank" rel="noopener noreferrer">mettez à jour</a>
-              le rapport de constatation et la lettre d'information puis retournez à
-              <a href="#" @click.prevent="$emit('back-to-notification')">l'étape précédente</a>
-              pour indiquer la nouvelle date d'envoi et le statut de l'accusé de réception.
-            </p>
-          </DsfrAlert>
-        </div>
-      </transition>
-    </div>
+    <transition name="fade-slide">
+      <div v-if="isNpai && suivi.decision_poursuite === 'recherche_adresse'" class="fr-mt-3w">
+        <DsfrAlert type="info">
+          <p class="fr-text--sm fr-mb-2w">
+            La procédure est en pause. Vous pouvez rechercher une nouvelle adresse :
+          </p>
+          <ul class="fr-text--sm fr-mb-2w">
+            <li>Par vos propres moyens, notamment par internet.</li>
+            <li>
+              En allant porter plainte à la brigade ou au commissariat, et en écrivant par la
+              suite au procureur de la République pour demander l'adresse de l'auteur.
+              <a
+                href="https://fichiers.numerique.gouv.fr/explorer/items/files/0b9b0e3b-f25a-4848-ba5f-991e27dd25cd"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Modèle de lettre au procureur</a
+              >
+            </li>
+          </ul>
+          <p class="fr-text--sm fr-mb-0">
+            <strong>Une fois la nouvelle adresse trouvée, </strong>
+            <a :href="modifyUrl" target="_blank" rel="noopener noreferrer">mettez à jour</a>
+            le rapport de constatation et la lettre d'information puis retournez à
+            <a href="#" @click.prevent="$emit('back-to-notification')">l'étape précédente</a>
+            pour indiquer la nouvelle date d'envoi et le statut de l'accusé de réception.
+          </p>
+        </DsfrAlert>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, watch } from 'vue'
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
+import SelectableChoices from '../shared/SelectableChoices.vue'
 
 const props = defineProps<{
   suivi: SuiviProcedure
@@ -122,14 +116,6 @@ const decisionOptionsNpai = [
 
 const currentOptions = computed(() => (isNpai.value ? decisionOptionsNpai : decisionOptions))
 
-const toggleDecision = (val: string) => {
-  if (props.suivi.decision_poursuite === val) {
-    props.suivi.decision_poursuite = ''
-  } else {
-    props.suivi.decision_poursuite = val
-  }
-}
-
 watch(
   () => props.suivi.decision_poursuite,
   (newVal) => {
@@ -142,35 +128,6 @@ watch(
 </script>
 
 <style scoped>
-.decision-outcome {
-  background-color: var(--background-alt-blue-france);
-  border-radius: 12px;
-  border: 1px solid var(--border-default-blue-france);
-  box-shadow: 0 4px 12px rgba(0, 0, 145, 0.05);
-}
-
-.decision-outcome :deep(.fr-checkbox-group) {
-  background-color: var(--background-default-grey);
-  padding: 1rem 1.5rem;
-  border-radius: 8px;
-  border: 1px solid var(--border-default-grey);
-  transition: all 0.2s ease;
-  height: 100%;
-  margin-bottom: 0;
-}
-
-.decision-outcome :deep(.fr-checkbox-group:hover) {
-  background-color: var(--background-alt-grey-hover);
-}
-
-.decision-outcome :deep(.fr-checkbox-group input[type='checkbox']:checked + label) {
-  font-weight: bold;
-}
-
-.text-center {
-  text-align: center;
-}
-
 .fade-slide-enter-active,
 .fade-slide-leave-active {
   transition: all 0.3s ease;

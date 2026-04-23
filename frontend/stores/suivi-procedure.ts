@@ -125,7 +125,7 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
             return true
           }
           return (
-            suivi.motif_abandon_choisi &&
+            suivi.motif_abandon !== '' &&
             (suivi.motif_abandon === 'Un auteur identifié' ||
               suivi.souhaite_notifier_abandon === false ||
               (suivi.souhaite_notifier_abandon === true && suivi.notification_abandon_envoyee))
