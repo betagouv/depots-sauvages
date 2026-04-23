@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { reactive } from 'vue'
-import { fetchResource, patchResource } from '../services/api'
+import { API_URL, fetchResource, patchResource } from '../services/api'
 
 export interface SuiviProcedure {
   // Méta
@@ -36,6 +36,8 @@ export interface SuiviProcedure {
   nettoyage_par: string
   observations_internes: string
 
+  titre_recette_confirme: boolean
+  montant_recouvre: boolean
   dossier_archive: boolean
   identification_reussie: boolean | null
 }
@@ -140,9 +142,9 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
     }
   }
 
-  const fetchSuivi = async (dossierId: string) => {
+  const fetchSuivi = async (dossierId: string, signalementId: number) => {
     try {
-      const data = await fetchResource(`/api/suivi-procedure/${dossierId}/`)
+      const data = await fetchResource(`${API_URL}/suivi-procedure/${signalementId}/`)
       if (data && typeof data === 'object') {
         procedures[dossierId] = data
       }
@@ -151,12 +153,12 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
     }
   }
 
-  const saveSuivi = async (dossierId: string) => {
+  const saveSuivi = async (dossierId: string, signalementId: number) => {
     const suivi = procedures[dossierId]
     if (!suivi) return
 
     try {
-      await patchResource(`/api/suivi-procedure/${dossierId}/`, suivi)
+      await patchResource(`${API_URL}/suivi-procedure/${signalementId}/`, suivi)
     } catch (e) {
       console.error('Erreur lors de la sauvegarde du suivi:', e)
     }
