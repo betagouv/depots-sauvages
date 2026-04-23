@@ -85,8 +85,8 @@
               de plainte.
             </li>
             <li class="fr-mb-1w">
-              En tant qu'OPJ, le maire peut demander la communication de l'adresse de l'auteur
-              potentiel au procureur de la République.
+              En tant que victime du dépôt, le maire peut demander la communication de la procédure
+              judiciaire au procureur de la République.
             </li>
           </ul>
         </div>
