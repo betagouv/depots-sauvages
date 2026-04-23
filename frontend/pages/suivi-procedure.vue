@@ -66,6 +66,7 @@
               <Identification
                 v-else
                 :auteur-identifie="auteurIdentifie"
+                :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
               />
             </template>
             <template v-if="hasProcedure" #step-3>

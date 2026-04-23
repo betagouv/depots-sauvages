@@ -39,14 +39,15 @@
             </li>
           </ul>
           <p class="fr-text--sm fr-mb-0">
-            Une fois l'identité déterminée, vous pouvez démarrer une nouvelle procédure :
+            Une fois l'identité déterminée, vous pouvez modifier le dossier pour y ajouter ces
+            informations :
             <a
-              :href="newProcedureUrl"
+              :href="modifyUrl"
               target="_blank"
               class="fr-text--sm fr-link fr-link--icon-left"
-              @click.prevent="openExternalLink(newProcedureUrl)"
+              @click.prevent="openExternalLink(modifyUrl)"
             >
-              Démarrer une nouvelle procédure sur Démarche Numérique
+              Modifier le dossier de constatation sur Démarche numérique
             </a>
           </p>
         </div>
@@ -100,9 +101,8 @@ import { openExternalLink } from '../../utils/browser'
 
 defineProps<{
   auteurIdentifie?: boolean
+  modifyUrl?: string
 }>()
-
-const newProcedureUrl = import.meta.env.VITE_DN_URL
 </script>
 
 <style scoped>
