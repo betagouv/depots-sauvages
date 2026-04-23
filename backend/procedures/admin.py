@@ -52,7 +52,6 @@ class SuiviProcedureAdmin(admin.ModelAdmin):
                     "arrete_redige",
                     "titre_recette_emis",
                     "notification_sanction_envoyee",
-                    "motif_abandon_choisi",
                     "motif_abandon",
                     "souhaite_notifier_abandon",
                     "notification_abandon_envoyee",

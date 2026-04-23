@@ -45,8 +45,8 @@
           <ul class="fr-text--sm fr-mb-2w">
             <li>Par vos propres moyens, notamment par internet.</li>
             <li>
-              En allant porter plainte à la brigade ou au commissariat, et en écrivant par la
-              suite au procureur de la République pour demander l'adresse de l'auteur.
+              En allant porter plainte à la brigade ou au commissariat, et en écrivant par la suite
+              au procureur de la République pour demander l'adresse de l'auteur.
               <a
                 href="https://fichiers.numerique.gouv.fr/explorer/items/files/0b9b0e3b-f25a-4848-ba5f-991e27dd25cd"
                 target="_blank"
@@ -121,7 +121,6 @@ watch(
   (newVal) => {
     if (newVal === 'abandon' && isNpai.value) {
       props.suivi.motif_abandon = 'Auteur introuvable (NPAI)'
-      props.suivi.motif_abandon_choisi = true
     }
   }
 )

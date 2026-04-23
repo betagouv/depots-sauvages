@@ -26,7 +26,6 @@ export interface SuiviProcedure {
   notification_sanction_envoyee: boolean
   notification_abandon_envoyee: boolean
   decision_poursuite: string // 'sanction' | 'abandon' | 'recherche_adresse' | ''
-  motif_abandon_choisi: boolean
   souhaite_notifier_abandon: boolean | null
 
   montant_amende: number | null
@@ -64,7 +63,6 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
         notification_sanction_envoyee: false,
         notification_abandon_envoyee: false,
         decision_poursuite: '',
-        motif_abandon_choisi: false,
         souhaite_notifier_abandon: null,
         montant_amende: null,
         motif_abandon: '',
