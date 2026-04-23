@@ -19,7 +19,7 @@
             Vous avez l'immatriculation du véhicule de l'auteur présumé, mais vous n'avez pas
             l'identité complète (Nom, prénom, adresse postale) :
           </p>
-          <ul class="fr-pl-2w fr-mb-2w fr-text--sm">
+          <ul class="fr-pl-2w fr-mb-0 fr-text--sm">
             <li class="fr-mb-1w">
               La Police municipale, si elle est habilitée et équipée,
               <a
@@ -38,18 +38,6 @@
               politique pénale locale).
             </li>
           </ul>
-          <p class="fr-text--sm fr-mb-0">
-            Une fois l'identité déterminée, vous pouvez modifier le dossier pour y ajouter ces
-            informations :
-            <a
-              :href="modifyUrl"
-              target="_blank"
-              class="fr-text--sm fr-link fr-link--icon-left"
-              @click.prevent="openExternalLink(modifyUrl)"
-            >
-              Modifier le dossier de constatation sur Démarche numérique
-            </a>
-          </p>
         </div>
       </div>
 
@@ -71,7 +59,7 @@
             Vous n'avez pas l'identité complète (Nom, Prénom, adresse postale), vous pouvez porter
             plainte pour que l'auteur soit identifié par une enquête judiciaire.
           </p>
-          <ul class="fr-pl-2w fr-mb-2w fr-text--sm">
+          <ul class="fr-pl-2w fr-mb-0 fr-text--sm">
             <li class="fr-mb-1w">
               Prenez rendez-vous
               <a
@@ -91,6 +79,23 @@
             </li>
           </ul>
         </div>
+      </div>
+
+      <div class="fr-col-12">
+        <DsfrAlert type="info" title="Une fois l'identité déterminée" class="fr-mt-2w">
+          <p class="fr-text--sm fr-mb-1w">
+            Vous devez modifier le dossier pour y ajouter les informations d'identité (Nom, Prénom,
+            adresse postale) :
+          </p>
+          <a
+            :href="modifyUrl"
+            target="_blank"
+            class="fr-link fr-link--icon-left"
+            @click.prevent="openExternalLink(modifyUrl)"
+          >
+            Modifier le dossier de constatation sur Démarche numérique
+          </a>
+        </DsfrAlert>
       </div>
     </div>
   </div>
