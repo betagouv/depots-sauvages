@@ -138,7 +138,6 @@ const decisionOptionsNpai = [
 
 const currentOptions = computed(() => (isNpai.value ? decisionOptionsNpai : decisionOptions))
 
-
 const onUpdateCase = (action: Action, val: boolean) => {
   isDecisionBoxChecked.value = val
   if (!val) {
