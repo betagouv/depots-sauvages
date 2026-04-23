@@ -1,6 +1,7 @@
 import '@gouvfr/dsfr/dist/dsfr.min.css'
 import '@gouvfr/dsfr/dist/dsfr.module.min.js'
 import '@gouvfr/dsfr/dist/utility/utility.min.css'
+import './styles/premium-design.css'
 import VueDsfr from '@gouvminint/vue-dsfr'
 import { OhVueIcon, addIcons } from 'oh-vue-icons'
 import {

@@ -34,7 +34,7 @@
             />
           </header>
 
-          <InfosComplementaires v-if="hasProcedure && auteurIdentifie" :suivi="suiviProcedure" />
+          <InfosComplementaires v-if="hasProcedure" :suivi="suiviProcedure" />
 
           <StepperProcedure :steps="steps" v-model:currentStep="activeStep">
             <template #step-0>
