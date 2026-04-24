@@ -46,7 +46,7 @@
           </ul>
         </DsfrAlert>
 
-        <h4 class="fr-h6 fr-mb-2w">Ce qu'il vous reste à faire :</h4>
+        <h4 class="fr-h6 fr-mb-3w">Ce qu'il vous reste à faire :</h4>
         <ListeActions step-id="sanction" :actions="sanctionActions" @update-case="onUpdateSanction">
           <template #extra-fixer_montant>
             <transition name="fade-slide">
@@ -143,7 +143,7 @@
 
           <transition name="fade-slide">
             <div v-if="showActionsList" class="actions-list-container">
-              <h4 class="fr-h6 fr-mb-2w">Ce qu'il vous reste à faire :</h4>
+              <h4 class="fr-h6 fr-mb-3w">Ce qu'il vous reste à faire :</h4>
               <ListeActions
                 step-id="abandon"
                 :actions="abandonActions"

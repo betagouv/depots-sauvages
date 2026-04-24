@@ -1,6 +1,6 @@
 <template>
   <div class="step-constatation">
-    <h4 class="fr-h6 fr-mb-2w">Actions déjà réalisées</h4>
+    <h4 class="fr-h6 fr-mb-3w">Actions déjà réalisées</h4>
     <ListeActions step-id="constat" :actions="actions" />
   </div>
 </template>

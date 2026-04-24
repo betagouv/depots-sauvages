@@ -1,0 +1,258 @@
+/* Premium Design - Base Overrides */
+:root {
+  --premium-shadow: 0 4px 12px rgba(0, 0, 145, 0.05);
+  --premium-shadow-focus:
+    0 0 0 1px var(--border-active-blue-france), 0 4px 12px rgba(0, 0, 145, 0.12);
+  --premium-input-radius: 6px;
+}
+
+/* Inputs, Textareas and Selects */
+.fr-input,
+.fr-select {
+  background-color: var(--background-default-grey) !important;
+  border: 1px solid var(--border-default-grey) !important;
+  border-radius: var(--premium-input-radius) !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+  padding: 0.65rem 1rem !important;
+  transition: all 0.2s ease !important;
+  height: auto !important;
+  font-size: 1rem !important;
+  line-height: 1.5 !important;
+  width: 100%;
+}
+
+.fr-input:not([type='date']),
+.fr-select {
+  background-image: none !important;
+}
+
+.fr-input[type='date'] {
+  position: relative !important;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23161616'%3E%3Cpath d='M9 1V3H15V1H17V3H21C21.5523 3 22 3.44772 22 4V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V4C2 3.44772 2.44772 3 3 3H7V1H9ZM20 10H4V19H20V10ZM7 5H4V8H20V5H17V7H15V5H9V7H7V5Z'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: calc(100% - 0.75rem) 50% !important;
+  background-size: 1.25rem !important;
+  padding-right: 2.5rem !important;
+  min-height: 3rem;
+  cursor: pointer;
+}
+
+.fr-input[type='date']::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0;
+  width: 2.5rem;
+  height: 100%;
+}
+
+.fr-input:focus,
+.fr-select:focus {
+  border-color: var(--border-active-blue-france) !important;
+  box-shadow: var(--premium-shadow-focus) !important;
+  outline: none !important;
+}
+
+.fr-input:hover:not(:focus),
+.fr-select:hover:not(:focus) {
+  background-color: var(--background-alt-grey-hover) !important;
+  border-color: var(--border-default-grey-hover) !important;
+}
+
+select.fr-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23161616'%3E%3Cpath d='M12 16l-6-6h12z'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: calc(100% - 0.75rem) 50% !important;
+  background-size: 1.25rem !important;
+  padding-right: 2.5rem !important;
+}
+
+textarea.fr-input {
+  min-height: 100px;
+}
+
+.fr-input-group--error .fr-input,
+.fr-select-group--error .fr-select {
+  border-color: var(--border-plain-error) !important;
+  box-shadow: 0 0 0 1px var(--border-plain-error) !important;
+}
+
+/* Labels and Legends */
+.fr-label {
+  font-weight: 600 !important;
+  margin-bottom: 0.4rem !important;
+  color: var(--text-label-grey) !important;
+  display: block;
+}
+
+.fr-fieldset__legend {
+  font-weight: 600 !important;
+  margin-bottom: 0.75rem !important;
+}
+
+/* Premium Containers */
+.premium-choices-container,
+.premium-box {
+  background-color: var(--background-alt-blue-france);
+  border: 1px solid var(--border-default-blue-france);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 145, 0.05);
+  transition: all 0.2s ease;
+}
+
+.premium-choices-container:focus-within,
+.premium-box:focus-within {
+  border-color: var(--border-plain-blue-france);
+  box-shadow:
+    0 0 0 1px var(--border-plain-blue-france),
+    0 4px 12px rgba(0, 0, 145, 0.1);
+}
+
+/* Premium Action Bracket (Timeline) */
+.premium-action-bracket {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border-left: 3px solid var(--border-active-blue-france);
+  border-radius: 2px;
+  margin-left: 0.25rem;
+  padding-left: 1.5rem;
+}
+
+@media (max-width: 767px) {
+  .premium-action-bracket {
+    padding-left: 0.75rem !important;
+  }
+}
+
+/* Premium Interactive Items (Actions & Choices) */
+.premium-action-item,
+.premium-choice-card .fr-checkbox-group {
+  background-color: var(--background-default-grey);
+  border: 1px solid var(--border-default-grey);
+  border-radius: 12px;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 6px rgba(0, 0, 145, 0.03);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.premium-choice-card .fr-checkbox-group {
+  background-color: var(--background-default-grey) !important;
+  height: 100%;
+}
+
+.premium-action-item.is-completed,
+.premium-choice-card.choice-active .fr-checkbox-group {
+  background-color: var(--background-alt-blue-france) !important;
+  border-color: var(--border-default-blue-france) !important;
+}
+
+.premium-action-item:hover,
+.premium-choice-card .fr-checkbox-group:hover {
+  background-color: var(--background-alt-grey-hover) !important;
+  border-color: var(--border-active-blue-france) !important;
+}
+
+/* Spacing and Alignment */
+.premium-action-item .fr-checkbox-group label,
+.premium-choice-card .fr-checkbox-group label {
+  width: 100%;
+  height: 100%;
+  margin: 0 !important;
+  cursor: pointer;
+  display: flex !important;
+  align-items: center !important;
+  padding: 1rem 1rem 1rem 2.5rem !important;
+}
+
+.premium-action-readonly {
+  cursor: default;
+  display: flex;
+  align-items: center;
+  padding: 1rem !important;
+  width: 100%;
+}
+
+.premium-action-readonly .action-icon {
+  margin-right: 1rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
+}
+
+.premium-action-item .fr-checkbox-group input[type='checkbox'] + label::before,
+.premium-choice-card .fr-checkbox-group input[type='checkbox'] + label::before {
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  margin-top: 0 !important;
+  left: 0.75rem !important;
+}
+
+/* Custom Checkbox Design */
+.fr-checkbox-group input[type='checkbox'] + label::before {
+  border-radius: 50% !important;
+  box-shadow: inset 0 0 0 1px var(--border-action-high-blue-france) !important;
+}
+
+.fr-checkbox-group input[type='checkbox']:checked + label::before {
+  background-color: var(--background-active-blue-france) !important;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23fff' d='M10 15.17l-3.29-3.3a1 1 0 00-1.42 1.41l4 4a1 1 0 001.42 0l8-8a1 1 0 10-1.42-1.41L10 15.17z'/%3E%3C/svg%3E") !important;
+  background-size: 1rem !important;
+  background-position: center !important;
+  box-shadow: none !important;
+}
+
+.fr-checkbox-group input[type='checkbox']:checked + label::after {
+  display: none !important;
+}
+
+/* Component Overrides and Utilities */
+.premium-action-item .fr-fieldset__element,
+.premium-action-item .fr-checkbox-group {
+  margin-bottom: 0 !important;
+  width: 100%;
+  padding: 0 !important;
+}
+
+.premium-action-item .fr-checkbox-group input[type='checkbox'],
+.premium-choice-card .fr-checkbox-group input[type='checkbox'] {
+  position: absolute !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  pointer-events: none !important;
+}
+
+.action-label {
+  font-weight: 500;
+  color: var(--text-label-grey);
+}
+
+.is-completed .action-label,
+.premium-choice-card.choice-active label {
+  font-weight: 500 !important;
+  color: var(--text-label-blue-france);
+}
+
+.action-icon {
+  color: var(--text-active-blue-france);
+  flex-shrink: 0;
+}
+
+.extra-icon {
+  font-size: 0.9rem;
+  color: var(--text-mention-grey);
+}
+
+.premium-choices-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.premium-indent {
+  padding-left: 2.5rem !important;
+}
