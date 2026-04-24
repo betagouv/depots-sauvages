@@ -24,7 +24,7 @@
       "
     />
 
-    <div v-else>
+    <div v-else-if="userInfo?.is_authenticated">
       <div v-if="userInfo && userInfo.is_authenticated" class="fr-mb-4w">
         <p v-if="userInfo.first_name && userInfo.last_name" class="fr-text--lead">
           Utilisateur connecté :
@@ -86,6 +86,7 @@
         />
       </div>
     </div>
+    <LoginInvitation v-else />
   </div>
 </template>
 
@@ -95,6 +96,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import DossierMetadata from '../components/dossiers/DossierMetadata.vue'
 import ChargementDossier from '../components/dossiers/ChargementDossier.vue'
+import LoginInvitation from '../components/shared/LoginInvitation.vue'
 import { getUserInfo, type UserInfo } from '../services/api'
 import { getDnModifyUrl, getSuiviProcedureUrl } from '../services/urls'
 import { openExternalLink } from '../utils/browser'

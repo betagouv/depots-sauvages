@@ -1,6 +1,7 @@
 <template>
   <div class="fr-container fr-py-6w">
     <ChargementDossier v-if="showLoading" />
+    <LoginInvitation v-else-if="!isUserAuthenticated" />
     <div v-else-if="error" class="fr-alert fr-alert--error fr-mb-4w">
       <p>{{ error }}</p>
     </div>
@@ -127,8 +128,9 @@ import MettreAjourDossier from '../components/steps/MettreAjourDossier.vue'
 import Notification from '../components/steps/Notification.vue'
 import SuiviActions from '../components/steps/SuiviActions.vue'
 import SuiviDecision from '../components/steps/SuiviDecision.vue'
-import { API_URLS, createResource } from '../services/api'
+import { API_URLS, createResource, getUserInfo } from '../services/api'
 import { getDnDocConstatUrl, getDnLettreInfoUrl, getDnModifyUrl } from '../services/urls'
+import LoginInvitation from '../components/shared/LoginInvitation.vue'
 import { useSuiviStore } from '../stores/suivi-procedure'
 import { openExternalLink } from '../utils/browser'
 import { debounce } from '../utils/debounce'
@@ -143,6 +145,7 @@ const suiviProcedure = computed(() => suiviStore.getOrCreateSuivi(dossierId.valu
 const showLoading = ref(true)
 const error = ref<string | null>(null)
 const dossierData = ref<any>(null)
+const isUserAuthenticated = ref(false)
 const activeStep = computed({
   get: () => suiviProcedure.value.etape_en_cours,
   set: (val) => (suiviProcedure.value.etape_en_cours = val),
@@ -229,6 +232,14 @@ onMounted(async () => {
   }
 
   try {
+    const user = await getUserInfo()
+    isUserAuthenticated.value = user.is_authenticated
+
+    if (!isUserAuthenticated.value) {
+      showLoading.value = false
+      return
+    }
+
     // Fetch dossier data first (it creates the signalement if needed)
     const dossierRes = await createResource(API_URLS.processDossier, { dossier_id: dossierId })
     dossierData.value = dossierRes

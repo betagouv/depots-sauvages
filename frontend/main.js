@@ -26,6 +26,7 @@ import {
   RiRefreshLine,
   RiSearchEyeLine,
   RiTimeLine,
+  RiAccountCircleLine,
 } from 'oh-vue-icons/icons/ri'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
@@ -55,7 +56,8 @@ addIcons(
   RiPenNibLine,
   RiRefreshLine,
   RiSearchEyeLine,
-  RiTimeLine
+  RiTimeLine,
+  RiAccountCircleLine
 )
 
 const pinia = createPinia()
@@ -76,7 +78,6 @@ const router = createRouter({
       path: '/mes-procedures',
       name: 'MesProcedures',
       component: () => import('./pages/mes-procedures.vue'),
-      meta: { requiresAuth: true },
     },
     {
       path: '/contact',
@@ -105,7 +106,7 @@ const router = createRouter({
       path: '/suivi-procedure/:dossier_id',
       name: 'SuiviProcedure',
       component: () => import('./pages/suivi-procedure.vue'),
-      meta: { requiresAuth: true, activeMenu: '/mes-procedures' },
+      meta: { activeMenu: '/mes-procedures' },
     },
     {
       path: '/rdv',

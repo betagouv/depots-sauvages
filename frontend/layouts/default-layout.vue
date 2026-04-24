@@ -126,18 +126,12 @@ interface NavLink {
 }
 
 const navLinks = computed<NavLink[]>(() => {
-  const links: NavLink[] = [
+  return [
     { text: 'Accueil', href: '/' },
     { text: 'Comprendre la procédure', href: '/comprendre-la-procedure' },
+    { text: 'Mes procédures', href: '/mes-procedures' },
+    { text: 'Contact', href: '/contact' },
   ]
-  if (isAuthenticated.value) {
-    links.push({
-      text: 'Mes procédures',
-      href: '/mes-procedures',
-    })
-  }
-  links.push({ text: 'Contact', href: '/contact' })
-  return links
 })
 
 interface QuickLink {
