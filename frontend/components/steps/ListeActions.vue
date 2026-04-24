@@ -73,8 +73,8 @@ defineEmits(['update-case'])
 
 .action-details {
   margin-top: -1px;
-  margin-left: 1.5rem; /* Center of the checkbox: 0.75 (left) + 0.75 (half width) */
-  padding-left: 1rem !important; /* Content offset: 2.5 - 1.5 = 1.0 */
+  margin-left: 1.5rem;
+  padding-left: 1rem !important;
   border-left: 2px solid var(--border-default-blue-france);
 }
 
