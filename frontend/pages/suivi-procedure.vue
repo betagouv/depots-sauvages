@@ -151,10 +151,12 @@ const activeStep = computed({
 const hasProcedure = computed(() => dossierData.value?.created !== false)
 const auteurIdentifie = computed(() => dossierData.value?.auteur_identifie ?? false)
 
+const signalementId = computed(() => dossierData.value?.id)
+
 // Auto-save logic with debounce
 const debouncedSave = debounce(() => {
-  if (dossierId.value) {
-    suiviStore.saveSuivi(dossierId.value)
+  if (dossierId.value && signalementId.value) {
+    suiviStore.saveSuivi(dossierId.value, signalementId.value)
   }
 }, 1000)
 
@@ -227,12 +229,12 @@ onMounted(async () => {
   }
 
   try {
-    // Fetch both dossier data and procedure tracking data
-    const [dossierRes] = await Promise.all([
-      createResource(API_URLS.processDossier, { dossier_id: dossierId }),
-      suiviStore.fetchSuivi(dossierId),
-    ])
+    // Fetch dossier data first (it creates the signalement if needed)
+    const dossierRes = await createResource(API_URLS.processDossier, { dossier_id: dossierId })
     dossierData.value = dossierRes
+
+    // Then fetch procedure tracking data using the internal ID
+    await suiviStore.fetchSuivi(dossierId, dossierRes.id)
   } catch (err: any) {
     error.value = err.error || 'Une erreur est survenue lors de la récupération du dossier.'
   } finally {

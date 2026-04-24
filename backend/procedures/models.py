@@ -45,7 +45,6 @@ class SuiviProcedure(TimeStampedModel):
         default=False, verbose_name="Notification de sanction envoyée"
     )
     # - Si Abandon
-    motif_abandon_choisi = models.BooleanField(default=False, verbose_name="Motif d'abandon choisi")
     motif_abandon = models.CharField(max_length=255, blank=True, verbose_name="Motif d'abandon")
     souhaite_notifier_abandon = models.BooleanField(
         null=True, blank=True, verbose_name="Souhaite notifier l'abandon"
