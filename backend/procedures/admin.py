@@ -25,6 +25,7 @@ class SuiviProcedureAdmin(admin.ModelAdmin):
                     "preuves_fournies",
                     "constatation_signee",
                     "lettre_signe",
+                    "identification_reussie",
                 ),
             },
         ),

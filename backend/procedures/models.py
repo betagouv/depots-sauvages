@@ -16,6 +16,9 @@ class SuiviProcedure(TimeStampedModel):
         default=False, verbose_name="Rapport de constatation signé"
     )
     lettre_signe = models.BooleanField(default=False, verbose_name="Lettre d'information signée")
+    identification_reussie = models.BooleanField(
+        null=True, blank=True, verbose_name="Identification de l'auteur réussie"
+    )
     # Étape 2 : Notification
     lettre_envoyee = models.BooleanField(default=False, verbose_name="Lettre d'information envoyée")
     lettre_envoyee_date = models.DateField(

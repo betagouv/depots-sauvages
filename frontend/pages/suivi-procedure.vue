@@ -65,7 +65,9 @@
               />
               <Identification
                 v-else
+                :suivi="suiviProcedure"
                 :auteur-identifie="auteurIdentifie"
+                :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
               />
             </template>
             <template v-if="hasProcedure" #step-3>
@@ -74,6 +76,14 @@
                 :suivi="suiviProcedure"
                 :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
                 @back-to-notification="activeStep = 2"
+              />
+              <MettreAjourDossier
+                v-else-if="suiviProcedure.identification_reussie === true"
+                :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
+              />
+              <ClotureSansAuteur
+                v-else-if="suiviProcedure.identification_reussie === false"
+                :suivi="suiviProcedure"
               />
             </template>
             <template v-if="hasProcedure" #step-4>
@@ -108,10 +118,12 @@ import ChargementDossier from '../components/dossiers/ChargementDossier.vue'
 import DossierMetadata from '../components/dossiers/DossierMetadata.vue'
 import AucuneProcedure from '../components/steps/AucuneProcedure.vue'
 import Cloture from '../components/steps/Cloture.vue'
+import ClotureSansAuteur from '../components/steps/ClotureSansAuteur.vue'
 import Constatation from '../components/steps/Constatation.vue'
 import Documents from '../components/steps/Documents.vue'
 import Identification from '../components/steps/Identification.vue'
 import InfosComplementaires from '../components/steps/InfosComplementaires.vue'
+import MettreAjourDossier from '../components/steps/MettreAjourDossier.vue'
 import Notification from '../components/steps/Notification.vue'
 import SuiviActions from '../components/steps/SuiviActions.vue'
 import SuiviDecision from '../components/steps/SuiviDecision.vue'
@@ -154,94 +166,52 @@ watch(
   { deep: true }
 )
 
+const getStepStatus = (index: number) =>
+  suiviStore.isStepCompleted(dossierId.value, index, {
+    auteurIdentifie: auteurIdentifie.value,
+    currentStep: activeStep.value,
+  })
+
 const steps = computed(() => {
+  if (!dossierId.value) return []
+
   if (!hasProcedure.value) {
     return [
-      {
-        title: 'Constatation',
-        completed: suiviStore.isStepCompleted(dossierId.value, 0, {
-          auteurIdentifie: auteurIdentifie.value,
-          currentStep: activeStep.value,
-        }),
-      },
-      {
-        title: 'Procédure à mettre à jour',
-        completed: false,
-      },
+      { title: 'Constatation', completed: getStepStatus(0) },
+      { title: 'Procédure à mettre à jour', completed: false },
     ]
   }
 
   if (!auteurIdentifie.value) {
-    return [
-      {
-        title: 'Constatation',
-        completed: suiviStore.isStepCompleted(dossierId.value, 0, {
-          auteurIdentifie: auteurIdentifie.value,
-          currentStep: activeStep.value,
-        }),
-      },
-      {
-        title: 'Pièces de procédure',
-        completed: suiviStore.isStepCompleted(dossierId.value, 1, {
-          auteurIdentifie: auteurIdentifie.value,
-          currentStep: activeStep.value,
-        }),
-      },
-      {
-        title: "Identifier l'auteur",
-        completed: false,
-      },
+    const baseSteps = [
+      { title: 'Constatation', completed: getStepStatus(0) },
+      { title: 'Pièces de procédure', completed: getStepStatus(1) },
+      { title: "Identifier l'auteur", completed: getStepStatus(2) },
     ]
+
+    if (suiviProcedure.value.identification_reussie === true) {
+      baseSteps.push({ title: 'Mettre à jour le dossier', completed: false })
+    } else if (suiviProcedure.value.identification_reussie === false) {
+      baseSteps.push({ title: 'Clôture de la procédure', completed: getStepStatus(5) })
+    }
+
+    return baseSteps
   }
 
+  const actionStepTitle =
+    suiviProcedure.value.decision_poursuite === 'sanction'
+      ? "Sanctionner l'auteur"
+      : suiviProcedure.value.decision_poursuite === 'abandon'
+        ? 'Abandonner les poursuites'
+        : 'Action de poursuite'
+
   return [
-    {
-      title: 'Constatation',
-      completed: suiviStore.isStepCompleted(dossierId.value, 0, {
-        auteurIdentifie: auteurIdentifie.value,
-        currentStep: activeStep.value,
-      }),
-    },
-    {
-      title: 'Signer les pièces de procédure',
-      completed: suiviStore.isStepCompleted(dossierId.value, 1, {
-        auteurIdentifie: auteurIdentifie.value,
-        currentStep: activeStep.value,
-      }),
-    },
-    {
-      title: "Notifier l'auteur présumé",
-      completed: suiviStore.isStepCompleted(dossierId.value, 2, {
-        auteurIdentifie: auteurIdentifie.value,
-        currentStep: activeStep.value,
-      }),
-    },
-    {
-      title: 'Décider des poursuites',
-      completed: suiviStore.isStepCompleted(dossierId.value, 3, {
-        auteurIdentifie: auteurIdentifie.value,
-        currentStep: activeStep.value,
-      }),
-    },
-    {
-      title:
-        suiviProcedure.value.decision_poursuite === 'sanction'
-          ? "Sanctionner l'auteur"
-          : suiviProcedure.value.decision_poursuite === 'abandon'
-            ? 'Abandonner les poursuites'
-            : 'Action de poursuite',
-      completed: suiviStore.isStepCompleted(dossierId.value, 4, {
-        auteurIdentifie: auteurIdentifie.value,
-        currentStep: activeStep.value,
-      }),
-    },
-    {
-      title: 'Clôture de la procédure',
-      completed: suiviStore.isStepCompleted(dossierId.value, 5, {
-        auteurIdentifie: auteurIdentifie.value,
-        currentStep: activeStep.value,
-      }),
-    },
+    { title: 'Constatation', completed: getStepStatus(0) },
+    { title: 'Signer les pièces de procédure', completed: getStepStatus(1) },
+    { title: "Notifier l'auteur présumé", completed: getStepStatus(2) },
+    { title: 'Décider des poursuites', completed: getStepStatus(3) },
+    { title: actionStepTitle, completed: getStepStatus(4) },
+    { title: 'Clôture de la procédure', completed: getStepStatus(5) },
   ]
 })
 

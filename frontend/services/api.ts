@@ -36,7 +36,7 @@ export const API_URLS = {
 }
 
 // API functions
-async function makeRequest(url: string, method: 'GET' | 'POST' | 'PUT', data: any) {
+async function makeRequest(url: string, method: 'GET' | 'POST' | 'PUT' | 'PATCH', data: any) {
   const options: RequestInit = {
     method,
     headers: {
@@ -46,24 +46,33 @@ async function makeRequest(url: string, method: 'GET' | 'POST' | 'PUT', data: an
     credentials: 'include',
   }
 
-  // Only include body for POST and PUT requests
+  // Only include body for POST, PUT and PATCH requests
   if (method !== 'GET' && data) {
     options.body = JSON.stringify(data)
   }
 
   const response = await fetch(url, options)
 
+  if (response.status === 204 || response.headers.get('content-length') === '0') {
+    return null
+  }
+
+  const contentType = response.headers.get('content-type')
+  const isJson = contentType && contentType.includes('application/json')
+
   if (!response.ok) {
-    const error = await response.json()
+    const error = isJson ? await response.json() : await response.text()
     throw error
   }
 
-  return response.json()
+  return isJson ? response.json() : response.text()
 }
 
 export const createResource = (url: string, data: any) => makeRequest(url, 'POST', data)
 
 export const updateResource = (url: string, data: any) => makeRequest(url, 'PUT', data)
+
+export const patchResource = (url: string, data: any) => makeRequest(url, 'PATCH', data)
 
 export const fetchResource = (url: string) => makeRequest(url, 'GET', {})
 

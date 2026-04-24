@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { reactive } from 'vue'
+import { fetchResource, patchResource } from '../services/api'
 
 export interface SuiviProcedure {
   // Méta
@@ -35,17 +36,15 @@ export interface SuiviProcedure {
   nettoyage_par: string
   observations_internes: string
 
-  // Étape 5 : Clôture
-  titre_recette_confirme: boolean
-  montant_recouvre: boolean
   dossier_archive: boolean
+  identification_reussie: boolean | null
 }
 
 export const useSuiviStore = defineStore('suiviProcedure', () => {
   const procedures = reactive<Record<string, SuiviProcedure>>({})
 
   const getOrCreateSuivi = (dossierId: string): SuiviProcedure => {
-    if (!procedures[dossierId]) {
+    if (!procedures[dossierId] || typeof procedures[dossierId] !== 'object') {
       procedures[dossierId] = {
         etape_en_cours: 1,
         preuves_fournies: false,
@@ -74,6 +73,7 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
         titre_recette_confirme: false,
         montant_recouvre: false,
         dossier_archive: false,
+        identification_reussie: null,
       }
     }
     return procedures[dossierId]
@@ -102,7 +102,9 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
           (!context.auteurIdentifie || suivi.lettre_signe)
         )
       case 2:
-        if (!context.auteurIdentifie) return false
+        if (!context.auteurIdentifie) {
+          return suivi.identification_reussie !== null
+        }
         return suivi.lettre_envoyee && suivi.copie_archives && suivi.ar_recu
       case 3:
         if (suivi.decision_poursuite === 'recherche_adresse') return false
@@ -140,8 +142,8 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
 
   const fetchSuivi = async (dossierId: string) => {
     try {
-      const data = await $fetch<SuiviProcedure>(`/api/suivi-procedure/${dossierId}/`)
-      if (data) {
+      const data = await fetchResource(`/api/suivi-procedure/${dossierId}/`)
+      if (data && typeof data === 'object') {
         procedures[dossierId] = data
       }
     } catch (e) {
@@ -154,10 +156,7 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
     if (!suivi) return
 
     try {
-      await $fetch(`/api/suivi-procedure/${dossierId}/`, {
-        method: 'PATCH',
-        body: suivi,
-      })
+      await patchResource(`/api/suivi-procedure/${dossierId}/`, suivi)
     } catch (e) {
       console.error('Erreur lors de la sauvegarde du suivi:', e)
     }

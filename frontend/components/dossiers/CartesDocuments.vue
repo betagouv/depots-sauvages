@@ -1,6 +1,6 @@
 <template>
   <div class="fr-grid-row fr-grid-row--gutters fr-mb-2w">
-    <div :class="rapportColClass">
+    <div class="fr-col-12 fr-col-md-6">
       <div class="fr-card fr-card--download fr-card--sm">
         <div class="fr-card__body fr-p-4w">
           <ul class="fr-btns-group fr-btns-group--full-width fr-mb-4w">
@@ -56,9 +56,7 @@ const props = defineProps<{
   lettreInfoUrl: string
 }>()
 
-const rapportColClass = computed(() =>
-  props.auteurIdentifie ? 'fr-col-12 fr-col-md-6' : 'fr-col-12 fr-col-lg-12'
-)
+
 
 const openUrl = (url: string) => {
   if (url) {
