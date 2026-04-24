@@ -1,16 +1,16 @@
 <template>
   <div class="action-list fr-mt-2w">
-    <div class="action-bracket fr-pl-1w fr-py-1v">
+    <div class="premium-action-bracket fr-py-1w">
       <div v-for="(action, index) in actions" :key="index" class="action-row">
         <div
-          class="action-item fr-display-flex fr-align-items-center fr-pt-2w fr-px-2w"
+          class="premium-action-item"
           :class="{ 'is-completed': action.completed }"
         >
           <DsfrCheckbox
             v-if="!action.readonly"
             :model-value="action.completed"
             :name="`${stepId}-action-${index}`"
-            class="fr-p-2w"
+            class="premium-action-content"
             @update:model-value="(val: boolean) => $emit('update-case', action, val)"
           >
             <template #label>
@@ -22,7 +22,7 @@
             </template>
           </DsfrCheckbox>
 
-          <div v-else class="fr-display-flex fr-align-items-center">
+          <div v-else class="premium-action-readonly">
             <span
               class="fr-icon-checkbox-circle-line fr-mr-1w action-icon"
               aria-hidden="true"
@@ -66,36 +66,9 @@ defineEmits(['update-case'])
 </script>
 
 <style scoped>
-.action-list {
-  display: flex;
-  flex-direction: column;
-}
-
-.action-bracket {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  border-left: 3px solid var(--border-active-blue-france);
-  border-radius: 12px;
-}
-
 .action-row {
   display: flex;
   flex-direction: column;
-}
-
-.action-item {
-  background-color: var(--background-alt-grey);
-  border-radius: 8px;
-  transition:
-    background-color 0.2s ease-in-out,
-    border-color 0.2s ease-in-out;
-  border: 1px solid transparent;
-}
-
-.action-item:hover {
-  background-color: var(--background-alt-grey-hover);
-  border-color: var(--border-default-blue-france);
 }
 
 .action-details {
@@ -105,52 +78,6 @@ defineEmits(['update-case'])
   border-left: 2px solid var(--border-default-blue-france);
 }
 
-@media (max-width: 767px) {
-  .action-bracket {
-    padding-left: 0.25rem !important;
-  }
-  .action-details {
-    margin-left: 0.5rem;
-    padding: 0.75rem !important;
-  }
-}
-
-.action-label {
-  font-weight: 500;
-  color: var(--text-label-grey);
-}
-
-.is-completed .action-label {
-  color: var(--text-active-blue-france);
-}
-
-.action-icon {
-  color: var(--text-active-blue-france);
-  flex-shrink: 0;
-}
-
-.extra-icon {
-  font-size: 0.9rem;
-  color: var(--text-mention-grey);
-}
-
-/* Round Checkboxes Override */
-:deep(.fr-checkbox-group input[type='checkbox'] + label::before) {
-  border-radius: 50% !important;
-  box-shadow: inset 0 0 0 1px var(--border-action-high-blue-france) !important;
-}
-
-:deep(.fr-checkbox-group input[type='checkbox']:checked + label::before) {
-  background-color: var(--background-active-blue-france) !important;
-  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23fff' d='M10 15.17l-3.29-3.3a1 1 0 00-1.42 1.41l4 4a1 1 0 001.42 0l8-8a1 1 0 10-1.42-1.41L10 15.17z'/%3E%3C/svg%3E") !important;
-  background-size: 1rem !important;
-  background-position: center !important;
-  box-shadow: none !important;
-}
-
-:deep(.fr-checkbox-group input[type='checkbox']:checked + label::after) {
-  display: none !important;
-}
 
 /* Transitions */
 .slide-up-enter-active,
