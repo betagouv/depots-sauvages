@@ -102,7 +102,25 @@ textarea.fr-input {
   margin-bottom: 0.75rem !important;
 }
 
-/* Premium Action List Components */
+/* Premium Boxes and Containers */
+.premium-choices-container,
+.premium-box {
+  background-color: var(--background-alt-blue-france);
+  border: 1px solid var(--border-default-blue-france);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 145, 0.05);
+  transition: all 0.2s ease;
+}
+
+.premium-choices-container:focus-within,
+.premium-box:focus-within {
+  border-color: var(--border-plain-blue-france);
+  box-shadow:
+    0 0 0 1px var(--border-plain-blue-france),
+    0 4px 12px rgba(0, 0, 145, 0.1);
+}
+
+/* Premium Action Bracket (Timeline) */
 .premium-action-bracket {
   display: flex;
   flex-direction: column;
@@ -119,8 +137,9 @@ textarea.fr-input {
   }
 }
 
-.premium-action-item {
-  background-color: #ffffff;
+/* Shared Premium Interactive Item (Action and Choice Cards) */
+.premium-action-item,
+.premium-choice-card .fr-checkbox-group {
   border-radius: 12px;
   transition: all 0.2s ease-in-out;
   border: 1px solid var(--border-default-grey);
@@ -128,64 +147,84 @@ textarea.fr-input {
   display: flex;
   align-items: center;
   overflow: hidden;
+  position: relative;
 }
 
-.premium-action-item.is-completed {
-  background-color: var(--background-alt-blue-france);
-  border-color: rgba(0, 0, 145, 0.1);
+.premium-action-item {
+  background-color: #ffffff;
 }
 
-.premium-action-item:hover {
-  background-color: var(--background-alt-grey-hover);
-  border-color: var(--border-active-blue-france);
-  box-shadow: 0 4px 12px rgba(0, 0, 145, 0.08);
-  transform: translateX(4px);
+.premium-choice-card .fr-checkbox-group {
+  background-color: var(--background-default-grey) !important;
+  border: 1px solid var(--border-default-grey) !important;
+  height: 100%;
 }
 
-.premium-action-content {
+.premium-action-item.is-completed,
+.premium-choice-card.choice-active .fr-checkbox-group {
+  background-color: var(--background-alt-blue-france) !important;
+  border-color: var(--border-default-blue-france) !important;
+}
+
+.premium-action-item:hover,
+.premium-choice-card .fr-checkbox-group:hover {
+  background-color: var(--background-alt-grey-hover) !important;
+  border-color: var(--border-active-blue-france) !important;
+}
+
+/* Standardized Label and Icon Spacing */
+.premium-action-item .fr-checkbox-group label,
+.premium-choice-card .fr-checkbox-group label {
   width: 100%;
+  height: 100%;
+  margin: 0 !important;
+  cursor: pointer;
+  display: flex !important;
+  align-items: center !important;
+  padding: 1rem 1rem 1rem 2.5rem !important;
 }
 
 .premium-action-readonly {
+  cursor: default;
   display: flex;
   align-items: center;
-  padding: 0.75rem 1rem;
+  padding: 1rem !important;
   width: 100%;
 }
 
-/* Checkbox overrides within premium actions */
-.premium-action-item .fr-fieldset__element {
-  margin-bottom: 0 !important;
-  width: 100%;
-  padding-left: 1rem;
-  padding-right: 2rem;
+.premium-action-readonly .action-icon {
+  margin-right: 1rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
 }
 
-.premium-action-item .fr-checkbox-group {
-  margin-bottom: 0 !important;
-  background-color: transparent !important;
-  width: 100%;
-}
-
-.premium-action-item .fr-checkbox-group label {
-  margin-bottom: 0 !important;
-  padding: 0.75rem 1rem 0.75rem 0.75rem !important;
-  min-height: auto !important;
-  display: flex !important;
-  align-items: center !important;
-  width: 100%;
-}
-
-.premium-action-item .fr-checkbox-group .fr-label {
-  margin-bottom: 0 !important;
-}
-
-/* Vertical centering of the checkbox icons */
+/* Icon Centering */
 .premium-action-item .fr-checkbox-group input[type='checkbox'] + label::before,
-.premium-action-item .fr-checkbox-group input[type='checkbox'] + label::after {
+.premium-choice-card .fr-checkbox-group input[type='checkbox'] + label::before {
   top: 50% !important;
   transform: translateY(-50%) !important;
   margin-top: 0 !important;
+  left: 0.75rem !important;
+}
+
+/* DSFR Component Cleanups */
+.premium-action-item .fr-fieldset__element,
+.premium-action-item .fr-checkbox-group {
+  margin-bottom: 0 !important;
+  width: 100%;
+  padding: 0 !important;
+}
+
+/* Hide native checkbox (Ghost input fix) */
+.premium-action-item .fr-checkbox-group input[type='checkbox'],
+.premium-choice-card .fr-checkbox-group input[type='checkbox'] {
+  position: absolute !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  pointer-events: none !important;
 }
 
 /* Global Round Checkbox Style */
@@ -206,14 +245,16 @@ textarea.fr-input {
   display: none !important;
 }
 
-/* Action Labels and Icons */
+/* Action Content Styling */
 .action-label {
   font-weight: 500;
   color: var(--text-label-grey);
 }
 
-.is-completed .action-label {
-  color: var(--text-active-blue-france);
+.is-completed .action-label,
+.premium-choice-card.choice-active label {
+  font-weight: 500 !important;
+  color: var(--text-label-blue-france);
 }
 
 .action-icon {
@@ -224,4 +265,16 @@ textarea.fr-input {
 .extra-icon {
   font-size: 0.9rem;
   color: var(--text-mention-grey);
+}
+
+/* Choices list layout */
+.premium-choices-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Common Indentation for nested/related content */
+.premium-indent {
+  padding-left: 2.5rem !important;
 }

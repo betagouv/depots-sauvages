@@ -8,7 +8,7 @@
           :options="nettoyageOptions"
         >
           <transition name="fade-slide">
-            <div v-if="suivi.nettoyage_fait" class="fr-mt-3w">
+            <div v-if="suivi.nettoyage_fait" class="fr-mt-3w premium-indent">
               <div class="fr-grid-row">
                 <div class="fr-col-12 fr-col-md-6">
                   <DsfrSelect
@@ -24,7 +24,7 @@
       </div>
 
       <div class="fr-col-12 fr-mt-4w">
-        <div class="notes-section fr-p-3w">
+        <div class="premium-box fr-p-3w">
           <h5 class="fr-h5 fr-mb-1w">Notes internes</h5>
           <p class="fr-text--sm fr-mb-2w">
             Vous pouvez ajouter ici des notes et des observations qui ne seront pas intégrées à la
@@ -64,21 +64,6 @@ const nettoyageParOptions = [
 </script>
 
 <style scoped>
-.notes-section {
-  background-color: var(--background-alt-blue-france);
-  border: 1px solid var(--border-default-blue-france);
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 145, 0.05);
-  transition: all 0.2s ease;
-}
-
-.notes-section:focus-within {
-  border-color: var(--border-plain-blue-france);
-  box-shadow:
-    0 0 0 1px var(--border-plain-blue-france),
-    0 4px 12px rgba(0, 0, 145, 0.1);
-}
-
 .fade-slide-enter-active,
 .fade-slide-leave-active {
   transition: all 0.3s ease;

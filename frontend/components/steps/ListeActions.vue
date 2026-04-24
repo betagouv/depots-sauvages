@@ -2,10 +2,7 @@
   <div class="action-list fr-mt-2w">
     <div class="premium-action-bracket fr-py-1w">
       <div v-for="(action, index) in actions" :key="index" class="action-row">
-        <div
-          class="premium-action-item"
-          :class="{ 'is-completed': action.completed }"
-        >
+        <div class="premium-action-item" :class="{ 'is-completed': action.completed }">
           <DsfrCheckbox
             v-if="!action.readonly"
             :model-value="action.completed"
@@ -14,11 +11,14 @@
             @update:model-value="(val: boolean) => $emit('update-case', action, val)"
           >
             <template #label>
-              <div v-if="action.icon" class="fr-display-flex fr-align-items-center">
+              <div class="fr-display-flex fr-align-items-center fr-ml-1w">
                 <span class="action-label" v-html="action.label"></span>
-                <span :class="[action.icon, 'fr-ml-1w', 'extra-icon']" aria-hidden="true"></span>
+                <span
+                  v-if="action.icon"
+                  :class="[action.icon, 'fr-ml-1w', 'extra-icon']"
+                  aria-hidden="true"
+                ></span>
               </div>
-              <span v-else class="action-label" v-html="action.label"></span>
             </template>
           </DsfrCheckbox>
 
@@ -73,11 +73,10 @@ defineEmits(['update-case'])
 
 .action-details {
   margin-top: -1px;
-  margin-left: 1.15rem;
-  padding-left: 1rem !important;
+  margin-left: 1.5rem; /* Center of the checkbox: 0.75 (left) + 0.75 (half width) */
+  padding-left: 1rem !important; /* Content offset: 2.5 - 1.5 = 1.0 */
   border-left: 2px solid var(--border-default-blue-france);
 }
-
 
 /* Transitions */
 .slide-up-enter-active,
