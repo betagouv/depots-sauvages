@@ -11,7 +11,7 @@
       </p>
       <div class="fr-btns-group fr-btns-group--center">
         <DsfrButton
-          label="Se connecter avec ProConnect"
+          label="Se connecter via ProConnect"
           :icon="{ name: 'ri-login-box-line', class: 'fr-mr-1w' }"
           @click="goToLogin"
         />
