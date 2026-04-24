@@ -173,6 +173,12 @@ defineEmits(['update:currentStep'])
   width: 100%;
 }
 
+.step--active .step-header-container {
+  display: grid;
+  grid-template-rows: auto 1.125rem; /* Reserve space for the badge row */
+  gap: 0.25rem;
+}
+
 .step-badges {
   display: flex;
   gap: 0.5rem;
