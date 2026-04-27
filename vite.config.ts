@@ -26,6 +26,11 @@ export default defineConfig(({ mode }) => {
     build: {
       assetsDir: 'static',
     },
+    css: {
+      lightningcss: {
+        errorRecovery: true,
+      },
+    },
     test: {
       environment: 'jsdom',
       globals: true,
