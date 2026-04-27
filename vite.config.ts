@@ -19,6 +19,9 @@ export default defineConfig(({ mode }) => {
           '../../.yarn', // loading fonts from yarn cache
         ],
       },
+      watch: {
+        ignored: ['**/.venv/**', '**/backend/**', '**/django_cache/**', '**/static/**'],
+      },
     },
     build: {
       assetsDir: 'static',
