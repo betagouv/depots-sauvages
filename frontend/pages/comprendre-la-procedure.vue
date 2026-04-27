@@ -42,7 +42,7 @@
           <span class="fr-icon-user-fill fr-mr-1w" aria-hidden="true"></span>
           <span>Qui peut engager la procédure&nbsp;?</span>
         </h2>
-        <p class="fr-text">Il s’agit de l’autorité titulaire du pouvoir de police.</p>
+        <p class="fr-text">Il s'agit de l'autorité titulaire du pouvoir de police.</p>
         <div class="fr-grid-row fr-grid-row--gutters">
           <div class="fr-col-12 fr-col-md-4">
             <DsfrCard
@@ -186,7 +186,7 @@
                   <div class="fr-collapse__body">
                     <p class="fr-text fr-mb-2w">
                       Un <strong>particulier</strong> confie ses déchets à un
-                      <strong>transporteur</strong> pour qu’il les conduise à la déchetterie. En
+                      <strong>transporteur</strong> pour qu'il les conduise à la déchetterie. En
                       réalité, le <strong>transporteur</strong> abandonne ces déchets dans un champ
                       appartenant au <strong>propriétaire du terrain</strong>.
                     </p>
@@ -196,11 +196,11 @@
                         déchets et donc responsable de leur gestion.
                       </li>
                       <li>
-                        Le <strong>transporteur</strong> est <em>l’auteur</em> du dépôt sauvage.
+                        Le <strong>transporteur</strong> est <em>l'auteur</em> du dépôt sauvage.
                       </li>
                       <li>
                         Le <strong>propriétaire du terrain</strong> est <em>la victime</em> du
-                        dépôt, mais sa responsabilité pourrait également être retenue s’il ne prend
+                        dépôt, mais sa responsabilité pourrait également être retenue s'il ne prend
                         pas les mesures nécessaires pour faire retirer les déchets.
                       </li>
                     </ul>
@@ -243,13 +243,12 @@
             </h3>
             <h4 class="fr-h5 fr-my-2w">Qui la prononce&nbsp;?</h4>
             <p class="fr-text">
-              L’autorité titulaire du pouvoir de police (ou autorité déléguée) à l'issue du délai de
+              L'autorité titulaire du pouvoir de police (ou autorité déléguée) à l'issue du délai de
               contradictoire.
             </p>
             <DsfrNotice
               class="fr-mb-2w"
-              title="Il est possible de prononcer l’amende même si le responsable ne reconnaît
-            pas les faits"
+              title="Il est possible de prononcer l'amende même si le responsable ne reconnaît pas les faits. Cette décision peut toutefois être contestée devant le juge administratif. En cas de jugement défavorable, la collectivité peut avoir à indemniser l'administré (frais de justice et préjudice subi) : toute sanction doit donc être justifiée."
             />
             <h4 class="fr-h5 fr-my-2w">Montant maximum</h4>
             <p class="fr-text fr-mb-2w"><strong>15&nbsp;000&nbsp;€</strong> par responsable.</p>
@@ -265,13 +264,9 @@
               <li>Transmission au <strong>Trésor public</strong> pour recouvrement ;</li>
               <li>Sommes reversées <strong>intégralement à la collectivité</strong>.</li>
             </ul>
-            <h4 class="fr-h5 fr-my-2w">Recours possible</h4>
-            <p class="fr-text">
-              Le responsable peut contester la procédure devant le
-              <strong>tribunal administratif</strong>.
-            </p>
+
             <h4 class="fr-h5 fr-my-2w">
-              Comment choisir le montant de l’amende et prendre l’arrêté&nbsp;?
+              Comment choisir le montant de l'amende et prendre l'arrêté&nbsp;?
             </h4>
             <p class="fr-text">
               En contactant directement l'équipe Protect'Envi :
@@ -300,7 +295,7 @@
               <li>
                 En cas de non-respect, elle peut prononcer une
                 <strong>nouvelle amende</strong> allant jusqu'à
-                <strong>150&nbsp;000&nbsp;€</strong> et d’autres sanctions complémentaires (article
+                <strong>150&nbsp;000&nbsp;€</strong> et d'autres sanctions complémentaires (article
                 L.541-3 du Code de l'environnement).
               </li>
             </ul>
