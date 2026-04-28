@@ -20,6 +20,9 @@
     "vue-matomo": "^4.2.0",
     "vue-router": "^5.0.6"
   },
+  "resolutions": {
+    "minimatch@npm:9.0.1": "^9.0.5"
+  },
   "devDependencies": {
     "@pinia/testing": "^1.0.3",
     "@testing-library/jest-dom": "^6.9.1",
