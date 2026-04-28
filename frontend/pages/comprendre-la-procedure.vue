@@ -305,7 +305,7 @@
 
       <section class="fr-my-8w">
         <h2 class="fr-h3 fr-mb-3w">
-          <span class="fr-icon-scales-2-line fr-mr-1w" aria-hidden="true"></span>
+          <span class="fr-icon-scales-3-line fr-mr-1w" aria-hidden="true"></span>
           <span>Textes de loi et références</span>
         </h2>
         <ul class="fr-text fr-pl-2w fr-mb-0">

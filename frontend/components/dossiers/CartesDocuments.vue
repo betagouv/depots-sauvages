@@ -7,15 +7,15 @@
             <li>
               <DsfrButton
                 label="Télécharger le rapport de constatation"
-                :icon="{ name: 'ri-download-line', class: 'fr-mr-1w' }"
                 size="lg"
+                icon="fr-icon-download-line"
                 @click="openUrl(docConstatUrl)"
               />
             </li>
           </ul>
 
           <p class="fr-text-mention--grey fr-mb-0">
-            <VIcon name="ri-folder-line" class="fr-mr-1w" />
+            <span class="fr-icon-folder-2-line fr-mr-1w" aria-hidden="true"></span>
             À conserver en mairie.
           </p>
         </div>
@@ -29,15 +29,15 @@
             <li>
               <DsfrButton
                 label="Télécharger la lettre d'information"
-                :icon="{ name: 'ri-download-line', class: 'fr-mr-1w' }"
                 size="lg"
+                icon="fr-icon-download-line"
                 @click="openUrl(lettreInfoUrl)"
               />
             </li>
           </ul>
 
           <p class="fr-text-mention--grey fr-mb-0">
-            <VIcon name="ri-mail-send-line" class="fr-mr-1w" />
+            <span class="fr-icon-mail-line fr-mr-1w" aria-hidden="true"></span>
             À envoyer à l'auteur présumé des faits.
           </p>
         </div>

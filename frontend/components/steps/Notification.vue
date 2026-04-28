@@ -7,9 +7,9 @@
       </p>
       <DsfrButton
         label="Télécharger la lettre d'information"
-        :icon="{ name: 'ri-download-line', class: 'fr-mr-1w' }"
-        size="sm"
         secondary
+        size="sm"
+        icon="fr-icon-download-line"
         @click="openUrl(lettreInfoUrl)"
       />
     </DsfrAlert>

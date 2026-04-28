@@ -29,7 +29,7 @@
             <DsfrButton
               label="Modifier le dossier de constatation sur Démarche numérique"
               class="fr-btn--secondary"
-              :icon="{ name: 'ri-external-link-line', class: 'fr-mr-1w' }"
+              icon="fr-icon-external-link-line"
               icon-right
               @click="openExternalLink(getDnModifyUrl(dossierData.dn_numero_dossier))"
             />

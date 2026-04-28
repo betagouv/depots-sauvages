@@ -1444,7 +1444,6 @@ __metadata:
     axe-core: "npm:^4.11.3"
     camelcase-keys: "npm:^10.0.2"
     jsdom: "npm:^29.1.0"
-    oh-vue-icons: "npm:^1.0.0-rc3"
     pinia: "npm:^3.0.4"
     snakecase-keys: "npm:^9.0.2"
     vite: "npm:^8.0.10"
@@ -2711,21 +2710,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"oh-vue-icons@npm:^1.0.0-rc3":
-  version: 1.0.0-rc3
-  resolution: "oh-vue-icons@npm:1.0.0-rc3"
-  dependencies:
-    vue-demi: "npm:^0.12.5"
-  peerDependencies:
-    "@vue/composition-api": ^1.0.0-rc.1
-    vue: ^2.0.0 || >=3.0.0
-  peerDependenciesMeta:
-    "@vue/composition-api":
-      optional: true
-  checksum: 10c0/2a1d3d776fe02c01f8fd6afd7a2f3fe7e4c26553fa3361966c0f5aec7cd1155303f470e19181d76cdffca44c914b00f4a5927364d43572460456f3dc2f007f6c
-  languageName: node
-  linkType: hard
-
 "p-map@npm:^7.0.2":
   version: 7.0.4
   resolution: "p-map@npm:7.0.4"
@@ -3685,22 +3669,6 @@ __metadata:
   version: 2.2.12
   resolution: "vue-component-type-helpers@npm:2.2.12"
   checksum: 10c0/ce15a2cdec4a57262a292ac1565aa18da9be73f3dfbcf28758a8a541199944bfff1aefb75802d6de5d955a5529c9667f1b651c659d14815c075e8965ac05175d
-  languageName: node
-  linkType: hard
-
-"vue-demi@npm:^0.12.5":
-  version: 0.12.5
-  resolution: "vue-demi@npm:0.12.5"
-  peerDependencies:
-    "@vue/composition-api": ^1.0.0-rc.1
-    vue: ^3.0.0-0 || ^2.6.0
-  peerDependenciesMeta:
-    "@vue/composition-api":
-      optional: true
-  bin:
-    vue-demi-fix: bin/vue-demi-fix.js
-    vue-demi-switch: bin/vue-demi-switch.js
-  checksum: 10c0/7c10377bf74e3ec81c5b5db91b6b4781b78df831f2e66fefa2aabf6da01d3ee08444f4aa4ec0dcf5cd345cdc6c09343558cb0aceb3f0716dba709a53eed745d1
   languageName: node
   linkType: hard
 

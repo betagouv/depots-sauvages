@@ -1,64 +1,14 @@
 import '@gouvfr/dsfr/dist/dsfr.min.css'
-import '@gouvfr/dsfr/dist/dsfr.module.min.js'
 import '@gouvfr/dsfr/dist/utility/utility.min.css'
+import '@gouvfr/dsfr/dist/utility/icons/icons.min.css'
 import './styles/premium-design.css'
 import VueDsfr from '@gouvminint/vue-dsfr'
-import { OhVueIcon, addIcons } from 'oh-vue-icons'
-import {
-  RiAlertLine,
-  RiCalendarLine,
-  RiChat1Line,
-  RiCheckLine,
-  RiDownloadLine,
-  RiEditLine,
-  RiExternalLinkLine,
-  RiFileEditLine,
-  RiFileList3Line,
-  RiFileListLine,
-  RiFolderLine,
-  RiLoginBoxLine,
-  RiLogoutBoxRLine,
-  RiMailLine,
-  RiMailSendLine,
-  RiMapPin2Line,
-  RiMoneyEuroCircleLine,
-  RiPenNibLine,
-  RiRefreshLine,
-  RiSearchEyeLine,
-  RiTimeLine,
-  RiAccountCircleLine,
-} from 'oh-vue-icons/icons/ri'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 import VueMatomo from 'vue-matomo'
 import { createRouter, createWebHistory } from 'vue-router'
 import App from './app.vue'
 import { getUserInfo } from './services/api'
-
-addIcons(
-  RiAlertLine,
-  RiCalendarLine,
-  RiChat1Line,
-  RiCheckLine,
-  RiDownloadLine,
-  RiEditLine,
-  RiExternalLinkLine,
-  RiFileEditLine,
-  RiFileList3Line,
-  RiFileListLine,
-  RiFolderLine,
-  RiLoginBoxLine,
-  RiLogoutBoxRLine,
-  RiMailLine,
-  RiMailSendLine,
-  RiMapPin2Line,
-  RiMoneyEuroCircleLine,
-  RiPenNibLine,
-  RiRefreshLine,
-  RiSearchEyeLine,
-  RiTimeLine,
-  RiAccountCircleLine
-)
 
 const pinia = createPinia()
 
@@ -139,7 +89,6 @@ const app = createApp(App)
 app.use(router)
 app.use(pinia)
 app.use(VueDsfr)
-app.component('VIcon', OhVueIcon)
 
 if (import.meta.env.VITE_MATOMO_ENABLED === 'true') {
   app.use(VueMatomo, {

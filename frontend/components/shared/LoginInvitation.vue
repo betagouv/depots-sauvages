@@ -2,7 +2,7 @@
   <div class="login-invitation fr-py-8w">
     <div class="premium-box fr-p-6w text-center">
       <div class="icon-container fr-mb-3w">
-        <v-icon name="ri-account-circle-line" scale="4" aria-hidden="true" />
+        <span class="fr-icon-account-circle-line custom-icon-size" aria-hidden="true"></span>
       </div>
       <h2 class="fr-h2">Consultez vos procédures</h2>
       <p class="fr-text--lead fr-mb-4w">
@@ -12,7 +12,7 @@
       <div class="fr-btns-group fr-btns-group--center">
         <DsfrButton
           label="Se connecter via ProConnect"
-          :icon="{ name: 'ri-login-box-line', class: 'fr-mr-1w' }"
+          icon="fr-icon-lock-line"
           @click="goToLogin"
         />
       </div>
@@ -58,7 +58,11 @@ const goToLogin = () => {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-.icon-container :deep(svg) {
+.custom-icon-size {
+  --icon-size: 4rem;
+}
+
+.icon-container .fr-icon-account-circle-line {
   color: var(--text-label-blue-france);
 }
 

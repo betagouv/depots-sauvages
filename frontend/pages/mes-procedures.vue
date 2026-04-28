@@ -7,8 +7,8 @@
       <div v-if="userInfo?.is_authenticated" class="fr-col-auto">
         <DsfrButton
           label="Synchroniser avec Démarche Numérique"
-          class="fr-btn--secondary"
-          :icon="{ name: 'ri-refresh-line', class: 'fr-mr-1w' }"
+          secondary
+          icon="fr-icon-refresh-line"
           :disabled="dossierStore.syncing"
           @click="handleManualSync"
         />
@@ -57,8 +57,8 @@
                   <li>
                     <DsfrButton
                       label="Voir sur Démarche Numérique"
-                      class="fr-btn--secondary"
-                      :icon="{ name: 'ri-external-link-line', class: 'fr-mr-1w' }"
+                      secondary
+                      icon="fr-icon-external-link-line"
                       icon-right
                       @click="openExternalLink(getDnModifyUrl(String(dossier.numero_dossier)))"
                     />
@@ -66,7 +66,7 @@
                   <li>
                     <DsfrButton
                       label="Suivre la procédure"
-                      :icon="{ name: 'ri-file-list-line', class: 'fr-mr-1w' }"
+                      icon="fr-icon-file-line"
                       icon-right
                       @click="router.push(getSuiviProcedureUrl(dossier.numero_dossier))"
                     />

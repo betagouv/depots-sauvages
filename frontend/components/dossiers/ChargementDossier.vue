@@ -5,7 +5,7 @@
         <div class="loading-section fr-p-4w fr-text--center" role="status" aria-live="polite">
           <VIcon
             name="ri-loader-4-line"
-            :scale="3"
+            scale="3"
             animation="spin"
             class="fr-mb-2w"
             aria-hidden="true"
@@ -19,6 +19,8 @@
 </template>
 
 <script setup lang="ts">
+import { VIcon } from '@gouvminint/vue-dsfr'
+
 withDefaults(
   defineProps<{
     message?: string

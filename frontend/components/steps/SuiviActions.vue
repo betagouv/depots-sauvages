@@ -119,8 +119,9 @@
                 </p>
                 <DsfrButton
                   label="Démarrer une nouvelle procédure"
-                  :icon="{ name: 'ri-add-circle-line', class: 'fr-mr-1w' }"
-                  class="fr-btn--sm fr-btn--secondary"
+                  secondary
+                  size="sm"
+                  icon="fr-icon-add-circle-line"
                   @click="openExternalLink(newProcedureUrl)"
                 />
               </DsfrAlert>

@@ -174,7 +174,7 @@ onMounted(async () => {
       isAuthenticated.value = true
       quickLinks.value.push({
         label: 'Se déconnecter',
-        icon: 'ri-logout-box-r-line',
+        icon: 'fr-icon-logout-box-r-line',
         iconRight: false,
         href: LOGOUT_URL,
         to: LOGOUT_URL, // for styling
@@ -183,7 +183,7 @@ onMounted(async () => {
     } else if (isProConnectEnabled) {
       quickLinks.value.push({
         label: 'Se connecter via ProConnect',
-        icon: 'ri-login-box-line',
+        icon: 'fr-icon-account-circle-line',
         iconRight: false,
         href: LOGIN_URL,
         to: LOGIN_URL, // for styling
@@ -196,7 +196,7 @@ onMounted(async () => {
     if (isProConnectEnabled) {
       quickLinks.value.push({
         label: 'Se connecter via ProConnect',
-        icon: 'ri-login-box-line',
+        icon: 'fr-icon-account-circle-line',
         iconRight: false,
         href: LOGIN_URL,
         to: LOGIN_URL, // for styling

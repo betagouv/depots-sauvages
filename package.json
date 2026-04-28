@@ -14,7 +14,6 @@
     "@gouvminint/vue-dsfr": "^8.16.1",
     "@iconify/vue": "^5.0.0",
     "camelcase-keys": "^10.0.2",
-    "oh-vue-icons": "^1.0.0-rc3",
     "pinia": "^3.0.4",
     "snakecase-keys": "^9.0.2",
     "vue": "^3.5.33",

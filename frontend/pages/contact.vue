@@ -110,8 +110,8 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 const contactEmail = import.meta.env.VITE_CONTACT_EMAIL
 
-const chatIcon = { name: 'ri-chat-1-line', scale: 1.5, class: 'fr-mr-1w' }
-const emailIcon = { name: 'ri-mail-line', scale: 1.5, class: 'fr-mr-1w' }
+const chatIcon = 'fr-icon-chat-2-line'
+const emailIcon = 'fr-icon-mail-line'
 
 const sendEmail = () => {
   window.location.href = `mailto:${contactEmail}`
