@@ -117,13 +117,10 @@
                   La procédure peut être poursuivie à l'encontre d'un autre auteur identifié (ex.
                   prestataire, sous-traitant, fournisseur, client, intermédiaire).
                 </p>
-                <DsfrButton
-                  label="Démarrer une nouvelle procédure"
-                  secondary
-                  size="sm"
-                  icon="fr-icon-add-circle-line"
-                  @click="openExternalLink(newProcedureUrl)"
-                />
+                <DsfrButton secondary size="sm" @click="openExternalLink(newProcedureUrl)">
+                  <span class="fr-icon-add-circle-line fr-mr-1w" aria-hidden="true"></span>
+                  Démarrer une nouvelle procédure
+                </DsfrButton>
               </DsfrAlert>
             </div>
           </transition>
@@ -194,7 +191,11 @@ const motifAbandonOptions = [
     label: "La responsabilité de l'auteur présumé n'est pas clairement établie",
     value: 'Éléments convaincants',
   },
-  { id: 'motif-autre-auteur', label: 'Un autre auteur a été identifié', value: 'Un auteur identifié' },
+  {
+    id: 'motif-autre-auteur',
+    label: 'Un autre auteur a été identifié',
+    value: 'Un auteur identifié',
+  },
   { id: 'motif-npai', label: 'Auteur introuvable (NPAI)', value: 'Auteur introuvable (NPAI)' },
   {
     id: 'motif-autre',

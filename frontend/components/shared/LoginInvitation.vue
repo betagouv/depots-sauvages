@@ -10,11 +10,10 @@
         être connecté.
       </p>
       <div class="fr-btns-group fr-btns-group--center">
-        <DsfrButton
-          label="Se connecter via ProConnect"
-          icon="fr-icon-lock-line"
-          @click="goToLogin"
-        />
+        <DsfrButton @click="goToLogin">
+          <span class="fr-icon-lock-line fr-mr-1w" aria-hidden="true"></span>
+          Se connecter via ProConnect
+        </DsfrButton>
       </div>
       <p class="fr-text--sm fr-mt-4w fr-mb-0">
         ProConnect est la solution de connexion sécurisée pour les agents de l'État et des

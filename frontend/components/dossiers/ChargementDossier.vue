@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { VIcon } from '@gouvminint/vue-dsfr'
+// VIcon is already registered globally by VueDsfr
 
 withDefaults(
   defineProps<{
