@@ -5,17 +5,15 @@
         <div class="fr-card__body fr-p-4w">
           <ul class="fr-btns-group fr-btns-group--full-width fr-mb-4w">
             <li>
-              <DsfrButton
-                label="Télécharger le rapport de constatation"
-                :icon="{ name: 'ri-download-line', class: 'fr-mr-1w' }"
-                size="lg"
-                @click="openUrl(docConstatUrl)"
-              />
+              <DsfrButton size="lg" @click="openUrl(docConstatUrl)">
+                <span class="fr-icon-download-line fr-mr-1w" aria-hidden="true"></span>
+                Télécharger le rapport de constatation
+              </DsfrButton>
             </li>
           </ul>
 
           <p class="fr-text-mention--grey fr-mb-0">
-            <VIcon name="ri-folder-line" class="fr-mr-1w" />
+            <span class="fr-icon-folder-2-line fr-mr-1w" aria-hidden="true"></span>
             À conserver en mairie.
           </p>
         </div>
@@ -27,17 +25,15 @@
         <div class="fr-card__body fr-p-4w">
           <ul class="fr-btns-group fr-btns-group--full-width fr-mb-4w">
             <li>
-              <DsfrButton
-                label="Télécharger la lettre d'information"
-                :icon="{ name: 'ri-download-line', class: 'fr-mr-1w' }"
-                size="lg"
-                @click="openUrl(lettreInfoUrl)"
-              />
+              <DsfrButton size="lg" @click="openUrl(lettreInfoUrl)">
+                <span class="fr-icon-download-line fr-mr-1w" aria-hidden="true"></span>
+                Télécharger la lettre d'information
+              </DsfrButton>
             </li>
           </ul>
 
           <p class="fr-text-mention--grey fr-mb-0">
-            <VIcon name="ri-mail-send-line" class="fr-mr-1w" />
+            <span class="fr-icon-mail-line fr-mr-1w" aria-hidden="true"></span>
             À envoyer à l'auteur présumé des faits.
           </p>
         </div>
@@ -48,15 +44,12 @@
 
 <script setup lang="ts">
 import { DsfrButton } from '@gouvminint/vue-dsfr'
-import { computed } from 'vue'
 
 const props = defineProps<{
   auteurIdentifie: boolean
   docConstatUrl: string
   lettreInfoUrl: string
 }>()
-
-
 
 const openUrl = (url: string) => {
   if (url) {

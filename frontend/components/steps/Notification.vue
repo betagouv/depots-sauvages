@@ -2,16 +2,13 @@
   <div class="step-notification">
     <DsfrAlert type="info" title="Documents pour cette étape" class="fr-mb-4w">
       <p class="fr-mb-2w">
-        Vous devez envoyer la lettre d'information à l'auteur présumé. Si vous ne l'avez pas
-        encore téléchargée :
+        Vous devez envoyer la lettre d'information à l'auteur présumé. Si vous ne l'avez pas encore
+        téléchargée :
       </p>
-      <DsfrButton
-        label="Télécharger la lettre d'information"
-        :icon="{ name: 'ri-download-line', class: 'fr-mr-1w' }"
-        size="sm"
-        secondary
-        @click="openUrl(lettreInfoUrl)"
-      />
+      <DsfrButton secondary size="sm" @click="openUrl(lettreInfoUrl)">
+        <span class="fr-icon-download-line fr-mr-1w" aria-hidden="true"></span>
+        Télécharger la lettre d'information
+      </DsfrButton>
     </DsfrAlert>
 
     <h4 class="fr-h6 fr-mb-2w">Ce qu'il vous reste à faire :</h4>

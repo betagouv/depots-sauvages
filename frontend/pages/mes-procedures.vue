@@ -5,13 +5,10 @@
         <h1>Mes procédures</h1>
       </div>
       <div v-if="userInfo?.is_authenticated" class="fr-col-auto">
-        <DsfrButton
-          label="Synchroniser avec Démarche Numérique"
-          class="fr-btn--secondary"
-          :icon="{ name: 'ri-refresh-line', class: 'fr-mr-1w' }"
-          :disabled="dossierStore.syncing"
-          @click="handleManualSync"
-        />
+        <DsfrButton secondary :disabled="dossierStore.syncing" @click="handleManualSync">
+          <span class="fr-icon-refresh-line fr-mr-1w" aria-hidden="true"></span>
+          Synchroniser avec Démarche Numérique
+        </DsfrButton>
       </div>
     </div>
 
@@ -56,20 +53,18 @@
                 <ul class="fr-btns-group fr-btns-group--inline-lg">
                   <li>
                     <DsfrButton
-                      label="Voir sur Démarche Numérique"
-                      class="fr-btn--secondary"
-                      :icon="{ name: 'ri-external-link-line', class: 'fr-mr-1w' }"
-                      icon-right
+                      secondary
                       @click="openExternalLink(getDnModifyUrl(String(dossier.numero_dossier)))"
-                    />
+                    >
+                      <span class="fr-icon-external-link-line fr-mr-1w" aria-hidden="true"></span>
+                      Voir sur Démarche Numérique
+                    </DsfrButton>
                   </li>
                   <li>
-                    <DsfrButton
-                      label="Suivre la procédure"
-                      :icon="{ name: 'ri-file-list-line', class: 'fr-mr-1w' }"
-                      icon-right
-                      @click="router.push(getSuiviProcedureUrl(dossier.numero_dossier))"
-                    />
+                    <DsfrButton @click="router.push(getSuiviProcedureUrl(dossier.numero_dossier))">
+                      <span class="fr-icon-file-line fr-mr-1w" aria-hidden="true"></span>
+                      Suivre la procédure
+                    </DsfrButton>
                   </li>
                 </ul>
               </div>
@@ -94,8 +89,8 @@
 import { useDossierStore } from '@/stores/dossier'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import DossierMetadata from '../components/dossiers/DossierMetadata.vue'
 import ChargementDossier from '../components/dossiers/ChargementDossier.vue'
+import DossierMetadata from '../components/dossiers/DossierMetadata.vue'
 import LoginInvitation from '../components/shared/LoginInvitation.vue'
 import { getUserInfo, type UserInfo } from '../services/api'
 import { getDnModifyUrl, getSuiviProcedureUrl } from '../services/urls'
@@ -121,9 +116,6 @@ onMounted(async () => {
     showLoading.value = false
   }
 })
-
-
-
 
 const handleManualSync = async () => {
   try {

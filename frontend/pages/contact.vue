@@ -12,44 +12,57 @@
     <div class="fr-container fr-pb-8w">
       <div class="fr-grid-row fr-grid-row--gutters">
         <div class="fr-col-12 fr-col-md-6">
-          <DsfrCard
-            title="Besoin d'une réponse rapide ?"
-            description="Échangez avec nos équipes par chat ou envoyez-nous un e-mail pour obtenir des réponses rapides à vos questions."
-            :buttons="[
-              {
-                label: 'Ouvrir le chat',
-                icon: chatIcon,
-                onClick: openCrispChat,
-              },
-              {
-                label: 'Envoyer un e-mail',
-                icon: emailIcon,
-                onClick: sendEmail,
-                disabled: !contactEmail,
-                secondary: true,
-              },
-            ]"
-            size="large"
-            no-arrow
-            title-tag="h4"
-          />
+          <div class="fr-card fr-card--no-arrow">
+            <div class="fr-card__body">
+              <div class="fr-card__content">
+                <h4 class="fr-card__title">Besoin d'une réponse rapide ?</h4>
+                <p class="fr-card__desc">
+                  Échangez avec nos équipes par chat ou envoyez-nous un e-mail pour obtenir des
+                  réponses rapides à vos questions.
+                </p>
+              </div>
+              <div class="fr-card__footer">
+                <ul class="fr-btns-group fr-btns-group--inline">
+                  <li>
+                    <DsfrButton @click="openCrispChat">
+                      <span class="fr-icon-chat-2-line fr-mr-1w" aria-hidden="true"></span>
+                      Ouvrir le chat
+                    </DsfrButton>
+                  </li>
+                  <li>
+                    <DsfrButton secondary :disabled="!contactEmail" @click="sendEmail">
+                      <span class="fr-icon-mail-line fr-mr-1w" aria-hidden="true"></span>
+                      Envoyer un e-mail
+                    </DsfrButton>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="fr-col-12 fr-col-md-6">
-          <DsfrCard
-            title="Besoin d'un accompagnement ?"
-            description="Participez à un webinaire collectif ou réservez une session d'accompagnement individuelle pour votre cas concret."
-            :buttons="[
-              {
-                label: 'Prendre rendez-vous',
-                onClick: () => router.push({ name: 'RDV' }),
-                secondary: true,
-              },
-            ]"
-            size="large"
-            no-arrow
-            title-tag="h4"
-          />
+          <div class="fr-card fr-card--no-arrow">
+            <div class="fr-card__body">
+              <div class="fr-card__content">
+                <h4 class="fr-card__title">Besoin d'un accompagnement ?</h4>
+                <p class="fr-card__desc">
+                  Participez à un webinaire collectif ou réservez une session d'accompagnement
+                  individuelle pour votre cas concret.
+                </p>
+              </div>
+              <div class="fr-card__footer">
+                <ul class="fr-btns-group">
+                  <li>
+                    <DsfrButton secondary @click="() => router.push({ name: 'RDV' })">
+                      <span class="fr-icon-calendar-line fr-mr-1w" aria-hidden="true"></span>
+                      Prendre rendez-vous
+                    </DsfrButton>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -104,14 +117,11 @@
 </template>
 
 <script setup lang="ts">
-import { DsfrCard } from '@gouvminint/vue-dsfr'
+import { DsfrButton } from '@gouvminint/vue-dsfr'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const contactEmail = import.meta.env.VITE_CONTACT_EMAIL
-
-const chatIcon = { name: 'ri-chat-1-line', scale: 1.5, class: 'fr-mr-1w' }
-const emailIcon = { name: 'ri-mail-line', scale: 1.5, class: 'fr-mr-1w' }
 
 const sendEmail = () => {
   window.location.href = `mailto:${contactEmail}`

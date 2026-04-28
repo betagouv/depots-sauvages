@@ -27,12 +27,12 @@
             <DossierMetadata :dossier="dossierData" class="fr-mb-3w" />
 
             <DsfrButton
-              label="Modifier le dossier de constatation sur Démarche numérique"
-              class="fr-btn--secondary"
-              :icon="{ name: 'ri-external-link-line', class: 'fr-mr-1w' }"
-              icon-right
+              secondary
               @click="openExternalLink(getDnModifyUrl(dossierData.dn_numero_dossier))"
-            />
+            >
+              <span class="fr-icon-external-link-line fr-mr-1w" aria-hidden="true"></span>
+              Modifier le dossier de constatation sur Démarche numérique
+            </DsfrButton>
           </header>
 
           <InfosComplementaires v-if="hasProcedure" :suivi="suiviProcedure" />
@@ -117,6 +117,7 @@ import { useRoute } from 'vue-router'
 import StepperProcedure from '../components/StepperProcedure.vue'
 import ChargementDossier from '../components/dossiers/ChargementDossier.vue'
 import DossierMetadata from '../components/dossiers/DossierMetadata.vue'
+import LoginInvitation from '../components/shared/LoginInvitation.vue'
 import AucuneProcedure from '../components/steps/AucuneProcedure.vue'
 import Cloture from '../components/steps/Cloture.vue'
 import ClotureSansAuteur from '../components/steps/ClotureSansAuteur.vue'
@@ -130,7 +131,6 @@ import SuiviActions from '../components/steps/SuiviActions.vue'
 import SuiviDecision from '../components/steps/SuiviDecision.vue'
 import { API_URLS, createResource, getUserInfo } from '../services/api'
 import { getDnDocConstatUrl, getDnLettreInfoUrl, getDnModifyUrl } from '../services/urls'
-import LoginInvitation from '../components/shared/LoginInvitation.vue'
 import { useSuiviStore } from '../stores/suivi-procedure'
 import { openExternalLink } from '../utils/browser'
 import { debounce } from '../utils/debounce'
