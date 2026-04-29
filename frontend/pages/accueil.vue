@@ -1,51 +1,55 @@
 <template>
-  <div class="fr-container fr-py-5w">
-    <div class="fr-grid-row fr-grid-row--gutters">
-      <div
-        class="fr-col-12 fr-col-md-6"
-        style="display: flex; flex-direction: column; justify-content: center"
-      >
-        <h1 class="fr-h1 fr-mt-0 fr-mb-3w">
-          Accompagner les collectivités pour mieux lutter contre les dépôts sauvages.
-        </h1>
-        <p class="fr-text fr-mb-4w">
-          La procédure administrative permet aux collectivités locales de sanctionner rapidement
-          l’auteur d’un dépôt sauvage par une amende pouvant aller jusqu’à 15 000 €, recouvrée au
-          profit de la collectivité.
-        </p>
-        <div>
-          <a
-            :href="demarcheNumeriqueUrl"
-            class="fr-btn fr-btn--lg"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Débuter une procédure administrative
-          </a>
-          <p class="fr-text--sm fr-mt-2w fr-mb-0" style="color: var(--text-mention-grey)">
-            Connexion ProConnect requise.
+  <div>
+    <div class="fr-container fr-py-5w">
+      <div class="fr-grid-row fr-grid-row--gutters">
+        <div
+          class="fr-col-12 fr-col-md-6"
+          style="display: flex; flex-direction: column; justify-content: center"
+        >
+          <h1 class="fr-h1 fr-mt-0 fr-mb-3w">
+            Accompagner les collectivités pour mieux lutter contre les dépôts sauvages.
+          </h1>
+          <p class="fr-text fr-mb-4w">
+            La procédure administrative permet aux collectivités locales de sanctionner rapidement
+            l’auteur d’un dépôt sauvage par une amende pouvant aller jusqu’à 15 000 €, recouvrée au
+            profit de la collectivité.
+          </p>
+          <div>
             <a
-              href="https://proconnect.crisp.help/fr/article/utiliser-proconnect-au-sein-dune-collectivite-ou-dune-mairie-1mobnb6"
+              :href="demarcheNumeriqueUrl"
+              class="fr-btn fr-btn--lg"
               target="_blank"
               rel="noopener noreferrer"
-              >En savoir plus</a
             >
-          </p>
+              Débuter une procédure administrative
+            </a>
+            <p class="fr-text--sm fr-mt-2w fr-mb-0" style="color: var(--text-mention-grey)">
+              Connexion ProConnect requise.
+              <a
+                href="https://proconnect.crisp.help/fr/article/utiliser-proconnect-au-sein-dune-collectivite-ou-dune-mairie-1mobnb6"
+                target="_blank"
+                rel="noopener noreferrer"
+                >En savoir plus</a
+              >
+            </p>
+          </div>
+        </div>
+
+        <div class="fr-col-12 fr-col-md-6">
+          <DsfrPicture
+            legend="Dépôt sauvage"
+            ratio="16x9"
+            size="medium"
+            src="/static/depot-de-dechet-sauvage-image-accueil.webp"
+            title="Dépôt sauvage"
+          />
         </div>
       </div>
+    </div>
 
-      <div class="fr-col-12 fr-col-md-6">
-        <DsfrPicture
-          legend="Dépôt sauvage"
-          ratio="16x9"
-          size="medium"
-          src="/static/depot-de-dechet-sauvage-image-accueil.webp"
-          title="Dépôt sauvage"
-        />
-      </div>
-
-      <div class="fr-col-12 fr-mt-4w fr-mb-4w">
-        <h2 class="fr-h2 fr-mb-4w" style="text-align: center">Vous avez un dépôt sauvage ?</h2>
+    <div class="fr-background-alt--blue-france fr-py-8w">
+      <div class="fr-container">
+        <h2 class="fr-h2 fr-mb-6w" style="text-align: center">Vous avez un dépôt sauvage ?</h2>
         <div class="fr-grid-row fr-grid-row--gutters">
           <div class="fr-col-12 fr-col-md-4">
             <div class="premium-card">
@@ -89,11 +93,13 @@
           </div>
         </div>
       </div>
+    </div>
 
+    <div class="fr-container fr-py-8w">
       <DsfrCallout
         title="Vos deux leviers d'action"
         content=""
-        class="fr-callout--blue-ecume fr-mt-2w"
+        class="fr-callout--blue-ecume"
       >
         <p class="fr-text">Lorsqu'une commune constate un dépôt sauvage, elle peut :</p>
         <ul class="fr-text fr-mb-0">
