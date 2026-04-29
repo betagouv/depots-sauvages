@@ -20,6 +20,7 @@
               class="fr-btn fr-btn--lg"
               target="_blank"
               rel="noopener noreferrer"
+              title="Débuter une procédure administrative - nouvelle fenêtre"
             >
               Débuter une procédure administrative
             </a>
@@ -29,6 +30,7 @@
                 href="https://proconnect.crisp.help/fr/article/utiliser-proconnect-au-sein-dune-collectivite-ou-dune-mairie-1mobnb6"
                 target="_blank"
                 rel="noopener noreferrer"
+                title="En savoir plus sur ProConnect - nouvelle fenêtre"
                 >En savoir plus</a
               >
             </p>
@@ -53,7 +55,12 @@
         <div class="fr-grid-row fr-grid-row--gutters">
           <div class="fr-col-12 fr-col-md-4">
             <div class="premium-card">
-              <span class="fr-icon-search-line fr-icon--lg" aria-hidden="true"></span>
+              <img
+                src="/static/artwork/pictograms/document-search.svg"
+                alt=""
+                class="fr-artwork"
+                aria-hidden="true"
+              />
               <h3 class="fr-h4">Simulateur d'éligibilité</h3>
               <p class="fr-text--sm fr-mb-3w">
                 Vérifier si la procédure administrative est adaptée
@@ -68,7 +75,12 @@
           </div>
           <div class="fr-col-12 fr-col-md-4">
             <div class="premium-card">
-              <span class="fr-icon-calculator-line fr-icon--lg" aria-hidden="true"></span>
+              <img
+                src="/static/artwork/pictograms/money.svg"
+                alt=""
+                class="fr-artwork"
+                aria-hidden="true"
+              />
               <h3 class="fr-h4">Calculateur d'amende</h3>
               <p class="fr-text--sm fr-mb-3w">Calculer le montant de l’amende pour ce dépôt</p>
               <TallyPopupButton
@@ -81,7 +93,12 @@
           </div>
           <div class="fr-col-12 fr-col-md-4">
             <div class="premium-card">
-              <span class="fr-icon-discuss-line fr-icon--lg" aria-hidden="true"></span>
+              <img
+                src="/static/artwork/pictograms/human-cooperation.svg"
+                alt=""
+                class="fr-artwork"
+                aria-hidden="true"
+              />
               <h3 class="fr-h4">Besoin d'aide ?</h3>
               <p class="fr-text--sm fr-mb-3w">
                 Nos experts vous accompagnent pas à pas dans vos démarches administratives.
