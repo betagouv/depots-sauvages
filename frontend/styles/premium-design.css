@@ -283,3 +283,30 @@ textarea.fr-input {
   height: 80px;
   margin-bottom: 1.5rem;
 }
+
+.premium-card--small {
+  padding: 1.5rem;
+}
+
+.premium-card--small .fr-artwork {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 1rem;
+}
+
+/* Premium Utilities */
+.premium-overline {
+  color: var(--text-mention-grey);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.premium-hero-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.premium-text-center {
+  text-align: center;
+}
