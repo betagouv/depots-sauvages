@@ -11,11 +11,24 @@
           de sanctionner l’auteur avec une amende pouvant aller jusqu'à 15 000 €, recouvrée au
           profit de la mairie.
         </p>
+        <div class="fr-btns-group fr-mt-3w">
+          <TallyPopupButton
+            form-id="A7xA8z"
+            label="Vérifier si la procédure administrative est adaptée"
+            variant="secondary"
+          />
+          <TallyPopupButton
+            form-id="9qElYG"
+            label="Calculer le montant de l'amende pour ce dépôt"
+            variant="secondary"
+          />
+        </div>
         <div class="fr-btns-group fr-btns-group--center fr-mt-3w">
           <a :href="demarcheNumeriqueUrl" class="fr-btn" target="_blank" rel="noopener noreferrer"
             >Débuter une procédure administrative via Démarche Numérique
           </a>
         </div>
+
         <DsfrNotice class="fr-mt-2w">
           Vous aurez besoin de vous connecter avec ProConnect.
           <br />En cas de difficultés,
@@ -96,6 +109,7 @@
 </template>
 
 <script setup lang="ts">
+import TallyPopupButton from '@/components/shared/TallyPopupButton.vue'
 import { DsfrCallout, DsfrPicture } from '@gouvminint/vue-dsfr'
 
 const demarcheNumeriqueUrl = import.meta.env.VITE_DN_URL
