@@ -272,7 +272,7 @@ textarea.fr-input {
   box-shadow: 0 2px 8px rgba(0, 0, 145, 0.03);
 }
 
-.premium-card:hover {
+.premium-card:not(.premium-card--static):hover {
   border-color: var(--border-active-blue-france);
   box-shadow: 0 4px 16px rgba(0, 0, 145, 0.08);
   transform: translateY(-2px);

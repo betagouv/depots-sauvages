@@ -126,7 +126,7 @@
         <div class="fr-col-12 fr-col-md-7">
           <div class="fr-grid-row fr-grid-row--gutters">
             <div class="fr-col-12 fr-col-sm-6">
-              <div class="premium-card premium-card--small">
+              <div class="premium-card premium-card--small premium-card--static">
                 <img
                   src="/static/artwork/pictograms/contract.svg"
                   alt=""
@@ -141,7 +141,7 @@
               </div>
             </div>
             <div class="fr-col-12 fr-col-sm-6">
-              <div class="premium-card premium-card--small">
+              <div class="premium-card premium-card--small premium-card--static">
                 <img
                   src="/static/artwork/pictograms/justice.svg"
                   alt=""
