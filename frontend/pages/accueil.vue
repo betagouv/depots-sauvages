@@ -112,15 +112,15 @@
     <div class="fr-container fr-py-8w">
       <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
         <div class="fr-col-12 fr-col-md-5">
-          <h2 class="fr-h2 fr-mb-3w">Deux procédures possibles</h2>
+          <h2 class="fr-h2 fr-mb-3w">Vos leviers d'action</h2>
           <p class="fr-text--sm fr-text--bold fr-mb-1w premium-overline">
-            Ces procédures ne sont pas exclusives
+            Deux procédures qui ne sont pas exclusives
           </p>
 
           <p class="fr-text fr-my-4w">
             Lorsqu'une commune constate un dépôt sauvage, elle dispose de deux leviers d'action.
-            Protect’Envi vous accompagne dans ces procédures en vous guidant pas à pas et en vous
-            fournissant des documents conformes pré-remplis.
+            <br />Protect’Envi vous accompagne dans ces procédures en vous guidant pas à pas et en
+            vous fournissant des documents conformes pré-remplis.
           </p>
         </div>
         <div class="fr-col-12 fr-col-md-7">
