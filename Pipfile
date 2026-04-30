@@ -24,6 +24,7 @@ mozilla-django-oidc = "*"
 typing-extensions = "*"
 django-anymail = {extras = ["brevo"], version = "*"}
 sentry-sdk = {extras = ["django"], version = "*"}
+django-csp = "*"
 
 [dev-packages]
 black = "*"
