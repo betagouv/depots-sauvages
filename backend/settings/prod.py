@@ -44,9 +44,12 @@ SECURE_CONTENT_TYPE_NOSNIFF = env.bool("SECURE_CONTENT_TYPE_NOSNIFF", default=Tr
 
 # Content Security Policy
 CSP_DEFAULT_SRC = env.list("CSP_DEFAULT_SRC", default=["'self'"])
-CSP_SCRIPT_SRC = env.list("CSP_SCRIPT_SRC", default=["'self'"])
+CSP_SCRIPT_SRC = env.list("CSP_SCRIPT_SRC", default=["'self'", "https://stats.beta.gouv.fr", "https://tally.so", "https://client.crisp.chat"])
 CSP_STYLE_SRC = env.list("CSP_STYLE_SRC", default=["'self'", "'unsafe-inline'"])
-CSP_IMG_SRC = env.list("CSP_IMG_SRC", default=["'self'", "data:"])
+CSP_IMG_SRC = env.list("CSP_IMG_SRC", default=["'self'", "data:", "https://stats.beta.gouv.fr", "https://tally.so", "https://image.crisp.chat"])
+CSP_FONT_SRC = env.list("CSP_FONT_SRC", default=["'self'", "data:"])
+CSP_FRAME_SRC = env.list("CSP_FRAME_SRC", default=["'self'", "https://tally.so", "https://grist.numerique.gouv.fr"])
+CSP_CONNECT_SRC = env.list("CSP_CONNECT_SRC", default=["'self'", "https://stats.beta.gouv.fr", "https://client.crisp.chat", "wss://client.relay.crisp.chat", "https://api.iconify.design"])
 
 
 # CORS/CSRF Settings
