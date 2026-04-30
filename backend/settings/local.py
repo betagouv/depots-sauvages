@@ -44,6 +44,11 @@ DATABASES = {
 
 # Security settings for development
 ALLOWED_HOSTS = ["*"]
+SECURE_BROWSER_XSS_FILTER = False
+SECURE_CONTENT_TYPE_NOSNIFF = False
+
+# Content Security Policy
+CSP_REPORT_ONLY = env.bool("CSP_REPORT_ONLY", default=True)
 
 # CORS/CSRF Settings
 CORS_ALLOW_ALL_ORIGINS = True

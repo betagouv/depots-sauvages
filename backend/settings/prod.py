@@ -39,6 +39,14 @@ DATABASES = {
 
 # Security settings for production
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
+SECURE_BROWSER_XSS_FILTER = env.bool("SECURE_BROWSER_XSS_FILTER", default=True)
+SECURE_CONTENT_TYPE_NOSNIFF = env.bool("SECURE_CONTENT_TYPE_NOSNIFF", default=True)
+
+# Content Security Policy
+CSP_DEFAULT_SRC = env.list("CSP_DEFAULT_SRC", default=["'self'"])
+CSP_SCRIPT_SRC = env.list("CSP_SCRIPT_SRC", default=["'self'"])
+CSP_STYLE_SRC = env.list("CSP_STYLE_SRC", default=["'self'", "'unsafe-inline'"])
+CSP_IMG_SRC = env.list("CSP_IMG_SRC", default=["'self'", "data:"])
 
 
 # CORS/CSRF Settings
