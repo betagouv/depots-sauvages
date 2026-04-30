@@ -7,7 +7,7 @@
       :quick-links="quickLinks"
     >
 
-      <template #mainnav>
+      <template #mainnav="{ hidemodal }">
         <nav
           v-if="!route.meta.hideNavigation"
           class="fr-nav"
@@ -32,7 +32,7 @@
                     isActive || route.meta.activeMenu === lien.href ? 'page' : undefined
                   "
                   :href="href"
-                  @click="navigate"
+                  @click="navigate(); hidemodal()"
                 >
                   {{ lien.text }}
                 </a>
