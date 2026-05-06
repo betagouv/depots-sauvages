@@ -1,7 +1,7 @@
 <template>
   <fieldset class="fr-fieldset fr-my-0">
     <legend class="fr-fieldset__legend">
-      <h3 class="fr-h2">Localisation du dépôt</h3>
+      <h3 class="fr-h2">1. Localisation du dépôt</h3>
     </legend>
 
     <div class="fr-fieldset__element">
