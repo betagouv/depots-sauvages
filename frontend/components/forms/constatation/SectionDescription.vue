@@ -74,7 +74,6 @@ import BooleanRadioSet from '@/components/shared/BooleanRadioSet.vue'
 import { useConstatationStore } from '@/stores/constatation'
 import { TypeDepotOptions, VolumeOptions } from '@/types/constatation'
 import { DsfrCheckboxSet, DsfrInputGroup, DsfrRadioButtonSet } from '@gouvminint/vue-dsfr'
-import { computed } from 'vue'
 
 const store = useConstatationStore()
 
