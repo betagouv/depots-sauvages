@@ -33,7 +33,6 @@
       />
     </div>
 
-    <!-- CAS OUI : Montant connu -->
     <template v-if="store.formData.prejudiceMontantConnu === true">
       <div class="fr-fieldset__element">
         <DsfrInputGroup
@@ -54,7 +53,6 @@
       </div>
     </template>
 
-    <!-- CAS NON : Aide à l'estimation -->
     <template v-if="store.formData.prejudiceMontantConnu === false">
       <div class="fr-callout fr-mb-2w fr-callout--blue-cumulus">
         <h3 class="fr-callout__title">Nous pouvons vous aider à estimer le préjudice</h3>
