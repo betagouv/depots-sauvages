@@ -3,7 +3,7 @@
     <SectionLocalisation />
     <SectionConstatation />
     <SectionDescription />
-    <SectionResponsable />
+    <SectionAuteurDepot />
     <SectionPrejudice />
     <SectionFinalisation />
   </div>
@@ -15,7 +15,7 @@ import SectionDescription from './SectionDescription.vue'
 import SectionFinalisation from './SectionFinalisation.vue'
 import SectionLocalisation from './SectionLocalisation.vue'
 import SectionPrejudice from './SectionPrejudice.vue'
-import SectionResponsable from './SectionResponsable.vue'
+import SectionAuteurDepot from './SectionAuteurDepot.vue'
 </script>
 
 <style scoped></style>

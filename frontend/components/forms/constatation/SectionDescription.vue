@@ -5,14 +5,11 @@
     </legend>
 
     <div class="fr-fieldset__element">
-      <DsfrRadioButtonSet
-        v-model="photoDispoStr"
+      <BooleanRadioSet
+        v-model="store.formData.photoDispo"
         legend="Disposez vous de photos du dépôt ?"
+        id-prefix="photo-dispo"
         :required="true"
-        :options="[
-          { label: 'Oui', value: 'oui', id: 'photo-oui' },
-          { label: 'Non', value: 'non', id: 'photo-non' },
-        ]"
       />
     </div>
 
@@ -73,6 +70,7 @@
 </template>
 
 <script setup lang="ts">
+import BooleanRadioSet from '@/components/shared/BooleanRadioSet.vue'
 import { useConstatationStore } from '@/stores/constatation'
 import { TypeDepotOptions, VolumeOptions } from '@/types/constatation'
 import { DsfrCheckboxSet, DsfrInputGroup, DsfrRadioButtonSet } from '@gouvminint/vue-dsfr'
@@ -80,10 +78,5 @@ import { computed } from 'vue'
 
 const store = useConstatationStore()
 
-const photoDispoStr = computed({
-  get: () => (store.formData.photoDispo ? 'oui' : 'non'),
-  set: (val: string) => {
-    store.formData.photoDispo = val === 'oui'
-  },
-})
+
 </script>
