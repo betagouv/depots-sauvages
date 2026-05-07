@@ -6,18 +6,18 @@
 
     <div class="fr-fieldset__element">
       <DsfrSelect
-        v-model="store.formData.constatantFonction"
+        v-model="store.formData.constatantRole"
         :required="true"
         label="Au sein de la collectivité, qui est en charge de la constatation de ce dépôt sauvage ?"
         :options="ConstatantOptions"
-        :error-message="store.errors.constatantFonction"
+        :error-message="store.errors.constatantRole"
       />
     </div>
 
     <div
       v-if="
         ['agent communautaire', 'conseiller communautaire'].includes(
-          store.formData.constatantFonction
+          store.formData.constatantRole
         )
       "
       class="fr-fieldset__element"
@@ -34,7 +34,7 @@
 
     <div
       v-if="
-        ['adjoint au maire', 'conseiller municipal'].includes(store.formData.constatantFonction)
+        ['adjoint au maire', 'conseiller municipal'].includes(store.formData.constatantRole)
       "
       class="fr-fieldset__element"
     >
@@ -47,21 +47,21 @@
       </DsfrAlert>
     </div>
 
-    <div v-if="store.formData.constatantFonction === 'president ECPI'" class="fr-fieldset__element">
+    <div v-if="store.formData.constatantRole === 'president ECPI'" class="fr-fieldset__element">
       <DsfrAlert
         type="warning"
         title="Vérifiez que la personne constatant le dépôt sauvage est bien habilitée"
       >
         Le président de l'EPCI peut établir un rapport de constatation seulement en cas de transfert
-        de compétence du maire – article L 5211-9-2 du CGCT.
+        de compétence du maire – article L 2122-9-2 du CGCT.
       </DsfrAlert>
     </div>
 
-    <div v-if="store.formData.constatantFonction === 'autre'" class="fr-fieldset__element">
+    <div v-if="store.formData.constatantRole === 'autre'" class="fr-fieldset__element">
       <DsfrInputGroup
-        v-model="store.formData.constatantFonctionAutre"
+        v-model="store.formData.constatantRoleAutre"
         label="Saisir votre option"
-        :error-message="store.errors.constatantFonctionAutre"
+        :error-message="store.errors.constatantRoleAutre"
       />
       <DsfrAlert
         type="warning"
