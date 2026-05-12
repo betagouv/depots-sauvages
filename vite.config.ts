@@ -11,6 +11,9 @@ export default defineConfig(({ mode }) => {
         '@': path.resolve(__dirname, 'frontend'),
       },
     },
+    define: {
+      global: 'window',
+    },
     server: {
       allowedHosts: ['localhost', '.local', '.protect-envi.beta.gouv.fr'],
       fs: {

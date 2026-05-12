@@ -45,7 +45,7 @@
 
     <div class="fr-fieldset__element">
       <DsfrRadioButtonSet
-        v-model="store.formData.isTest"
+        v-model="store.formData.ceciEstUnTest"
         legend="Concernant la démarche que vous venez de remplir :"
         hint="Le dispositif Protect'Envi étant en expérimentation merci de nous préciser s'il s'agit d'un cas réel ou simplement d'un test."
         :required="true"

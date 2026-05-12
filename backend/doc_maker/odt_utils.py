@@ -22,6 +22,7 @@ def prepare_context(instance):
     context.pop("lettre_info", None)
     context.pop("lettre_info_generated_at", None)
     context["prejudice_montant_calcule"] = instance.get_prejudice_montant_calcule()
+    context["souhaite_porter_plainte"] = instance.souhaite_porter_plainte
     today = timezone.now()
     context["date_courante"] = today.strftime("%-d %B %Y")
     context["annee_courante"] = today.year

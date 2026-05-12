@@ -8,6 +8,16 @@ class SuiviProcedure(TimeStampedModel):
         on_delete=models.CASCADE,
         related_name="suivi_procedure",
         verbose_name="Signalement lié",
+        null=True,
+        blank=True,
+    )
+    constatation = models.OneToOneField(
+        "constatations.Constatation",
+        on_delete=models.CASCADE,
+        related_name="suivi_procedure",
+        verbose_name="Constatation liée",
+        null=True,
+        blank=True,
     )
     etape_en_cours = models.PositiveSmallIntegerField(default=1, verbose_name="Étape active")
     # Étape 1 : Pièces de procédure

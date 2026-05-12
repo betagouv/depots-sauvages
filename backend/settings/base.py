@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     "backend.dn",
     "backend.dn_signalements",
     "backend.procedures",
+    "backend.constatations",
 ]
 
 MIDDLEWARE = [

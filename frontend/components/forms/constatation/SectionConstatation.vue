@@ -82,7 +82,7 @@
 
     <div class="fr-fieldset__element">
       <DsfrRadioButtonSet
-        v-model="store.formData.constatantIsSessionUser"
+        v-model="store.formData.constatantEstUtilisateurConnecte"
         legend="La personne qui remplit ce formulaire est-elle la personne en charge de la constatation du dépôt sauvage ?"
         :options="[
           { label: 'Oui', value: true },
@@ -93,7 +93,7 @@
       />
     </div>
 
-    <template v-if="!store.formData.constatantIsSessionUser">
+    <template v-if="!store.formData.constatantEstUtilisateurConnecte">
       <div class="fr-fieldset__element">
         <DsfrRadioButtonSet
           v-model="store.formData.constatantCivilite"

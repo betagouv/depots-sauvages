@@ -38,13 +38,13 @@
           legend="S'agit-il d'une entreprise ou d'un particulier ?"
           :required="true"
           :options="[
-            { label: 'Entreprise', value: 'Entreprise', id: 'statut-entreprise' },
-            { label: 'Particulier', value: 'Particulier', id: 'statut-particulier' },
+            { label: 'Entreprise', value: 'entreprise', id: 'statut-entreprise' },
+            { label: 'Particulier', value: 'particulier', id: 'statut-particulier' },
           ]"
         />
       </div>
 
-      <template v-if="store.formData.statutAuteur === 'Entreprise'">
+      <template v-if="store.formData.statutAuteur === 'entreprise'">
         <div class="fr-fieldset__element">
           <DsfrCallout
             title="Avec un auteur présumé identifié, vous pouvez débuter une procédure administrative."
@@ -106,7 +106,7 @@
         </div>
       </template>
 
-      <template v-if="store.formData.statutAuteur === 'Particulier'">
+      <template v-if="store.formData.statutAuteur === 'particulier'">
         <div class="fr-fieldset__element">
           <DsfrCheckboxSet
             v-model="store.formData.informationsAuteur"
