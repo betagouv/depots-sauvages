@@ -123,6 +123,18 @@ if (matomoEnabled) {
       trackInitialViewOnce: true,
     })
     console.log('[Matomo] Initialisé avec succès', { host: matomoHost, siteId: matomoSiteId })
+
+    // Test navigation hook
+    router.afterEach((to) => {
+      console.log('[Matomo] Navigation détectée vers :', to.fullPath)
+    })
+
+    // Check if script is actually loaded after a short delay
+    setTimeout(() => {
+      if (!window.Matomo && !window.Piwik) {
+        console.warn('[Matomo] Le script semble ne pas s\'être chargé après 5s. Vérifiez les bloqueurs de pub ou la CSP.')
+      }
+    }, 5000)
   } else {
     console.warn('[Matomo] Activé mais hôte ou ID de site manquant', { host: matomoHost, siteId: matomoSiteId })
   }
