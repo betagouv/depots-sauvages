@@ -99,50 +99,36 @@ app.use(router)
 app.use(pinia)
 app.use(VueDsfr)
 
-// Diagnostic logs for environment variables (helpful for Scalingo review app)
-console.log('--- [Debug Env] ---')
-console.log('VITE_MATOMO_ENABLED:', import.meta.env.VITE_MATOMO_ENABLED, '(' + typeof import.meta.env.VITE_MATOMO_ENABLED + ')')
-console.log('VITE_CRISP_ENABLED:', import.meta.env.VITE_CRISP_ENABLED, '(' + typeof import.meta.env.VITE_CRISP_ENABLED + ')')
-console.log('VITE_LOGIN_REQUIRED:', import.meta.env.VITE_LOGIN_REQUIRED, '(' + typeof import.meta.env.VITE_LOGIN_REQUIRED + ')')
-console.log('-------------------')
-
-// Matomo initialization with robust environment variable handling
+// Matomo initialization (Manual approach for better compatibility with Vite 8/Vue 3.5)
 const matomoEnabled = import.meta.env.VITE_MATOMO_ENABLED === 'true' || import.meta.env.VITE_MATOMO_ENABLED === true
 const matomoHost = import.meta.env.VITE_MATOMO_HOST
-const matomoSiteId = import.meta.env.VITE_MATOMO_SITE_ID
+const matomoSiteId = parseInt(import.meta.env.VITE_MATOMO_SITE_ID)
 
-if (matomoEnabled) {
-  if (matomoHost && matomoSiteId) {
-    app.use(VueMatomo, {
-      host: matomoHost.endsWith('/') ? matomoHost.slice(0, -1) : matomoHost,
-      siteId: parseInt(matomoSiteId),
-      router: router,
-      disableCookies: true,
-      requireConsent: false,
-      trackInitialView: true,
-      trackInitialViewOnce: true,
-    })
-    console.log('[Matomo] Initialisé avec succès', { host: matomoHost, siteId: matomoSiteId })
+if (matomoEnabled && matomoHost && matomoSiteId) {
+  window._paq = window._paq || []
+  window._paq.push(['setTrackerUrl', `${matomoHost.endsWith('/') ? matomoHost : matomoHost + '/'}matomo.php`])
+  window._paq.push(['setSiteId', matomoSiteId])
+  window._paq.push(['disableCookies'])
+  window._paq.push(['trackPageView'])
+  window._paq.push(['enableLinkTracking'])
 
-    // Test navigation hook
-    router.afterEach((to) => {
-      console.log('[Matomo] Navigation détectée vers :', to.fullPath)
-      if (window._paq) {
-        console.log('[Matomo] État de _paq :', window._paq.length, 'commandes en attente')
-      }
-    })
+  const script = document.createElement('script')
+  script.async = true
+  script.src = `${matomoHost.endsWith('/') ? matomoHost : matomoHost + '/'}matomo.js`
+  script.onerror = () => console.error('[Matomo] Erreur fatale lors du chargement du script')
+  script.onload = () => console.log('[Matomo] Script chargé et actif')
+  document.head.appendChild(script)
 
-    // Check if script is actually loaded after a short delay
-    setTimeout(() => {
-      if (!window.Matomo && !window.Piwik) {
-        console.warn('[Matomo] Le script semble ne pas s\'être chargé après 5s. Vérifiez les bloqueurs de pub ou la CSP.')
-      }
-    }, 5000)
-  } else {
-    console.warn('[Matomo] Activé mais hôte ou ID de site manquant', { host: matomoHost, siteId: matomoSiteId })
-  }
-} else {
-  console.log('[Matomo] Désactivé via VITE_MATOMO_ENABLED')
+  // Link to router for page tracking
+  router.afterEach((to) => {
+    window._paq.push(['setCustomUrl', window.location.origin + to.fullPath])
+    window._paq.push(['setDocumentTitle', to.meta.title || document.title])
+    window._paq.push(['trackPageView'])
+  })
+  
+  console.log('[Matomo] Initialisation manuelle lancée', { host: matomoHost, siteId: matomoSiteId })
+} else if (matomoEnabled) {
+  console.warn('[Matomo] Activé mais configuration incomplète', { matomoHost, matomoSiteId })
 }
 
 if (import.meta.env.VITE_CRISP_ENABLED === 'true' && import.meta.env.VITE_CRISP_WEBSITE_ID) {
