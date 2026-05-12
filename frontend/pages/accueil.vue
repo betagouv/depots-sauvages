@@ -38,13 +38,16 @@
             </li>
           </ul>
           <div>
-            <a
-              :href="demarcheNumeriqueUrl"
+            <router-link
+              to="/constatation"
               class="fr-btn fr-btn--lg"
+              title="Débuter une procédure administrative"
               target="_blank"
               rel="noopener noreferrer"
               title="Lancer une procédure - nouvelle fenêtre"
             >
+              Débuter une procédure administrative
+            </router-link>
               Lancer une procédure
             </a>
             <p class="fr-text--sm fr-mt-2w fr-mb-0 fr-hint-text">
@@ -190,8 +193,8 @@
 
 <script setup lang="ts">
 import TallyPopupButton from '@/components/shared/TallyPopupButton.vue'
-import { DsfrPicture } from '@gouvminint/vue-dsfr'
 import { useTallyRoutes } from '@/composables/useTally'
+import { DsfrPicture } from '@gouvminint/vue-dsfr'
 
 const demarcheNumeriqueUrl = import.meta.env.VITE_DN_URL
 

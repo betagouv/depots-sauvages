@@ -35,6 +35,7 @@ export const API_URLS = {
   syncDossiers: `${API_URL}/dossiers/sync/`,
   bypassAuthConfig: `${API_URL}/bypass-auth/config/`,
   bypassAuthLogin: `${API_URL}/bypass-auth/login/`,
+  constatations: `${API_URL}/constatations/`,
 }
 
 // API functions

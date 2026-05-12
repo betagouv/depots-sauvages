@@ -118,37 +118,28 @@
         </div>
 
         <div
-          v-if="hasInfo('Nom et prénom') && hasInfo('Adresse postale')"
+          v-if="hasInfo('Plaque d\'immatriculation') || hasInfo('Aucune')"
           class="fr-fieldset__element"
         >
-          <DsfrCallout
-            title="Avec le nom/prénom et l'adresse postale vous disposez de l'identité complète"
-          >
-            <p>
-              Dans le cas où vous avez bien le nom/prénom ET l'adresse postale vous disposez de
-              l'identité complète nécessaire à la procédure administrative.
-            </p>
-          </DsfrCallout>
-        </div>
-
-        <div
-          v-else-if="hasInfo('Nom et prénom') && !hasInfo('Adresse postale')"
-          class="fr-fieldset__element"
-        >
-          <DsfrCallout title="Vous avez le nom et le prénom mais vous n'avez pas l'adresse">
-            <p>
+          <div class="fr-callout fr-mb-2w fr-callout--blue-cumulus">
+            <h3 class="fr-h4 fr-callout__title">
               Sans l'identité complète de l'auteur présumé, la procédure administrative ne peut pas
               être initiée.
+            </h3>
+            <p class="fr-callout__text">
+              Vous pouvez cependant déposer plainte en brigade ou commissariat pour initier une
+              procédure judiciaire. En cas d’identification de l'auteur présumé, la communication de
+              l’identité pourra être sollicitée auprès du procureur de la République.
             </p>
-            <p>
-              En tant qu'OPJ, le maire peut demander la communication de l'adresse de l'auteur
-              présumé au procureur de la République.
+            <p class="fr-callout__text">
+              Continuez cette démarche afin de générer un rapport de constatation pour matérialiser
+              les faits et appuyer votre dépôt de plainte.
             </p>
-          </DsfrCallout>
+          </div>
         </div>
 
         <div
-          v-else-if="
+          v-if="
             hasInfo('Plaque d\'immatriculation') &&
             !hasInfo('Nom et prénom') &&
             !hasInfo('Adresse postale')
@@ -161,6 +152,77 @@
             <p>
               La gendarmerie peut communiquer à la police municipale les informations du SIV
               (système d'immatriculation des véhicules).
+            </p>
+          </DsfrCallout>
+        </div>
+
+        <div
+          v-if="hasInfo('Nom et prénom') && !hasInfo('Adresse postale')"
+          class="fr-fieldset__element"
+        >
+          <div class="fr-callout fr-mb-2w fr-callout--blue-cumulus">
+            <h3 class="fr-h4 fr-callout__title">
+              Vous avez le nom et le prénom mais vous n'avez pas l'adresse
+            </h3>
+            <p class="fr-callout__text">
+              Sans l'identité complète de l'auteur présumé, la procédure administrative ne peut pas
+              être initiée.
+            </p>
+            <p class="fr-callout__text">
+              Vous pouvez cependant déposer plainte en brigade ou commissariat pour initier une
+              procédure judiciaire. En cas d’identification de l'auteur présumé, la communication de
+              l’identité pourra être sollicitée auprès du procureur de la République.
+            </p>
+            <p class="fr-callout__text">
+              Continuez cette démarche afin de générer un rapport de constatation pour matérialiser
+              les faits et appuyer votre dépôt de plainte
+            </p>
+            <p class="fr-callout__text">
+              En tant qu’OPJ, le maire peut demander la communication de l’adresse de l'auteur
+              présumé au procureur de la République.
+            </p>
+          </div>
+        </div>
+
+        <div
+          v-if="hasInfo('Nom et prénom') || hasInfo('Adresse postale')"
+          class="fr-fieldset__element"
+        >
+          <DsfrCallout
+            title="Avec un auteur présumé identifié, vous pouvez débuter une procédure administrative."
+          >
+            <p>
+              Le maire ou l'adjoint par délégation, ou le président d'EPCI par transfert de
+              compétence peut engager une <strong>procédure administrative</strong> (article L.541-3
+              du Code de l'environnement).
+            </p>
+            <p>
+              Elle permet de <strong>sanctionner efficacement</strong> les auteurs présumés, avec
+              une <strong>amende pouvant aller jusqu'à 15 000 €</strong>, recouvrée au profit de la
+              mairie.
+            </p>
+            <p>
+              Plus d'informations sur :
+              <a
+                href="https://protect-envi.beta.gouv.fr/comprendre-la-procedure"
+                target="_blank"
+                rel="noopener noreferrer"
+                >https://protect-envi.beta.gouv.fr/comprendre-la-procedure</a
+              >
+            </p>
+          </DsfrCallout>
+        </div>
+
+        <div
+          v-if="hasInfo('Nom et prénom') && hasInfo('Adresse postale')"
+          class="fr-fieldset__element"
+        >
+          <DsfrCallout
+            title="Avec le nom/prénom et l'adresse postale vous disposez de l'identité complète"
+          >
+            <p>
+              Dans le cas où vous avez bien le nom/prénom ET l'adresse postale vous disposez de
+              l'identité complète nécessaire à la procédure administrative.
             </p>
           </DsfrCallout>
         </div>
@@ -215,20 +277,20 @@
         </DsfrCallout>
       </div>
 
-      <div class="fr-callout fr-mb-2w fr-callout--blue-cumulus">
-        <h3 class="fr-callout__title">
-          Sans l'identité complète de l'auteur présumé, la procédure administrative ne peut pas être
-          initiée.
-        </h3>
-        <p class="fr-callout__text">
-          Vous pouvez cependant déposer plainte en brigade ou commissariat pour initier une
-          procédure judiciaire. En cas d’identification de l'auteur présumé, la communication de
-          l’identité pourra être sollicitée auprès du procureur de la République.
-        </p>
-        <p class="fr-callout__text">
-          Continuez cette démarche afin de générer un rapport de constatation pour matérialiser les
-          faits et appuyer votre dépôt de plainte.
-        </p>
+      <div class="fr-fieldset__element">
+        <DsfrCallout
+          title="Sans l'identité complète de l'auteur présumé, la procédure administrative ne peut pas être initiée."
+        >
+          <p>
+            Vous pouvez cependant déposer plainte en brigade ou commissariat pour initier une
+            procédure judiciaire. En cas d’identification de l'auteur présumé, la communication de
+            l’identité pourra être sollicitée auprès du procureur de la République.
+          </p>
+          <p>
+            Continuez cette démarche afin de générer un rapport de constatation pour matérialiser
+            les faits et appuyer votre dépôt de plainte.
+          </p>
+        </DsfrCallout>
       </div>
     </template>
 
@@ -313,7 +375,8 @@ const showPlainteSection = computed(() => {
 
   if (store.formData.statutAuteur === 'Particulier') {
     const info = store.formData.informationsAuteur || []
-    if (info.includes('Aucune') || info.length === 0) return true
+    if (info.length === 0) return false
+    if (info.includes('Aucune')) return true
     // Need Nom et prénom AND Adresse to be "complete"
     return !hasInfo('Nom et prénom') || !hasInfo('Adresse postale')
   }

@@ -8,7 +8,8 @@ export interface Signalement {
   localisationDepot: string
   dateConstat: string
   heureConstat: string
-  auteurSignalement: string
+  auteurSignalementNom: string
+  auteurSignalementPrenom: string
   natureTerrain: string[]
 
   // Step 2
@@ -60,7 +61,8 @@ export const createEmptySignalement = (): Signalement => ({
   localisationDepot: '',
   dateConstat: '',
   heureConstat: '',
-  auteurSignalement: '',
+  auteurSignalementNom: '',
+  auteurSignalementPrenom: '',
   natureTerrain: [],
   volumeDepot: '',
   risqueEcoulement: false,
