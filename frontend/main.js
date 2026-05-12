@@ -5,10 +5,10 @@ import './styles/premium-design.css'
 import VueDsfr from '@gouvminint/vue-dsfr'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
-import VueMatomo from 'vue-matomo'
 import { createRouter, createWebHistory } from 'vue-router'
 import App from './app.vue'
 import { getUserInfo } from './services/api'
+import { initMatomo } from './services/matomo'
 
 const pinia = createPinia()
 
@@ -99,37 +99,7 @@ app.use(router)
 app.use(pinia)
 app.use(VueDsfr)
 
-// Matomo initialization (Manual approach for better compatibility with Vite 8/Vue 3.5)
-const matomoEnabled = import.meta.env.VITE_MATOMO_ENABLED === 'true' || import.meta.env.VITE_MATOMO_ENABLED === true
-const matomoHost = import.meta.env.VITE_MATOMO_HOST
-const matomoSiteId = parseInt(import.meta.env.VITE_MATOMO_SITE_ID)
-
-if (matomoEnabled && matomoHost && matomoSiteId) {
-  window._paq = window._paq || []
-  window._paq.push(['setTrackerUrl', `${matomoHost.endsWith('/') ? matomoHost : matomoHost + '/'}matomo.php`])
-  window._paq.push(['setSiteId', matomoSiteId])
-  window._paq.push(['disableCookies'])
-  window._paq.push(['trackPageView'])
-  window._paq.push(['enableLinkTracking'])
-
-  const script = document.createElement('script')
-  script.async = true
-  script.src = `${matomoHost.endsWith('/') ? matomoHost : matomoHost + '/'}matomo.js`
-  script.onerror = () => console.error('[Matomo] Erreur fatale lors du chargement du script')
-  script.onload = () => console.log('[Matomo] Script chargé et actif')
-  document.head.appendChild(script)
-
-  // Link to router for page tracking
-  router.afterEach((to) => {
-    window._paq.push(['setCustomUrl', window.location.origin + to.fullPath])
-    window._paq.push(['setDocumentTitle', to.meta.title || document.title])
-    window._paq.push(['trackPageView'])
-  })
-  
-  console.log('[Matomo] Initialisation manuelle lancée', { host: matomoHost, siteId: matomoSiteId })
-} else if (matomoEnabled) {
-  console.warn('[Matomo] Activé mais configuration incomplète', { matomoHost, matomoSiteId })
-}
+initMatomo(router)
 
 if (import.meta.env.VITE_CRISP_ENABLED === 'true' && import.meta.env.VITE_CRISP_WEBSITE_ID) {
   window.$crisp = []
