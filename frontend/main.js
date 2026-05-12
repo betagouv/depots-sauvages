@@ -9,6 +9,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import App from './app.vue'
 import { getUserInfo } from './services/api'
 import { initMatomo } from './services/matomo'
+import { initCrisp } from './services/crisp'
 
 const pinia = createPinia()
 
@@ -100,14 +101,6 @@ app.use(pinia)
 app.use(VueDsfr)
 
 initMatomo(router)
-
-if (import.meta.env.VITE_CRISP_ENABLED === 'true' && import.meta.env.VITE_CRISP_WEBSITE_ID) {
-  window.$crisp = []
-  window.CRISP_WEBSITE_ID = import.meta.env.VITE_CRISP_WEBSITE_ID
-  const script = document.createElement('script')
-  script.src = 'https://client.crisp.chat/l.js'
-  script.async = true
-  document.getElementsByTagName('head')[0].appendChild(script)
-}
+initCrisp()
 
 app.mount('#app')
