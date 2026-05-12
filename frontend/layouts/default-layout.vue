@@ -87,6 +87,8 @@ import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { getUserInfo } from '../services/api'
 import { LOGIN_URL, LOGOUT_URL } from '../services/urls'
+import { PROCONNECT_ENABLED } from '../services/config'
+
 interface FooterLink {
   text: string
   href: string
@@ -144,7 +146,7 @@ const goToLogout = (event?: MouseEvent) => {
   window.location.href = LOGOUT_URL
 }
 
-const isProConnectEnabled = import.meta.env.VITE_PROCONNECT_ENABLED === 'true'
+const isProConnectEnabled = PROCONNECT_ENABLED
 
 onMounted(async () => {
   try {

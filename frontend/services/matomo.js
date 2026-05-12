@@ -1,10 +1,10 @@
+import { MATOMO_ENABLED } from './config'
+
 export function initMatomo(router) {
-  const matomoEnabled =
-    import.meta.env.VITE_MATOMO_ENABLED === 'true' || import.meta.env.VITE_MATOMO_ENABLED === true
   const matomoHost = import.meta.env.VITE_MATOMO_HOST
   const matomoSiteId = parseInt(import.meta.env.VITE_MATOMO_SITE_ID)
 
-  if (!matomoEnabled || !matomoHost || !matomoSiteId) {
+  if (!MATOMO_ENABLED || !matomoHost || !matomoSiteId) {
     return
   }
 

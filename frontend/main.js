@@ -10,6 +10,7 @@ import App from './app.vue'
 import { getUserInfo } from './services/api'
 import { initMatomo } from './services/matomo'
 import { initCrisp } from './services/crisp'
+import { LOGIN_REQUIRED } from './services/config'
 
 const pinia = createPinia()
 
@@ -80,8 +81,7 @@ router.beforeEach(async (to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     try {
       const userInfo = await getUserInfo()
-      const loginRequired = import.meta.env.VITE_LOGIN_REQUIRED !== 'false'
-      if (loginRequired && !userInfo.is_authenticated) {
+      if (LOGIN_REQUIRED && !userInfo.is_authenticated) {
         next('/')
         return
       }

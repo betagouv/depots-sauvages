@@ -1,8 +1,9 @@
+import { CRISP_ENABLED } from './config'
+
 export function initCrisp() {
-  const crispEnabled = import.meta.env.VITE_CRISP_ENABLED === 'true' || import.meta.env.VITE_CRISP_ENABLED === true
   const websiteId = import.meta.env.VITE_CRISP_WEBSITE_ID
 
-  if (crispEnabled && websiteId) {
+  if (CRISP_ENABLED && websiteId) {
     window.$crisp = []
     window.CRISP_WEBSITE_ID = websiteId
     const script = document.createElement('script')
