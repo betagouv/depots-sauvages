@@ -72,6 +72,11 @@ const router = createRouter({
       name: 'RDV',
       component: () => import('./pages/rdv.vue'),
     },
+    {
+      path: '/constatation',
+      name: 'Constatation',
+      component: () => import('./pages/constatation.vue'),
+    },
   ],
 })
 

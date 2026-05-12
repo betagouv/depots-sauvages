@@ -12,15 +12,13 @@
             profit de la collectivité.
           </p>
           <div>
-            <a
-              :href="demarcheNumeriqueUrl"
+            <router-link
+              to="/constatation"
               class="fr-btn fr-btn--lg"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Débuter une procédure administrative - nouvelle fenêtre"
+              title="Débuter une procédure administrative"
             >
               Débuter une procédure administrative
-            </a>
+            </router-link>
             <p class="fr-text--sm fr-mt-2w fr-mb-0 fr-hint-text">
               Connexion ProConnect requise.
               <a

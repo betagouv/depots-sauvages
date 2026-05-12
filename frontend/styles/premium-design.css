@@ -77,14 +77,19 @@ textarea.fr-input {
 
 /* Labels and Legends */
 .fr-label {
-  font-weight: 600 !important;
   margin-bottom: 0.4rem !important;
   color: var(--text-label-grey) !important;
   display: block;
 }
 
+/* Main labels and legends should be bold for premium look */
+.fr-input-group > .fr-label,
+.fr-select-group > .fr-label,
 .fr-fieldset__legend {
   font-weight: 600 !important;
+}
+
+.fr-fieldset__legend {
   margin-bottom: 0.75rem !important;
 }
 

@@ -33,6 +33,7 @@ export const API_URLS = {
   userInfo: `${API_URL}/user-info/`,
   userDossiers: `${API_URL}/dossiers/`,
   syncDossiers: `${API_URL}/dossiers/sync/`,
+  constatations: `${API_URL}/constatations/`,
 }
 
 // API functions
