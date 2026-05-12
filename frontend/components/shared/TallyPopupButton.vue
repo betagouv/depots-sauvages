@@ -25,6 +25,9 @@ const props = withDefaults(
     size?: 'sm' | 'md' | 'lg'
     icon?: string
     tallyOptions?: TallyPopupOptions
+    trackingCategory?: string
+    trackingAction?: string
+    trackingName?: string
   }>(),
   {
     variant: 'primary',
@@ -35,6 +38,16 @@ const props = withDefaults(
 )
 
 const openPopup = () => {
+  if (props.trackingCategory && props.trackingAction) {
+    if (typeof window !== 'undefined' && (window as any)._paq) {
+      const eventArgs = ['trackEvent', props.trackingCategory, props.trackingAction]
+      if (props.trackingName) {
+        eventArgs.push(props.trackingName)
+      }
+      ;(window as any)._paq.push(eventArgs)
+    }
+  }
+
   openTallyPopup(props.formId, {
     layout: 'modal', // Force layout modal pour une bonne UX
     ...props.tallyOptions,

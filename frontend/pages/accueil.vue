@@ -67,6 +67,9 @@
                 label="Lancer le simulateur"
                 variant="secondary"
                 class="fr-mt-auto"
+                tracking-category="Accueil"
+                tracking-action="Click"
+                tracking-name="Lancer Simulateur"
               />
             </div>
           </div>
@@ -85,6 +88,9 @@
                 label="Lancer le calculateur"
                 variant="secondary"
                 class="fr-mt-auto"
+                tracking-category="Accueil"
+                tracking-action="Click"
+                tracking-name="Lancer Calculateur"
               />
             </div>
           </div>
