@@ -99,16 +99,35 @@ app.use(router)
 app.use(pinia)
 app.use(VueDsfr)
 
-if (import.meta.env.VITE_MATOMO_ENABLED === 'true') {
-  app.use(VueMatomo, {
-    host: import.meta.env.VITE_MATOMO_HOST,
-    siteId: parseInt(import.meta.env.VITE_MATOMO_SITE_ID),
-    router: router,
-    disableCookies: true,
-    requireConsent: false,
-    trackInitialView: true, // trigger the first pageview
-    trackInitialViewOnce: true, // avoid double counting on hot-reload
-  })
+// Diagnostic logs for environment variables (helpful for Scalingo review app)
+console.log('--- [Debug Env] ---')
+console.log('VITE_MATOMO_ENABLED:', import.meta.env.VITE_MATOMO_ENABLED, '(' + typeof import.meta.env.VITE_MATOMO_ENABLED + ')')
+console.log('VITE_CRISP_ENABLED:', import.meta.env.VITE_CRISP_ENABLED, '(' + typeof import.meta.env.VITE_CRISP_ENABLED + ')')
+console.log('VITE_LOGIN_REQUIRED:', import.meta.env.VITE_LOGIN_REQUIRED, '(' + typeof import.meta.env.VITE_LOGIN_REQUIRED + ')')
+console.log('-------------------')
+
+// Matomo initialization with robust environment variable handling
+const matomoEnabled = import.meta.env.VITE_MATOMO_ENABLED === 'true' || import.meta.env.VITE_MATOMO_ENABLED === true
+const matomoHost = import.meta.env.VITE_MATOMO_HOST
+const matomoSiteId = import.meta.env.VITE_MATOMO_SITE_ID
+
+if (matomoEnabled) {
+  if (matomoHost && matomoSiteId) {
+    app.use(VueMatomo, {
+      host: matomoHost.endsWith('/') ? matomoHost.slice(0, -1) : matomoHost,
+      siteId: parseInt(matomoSiteId),
+      router: router,
+      disableCookies: true,
+      requireConsent: false,
+      trackInitialView: true,
+      trackInitialViewOnce: true,
+    })
+    console.log('[Matomo] Initialisé avec succès', { host: matomoHost, siteId: matomoSiteId })
+  } else {
+    console.warn('[Matomo] Activé mais hôte ou ID de site manquant', { host: matomoHost, siteId: matomoSiteId })
+  }
+} else {
+  console.log('[Matomo] Désactivé via VITE_MATOMO_ENABLED')
 }
 
 if (import.meta.env.VITE_CRISP_ENABLED === 'true' && import.meta.env.VITE_CRISP_WEBSITE_ID) {
