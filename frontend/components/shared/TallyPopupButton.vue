@@ -8,7 +8,7 @@
       size === 'lg' ? 'fr-btn--lg' : '',
       icon ? `${icon} fr-btn--icon-left` : '',
     ]"
-    @click="openPopup"
+    @click="handleClick"
   >
     {{ label }}
   </button>
@@ -16,6 +16,7 @@
 
 <script setup lang="ts">
 import { openTallyPopup, type TallyPopupOptions } from '@/utils/tally'
+import { useRouter } from 'vue-router'
 
 const props = withDefaults(
   defineProps<{
@@ -24,10 +25,8 @@ const props = withDefaults(
     variant?: 'primary' | 'secondary'
     size?: 'sm' | 'md' | 'lg'
     icon?: string
+    to?: string
     tallyOptions?: TallyPopupOptions
-    trackingCategory?: string
-    trackingAction?: string
-    trackingName?: string
   }>(),
   {
     variant: 'primary',
@@ -37,17 +36,17 @@ const props = withDefaults(
   }
 )
 
-const openPopup = () => {
-  if (props.trackingCategory && props.trackingAction) {
-    if (typeof window !== 'undefined' && (window as any)._paq) {
-      const eventArgs = ['trackEvent', props.trackingCategory, props.trackingAction]
-      if (props.trackingName) {
-        eventArgs.push(props.trackingName)
-      }
-      ;(window as any)._paq.push(eventArgs)
-    }
-  }
+const router = useRouter()
 
+const handleClick = () => {
+  if (props.to) {
+    router.push(props.to)
+    return
+  }
+  openPopup()
+}
+
+const openPopup = () => {
   openTallyPopup(props.formId, {
     layout: 'modal', // Force layout modal pour une bonne UX
     ...props.tallyOptions,

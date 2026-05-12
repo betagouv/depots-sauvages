@@ -31,6 +31,16 @@ const router = createRouter({
       component: () => import('./pages/accueil.vue'),
     },
     {
+      path: '/simulateur',
+      name: 'Simulateur',
+      component: () => import('./pages/accueil.vue'),
+    },
+    {
+      path: '/calculateur',
+      name: 'Calculateur',
+      component: () => import('./pages/accueil.vue'),
+    },
+    {
       path: '/comprendre-la-procedure',
       name: 'ComprendreProcedure',
       component: () => import('./pages/comprendre-la-procedure.vue'),
