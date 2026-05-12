@@ -127,6 +127,9 @@ if (matomoEnabled) {
     // Test navigation hook
     router.afterEach((to) => {
       console.log('[Matomo] Navigation détectée vers :', to.fullPath)
+      if (window._paq) {
+        console.log('[Matomo] État de _paq :', window._paq.length, 'commandes en attente')
+      }
     })
 
     // Check if script is actually loaded after a short delay
