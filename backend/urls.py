@@ -17,6 +17,7 @@ from backend.bypass_auth.views import (
     BypassAuthLoginView,
 )
 from backend.procedures.views import SuiviProcedureViewSet
+from backend.constatations.views import ConstatationViewSet
 
 
 
@@ -25,6 +26,7 @@ router = DefaultRouter()
 router.register("user-info", UserInfoViewSet, basename="user-info")
 router.register("dossiers", UserSignalementViewSet, basename="user-dossier")
 router.register("suivi-procedure", SuiviProcedureViewSet, basename="suivi-procedure")
+router.register("constatations", ConstatationViewSet, basename="constatation")
 
 
 # Admin Routes
