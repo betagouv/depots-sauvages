@@ -67,6 +67,7 @@
                 label="Lancer le simulateur"
                 variant="secondary"
                 class="fr-mt-auto"
+                to="/simulateur"
               />
             </div>
           </div>
@@ -85,6 +86,7 @@
                 label="Lancer le calculateur"
                 variant="secondary"
                 class="fr-mt-auto"
+                to="/calculateur"
               />
             </div>
           </div>
@@ -164,6 +166,12 @@
 <script setup lang="ts">
 import TallyPopupButton from '@/components/shared/TallyPopupButton.vue'
 import { DsfrPicture } from '@gouvminint/vue-dsfr'
+import { useTallyRoutes } from '@/composables/useTally'
 
 const demarcheNumeriqueUrl = import.meta.env.VITE_DN_URL
+
+useTallyRoutes({
+  '/simulateur': { formId: 'A7xA8z', options: { layout: 'modal', width: 900 } },
+  '/calculateur': { formId: '9qElYG', options: { layout: 'modal', width: 900 } },
+})
 </script>

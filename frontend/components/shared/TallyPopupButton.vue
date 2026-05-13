@@ -8,7 +8,7 @@
       size === 'lg' ? 'fr-btn--lg' : '',
       icon ? `${icon} fr-btn--icon-left` : '',
     ]"
-    @click="openPopup"
+    @click="handleClick"
   >
     {{ label }}
   </button>
@@ -16,6 +16,7 @@
 
 <script setup lang="ts">
 import { openTallyPopup, type TallyPopupOptions } from '@/utils/tally'
+import { useRouter } from 'vue-router'
 
 const props = withDefaults(
   defineProps<{
@@ -24,6 +25,7 @@ const props = withDefaults(
     variant?: 'primary' | 'secondary'
     size?: 'sm' | 'md' | 'lg'
     icon?: string
+    to?: string
     tallyOptions?: TallyPopupOptions
   }>(),
   {
@@ -33,6 +35,16 @@ const props = withDefaults(
     tallyOptions: () => ({ layout: 'modal', width: 900 }),
   }
 )
+
+const router = useRouter()
+
+const handleClick = () => {
+  if (props.to) {
+    router.push(props.to)
+    return
+  }
+  openPopup()
+}
 
 const openPopup = () => {
   openTallyPopup(props.formId, {

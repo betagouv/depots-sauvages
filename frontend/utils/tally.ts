@@ -39,10 +39,25 @@ declare global {
 }
 
 export const openTallyPopup = (formId: string, options: TallyPopupOptions = {}) => {
-  if (typeof window !== 'undefined' && window.Tally) {
-    window.Tally.openPopup(formId, options)
-  } else {
-    console.warn('Tally script is not loaded yet.')
+  const tryOpen = () => {
+    if (typeof window !== 'undefined' && window.Tally) {
+      window.Tally.openPopup(formId, options)
+      return true
+    }
+    return false
+  }
+
+  if (!tryOpen()) {
+    let attempts = 0
+    const interval = setInterval(() => {
+      attempts++
+      if (tryOpen() || attempts >= 20) {
+        clearInterval(interval)
+        if (attempts >= 20 && !window.Tally) {
+          console.warn('Tally script is not loaded yet after 2 seconds.')
+        }
+      }
+    }, 100)
   }
 }
 

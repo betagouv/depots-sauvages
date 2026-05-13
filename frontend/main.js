@@ -5,10 +5,12 @@ import './styles/premium-design.css'
 import VueDsfr from '@gouvminint/vue-dsfr'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
-import VueMatomo from 'vue-matomo'
 import { createRouter, createWebHistory } from 'vue-router'
 import App from './app.vue'
 import { getUserInfo } from './services/api'
+import { initMatomo } from './services/matomo'
+import { initCrisp } from './services/crisp'
+import { LOGIN_REQUIRED } from './services/config'
 
 const pinia = createPinia()
 
@@ -21,11 +23,28 @@ const router = createRouter({
     if (to.hash) {
       return { el: to.hash }
     }
+
+    // Empêcher le défilement vers le haut lors de la navigation entre l'accueil et les popups Tally
+    const tallyRoutes = ['/', '/simulateur', '/calculateur']
+    if (tallyRoutes.includes(to.path) && tallyRoutes.includes(from.path)) {
+      return false
+    }
+
     return { top: 0 }
   },
   routes: [
     {
       path: '/',
+      component: () => import('./pages/accueil.vue'),
+    },
+    {
+      path: '/simulateur',
+      name: 'Simulateur',
+      component: () => import('./pages/accueil.vue'),
+    },
+    {
+      path: '/calculateur',
+      name: 'Calculateur',
       component: () => import('./pages/accueil.vue'),
     },
     {
@@ -79,8 +98,7 @@ router.beforeEach(async (to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     try {
       const userInfo = await getUserInfo()
-      const loginRequired = import.meta.env.VITE_LOGIN_REQUIRED !== 'false'
-      if (loginRequired && !userInfo.is_authenticated) {
+      if (LOGIN_REQUIRED && !userInfo.is_authenticated) {
         next('/')
         return
       }
@@ -99,25 +117,7 @@ app.use(router)
 app.use(pinia)
 app.use(VueDsfr)
 
-if (import.meta.env.VITE_MATOMO_ENABLED === 'true') {
-  app.use(VueMatomo, {
-    host: import.meta.env.VITE_MATOMO_HOST,
-    siteId: parseInt(import.meta.env.VITE_MATOMO_SITE_ID),
-    router: router,
-    disableCookies: true,
-    requireConsent: false,
-    trackInitialView: true, // trigger the first pageview
-    trackInitialViewOnce: true, // avoid double counting on hot-reload
-  })
-}
-
-if (import.meta.env.VITE_CRISP_ENABLED === 'true' && import.meta.env.VITE_CRISP_WEBSITE_ID) {
-  window.$crisp = []
-  window.CRISP_WEBSITE_ID = import.meta.env.VITE_CRISP_WEBSITE_ID
-  const script = document.createElement('script')
-  script.src = 'https://client.crisp.chat/l.js'
-  script.async = true
-  document.getElementsByTagName('head')[0].appendChild(script)
-}
+initMatomo(router)
+initCrisp()
 
 app.mount('#app')

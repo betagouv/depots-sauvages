@@ -4,10 +4,13 @@ import { describe, expect, it, vi } from 'vitest'
 import { axe } from 'vitest-axe'
 import Accueil from '../pages/accueil.vue'
 
-const replace = vi.fn()
 vi.mock('vue-router', () => ({
+  useRoute: () => ({
+    path: '/',
+  }),
   useRouter: () => ({
-    replace,
+    push: vi.fn(),
+    replace: vi.fn(),
   }),
 }))
 
