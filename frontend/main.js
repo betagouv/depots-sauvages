@@ -23,6 +23,13 @@ const router = createRouter({
     if (to.hash) {
       return { el: to.hash }
     }
+
+    // Empêcher le défilement vers le haut lors de la navigation entre l'accueil et les popups Tally
+    const tallyRoutes = ['/', '/simulateur', '/calculateur']
+    if (tallyRoutes.includes(to.path) && tallyRoutes.includes(from.path)) {
+      return false
+    }
+
     return { top: 0 }
   },
   routes: [
