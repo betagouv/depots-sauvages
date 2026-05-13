@@ -1,19 +1,41 @@
 <template>
   <div>
     <div class="fr-container fr-py-5w">
-      <div class="fr-grid-row fr-grid-row--gutters">
-        <div class="fr-col-12 fr-col-md-6 premium-hero-text">
-          <h1 class="fr-h1 fr-mt-0 fr-mb-3w">
+      <div class="fr-grid-row">
+        <div class="fr-col-12">
+          <h1 class="fr-h1 fr-mt-0 fr-mb-2w">
             Accompagner les collectivités pour mieux lutter contre les dépôts sauvages.
           </h1>
-          <p class="fr-text fr-mb-2w fr-text--bold">
-            Protect'Envi accompagne les collectivités à la mise en oeuvre de la procédure
+        </div>
+      </div>
+      <div class="fr-grid-row fr-grid-row--gutters">
+        <div class="fr-col-12 fr-col-md-6 premium-hero-text">
+          <p class="fr-text fr-mb-1w fr-text--bold">
+            Protect'Envi accompagne les collectivités à la mise en œuvre de la procédure
             administrative qui permet de sanctionner efficacement l'auteur d'un dépôt sauvage.
           </p>
-          <ul class="fr-text--sm fr-mb-4w">
-            <li>Formulaire de procédure prêt à l'emploi</li>
-            <li>Amende jusqu'à 15 000 € recouvrée au profit de la collectivité</li>
-            <li>Service numérique gratuit</li>
+          <ul class="fr-p-0 fr-mt-2w fr-mb-3w" style="list-style: none">
+            <li class="fr-mb-1w fr-display-flex">
+              <span
+                class="fr-icon-checkbox-circle-fill fr-text-default--success fr-mr-1w"
+                aria-hidden="true"
+              ></span>
+              <span>Formulaire de procédure <strong>prêt à l'emploi</strong></span>
+            </li>
+            <li class="fr-mb-1w fr-display-flex">
+              <span
+                class="fr-icon-checkbox-circle-fill fr-text-default--success fr-mr-1w"
+                aria-hidden="true"
+              ></span>
+              <span>Amende jusqu'à <strong>15 000 €</strong> recouvrée au profit de la collectivité</span>
+            </li>
+            <li class="fr-mb-1w fr-display-flex">
+              <span
+                class="fr-icon-checkbox-circle-fill fr-text-default--success fr-mr-1w"
+                aria-hidden="true"
+              ></span>
+              <span>Service numérique <strong>gratuit</strong></span>
+            </li>
           </ul>
           <div>
             <a
@@ -40,6 +62,7 @@
 
         <div class="fr-col-12 fr-col-md-6">
           <DsfrPicture
+            class="premium-rounded-image"
             legend="Dépôt sauvage"
             ratio="16x9"
             size="medium"
@@ -167,8 +190,8 @@
 
 <script setup lang="ts">
 import TallyPopupButton from '@/components/shared/TallyPopupButton.vue'
-import { DsfrPicture } from '@gouvminint/vue-dsfr'
 import { useTallyRoutes } from '@/composables/useTally'
+import { DsfrPicture } from '@gouvminint/vue-dsfr'
 
 const demarcheNumeriqueUrl = import.meta.env.VITE_DN_URL
 
