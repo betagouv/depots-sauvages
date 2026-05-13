@@ -1,8 +1,7 @@
 <template>
   <DsfrRadioButtonSet
     v-model="stringValue"
-    :legend="legend"
-    :required="required"
+    :legend="computedLegend"
     :error-message="errorMessage"
     :inline="inline"
     :options="[
@@ -28,6 +27,8 @@ const props = defineProps<{
 const emit = defineEmits<{
   'update:modelValue': [value: boolean]
 }>()
+
+const computedLegend = computed(() => (props.required ? `${props.legend} *` : props.legend))
 
 const stringValue = computed({
   get: () => {

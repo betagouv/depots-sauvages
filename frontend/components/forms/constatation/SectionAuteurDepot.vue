@@ -1,7 +1,10 @@
 <template>
   <fieldset class="fr-fieldset fr-my-0 fr-mt-4w">
     <legend class="fr-fieldset__legend">
-      <h3 class="fr-h2">4. Identification de l'auteur présumé du dépôt</h3>
+      <h2 class="premium-h2">
+        <span class="premium-badge">4</span>
+        Identification de l'auteur présumé
+      </h2>
     </legend>
 
     <div class="fr-fieldset__element">
@@ -100,6 +103,7 @@
           <DsfrInputGroup
             v-model="store.formData.auteurAdresse"
             :is-textarea="true"
+            :required="true"
             label="Adresse postale complète de l'entreprise étrangère"
             hint="Merci de préciser le pays"
           />
@@ -110,11 +114,14 @@
         <div class="fr-fieldset__element">
           <DsfrCheckboxSet
             v-model="store.formData.informationsAuteur"
-            legend="De quelles informations disposez vous sur l'auteur présumé des faits ?"
-            hint="Vous pouvez sélectionner un ou plusieurs choix."
-            :required="true"
+            :required="false"
             :options="InfoAuteurOptions"
-          />
+          >
+            <template #legend>
+              De quelles informations disposez vous sur l'auteur présumé des faits ? *
+              <span class="fr-hint-text">Vous pouvez sélectionner un ou plusieurs choix.</span>
+            </template>
+          </DsfrCheckboxSet>
         </div>
 
         <div
@@ -253,7 +260,7 @@
         <div v-if="hasInfo('Adresse postale')" class="fr-fieldset__element">
           <AddressAutocomplete
             v-model="store.formData.auteurAdresse"
-            label="Adresse postale de l'auteur présumé"
+            label="Adresse postale de l'auteur présumé *"
           />
         </div>
       </template>
@@ -307,10 +314,14 @@
       <div class="fr-fieldset__element">
         <DsfrCheckboxSet
           v-model="store.formData.indicesDisponibles"
-          legend="Par quels moyens l'auteur présumé peut-il être identifié ?"
-          hint="Vous pouvez sélectionner un ou plusieurs choix."
+          :required="false"
           :options="IndicesOptions"
-        />
+        >
+          <template #legend>
+            Par quels moyens l'auteur présumé peut-il être identifié ? *
+            <span class="fr-hint-text">Vous pouvez sélectionner un ou plusieurs choix.</span>
+          </template>
+        </DsfrCheckboxSet>
       </div>
 
       <div class="fr-fieldset__element">

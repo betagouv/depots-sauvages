@@ -2,9 +2,8 @@
   <div class="fr-container fr-py-6w">
     <h1 class="fr-h1 fr-mb-2w">Création d'une constatation</h1>
 
-    <div class="fr-highlight fr-mb-6w">
-      <p class="fr-text--sm">
-        <strong>Les champs suivis d'un astérisque (*) sont obligatoires.</strong><br />
+    <div class="fr-mb-4w">
+      <p class="fr-text--xs fr-text--mention-grey">
         Votre dossier est enregistré automatiquement après chaque modification. Vous pouvez à tout
         moment fermer la fenêtre et reprendre plus tard là où vous en étiez.
       </p>
@@ -22,9 +21,6 @@
 
       <ConstatationForm />
 
-      <div class="fr-mt-6w fr-mb-4w">
-        <button type="submit" class="fr-btn fr-btn--lg">Enregistrer la constatation</button>
-      </div>
     </form>
   </div>
 </template>

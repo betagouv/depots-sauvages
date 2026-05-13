@@ -1,7 +1,10 @@
 <template>
   <fieldset class="fr-fieldset fr-my-0 fr-mt-4w">
     <legend class="fr-fieldset__legend">
-      <h3 class="fr-h2">3. Description du dépôt</h3>
+      <h2 class="premium-h2">
+        <span class="premium-badge">3</span>
+        Description du dépôt
+      </h2>
     </legend>
 
     <div class="fr-fieldset__element">

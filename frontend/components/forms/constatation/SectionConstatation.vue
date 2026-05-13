@@ -1,7 +1,10 @@
 <template>
   <fieldset class="fr-fieldset fr-my-0 fr-mt-4w">
     <legend class="fr-fieldset__legend">
-      <h3 class="fr-h2">2. Détail de la constatation</h3>
+      <h2 class="premium-h2">
+        <span class="premium-badge">2</span>
+        Détail de la constatation
+      </h2>
     </legend>
 
     <div class="fr-fieldset__element">
@@ -61,6 +64,7 @@
       <DsfrInputGroup
         v-model="store.formData.constatantRoleAutre"
         label="Saisir votre option"
+        :required="true"
         :error-message="store.errors.constatantRoleAutre"
       />
       <DsfrAlert
@@ -125,25 +129,26 @@
       </div>
     </template>
 
-    <div class="fr-fieldset__element">
-      <DsfrInputGroup
-        v-model="store.formData.dateConstat"
-        :required="true"
-        type="date"
-        label="Date de la constatation"
-        hint="Le dépôt ne peut être antérieur au 01/01/2025. Cette date doit être comprise entre le 01/01/2025 et le 31/12/2100."
-        :error-message="store.errors.dateConstat"
-      />
-    </div>
-
-    <div class="fr-fieldset__element">
-      <DsfrInputGroup
-        v-model="store.formData.heureConstat"
-        :required="true"
-        type="time"
-        label="Heure de la constatation"
-        :error-message="store.errors.heureConstat"
-      />
+    <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--bottom fr-fieldset__element">
+      <div class="fr-col-12 fr-col-md-6">
+        <DsfrInputGroup
+          v-model="store.formData.dateConstat"
+          :required="true"
+          type="date"
+          label="Date de la constatation"
+          hint="Le dépôt ne peut être antérieur au 01/01/2025. Cette date doit être comprise entre le 01/01/2025 et le 31/12/2100."
+          :error-message="store.errors.dateConstat"
+        />
+      </div>
+      <div class="fr-col-12 fr-col-md-6">
+        <DsfrInputGroup
+          v-model="store.formData.heureConstat"
+          :required="true"
+          type="time"
+          label="Heure de la constatation"
+          :error-message="store.errors.heureConstat"
+        />
+      </div>
     </div>
   </fieldset>
 </template>
