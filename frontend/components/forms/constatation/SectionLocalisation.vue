@@ -1,7 +1,10 @@
 <template>
   <fieldset class="fr-fieldset fr-my-0">
     <legend class="fr-fieldset__legend">
-      <h3 class="fr-h2">1. Localisation du dépôt</h3>
+      <h2 class="premium-h2">
+        <span class="premium-badge">1</span>
+        Localisation du dépôt
+      </h2>
     </legend>
 
     <div class="fr-fieldset__element">
@@ -23,14 +26,18 @@
         :error-message="store.errors.natureTerrain"
       >
         <template #legend>
-          Nature du terrain
+          Nature du terrain *
           <span class="fr-hint-text">Vous pouvez sélectionner un ou plusieurs choix.</span>
         </template>
       </DsfrCheckboxSet>
     </div>
 
     <div v-if="isTerrainPrive" class="fr-fieldset__element fr-mt-2w">
-      <DsfrCallout title="Dépôt sur terrain privé" class="fr-mb-4w">
+      <DsfrAlert
+        class="fr-mb-4w"
+        title="Dépôt sur terrain privé"
+        type="info"
+      >
         Vous pouvez agir sur un terrain privé en cas d'atteinte à la salubrité publique (pollution
         de toute nature) ou à la sécurité (risque d'incendie).
         <br />
@@ -38,7 +45,7 @@
         permet de prendre des mesures pour prévenir ces atteintes.
         <br />
         Cette spécificité sera mentionnée dans le rapport de constatation.
-      </DsfrCallout>
+      </DsfrAlert>
 
       <DsfrRadioButtonSet
         v-model="store.formData.proprietaireTerrainPrive"
@@ -58,7 +65,7 @@
         ]"
       >
         <template #legend>
-          Concernant le propriétaire du terrain privé où se situe le dépôt
+          Concernant le propriétaire du terrain privé où se situe le dépôt *
           <span class="fr-hint-text">
             Vous avez indiqué que le dépôt sauvage était situé - tout ou partie - sur un terrain
             privé. Merci de préciser la situation du propriétaire.
@@ -66,29 +73,31 @@
         </template>
       </DsfrRadioButtonSet>
 
-      <DsfrCallout
+      <DsfrAlert
         v-if="isProprietaireVictime"
         title="Le propriétaire est victime"
+        type="warning"
         class="fr-mt-2w"
       >
         Dans un premier temps, vous pouvez encourager le propriétaire à déposer plainte au
         commissariat ou en gendarmerie.
         <br />
-        ⚠️ Si le propriétaire refuse ou tarde à nettoyer ou fait preuve de négligence, il peut être
+        Si le propriétaire refuse ou tarde à nettoyer ou fait preuve de négligence, il peut être
         considéré comme détenteur des déchets et devenir responsable au titre de la procédure
         administrative.
-      </DsfrCallout>
+      </DsfrAlert>
 
-      <DsfrCallout
+      <DsfrAlert
         v-if="isProprietaireResponsable"
         title="La responsabilité du propriétaire est engagée"
+        type="warning"
         class="fr-mt-2w"
       >
-        ⚠️ Si le propriétaire refuse ou tarde à nettoyer ou fait preuve de négligence, il peut être
+        Si le propriétaire refuse ou tarde à nettoyer ou fait preuve de négligence, il peut être
         considéré comme détenteur des déchets et en devenir responsable.
         <br />
         La procédure administrative peut être initiée contre lui.
-      </DsfrCallout>
+      </DsfrAlert>
     </div>
   </fieldset>
 </template>
@@ -97,7 +106,7 @@
 import AddressAutocomplete from '@/components/shared/AddressAutocomplete.vue'
 import { useConstatationStore } from '@/stores/constatation'
 import { NatureTerrainOptions } from '@/types/constatation'
-import { DsfrCallout, DsfrRadioButtonSet } from '@gouvminint/vue-dsfr'
+import { DsfrAlert, DsfrRadioButtonSet } from '@gouvminint/vue-dsfr'
 import { computed } from 'vue'
 
 const store = useConstatationStore()
