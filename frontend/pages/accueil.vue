@@ -190,7 +190,6 @@
 
 <script setup lang="ts">
 import TallyPopupButton from '@/components/shared/TallyPopupButton.vue'
-import { useTallyRoutes } from '@/composables/useTally'
 import { DsfrPicture } from '@gouvminint/vue-dsfr'
 import { useTallyRoutes } from '@/composables/useTally'
 

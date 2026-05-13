@@ -45,6 +45,7 @@ describe('Page Mes Procédures', () => {
             template: '<div>{{ title }} {{ description }}</div>',
           },
           DnLoading: true,
+          VIcon: true,
         },
       },
     })
@@ -75,6 +76,7 @@ describe('Page Mes Procédures', () => {
             template: '<div>{{ title }} {{ description }}</div>',
           },
           DnLoading: true,
+          VIcon: true,
         },
       },
     })
@@ -110,6 +112,7 @@ describe('Page Mes Procédures', () => {
             template: '<div>{{ title }} {{ description }}</div>',
           },
           DnLoading: true,
+          VIcon: true,
         },
       },
     })
