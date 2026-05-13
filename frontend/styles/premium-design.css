@@ -307,3 +307,11 @@ textarea.fr-input {
 .premium-text-center {
   text-align: center;
 }
+
+/* Premium Rounded Image */
+.premium-rounded-image img,
+.premium-rounded-image .fr-responsive-img,
+.premium-rounded-image .fr-responsive-vid {
+  border-radius: 12px;
+  overflow: hidden;
+}
