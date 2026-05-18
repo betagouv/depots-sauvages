@@ -11,6 +11,7 @@
       <AddressAutocomplete
         id="address-input"
         label="Adresse du dépôt"
+        :required="true"
         hint="Saisissez une adresse, une voie, un lieu-dit ou une commune. Exemple : 11 rue Réaumur, Paris"
         v-model="store.formData.localisationDepot"
         :error-message="store.errors.localisationDepot"
@@ -19,11 +20,12 @@
     </div>
 
     <div v-else class="fr-fieldset__element">
-      <DsfrInputGroup
-        v-model="store.formData.commune"
+      <CommuneAutocomplete
+        id="commune-input"
+        label="Commune de l'infraction"
         :required="true"
-        label="Commune"
-        placeholder="Exemple : Bordeaux"
+        hint="Saisissez et sélectionnez la commune dans la liste"
+        v-model="store.formData.commune"
         :error-message="store.errors.commune"
         class="fr-mb-2w"
       />
@@ -31,7 +33,7 @@
         v-model="store.formData.localisationDepot"
         :is-textarea="true"
         :required="true"
-        label="Détails de la localisation *"
+        label="Détails de la localisation"
         :error-message="store.errors.localisationDepot"
       />
     </div>
@@ -126,6 +128,7 @@
 
 <script setup lang="ts">
 import AddressAutocomplete from '@/components/shared/AddressAutocomplete.vue'
+import CommuneAutocomplete from '@/components/shared/CommuneAutocomplete.vue'
 import { useConstatationStore } from '@/stores/constatation'
 import { NatureTerrainOptions } from '@/types/constatation'
 import {
