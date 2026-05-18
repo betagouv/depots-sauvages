@@ -10,7 +10,7 @@
     <div v-if="!hasNoExactAddress" class="fr-fieldset__element">
       <AddressAutocomplete
         id="address-input"
-        label="Adresse du dépôt *"
+        label="Adresse du dépôt"
         hint="Saisissez une adresse, une voie, un lieu-dit ou une commune. Exemple : 11 rue Réaumur, Paris"
         v-model="store.formData.localisationDepot"
         :error-message="store.errors.localisationDepot"
@@ -19,6 +19,14 @@
     </div>
 
     <div v-else class="fr-fieldset__element">
+      <DsfrInputGroup
+        v-model="store.formData.commune"
+        :required="true"
+        label="Commune"
+        placeholder="Exemple : Bordeaux"
+        :error-message="store.errors.commune"
+        class="fr-mb-2w"
+      />
       <DsfrInputGroup
         v-model="store.formData.localisationDepot"
         :is-textarea="true"
@@ -51,11 +59,7 @@
     </div>
 
     <div v-if="isTerrainPrive" class="fr-fieldset__element fr-mt-2w">
-      <DsfrAlert
-        class="fr-mb-4w"
-        title="Dépôt sur terrain privé"
-        type="info"
-      >
+      <DsfrAlert class="fr-mb-4w" title="Dépôt sur terrain privé" type="info">
         Vous pouvez agir sur un terrain privé en cas d'atteinte à la salubrité publique (pollution
         de toute nature) ou à la sécurité (risque d'incendie).
         <br />
@@ -124,7 +128,13 @@
 import AddressAutocomplete from '@/components/shared/AddressAutocomplete.vue'
 import { useConstatationStore } from '@/stores/constatation'
 import { NatureTerrainOptions } from '@/types/constatation'
-import { DsfrAlert, DsfrCheckbox, DsfrCheckboxSet, DsfrInputGroup, DsfrRadioButtonSet } from '@gouvminint/vue-dsfr'
+import {
+  DsfrAlert,
+  DsfrCheckbox,
+  DsfrCheckboxSet,
+  DsfrInputGroup,
+  DsfrRadioButtonSet,
+} from '@gouvminint/vue-dsfr'
 import { computed, ref } from 'vue'
 
 const store = useConstatationStore()

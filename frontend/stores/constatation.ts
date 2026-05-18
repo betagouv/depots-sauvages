@@ -68,7 +68,7 @@ export const useConstatationStore = defineStore('constatation', {
       // Localisation
       if (!data.localisationDepot) this.errors.localisationDepot = "L'adresse est obligatoire"
       if (!data.commune)
-        this.errors.commune = 'La commune est obligatoire (sélectionnez une adresse dans la liste)'
+        this.errors.commune = 'La commune est obligatoire'
       if (data.natureTerrain.length === 0)
         this.errors.natureTerrain = 'La nature du terrain est obligatoire'
 
