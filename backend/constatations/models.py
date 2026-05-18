@@ -14,7 +14,7 @@ class Constatation(PrejudiceMixin, TimeStampedModel):
         blank=True,
     )
     commune = models.CharField("commune", max_length=255)
-    localisation_depot = models.CharField("localisation", max_length=255, blank=True)
+    localisation_depot = models.TextField("localisation", blank=True)
     date_constat = models.DateField("date de constatation", null=True, blank=True)
     heure_constat = models.TimeField("heure de constatation", null=True, blank=True)
     constatant_civilite = models.CharField("civilité du constatant", max_length=255, blank=True)
