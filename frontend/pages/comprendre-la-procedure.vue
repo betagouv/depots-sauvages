@@ -38,7 +38,7 @@
 
     <div class="fr-container fr-pb-8w">
       <section class="fr-mb-7w">
-        <h2 class="fr-h3 fr-mb-3w">
+        <h2 id="qui-peut-engager-la-procedure" class="fr-h3 fr-mb-3w">
           <span class="fr-icon-user-fill fr-mr-1w" aria-hidden="true"></span>
           <span>Qui peut engager la procédure&nbsp;?</span>
         </h2>
@@ -80,7 +80,7 @@
             </h3>
             <div class="fr-grid-row fr-grid-row--gutters">
               <div class="fr-col-12 fr-col-md-6">
-                <h4 class="fr-h5 fr-mb-1w">Qui peut constater&nbsp;?</h4>
+                <h4 id="qui-peut-constater" class="fr-h5 fr-mb-1w">Qui peut constater&nbsp;?</h4>
                 <ul class="fr-text fr-pl-2w">
                   <li>Le maire, ses adjoints ou conseillers délégués</li>
                   <li>Les policiers municipaux ou gardes champêtres</li>

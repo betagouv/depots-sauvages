@@ -75,12 +75,7 @@
         Si la personne sélectionnée n'est pas habilitée à réaliser un rapport de constatation, il
         n'aura pas de valeur juridique. Nous vous conseillons de faire constater le dépôt sauvage
         par une personne habilitée. Plus d'information
-        <a
-          href="https://www.ecologie.gouv.fr/lutte-contre-depots-sauvages"
-          target="_blank"
-          rel="noopener noreferrer"
-          >ici</a
-        >.
+        <router-link to="/comprendre-la-procedure#qui-peut-constater">ici</router-link>.
       </DsfrAlert>
     </div>
 
