@@ -7,7 +7,7 @@
       </h2>
     </legend>
 
-    <div class="fr-fieldset__element">
+    <div v-if="!isSaisieLibre" class="fr-fieldset__element">
       <AddressAutocomplete
         id="address-input"
         label="Adresse du dépôt *"
@@ -15,6 +15,24 @@
         v-model="store.formData.localisationDepot"
         :error-message="store.errors.localisationDepot"
         @select="onAddressSelect"
+      />
+    </div>
+
+    <div v-else class="fr-fieldset__element">
+      <DsfrInputGroup
+        v-model="store.formData.localisationDepot"
+        :is-textarea="true"
+        :required="true"
+        label="Détails de la localisation *"
+        :error-message="store.errors.localisationDepot"
+      />
+    </div>
+
+    <div class="fr-fieldset__element fr-mt-2w">
+      <DsfrCheckbox
+        v-model="isSaisieLibre"
+        label="Si vous n'avez pas d'adresse exacte ou que vous ne la trouvez pas dans les suggestions, merci d'indiquer des détails sur la localisation : lieudit, coordonnées GPS, détails sur la localisation, etc."
+        name="saisieLibre"
       />
     </div>
 
@@ -106,10 +124,12 @@
 import AddressAutocomplete from '@/components/shared/AddressAutocomplete.vue'
 import { useConstatationStore } from '@/stores/constatation'
 import { NatureTerrainOptions } from '@/types/constatation'
-import { DsfrAlert, DsfrRadioButtonSet } from '@gouvminint/vue-dsfr'
-import { computed } from 'vue'
+import { DsfrAlert, DsfrCheckbox, DsfrCheckboxSet, DsfrInputGroup, DsfrRadioButtonSet } from '@gouvminint/vue-dsfr'
+import { computed, ref } from 'vue'
 
 const store = useConstatationStore()
+
+const isSaisieLibre = ref(false)
 
 const onAddressSelect = (data: { label: string; city: string }) => {
   store.formData.localisationDepot = data.label
