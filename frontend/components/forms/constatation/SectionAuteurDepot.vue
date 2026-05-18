@@ -83,20 +83,43 @@
           />
         </div>
 
-        <div class="fr-fieldset__element">
+        <div v-if="store.formData.entrepriseFrancaise === false" class="fr-fieldset__element">
           <DsfrInputGroup
             v-model="store.formData.auteurNom"
             :required="true"
             label="Nom de l'entreprise présumée auteur du dépôt"
+            :error-message="store.errors.auteurNom"
           />
         </div>
 
         <div v-if="store.formData.entrepriseFrancaise === true" class="fr-fieldset__element">
           <DsfrInputGroup
             v-model="store.formData.auteurSiret"
-            label="Numéro SIRET de l'entreprise présumée auteur"
-            hint="Pour trouver le numéro SIRET d'une entreprise vous pouvez utiliser https://annuaire-entreprises.data.gouv.fr/. Format attendu : 14 chiffres."
-          />
+            :error-message="store.errors.auteurSiret"
+          >
+            <template #default="{ isValid, isInvalid, descriptionId }">
+              <DsfrInput
+                id="auteur-siret"
+                v-model="store.formData.auteurSiret"
+                :is-valid="isValid"
+                :is-invalid="isInvalid"
+                :description-id="descriptionId"
+              >
+                <template #label>
+                  Numéro SIRET de l'entreprise présumée auteur
+                  <span class="fr-hint-text">
+                    Pour trouver le numéro SIRET d'une entreprise vous pouvez utiliser
+                    <a
+                      href="https://annuaire-entreprises.data.gouv.fr/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      >https://annuaire-entreprises.data.gouv.fr/</a
+                    >. Format attendu : 14 chiffres.
+                  </span>
+                </template>
+              </DsfrInput>
+            </template>
+          </DsfrInputGroup>
         </div>
 
         <div v-if="store.formData.entrepriseFrancaise === false" class="fr-fieldset__element">
@@ -353,6 +376,7 @@ import {
 import {
   DsfrCallout,
   DsfrCheckboxSet,
+  DsfrInput,
   DsfrInputGroup,
   DsfrRadioButtonSet,
 } from '@gouvminint/vue-dsfr'
@@ -394,7 +418,6 @@ const showPlainteSection = computed(() => {
 
   if (store.formData.statutAuteur === 'Entreprise') {
     // For Enterprise, it's considered complete if we have the SIRET (French) or Adresse (Foreign)
-    // and the Nom is mandatory anyway.
     if (store.formData.entrepriseFrancaise === true) {
       return !store.formData.auteurSiret
     }

@@ -114,16 +114,22 @@ export const useConstatationStore = defineStore('constatation', {
         }
 
         if (data.statutAuteur === 'Entreprise') {
-          if (!data.auteurNom) this.errors.auteurNom = "Le nom de l'entreprise est obligatoire"
           if (data.entrepriseFrancaise === null) {
             this.errors.entrepriseFrancaise =
               "Veuillez préciser s'il s'agit d'une entreprise française"
           }
-          if (data.entrepriseFrancaise === true && !data.auteurSiret) {
-            this.errors.auteurSiret = 'Le numéro SIRET est obligatoire pour une entreprise française'
+          if (data.entrepriseFrancaise === true) {
+            if (!data.auteurSiret) {
+              this.errors.auteurSiret = 'Le numéro SIRET est obligatoire pour une entreprise française'
+            }
           }
-          if (data.entrepriseFrancaise === false && !data.auteurAdresse) {
-            this.errors.auteurAdresse = "L'adresse complète de l'entreprise étrangère est obligatoire"
+          if (data.entrepriseFrancaise === false) {
+            if (!data.auteurNom) {
+              this.errors.auteurNom = "Le nom de l'entreprise est obligatoire"
+            }
+            if (!data.auteurAdresse) {
+              this.errors.auteurAdresse = "L'adresse complète de l'entreprise étrangère est obligatoire"
+            }
           }
         }
 
