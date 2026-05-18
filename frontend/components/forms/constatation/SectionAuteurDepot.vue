@@ -306,22 +306,6 @@
           </p>
         </DsfrCallout>
       </div>
-
-      <div class="fr-fieldset__element">
-        <DsfrCallout
-          title="Sans l'identité complète de l'auteur présumé, la procédure administrative ne peut pas être initiée."
-        >
-          <p>
-            Vous pouvez cependant déposer plainte en brigade ou commissariat pour initier une
-            procédure judiciaire. En cas d’identification de l'auteur présumé, la communication de
-            l’identité pourra être sollicitée auprès du procureur de la République.
-          </p>
-          <p>
-            Continuez cette démarche afin de générer un rapport de constatation pour matérialiser
-            les faits et appuyer votre dépôt de plainte.
-          </p>
-        </DsfrCallout>
-      </div>
     </template>
 
     <div v-if="showPlainteSection" class="fr-fieldset__element fr-mt-2w">
