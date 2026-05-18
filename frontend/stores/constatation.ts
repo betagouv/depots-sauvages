@@ -102,7 +102,7 @@ export const useConstatationStore = defineStore('constatation', {
         const hasInfo = (val: string) =>
           data.informationsAuteur && data.informationsAuteur.includes(val as any)
 
-        if (data.statutAuteur === 'Particulier') {
+        if (data.statutAuteur === 'particulier') {
           if (hasInfo('Nom et prénom')) {
             if (!data.auteurNom) this.errors.auteurNom = 'Le nom de famille est obligatoire'
             if (!data.auteurPrenom) this.errors.auteurPrenom = 'Le prénom est obligatoire'
@@ -113,7 +113,7 @@ export const useConstatationStore = defineStore('constatation', {
           }
         }
 
-        if (data.statutAuteur === 'Entreprise') {
+        if (data.statutAuteur === 'entreprise') {
           if (data.entrepriseFrancaise === null) {
             this.errors.entrepriseFrancaise =
               "Veuillez préciser s'il s'agit d'une entreprise française"
@@ -135,23 +135,23 @@ export const useConstatationStore = defineStore('constatation', {
 
         // Plainte validation logic (replicated from SectionAuteurDepot.vue)
         let showPlainte = false
-        if (data.statutAuteur === 'Particulier') {
+        if (data.statutAuteur === 'particulier') {
           const info = data.informationsAuteur || []
-          if (info.includes('Aucune' as any) || info.length === 0) {
-            showPlainte = true
+          if (info.length === 0) {
+            showPlainte = false
+          } else if (info.includes('Nom et prénom' as any) && info.includes('Adresse postale' as any)) {
+            showPlainte = false
           } else {
-            showPlainte = !hasInfo('Nom et prénom') || !hasInfo('Adresse postale')
+            showPlainte = true
           }
-        } else if (data.statutAuteur === 'Entreprise') {
+        } else if (data.statutAuteur === 'entreprise') {
           if (data.entrepriseFrancaise === true) {
             showPlainte = !data.auteurSiret
           } else if (data.entrepriseFrancaise === false) {
             showPlainte = !data.auteurAdresse
           } else {
-            showPlainte = true
+            showPlainte = false
           }
-        } else {
-          showPlainte = true
         }
 
         if (showPlainte && !data.plainteEtat) {
