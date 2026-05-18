@@ -392,15 +392,18 @@ const showPlainteSection = computed(() => {
   if (store.formData.auteurIdentifie === null) return false
   if (store.formData.auteurIdentifie === false) return true
 
-  if (store.formData.statutAuteur === 'Particulier') {
+  if (store.formData.statutAuteur === 'particulier') {
     const info = store.formData.informationsAuteur || []
     if (info.length === 0) return false
-    if (info.includes('Aucune')) return true
-    // Need Nom et prénom AND Adresse to be "complete"
-    return !hasInfo('Nom et prénom') || !hasInfo('Adresse postale')
+
+    // Need both Nom et prénom AND Adresse postale to hide plainte section
+    if (hasInfo('Nom et prénom') && hasInfo('Adresse postale')) {
+      return false
+    }
+    return true
   }
 
-  if (store.formData.statutAuteur === 'Entreprise') {
+  if (store.formData.statutAuteur === 'entreprise') {
     // For Enterprise, it's considered complete if we have the SIRET (French) or Adresse (Foreign)
     if (store.formData.entrepriseFrancaise === true) {
       return !store.formData.auteurSiret
@@ -408,9 +411,9 @@ const showPlainteSection = computed(() => {
     if (store.formData.entrepriseFrancaise === false) {
       return !store.formData.auteurAdresse
     }
-    return true
+    return false
   }
 
-  return true
+  return false
 })
 </script>
