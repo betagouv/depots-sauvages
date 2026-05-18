@@ -11,6 +11,7 @@
       <BooleanRadioSet
         v-model="store.formData.photoDispo"
         legend="Disposez vous de photos du dépôt ?"
+        hint="À la fin de cette démarche, vous pourrez récupérer le rapport de constatation. Vous devrez y insérer vos photos."
         id-prefix="photo-dispo"
         :required="true"
       />
