@@ -7,7 +7,7 @@
       </h2>
     </legend>
 
-    <div v-if="!isSaisieLibre" class="fr-fieldset__element">
+    <div v-if="!hasNoExactAddress" class="fr-fieldset__element">
       <AddressAutocomplete
         id="address-input"
         label="Adresse du dépôt *"
@@ -30,9 +30,9 @@
 
     <div class="fr-fieldset__element fr-mt-2w">
       <DsfrCheckbox
-        v-model="isSaisieLibre"
+        v-model="hasNoExactAddress"
         label="Si vous n'avez pas d'adresse exacte ou que vous ne la trouvez pas dans les suggestions, merci d'indiquer des détails sur la localisation : lieudit, coordonnées GPS, détails sur la localisation, etc."
-        name="saisieLibre"
+        name="hasNoExactAddress"
       />
     </div>
 
@@ -129,7 +129,7 @@ import { computed, ref } from 'vue'
 
 const store = useConstatationStore()
 
-const isSaisieLibre = ref(false)
+const hasNoExactAddress = ref(false)
 
 const onAddressSelect = (data: { label: string; city: string }) => {
   store.formData.localisationDepot = data.label
