@@ -1,6 +1,6 @@
 <template>
   <div class="fr-container fr-py-6w">
-    <h1 class="fr-h1 fr-mb-2w">Création d'une constatation</h1>
+    <h1 class="fr-h1 fr-mb-2w">Constatation d'un dépôt sauvage</h1>
 
     <div class="fr-mb-4w">
       <p class="fr-text--xs fr-text--mention-grey">
@@ -20,7 +20,6 @@
       </DsfrAlert>
 
       <ConstatationForm />
-
     </form>
   </div>
 </template>
