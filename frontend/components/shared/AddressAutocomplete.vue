@@ -51,18 +51,24 @@ const suggestions = ref<any[]>([])
 const selectedIndex = ref(-1)
 
 const onInput = async () => {
-  if (query.value.length < 3) {
+  const trimmedQuery = query.value.trim()
+  if (trimmedQuery.length < 3) {
     suggestions.value = []
     return
   }
 
   try {
-    const response = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(query.value)}&limit=5`)
+    const response = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(trimmedQuery)}&limit=5`)
+    if (!response.ok) {
+      suggestions.value = []
+      return
+    }
     const data = await response.json()
-    suggestions.value = data.features
+    suggestions.value = data.features || []
     selectedIndex.value = -1
   } catch (error) {
     console.error('Error fetching addresses:', error)
+    suggestions.value = []
   }
 }
 
