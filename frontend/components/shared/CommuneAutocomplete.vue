@@ -16,18 +16,19 @@
         @keydown.down.prevent="onArrowDown"
         @keydown.up.prevent="onArrowUp"
         @keydown.enter.prevent="onEnter"
-        placeholder="Rechercher une adresse..."
+        placeholder="Rechercher une commune..."
         autocomplete="off"
         :required="required"
       />
-      <ul v-if="suggestions.length > 0" class="suggestions-list">
+      <ul v-if="suggestions.length > 0" class="suggestions-list" role="listbox">
         <li
           v-for="(suggestion, index) in suggestions"
           :key="suggestion.properties.id"
           :class="{ 'is-selected': index === selectedIndex }"
           @click="selectSuggestion(suggestion)"
+          role="option"
         >
-          {{ suggestion.properties.label }}
+          {{ suggestion.properties.city }} ({{ suggestion.properties.postcode }})
         </li>
       </ul>
     </div>
@@ -63,7 +64,7 @@ const onInput = async () => {
   }
 
   try {
-    const response = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(trimmedQuery)}&limit=5`)
+    const response = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(trimmedQuery)}&type=municipality&limit=5`)
     if (!response.ok) {
       suggestions.value = []
       return
@@ -72,18 +73,17 @@ const onInput = async () => {
     suggestions.value = data.features || []
     selectedIndex.value = -1
   } catch (error) {
-    console.error('Error fetching addresses:', error)
+    console.error('Error fetching communes:', error)
     suggestions.value = []
   }
 }
 
 const selectSuggestion = (suggestion: any) => {
-  const label = suggestion.properties.label
   const city = suggestion.properties.city
-  query.value = label
+  query.value = city
   suggestions.value = []
-  emit('update:modelValue', label)
-  emit('select', { label, city, full: suggestion })
+  emit('update:modelValue', city)
+  emit('select', { city, full: suggestion })
 }
 
 const onArrowDown = () => {
