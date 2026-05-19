@@ -4,10 +4,9 @@
       <div class="icon-container fr-mb-3w">
         <span class="fr-icon-account-circle-line custom-icon-size" aria-hidden="true"></span>
       </div>
-      <h2 class="fr-h2">Consultez vos procédures</h2>
+      <h2 class="fr-h2">{{ title }}</h2>
       <p class="fr-text--lead fr-mb-4w">
-        Pour accéder à la liste de vos dossiers et suivre l'avancement de vos procédures, vous devez
-        être connecté.
+        {{ description }}
       </p>
       <div class="fr-btns-group fr-btns-group--center">
         <DsfrButton @click="goToLogin">
@@ -17,7 +16,13 @@
       </div>
       <p class="fr-text--sm fr-mt-4w fr-mb-0">
         ProConnect est la solution de connexion sécurisée pour les agents de l'État et des
-        collectivités.
+        collectivités. Si vous rencontrez des difficultés,
+        <a
+          href="https://proconnect.crisp.help/fr/article/utiliser-proconnect-au-sein-dune-collectivite-ou-dune-mairie-1mobnb6"
+          target="_blank"
+          rel="noopener"
+          >consultez cette aide en ligne</a
+        >.
       </p>
     </div>
   </div>
@@ -26,8 +31,28 @@
 <script setup lang="ts">
 import { LOGIN_URL } from '@/services/urls'
 
+const props = defineProps({
+  title: {
+    type: String,
+    default: 'Consultez vos procédures',
+  },
+  description: {
+    type: String,
+    default:
+      "Pour accéder à la liste de vos dossiers et suivre l'avancement de vos procédures, vous devez être connecté.",
+  },
+  redirectTo: {
+    type: String,
+    default: '',
+  },
+})
+
 const goToLogin = () => {
-  window.location.href = LOGIN_URL
+  if (props.redirectTo) {
+    window.location.href = `${LOGIN_URL}?next=${encodeURIComponent(props.redirectTo)}`
+  } else {
+    window.location.href = LOGIN_URL
+  }
 }
 </script>
 
