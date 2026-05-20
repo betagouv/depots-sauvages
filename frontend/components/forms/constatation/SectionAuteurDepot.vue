@@ -265,19 +265,21 @@
             :options="CiviliteOptions"
           />
         </div>
-        <div v-if="hasInfo('Nom et prénom')" class="fr-fieldset__row fr-grid-row--gutters">
-          <div class="fr-col-12 fr-col-md-6">
-            <DsfrInputGroup
-              v-model="store.formData.auteurNom"
-              :required="true"
-              label="Nom de famille de l'auteur présumé"
-            />
-          </div>
-          <div class="fr-col-12 fr-col-md-6">
-            <DsfrInputGroup
-              v-model="store.formData.auteurPrenom"
-              label="Prénom de l'auteur présumé"
-            />
+        <div v-if="hasInfo('Nom et prénom')" class="fr-fieldset__element">
+          <div class="fr-grid-row fr-grid-row--gutters">
+            <div class="fr-col-12 fr-col-md-6">
+              <DsfrInputGroup
+                v-model="store.formData.auteurNom"
+                :required="true"
+                label="Nom de famille de l'auteur présumé"
+              />
+            </div>
+            <div class="fr-col-12 fr-col-md-6">
+              <DsfrInputGroup
+                v-model="store.formData.auteurPrenom"
+                label="Prénom de l'auteur présumé"
+              />
+            </div>
           </div>
         </div>
         <div v-if="hasInfo('Adresse postale')" class="fr-fieldset__element">

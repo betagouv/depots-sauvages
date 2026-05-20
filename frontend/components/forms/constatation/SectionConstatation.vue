@@ -19,9 +19,7 @@
 
     <div
       v-if="
-        ['agent communautaire', 'conseiller communautaire'].includes(
-          store.formData.constatantRole
-        )
+        ['agent communautaire', 'conseiller communautaire'].includes(store.formData.constatantRole)
       "
       class="fr-fieldset__element"
     >
@@ -36,9 +34,7 @@
     </div>
 
     <div
-      v-if="
-        ['adjoint au maire', 'conseiller municipal'].includes(store.formData.constatantRole)
-      "
+      v-if="['adjoint au maire', 'conseiller municipal'].includes(store.formData.constatantRole)"
       class="fr-fieldset__element"
     >
       <DsfrAlert
@@ -75,11 +71,15 @@
         Si la personne sélectionnée n'est pas habilitée à réaliser un rapport de constatation, il
         n'aura pas de valeur juridique. Nous vous conseillons de faire constater le dépôt sauvage
         par une personne habilitée. Plus d'information
-        <router-link to="/comprendre-la-procedure#qui-peut-constater">ici</router-link>.
+        <router-link
+          to="/comprendre-la-procedure#qui-peut-constater"
+          target="_blank"
+          rel="noopener noreferrer"
+        >ici</router-link>.
       </DsfrAlert>
     </div>
 
-    <div class="fr-fieldset__element">
+    <div class="fr-fieldset__element fr-mt-4w">
       <DsfrRadioButtonSet
         v-model="store.formData.constatantEstUtilisateurConnecte"
         legend="La personne qui remplit ce formulaire est-elle la personne en charge de la constatation du dépôt sauvage ?"
@@ -104,45 +104,49 @@
         />
       </div>
 
-      <div class="fr-grid-row fr-grid-row--gutters">
-        <div class="fr-col-12 fr-col-md-6">
-          <DsfrInputGroup
-            v-model="store.formData.constatantPrenom"
-            :required="true"
-            label="Prénom"
-            :error-message="store.errors.constatantPrenom"
-          />
-        </div>
-        <div class="fr-col-12 fr-col-md-6">
-          <DsfrInputGroup
-            v-model="store.formData.constatantNom"
-            :required="true"
-            label="Nom"
-            :error-message="store.errors.constatantNom"
-          />
+      <div class="fr-fieldset__element fr-mb-4w">
+        <div class="fr-grid-row fr-grid-row--gutters">
+          <div class="fr-col-12 fr-col-md-6">
+            <DsfrInputGroup
+              v-model="store.formData.constatantPrenom"
+              :required="true"
+              label="Prénom"
+              :error-message="store.errors.constatantPrenom"
+            />
+          </div>
+          <div class="fr-col-12 fr-col-md-6">
+            <DsfrInputGroup
+              v-model="store.formData.constatantNom"
+              :required="true"
+              label="Nom"
+              :error-message="store.errors.constatantNom"
+            />
+          </div>
         </div>
       </div>
     </template>
 
-    <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--bottom fr-fieldset__element">
-      <div class="fr-col-12 fr-col-md-6">
-        <DsfrInputGroup
-          v-model="store.formData.dateConstat"
-          :required="true"
-          type="date"
-          label="Date de la constatation"
-          hint="Le dépôt ne peut être antérieur au 01/01/2025. Cette date doit être comprise entre le 01/01/2025 et le 31/12/2100."
-          :error-message="store.errors.dateConstat"
-        />
-      </div>
-      <div class="fr-col-12 fr-col-md-6">
-        <DsfrInputGroup
-          v-model="store.formData.heureConstat"
-          :required="true"
-          type="time"
-          label="Heure de la constatation"
-          :error-message="store.errors.heureConstat"
-        />
+    <div class="fr-fieldset__element">
+      <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--bottom">
+        <div class="fr-col-12 fr-col-md-6">
+          <DsfrInputGroup
+            v-model="store.formData.dateConstat"
+            :required="true"
+            type="date"
+            label="Date de la constatation"
+            hint="Le dépôt ne peut être antérieur au 01/01/2025. Cette date doit être comprise entre le 01/01/2025 et le 31/12/2100."
+            :error-message="store.errors.dateConstat"
+          />
+        </div>
+        <div class="fr-col-12 fr-col-md-6">
+          <DsfrInputGroup
+            v-model="store.formData.heureConstat"
+            :required="true"
+            type="time"
+            label="Heure de la constatation"
+            :error-message="store.errors.heureConstat"
+          />
+        </div>
       </div>
     </div>
   </fieldset>

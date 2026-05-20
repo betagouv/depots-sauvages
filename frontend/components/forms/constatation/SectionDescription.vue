@@ -17,7 +17,7 @@
       />
     </div>
 
-    <div class="fr-fieldset__element">
+    <div class="fr-fieldset__element fr-mb-4w">
       <DsfrInputGroup
         v-model="store.formData.precisionsDepot"
         :is-textarea="true"
@@ -80,6 +80,4 @@ import { TypeDepotOptions, VolumeOptions } from '@/types/constatation'
 import { DsfrCheckboxSet, DsfrInputGroup, DsfrRadioButtonSet } from '@gouvminint/vue-dsfr'
 
 const store = useConstatationStore()
-
-
 </script>
