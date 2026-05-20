@@ -12,7 +12,7 @@
     </div>
 
     <div v-else>
-      <h1 class="fr-h1 fr-mb-2w">Commencer une constatation</h1>
+      <h1 class="fr-h1 fr-mb-2w">Démarrer une constatation</h1>
 
       <p class="fr-text--lead fr-mb-4w">
         Pour initier une procédure, vous devez matérialiser le dépôt sauvage dans un rapport de
@@ -70,11 +70,7 @@
       </div>
 
       <div v-if="userInfo?.is_authenticated" class="fr-mt-6w" style="text-align: center">
-        <router-link
-          to="/constatation/formulaire"
-          class="fr-btn fr-btn--lg"
-          title="Démarrer la constatation"
-        >
+        <router-link to="/constatation" class="fr-btn fr-btn--lg" title="Démarrer la constatation">
           Démarrer la constatation
         </router-link>
       </div>
@@ -83,7 +79,7 @@
         v-else
         title="Connectez-vous pour démarrer"
         description="Pour initier une procédure et accéder au formulaire de constatation, vous devez vous connecter avec ProConnect."
-        redirectTo="/constatation/formulaire"
+        redirectTo="/constatation"
       />
     </div>
   </div>

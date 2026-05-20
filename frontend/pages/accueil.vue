@@ -39,7 +39,7 @@
           </ul>
           <div>
             <router-link
-              to="/constatation"
+              to="/demarrer-constatation"
               class="fr-btn fr-btn--lg"
               title="Débuter une procédure administrative"
               target="_blank"

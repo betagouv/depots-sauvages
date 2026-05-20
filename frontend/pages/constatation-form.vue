@@ -39,7 +39,7 @@
       v-else
       title="Connectez-vous pour démarrer"
       description="Pour initier une procédure et accéder au formulaire de constatation, vous devez vous connecter avec ProConnect."
-      redirectTo="/constatation/formulaire"
+      redirectTo="/constatation"
     />
   </div>
 </template>
