@@ -341,11 +341,13 @@
       <div class="fr-fieldset__element">
         <DsfrCheckboxSet
           v-model="store.formData.indicesDisponibles"
-          :required="false"
+          :required="true"
           :options="IndicesOptions"
+          :error-message="store.errors.indicesDisponibles"
+          @update:model-value="store.clearFieldError('indicesDisponibles')"
         >
           <template #legend>
-            Par quels moyens l'auteur présumé peut-il être identifié ?
+            Par quels moyens l'auteur présumé peut-il être identifié ? *
             <span class="fr-hint-text">Vous pouvez sélectionner un ou plusieurs choix.</span>
           </template>
         </DsfrCheckboxSet>

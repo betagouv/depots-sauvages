@@ -182,8 +182,14 @@ export const useConstatationStore = defineStore('constatation', {
         if (!data.plainteEtat) this.errors.plainteEtat = 'Le statut de la plainte est obligatoire'
       }
 
-      if (data.auteurIdentifie !== null && !data.precisionsIndices) {
-        this.errors.precisionsIndices = "Veuillez ajouter les éléments d'identification"
+      if (data.auteurIdentifie !== null) {
+        const indicesDisponibles = data.indicesDisponibles || []
+        if (indicesDisponibles.length === 0) {
+          this.errors.indicesDisponibles = "Veuillez cocher au moins une option"
+        }
+        if (!data.precisionsIndices) {
+          this.errors.precisionsIndices = "Veuillez ajouter les éléments d'identification"
+        }
       }
 
       // Prejudice (Conditional)

@@ -10,12 +10,15 @@
     <div class="fr-fieldset__element">
       <fieldset class="fr-fieldset">
         <legend class="fr-fieldset__legend fr-text--bold">
-          Accompagnement personnalisé
+          Accompagnement personnalisé *
         </legend>
         <DsfrCheckbox
           v-model="store.formData.accepteAccompagnement"
           label="Je comprends que je peux être recontacté(e) dans le cadre d'un accompagnement personnalisé."
           name="accepteAccompagnement"
+          :required="true"
+          :error-message="store.errors.accepteAccompagnement"
+          @update:model-value="store.clearFieldError('accepteAccompagnement')"
         />
       </fieldset>
       <div class="fr-ml-4w fr-mt-1w fr-text--sm fr-text--mention-grey">
@@ -53,11 +56,13 @@
     <div class="fr-fieldset__element">
       <DsfrRadioButtonSet
         v-model="store.formData.ceciEstUnTest"
-        :required="false"
+        :required="true"
         :options="[
           { label: 'C\'est un cas réel de dépôt sauvage', value: false, id: 'test-non' },
           { label: 'Il s\'agit d\'un test ou d\'une démonstration', value: true, id: 'test-oui' },
         ]"
+        :error-message="store.errors.ceciEstUnTest"
+        @update:model-value="store.clearFieldError('ceciEstUnTest')"
       >
         <template #legend>
           Concernant la démarche que vous venez de remplir : *
