@@ -141,7 +141,7 @@ import {
   DsfrInputGroup,
   DsfrRadioButtonSet,
 } from '@gouvminint/vue-dsfr'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 const store = useConstatationStore()
 
@@ -161,4 +161,11 @@ const isProprietaireVictime = computed(() => store.formData.proprietaireTerrainP
 const isProprietaireResponsable = computed(
   () => store.formData.proprietaireTerrainPrive === 'Responsable'
 )
+
+watch(isTerrainPrive, (newVal) => {
+  if (!newVal) {
+    store.formData.proprietaireTerrainPrive = ''
+    store.clearFieldError('proprietaireTerrainPrive')
+  }
+})
 </script>

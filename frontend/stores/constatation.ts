@@ -75,9 +75,10 @@ export const useConstatationStore = defineStore('constatation', {
       if (!data.localisationDepot) this.errors.localisationDepot = "L'adresse est obligatoire"
       if (!data.commune)
         this.errors.commune = 'La commune est obligatoire'
-      if (data.natureTerrain.length === 0)
+      const natureTerrain = data.natureTerrain || []
+      if (natureTerrain.length === 0)
         this.errors.natureTerrain = 'La nature du terrain est obligatoire'
-      if (data.natureTerrain.includes('Terrain privé') && !data.proprietaireTerrainPrive) {
+      if (natureTerrain.includes('Terrain privé') && !data.proprietaireTerrainPrive) {
         this.errors.proprietaireTerrainPrive = 'La situation du propriétaire est obligatoire'
       }
 
@@ -101,7 +102,9 @@ export const useConstatationStore = defineStore('constatation', {
 
       // Description
       if (!data.volumeDepot) this.errors.volumeDepot = 'Le volume est obligatoire'
-      if (data.typesDepot.length === 0) this.errors.typesDepot = 'Le type de dépôt est obligatoire'
+      
+      const typesDepot = data.typesDepot || []
+      if (typesDepot.length === 0) this.errors.typesDepot = 'Le type de dépôt est obligatoire'
       if (!data.precisionsDepot) this.errors.precisionsDepot = 'La description du dépôt est obligatoire'
 
       // Responsable (Conditional)
@@ -115,7 +118,8 @@ export const useConstatationStore = defineStore('constatation', {
           data.informationsAuteur && data.informationsAuteur.includes(val as any)
 
         if (data.statutAuteur === 'particulier') {
-          if (data.informationsAuteur.length === 0) {
+          const informationsAuteur = data.informationsAuteur || []
+          if (informationsAuteur.length === 0) {
             this.errors.informationsAuteur = "Veuillez cocher au moins une option"
           }
           if (hasInfo('Nom et prénom')) {

@@ -22,15 +22,6 @@
       </div>
 
       <form @submit.prevent="submitForm">
-        <DsfrAlert
-          v-if="store.hasBeenSubmitted && Object.keys(store.errors).length > 0"
-          type="error"
-          title="Le formulaire contient des erreurs"
-          class="fr-mb-4w"
-        >
-          Veuillez corriger les champs indiquant une erreur avant de soumettre le formulaire.
-        </DsfrAlert>
-
         <ConstatationForm />
       </form>
     </div>
