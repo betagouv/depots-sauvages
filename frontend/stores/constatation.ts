@@ -66,8 +66,9 @@ export const useConstatationStore = defineStore('constatation', {
       }
     },
 
-    validate(): boolean {
+    validate(onlyExisting = false): boolean {
       this.hasBeenSubmitted = true
+      const previousErrors = { ...this.errors }
       this.errors = {}
       const data = this.formData
 
@@ -215,6 +216,16 @@ export const useConstatationStore = defineStore('constatation', {
         this.errors.ceciEstUnTest = "Veuillez préciser s'il s'agit d'un test ou d'un cas réel"
       if (!data.accepteAccompagnement)
         this.errors.accepteAccompagnement = "Vous devez accepter d'être recontacté"
+
+      if (onlyExisting) {
+        const filteredErrors: Record<string, string> = {}
+        for (const key in this.errors) {
+          if (previousErrors[key]) {
+            filteredErrors[key] = this.errors[key]
+          }
+        }
+        this.errors = filteredErrors
+      }
 
       return Object.keys(this.errors).length === 0
     },

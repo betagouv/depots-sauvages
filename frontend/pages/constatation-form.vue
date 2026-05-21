@@ -60,7 +60,7 @@ onMounted(async () => {
 watch(
   () => store.formData,
   () => {
-    if (store.hasBeenSubmitted) store.validate()
+    if (store.hasBeenSubmitted) store.validate(true)
   },
   { deep: true },
 )
