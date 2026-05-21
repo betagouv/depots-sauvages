@@ -14,6 +14,8 @@
         hint="Indiquer NON uniquement s'il n'y a absolument rien qui permettrait d'identifier l'auteur présumé."
         id-prefix="auteur-identifie"
         :required="true"
+        :error-message="store.errors.auteurIdentifie"
+        @update:model-value="store.clearFieldError('auteurIdentifie')"
       />
     </div>
 
@@ -44,6 +46,8 @@
             { label: 'Entreprise', value: 'entreprise', id: 'statut-entreprise' },
             { label: 'Particulier', value: 'particulier', id: 'statut-particulier' },
           ]"
+          :error-message="store.errors.statutAuteur"
+          @update:model-value="store.clearFieldError('statutAuteur')"
         />
       </div>
 
@@ -80,6 +84,8 @@
             legend="S'agit-il d'une entreprise française ?"
             id-prefix="entreprise-francaise"
             :required="true"
+            :error-message="store.errors.entrepriseFrancaise"
+            @update:model-value="store.clearFieldError('entrepriseFrancaise')"
           />
         </div>
 
@@ -137,8 +143,10 @@
         <div class="fr-fieldset__element">
           <DsfrCheckboxSet
             v-model="store.formData.informationsAuteur"
-            :required="false"
+            :required="true"
             :options="InfoAuteurOptions"
+            :error-message="store.errors.informationsAuteur"
+            @update:model-value="store.clearFieldError('informationsAuteur')"
           >
             <template #legend>
               De quelles informations disposez vous sur l'auteur présumé des faits ? *
@@ -263,6 +271,8 @@
             legend="Civilité de l'auteur présumé"
             :required="true"
             :options="CiviliteOptions"
+            :error-message="store.errors.auteurCivilite"
+            @update:model-value="store.clearFieldError('auteurCivilite')"
           />
         </div>
         <div v-if="hasInfo('Nom et prénom')" class="fr-fieldset__element">
@@ -272,20 +282,26 @@
                 v-model="store.formData.auteurNom"
                 :required="true"
                 label="Nom de famille de l'auteur présumé"
+                :error-message="store.errors.auteurNom"
               />
             </div>
             <div class="fr-col-12 fr-col-md-6">
               <DsfrInputGroup
                 v-model="store.formData.auteurPrenom"
+                :required="true"
                 label="Prénom de l'auteur présumé"
+                :error-message="store.errors.auteurPrenom"
               />
             </div>
           </div>
         </div>
         <div v-if="hasInfo('Adresse postale')" class="fr-fieldset__element">
           <AddressAutocomplete
+            id="auteur-adresse"
             v-model="store.formData.auteurAdresse"
-            label="Adresse postale de l'auteur présumé *"
+            label="Adresse postale de l'auteur présumé"
+            :required="true"
+            :error-message="store.errors.auteurAdresse"
           />
         </div>
       </template>
@@ -316,6 +332,8 @@
         legend="Un dépôt de plainte est indispensable pour espérer obtenir une identification de l'auteur présumé :"
         :required="true"
         :options="PlainteOptions"
+        :error-message="store.errors.plainteEtat"
+        @update:model-value="store.clearFieldError('plainteEtat')"
       />
     </div>
 
@@ -327,7 +345,7 @@
           :options="IndicesOptions"
         >
           <template #legend>
-            Par quels moyens l'auteur présumé peut-il être identifié ? *
+            Par quels moyens l'auteur présumé peut-il être identifié ?
             <span class="fr-hint-text">Vous pouvez sélectionner un ou plusieurs choix.</span>
           </template>
         </DsfrCheckboxSet>
@@ -339,6 +357,7 @@
           :is-textarea="true"
           :required="true"
           label="Ajoutez les éléments qui permettraient d'identifier l'auteur présumé"
+          :error-message="store.errors.precisionsIndices"
           hint='Exemple : 
   "Nous constatons la présence des colis et des factures qui ont été retrouvés dans le dépôts sur lesquels est indiqué l’identité d’une personne"
   "Un voisin témoin de la scène a pu relever la plaque d’immatriculation du véhicule"

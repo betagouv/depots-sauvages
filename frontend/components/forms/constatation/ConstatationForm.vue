@@ -44,8 +44,7 @@
         <div class="fr-grid-row fr-grid-row--center fr-mt-6w">
           <DsfrButton
             label="Enregistrer la constatation"
-            :loading="store.loading"
-            @click="store.submit"
+            type="submit"
           />
         </div>
       </div>

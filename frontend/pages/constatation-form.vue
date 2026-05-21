@@ -23,7 +23,7 @@
 
       <form @submit.prevent="submitForm">
         <DsfrAlert
-          v-if="Object.keys(store.errors).length > 0"
+          v-if="store.hasBeenSubmitted && Object.keys(store.errors).length > 0"
           type="error"
           title="Le formulaire contient des erreurs"
           class="fr-mb-4w"
@@ -46,15 +46,13 @@
 
 <script setup lang="ts">
 import { DsfrAlert } from '@gouvminint/vue-dsfr'
-import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { nextTick, onMounted, ref, watch } from 'vue'
 import ConstatationForm from '../components/forms/constatation/ConstatationForm.vue'
 import LoginInvitation from '../components/shared/LoginInvitation.vue'
 import { getUserInfo, type UserInfo } from '../services/api'
 import { useConstatationStore } from '../stores/constatation'
 
 const store = useConstatationStore()
-const router = useRouter()
 const userInfo = ref<UserInfo | null>(null)
 const showLoading = ref(true)
 
@@ -68,9 +66,25 @@ onMounted(async () => {
   }
 })
 
+watch(
+  () => store.formData,
+  () => {
+    if (store.hasBeenSubmitted) store.validate()
+  },
+  { deep: true },
+)
+
+const scrollToFirstError = async () => {
+  await nextTick()
+  const firstError = document.querySelector<HTMLElement>(
+    '.fr-fieldset--error, .fr-input-group--error, .fr-select-group--error, .fr-alert--error',
+  )
+  firstError?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+}
+
 const submitForm = async () => {
   if (!store.validate()) {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    scrollToFirstError()
     return
   }
 

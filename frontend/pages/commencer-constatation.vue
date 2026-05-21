@@ -23,6 +23,7 @@
         <p class="fr-mb-0">
           Avant de démarrer votre constatation, vous pouvez vérifier votre éligibilité à la
           procédure administrative.
+          <br />
           <strong>
             <a href="#" @click.prevent="openSimulator">
               Je vérifie mon éligibilité grâce au simulateur

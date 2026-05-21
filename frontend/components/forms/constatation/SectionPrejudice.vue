@@ -36,6 +36,7 @@
         hint="Exemple : les frais engagés par la mairie; prestation d'une entreprise de nettoyage, coût en déchetterie, emploi de personnels et matériels municipaux, etc."
         id-prefix="prejudice-connu"
         :required="true"
+        :error-message="store.errors.prejudiceMontantConnu"
       />
     </div>
 
@@ -46,6 +47,7 @@
           type="number"
           :required="true"
           label="Montant du préjudice (en euros)"
+          :error-message="store.errors.prejudiceMontant"
           hint="Format attendu : De 1 à 3 décimales après le point. Exemple: 3.141. Ce nombre doit être positif. Ce nombre doit être compris entre 0 et 1000000."
         />
       </div>
@@ -78,6 +80,7 @@
           type="number"
           :required="true"
           label="Nombre de personnes mobilisées"
+          :error-message="store.errors.prejudiceNombrePersonnes"
           hint="Ce nombre doit être positif. Ce nombre doit être compris entre 0 et 100. élu, agents techniques"
         />
       </div>
@@ -88,6 +91,7 @@
           type="number"
           :required="true"
           label="Nombre d'heures travaillées"
+          :error-message="store.errors.prejudiceNombreHeures"
           hint="Ce nombre doit être positif. Ce nombre doit être compris entre 0 et 1000. Temps pour retirer le dépôt ou pour gérer son traitement"
         />
       </div>
@@ -98,6 +102,7 @@
           type="number"
           :required="true"
           label="Nombre de véhicules utilisés"
+          :error-message="store.errors.prejudiceNombreVehicules"
           hint="Ce nombre doit être positif. Ce nombre doit être compris entre 0 et 100."
         />
       </div>
@@ -108,6 +113,7 @@
           type="number"
           :required="true"
           label="Kilométrage estimé"
+          :error-message="store.errors.prejudiceKilometrage"
           hint="Ce nombre doit être positif. Ce nombre doit être compris entre 0 et 1000. pour retirer le dépôt et/ou pour aller en déchetterie"
         />
       </div>
@@ -118,6 +124,7 @@
           type="number"
           :required="true"
           label="Autres coûts (en euros)"
+          :error-message="store.errors.prejudiceAutresCouts"
           hint="Format attendu : De 1 à 3 décimales après le point. Exemple: 3.141. Ce nombre doit être positif. Ce nombre doit être compris entre 0 et 100000. Mise en décharge, forfait enlèvement, traitement spécifique, achat de matériel, location de matériel"
         />
       </div>

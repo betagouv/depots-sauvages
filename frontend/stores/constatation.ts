@@ -8,6 +8,7 @@ export const useConstatationStore = defineStore('constatation', {
     currentId: null as number | null,
     errors: {} as Record<string, string>,
     formData: createEmptyConstatation(),
+    hasBeenSubmitted: false,
   }),
 
   actions: {
@@ -15,6 +16,11 @@ export const useConstatationStore = defineStore('constatation', {
       this.currentId = null
       this.formData = createEmptyConstatation()
       this.errors = {}
+      this.hasBeenSubmitted = false
+    },
+
+    clearFieldError(field: string) {
+      delete this.errors[field]
     },
 
     updateBooleanField(field: keyof Constatation, value: string) {
@@ -30,7 +36,6 @@ export const useConstatationStore = defineStore('constatation', {
       }
 
       const dataToSend = toApiFormat(data)
-      console.log('Sending data to API:', dataToSend)
 
       if (this.currentId) {
         return await updateResource(`${API_URLS.constatations}${this.currentId}/`, dataToSend)
@@ -62,6 +67,7 @@ export const useConstatationStore = defineStore('constatation', {
     },
 
     validate(): boolean {
+      this.hasBeenSubmitted = true
       this.errors = {}
       const data = this.formData
 
@@ -71,6 +77,9 @@ export const useConstatationStore = defineStore('constatation', {
         this.errors.commune = 'La commune est obligatoire'
       if (data.natureTerrain.length === 0)
         this.errors.natureTerrain = 'La nature du terrain est obligatoire'
+      if (data.natureTerrain.includes('Terrain privé') && !data.proprietaireTerrainPrive) {
+        this.errors.proprietaireTerrainPrive = 'La situation du propriétaire est obligatoire'
+      }
 
       // Constatation
       if (!data.constatantRole)
@@ -93,9 +102,12 @@ export const useConstatationStore = defineStore('constatation', {
       // Description
       if (!data.volumeDepot) this.errors.volumeDepot = 'Le volume est obligatoire'
       if (data.typesDepot.length === 0) this.errors.typesDepot = 'Le type de dépôt est obligatoire'
+      if (!data.precisionsDepot) this.errors.precisionsDepot = 'La description du dépôt est obligatoire'
 
       // Responsable (Conditional)
-      if (data.auteurIdentifie) {
+      if (data.auteurIdentifie === null) {
+        this.errors.auteurIdentifie = "Veuillez préciser si l'auteur présumé est identifié"
+      } else if (data.auteurIdentifie === true) {
         if (!data.statutAuteur)
           this.errors.statutAuteur = "Le statut de l'auteur présumé est obligatoire"
 
@@ -103,6 +115,9 @@ export const useConstatationStore = defineStore('constatation', {
           data.informationsAuteur && data.informationsAuteur.includes(val as any)
 
         if (data.statutAuteur === 'particulier') {
+          if (data.informationsAuteur.length === 0) {
+            this.errors.informationsAuteur = "Veuillez cocher au moins une option"
+          }
           if (hasInfo('Nom et prénom')) {
             if (!data.auteurNom) this.errors.auteurNom = 'Le nom de famille est obligatoire'
             if (!data.auteurPrenom) this.errors.auteurPrenom = 'Le prénom est obligatoire'
@@ -157,14 +172,38 @@ export const useConstatationStore = defineStore('constatation', {
         if (showPlainte && !data.plainteEtat) {
           this.errors.plainteEtat = 'Le statut de la plainte est obligatoire'
         }
-      } else {
+      } else if (data.auteurIdentifie === false) {
         // Author not identified at all
         if (!data.plainteEtat) this.errors.plainteEtat = 'Le statut de la plainte est obligatoire'
       }
 
+      if (data.auteurIdentifie !== null && !data.precisionsIndices) {
+        this.errors.precisionsIndices = "Veuillez ajouter les éléments d'identification"
+      }
+
       // Prejudice (Conditional)
-      if (data.prejudiceMontantConnu && !data.prejudiceMontant) {
-        this.errors.prejudiceMontant = 'Le montant du préjudice est obligatoire'
+      if (['Déposée', 'Sera déposée'].includes(data.plainteEtat)) {
+        if (data.prejudiceMontantConnu === null) {
+          this.errors.prejudiceMontantConnu = "Veuillez préciser si le montant du préjudice est connu"
+        } else if (data.prejudiceMontantConnu === true) {
+          if (!data.prejudiceMontant) {
+            this.errors.prejudiceMontant = 'Le montant du préjudice est obligatoire'
+          }
+        } else if (data.prejudiceMontantConnu === false) {
+          // Allow 0 as a valid number but reject empty values (null, undefined, '') and invalid inputs (NaN)
+          const missing = (v: unknown) =>
+            v === null || v === undefined || v === '' || (typeof v === 'number' && isNaN(v))
+          if (missing(data.prejudiceNombrePersonnes))
+            this.errors.prejudiceNombrePersonnes = 'Le nombre de personnes mobilisées est obligatoire'
+          if (missing(data.prejudiceNombreHeures))
+            this.errors.prejudiceNombreHeures = "Le nombre d'heures travaillées est obligatoire"
+          if (missing(data.prejudiceNombreVehicules))
+            this.errors.prejudiceNombreVehicules = 'Le nombre de véhicules utilisés est obligatoire'
+          if (missing(data.prejudiceKilometrage))
+            this.errors.prejudiceKilometrage = 'Le kilométrage est obligatoire'
+          if (missing(data.prejudiceAutresCouts))
+            this.errors.prejudiceAutresCouts = 'Les autres coûts sont obligatoires'
+        }
       }
 
       // Finalisation

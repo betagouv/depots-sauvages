@@ -52,6 +52,7 @@
         :required="true"
         :options="NatureTerrainOptions"
         :error-message="store.errors.natureTerrain"
+        @update:model-value="store.clearFieldError('natureTerrain')"
       >
         <template #legend>
           Nature du terrain *
@@ -87,6 +88,8 @@
             id: 'prop-responsable',
           },
         ]"
+        :error-message="store.errors.proprietaireTerrainPrive"
+        @update:model-value="store.clearFieldError('proprietaireTerrainPrive')"
       >
         <template #legend>
           Concernant le propriétaire du terrain privé où se situe le dépôt *

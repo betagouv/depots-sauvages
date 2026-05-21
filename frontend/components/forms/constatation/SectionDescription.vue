@@ -58,6 +58,7 @@
         :required="true"
         :options="VolumeOptions"
         :error-message="store.errors.volumeDepot"
+        @update:model-value="store.clearFieldError('volumeDepot')"
       />
     </div>
 
@@ -68,6 +69,7 @@
         :required="true"
         :options="TypeDepotOptions"
         :error-message="store.errors.typesDepot"
+        @update:model-value="store.clearFieldError('typesDepot')"
       />
     </div>
   </fieldset>
