@@ -1,7 +1,12 @@
 import { defineStore } from 'pinia'
 import { API_URLS, createResource, fetchResource, updateResource } from '../services/api'
 import type { Constatation } from '../types/constatation'
-import { ConstatantOptions, createEmptyConstatation, fromApiFormat, toApiFormat } from '../types/constatation'
+import {
+  ConstatantOptions,
+  createEmptyConstatation,
+  fromApiFormat,
+  toApiFormat,
+} from '../types/constatation'
 
 export const useConstatationStore = defineStore('constatation', {
   state: () => ({
@@ -51,14 +56,14 @@ export const useConstatationStore = defineStore('constatation', {
         const data = await fetchResource(`${API_URLS.constatations}${id}/`)
         this.currentId = id
         const formData = fromApiFormat(data)
-        
+
         // Handle 'autre' function on load
-        const standardValues = ConstatantOptions.map(o => o.value).filter(v => v !== 'autre')
+        const standardValues = ConstatantOptions.map((o) => o.value).filter((v) => v !== 'autre')
         if (formData.constatantRole && !standardValues.includes(formData.constatantRole as any)) {
           formData.constatantRoleAutre = formData.constatantRole
           formData.constatantRole = 'autre'
         }
-        
+
         this.formData = formData
       } catch (error) {
         console.error('Error loading constatation:', error)
@@ -74,8 +79,7 @@ export const useConstatationStore = defineStore('constatation', {
 
       // Localisation
       if (!data.localisationDepot) this.errors.localisationDepot = "L'adresse est obligatoire"
-      if (!data.commune)
-        this.errors.commune = 'La commune est obligatoire'
+      if (!data.commune) this.errors.commune = 'La commune est obligatoire'
       const natureTerrain = data.natureTerrain || []
       if (natureTerrain.length === 0)
         this.errors.natureTerrain = 'La nature du terrain est obligatoire'
@@ -88,14 +92,11 @@ export const useConstatationStore = defineStore('constatation', {
         this.errors.constatantRole = 'La fonction du constatant est obligatoire'
       if (data.constatantRole === 'autre' && !data.constatantRoleAutre)
         this.errors.constatantRoleAutre = 'Veuillez préciser la fonction'
-      
+
       if (!data.constatantEstUtilisateurConnecte) {
-        if (!data.constatantNom)
-          this.errors.constatantNom = 'Le nom est obligatoire'
-        if (!data.constatantPrenom)
-          this.errors.constatantPrenom = 'Le prénom est obligatoire'
-        if (!data.constatantCivilite)
-          this.errors.constatantCivilite = 'La civilité est obligatoire'
+        if (!data.constatantNom) this.errors.constatantNom = 'Le nom est obligatoire'
+        if (!data.constatantPrenom) this.errors.constatantPrenom = 'Le prénom est obligatoire'
+        if (!data.constatantCivilite) this.errors.constatantCivilite = 'La civilité est obligatoire'
       }
 
       if (!data.dateConstat) this.errors.dateConstat = 'La date est obligatoire'
@@ -103,10 +104,11 @@ export const useConstatationStore = defineStore('constatation', {
 
       // Description
       if (!data.volumeDepot) this.errors.volumeDepot = 'Le volume est obligatoire'
-      
+
       const typesDepot = data.typesDepot || []
       if (typesDepot.length === 0) this.errors.typesDepot = 'Le type de dépôt est obligatoire'
-      if (!data.precisionsDepot) this.errors.precisionsDepot = 'La description du dépôt est obligatoire'
+      if (!data.precisionsDepot)
+        this.errors.precisionsDepot = 'La description du dépôt est obligatoire'
 
       // Responsable (Conditional)
       if (data.auteurIdentifie === null) {
@@ -121,7 +123,7 @@ export const useConstatationStore = defineStore('constatation', {
         if (data.statutAuteur === 'particulier') {
           const informationsAuteur = data.informationsAuteur || []
           if (informationsAuteur.length === 0) {
-            this.errors.informationsAuteur = "Veuillez cocher au moins une option"
+            this.errors.informationsAuteur = 'Veuillez cocher au moins une option'
           }
           if (hasInfo('Nom et prénom')) {
             if (!data.auteurNom) this.errors.auteurNom = 'Le nom de famille est obligatoire'
@@ -140,7 +142,14 @@ export const useConstatationStore = defineStore('constatation', {
           }
           if (data.entrepriseFrancaise === true) {
             if (!data.auteurSiret) {
-              this.errors.auteurSiret = 'Le numéro SIRET est obligatoire pour une entreprise française'
+              this.errors.auteurSiret =
+                'Le numéro SIRET est obligatoire pour une entreprise française'
+            }
+            if (!data.auteurNom) {
+              this.errors.auteurNom = "Le nom de l'entreprise est obligatoire"
+            }
+            if (!data.auteurAdresse) {
+              this.errors.auteurAdresse = "L'adresse de l'entreprise est obligatoire"
             }
           }
           if (data.entrepriseFrancaise === false) {
@@ -148,7 +157,8 @@ export const useConstatationStore = defineStore('constatation', {
               this.errors.auteurNom = "Le nom de l'entreprise est obligatoire"
             }
             if (!data.auteurAdresse) {
-              this.errors.auteurAdresse = "L'adresse complète de l'entreprise étrangère est obligatoire"
+              this.errors.auteurAdresse =
+                "L'adresse complète de l'entreprise étrangère est obligatoire"
             }
           }
         }
@@ -159,16 +169,19 @@ export const useConstatationStore = defineStore('constatation', {
           const info = data.informationsAuteur || []
           if (info.length === 0) {
             showPlainte = false
-          } else if (info.includes('Nom et prénom' as any) && info.includes('Adresse postale' as any)) {
+          } else if (
+            info.includes('Nom et prénom' as any) &&
+            info.includes('Adresse postale' as any)
+          ) {
             showPlainte = false
           } else {
             showPlainte = true
           }
         } else if (data.statutAuteur === 'entreprise') {
           if (data.entrepriseFrancaise === true) {
-            showPlainte = !data.auteurSiret
+            showPlainte = !data.auteurSiret || !data.auteurNom || !data.auteurAdresse
           } else if (data.entrepriseFrancaise === false) {
-            showPlainte = !data.auteurAdresse
+            showPlainte = !data.auteurAdresse || !data.auteurNom
           } else {
             showPlainte = false
           }
@@ -185,7 +198,7 @@ export const useConstatationStore = defineStore('constatation', {
       if (data.auteurIdentifie !== null) {
         const indicesDisponibles = data.indicesDisponibles || []
         if (indicesDisponibles.length === 0) {
-          this.errors.indicesDisponibles = "Veuillez cocher au moins une option"
+          this.errors.indicesDisponibles = 'Veuillez cocher au moins une option'
         }
         if (!data.precisionsIndices) {
           this.errors.precisionsIndices = "Veuillez ajouter les éléments d'identification"
@@ -195,7 +208,8 @@ export const useConstatationStore = defineStore('constatation', {
       // Prejudice (Conditional)
       if (['Déposée', 'Sera déposée'].includes(data.plainteEtat)) {
         if (data.prejudiceMontantConnu === null) {
-          this.errors.prejudiceMontantConnu = "Veuillez préciser si le montant du préjudice est connu"
+          this.errors.prejudiceMontantConnu =
+            'Veuillez préciser si le montant du préjudice est connu'
         } else if (data.prejudiceMontantConnu === true) {
           if (!data.prejudiceMontant) {
             this.errors.prejudiceMontant = 'Le montant du préjudice est obligatoire'
@@ -205,7 +219,8 @@ export const useConstatationStore = defineStore('constatation', {
           const missing = (v: unknown) =>
             v === null || v === undefined || v === '' || (typeof v === 'number' && isNaN(v))
           if (missing(data.prejudiceNombrePersonnes))
-            this.errors.prejudiceNombrePersonnes = 'Le nombre de personnes mobilisées est obligatoire'
+            this.errors.prejudiceNombrePersonnes =
+              'Le nombre de personnes mobilisées est obligatoire'
           if (missing(data.prejudiceNombreHeures))
             this.errors.prejudiceNombreHeures = "Le nombre d'heures travaillées est obligatoire"
           if (missing(data.prejudiceNombreVehicules))

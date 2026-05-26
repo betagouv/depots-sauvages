@@ -99,33 +99,46 @@
         </div>
 
         <div v-if="store.formData.entrepriseFrancaise === true" class="fr-fieldset__element">
-          <DsfrInputGroup
-            v-model="store.formData.auteurSiret"
-            :error-message="store.errors.auteurSiret"
-          >
-            <template #default="{ isValid, isInvalid, descriptionId }">
-              <DsfrInput
-                id="auteur-siret"
+          <CompanyAutocomplete
+            id="auteur-entreprise-recherche"
+            v-model="store.formData.auteurNom"
+            label="Rechercher l'entreprise par son nom ou son SIRET"
+            hint="Saisissez le nom complet ou le numéro SIRET/SIREN de l'entreprise pour l'identifier facilement."
+            :error-message="store.errors.auteurNom"
+            :required="true"
+            @select="onCompanySelect"
+          />
+
+          <div class="fr-grid-row fr-grid-row--gutters fr-mt-2w">
+            <div class="fr-col-12">
+              <DsfrInputGroup
+                v-model="store.formData.auteurNom"
+                label="Nom de l'entreprise présumée auteur du dépôt"
+                :required="true"
+                :error-message="store.errors.auteurNom"
+                @update:model-value="store.clearFieldError('auteurNom')"
+              />
+            </div>
+            <div class="fr-col-12 fr-col-md-6">
+              <DsfrInputGroup
                 v-model="store.formData.auteurSiret"
-                :is-valid="isValid"
-                :is-invalid="isInvalid"
-                :description-id="descriptionId"
-              >
-                <template #label>
-                  Numéro SIRET de l'entreprise présumée auteur
-                  <span class="fr-hint-text">
-                    Pour trouver le numéro SIRET d'une entreprise vous pouvez utiliser
-                    <a
-                      href="https://annuaire-entreprises.data.gouv.fr/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      >https://annuaire-entreprises.data.gouv.fr/</a
-                    >. Format attendu : 14 chiffres.
-                  </span>
-                </template>
-              </DsfrInput>
-            </template>
-          </DsfrInputGroup>
+                label="Numéro SIRET"
+                :required="true"
+                hint="Format attendu : 14 chiffres."
+                :error-message="store.errors.auteurSiret"
+                @update:model-value="store.clearFieldError('auteurSiret')"
+              />
+            </div>
+            <div class="fr-col-12 fr-col-md-6">
+              <DsfrInputGroup
+                v-model="store.formData.auteurAdresse"
+                label="Adresse de l'entreprise"
+                :required="true"
+                :error-message="store.errors.auteurAdresse"
+                @update:model-value="store.clearFieldError('auteurAdresse')"
+              />
+            </div>
+          </div>
         </div>
 
         <div v-if="store.formData.entrepriseFrancaise === false" class="fr-fieldset__element">
@@ -373,6 +386,7 @@
 <script setup lang="ts">
 import AddressAutocomplete from '@/components/shared/AddressAutocomplete.vue'
 import BooleanRadioSet from '@/components/shared/BooleanRadioSet.vue'
+import CompanyAutocomplete from '@/components/shared/CompanyAutocomplete.vue'
 import { useConstatationStore } from '@/stores/constatation'
 import {
   CiviliteOptions,
@@ -383,7 +397,6 @@ import {
 import {
   DsfrCallout,
   DsfrCheckboxSet,
-  DsfrInput,
   DsfrInputGroup,
   DsfrRadioButtonSet,
 } from '@gouvminint/vue-dsfr'
@@ -429,14 +442,33 @@ const showPlainteSection = computed(() => {
   if (store.formData.statutAuteur === 'entreprise') {
     // For Enterprise, it's considered complete if we have the SIRET (French) or Adresse (Foreign)
     if (store.formData.entrepriseFrancaise === true) {
-      return !store.formData.auteurSiret
+      return (
+        !store.formData.auteurSiret || !store.formData.auteurNom || !store.formData.auteurAdresse
+      )
     }
     if (store.formData.entrepriseFrancaise === false) {
-      return !store.formData.auteurAdresse
+      return !store.formData.auteurAdresse || !store.formData.auteurNom
     }
     return false
   }
 
   return false
 })
+
+const onCompanySelect = ({
+  name,
+  siret,
+  address,
+}: {
+  name: string
+  siret: string
+  address: string
+}) => {
+  store.formData.auteurNom = name
+  store.formData.auteurSiret = siret
+  store.formData.auteurAdresse = address
+  store.clearFieldError('auteurNom')
+  store.clearFieldError('auteurSiret')
+  store.clearFieldError('auteurAdresse')
+}
 </script>
