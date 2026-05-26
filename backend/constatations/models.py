@@ -52,7 +52,6 @@ class Constatation(PrejudiceMixin, TimeStampedModel):
     indices_disponibles = models.JSONField("indices", default=list, blank=True, null=True)
     precisions_indices = models.TextField("précisions indices", blank=True)
 
-    montant_forfait_enlevement = models.IntegerField("forfait enlèvement", null=True, blank=True)
     prejudice_montant_connu = models.BooleanField("montant connu", default=False)
     prejudice_montant = models.IntegerField("montant préjudice", null=True, blank=True)
     prejudice_nombre_personnes = models.IntegerField("personnes", null=True, blank=True)

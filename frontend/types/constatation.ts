@@ -139,7 +139,6 @@ export interface Constatation {
   precisionsIndices: string
 
   // Prejudice
-  montantForfaitEnlevement: number
   prejudiceMontantConnu: boolean | null
   prejudiceMontant: number
   prejudiceNombrePersonnes: number
@@ -196,7 +195,6 @@ export const createEmptyConstatation = (): Constatation => ({
   plainteEtat: '',
   indicesDisponibles: [],
   precisionsIndices: '',
-  montantForfaitEnlevement: 0,
   prejudiceMontantConnu: null,
   prejudiceMontant: 0,
   prejudiceNombrePersonnes: 0,

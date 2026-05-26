@@ -36,7 +36,6 @@
 </template>
 
 <script setup lang="ts">
-import { DsfrAlert } from '@gouvminint/vue-dsfr'
 import { nextTick, onMounted, ref, watch } from 'vue'
 import ConstatationForm from '../components/forms/constatation/ConstatationForm.vue'
 import LoginInvitation from '../components/shared/LoginInvitation.vue'
@@ -50,6 +49,21 @@ const showLoading = ref(true)
 onMounted(async () => {
   try {
     userInfo.value = await getUserInfo()
+    if (userInfo.value?.is_authenticated) {
+      // The contact person fills the form and receives follow-ups.
+      // He is by default the logged-in user.
+      // He can also be the legal 'constatant',
+      // or he can be filling the form on behalf of someone else.
+      if (!store.formData.contactNom && userInfo.value.last_name) {
+        store.formData.contactNom = userInfo.value.last_name
+      }
+      if (!store.formData.contactPrenom && userInfo.value.first_name) {
+        store.formData.contactPrenom = userInfo.value.first_name
+      }
+      if (!store.formData.contactEmail && userInfo.value.email) {
+        store.formData.contactEmail = userInfo.value.email
+      }
+    }
   } catch (error) {
     console.error('Failed to fetch data:', error)
   } finally {
@@ -62,13 +76,13 @@ watch(
   () => {
     if (store.hasBeenSubmitted) store.validate(true)
   },
-  { deep: true },
+  { deep: true }
 )
 
 const scrollToFirstError = async () => {
   await nextTick()
   const firstError = document.querySelector<HTMLElement>(
-    '.fr-fieldset--error, .fr-input-group--error, .fr-select-group--error, .fr-alert--error',
+    '.fr-fieldset--error, .fr-input-group--error, .fr-select-group--error, .fr-alert--error'
   )
   firstError?.scrollIntoView({ behavior: 'smooth', block: 'center' })
 }

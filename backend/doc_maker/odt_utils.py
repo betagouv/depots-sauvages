@@ -38,6 +38,19 @@ def prepare_context(instance):
         vowels = "aeiouyàâéèêëîïôûù"
         context["constatant_role_needs_elision"] = role[0].lower() in vowels
 
+    # Consolidate complete names without leaving extra spaces when civility is empty
+    c_civ = context.get("constatant_civilite") or ""
+    c_pre = context.get("constatant_prenom") or ""
+    c_nom = context.get("constatant_nom") or ""
+    c_full = f"{c_civ} {c_pre} {c_nom}" if c_civ else f"{c_pre} {c_nom}"
+    context["constatant_nom_complet"] = c_full.replace("  ", " ").strip()
+
+    a_civ = context.get("auteur_civilite") or ""
+    a_pre = context.get("auteur_prenom") or ""
+    a_nom = context.get("auteur_nom") or ""
+    a_full = f"{a_civ} {a_pre} {a_nom}" if a_civ else f"{a_pre} {a_nom}"
+    context["auteur_nom_complet"] = a_full.replace("  ", " ").strip()
+
     return context
 
 
