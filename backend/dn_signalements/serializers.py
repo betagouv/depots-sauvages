@@ -1,19 +1,18 @@
-"""Serializers for signalements app."""
-
 from rest_framework import serializers
 
-from backend.dn_signalements.models import DNSignalement
+from backend.constatations.models import Constatation
 
 
 class UserSignalementSerializer(serializers.ModelSerializer):
-    """Serializer for Signalement/user."""
+    """Serializer for Constatation/user."""
 
-    numero_dossier = serializers.IntegerField(source="dn_numero_dossier")
-    date_creation = serializers.DateTimeField(source="dn_date_creation")
-    date_modification = serializers.DateTimeField(source="dn_date_modification")
+    numero_dossier = serializers.IntegerField(source="id")
+    date_creation = serializers.DateTimeField(source="created")
+    date_modification = serializers.DateTimeField(source="modified")
+    title = serializers.SerializerMethodField()
 
     class Meta:
-        model = DNSignalement
+        model = Constatation
         fields = [
             "id",
             "numero_dossier",
@@ -23,3 +22,7 @@ class UserSignalementSerializer(serializers.ModelSerializer):
             "date_constat",
             "localisation_depot",
         ]
+
+    def get_title(self, obj):
+        return f"Dossier #{obj.id}"
+

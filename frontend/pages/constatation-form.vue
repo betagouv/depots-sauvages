@@ -37,11 +37,13 @@
 
 <script setup lang="ts">
 import { nextTick, onMounted, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import ConstatationForm from '../components/forms/constatation/ConstatationForm.vue'
 import LoginInvitation from '../components/shared/LoginInvitation.vue'
 import { getUserInfo, type UserInfo } from '../services/api'
 import { useConstatationStore } from '../stores/constatation'
 
+const router = useRouter()
 const store = useConstatationStore()
 const userInfo = ref<UserInfo | null>(null)
 const showLoading = ref(true)
@@ -94,7 +96,10 @@ const submitForm = async () => {
   }
 
   try {
-    await store.saveFormData()
+    const data = await store.saveFormData()
+    if (data && data.id) {
+      router.push(`/suivi-procedure/${data.id}`)
+    }
   } catch (error) {
     console.error('Erreur lors de la sauvegarde:', error)
   }

@@ -17,7 +17,7 @@ from backend.bypass_auth.views import (
     BypassAuthLoginView,
 )
 from backend.procedures.views import SuiviProcedureViewSet
-from backend.constatations.views import ConstatationViewSet
+from backend.constatations.views import ConstatationViewSet, ConstatationDocumentDownloadView
 
 
 
@@ -38,6 +38,11 @@ else:
 # API Routes
 urlpatterns.extend(
     [
+        path(
+            "api/constatations/<int:pk>/documents/<str:doc_type>/",
+            ConstatationDocumentDownloadView.as_view(),
+            name="constatation-document-download",
+        ),
         path(
             "api/dn-signalements/<int:pk>/documents/<str:doc_type>/",
             DNSignalementDocumentDownloadView.as_view(),
