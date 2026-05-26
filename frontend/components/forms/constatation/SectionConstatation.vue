@@ -153,9 +153,36 @@
 </template>
 
 <script setup lang="ts">
+import { ref, watch } from 'vue'
 import { useConstatationStore } from '@/stores/constatation'
 import { CiviliteOptions, ConstatantOptions } from '@/types/constatation'
 import { DsfrAlert, DsfrInputGroup, DsfrRadioButtonSet, DsfrSelect } from '@gouvminint/vue-dsfr'
+import { getUserInfo, type UserInfo } from '@/services/api'
 
 const store = useConstatationStore()
+const userInfo = ref<UserInfo | null>(null)
+
+watch(
+  () => store.formData.constatantEstUtilisateurConnecte,
+  async (newVal) => {
+    if (newVal) {
+      if (!userInfo.value) {
+        try {
+          userInfo.value = await getUserInfo()
+        } catch (error) {
+          console.error('Failed to load user info:', error)
+        }
+      }
+      if (userInfo.value) {
+        if (userInfo.value.first_name) {
+          store.formData.constatantPrenom = userInfo.value.first_name
+        }
+        if (userInfo.value.last_name) {
+          store.formData.constatantNom = userInfo.value.last_name
+        }
+      }
+    }
+  },
+  { immediate: true },
+)
 </script>
