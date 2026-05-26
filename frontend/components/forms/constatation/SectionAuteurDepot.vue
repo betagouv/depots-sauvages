@@ -134,6 +134,7 @@
                 v-model="store.formData.auteurAdresse"
                 label="Adresse de l'entreprise"
                 :required="true"
+                hint="Adresse du siège social de l'entreprise."
                 :error-message="store.errors.auteurAdresse"
                 @update:model-value="store.clearFieldError('auteurAdresse')"
               />
