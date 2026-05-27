@@ -3,7 +3,6 @@ from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from rest_framework import mixins, permissions, viewsets
 
-from backend.procedures.models import SuiviProcedure
 from backend.signalements.views import SignalementDocumentDownloadViewMixin
 
 from .models import Constatation
@@ -24,8 +23,7 @@ class ConstatationViewSet(
 
     def perform_create(self, serializer):
         user = self.request.user if self.request.user.is_authenticated else None
-        constatation = serializer.save(user=user)
-        SuiviProcedure.objects.create(constatation=constatation)
+        serializer.save(user=user)
 
 
 @method_decorator(login_required, name="dispatch")

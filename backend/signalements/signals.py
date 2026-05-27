@@ -7,6 +7,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 from django_tasks import task
 
+from backend.constatations.models import Constatation
 from backend.dn_signalements.models import DNSignalement
 from backend.doc_maker import odt_utils
 
@@ -99,46 +100,56 @@ def generate_document_task(signalement_id, doc_base_name, model_label):
         raise
 
 
-@receiver(post_save, sender=DNSignalement)
+@receiver(post_save, sender=Constatation)
 def generate_doc_constat(sender, instance, created, **kwargs):
     """
-    Signal handler to trigger rapport de constatation generation when a Signalement or
-    DNSignalement is saved. Only triggers if doc_constat_should_generate flag is True.
+    Signal handler to trigger rapport de constatation generation when a Constatation
+    is saved. Only triggers if doc_constat_should_generate flag is True.
     """
     logger.debug(
-        f"Signal for {instance.id} with generate doc: " f"{instance.doc_constat_should_generate}"
+        f"Signal for constatation {instance.id} with generate doc: "
+        f"{instance.doc_constat_should_generate}"
     )
     if not instance.doc_constat_should_generate:
         return
-    logger.info(f"Post-save signal for signalement {instance.id}, starting background generation")
+    logger.info(f"Post-save signal for constatation {instance.id}, starting background generation")
     model_label = f"{instance._meta.app_label}.{instance._meta.model_name}"
     generate_document_task.enqueue(
         instance.id,
         doc_base_name="doc_constat",
         model_label=model_label,
     )
-    logger.info(f"Document generation task enqueued for signalement {instance.id}")
+    logger.info(f"Document generation task enqueued for constatation {instance.id}")
 
 
-@receiver(post_save, sender=DNSignalement)
+@receiver(post_save, sender=Constatation)
 def generate_lettre_info(sender, instance, created, **kwargs):
     """
-    Signal handler to trigger lettre info generation when a Signalement or DNSignalement
+    Signal handler to trigger lettre info generation when a Constatation
     is saved. Only triggers if lettre_info_should_generate flag is True.
     """
     logger.debug(
-        f"Signal for {instance.id} with generate lettre info: "
+        f"Signal for constatation {instance.id} with generate lettre info: "
         f"{instance.lettre_info_should_generate}"
     )
     if not instance.lettre_info_should_generate:
         return
-    logger.info(f"Post-save signal for signalement {instance.id}, starting background generation")
+    logger.info(f"Post-save signal for constatation {instance.id}, starting background generation")
     model_label = f"{instance._meta.app_label}.{instance._meta.model_name}"
     generate_document_task.enqueue(
         instance.id,
         doc_base_name="lettre_info",
         model_label=model_label,
     )
-    logger.info(f"Lettre info generation task enqueued for signalement {instance.id}")
+    logger.info(f"Lettre info generation task enqueued for constatation {instance.id}")
 
-    logger.info(f"Lettre info generation task enqueued for signalement {instance.id}")
+
+@receiver(post_save, sender=Constatation)
+def create_suivi_procedure(sender, instance, created, **kwargs):
+    """
+    Ensure that every Constatation has an associated SuiviProcedure as soon as it is saved.
+    """
+    from backend.procedures.models import SuiviProcedure
+
+    if created:
+        SuiviProcedure.objects.get_or_create(constatation=instance)

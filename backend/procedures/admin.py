@@ -10,13 +10,13 @@ class SuiviProcedureAdmin(admin.ModelAdmin):
     list_filter = ("etape_en_cours", "decision_poursuite")
     search_fields = ("signalement__dn_numero_dossier",)
     readonly_fields = ("created", "modified")
-    raw_id_fields = ("signalement",)
+    raw_id_fields = ("signalement", "constatation")
 
     fieldsets = (
         (
             None,
             {
-                "fields": ("signalement", "etape_en_cours"),
+                "fields": ("signalement", "constatation", "etape_en_cours"),
             },
         ),
         (

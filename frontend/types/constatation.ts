@@ -161,7 +161,13 @@ export interface Constatation {
 }
 
 // Simple conversion functions using libraries
-export const toApiFormat = (data: Constatation) => snakecaseKeys(data)
+export const toApiFormat = (data: Constatation) => {
+  const formatted = { ...data }
+  if (formatted.prejudiceMontantConnu === null) {
+    formatted.prejudiceMontantConnu = false
+  }
+  return snakecaseKeys(formatted)
+}
 export const fromApiFormat = (data: any): Constatation => camelcaseKeys(data)
 
 // Factory function to create an empty Constatation

@@ -25,15 +25,6 @@
             <p class="fr-text--lead fr-mb-4w">Suivi des actions que vous devez réaliser.</p>
 
             <DossierMetadata :dossier="dossierData" class="fr-mb-3w" />
-
-            <DsfrButton
-              v-if="dossierData.dn_numero_dossier"
-              secondary
-              @click="openExternalLink(getDnModifyUrl(dossierData.dn_numero_dossier))"
-            >
-              <span class="fr-icon-external-link-line fr-mr-1w" aria-hidden="true"></span>
-              Modifier le dossier de constatation sur Démarche numérique
-            </DsfrButton>
           </header>
 
           <InfosComplementaires v-if="hasProcedure" :suivi="suiviProcedure" />
@@ -45,9 +36,6 @@
             <template #step-1>
               <AucuneProcedure
                 v-if="!hasProcedure"
-                :modify-url="
-                  dossierData.dn_numero_dossier ? getDnModifyUrl(dossierData.dn_numero_dossier) : ''
-                "
               />
               <Documents
                 v-else
@@ -57,9 +45,6 @@
                 :auteur-identifie="auteurIdentifie"
                 :doc-constat-url="getDocConstatUrl(dossierData.id)"
                 :lettre-info-url="getLettreInfoUrl(dossierData.id)"
-                :modify-url="
-                  dossierData.dn_numero_dossier ? getDnModifyUrl(dossierData.dn_numero_dossier) : ''
-                "
               />
             </template>
             <template v-if="hasProcedure" #step-2>
@@ -73,25 +58,16 @@
                 v-else
                 :suivi="suiviProcedure"
                 :auteur-identifie="auteurIdentifie"
-                :modify-url="
-                  dossierData.dn_numero_dossier ? getDnModifyUrl(dossierData.dn_numero_dossier) : ''
-                "
               />
             </template>
             <template v-if="hasProcedure" #step-3>
               <SuiviDecision
                 v-if="auteurIdentifie"
                 :suivi="suiviProcedure"
-                :modify-url="
-                  dossierData.dn_numero_dossier ? getDnModifyUrl(dossierData.dn_numero_dossier) : ''
-                "
                 @back-to-notification="activeStep = 2"
               />
               <MettreAjourDossier
                 v-else-if="suiviProcedure.identification_reussie === true"
-                :modify-url="
-                  dossierData.dn_numero_dossier ? getDnModifyUrl(dossierData.dn_numero_dossier) : ''
-                "
               />
               <ClotureSansAuteur
                 v-else-if="suiviProcedure.identification_reussie === false"
@@ -102,9 +78,6 @@
               <SuiviActions
                 v-if="auteurIdentifie"
                 :suivi="suiviProcedure"
-                :modify-url="
-                  dossierData.dn_numero_dossier ? getDnModifyUrl(dossierData.dn_numero_dossier) : ''
-                "
                 @back-to-decision="activeStep = 3"
                 @go-to-cloture="activeStep = 5"
               />
@@ -143,9 +116,8 @@ import Notification from '../components/steps/Notification.vue'
 import SuiviActions from '../components/steps/SuiviActions.vue'
 import SuiviDecision from '../components/steps/SuiviDecision.vue'
 import { API_URLS, fetchResource, getUserInfo } from '../services/api'
-import { getDnModifyUrl, getDocConstatUrl, getLettreInfoUrl } from '../services/urls'
+import { getDocConstatUrl, getLettreInfoUrl } from '../services/urls'
 import { useSuiviStore } from '../stores/suivi-procedure'
-import { openExternalLink } from '../utils/browser'
 import { debounce } from '../utils/debounce'
 
 const route = useRoute()
