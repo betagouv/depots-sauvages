@@ -34,6 +34,7 @@
         :is-textarea="true"
         :required="true"
         label="Détails de la localisation"
+        hint="Si vous n'avez pas d'adresse exacte ou que vous ne la trouvez pas dans les suggestions, merci d'indiquer des détails sur la localisation : lieudit, coordonnées GPS, détails sur la localisation, etc."
         :error-message="store.errors.localisationDepot"
       />
     </div>
@@ -41,7 +42,7 @@
     <div class="fr-fieldset__element fr-mt-2w">
       <DsfrCheckbox
         v-model="hasNoExactAddress"
-        label="Si vous n'avez pas d'adresse exacte ou que vous ne la trouvez pas dans les suggestions, merci d'indiquer des détails sur la localisation : lieudit, coordonnées GPS, détails sur la localisation, etc."
+        label="Je ne trouve pas l'adresse dans les suggestions, je souhaite la saisir manuellement"
         name="hasNoExactAddress"
       />
     </div>

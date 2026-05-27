@@ -310,13 +310,33 @@
           </div>
         </div>
         <div v-if="hasInfo('Adresse postale')" class="fr-fieldset__element">
-          <AddressAutocomplete
-            id="auteur-adresse"
-            v-model="store.formData.auteurAdresse"
-            label="Adresse postale de l'auteur présumé"
-            :required="true"
-            :error-message="store.errors.auteurAdresse"
-          />
+          <div v-if="!hasNoExactAuteurAddress">
+            <AddressAutocomplete
+              id="auteur-adresse"
+              v-model="store.formData.auteurAdresse"
+              label="Adresse postale de l'auteur présumé"
+              :required="true"
+              :error-message="store.errors.auteurAdresse"
+            />
+          </div>
+          <div v-else>
+            <DsfrInputGroup
+              id="auteur-adresse-manuel"
+              v-model="store.formData.auteurAdresse"
+              :is-textarea="true"
+              :required="true"
+              label="Adresse postale de l'auteur présumé"
+              :error-message="store.errors.auteurAdresse"
+              hint="Saisissez l'adresse postale complète"
+            />
+          </div>
+          <div class="fr-mt-2w">
+            <DsfrCheckbox
+              v-model="hasNoExactAuteurAddress"
+              label="Je ne trouve pas l'adresse dans les suggestions, je souhaite la saisir manuellement"
+              name="hasNoExactAuteurAddress"
+            />
+          </div>
         </div>
       </template>
     </template>
@@ -397,13 +417,15 @@ import {
 } from '@/types/constatation'
 import {
   DsfrCallout,
+  DsfrCheckbox,
   DsfrCheckboxSet,
   DsfrInputGroup,
   DsfrRadioButtonSet,
 } from '@gouvminint/vue-dsfr'
-import { computed, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 const store = useConstatationStore()
+const hasNoExactAuteurAddress = ref(false)
 
 const hasInfo = (info: string) => {
   const infos = store.formData.informationsAuteur || []
