@@ -110,7 +110,6 @@ export interface Constatation {
   proprietaireTerrainPrive: string
 
   // Constatation
-  constatantCivilite: string
   constatantRole: ConstatantRole
   constatantRoleAutre: string
   constatantNom: string
@@ -178,7 +177,6 @@ export const createEmptyConstatation = (): Constatation => ({
   heureConstat: '',
   natureTerrain: [],
   proprietaireTerrainPrive: '',
-  constatantCivilite: '',
   constatantNom: '',
   constatantPrenom: '',
   constatantRole: '',

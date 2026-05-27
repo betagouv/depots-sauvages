@@ -93,17 +93,6 @@
     </div>
 
     <template v-if="!store.formData.constatantEstUtilisateurConnecte">
-      <div class="fr-fieldset__element">
-        <DsfrRadioButtonSet
-          v-model="store.formData.constatantCivilite"
-          legend="Civilité"
-          :options="CiviliteOptions"
-          :required="true"
-          :error-message="store.errors.constatantCivilite"
-          :inline="true"
-        />
-      </div>
-
       <div class="fr-fieldset__element fr-mb-4w">
         <div class="fr-grid-row fr-grid-row--gutters">
           <div class="fr-col-12 fr-col-md-6">
@@ -155,7 +144,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useConstatationStore } from '@/stores/constatation'
-import { CiviliteOptions, ConstatantOptions } from '@/types/constatation'
+import { ConstatantOptions } from '@/types/constatation'
 import { DsfrAlert, DsfrInputGroup, DsfrRadioButtonSet, DsfrSelect } from '@gouvminint/vue-dsfr'
 import { getUserInfo, type UserInfo } from '@/services/api'
 

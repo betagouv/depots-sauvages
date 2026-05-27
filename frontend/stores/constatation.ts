@@ -96,7 +96,6 @@ export const useConstatationStore = defineStore('constatation', {
       if (!data.constatantEstUtilisateurConnecte) {
         if (!data.constatantNom) this.errors.constatantNom = 'Le nom est obligatoire'
         if (!data.constatantPrenom) this.errors.constatantPrenom = 'Le prénom est obligatoire'
-        if (!data.constatantCivilite) this.errors.constatantCivilite = 'La civilité est obligatoire'
       }
 
       if (!data.dateConstat) this.errors.dateConstat = 'La date est obligatoire'
