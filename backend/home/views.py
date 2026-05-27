@@ -11,6 +11,9 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 
+from backend.constatations.models import Constatation
+
+
 class IndexView(TemplateView):
     """
     Serve Vue Application
@@ -34,6 +37,7 @@ class UserInfoViewSet(viewsets.ViewSet):
                     "first_name": request.user.first_name,
                     "last_name": request.user.last_name,
                     "email": request.user.username,
+                    "procedures_count": Constatation.objects.filter(user=request.user).count(),
                 }
             )
         return Response(

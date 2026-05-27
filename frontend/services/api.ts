@@ -85,6 +85,7 @@ export interface UserInfo {
   first_name?: string
   last_name?: string
   email?: string
+  procedures_count?: number
 }
 
 export const getUserInfo = (): Promise<UserInfo> => makeRequest(API_URLS.userInfo, 'GET', {})

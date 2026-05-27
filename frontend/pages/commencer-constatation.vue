@@ -105,7 +105,6 @@
 </template>
 
 <script setup lang="ts">
-import { useDossierStore } from '@/stores/dossier'
 import { computed, onMounted, ref } from 'vue'
 import LoginInvitation from '../components/shared/LoginInvitation.vue'
 import PremiumCallout from '../components/shared/PremiumCallout.vue'
@@ -113,10 +112,9 @@ import { getUserInfo, type UserInfo } from '../services/api'
 import { openTallyPopup } from '../utils/tally'
 
 const userInfo = ref<UserInfo | null>(null)
-const dossierStore = useDossierStore()
 const showLoading = ref(true)
 
-const dossiersCount = computed(() => dossierStore.dossiers.length)
+const dossiersCount = computed(() => userInfo.value?.procedures_count || 0)
 
 const openSimulator = () => {
   openTallyPopup('A7xA8z', { layout: 'modal', width: 900 })
@@ -125,9 +123,6 @@ const openSimulator = () => {
 onMounted(async () => {
   try {
     userInfo.value = await getUserInfo()
-    if (userInfo.value?.is_authenticated) {
-      await dossierStore.fetchDossiers()
-    }
   } catch (error) {
     console.error('Failed to fetch data:', error)
   } finally {
