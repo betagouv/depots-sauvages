@@ -153,7 +153,7 @@ const userInfo = ref<UserInfo | null>(null)
 
 watch(
   () => store.formData.constatantEstUtilisateurConnecte,
-  async (newVal) => {
+  async (newVal, oldVal) => {
     if (newVal) {
       if (!userInfo.value) {
         try {
@@ -170,6 +170,9 @@ watch(
           store.formData.constatantNom = userInfo.value.last_name
         }
       }
+    } else if (oldVal !== undefined) {
+      store.formData.constatantPrenom = ''
+      store.formData.constatantNom = ''
     }
   },
   { immediate: true },
