@@ -1,4 +1,4 @@
-import { API_URL, DN_BASE_URL } from './api'
+import { API_URL, DN_BASE_URL, BACKEND_URL } from './api'
 
 // Get the URL for downloading the doc "rapport de constatation"
 export const getDocConstatUrl = (id: number | null) => {
@@ -34,5 +34,6 @@ export const getDnModifyUrl = (numeroDossier: string | null) => {
   return `${DN_BASE_URL}/dossiers/${numeroDossier}/modifier`
 }
 
-export const LOGIN_URL = '/oidc/authenticate/'
-export const LOGOUT_URL = '/logout/'
+export const LOGIN_URL = `${BACKEND_URL}/oidc/authenticate/`
+export const LOGOUT_URL = `${BACKEND_URL}/logout/`
+
