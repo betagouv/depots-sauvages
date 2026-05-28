@@ -4,7 +4,7 @@
       <p>
         Pour accéder à vos documents et poursuivre vos démarches, merci de
         <router-link :to="modifyUrl" class="fr-link fr-icon-edit-line fr-link--icon-right"
-          >mettre à jour votre constatation</router-link
+          >mettre à jour la constatation de dépôt sauvage</router-link
         >.
       </p>
       <DsfrAlert

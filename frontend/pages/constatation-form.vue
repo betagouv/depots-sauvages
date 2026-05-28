@@ -18,7 +18,7 @@
     />
 
     <div v-else-if="userInfo?.is_authenticated">
-      <h1 class="fr-h1 fr-mb-2w">Constat de dépôt sauvage</h1>
+      <h1 class="fr-h1 fr-mb-2w">Constatation de dépôt sauvage</h1>
 
       <div class="fr-mb-4w">
         <p class="fr-text--xs fr-text--mention-grey">

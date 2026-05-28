@@ -85,15 +85,19 @@
         </div>
 
         <div v-if="userInfo?.is_authenticated" class="fr-mt-6w" style="text-align: center">
-          <router-link to="/constatation" class="fr-btn fr-btn--lg" title="Démarrer le constat">
-            Démarrer le constat
+          <router-link
+            to="/constatation"
+            class="fr-btn fr-btn--lg"
+            title="Démarrer la constatation"
+          >
+            Démarrer la constatation
           </router-link>
         </div>
 
         <LoginInvitation
           v-else
           title="Connectez-vous pour démarrer"
-          description="Pour initier une procédure et accéder au constat de dépôt sauvage, vous devez vous connecter avec ProConnect."
+          description="Pour initier une procédure et accéder au formulaire de constatation de dépôt sauvage, vous devez vous connecter avec ProConnect."
           redirectTo="/constatation"
         />
       </div>
