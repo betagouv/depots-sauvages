@@ -6,8 +6,8 @@
     iconColor="#00875a"
   >
     <template #actions>
-      <DsfrButton label="Accéder au suivi de la procédure" @click="$emit('goToSuivi')" />
-      <DsfrButton secondary label="Retourner à mes procédures" @click="$emit('goToProcedures')" />
+      <DsfrButton label="Accéder au suivi de cette procédure" @click="$emit('goToSuivi')" />
+      <DsfrButton secondary label="Voir toutes mes procédures" @click="$emit('goToProcedures')" />
     </template>
   </PremiumBox>
 </template>
