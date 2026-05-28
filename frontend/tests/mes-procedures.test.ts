@@ -121,7 +121,7 @@ describe('Page Mes Procédures', () => {
       expect(screen.getByText(/Aucune procédure en cours/)).toBeInTheDocument()
       expect(
         screen.getByText(
-          /Vous n'avez pas encore créé de constatation pour initier une procédure administrative\./
+          /Vous n'avez pas encore créé de constatation pour initier une procédure administrative/
         )
       ).toBeInTheDocument()
     })

@@ -4,7 +4,7 @@
       <div class="fr-col">
         <h1>Mes procédures</h1>
       </div>
-      <div v-if="userInfo?.is_authenticated" class="fr-col-auto">
+      <div v-if="userInfo?.is_authenticated && dossiers.length > 0" class="fr-col-auto">
         <router-link to="/demarrer-constatation" class="fr-btn">
           <span class="fr-icon-add-line fr-mr-1w" aria-hidden="true"></span>
           Démarrer une nouvelle constatation
@@ -65,19 +65,10 @@
           </div>
         </div>
       </div>
-
-      <div v-if="dossiers.length === 0 && userInfo?.is_authenticated" class="fr-mt-5w">
-        <DsfrAlert
-          title="Aucune procédure en cours"
-          description="Vous n'avez pas encore créé de constatation pour initier une procédure administrative."
-          type="info"
-        />
-        <div class="fr-mt-4w" style="text-align: center">
-          <router-link to="/demarrer-constatation" class="fr-btn fr-btn--lg">
-            Débuter une procédure administrative
-          </router-link>
-        </div>
-      </div>
+      <AucuneProcedureBox
+        v-if="dossiers.length === 0 && userInfo?.is_authenticated"
+        class="fr-mt-5w"
+      />
     </div>
     <LoginInvitation v-else />
   </div>
@@ -87,6 +78,7 @@
 import { useDossierStore } from '@/stores/dossier'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import AucuneProcedureBox from '../components/dossiers/AucuneProcedureBox.vue'
 import ChargementDossier from '../components/dossiers/ChargementDossier.vue'
 import DossierMetadata from '../components/dossiers/DossierMetadata.vue'
 import LoginInvitation from '../components/shared/LoginInvitation.vue'
