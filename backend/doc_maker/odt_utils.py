@@ -1,4 +1,5 @@
 import logging
+import re
 
 from django.forms.models import model_to_dict
 from django.utils import timezone
@@ -40,6 +41,20 @@ def prepare_context(instance):
     c_nom = context.get("constatant_nom") or ""
     c_full = f"{c_pre} {c_nom}"
     context["constatant_nom_complet"] = c_full.replace("  ", " ").strip()
+    a_adr = context.get("auteur_adresse") or ""
+    l1, l2 = a_adr, ""
+    if a_adr:
+        if "\n" in a_adr:
+            parts = a_adr.split("\n", 1)
+            l1, l2 = parts[0].strip(), parts[1].strip()
+        else:
+            match = re.search(r"\s+(\d{5}\s+.*)$", a_adr)
+            if match:
+                pos = match.start()
+                l1 = a_adr[:pos].strip()
+                l2 = match.group(1).strip()
+    context["auteur_adresse_l1"] = l1
+    context["auteur_adresse_l2"] = l2
     a_civ = context.get("auteur_civilite") or ""
     a_pre = context.get("auteur_prenom") or ""
     a_nom = context.get("auteur_nom") or ""
