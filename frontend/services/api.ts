@@ -33,6 +33,8 @@ export const API_URLS = {
   userInfo: `${API_URL}/user-info/`,
   userDossiers: `${API_URL}/dossiers/`,
   syncDossiers: `${API_URL}/dossiers/sync/`,
+  bypassAuthConfig: `${API_URL}/bypass-auth/config/`,
+  bypassAuthLogin: `${API_URL}/bypass-auth/login/`,
 }
 
 // API functions
@@ -102,3 +104,22 @@ export const getUserSignalements = (): Promise<UserSignalement[]> =>
 
 export const syncDossiers = (): Promise<{ status: string }> =>
   makeRequest(API_URLS.syncDossiers, 'POST', {})
+
+export interface BypassAuthConfig {
+  enabled: boolean
+}
+
+export interface BypassAuthUser {
+  id: number
+  first_name: string
+  last_name: string
+  email: string
+}
+
+export const getBypassAuthConfig = (): Promise<BypassAuthConfig> =>
+  makeRequest(API_URLS.bypassAuthConfig, 'GET', {})
+
+export const loginBypassAuth = (
+  email: string
+): Promise<{ message: string; user: BypassAuthUser }> =>
+  makeRequest(API_URLS.bypassAuthLogin, 'POST', { email })

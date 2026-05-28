@@ -46,3 +46,9 @@ LOGIN_URL = "/login/"  # Override base setting to avoid reversing missing oidc u
 REST_FRAMEWORK["DEFAULT_PERMISSION_CLASSES"] = [
     "rest_framework.permissions.AllowAny",
 ]
+
+# Register the bypass auth backend in test environment always
+AUTHENTICATION_BACKENDS = [
+    "backend.bypass_auth.auth.BypassAuthBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]

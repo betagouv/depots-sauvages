@@ -32,7 +32,9 @@ INSTALLED_APPS = [
     "backend.dn",
     "backend.dn_signalements",
     "backend.procedures",
+    "backend.bypass_auth",
 ]
+
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -141,6 +143,11 @@ LOGGING = {
     },
 }
 
+# Authentication backends
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+]
+
 # Django Tasks Settings
 TASKS = {
     "default": {
@@ -185,3 +192,7 @@ LOGIN_REQUIRED = True
 # Admin configuration
 ENABLE_ADMIN = True
 ADMIN_URL_NAME = "admin"
+
+# Bypass Auth Configuration
+BYPASS_AUTH_ENABLED = False
+ENV_NAME = "development"
