@@ -25,6 +25,16 @@
             <p class="fr-text--lead fr-mb-4w">Suivi des actions que vous devez réaliser.</p>
 
             <DossierMetadata :dossier="dossierData" class="fr-mb-3w" />
+
+            <div v-if="dossierData" class="fr-mt-2w">
+              <DsfrButton
+                secondary
+                @click="router.push(modifyUrl)"
+              >
+                <span class="fr-icon-edit-line fr-mr-1w" aria-hidden="true"></span>
+                Modifier la constatation
+              </DsfrButton>
+            </div>
           </header>
 
           <InfosComplementaires v-if="hasProcedure" :suivi="suiviProcedure" />
@@ -100,7 +110,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import StepperProcedure from '../components/StepperProcedure.vue'
 import ChargementDossier from '../components/dossiers/ChargementDossier.vue'
@@ -123,6 +133,7 @@ import { useSuiviStore } from '../stores/suivi-procedure'
 import { debounce } from '../utils/debounce'
 
 const route = useRoute()
+const router = useRouter()
 const suiviStore = useSuiviStore()
 
 const dossierId = computed(
