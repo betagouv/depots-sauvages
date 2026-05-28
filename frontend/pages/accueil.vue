@@ -41,9 +41,9 @@
             <router-link
               to="/demarrer-constatation"
               class="fr-btn fr-btn--lg"
-              title="Débuter une constatation"
+              title="Lancer une procédure"
             >
-              Débuter une constatation
+              Lancer une procédure
             </router-link>
             <p class="fr-text--sm fr-mt-2w fr-mb-0 fr-hint-text">
               Connexion ProConnect requise.

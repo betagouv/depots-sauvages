@@ -16,9 +16,10 @@
     <div v-else>
       <div class="fr-background-alt--blue-france fr-mb-6w fr-py-6w">
         <div class="fr-container">
-          <h1 class="fr-h1 fr-mb-3w">Démarrer une constatation</h1>
+          <h1 class="fr-h1 fr-mb-3w">Lancer une procédure</h1>
           <p class="fr-text fr-text--lead fr-mb-0">
-            Pour initier une procédure, vous devez commencer par faire un constat de dépôt sauvage.
+            Pour initier une procédure, vous devez commencer par établir le constat du dépôt
+            sauvage.
           </p>
         </div>
       </div>
@@ -84,19 +85,15 @@
         </div>
 
         <div v-if="userInfo?.is_authenticated" class="fr-mt-6w" style="text-align: center">
-          <router-link
-            to="/constatation"
-            class="fr-btn fr-btn--lg"
-            title="Démarrer la constatation"
-          >
-            Démarrer la constatation
+          <router-link to="/constatation" class="fr-btn fr-btn--lg" title="Démarrer le constat">
+            Démarrer le constat
           </router-link>
         </div>
 
         <LoginInvitation
           v-else
           title="Connectez-vous pour démarrer"
-          description="Pour initier une procédure et accéder au formulaire de constatation, vous devez vous connecter avec ProConnect."
+          description="Pour initier une procédure et accéder au constat de dépôt sauvage, vous devez vous connecter avec ProConnect."
           redirectTo="/constatation"
         />
       </div>

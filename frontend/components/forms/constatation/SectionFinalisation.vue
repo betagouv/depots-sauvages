@@ -2,7 +2,7 @@
   <fieldset class="fr-fieldset fr-my-0 fr-mt-4w">
     <legend class="fr-fieldset__legend">
       <h2 class="premium-h2">
-        <span class="premium-badge">6</span>
+        <span class="premium-badge">{{ sectionNumber }}</span>
         Finalisation de la démarche
       </h2>
     </legend>
@@ -90,8 +90,14 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useConstatationStore } from '@/stores/constatation'
 import { DsfrCallout, DsfrCheckbox, DsfrInputGroup, DsfrRadioButtonSet } from '@gouvminint/vue-dsfr'
 
 const store = useConstatationStore()
+
+const showPrejudice = computed(() => 
+  ['Déposée', 'Sera déposée'].includes(store.formData.plainteEtat)
+)
+const sectionNumber = computed(() => showPrejudice.value ? 6 : 5)
 </script>

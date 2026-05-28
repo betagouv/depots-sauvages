@@ -11,7 +11,7 @@
       <DsfrSelect
         v-model="store.formData.constatantRole"
         :required="true"
-        label="Au sein de la collectivité, qui est en charge de la constatation de ce dépôt sauvage ?"
+        label="Au sein de la collectivité, qui a réalisé la constatation de ce dépôt sauvage ?"
         :options="ConstatantOptions"
         :error-message="store.errors.constatantRole"
       />
@@ -82,7 +82,7 @@
     <div class="fr-fieldset__element fr-mt-4w">
       <DsfrRadioButtonSet
         v-model="store.formData.constatantEstUtilisateurConnecte"
-        legend="La personne qui remplit ce formulaire est-elle la personne en charge de la constatation du dépôt sauvage ?"
+        legend="La personne qui remplit ce formulaire est-elle la personne qui a réalisé la constatation du dépôt sauvage ?"
         :options="[
           { label: 'Oui', value: true },
           { label: 'Non', value: false },

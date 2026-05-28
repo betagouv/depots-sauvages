@@ -363,7 +363,7 @@
     <div v-if="showPlainteSection" class="fr-fieldset__element fr-mt-2w">
       <DsfrRadioButtonSet
         v-model="store.formData.plainteEtat"
-        legend="Un dépôt de plainte est indispensable pour espérer obtenir une identification de l'auteur présumé :"
+        legend="Si la mairie ne peut pas identifier l'auteur des faits, un dépôt de plainte est nécessaire pour initier une procédure pénale."
         :required="true"
         :options="PlainteOptions"
         :error-message="store.errors.plainteEtat"
