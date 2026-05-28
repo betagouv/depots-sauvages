@@ -41,15 +41,10 @@
             <router-link
               to="/demarrer-constatation"
               class="fr-btn fr-btn--lg"
-              title="Débuter une procédure administrative"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Lancer une procédure - nouvelle fenêtre"
+              title="Débuter une constatation"
             >
-              Débuter une procédure administrative
+              Débuter une constatation
             </router-link>
-              Lancer une procédure
-            </a>
             <p class="fr-text--sm fr-mt-2w fr-mb-0 fr-hint-text">
               Connexion ProConnect requise.
               <a
@@ -195,8 +190,6 @@
 import TallyPopupButton from '@/components/shared/TallyPopupButton.vue'
 import { useTallyRoutes } from '@/composables/useTally'
 import { DsfrPicture } from '@gouvminint/vue-dsfr'
-
-const demarcheNumeriqueUrl = import.meta.env.VITE_DN_URL
 
 useTallyRoutes({
   '/simulateur': { formId: 'A7xA8z', options: { layout: 'modal', width: 900 } },
