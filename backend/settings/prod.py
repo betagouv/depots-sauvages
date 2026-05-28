@@ -127,3 +127,11 @@ if not LOGIN_REQUIRED:
     REST_FRAMEWORK["DEFAULT_PERMISSION_CLASSES"] = [
         "rest_framework.permissions.AllowAny",
     ]
+
+# Bypass Auth in Demo Mode - strictly forbidden in production
+BYPASS_AUTH_ENABLED = env.bool("BYPASS_AUTH_ENABLED", default=False)
+if "prod" in ENV_NAME:
+    BYPASS_AUTH_ENABLED = False
+
+if BYPASS_AUTH_ENABLED:
+    AUTHENTICATION_BACKENDS.insert(0, "backend.bypass_auth.auth.BypassAuthBackend")

@@ -12,7 +12,13 @@ from backend.dn_signalements.views import (
     UserSignalementViewSet,
 )
 from backend.home.views import UserInfoViewSet, index_view, logout_view
+from backend.bypass_auth.views import (
+    BypassAuthConfigView,
+    BypassAuthLoginView,
+)
 from backend.procedures.views import SuiviProcedureViewSet
+
+
 
 # API Routes registration
 router = DefaultRouter()
@@ -45,10 +51,21 @@ urlpatterns.extend(
             SyncUserSignalementsView.as_view(),
             name="dossiers-sync",
         ),
+        path(
+            "api/bypass-auth/config/",
+            BypassAuthConfigView.as_view(),
+            name="bypass-auth-config",
+        ),
+        path(
+            "api/bypass-auth/login/",
+            BypassAuthLoginView.as_view(),
+            name="bypass-auth-login",
+        ),
         path("api/", include(router.urls)),
         path("logout/", logout_view, name="logout"),
     ]
 )
+
 
 # OIDC Routes
 if settings.PROCONNECT_ENABLED:

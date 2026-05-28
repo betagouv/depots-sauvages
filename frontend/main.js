@@ -91,6 +91,11 @@ const router = createRouter({
       name: 'RDV',
       component: () => import('./pages/rdv.vue'),
     },
+    {
+      path: '/login-demo',
+      name: 'LoginDemo',
+      component: () => import('./pages/login-demo.vue'),
+    },
   ],
 })
 
