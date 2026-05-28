@@ -8,7 +8,6 @@ from django.utils import timezone
 from django_tasks import task
 
 from backend.constatations.models import Constatation
-from backend.dn_signalements.models import DNSignalement
 from backend.doc_maker import odt_utils
 
 logger = logging.getLogger(__name__)
@@ -18,25 +17,19 @@ def save_document(instance, odt_data, doc_base_name):
     """
     Save document data to the instance.
     """
-    signal_handler = None
     sender_model = instance.__class__
-    if doc_base_name == "doc_constat":
-        signal_handler = generate_doc_constat
-    elif doc_base_name == "lettre_info":
-        signal_handler = generate_lettre_info
-    if not signal_handler:
-        return
-    post_save.disconnect(signal_handler, sender=sender_model)  # Prevent infinite loop
+    post_save.disconnect(generate_doc_constat, sender=sender_model)
+    post_save.disconnect(generate_lettre_info, sender=sender_model)
     try:
         if odt_data:
             setattr(instance, doc_base_name, odt_data)
         setattr(instance, f"{doc_base_name}_generated_at", timezone.now())
-        if doc_base_name == "lettre_info":
-            setattr(instance, f"{doc_base_name}_should_generate", False)
+        setattr(instance, f"{doc_base_name}_should_generate", False)
         instance.save()
         logger.info(f"Document '{doc_base_name}' saved for signalement {instance.id}")
     finally:
-        post_save.connect(signal_handler, sender=sender_model)
+        post_save.connect(generate_doc_constat, sender=sender_model)
+        post_save.connect(generate_lettre_info, sender=sender_model)
 
 
 def generate_document(signalement_id, doc_base_name, model_label):
