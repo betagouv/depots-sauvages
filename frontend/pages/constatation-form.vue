@@ -61,18 +61,27 @@ onMounted(async () => {
   try {
     userInfo.value = await getUserInfo()
     if (userInfo.value?.is_authenticated) {
-      // The contact person fills the form and receives follow-ups.
-      // He is by default the logged-in user.
-      // He can also be the legal 'constatant',
-      // or he can be filling the form on behalf of someone else.
-      if (!store.formData.contactNom && userInfo.value.last_name) {
-        store.formData.contactNom = userInfo.value.last_name
-      }
-      if (!store.formData.contactPrenom && userInfo.value.first_name) {
-        store.formData.contactPrenom = userInfo.value.first_name
-      }
-      if (!store.formData.contactEmail && userInfo.value.email) {
-        store.formData.contactEmail = userInfo.value.email
+      const editId = router.currentRoute.value.params.id
+      if (editId) {
+        const id = parseInt(editId as string, 10)
+        if (!isNaN(id)) {
+          await store.loadConstatation(id)
+        }
+      } else {
+        store.resetStore()
+        // The contact person fills the form and receives follow-ups.
+        // He is by default the logged-in user.
+        // He can also be the legal 'constatant',
+        // or he can be filling the form on behalf of someone else.
+        if (!store.formData.contactNom && userInfo.value.last_name) {
+          store.formData.contactNom = userInfo.value.last_name
+        }
+        if (!store.formData.contactPrenom && userInfo.value.first_name) {
+          store.formData.contactPrenom = userInfo.value.first_name
+        }
+        if (!store.formData.contactEmail && userInfo.value.email) {
+          store.formData.contactEmail = userInfo.value.email
+        }
       }
     }
   } catch (error) {

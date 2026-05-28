@@ -3,12 +3,8 @@
     <div class="fr-mb-4w">
       <p>
         Pour accéder à vos documents et poursuivre vos démarches, merci de
-        <a
-          :href="modifyUrl"
-          class="fr-link fr-icon-external-link-line fr-link--icon-right"
-          target="_blank"
-          rel="noopener noreferrer"
-          >mettre à jour votre procédure sur la plateforme Démarches Numériques</a
+        <router-link :to="modifyUrl" class="fr-link fr-icon-edit-line fr-link--icon-right"
+          >mettre à jour votre constatation</router-link
         >.
       </p>
       <DsfrAlert

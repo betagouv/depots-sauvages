@@ -3,9 +3,7 @@
     <DsfrAlert type="success" title="Identification réussie" class="fr-mb-4w">
       <p class="fr-mb-1w">
         Vous avez identifié l'auteur. Vous pouvez maintenant
-        <a :href="modifyUrl" target="_blank" @click.prevent="openExternalLink(modifyUrl)"
-          >modifier le dossier sur Démarche numérique</a
-        >
+        <router-link :to="modifyUrl">modifier la constatation</router-link>
         pour y ajouter l'identité de l'auteur.
       </p>
     </DsfrAlert>
@@ -13,8 +11,6 @@
 </template>
 
 <script setup lang="ts">
-import { openExternalLink } from '../../utils/browser'
-
 defineProps<{
   modifyUrl: string
 }>()

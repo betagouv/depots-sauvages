@@ -107,6 +107,11 @@ const router = createRouter({
       name: 'ConstatationForm',
       component: () => import('./pages/constatation-form.vue'),
     },
+    {
+      path: '/constatation/:id',
+      name: 'ConstatationEditForm',
+      component: () => import('./pages/constatation-form.vue'),
+    },
   ],
 })
 

@@ -50,6 +50,15 @@
                       Suivre la procédure
                     </DsfrButton>
                   </li>
+                  <li>
+                    <DsfrButton
+                      secondary
+                      @click="router.push(`/constatation/${dossier.numero_dossier}`)"
+                    >
+                      <span class="fr-icon-edit-line fr-mr-1w" aria-hidden="true"></span>
+                      Modifier le constat
+                    </DsfrButton>
+                  </li>
                 </ul>
               </div>
             </div>

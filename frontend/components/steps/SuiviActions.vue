@@ -117,7 +117,7 @@
                   La procédure peut être poursuivie à l'encontre d'un autre auteur identifié (ex.
                   prestataire, sous-traitant, fournisseur, client, intermédiaire).
                 </p>
-                <DsfrButton secondary size="sm" @click="openExternalLink(newProcedureUrl)">
+                <DsfrButton secondary size="sm" @click="startNewProcedure">
                   <span class="fr-icon-add-circle-line fr-mr-1w" aria-hidden="true"></span>
                   Démarrer une nouvelle procédure
                 </DsfrButton>
@@ -159,6 +159,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
 import SelectableChoices from '../shared/SelectableChoices.vue'
 import AttenteDecision from './AttenteDecision.vue'
@@ -169,10 +170,10 @@ const props = defineProps<{
   modifyUrl: string
 }>()
 
-const newProcedureUrl = 'https://www.demarches-simplifiees.fr/commencer/sa-depot-sauvage'
+const router = useRouter()
 
-const openExternalLink = (url: string) => {
-  window.open(url, '_blank')
+const startNewProcedure = () => {
+  router.push('/demarrer-constatation')
 }
 
 defineEmits(['back-to-decision', 'go-to-cloture'])

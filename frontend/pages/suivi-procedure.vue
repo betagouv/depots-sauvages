@@ -36,6 +36,7 @@
             <template #step-1>
               <AucuneProcedure
                 v-if="!hasProcedure"
+                :modify-url="modifyUrl"
               />
               <Documents
                 v-else
@@ -68,6 +69,7 @@
               />
               <MettreAjourDossier
                 v-else-if="suiviProcedure.identification_reussie === true"
+                :modify-url="modifyUrl"
               />
               <ClotureSansAuteur
                 v-else-if="suiviProcedure.identification_reussie === false"
@@ -140,6 +142,7 @@ const hasProcedure = computed(() => dossierData.value?.created !== false)
 const auteurIdentifie = computed(() => dossierData.value?.auteur_identifie ?? false)
 
 const signalementId = computed(() => dossierData.value?.id)
+const modifyUrl = computed(() => `/constatation/${dossierId.value}`)
 
 // Auto-save logic with debounce
 const debouncedSave = debounce(() => {
