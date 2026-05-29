@@ -7,6 +7,7 @@ from backend.constatations.models import Constatation
 class ConstatationAdmin(admin.ModelAdmin):
     list_display = [
         "commune",
+        "user",
         "date_constat",
         "constatant_role",
         "user",
