@@ -63,7 +63,12 @@ class Command(BaseCommand):
         # Temporarily disconnect post_save signals on Constatation to avoid automatic/conflicting
         # SuiviProcedure creation and background document task queueing during the migration.
         from django.db.models.signals import post_save
-        from backend.signalements.signals import create_suivi_procedure, generate_doc_constat, generate_lettre_info
+
+        from backend.signalements.signals import (
+            create_suivi_procedure,
+            generate_doc_constat,
+            generate_lettre_info,
+        )
 
         post_save.disconnect(create_suivi_procedure, sender=Constatation)
         post_save.disconnect(generate_doc_constat, sender=Constatation)
@@ -207,8 +212,7 @@ class Command(BaseCommand):
                     else:
                         # Create new SuiviProcedure safely since signal didn't create one
                         sp = SuiviProcedure.objects.create(
-                            constatation=constatation,
-                            signalement=dnsig
+                            constatation=constatation, signalement=dnsig
                         )
                         procedures_created += 1
                     migrated_count += 1

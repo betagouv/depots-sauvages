@@ -1,5 +1,7 @@
 import logging
+
 from django.core.management.base import BaseCommand
+
 from backend.constatations.models import Constatation
 
 logger = logging.getLogger(__name__)
@@ -9,7 +11,9 @@ class Command(BaseCommand):
     help = "Génère en arrière-plan les documents (rapport de constatation et lettre d'information) pour les dossiers DN migrés."
 
     def handle(self, *args, **options):
-        self.stdout.write("Recherche des constatations migrées nécessitant la génération de documents...")
+        self.stdout.write(
+            "Recherche des constatations migrées nécessitant la génération de documents..."
+        )
 
         # Find Constatations that have a linked DNSignalement (migrated dossiers)
         migrated_constatations = Constatation.objects.filter(
@@ -60,9 +64,17 @@ class Command(BaseCommand):
                     f"[{idx}/{total_count}] Dossier #{dossier_num} : Documents déjà générés ou non requis, ignoré."
                 )
 
-        self.stdout.write(self.style.SUCCESS("\n=================================================="))
+        self.stdout.write(
+            self.style.SUCCESS("\n==================================================")
+        )
         self.stdout.write(self.style.SUCCESS("    LANCEMENT DE LA GENERATION TERMINE AVEC SUCCES "))
         self.stdout.write(self.style.SUCCESS("=================================================="))
-        self.stdout.write(f"Rapports de constatation en cours de génération : {doc_constat_triggered}")
-        self.stdout.write(f"Lettres d'information en cours de génération    : {lettre_info_triggered}")
-        self.stdout.write("Les documents sont générés de manière asynchrone par les tâches de fond.\n")
+        self.stdout.write(
+            f"Rapports de constatation en cours de génération : {doc_constat_triggered}"
+        )
+        self.stdout.write(
+            f"Lettres d'information en cours de génération    : {lettre_info_triggered}"
+        )
+        self.stdout.write(
+            "Les documents sont générés de manière asynchrone par les tâches de fond.\n"
+        )

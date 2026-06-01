@@ -1,4 +1,4 @@
-import logging
+backend/dn/management/commands/audit_dn_data_alignment.pyimport logging
 from django.core.management.base import BaseCommand
 from backend.constatations.models import Constatation
 from backend.procedures.models import SuiviProcedure
