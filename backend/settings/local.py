@@ -94,7 +94,7 @@ if PROCONNECT_ENABLED:
     OIDC_OP_JWKS_ENDPOINT = env("OIDC_OP_JWKS_ENDPOINT", default="")
     OIDC_OP_LOGOUT_ENDPOINT = env("OIDC_OP_LOGOUT_ENDPOINT", default="")
     OIDC_RP_SIGN_ALGO = "RS256"
-    OIDC_RP_SCOPES = "openid email profile"
+    OIDC_RP_SCOPES = "openid email given_name usual_name"
 
 
 # Auth Configuration
