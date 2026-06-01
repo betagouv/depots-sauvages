@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework import status
 
-from backend.home.auth import ProConnectOIDCBackend
+from backend.proconnect.auth import ProConnectOIDCBackend
 from backend.unit_tests.factories import UserFactory
 
 
@@ -47,7 +47,7 @@ def test_logout_proconnect_user(client, settings):
     settings.PROCONNECT_ENABLED = True
     settings.OIDC_OP_LOGOUT_ENDPOINT = "https://example.com/logout"
     user = UserFactory()
-    client.force_login(user, backend="backend.home.auth.ProConnectOIDCBackend")
+    client.force_login(user, backend="backend.proconnect.auth.ProConnectOIDCBackend")
     # Store token mock in session
     session = client.session
     session["oidc_id_token"] = "mock-id-token"
