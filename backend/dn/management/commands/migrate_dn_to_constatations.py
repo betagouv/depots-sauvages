@@ -59,153 +59,163 @@ class Command(BaseCommand):
         pre_registered_users = []
         # Instantiate ProcessDossierView to reuse parsing and extraction logic
         parser_view = ProcessDossierView()
-        for idx, lean_node in enumerate(lean_dossiers, start=1):
-            dossier_number = lean_node["number"]
-            self.stdout.write(
-                f"[{idx}/{total_source_count}] Récupération des détails complets pour le dossier #{dossier_number}..."
-            )
-            try:
-                dossier_detail = dn_client.get_dossier(dossier_number)
-            except Exception as e:
-                self.stdout.write(
-                    self.style.ERROR(
-                        f"  Erreur lors de la récupération des détails pour le dossier #{dossier_number} : {e}"
-                    )
-                )
-                continue
 
-            if not dossier_detail:
+        # Temporarily disconnect post_save signals on Constatation to avoid automatic/conflicting
+        # SuiviProcedure creation and background document task queueing during the migration.
+        from django.db.models.signals import post_save
+        from backend.signalements.signals import create_suivi_procedure, generate_doc_constat, generate_lettre_info
+
+        post_save.disconnect(create_suivi_procedure, sender=Constatation)
+        post_save.disconnect(generate_doc_constat, sender=Constatation)
+        post_save.disconnect(generate_lettre_info, sender=Constatation)
+
+        try:
+            for idx, lean_node in enumerate(lean_dossiers, start=1):
+                dossier_number = lean_node["number"]
                 self.stdout.write(
-                    self.style.WARNING(
-                        f"  Le dossier #{dossier_number} n'a pas été trouvé sur l'API."
+                    f"[{idx}/{total_source_count}] Récupération des détails complets pour le dossier #{dossier_number}..."
+                )
+                try:
+                    dossier_detail = dn_client.get_dossier(dossier_number)
+                except Exception as e:
+                    self.stdout.write(
+                        self.style.ERROR(
+                            f"  Erreur lors de la récupération des détails pour le dossier #{dossier_number} : {e}"
+                        )
                     )
-                )
-                continue
-            # Extract model data
-            signalement_data = parser_view.dossier_to_model_data(dossier_detail)
-            if not signalement_data:
-                self.stdout.write(
-                    self.style.WARNING(
-                        f"  Le dossier #{dossier_number} n'a pas de procédure associée ou manque d'informations, ignoré."
+                    continue
+
+                if not dossier_detail:
+                    self.stdout.write(
+                        self.style.WARNING(
+                            f"  Le dossier #{dossier_number} n'a pas été trouvé sur l'API."
+                        )
                     )
-                )
-                continue
-            # Clean signalement_data to only include fields existing on the Constatation model
-            valid_fields = {field.name for field in Constatation._meta.get_fields()}
-            signalement_data = {k: v for k, v in signalement_data.items() if k in valid_fields}
-            # Map or pre-register the associated user
-            user = None
-            usager_email = dossier_detail.get("usager", {}).get("email")
-            if usager_email:
-                user = User.objects.filter(email__iexact=usager_email).first()
-                if not user:
-                    user = User.objects.filter(username__iexact=usager_email).first()
-                if not user:
-                    if no_pre_register:
-                        unmatched_users_logged.append(
-                            {
-                                "dossier": dossier_number,
-                                "email": usager_email,
-                            }
+                    continue
+                # Extract model data
+                signalement_data = parser_view.dossier_to_model_data(dossier_detail)
+                if not signalement_data:
+                    self.stdout.write(
+                        self.style.WARNING(
+                            f"  Le dossier #{dossier_number} n'a pas de procédure associée ou manque d'informations, ignoré."
                         )
+                    )
+                    continue
+                # Clean signalement_data to only include fields existing on the Constatation model
+                valid_fields = {field.name for field in Constatation._meta.get_fields()}
+                signalement_data = {k: v for k, v in signalement_data.items() if k in valid_fields}
+                # Map or pre-register the associated user
+                user = None
+                usager_email = dossier_detail.get("usager", {}).get("email")
+                if usager_email:
+                    user = User.objects.filter(email__iexact=usager_email).first()
+                    if not user:
+                        user = User.objects.filter(username__iexact=usager_email).first()
+                    if not user:
+                        if no_pre_register:
+                            unmatched_users_logged.append(
+                                {
+                                    "dossier": dossier_number,
+                                    "email": usager_email,
+                                }
+                            )
+                        else:
+                            # Pre-register user cleanly (fully idempotent check done above)
+                            user = User.objects.create(
+                                email=usager_email,
+                                username=usager_email,
+                                is_active=True,
+                            )
+                            pre_registered_users.append(
+                                {
+                                    "dossier": dossier_number,
+                                    "email": usager_email,
+                                }
+                            )
+                # Handle Commune Fallback
+                commune = signalement_data.get("commune")
+                if not commune or not commune.strip():
+                    # Heuristics parsing: check if we can extract commune from localisation_depot
+                    parsed_commune = None
+                    loc = signalement_data.get("localisation_depot") or ""
+                    if loc:
+                        match = re.search(r"\b\d{5}\s+([A-Za-zÀ-ÖØ-öø-ÿ\s\-]+)$", loc)
+                        if match:
+                            parsed_commune = match.group(1).strip()
+                    commune = parsed_commune or "Inconnue"
+                    fallbacks_applied.append(
+                        {
+                            "dossier": dossier_number,
+                            "localisation": loc or "[Vide]",
+                            "assigned": commune,
+                        }
+                    )
+                    signalement_data["commune"] = commune
+                # Normalize role présidents de l'epci if needed
+                role = signalement_data.get("constatant_role") or ""
+                if "président de l'epci" in role.lower() or "président de l’epci" in role.lower():
+                    signalement_data["constatant_role"] = "president ECPI"
+                # Parse original timestamps
+                date_creation = (
+                    dateparse.parse_datetime(dossier_detail.get("dateDepot")) or timezone.now()
+                )
+                date_modification = (
+                    dateparse.parse_datetime(dossier_detail.get("dateDerniereModification"))
+                    or timezone.now()
+                )
+                # Doc generation will be done later, when the user hits the "suivi procédure" page.
+                signalement_data["doc_constat_should_generate"] = False
+                signalement_data["lettre_info_should_generate"] = False
+                with transaction.atomic():
+                    # Get or create the DNSignalement placeholder to ensure robust tracking & idempotency
+                    dnsig, _ = DNSignalement.objects.get_or_create(
+                        dn_numero_dossier=dossier_number,
+                        defaults={
+                            "commune": commune,
+                            "localisation_depot": signalement_data.get("localisation_depot") or "",
+                            "date_constat": signalement_data.get("date_constat"),
+                            "heure_constat": signalement_data.get("heure_constat"),
+                        },
+                    )
+                    # Locate corresponding SuiviProcedure linked to this dossier's placeholder
+                    sp = SuiviProcedure.objects.filter(signalement=dnsig).first()
+                    constatation = None
+                    if sp and sp.constatation:
+                        constatation = sp.constatation
+                    is_new_constatation = False
+                    if constatation:
+                        # Update existing constatation (IDEMPOTENT update)
+                        for k, v in signalement_data.items():
+                            setattr(constatation, k, v)
+                        constatation.user = user
+                        constatation.save()
                     else:
-                        # Pre-register user cleanly (fully idempotent check done above)
-                        user = User.objects.create(
-                            email=usager_email,
-                            username=usager_email,
-                            is_active=True,
-                        )
-                        pre_registered_users.append(
-                            {
-                                "dossier": dossier_number,
-                                "email": usager_email,
-                            }
-                        )
-            # Handle Commune Fallback
-            commune = signalement_data.get("commune")
-            if not commune or not commune.strip():
-                # Heuristics parsing: check if we can extract commune from localisation_depot
-                parsed_commune = None
-                loc = signalement_data.get("localisation_depot") or ""
-                if loc:
-                    match = re.search(r"\b\d{5}\s+([A-Za-zÀ-ÖØ-öø-ÿ\s\-]+)$", loc)
-                    if match:
-                        parsed_commune = match.group(1).strip()
-                commune = parsed_commune or "Inconnue"
-                fallbacks_applied.append(
-                    {
-                        "dossier": dossier_number,
-                        "localisation": loc or "[Vide]",
-                        "assigned": commune,
-                    }
-                )
-                signalement_data["commune"] = commune
-            # Normalize role présidents de l'epci if needed
-            role = signalement_data.get("constatant_role") or ""
-            if "président de l'epci" in role.lower() or "président de l’epci" in role.lower():
-                signalement_data["constatant_role"] = "president ECPI"
-            # Parse original timestamps
-            date_creation = (
-                dateparse.parse_datetime(dossier_detail.get("dateDepot")) or timezone.now()
-            )
-            date_modification = (
-                dateparse.parse_datetime(dossier_detail.get("dateDerniereModification"))
-                or timezone.now()
-            )
-            # Doc generation will be done later, when the user hits the "suivi procédure" page.
-            signalement_data["doc_constat_should_generate"] = False
-            signalement_data["lettre_info_should_generate"] = False
-            with transaction.atomic():
-                # Get or create the DNSignalement placeholder to ensure robust tracking & idempotency
-                dnsig, _ = DNSignalement.objects.get_or_create(
-                    dn_numero_dossier=dossier_number,
-                    defaults={
-                        "commune": commune,
-                        "localisation_depot": signalement_data.get("localisation_depot") or "",
-                        "date_constat": signalement_data.get("date_constat"),
-                        "heure_constat": signalement_data.get("heure_constat"),
-                    },
-                )
-                # Locate corresponding SuiviProcedure linked to this dossier's placeholder
-                sp = SuiviProcedure.objects.filter(signalement=dnsig).first()
-                constatation = None
-                if sp and sp.constatation:
-                    constatation = sp.constatation
-                is_new_constatation = False
-                if constatation:
-                    # Update existing constatation (IDEMPOTENT update)
-                    for k, v in signalement_data.items():
-                        setattr(constatation, k, v)
-                    constatation.user = user
-                    constatation.save()
-                else:
-                    # Create new constatation (triggers post-save signals auto-creating SuiviProcedure)
-                    constatation = Constatation.objects.create(user=user, **signalement_data)
-                    is_new_constatation = True
-                # Overwrite django's auto-generated created/modified times with original ones
-                Constatation.objects.filter(id=constatation.id).update(
-                    created=date_creation, modified=date_modification
-                )
-                # Connect SuiviProcedure safely (relink or update the post-save auto-created one)
-                if sp:
-                    # If there's an existing SuiviProcedure for this dossier, link it to the constatation
-                    if sp.constatation != constatation:
-                        sp.constatation = constatation
-                        sp.save()
-                    procedures_relinked += 1
-                else:
-                    # Get the SuiviProcedure created automatically by the post_save signal
-                    sp = SuiviProcedure.objects.filter(constatation=constatation).first()
-                    if not sp:
-                        # Fallback if signal was disabled
-                        sp, _ = SuiviProcedure.objects.get_or_create(constatation=constatation)
-                    sp.signalement = dnsig
-                    sp.save()
-                    if is_new_constatation:
-                        procedures_created += 1
-                    else:
+                        # Create new constatation (no signal will trigger to auto-create SuiviProcedure)
+                        constatation = Constatation.objects.create(user=user, **signalement_data)
+                        is_new_constatation = True
+                    # Overwrite django's auto-generated created/modified times with original ones
+                    Constatation.objects.filter(id=constatation.id).update(
+                        created=date_creation, modified=date_modification
+                    )
+                    # Connect SuiviProcedure safely
+                    if sp:
+                        # If there's an existing SuiviProcedure for this dossier, link it to the constatation
+                        if sp.constatation != constatation:
+                            sp.constatation = constatation
+                            sp.save()
                         procedures_relinked += 1
-                migrated_count += 1
+                    else:
+                        # Create new SuiviProcedure safely since signal didn't create one
+                        sp = SuiviProcedure.objects.create(
+                            constatation=constatation,
+                            signalement=dnsig
+                        )
+                        procedures_created += 1
+                    migrated_count += 1
+        finally:
+            post_save.connect(create_suivi_procedure, sender=Constatation)
+            post_save.connect(generate_doc_constat, sender=Constatation)
+            post_save.connect(generate_lettre_info, sender=Constatation)
 
         # --- MIGRATION REPORT ---
         self.stdout.write(
