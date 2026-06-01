@@ -11,11 +11,7 @@ class Command(BaseCommand):
     help = "Génère en arrière-plan les documents (rapport de constatation et lettre d'information) pour les dossiers DN migrés."
 
     def handle(self, *args, **options):
-        self.stdout.write(
-            "Recherche des constatations migrées nécessitant la génération de documents..."
-        )
-
-        # Find all Constatations to check and generate missing documents
+        self.stdout.write("Récupération de l'ensemble des constatations...")
         constatations = Constatation.objects.all()
 
         total_count = constatations.count()
@@ -23,56 +19,24 @@ class Command(BaseCommand):
             self.stdout.write(self.style.WARNING("Aucune constatation trouvée."))
             return
 
-        self.stdout.write(f"Analyse de l'ensemble des {total_count} constatation(s) de la base de données...")
-
-        doc_constat_triggered = 0
-        lettre_info_triggered = 0
+        self.stdout.write(self.style.WARNING(f"\nLancement de la génération des documents pour {total_count} constatation(s)..."))
 
         for idx, constatation in enumerate(constatations, start=1):
             dnsig = constatation.suivi_procedure.signalement if hasattr(constatation, "suivi_procedure") and constatation.suivi_procedure else None
             identifier = f"Dossier #{dnsig.dn_numero_dossier}" if dnsig else f"Constatation ID {constatation.id}"
-            needs_save = False
-            triggered_actions = []
 
-            # 1. Trigger Rapport de constatation if not yet generated
-            if not constatation.doc_constat:
-                constatation.doc_constat_should_generate = True
-                needs_save = True
-                doc_constat_triggered += 1
-                triggered_actions.append("Rapport de constatation")
+            constatation.doc_constat_should_generate = True
+            constatation.lettre_info_should_generate = True
+            constatation.save()
 
-            # 2. Trigger Lettre d'information if not yet generated
-            if not constatation.lettre_info:
-                constatation.lettre_info_should_generate = True
-                needs_save = True
-                lettre_info_triggered += 1
-                triggered_actions.append("Lettre d'information")
-
-            if needs_save:
-                # Saving with signals active automatically enqueues background document generation tasks
-                constatation.save()
-                actions_str = " et ".join(triggered_actions)
-                self.stdout.write(
-                    self.style.SUCCESS(
-                        f"[{idx}/{total_count}] {identifier} : Génération lancée pour : {actions_str}."
-                    )
+            self.stdout.write(
+                self.style.SUCCESS(
+                    f"[{idx}/{total_count}] {identifier} : Demandes de génération envoyées (Rapport + Lettre)."
                 )
-            else:
-                self.stdout.write(
-                    f"[{idx}/{total_count}] {identifier} : Documents déjà générés ou non requis, ignoré."
-                )
+            )
 
-        self.stdout.write(
-            self.style.SUCCESS("\n==================================================")
-        )
+        self.stdout.write(self.style.SUCCESS("\n=================================================="))
         self.stdout.write(self.style.SUCCESS("    LANCEMENT DE LA GENERATION TERMINE AVEC SUCCES "))
         self.stdout.write(self.style.SUCCESS("=================================================="))
-        self.stdout.write(
-            f"Rapports de constatation en cours de génération : {doc_constat_triggered}"
-        )
-        self.stdout.write(
-            f"Lettres d'information en cours de génération    : {lettre_info_triggered}"
-        )
-        self.stdout.write(
-            "Les documents sont générés de manière asynchrone par les tâches de fond.\n"
-        )
+        self.stdout.write(f"Total des constatations traitées : {total_count}")
+        self.stdout.write("Les documents (Rapports & Lettres) sont générés en arrière-plan par les tâches de fond.\n")
