@@ -179,6 +179,9 @@ class ProcessDossierView(APIView):
             updates["nature_terrain"] = [str(item).lower() for item in data["nature_terrain"]]
         if data.get("auteur_adresse"):
             updates["auteur_adresse"] = self.clean_text(data["auteur_adresse"])
+        if "ceci_est_un_test" in data:
+            val = str(data["ceci_est_un_test"]).lower()
+            updates["ceci_est_un_test"] = "test" in val or "démonstration" in val
         return updates
 
     def get_usager_contact_data(self, dossier):

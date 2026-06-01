@@ -22,6 +22,7 @@ class BaseSignalementAdminMixin:
         "contact_nom",
         "contact_prenom",
         "accepte_accompagnement",
+        "ceci_est_un_test",
         "created",
         "modified",
     ]
@@ -36,6 +37,8 @@ class BaseSignalementAdminMixin:
         "auteur_identifie",
         "statut_auteur",
         "accepte_accompagnement",
+        "ceci_est_un_test",
+        "entreprise_francaise",
     ]
     search_fields = [
         "commune",
@@ -66,6 +69,7 @@ class BaseSignalementAdminMixin:
                     "constatant_civilite",
                     "constatant_prenom",
                     "constatant_nom",
+                    "ceci_est_un_test",
                 )
             },
         ),
@@ -93,6 +97,7 @@ class BaseSignalementAdminMixin:
                     "auteur_prenom",
                     "auteur_adresse",
                     "auteur_siret",
+                    "entreprise_francaise",
                     "indices_disponibles",
                     "precisions_indices",
                     "arrete_municipal_existe",
