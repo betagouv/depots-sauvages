@@ -85,7 +85,14 @@ def test_logout_standard_user(client, settings):
 
 
 @pytest.mark.django_db
-def test_proconnect_oidc_backend_claims():
+def test_proconnect_oidc_backend_claims(settings):
+    settings.OIDC_OP_TOKEN_ENDPOINT = "https://example.com/token"
+    settings.OIDC_OP_USER_ENDPOINT = "https://example.com/userinfo"
+    settings.OIDC_OP_JWKS_ENDPOINT = "https://example.com/jwks"
+    settings.OIDC_RP_CLIENT_ID = "mock-client"
+    settings.OIDC_RP_CLIENT_SECRET = "mock-secret"
+    settings.OIDC_RP_SIGN_ALGO = "RS256"
+
     User = get_user_model()
     backend = ProConnectOIDCBackend()
     user = User.objects.create(username="agent@example.com", email="agent@example.com")
