@@ -15,23 +15,22 @@ class Command(BaseCommand):
             "Recherche des constatations migrées nécessitant la génération de documents..."
         )
 
-        # Find Constatations that have a linked DNSignalement (migrated dossiers)
-        migrated_constatations = Constatation.objects.filter(
-            suivi_procedure__signalement__isnull=False
-        )
+        # Find all Constatations to check and generate missing documents
+        constatations = Constatation.objects.all()
 
-        total_count = migrated_constatations.count()
+        total_count = constatations.count()
         if total_count == 0:
-            self.stdout.write(self.style.WARNING("Aucune constatation migrée trouvée."))
+            self.stdout.write(self.style.WARNING("Aucune constatation trouvée."))
             return
 
-        self.stdout.write(f"Trouvé {total_count} constatation(s) migrée(s). Début de l'analyse...")
+        self.stdout.write(f"Analyse de l'ensemble des {total_count} constatation(s) de la base de données...")
 
         doc_constat_triggered = 0
         lettre_info_triggered = 0
 
-        for idx, constatation in enumerate(migrated_constatations, start=1):
-            dossier_num = constatation.suivi_procedure.signalement.dn_numero_dossier
+        for idx, constatation in enumerate(constatations, start=1):
+            dnsig = constatation.suivi_procedure.signalement if hasattr(constatation, "suivi_procedure") and constatation.suivi_procedure else None
+            identifier = f"Dossier #{dnsig.dn_numero_dossier}" if dnsig else f"Constatation ID {constatation.id}"
             needs_save = False
             triggered_actions = []
 
@@ -42,9 +41,8 @@ class Command(BaseCommand):
                 doc_constat_triggered += 1
                 triggered_actions.append("Rapport de constatation")
 
-            # 2. Trigger Lettre d'information if auteur is identified and not yet generated
-            # Note: doc generation signal checks lettre_info_should_generate
-            if constatation.auteur_identifie and not constatation.lettre_info:
+            # 2. Trigger Lettre d'information if not yet generated
+            if not constatation.lettre_info:
                 constatation.lettre_info_should_generate = True
                 needs_save = True
                 lettre_info_triggered += 1
@@ -56,12 +54,12 @@ class Command(BaseCommand):
                 actions_str = " et ".join(triggered_actions)
                 self.stdout.write(
                     self.style.SUCCESS(
-                        f"[{idx}/{total_count}] Dossier #{dossier_num} : Génération lancée pour : {actions_str}."
+                        f"[{idx}/{total_count}] {identifier} : Génération lancée pour : {actions_str}."
                     )
                 )
             else:
                 self.stdout.write(
-                    f"[{idx}/{total_count}] Dossier #{dossier_num} : Documents déjà générés ou non requis, ignoré."
+                    f"[{idx}/{total_count}] {identifier} : Documents déjà générés ou non requis, ignoré."
                 )
 
         self.stdout.write(
