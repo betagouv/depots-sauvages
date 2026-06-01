@@ -18,6 +18,7 @@ from backend.dn_signalements.dn_mappings import (
     CHAMP_ID_TO_FIELD,
     DATE_CONSTAT_CHAMP_ID,
 )
+from backend.constatations.models import Constatation
 from backend.dn_signalements.models import DNSignalement
 from backend.dn_signalements.serializers import UserSignalementSerializer
 from backend.dn_signalements.tasks import sync_user_dossiers
@@ -25,6 +26,7 @@ from backend.signalements.views import SignalementDocumentDownloadViewMixin
 
 
 class ProcessDossierView(APIView):
+
     def post(self, request):
         dossier_id = request.data.get("dossier_id")
         if not dossier_id or not str(dossier_id).isdigit():
@@ -218,7 +220,8 @@ class UserSignalementViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return DNSignalement.objects.filter(user=self.request.user).order_by("-dn_date_creation")
+        return Constatation.objects.filter(user=self.request.user).order_by("-created")
+
 
 
 class SyncUserSignalementsView(APIView):

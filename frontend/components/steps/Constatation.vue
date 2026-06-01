@@ -20,7 +20,7 @@ const actions = computed(() => [
     readonly: true,
   },
   {
-    label: 'Remplir le formulaire sur Démarches Numériques',
+    label: 'Remplir le formulaire de constatation',
     completed: true,
     readonly: true,
   },

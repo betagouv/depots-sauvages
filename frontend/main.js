@@ -1,16 +1,16 @@
 import '@gouvfr/dsfr/dist/dsfr.min.css'
-import '@gouvfr/dsfr/dist/utility/utility.min.css'
 import '@gouvfr/dsfr/dist/utility/icons/icons.min.css'
-import './styles/premium-design.css'
+import '@gouvfr/dsfr/dist/utility/utility.min.css'
 import VueDsfr from '@gouvminint/vue-dsfr'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import App from './app.vue'
 import { getUserInfo } from './services/api'
-import { initMatomo } from './services/matomo'
-import { initCrisp } from './services/crisp'
 import { LOGIN_REQUIRED } from './services/config'
+import { initCrisp } from './services/crisp'
+import { initMatomo } from './services/matomo'
+import './styles/premium-design.css'
 
 const pinia = createPinia()
 
@@ -95,6 +95,22 @@ const router = createRouter({
       path: '/login-demo',
       name: 'LoginDemo',
       component: () => import('./pages/login-demo.vue'),
+    },
+    {
+      path: '/constatation',
+      path: '/demarrer-constatation',
+      name: 'ConstatationStart',
+      component: () => import('./pages/commencer-constatation.vue'),
+    },
+    {
+      path: '/constatation',
+      name: 'ConstatationForm',
+      component: () => import('./pages/constatation-form.vue'),
+    },
+    {
+      path: '/constatation/:id',
+      name: 'ConstatationEditForm',
+      component: () => import('./pages/constatation-form.vue'),
     },
   ],
 })

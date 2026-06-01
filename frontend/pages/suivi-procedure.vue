@@ -11,7 +11,7 @@
           <header class="fr-mb-4w">
             <div class="fr-grid-row fr-grid-row--middle fr-mb-3w">
               <div class="fr-col-auto fr-mr-3w">
-                <h1 class="fr-h1 fr-mb-0">Procédure #{{ dossierData.dn_numero_dossier }}</h1>
+                <h1 class="fr-h1 fr-mb-0">Procédure #{{ dossierData.id }}</h1>
               </div>
               <div class="fr-col-auto" v-if="hasProcedure">
                 <DsfrBadge
@@ -26,13 +26,15 @@
 
             <DossierMetadata :dossier="dossierData" class="fr-mb-3w" />
 
-            <DsfrButton
-              secondary
-              @click="openExternalLink(getDnModifyUrl(dossierData.dn_numero_dossier))"
-            >
-              <span class="fr-icon-external-link-line fr-mr-1w" aria-hidden="true"></span>
-              Modifier le dossier de constatation sur Démarche numérique
-            </DsfrButton>
+            <div v-if="dossierData" class="fr-mt-2w">
+              <DsfrButton
+                secondary
+                @click="router.push(modifyUrl)"
+              >
+                <span class="fr-icon-edit-line fr-mr-1w" aria-hidden="true"></span>
+                Modifier la constatation
+              </DsfrButton>
+            </div>
           </header>
 
           <InfosComplementaires v-if="hasProcedure" :suivi="suiviProcedure" />
@@ -44,7 +46,7 @@
             <template #step-1>
               <AucuneProcedure
                 v-if="!hasProcedure"
-                :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
+                :modify-url="modifyUrl"
               />
               <Documents
                 v-else
@@ -52,35 +54,32 @@
                 :dossier-data="dossierData"
                 :has-procedure="hasProcedure"
                 :auteur-identifie="auteurIdentifie"
-                :doc-constat-url="getDnDocConstatUrl(dossierData.id)"
-                :lettre-info-url="getDnLettreInfoUrl(dossierData.id)"
-                :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
+                :doc-constat-url="getDocConstatUrl(dossierData.id)"
+                :lettre-info-url="getLettreInfoUrl(dossierData.id)"
               />
             </template>
             <template v-if="hasProcedure" #step-2>
               <Notification
                 v-if="auteurIdentifie"
                 :suivi="suiviProcedure"
-                :lettre-info-url="getDnLettreInfoUrl(dossierData.id)"
+                :lettre-info-url="getLettreInfoUrl(dossierData.id)"
                 @next-step="activeStep = 3"
               />
               <Identification
                 v-else
                 :suivi="suiviProcedure"
                 :auteur-identifie="auteurIdentifie"
-                :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
               />
             </template>
             <template v-if="hasProcedure" #step-3>
               <SuiviDecision
                 v-if="auteurIdentifie"
                 :suivi="suiviProcedure"
-                :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
                 @back-to-notification="activeStep = 2"
               />
               <MettreAjourDossier
                 v-else-if="suiviProcedure.identification_reussie === true"
-                :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
+                :modify-url="modifyUrl"
               />
               <ClotureSansAuteur
                 v-else-if="suiviProcedure.identification_reussie === false"
@@ -91,7 +90,6 @@
               <SuiviActions
                 v-if="auteurIdentifie"
                 :suivi="suiviProcedure"
-                :modify-url="getDnModifyUrl(dossierData.dn_numero_dossier)"
                 @back-to-decision="activeStep = 3"
                 @go-to-cloture="activeStep = 5"
               />
@@ -112,7 +110,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import StepperProcedure from '../components/StepperProcedure.vue'
 import ChargementDossier from '../components/dossiers/ChargementDossier.vue'
@@ -129,13 +127,13 @@ import MettreAjourDossier from '../components/steps/MettreAjourDossier.vue'
 import Notification from '../components/steps/Notification.vue'
 import SuiviActions from '../components/steps/SuiviActions.vue'
 import SuiviDecision from '../components/steps/SuiviDecision.vue'
-import { API_URLS, createResource, getUserInfo } from '../services/api'
-import { getDnDocConstatUrl, getDnLettreInfoUrl, getDnModifyUrl } from '../services/urls'
+import { API_URLS, fetchResource, getUserInfo } from '../services/api'
+import { getDocConstatUrl, getLettreInfoUrl } from '../services/urls'
 import { useSuiviStore } from '../stores/suivi-procedure'
-import { openExternalLink } from '../utils/browser'
 import { debounce } from '../utils/debounce'
 
 const route = useRoute()
+const router = useRouter()
 const suiviStore = useSuiviStore()
 
 const dossierId = computed(
@@ -155,6 +153,7 @@ const hasProcedure = computed(() => dossierData.value?.created !== false)
 const auteurIdentifie = computed(() => dossierData.value?.auteur_identifie ?? false)
 
 const signalementId = computed(() => dossierData.value?.id)
+const modifyUrl = computed(() => `/constatation/${dossierId.value}`)
 
 // Auto-save logic with debounce
 const debouncedSave = debounce(() => {
@@ -224,8 +223,6 @@ onMounted(async () => {
   const dossierId = (route.params.dossier_id as string) || (route.query.dossier_id as string)
 
   if (!dossierId) {
-    // For demo/dev purposes if no ID is provided, we might want to mock or show error
-    // In a real app, we should probably redirect or show a robust error
     error.value = 'Identifiant de dossier manquant.'
     showLoading.value = false
     return
@@ -240,8 +237,8 @@ onMounted(async () => {
       return
     }
 
-    // Fetch dossier data first (it creates the signalement if needed)
-    const dossierRes = await createResource(API_URLS.processDossier, { dossier_id: dossierId })
+    // Fetch constatation data directly
+    const dossierRes = await fetchResource(`${API_URLS.constatations}${dossierId}/`)
     dossierData.value = dossierRes
 
     // Then fetch procedure tracking data using the internal ID

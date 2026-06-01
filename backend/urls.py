@@ -1,10 +1,11 @@
 from django.conf import settings
 from django.contrib import admin
-from django.contrib.auth.decorators import login_required
 from django.urls import include, path, re_path
 from django.views.generic import RedirectView
 from rest_framework.routers import DefaultRouter
 
+from backend.bypass_auth.views import BypassAuthConfigView, BypassAuthLoginView
+from backend.constatations.views import ConstatationDocumentDownloadView, ConstatationViewSet
 from backend.dn_signalements.views import (
     DNSignalementDocumentDownloadView,
     ProcessDossierView,
@@ -12,19 +13,14 @@ from backend.dn_signalements.views import (
     UserSignalementViewSet,
 )
 from backend.home.views import UserInfoViewSet, index_view, logout_view
-from backend.bypass_auth.views import (
-    BypassAuthConfigView,
-    BypassAuthLoginView,
-)
 from backend.procedures.views import SuiviProcedureViewSet
-
-
 
 # API Routes registration
 router = DefaultRouter()
 router.register("user-info", UserInfoViewSet, basename="user-info")
 router.register("dossiers", UserSignalementViewSet, basename="user-dossier")
 router.register("suivi-procedure", SuiviProcedureViewSet, basename="suivi-procedure")
+router.register("constatations", ConstatationViewSet, basename="constatation")
 
 
 # Admin Routes
@@ -36,6 +32,11 @@ else:
 # API Routes
 urlpatterns.extend(
     [
+        path(
+            "api/constatations/<int:pk>/documents/<str:doc_type>/",
+            ConstatationDocumentDownloadView.as_view(),
+            name="constatation-document-download",
+        ),
         path(
             "api/dn-signalements/<int:pk>/documents/<str:doc_type>/",
             DNSignalementDocumentDownloadView.as_view(),
@@ -79,8 +80,6 @@ urlpatterns.append(
     )
 )
 
-if settings.LOGIN_REQUIRED:
-    urlpatterns.append(re_path(r"^mes-procedures/?$", login_required(index_view)))
 
 # Sentry Debug
 if getattr(settings, "SENTRY_DEBUG", False):

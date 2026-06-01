@@ -35,6 +35,7 @@ export const API_URLS = {
   syncDossiers: `${API_URL}/dossiers/sync/`,
   bypassAuthConfig: `${API_URL}/bypass-auth/config/`,
   bypassAuthLogin: `${API_URL}/bypass-auth/login/`,
+  constatations: `${API_URL}/constatations/`,
 }
 
 // API functions
@@ -84,6 +85,7 @@ export interface UserInfo {
   first_name?: string
   last_name?: string
   email?: string
+  procedures_count?: number
 }
 
 export const getUserInfo = (): Promise<UserInfo> => makeRequest(API_URLS.userInfo, 'GET', {})

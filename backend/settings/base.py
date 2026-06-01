@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "backend.dn_signalements",
     "backend.procedures",
     "backend.bypass_auth",
+    "backend.constatations",
 ]
 
 

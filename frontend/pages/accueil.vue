@@ -38,15 +38,13 @@
             </li>
           </ul>
           <div>
-            <a
-              :href="demarcheNumeriqueUrl"
+            <router-link
+              to="/demarrer-constatation"
               class="fr-btn fr-btn--lg"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Lancer une procédure - nouvelle fenêtre"
+              title="Lancer une procédure"
             >
               Lancer une procédure
-            </a>
+            </router-link>
             <p class="fr-text--sm fr-mt-2w fr-mb-0 fr-hint-text">
               Connexion ProConnect requise.
               <a
@@ -190,10 +188,8 @@
 
 <script setup lang="ts">
 import TallyPopupButton from '@/components/shared/TallyPopupButton.vue'
-import { DsfrPicture } from '@gouvminint/vue-dsfr'
 import { useTallyRoutes } from '@/composables/useTally'
-
-const demarcheNumeriqueUrl = import.meta.env.VITE_DN_URL
+import { DsfrPicture } from '@gouvminint/vue-dsfr'
 
 useTallyRoutes({
   '/simulateur': { formId: 'A7xA8z', options: { layout: 'modal', width: 900 } },

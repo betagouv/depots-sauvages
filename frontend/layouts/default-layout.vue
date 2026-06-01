@@ -85,7 +85,7 @@
 import { DsfrFooter, DsfrFooterLinkList, DsfrHeader } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { getUserInfo } from '../services/api'
+import { getUserInfo, getBypassAuthConfig } from '../services/api'
 import { LOGIN_URL, LOGOUT_URL } from '../services/urls'
 import { PROCONNECT_ENABLED } from '../services/config'
 
@@ -149,6 +149,14 @@ const goToLogout = (event?: MouseEvent) => {
 const isProConnectEnabled = PROCONNECT_ENABLED
 
 onMounted(async () => {
+  let bypassEnabled = false
+  try {
+    const bypassConfig = await getBypassAuthConfig()
+    bypassEnabled = bypassConfig.enabled
+  } catch (e) {
+    console.warn('Failed to fetch bypass auth config', e)
+  }
+
   try {
     const info = await getUserInfo()
     userInfo.value = info
@@ -163,19 +171,47 @@ onMounted(async () => {
         to: LOGOUT_URL, // for styling
         onClick: goToLogout,
       })
-    } else if (isProConnectEnabled) {
-      quickLinks.value.push({
-        label: 'Se connecter via ProConnect',
-        icon: 'fr-icon-lock-line',
-        iconRight: false,
-        href: LOGIN_URL,
-        to: LOGIN_URL, // for styling
-        onClick: goToLogin,
-      })
+    } else {
+      if (bypassEnabled) {
+        quickLinks.value.push({
+          label: 'Connexion de démo',
+          icon: 'fr-icon-user-line',
+          iconRight: false,
+          href: '/login-demo',
+          to: '/login-demo',
+          onClick: (event) => {
+            if (event) event.preventDefault()
+            window.location.href = '/login-demo'
+          }
+        })
+      }
+      if (isProConnectEnabled) {
+        quickLinks.value.push({
+          label: 'Se connecter via ProConnect',
+          icon: 'fr-icon-lock-line',
+          iconRight: false,
+          href: LOGIN_URL,
+          to: LOGIN_URL, // for styling
+          onClick: goToLogin,
+        })
+      }
     }
   } catch (error) {
     console.error('Failed to fetch user info:', error)
 
+    if (bypassEnabled) {
+      quickLinks.value.push({
+        label: 'Connexion de démo',
+        icon: 'fr-icon-user-line',
+        iconRight: false,
+        href: '/login-demo',
+        to: '/login-demo',
+        onClick: (event) => {
+          if (event) event.preventDefault()
+          window.location.href = '/login-demo'
+        }
+      })
+    }
     if (isProConnectEnabled) {
       quickLinks.value.push({
         label: 'Se connecter via ProConnect',

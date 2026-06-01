@@ -118,9 +118,11 @@ describe('Page Mes Procédures', () => {
     })
 
     await waitFor(() => {
-      expect(screen.getByText(/Aucune procédure trouvée/)).toBeInTheDocument()
+      expect(screen.getByText(/Aucune procédure en cours/)).toBeInTheDocument()
       expect(
-        screen.getByText(/Aucune procédure trouvée sur Démarche Numérique\./)
+        screen.getByText(
+          /Vous n'avez pas encore créé de constatation pour initier une procédure administrative/
+        )
       ).toBeInTheDocument()
     })
   })
