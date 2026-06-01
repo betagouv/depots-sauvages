@@ -37,6 +37,7 @@ class AbstractSignalementBase(models.Model):
     auteur_prenom = models.CharField("prénom de l'auteur", max_length=255, blank=True)
     auteur_adresse = models.TextField("adresse de l'auteur", blank=True)
     auteur_siret = models.CharField("SIRET de l'auteur", max_length=14, blank=True)
+    entreprise_francaise = models.BooleanField("entreprise française", null=True, blank=True)
     contact_nom = models.CharField("nom du contact", max_length=255, blank=True)
     contact_prenom = models.CharField("prénom du contact", max_length=255, blank=True)
     contact_email = models.EmailField("email du contact", blank=True)

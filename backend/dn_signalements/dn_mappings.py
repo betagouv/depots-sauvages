@@ -29,6 +29,7 @@ CHAMP_ID_TO_FIELD = {
     "Q2hhbXAtNjMyODgzNQ==": "constatant_civilite",
     "Q2hhbXAtNjMyODg0MA==": "constatant_prenom",
     "Q2hhbXAtNjMyODg0Mg==": "constatant_nom",
+    "Q2hhbXAtNjI3MDI4Mw==": "entreprise_francaise",
 }
 
 # IDs of fields that need special handling
