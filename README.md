@@ -17,6 +17,7 @@ Application de signalement des dépôts sauvages destinée aux communes.
   - [Les deux conteneurs](#les-deux-conteneurs)
 - [🧪 Tests](#-tests)
 - [✨ Fonctionnalités](#-fonctionnalités-clés)
+- [⚖️ Licence](#️-licence)
 
 ---
 
@@ -252,3 +253,11 @@ docker compose up --build
 # Arrêter tous les conteneurs
 docker compose down
 ```
+
+---
+
+## ⚖️ Licence
+
+Ce projet est sous licence libre **GNU Affero General Public License v3 (AGPL-3.0)**. Pour plus de détails, veuillez consulter le fichier [LICENSE.md](file:///home/sylvain/Dev/depots-sauvages/LICENSE.md) à la racine du dépôt.
+
+
