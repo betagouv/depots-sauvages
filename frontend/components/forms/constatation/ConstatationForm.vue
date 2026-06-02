@@ -28,9 +28,9 @@
 
     <div class="fr-col-12 fr-col-md-9">
       <div class="constatation-form fr-pb-10w">
-        <DsfrCallout class="fr-mb-4w">
+        <p class="fr-text--sm fr-text--mention-grey fr-mb-4w">
           Les champs marqués d'un astérisque (*) sont obligatoires.
-        </DsfrCallout>
+        </p>
         <SectionLocalisation id="localisation" />
         <SectionConstatation id="detail" />
         <SectionDescription id="description" />
@@ -55,7 +55,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useConstatationStore } from '@/stores/constatation'
-import { DsfrButton, DsfrCallout } from '@gouvminint/vue-dsfr'
+import { DsfrButton } from '@gouvminint/vue-dsfr'
 import SectionConstatation from './SectionConstatation.vue'
 import SectionDescription from './SectionDescription.vue'
 import SectionFinalisation from './SectionFinalisation.vue'
