@@ -20,12 +20,7 @@
     <div v-else-if="userInfo?.is_authenticated">
       <h1 class="fr-h1 fr-mb-2w">Constatation de dépôt sauvage</h1>
 
-      <div class="fr-mb-4w">
-        <p class="fr-text--xs fr-text--mention-grey">
-          Votre dossier est enregistré automatiquement après chaque modification. Vous pouvez à tout
-          moment fermer la fenêtre et reprendre plus tard là où vous en étiez.
-        </p>
-      </div>
+
 
       <form @submit.prevent="submitForm">
         <ConstatationForm />
