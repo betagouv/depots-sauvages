@@ -84,16 +84,16 @@ class ProcessDossierView(APIView):
             "dn_date_modification": date_modification,
         }
 
-    def dossier_to_model_data(self, dossier):
+    def dossier_to_model_data(self, dossier, ignore_missing_date=False):
         """Extract signalement data from DN dossier. Returns None if no signalement exists."""
         dn_field = DNField(dossier)
         fields_data = dn_field.get_data()
         datetime_constat = fields_data.get(DATE_CONSTAT_CHAMP_ID)
-        if not datetime_constat:
+        if not datetime_constat and not ignore_missing_date:
             return None
         data = {
             "date_constat": datetime_constat,
-            "heure_constat": datetime_constat.time(),
+            "heure_constat": datetime_constat.time() if datetime_constat else None,
         }
         for champ_id, value in fields_data.items():
             field_name = CHAMP_ID_TO_FIELD.get(champ_id)
