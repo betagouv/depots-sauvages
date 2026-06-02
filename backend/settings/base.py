@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     # Third party apps
     "django_extensions",
     "rest_framework",
+    "drf_spectacular",
     "corsheaders",
     "django_tasks",
     "django_tasks_db",
@@ -115,6 +116,14 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
     ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Dépôts Sauvages API",
+    "DESCRIPTION": "Documentation interactive des API de la plateforme Dépôts Sauvages.",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
 }
 
 LOGGING = {
