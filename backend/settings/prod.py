@@ -103,7 +103,7 @@ PROCONNECT_ENABLED = env.bool("VITE_PROCONNECT_ENABLED", default=False)
 if PROCONNECT_ENABLED:
     INSTALLED_APPS += ["mozilla_django_oidc"]
     AUTHENTICATION_BACKENDS = [
-        "backend.home.auth.ProConnectOIDCBackend",
+        "backend.proconnect.auth.ProConnectOIDCBackend",
         "django.contrib.auth.backends.ModelBackend",
     ]
     OIDC_RP_CLIENT_ID = env("OIDC_RP_CLIENT_ID")
@@ -114,6 +114,7 @@ if PROCONNECT_ENABLED:
     OIDC_OP_JWKS_ENDPOINT = env("OIDC_OP_JWKS_ENDPOINT")
     OIDC_OP_LOGOUT_ENDPOINT = env("OIDC_OP_LOGOUT_ENDPOINT", default="")
     OIDC_RP_SIGN_ALGO = "RS256"
+    OIDC_RP_SCOPES = "openid email given_name usual_name"
 
 
 # Auth Configuration
