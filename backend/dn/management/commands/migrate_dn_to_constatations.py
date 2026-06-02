@@ -26,9 +26,22 @@ class Command(BaseCommand):
             action="store_true",
             help="Disable default pre-registration of unmatched user accounts.",
         )
+        parser.add_argument(
+            "--no-update",
+            action="store_true",
+            help="Skip updating already migrated/existing constatations (create-only mode).",
+        )
+        parser.add_argument(
+            "--dry-run",
+            action="store_true",
+            help="Simulate the migration without modifying the database and show which dossiers would be processed.",
+        )
 
     def handle(self, *args, **options):
         no_pre_register = options["no_pre_register"]
+        no_update = options.get("no_update")
+        dry_run = options.get("dry_run")
+
         self.stdout.write(
             "Récupération de la liste des dossiers depuis l'API Démarches Numériques..."
         )
@@ -44,10 +57,46 @@ class Command(BaseCommand):
                 )
             )
             return
+
+        if no_update:
+            existing_dossiers = set(
+                SuiviProcedure.objects.filter(
+                    signalement__dn_numero_dossier__isnull=False,
+                    constatation__isnull=False
+                ).values_list("signalement__dn_numero_dossier", flat=True)
+            )
+            lean_dossiers = [
+                node for node in lean_dossiers
+                if node.get("number") not in existing_dossiers
+            ]
+
         total_source_count = len(lean_dossiers)
         if total_source_count == 0:
-            self.stdout.write(self.style.WARNING("Aucun dossier trouvé sur l'API DN."))
+            self.stdout.write(self.style.WARNING("Aucun dossier trouvé sur l'API DN avec ces critères."))
             return
+
+        if dry_run:
+            self.stdout.write(
+                self.style.WARNING(
+                    f"\n[DRY RUN] {total_source_count} dossiers seraient importés ou mis à jour :"
+                )
+            )
+            self.stdout.write("-" * 65)
+            self.stdout.write(f"{'Dossier DN':<15} | {'Date de dépôt (DN)':<30} | {'Email':<25}")
+            self.stdout.write("-" * 65)
+            for node in lean_dossiers:
+                email = node.get("usager", {}).get("email") or "[Non renseigné]"
+                self.stdout.write(
+                    f"{node.get('number'):<15} | {node.get('dateDepot') or '[Inconnue]':<30} | {email:<25}"
+                )
+            self.stdout.write("-" * 65)
+            self.stdout.write(
+                self.style.WARNING(
+                    "[DRY RUN] Fin de la simulation. Aucune modification n'a été effectuée en base de données.\n"
+                )
+            )
+            return
+
         self.stdout.write(
             f"{total_source_count} dossiers trouvés sur l'API DN. Début de l'importation..."
         )
