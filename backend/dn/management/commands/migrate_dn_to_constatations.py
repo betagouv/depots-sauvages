@@ -147,7 +147,7 @@ class Command(BaseCommand):
                     )
                     continue
                 # Extract model data
-                signalement_data = parser_view.dossier_to_model_data(dossier_detail)
+                signalement_data = parser_view.dossier_to_model_data(dossier_detail, ignore_missing_date=True)
                 if not signalement_data:
                     self.stdout.write(
                         self.style.WARNING(

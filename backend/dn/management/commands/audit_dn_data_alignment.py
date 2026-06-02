@@ -102,7 +102,7 @@ class Command(BaseCommand):
                 continue
 
             # Extract expected model data
-            expected_data = parser_view.dossier_to_model_data(dossier_detail)
+            expected_data = parser_view.dossier_to_model_data(dossier_detail, ignore_missing_date=True)
             if not expected_data:
                 continue
             expected_data = {k: v for k, v in expected_data.items() if k in valid_fields}
