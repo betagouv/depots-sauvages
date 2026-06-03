@@ -35,7 +35,7 @@ class UserInfoViewSet(viewsets.ViewSet):
                     "proconnect_enabled": settings.PROCONNECT_ENABLED,
                     "first_name": request.user.first_name,
                     "last_name": request.user.last_name,
-                    "email": request.user.username,
+                    "email": request.user.email,
                     "procedures_count": Constatation.objects.filter(user=request.user).count(),
                 }
             )

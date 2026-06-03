@@ -9,9 +9,7 @@
 
     <div class="fr-fieldset__element">
       <fieldset class="fr-fieldset">
-        <legend class="fr-fieldset__legend fr-text--bold">
-          Accompagnement personnalisé *
-        </legend>
+        <legend class="fr-fieldset__legend fr-text--bold">Accompagnement personnalisé *</legend>
         <DsfrCheckbox
           v-model="store.formData.accepteAccompagnement"
           label="Je comprends que je peux être recontacté(e) dans le cadre d'un accompagnement personnalisé."
@@ -48,7 +46,7 @@
         hint="Format attendu : Un numéro de téléphone valide. Exemple : 0612345678"
       />
       <p class="fr-text--sm fr-text--mention-grey fr-mt-1w">
-        Si vous souhaitez être contacter par téléphone dans le cadre de notre accompagnement, vous
+        Si vous souhaitez être contacté(e) par téléphone dans le cadre de notre accompagnement, vous
         pouvez indiquer votre téléphone pour faciliter les échanges.
       </p>
     </div>
@@ -90,14 +88,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import { useConstatationStore } from '@/stores/constatation'
 import { DsfrCallout, DsfrCheckbox, DsfrInputGroup, DsfrRadioButtonSet } from '@gouvminint/vue-dsfr'
+import { computed } from 'vue'
 
 const store = useConstatationStore()
 
-const showPrejudice = computed(() => 
+const showPrejudice = computed(() =>
   ['Déposée', 'Sera déposée'].includes(store.formData.plainteEtat)
 )
-const sectionNumber = computed(() => showPrejudice.value ? 6 : 5)
+const sectionNumber = computed(() => (showPrejudice.value ? 6 : 5))
 </script>
