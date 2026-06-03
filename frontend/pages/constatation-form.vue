@@ -20,8 +20,6 @@
     <div v-else-if="userInfo?.is_authenticated">
       <h1 class="fr-h1 fr-mb-2w">Constatation de dépôt sauvage</h1>
 
-
-
       <form @submit.prevent="submitForm">
         <ConstatationForm />
       </form>
@@ -75,9 +73,6 @@ onMounted(async () => {
       }
       if (!store.formData.contactPrenom && userInfo.value.first_name) {
         store.formData.contactPrenom = userInfo.value.first_name
-      }
-      if (!store.formData.contactEmail && userInfo.value.email) {
-        store.formData.contactEmail = userInfo.value.email
       }
     }
   } catch (error) {
