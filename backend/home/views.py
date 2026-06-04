@@ -23,10 +23,14 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        seo_data = get_seo_data(self.request.path)
-        if seo_data:
-            context["seo_title"] = seo_data["title"]
-            context["seo_description"] = seo_data["desc"]
+        seo_data = get_seo_data(self.request.path) or {}
+        context["seo_title"] = (
+            seo_data.get("title")
+            or "Protect’Envi - Accompagner les collectivités pour mieux lutter contre les dépôts sauvages."
+        )
+        context["seo_description"] = (
+            seo_data.get("desc") or "Signaler un dépôt sauvage avec Protect'Envi."
+        )
         return context
 
 
