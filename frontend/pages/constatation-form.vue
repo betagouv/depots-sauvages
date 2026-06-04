@@ -43,6 +43,8 @@ import LoginInvitation from '../components/shared/LoginInvitation.vue'
 import { getUserInfo, type UserInfo } from '../services/api'
 import { useConstatationStore } from '../stores/constatation'
 
+import camelcaseKeys from 'camelcase-keys'
+
 const router = useRouter()
 const store = useConstatationStore()
 const userInfo = ref<UserInfo | null>(null)
@@ -112,6 +114,17 @@ const submitForm = async () => {
     }
   } catch (error) {
     console.error('Erreur lors de la sauvegarde:', error)
+    if (error && typeof error === 'object') {
+      const camelErrors = camelcaseKeys(error as Record<string, any>)
+      for (const [key, val] of Object.entries(camelErrors)) {
+        if (Array.isArray(val) && val.length > 0) {
+          store.errors[key] = val[0]
+        } else if (typeof val === 'string') {
+          store.errors[key] = val
+        }
+      }
+      scrollToFirstError()
+    }
   }
 }
 </script>

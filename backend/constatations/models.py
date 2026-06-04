@@ -2,7 +2,7 @@ from django.conf import settings
 from django.db import models
 from model_utils.models import TimeStampedModel
 
-from backend.signalements.prejudice import PrejudiceMixin
+from .prejudice import PrejudiceMixin
 
 
 class Constatation(PrejudiceMixin, TimeStampedModel):
@@ -53,12 +53,12 @@ class Constatation(PrejudiceMixin, TimeStampedModel):
     precisions_indices = models.TextField("précisions indices", blank=True)
 
     prejudice_montant_connu = models.BooleanField("montant connu", default=False)
-    prejudice_montant = models.IntegerField("montant préjudice", null=True, blank=True)
-    prejudice_nombre_personnes = models.IntegerField("personnes", null=True, blank=True)
-    prejudice_nombre_heures = models.IntegerField("heures", null=True, blank=True)
-    prejudice_nombre_vehicules = models.IntegerField("véhicules", null=True, blank=True)
-    prejudice_kilometrage = models.IntegerField("kilométrage", null=True, blank=True)
-    prejudice_autres_couts = models.IntegerField("autres coûts", null=True, blank=True)
+    prejudice_montant = models.FloatField("montant préjudice", null=True, blank=True)
+    prejudice_nombre_personnes = models.FloatField("personnes", null=True, blank=True)
+    prejudice_nombre_heures = models.FloatField("heures", null=True, blank=True)
+    prejudice_nombre_vehicules = models.FloatField("véhicules", null=True, blank=True)
+    prejudice_kilometrage = models.FloatField("kilométrage", null=True, blank=True)
+    prejudice_autres_couts = models.FloatField("autres coûts", null=True, blank=True)
 
     contact_nom = models.CharField("nom du contact", max_length=255, blank=True)
     contact_prenom = models.CharField("prénom du contact", max_length=255, blank=True)
@@ -98,6 +98,20 @@ class Constatation(PrejudiceMixin, TimeStampedModel):
         Returns True if a complaint is filed or planned.
         """
         return self.plainte_etat in ["Déposée", "Sera déposée"]
+
+    def save(self, *args, **kwargs):
+        if self.souhaite_porter_plainte:
+            if not self.prejudice_montant_connu:
+                self.prejudice_montant = self.get_prejudice_montant_calcule()
+        else:
+            self.prejudice_montant_connu = False
+            self.prejudice_montant = None
+            self.prejudice_nombre_personnes = None
+            self.prejudice_nombre_heures = None
+            self.prejudice_nombre_vehicules = None
+            self.prejudice_kilometrage = None
+            self.prejudice_autres_couts = None
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Constatation à {self.commune} ({self.date_constat})"
