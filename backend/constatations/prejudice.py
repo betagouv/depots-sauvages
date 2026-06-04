@@ -18,4 +18,4 @@ class PrejudiceMixin:
         vehicle_cost = kilometrage * self.VEHICLE_USAGE_RATE
         total_vehicle_cost = vehicle_cost * nombre_vehicules
         total_cost = autres_couts + total_agent_cost + total_vehicle_cost
-        return total_cost
+        return round(total_cost, 2)
