@@ -2,7 +2,7 @@ from django.conf import settings
 from django.db import models
 from model_utils.models import TimeStampedModel
 
-from backend.signalements.prejudice import PrejudiceMixin
+from .prejudice import PrejudiceMixin
 
 
 class Constatation(PrejudiceMixin, TimeStampedModel):
@@ -98,6 +98,11 @@ class Constatation(PrejudiceMixin, TimeStampedModel):
         Returns True if a complaint is filed or planned.
         """
         return self.plainte_etat in ["Déposée", "Sera déposée"]
+
+    def save(self, *args, **kwargs):
+        if not self.prejudice_montant_connu:
+            self.prejudice_montant = self.get_prejudice_montant_calcule()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Constatation à {self.commune} ({self.date_constat})"
