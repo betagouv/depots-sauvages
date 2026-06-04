@@ -40,6 +40,16 @@ export const useConstatationStore = defineStore('constatation', {
         data.constatantRole = data.constatantRoleAutre as any
       }
 
+      if (data.plainteEtat === 'Aucune') {
+        data.prejudiceMontantConnu = false
+        data.prejudiceMontant = null as any
+        data.prejudiceNombrePersonnes = null as any
+        data.prejudiceNombreHeures = null as any
+        data.prejudiceNombreVehicules = null as any
+        data.prejudiceKilometrage = null as any
+        data.prejudiceAutresCouts = null as any
+      }
+
       const dataToSend = toApiFormat(data)
 
       if (this.currentId) {
