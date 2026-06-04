@@ -11,12 +11,6 @@
       </div>
     </div>
 
-    <ConstatationSuccess
-      v-else-if="isSubmittedSuccessfully"
-      @go-to-suivi="router.push(`/suivi-procedure/${createdConstatationId}`)"
-      @go-to-procedures="router.push('/mes-procedures')"
-    />
-
     <div v-else-if="userInfo?.is_authenticated">
       <h1 class="fr-h1 fr-mb-2w">Constatation de dépôt sauvage</h1>
 
@@ -38,7 +32,6 @@
 import { nextTick, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import ConstatationForm from '../components/forms/constatation/ConstatationForm.vue'
-import ConstatationSuccess from '../components/forms/constatation/ConstatationSuccess.vue'
 import LoginInvitation from '../components/shared/LoginInvitation.vue'
 import { getUserInfo, type UserInfo } from '../services/api'
 import { useConstatationStore } from '../stores/constatation'
@@ -49,8 +42,6 @@ const router = useRouter()
 const store = useConstatationStore()
 const userInfo = ref<UserInfo | null>(null)
 const showLoading = ref(true)
-const isSubmittedSuccessfully = ref(false)
-const createdConstatationId = ref<number | null>(null)
 
 onMounted(async () => {
   try {
@@ -109,8 +100,7 @@ const submitForm = async () => {
   try {
     const data = await store.saveFormData()
     if (data && data.id) {
-      createdConstatationId.value = data.id
-      isSubmittedSuccessfully.value = true
+      router.push(`/constatation-fin/${data.id}`)
     }
   } catch (error) {
     console.error('Erreur lors de la sauvegarde:', error)
