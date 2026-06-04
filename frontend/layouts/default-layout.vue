@@ -46,7 +46,10 @@
     <main role="main" id="content">
       <slot />
     </main>
-    <DsfrFooter :logo-text="logoText">
+    <DsfrFooter
+      :logo-text="logoText"
+      :after-mandatory-links="afterMandatoryLinks"
+    >
       <template #description>
         <strong>Protect’Envi</strong>
         <br />
@@ -220,6 +223,10 @@ const footerLinks: FooterLink[] = [
   { text: 'gouvernement.fr', href: 'https://gouvernement.fr' },
   { text: 'service-public.fr', href: 'https://service-public.fr' },
   { text: 'data.gouv.fr', href: 'https://data.gouv.fr' },
+]
+
+const afterMandatoryLinks = [
+  { label: 'Plan du site', to: '/plan-du-site' }
 ]
 </script>
 

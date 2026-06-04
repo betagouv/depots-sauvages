@@ -112,6 +112,31 @@ const router = createRouter({
       name: 'ConstatationEditForm',
       component: () => import('./pages/constatation-form.vue'),
     },
+    {
+      path: '/mentions-legales',
+      name: 'MentionsLegales',
+      component: () => import('./pages/mentions-legales.vue'),
+    },
+    {
+      path: '/donnees-personnelles',
+      name: 'DonneesPersonnelles',
+      component: () => import('./pages/donnees-personnelles.vue'),
+    },
+    {
+      path: '/a11y',
+      name: 'Accessibilite',
+      component: () => import('./pages/a11y.vue'),
+    },
+    {
+      path: '/cookies',
+      name: 'Cookies',
+      component: () => import('./pages/cookies.vue'),
+    },
+    {
+      path: '/plan-du-site',
+      name: 'PlanDuSite',
+      component: () => import('./pages/plan-du-site.vue'),
+    },
   ],
 })
 
