@@ -4,11 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token }}" />
-    <meta name="description" content="Signaler un dépôt sauvage avec Protect'Envi." />
+    <meta name="description" content="{{ seo_description|default:\"Signaler un dépôt sauvage avec Protect'Envi.\" }}" />
+    <meta property="og:title" content="{{ seo_title|default:\"Protect’Envi\" }}" />
+    <meta property="og:description" content="{{ seo_description|default:\"Signaler un dépôt sauvage avec Protect'Envi.\" }}" />
+    <meta property="og:type" content="website" />
     <link rel="icon" href="/static/favicon.ico" type="image/x-icon" />
-    <title>
-      Protect’Envi - Accompagner les collectivités pour mieux lutter contre les dépôts sauvages.
-    </title>
+    <title>{{ seo_title|default:"Protect’Envi - Accompagner les collectivités pour mieux lutter contre les dépôts sauvages." }}</title>
     <script async src="https://tally.so/widgets/embed.js"></script>
   </head>
   <body>
