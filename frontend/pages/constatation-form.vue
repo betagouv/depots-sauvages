@@ -1,15 +1,6 @@
 <template>
   <div class="fr-container fr-py-6w">
-    <div v-if="showLoading" class="fr-grid-row fr-grid-row--center fr-my-8w">
-      <div class="fr-col-12 fr-col-md-6 text-center">
-        <span
-          class="fr-icon-refresh-line fr-icon--lg"
-          aria-hidden="true"
-          style="animation: spin 1s linear infinite"
-        ></span>
-        <p class="fr-mt-2w">Chargement de la page...</p>
-      </div>
-    </div>
+    <PageLoader v-if="showLoading" />
 
     <div v-else-if="userInfo?.is_authenticated">
       <h1 class="fr-h1 fr-mb-2w">Constatation de dépôt sauvage</h1>
@@ -33,6 +24,7 @@ import { nextTick, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import ConstatationForm from '../components/forms/constatation/ConstatationForm.vue'
 import LoginInvitation from '../components/shared/LoginInvitation.vue'
+import PageLoader from '../components/shared/PageLoader.vue'
 import { getUserInfo, type UserInfo } from '../services/api'
 import { useConstatationStore } from '../stores/constatation'
 
@@ -120,15 +112,4 @@ const submitForm = async () => {
 </script>
 
 <style scoped>
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-.text-center {
-  text-align: center;
-}
 </style>
