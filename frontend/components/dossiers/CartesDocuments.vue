@@ -43,6 +43,7 @@
 </template>
 
 <script setup lang="ts">
+import { trackDownload } from '@/services/matomo'
 import { DsfrButton } from '@gouvminint/vue-dsfr'
 
 const props = defineProps<{
@@ -53,6 +54,7 @@ const props = defineProps<{
 
 const openUrl = (url: string) => {
   if (url) {
+    trackDownload(url)
     window.open(url, '_blank', 'noopener,noreferrer')
   }
 }
