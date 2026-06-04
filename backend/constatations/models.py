@@ -53,12 +53,12 @@ class Constatation(PrejudiceMixin, TimeStampedModel):
     precisions_indices = models.TextField("précisions indices", blank=True)
 
     prejudice_montant_connu = models.BooleanField("montant connu", default=False)
-    prejudice_montant = models.IntegerField("montant préjudice", null=True, blank=True)
-    prejudice_nombre_personnes = models.IntegerField("personnes", null=True, blank=True)
-    prejudice_nombre_heures = models.IntegerField("heures", null=True, blank=True)
-    prejudice_nombre_vehicules = models.IntegerField("véhicules", null=True, blank=True)
-    prejudice_kilometrage = models.IntegerField("kilométrage", null=True, blank=True)
-    prejudice_autres_couts = models.IntegerField("autres coûts", null=True, blank=True)
+    prejudice_montant = models.FloatField("montant préjudice", null=True, blank=True)
+    prejudice_nombre_personnes = models.FloatField("personnes", null=True, blank=True)
+    prejudice_nombre_heures = models.FloatField("heures", null=True, blank=True)
+    prejudice_nombre_vehicules = models.FloatField("véhicules", null=True, blank=True)
+    prejudice_kilometrage = models.FloatField("kilométrage", null=True, blank=True)
+    prejudice_autres_couts = models.FloatField("autres coûts", null=True, blank=True)
 
     contact_nom = models.CharField("nom du contact", max_length=255, blank=True)
     contact_prenom = models.CharField("prénom du contact", max_length=255, blank=True)
