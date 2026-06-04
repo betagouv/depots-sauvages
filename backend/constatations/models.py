@@ -100,8 +100,17 @@ class Constatation(PrejudiceMixin, TimeStampedModel):
         return self.plainte_etat in ["Déposée", "Sera déposée"]
 
     def save(self, *args, **kwargs):
-        if not self.prejudice_montant_connu:
-            self.prejudice_montant = self.get_prejudice_montant_calcule()
+        if self.souhaite_porter_plainte:
+            if not self.prejudice_montant_connu:
+                self.prejudice_montant = self.get_prejudice_montant_calcule()
+        else:
+            self.prejudice_montant_connu = False
+            self.prejudice_montant = None
+            self.prejudice_nombre_personnes = None
+            self.prejudice_nombre_heures = None
+            self.prejudice_nombre_vehicules = None
+            self.prejudice_kilometrage = None
+            self.prejudice_autres_couts = None
         super().save(*args, **kwargs)
 
     def __str__(self):
