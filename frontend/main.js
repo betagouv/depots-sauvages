@@ -115,21 +115,18 @@ const router = createRouter({
   ],
 })
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     try {
       const userInfo = await getUserInfo()
       if (LOGIN_REQUIRED && !userInfo.is_authenticated) {
-        next('/')
-        return
+        return '/'
       }
     } catch (error) {
       console.error('Error checking auth:', error)
-      next('/')
-      return
+      return '/'
     }
   }
-  next()
 })
 
 const app = createApp(App)
