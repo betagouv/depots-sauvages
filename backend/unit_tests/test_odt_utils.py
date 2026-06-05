@@ -59,7 +59,7 @@ def test_prepare_context_with_basic_fields(monkeypatch):
         assert field not in context
 
     # 2. Calculated fields and basic info
-    assert context["prejudice_montant_calcule"] == 1500
+    assert context["prejudice_montant_calcule"] == "1500,00"
     assert context["souhaite_porter_plainte"] is True
 
     # 3. Current date formatting
