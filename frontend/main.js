@@ -133,6 +133,11 @@ const router = createRouter({
       component: () => import('./pages/cookies.vue'),
     },
     {
+      path: '/cgu',
+      name: 'CGU',
+      component: () => import('./pages/cgu.vue'),
+    },
+    {
       path: '/plan-du-site',
       name: 'PlanDuSite',
       component: () => import('./pages/plan-du-site.vue'),

@@ -47,6 +47,9 @@
                 <router-link class="fr-link" to="/donnees-personnelles">Données personnelles et confidentialité</router-link>
               </li>
               <li class="fr-mb-1w">
+                <router-link class="fr-link" to="/cgu">Conditions générales d’utilisation</router-link>
+              </li>
+              <li class="fr-mb-1w">
                 <router-link class="fr-link" to="/cookies">Gestion des cookies</router-link>
               </li>
               <li class="fr-mb-1w">

@@ -226,6 +226,7 @@ const footerLinks: FooterLink[] = [
 ]
 
 const afterMandatoryLinks = [
+  { label: 'Conditions générales d’utilisation', to: '/cgu' },
   { label: 'Plan du site', to: '/plan-du-site' }
 ]
 </script>
