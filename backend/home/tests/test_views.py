@@ -11,7 +11,8 @@ from backend.unit_tests.factories import UserFactory
 def test_home_page_loads_correctly(client):
     url = reverse("index")
     response = client.get(url)
-    assert "Protect'Envi" in response.content.decode()
+    content = response.content.decode()
+    assert "Protect’Envi" in content or "Protect&#x27;Envi" in content
 
 
 @pytest.mark.django_db

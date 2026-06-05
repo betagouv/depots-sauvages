@@ -15,7 +15,6 @@ export function initMatomo(router) {
   ])
   window._paq.push(['setSiteId', matomoSiteId])
   window._paq.push(['disableCookies'])
-  window._paq.push(['trackPageView'])
   window._paq.push(['enableLinkTracking'])
 
   const script = document.createElement('script')
@@ -25,8 +24,18 @@ export function initMatomo(router) {
   document.head.appendChild(script)
 
   router.afterEach((to) => {
+    const title = to.meta.title
+      ? `${to.meta.title} - Protect'Envi`
+      : 'Protect’Envi - Accompagner les collectivités pour mieux lutter contre les dépôts sauvages.'
+    document.title = title
     window._paq.push(['setCustomUrl', window.location.origin + to.fullPath])
-    window._paq.push(['setDocumentTitle', to.meta.title || document.title])
+    window._paq.push(['setDocumentTitle', title])
     window._paq.push(['trackPageView'])
   })
+}
+
+export function trackDownload(url) {
+  if (window._paq) {
+    window._paq.push(['trackLink', url, 'download'])
+  }
 }

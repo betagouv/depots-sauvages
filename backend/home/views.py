@@ -11,6 +11,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from backend.constatations.models import Constatation
+from backend.home.seo_metadata import get_seo_data
 
 
 class IndexView(TemplateView):
@@ -19,6 +20,18 @@ class IndexView(TemplateView):
     """
 
     template_name = "index.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        seo_data = get_seo_data(self.request.path) or {}
+        context["seo_title"] = (
+            seo_data.get("title")
+            or "Protect’Envi - Accompagner les collectivités pour mieux lutter contre les dépôts sauvages."
+        )
+        context["seo_description"] = (
+            seo_data.get("desc") or "Signaler un dépôt sauvage avec Protect'Envi."
+        )
+        return context
 
 
 index_view = never_cache(IndexView.as_view())

@@ -1,16 +1,7 @@
 <template>
   <div>
     <div v-if="showLoading" class="fr-container fr-py-6w">
-      <div class="fr-grid-row fr-grid-row--center fr-my-8w">
-        <div class="fr-col-12 fr-col-md-6 text-center">
-          <span
-            class="fr-icon-refresh-line fr-icon--lg"
-            aria-hidden="true"
-            style="animation: spin 1s linear infinite"
-          ></span>
-          <p class="fr-mt-2w">Chargement de la page...</p>
-        </div>
-      </div>
+      <PageLoader />
     </div>
 
     <div v-else>
@@ -108,6 +99,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import LoginInvitation from '../components/shared/LoginInvitation.vue'
+import PageLoader from '../components/shared/PageLoader.vue'
 import PremiumCallout from '../components/shared/PremiumCallout.vue'
 import { getUserInfo, type UserInfo } from '../services/api'
 import { openTallyPopup } from '../utils/tally'
@@ -133,17 +125,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-.text-center {
-  text-align: center;
-}
 .text-blue {
   color: var(--text-active-blue-france);
 }
