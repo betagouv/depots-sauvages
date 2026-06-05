@@ -2,6 +2,7 @@ import logging
 import re
 
 from django.forms.models import model_to_dict
+from django.template.defaultfilters import floatformat
 from django.utils import timezone
 
 from backend.doc_maker.odt import ODTProcessor
@@ -33,7 +34,29 @@ class DocumentContextBuilder:
 
     def add_calculated_fields(self):
         """Add custom calculated properties/methods from the instance."""
-        self.context["prejudice_montant_calcule"] = self.instance.get_prejudice_montant_calcule()
+
+        # Format quantity fields (no trailing .0, localized decimal separator)
+        quantity_fields = [
+            "prejudice_nombre_personnes",
+            "prejudice_nombre_heures",
+            "prejudice_nombre_vehicules",
+            "prejudice_kilometrage",
+        ]
+        for field in quantity_fields:
+            val = self.context.get(field)
+            if val is not None:
+                self.context[field] = floatformat(val, -2)
+        # Format monetary/cost fields (always 2 decimals, localized decimal separator)
+        money_fields = ["prejudice_autres_couts", "prejudice_montant"]
+        for field in money_fields:
+            val = self.context.get(field)
+            if val is not None:
+                self.context[field] = floatformat(val, 2)
+        prejudice_montant_calcule = self.instance.get_prejudice_montant_calcule()
+        if prejudice_montant_calcule is not None:
+            self.context["prejudice_montant_calcule"] = floatformat(prejudice_montant_calcule, 2)
+        else:
+            self.context["prejudice_montant_calcule"] = ""
         self.context["souhaite_porter_plainte"] = self.instance.souhaite_porter_plainte
         return self
 
