@@ -128,24 +128,51 @@ const router = createRouter({
       component: () => import('./pages/constatation-fin.vue'),
       meta: { title: "Constatation enregistrée" },
     },
+    {
+      path: '/mentions-legales',
+      name: 'MentionsLegales',
+      component: () => import('./pages/mentions-legales.vue'),
+    },
+    {
+      path: '/donnees-personnelles',
+      name: 'DonneesPersonnelles',
+      component: () => import('./pages/donnees-personnelles.vue'),
+    },
+    {
+      path: '/a11y',
+      name: 'Accessibilite',
+      component: () => import('./pages/a11y.vue'),
+    },
+    {
+      path: '/cookies',
+      name: 'Cookies',
+      component: () => import('./pages/cookies.vue'),
+    },
+    {
+      path: '/cgu',
+      name: 'CGU',
+      component: () => import('./pages/cgu.vue'),
+    },
+    {
+      path: '/plan-du-site',
+      name: 'PlanDuSite',
+      component: () => import('./pages/plan-du-site.vue'),
+    },
   ],
 })
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     try {
       const userInfo = await getUserInfo()
       if (LOGIN_REQUIRED && !userInfo.is_authenticated) {
-        next('/')
-        return
+        return '/'
       }
     } catch (error) {
       console.error('Error checking auth:', error)
-      next('/')
-      return
+      return '/'
     }
   }
-  next()
 })
 
 const app = createApp(App)

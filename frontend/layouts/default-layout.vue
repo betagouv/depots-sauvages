@@ -46,21 +46,14 @@
     <main role="main" id="content">
       <slot />
     </main>
-    <DsfrFooter :logo-text="logoText">
+    <DsfrFooter
+      :logo-text="logoText"
+      :after-mandatory-links="afterMandatoryLinks"
+    >
       <template #description>
-        Le site de la mission logiciels libres et communs numériques est une publication de la
-        <a href="https://www.numerique.gouv.fr/" target="_blank"
-          >direction interministérielle du numérique</a
-        >. Le
-        <a
-          href="https://github.com/betagouv/depots-sauvages"
-          title="code source - Nouvelle fenêtre"
-          target="_blank"
-          rel="noreferrer noopener"
-        >
-          code source de ce site
-        </a>
-        est publié sous licence libre.
+        <strong>Protect’Envi</strong>
+        <br />
+        Accompagner les collectivités pour mieux lutter contre les dépôts sauvages.
       </template>
       <template #bottom-link>
         <DsfrFooterLinkList :links="footerLinks" />
@@ -230,6 +223,11 @@ const footerLinks: FooterLink[] = [
   { text: 'gouvernement.fr', href: 'https://gouvernement.fr' },
   { text: 'service-public.fr', href: 'https://service-public.fr' },
   { text: 'data.gouv.fr', href: 'https://data.gouv.fr' },
+]
+
+const afterMandatoryLinks = [
+  { label: 'Conditions générales d’utilisation', to: '/cgu' },
+  { label: 'Plan du site', to: '/plan-du-site' }
 ]
 </script>
 
