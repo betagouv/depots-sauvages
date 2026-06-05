@@ -70,17 +70,18 @@
 
           <h2>Durée de conservation</h2>
           <p>
-            Les comptes d'utilisateurs inactifs sont supprimés au bout de 2 ans. Les données
-            relatives aux procédures et aux constatations d'infractions sont conservées pendant les
-            durées de prescription légale applicables aux procédures administratives ou judiciaires
-            engagées.
+            Les comptes d'utilisateurs inactifs sont supprimés au bout de 2 ans.
+            <br />
+            Les données relatives aux procédures et aux constatations d’infractions sont conservées
+            pendant 2 ans. À l’issue de ces périodes, les données à caractère personnel sont
+            supprimées. Seules les données anonymes à visée statistique sont conservées au-delà de
+            cette durée.
           </p>
 
           <h2>Registre des activités de traitement</h2>
           <p>
             Conformément à l'article 30 du RGPD, ce traitement de données personnelles est inscrit
-            au registre des activités de traitement du Ministère de l'Intérieur et des Outre-mer
-            (dont relève le CESAN de la Gendarmerie nationale).
+            au registre des activités de traitement du CESAN de la Gendarmerie nationale.
           </p>
 
           <h2>Vos droits</h2>

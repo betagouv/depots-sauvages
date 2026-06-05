@@ -14,18 +14,18 @@
         <div class="fr-col-12 fr-col-md-8">
           <h2>Éditeur du site</h2>
           <p>
-            Le site Protect’Envi est édité par le <strong>Commandement pour l’environnement et la santé (CESAN)</strong> de la Gendarmerie nationale, sous l'égide du Ministère de l'Intérieur et des Outre-mer et de l'Agence Nationale de la Cohésion des Territoires (ANCT).
+            Le site Protect’Envi est édité par le <strong>Commandement pour l’environnement et la santé (CESAN)</strong> de la Gendarmerie nationale, sous l'égide du Ministère de l'Intérieur.
           </p>
 
           <DsfrHighlight class="fr-ml-0 fr-mb-4w">
             <strong>Adresse de l'éditeur :</strong><br />
             CESAN - Gendarmerie Nationale<br />
-            4 rue Claude Bernard<br />
-            92130 Issy-les-Moulineaux<br />
+            6 Av. de Stalingrad<br />
+            94110 Arcueil<br />
             France
             <br /><br />
             <strong>Directeur de la publication :</strong><br />
-            Le Général de division, commandant le CESAN de la Gendarmerie nationale.
+            Le Général de division, commandant le CESAN.
           </DsfrHighlight>
 
           <hr class="fr-my-4w" />
