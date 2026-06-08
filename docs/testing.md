@@ -1,4 +1,4 @@
-# Documentation des Tests
+# Documentation des tests
 
 Ce projet utilise plusieurs types de tests pour assurer la qualité du code et la stabilité de l'application.
 

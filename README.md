@@ -16,6 +16,7 @@ Application de signalement des dépôts sauvages destinée aux communes.
   - [Frontend](#frontend)
   - [Les deux conteneurs](#les-deux-conteneurs)
 - [🧪 Tests](#-tests)
+- [🔒 Sécurité](#-sécurité)
 - [✨ Fonctionnalités](#-fonctionnalités-clés)
 - [⚖️ Licence](#️-licence)
 
@@ -204,7 +205,13 @@ Certaines notions intermédiaires comme « étape » peuvent relever du métie
 
 ## 🧪 Tests
 
-Pour plus de détails sur la stratégie de test et les commandes d'exécution, consultez le fichier [TESTING.md](./TESTING.md).
+Pour plus de détails sur la stratégie de test et les commandes d'exécution, consultez le fichier [testing.md](./docs/testing.md).
+
+---
+
+## 🔒 Sécurité
+
+Pour en savoir plus sur notre politique de sécurité et notre auto-évaluation de robustesse (XSS, CSP, rate-limiting, etc.), veuillez consulter le fichier [SECURITY.md](./SECURITY.md).
 
 ---
 
