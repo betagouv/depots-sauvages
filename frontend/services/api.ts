@@ -6,13 +6,17 @@ export const DN_BASE_URL = import.meta.env.VITE_DN_BASE_URL || 'https://demarche
 // Helper to get CSRF token
 const getCSRFToken = (): string => {
   // First try to get from cookie
-  const name = 'csrftoken='
+  const name1 = 'csrftoken='
+  const name2 = '__Host-csrftoken='
   const decodedCookie = decodeURIComponent(document.cookie)
   const cookieArray = decodedCookie.split(';')
   for (let cookie of cookieArray) {
     cookie = cookie.trim()
-    if (cookie.indexOf(name) === 0) {
-      return cookie.substring(name.length, cookie.length)
+    if (cookie.indexOf(name1) === 0) {
+      return cookie.substring(name1.length, cookie.length)
+    }
+    if (cookie.indexOf(name2) === 0) {
+      return cookie.substring(name2.length, cookie.length)
     }
   }
 
