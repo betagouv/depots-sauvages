@@ -13,7 +13,7 @@ from backend.dn_signalements.views import (
     SyncUserSignalementsView,
     UserSignalementViewSet,
 )
-from backend.home.views import UserInfoViewSet, index_view, logout_view
+from backend.home.views import RobotsTxtView, UserInfoViewSet, index_view, logout_view
 from backend.procedures.views import SuiviProcedureViewSet
 
 # API Routes registration
@@ -102,11 +102,14 @@ if getattr(settings, "SENTRY_DEBUG", False):
     urlpatterns.append(path("sentry-debug/", trigger_error))
 
 
+# Robots.txt Route
+urlpatterns.append(path("robots.txt", RobotsTxtView.as_view(), name="robots_txt"))
+
 # Frontend Routes
 # This is a catch-all pattern that serves the compiled frontend.
 # It must be placed at the very end of urlpatterns so that it doesn't
 # intercept requests intended for other routes like API, Admin, or OIDC.
 admin_url = settings.ADMIN_URL_NAME.rstrip("/")
 urlpatterns.append(
-    re_path(r"^(?!%s|api|oidc|sentry-debug).*" % admin_url, index_view, name="index")
+    re_path(r"^(?!%s|api|oidc|sentry-debug|robots\.txt).*" % admin_url, index_view, name="index")
 )
