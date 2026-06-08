@@ -42,14 +42,51 @@ ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 SECURE_BROWSER_XSS_FILTER = env.bool("SECURE_BROWSER_XSS_FILTER", default=True)
 SECURE_CONTENT_TYPE_NOSNIFF = env.bool("SECURE_CONTENT_TYPE_NOSNIFF", default=True)
 
+# External services domains used in CSP
+STATS_BETA_GOUV = "https://stats.beta.gouv.fr"
+TALLY_SO = "https://tally.so"
+CRISP_CLIENT = "https://client.crisp.chat"
+CRISP_IMAGE = "https://image.crisp.chat"
+CRISP_WSS = "wss://client.relay.crisp.chat"
+GRIST = "https://grist.numerique.gouv.fr"
+ICONIFY = "https://api.iconify.design"
+
 # Content Security Policy
-CSP_DEFAULT_SRC = env.list("CSP_DEFAULT_SRC", default=["'self'"])
-CSP_SCRIPT_SRC = env.list("CSP_SCRIPT_SRC", default=["'self'", "https://stats.beta.gouv.fr", "https://tally.so", "https://client.crisp.chat"])
-CSP_STYLE_SRC = env.list("CSP_STYLE_SRC", default=["'self'", "'unsafe-inline'"])
-CSP_IMG_SRC = env.list("CSP_IMG_SRC", default=["'self'", "data:", "https://stats.beta.gouv.fr", "https://tally.so", "https://image.crisp.chat"])
-CSP_FONT_SRC = env.list("CSP_FONT_SRC", default=["'self'", "data:"])
-CSP_FRAME_SRC = env.list("CSP_FRAME_SRC", default=["'self'", "https://tally.so", "https://grist.numerique.gouv.fr"])
-CSP_CONNECT_SRC = env.list("CSP_CONNECT_SRC", default=["'self'", "https://stats.beta.gouv.fr", "https://client.crisp.chat", "wss://client.relay.crisp.chat", "https://api.iconify.design"])
+CONTENT_SECURITY_POLICY = {
+    "default-src": env.list("CSP_DEFAULT_SRC", default=["'self'"]),
+    "script-src": env.list(
+        "CSP_SCRIPT_SRC",
+        default=[
+            "'self'",
+            STATS_BETA_GOUV,
+            TALLY_SO,
+            CRISP_CLIENT,
+        ],
+    ),
+    "style-src": env.list("CSP_STYLE_SRC", default=["'self'", "'unsafe-inline'"]),
+    "img-src": env.list(
+        "CSP_IMG_SRC",
+        default=[
+            "'self'",
+            "data:",
+            STATS_BETA_GOUV,
+            TALLY_SO,
+            CRISP_IMAGE,
+        ],
+    ),
+    "font-src": env.list("CSP_FONT_SRC", default=["'self'", "data:"]),
+    "frame-src": env.list("CSP_FRAME_SRC", default=["'self'", TALLY_SO, GRIST]),
+    "connect-src": env.list(
+        "CSP_CONNECT_SRC",
+        default=[
+            "'self'",
+            STATS_BETA_GOUV,
+            CRISP_CLIENT,
+            CRISP_WSS,
+            ICONIFY,
+        ],
+    ),
+}
 
 
 # CORS/CSRF Settings
