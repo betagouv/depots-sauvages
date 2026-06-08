@@ -26,6 +26,7 @@ django-anymail = {extras = ["brevo"], version = "*"}
 sentry-sdk = {extras = ["django"], version = "*"}
 django-csp = "*"
 drf-spectacular = "*"
+django-permissions-policy = "*"
 
 [dev-packages]
 black = "*"
