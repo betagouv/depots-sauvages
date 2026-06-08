@@ -39,6 +39,56 @@ DATABASES = {
 
 # Security settings for production
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
+SECURE_BROWSER_XSS_FILTER = env.bool("SECURE_BROWSER_XSS_FILTER", default=True)
+SECURE_CONTENT_TYPE_NOSNIFF = env.bool("SECURE_CONTENT_TYPE_NOSNIFF", default=True)
+
+# External services domains used in CSP
+STATS_BETA_GOUV = "https://stats.beta.gouv.fr"
+TALLY_SO = "https://tally.so"
+CRISP_CLIENT = "https://client.crisp.chat"
+CRISP_IMAGE = "https://image.crisp.chat"
+CRISP_WSS = "wss://client.relay.crisp.chat"
+GRIST = "https://grist.numerique.gouv.fr"
+ICONIFY = "https://api.iconify.design"
+
+# Content Security Policy (django-csp 4.0+)
+CONTENT_SECURITY_POLICY = {
+    "DIRECTIVES": {
+        "default-src": env.list("CSP_DEFAULT_SRC", default=["'self'"]),
+        "script-src": env.list(
+            "CSP_SCRIPT_SRC",
+            default=[
+                "'self'",
+                STATS_BETA_GOUV,
+                TALLY_SO,
+                CRISP_CLIENT,
+            ],
+        ),
+        "style-src": env.list("CSP_STYLE_SRC", default=["'self'", "'unsafe-inline'"]),
+        "img-src": env.list(
+            "CSP_IMG_SRC",
+            default=[
+                "'self'",
+                "data:",
+                STATS_BETA_GOUV,
+                TALLY_SO,
+                CRISP_IMAGE,
+            ],
+        ),
+        "font-src": env.list("CSP_FONT_SRC", default=["'self'", "data:"]),
+        "frame-src": env.list("CSP_FRAME_SRC", default=["'self'", TALLY_SO, GRIST]),
+        "connect-src": env.list(
+            "CSP_CONNECT_SRC",
+            default=[
+                "'self'",
+                STATS_BETA_GOUV,
+                CRISP_CLIENT,
+                CRISP_WSS,
+                ICONIFY,
+            ],
+        ),
+    }
+}
 
 
 # CORS/CSRF Settings
@@ -47,9 +97,12 @@ CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
 
 # Cookie Settings
+CSRF_COOKIE_NAME = "__Host-csrftoken"
 CSRF_COOKIE_SAMESITE = "Lax"
 CSRF_COOKIE_HTTPONLY = False  # Needed to access the token in JavaScript
 SESSION_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 # Django Tasks Settings
 TASKS["default"]["BACKEND"] = "django_tasks_db.DatabaseBackend"

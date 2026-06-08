@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     "django_tasks_db",
     "anymail",
     "python_odt_template",
+    "csp",
     #
     # Project apps
     "backend.throttling",
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "django_permissions_policy.PermissionsPolicyMiddleware",
     "backend.home.middleware.StagingNoIndexMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -49,6 +51,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "csp.middleware.CSPMiddleware",
 ]
 
 ROOT_URLCONF = "backend.urls"
@@ -207,3 +210,18 @@ ADMIN_URL_NAME = "admin"
 # Bypass Auth Configuration
 BYPASS_AUTH_ENABLED = False
 ENV_NAME = "development"
+
+# Permissions Policy
+PERMISSIONS_POLICY = {
+    "accelerometer": [],
+    "ambient-light-sensor": [],
+    "autoplay": [],
+    "camera": [],
+    "display-capture": [],
+    "fullscreen": [],
+    "geolocation": [],
+    "gyroscope": [],
+    "microphone": [],
+    "payment": [],
+    "usb": [],
+}

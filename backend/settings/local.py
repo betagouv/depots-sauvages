@@ -44,6 +44,15 @@ DATABASES = {
 
 # Security settings for development
 ALLOWED_HOSTS = ["*"]
+SECURE_BROWSER_XSS_FILTER = False
+SECURE_CONTENT_TYPE_NOSNIFF = False
+
+# Content Security Policy (django-csp 4.0+)
+CONTENT_SECURITY_POLICY_REPORT_ONLY = {
+    "DIRECTIVES": {
+        "default-src": ["'self'"],
+    }
+}
 
 # CORS/CSRF Settings
 CORS_ALLOW_ALL_ORIGINS = True
