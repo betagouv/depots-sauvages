@@ -47,9 +47,11 @@ ALLOWED_HOSTS = ["*"]
 SECURE_BROWSER_XSS_FILTER = False
 SECURE_CONTENT_TYPE_NOSNIFF = False
 
-# Content Security Policy
+# Content Security Policy (django-csp 4.0+)
 CONTENT_SECURITY_POLICY_REPORT_ONLY = {
-    "default-src": ["'self'"],
+    "DIRECTIVES": {
+        "default-src": ["'self'"],
+    }
 }
 
 # CORS/CSRF Settings

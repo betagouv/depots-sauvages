@@ -51,41 +51,43 @@ CRISP_WSS = "wss://client.relay.crisp.chat"
 GRIST = "https://grist.numerique.gouv.fr"
 ICONIFY = "https://api.iconify.design"
 
-# Content Security Policy
+# Content Security Policy (django-csp 4.0+)
 CONTENT_SECURITY_POLICY = {
-    "default-src": env.list("CSP_DEFAULT_SRC", default=["'self'"]),
-    "script-src": env.list(
-        "CSP_SCRIPT_SRC",
-        default=[
-            "'self'",
-            STATS_BETA_GOUV,
-            TALLY_SO,
-            CRISP_CLIENT,
-        ],
-    ),
-    "style-src": env.list("CSP_STYLE_SRC", default=["'self'", "'unsafe-inline'"]),
-    "img-src": env.list(
-        "CSP_IMG_SRC",
-        default=[
-            "'self'",
-            "data:",
-            STATS_BETA_GOUV,
-            TALLY_SO,
-            CRISP_IMAGE,
-        ],
-    ),
-    "font-src": env.list("CSP_FONT_SRC", default=["'self'", "data:"]),
-    "frame-src": env.list("CSP_FRAME_SRC", default=["'self'", TALLY_SO, GRIST]),
-    "connect-src": env.list(
-        "CSP_CONNECT_SRC",
-        default=[
-            "'self'",
-            STATS_BETA_GOUV,
-            CRISP_CLIENT,
-            CRISP_WSS,
-            ICONIFY,
-        ],
-    ),
+    "DIRECTIVES": {
+        "default-src": env.list("CSP_DEFAULT_SRC", default=["'self'"]),
+        "script-src": env.list(
+            "CSP_SCRIPT_SRC",
+            default=[
+                "'self'",
+                STATS_BETA_GOUV,
+                TALLY_SO,
+                CRISP_CLIENT,
+            ],
+        ),
+        "style-src": env.list("CSP_STYLE_SRC", default=["'self'", "'unsafe-inline'"]),
+        "img-src": env.list(
+            "CSP_IMG_SRC",
+            default=[
+                "'self'",
+                "data:",
+                STATS_BETA_GOUV,
+                TALLY_SO,
+                CRISP_IMAGE,
+            ],
+        ),
+        "font-src": env.list("CSP_FONT_SRC", default=["'self'", "data:"]),
+        "frame-src": env.list("CSP_FRAME_SRC", default=["'self'", TALLY_SO, GRIST]),
+        "connect-src": env.list(
+            "CSP_CONNECT_SRC",
+            default=[
+                "'self'",
+                STATS_BETA_GOUV,
+                CRISP_CLIENT,
+                CRISP_WSS,
+                ICONIFY,
+            ],
+        ),
+    }
 }
 
 
@@ -98,6 +100,8 @@ CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
 CSRF_COOKIE_SAMESITE = "Lax"
 CSRF_COOKIE_HTTPONLY = False  # Needed to access the token in JavaScript
 SESSION_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 # Django Tasks Settings
 TASKS["default"]["BACKEND"] = "django_tasks_db.DatabaseBackend"
