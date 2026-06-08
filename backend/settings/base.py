@@ -214,7 +214,6 @@ ENV_NAME = "development"
 # Permissions Policy
 PERMISSIONS_POLICY = {
     "accelerometer": [],
-    "ambient-light-sensor": [],
     "autoplay": [],
     "camera": [],
     "display-capture": [],
