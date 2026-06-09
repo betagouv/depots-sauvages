@@ -72,11 +72,13 @@ CONTENT_SECURITY_POLICY = {
                 "data:",
                 STATS_BETA_GOUV,
                 TALLY_SO,
+                CRISP_CLIENT,
                 CRISP_IMAGE,
             ],
         ),
         "font-src": env.list("CSP_FONT_SRC", default=["'self'", "data:", CRISP_CLIENT]),
         "frame-src": env.list("CSP_FRAME_SRC", default=["'self'", TALLY_SO, GRIST]),
+        "media-src": env.list("CSP_MEDIA_SRC", default=["'self'", CRISP_CLIENT]),
         "connect-src": env.list(
             "CSP_CONNECT_SRC",
             default=[
