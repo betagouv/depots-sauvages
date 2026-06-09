@@ -34,9 +34,7 @@
           <div class="fr-card fr-card--no-arrow shadow-card">
             <div class="fr-card__body">
               <div class="fr-card__content">
-                <h3 class="fr-card__title">
-                  {{ dossier.title }}
-                </h3>
+                <h3 class="fr-card__title">Procédure #{{ dossier.id }}</h3>
                 <div class="fr-card__desc">
                   <DossierMetadata :dossier="dossier" />
                 </div>
