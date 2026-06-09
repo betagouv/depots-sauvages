@@ -64,7 +64,7 @@ CONTENT_SECURITY_POLICY = {
                 CRISP_CLIENT,
             ],
         ),
-        "style-src": env.list("CSP_STYLE_SRC", default=["'self'", "'unsafe-inline'"]),
+        "style-src": env.list("CSP_STYLE_SRC", default=["'self'", "'unsafe-inline'", CRISP_CLIENT]),
         "img-src": env.list(
             "CSP_IMG_SRC",
             default=[
@@ -75,7 +75,7 @@ CONTENT_SECURITY_POLICY = {
                 CRISP_IMAGE,
             ],
         ),
-        "font-src": env.list("CSP_FONT_SRC", default=["'self'", "data:"]),
+        "font-src": env.list("CSP_FONT_SRC", default=["'self'", "data:", CRISP_CLIENT]),
         "frame-src": env.list("CSP_FRAME_SRC", default=["'self'", TALLY_SO, GRIST]),
         "connect-src": env.list(
             "CSP_CONNECT_SRC",
