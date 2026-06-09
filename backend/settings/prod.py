@@ -50,6 +50,8 @@ CRISP_IMAGE = "https://image.crisp.chat"
 CRISP_WSS = "wss://client.relay.crisp.chat"
 GRIST = "https://grist.numerique.gouv.fr"
 ICONIFY = "https://api.iconify.design"
+API_ADRESSE_DATA_GOUV = "https://api-adresse.data.gouv.fr"
+RECHERCHE_ENTREPRISES_API = "https://recherche-entreprises.api.gouv.fr"
 
 # Content Security Policy (django-csp 4.0+)
 CONTENT_SECURITY_POLICY = {
@@ -87,6 +89,8 @@ CONTENT_SECURITY_POLICY = {
                 CRISP_CLIENT,
                 CRISP_WSS,
                 ICONIFY,
+                API_ADRESSE_DATA_GOUV,
+                RECHERCHE_ENTREPRISES_API,
             ],
         ),
     }
