@@ -24,5 +24,4 @@ class UserSignalementSerializer(serializers.ModelSerializer):
         ]
 
     def get_title(self, obj):
-        return f"Dossier #{obj.id}"
-
+        return f"Procédure #{obj.id}"
