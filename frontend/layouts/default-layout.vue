@@ -6,6 +6,17 @@
       :logoText="logoText"
       :quick-links="quickLinks"
     >
+      <template #before-quick-links>
+        <div class="fr-header__tools-item admin-toggle-header-item">
+          <DsfrToggleSwitch
+            label="Mode édition"
+            v-model="editModeStore.isAdminMode"
+            :label-left="true"
+            :no-text="true"
+            input-id="admin-mode-toggle-header"
+          />
+        </div>
+      </template>
 
       <template #mainnav="{ hidemodal }">
         <nav
@@ -75,9 +86,10 @@
 </template>
 
 <script setup lang="ts">
-import { DsfrFooter, DsfrFooterLinkList, DsfrHeader } from '@gouvminint/vue-dsfr'
+import { DsfrFooter, DsfrFooterLinkList, DsfrHeader, DsfrToggleSwitch } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { useEditModeStore } from '../stores/editMode'
 import { getUserInfo, getBypassAuthConfig } from '../services/api'
 import { LOGIN_URL, LOGOUT_URL } from '../services/urls'
 import { PROCONNECT_ENABLED } from '../services/config'
@@ -93,6 +105,7 @@ interface BreadcrumbLink {
 }
 
 const route = useRoute()
+const editModeStore = useEditModeStore()
 const logoText = ['Ministère', 'de l’intérieur']
 const breadcrumbLinks: BreadcrumbLink[] = []
 
@@ -227,7 +240,8 @@ const footerLinks: FooterLink[] = [
 
 const afterMandatoryLinks = [
   { label: 'Conditions générales d’utilisation', to: '/cgu' },
-  { label: 'Plan du site', to: '/plan-du-site' }
+  { label: 'Plan du site', to: '/plan-du-site' },
+  { label: 'Foire aux questions', to: '/faq' }
 ]
 </script>
 
@@ -238,4 +252,36 @@ const afterMandatoryLinks = [
   absolute positioning relative to the header structure.
 */
 
+.admin-toggle-header-item {
+  display: flex;
+  align-items: center;
+  margin-right: 1.5rem;
+  padding-right: 1.5rem;
+  border-right: 1px solid var(--border-default-grey);
+}
+
+.admin-toggle-header-item .fr-toggle {
+  padding: 0;
+  margin: 0;
+}
+
+.admin-toggle-header-item .fr-toggle__label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-title-grey);
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  .admin-toggle-header-item {
+    margin-right: 0;
+    padding-right: 0;
+    border-right: none;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-default-grey);
+    width: 100%;
+    justify-content: space-between;
+  }
+}
 </style>
