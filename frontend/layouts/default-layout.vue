@@ -119,6 +119,7 @@ const navLinks = computed<NavLink[]>(() => {
     { text: 'Accueil', href: '/' },
     { text: 'Comprendre la procédure', href: '/comprendre-la-procedure' },
     { text: 'Mes procédures', href: '/mes-procedures' },
+    { text: 'FAQ', href: '/faq' },
     { text: 'Contact', href: '/contact' },
   ]
 })
