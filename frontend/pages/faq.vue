@@ -26,187 +26,63 @@
           class="faq-category-group fr-mb-6w"
         >
           <div
-            v-if="getFilteredQuestions(cat).length > 0 || isAdminMode"
+            v-if="getVisibleQuestions(cat).length > 0 || isAdminMode"
             class="fr-mb-3w category-header-wrapper"
           >
             <h2 class="fr-h4 fr-mb-0 category-header">
               {{ cat.label }}
             </h2>
 
-            <div v-if="isAdminMode" class="admin-inline-controls category-admin-controls fr-ml-2w">
-              <button
-                class="admin-btn fr-icon-arrow-up-line"
-                aria-label="Monter cette thématique"
-                title="Monter"
-                :disabled="catIndex === 0"
-                @click.stop="moveCategory(catIndex, -1)"
-              ></button>
-              <button
-                class="admin-btn fr-icon-arrow-down-line"
-                aria-label="Descendre cette thématique"
-                title="Descendre"
-                :disabled="catIndex === sortedCategories.length - 1"
-                @click.stop="moveCategory(catIndex, 1)"
-              ></button>
-              <button
-                class="admin-btn fr-icon-edit-line"
-                aria-label="Modifier cette thématique"
-                title="Modifier"
-                @click.stop="editCategory(cat)"
-              ></button>
-              <button
-                class="admin-btn admin-btn-delete fr-icon-delete-line"
-                aria-label="Supprimer cette thématique"
-                title="Supprimer"
-                @click.stop="triggerDeleteCategory(cat.id)"
-              ></button>
-            </div>
+            <AdminControls
+              v-if="isAdminMode"
+              class="category-admin-controls fr-ml-2w"
+              :up-disabled="catIndex === 0"
+              :down-disabled="catIndex === sortedCategories.length - 1"
+              up-label="Monter cette thématique"
+              down-label="Descendre cette thématique"
+              edit-label="Modifier cette thématique"
+              delete-label="Supprimer cette thématique"
+              @up="moveCategory(catIndex, -1)"
+              @down="moveCategory(catIndex, 1)"
+              @edit="editCategory(cat)"
+              @delete="triggerDeleteCategory(cat.id)"
+            />
           </div>
 
-          <div v-if="getFilteredQuestions(cat).length > 0" class="fr-accordions-group">
-            <section
-              v-for="(item, index) in getFilteredQuestions(cat)"
+          <div v-if="getVisibleQuestions(cat).length > 0" class="fr-accordions-group">
+            <FaqItem
+              v-for="(item, index) in getVisibleQuestions(cat)"
               :key="item.id"
-              class="fr-accordion faq-item-section"
-              :class="{ 'faq-draft': !item.is_published }"
-            >
-              <div
-                class="fr-grid-row fr-grid-row--middle faq-item-header"
-                :class="{ 'faq-item-header--expanded': expandedItems[item.id] }"
-              >
-                <div class="fr-col">
-                  <h3 class="fr-accordion__title">
-                    <button
-                      class="fr-accordion__btn"
-                      :aria-expanded="expandedItems[item.id]"
-                      :aria-controls="'accordion-' + item.id"
-                      @click="toggleAccordion(item.id)"
-                    >
-                      {{ item.question }}
-                      <span v-if="!item.is_published" class="fr-badge fr-badge--warning fr-ml-2w"
-                        >Brouillon</span
-                      >
-                    </button>
-                  </h3>
-                </div>
-
-                <div v-if="isAdminMode" class="fr-col-auto fr-pr-2w admin-inline-controls">
-                  <button
-                    class="admin-btn fr-icon-arrow-up-line"
-                    aria-label="Monter cette question"
-                    title="Monter"
-                    :disabled="index === 0"
-                    @click.stop="moveItem(cat.id, index, -1)"
-                  ></button>
-                  <button
-                    class="admin-btn fr-icon-arrow-down-line"
-                    aria-label="Descendre cette question"
-                    title="Descendre"
-                    :disabled="index === getFilteredQuestions(cat).length - 1"
-                    @click.stop="moveItem(cat.id, index, 1)"
-                  ></button>
-                  <button
-                    class="admin-btn fr-icon-edit-line"
-                    aria-label="Modifier cette question"
-                    title="Modifier"
-                    @click.stop="editItem(item)"
-                  ></button>
-                  <button
-                    class="admin-btn admin-btn-delete fr-icon-delete-line"
-                    aria-label="Supprimer cette question"
-                    title="Supprimer"
-                    @click.stop="triggerDeleteItem(item.id)"
-                  ></button>
-                </div>
-              </div>
-
-              <div
-                class="fr-collapse"
-                :id="'accordion-' + item.id"
-                :class="{ 'fr-collapse--expanded': expandedItems[item.id] }"
-                :style="expandedItems[item.id] ? 'max-height: none;' : undefined"
-              >
-                <div class="fr-p-3w">
-                  <BlockRenderer :blocks="item.content" />
-                </div>
-              </div>
-            </section>
+              :item="item"
+              :index="index"
+              :list-length="getVisibleQuestions(cat).length"
+              :is-admin-mode="isAdminMode"
+              @up="moveItem(cat.id, index, -1)"
+              @down="moveItem(cat.id, index, 1)"
+              @edit="editItem(item)"
+              @delete="triggerDeleteItem(item.id)"
+            />
           </div>
         </div>
 
-        <div v-if="getFilteredOrphans.length > 0" class="faq-category-group fr-mb-6w">
+        <div v-if="visibleOrphans.length > 0" class="faq-category-group fr-mb-6w">
           <div class="fr-mb-3w category-header-wrapper">
             <h2 class="fr-h4 fr-mb-0 category-header">Questions sans thématique</h2>
           </div>
 
           <div class="fr-accordions-group">
-            <section
-              v-for="(item, index) in getFilteredOrphans"
+            <FaqItem
+              v-for="(item, index) in visibleOrphans"
               :key="item.id"
-              class="fr-accordion faq-item-section"
-              :class="{ 'faq-draft': !item.is_published }"
-            >
-              <div
-                class="fr-grid-row fr-grid-row--middle faq-item-header"
-                :class="{ 'faq-item-header--expanded': expandedItems[item.id] }"
-              >
-                <div class="fr-col">
-                  <h3 class="fr-accordion__title">
-                    <button
-                      class="fr-accordion__btn"
-                      :aria-expanded="expandedItems[item.id]"
-                      :aria-controls="'accordion-' + item.id"
-                      @click="toggleAccordion(item.id)"
-                    >
-                      {{ item.question }}
-                      <span v-if="!item.is_published" class="fr-badge fr-badge--warning fr-ml-2w"
-                        >Brouillon</span
-                      >
-                    </button>
-                  </h3>
-                </div>
-
-                <div v-if="isAdminMode" class="fr-col-auto fr-pr-2w admin-inline-controls">
-                  <button
-                    class="admin-btn fr-icon-arrow-up-line"
-                    aria-label="Monter cette question"
-                    title="Monter"
-                    :disabled="index === 0"
-                    @click.stop="moveItem(null, index, -1)"
-                  ></button>
-                  <button
-                    class="admin-btn fr-icon-arrow-down-line"
-                    aria-label="Descendre cette question"
-                    title="Descendre"
-                    :disabled="index === getFilteredOrphans.length - 1"
-                    @click.stop="moveItem(null, index, 1)"
-                  ></button>
-                  <button
-                    class="admin-btn fr-icon-edit-line"
-                    aria-label="Modifier cette question"
-                    title="Modifier"
-                    @click.stop="editItem(item)"
-                  ></button>
-                  <button
-                    class="admin-btn admin-btn-delete fr-icon-delete-line"
-                    aria-label="Supprimer cette question"
-                    title="Supprimer"
-                    @click.stop="triggerDeleteItem(item.id)"
-                  ></button>
-                </div>
-              </div>
-
-              <div
-                class="fr-collapse"
-                :id="'accordion-' + item.id"
-                :class="{ 'fr-collapse--expanded': expandedItems[item.id] }"
-                :style="expandedItems[item.id] ? 'max-height: none;' : undefined"
-              >
-                <div class="fr-p-3w">
-                  <BlockRenderer :blocks="item.content" />
-                </div>
-              </div>
-            </section>
+              :item="item"
+              :index="index"
+              :list-length="visibleOrphans.length"
+              :is-admin-mode="isAdminMode"
+              @up="moveItem(null, index, -1)"
+              @down="moveItem(null, index, 1)"
+              @edit="editItem(item)"
+              @delete="triggerDeleteItem(item.id)"
+            />
           </div>
         </div>
       </div>
@@ -229,114 +105,22 @@
         </div>
       </div>
 
-      <DsfrModal
+      <FaqQuestionModal
         :opened="showForm"
         :title="editingId ? 'Modifier la question de la FAQ' : 'Ajouter une nouvelle question'"
-        :is-alert="true"
+        :categories="sortedCategories"
+        :initial-data="form"
         @close="showForm = false"
-      >
-        <form @submit.prevent="saveItem" class="fr-container--fluid fr-p-0 faq-edit-form">
-          <div class="fr-grid-row fr-grid-row--gutters">
-            <div class="fr-col-12">
-              <div class="fr-input-group">
-                <label class="fr-label" for="faq-question">Question</label>
-                <input
-                  v-model="form.question"
-                  class="fr-input"
-                  type="text"
-                  id="faq-question"
-                  required
-                  placeholder="Ex: Qu'est-ce qu'un dépôt sauvage ?"
-                />
-              </div>
-            </div>
+        @save="saveItem"
+      />
 
-            <div class="fr-col-12">
-              <div class="fr-select-group">
-                <label class="fr-label" for="faq-category">Thématique / Catégorie</label>
-                <select v-model="form.categoryId" class="fr-select" id="faq-category">
-                  <option :value="null">Aucune thématique (placer en bas)</option>
-                  <option v-for="cat in sortedCategories" :key="cat.id" :value="cat.id">
-                    {{ cat.label }}
-                  </option>
-                </select>
-              </div>
-            </div>
-
-            <div class="fr-col-12">
-              <div class="fr-input-group">
-                <label class="fr-label" for="faq-answer">Réponse</label>
-
-                <div class="tiptap-editor-wrapper">
-                  <RichTextEditor v-model="form.answer" />
-                </div>
-              </div>
-            </div>
-
-            <div class="fr-col-12">
-              <div class="fr-checkbox-group">
-                <input v-model="form.is_published" type="checkbox" id="faq-published" />
-                <label class="fr-label" for="faq-published">Publié (visible de tous)</label>
-              </div>
-            </div>
-
-            <div class="fr-col-12 fr-mt-3w text-right">
-              <ul class="fr-btns-group fr-btns-group--inline fr-btns-group--right">
-                <li>
-                  <button type="button" class="fr-btn fr-btn--secondary" @click="showForm = false">
-                    Annuler
-                  </button>
-                </li>
-                <li>
-                  <button type="submit" class="fr-btn">Enregistrer</button>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </form>
-      </DsfrModal>
-
-      <DsfrModal
+      <FaqCategoryModal
         :opened="showCategoryForm"
         :title="editingId ? 'Modifier la thématique' : 'Ajouter une thématique'"
-        :is-alert="true"
+        :initial-data="categoryForm"
         @close="showCategoryForm = false"
-      >
-        <form @submit.prevent="saveCategory" class="fr-container--fluid fr-p-0">
-          <div class="fr-grid-row fr-grid-row--gutters">
-            <div class="fr-col-12">
-              <div class="fr-input-group">
-                <label class="fr-label" for="category-label">Titre de la thématique</label>
-                <input
-                  v-model="categoryForm.label"
-                  class="fr-input"
-                  type="text"
-                  id="category-label"
-                  required
-                  placeholder="Ex: ⚖️ Cadre général"
-                />
-              </div>
-            </div>
-
-            <div class="fr-col-12 fr-mt-3w text-right">
-              <ul class="fr-btns-group fr-btns-group--inline fr-btns-group--right">
-                <li>
-                  <button
-                    type="button"
-                    class="fr-btn fr-btn--secondary"
-                    @click="showCategoryForm = false"
-                  >
-                    Annuler
-                  </button>
-                </li>
-                <li>
-                  <button type="submit" class="fr-btn">Enregistrer</button>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </form>
-      </DsfrModal>
+        @save="saveCategory"
+      />
 
       <ConfirmModal
         :opened="showDeleteConfirm"
@@ -373,10 +157,13 @@ import {
   fetchResource,
   patchResource,
 } from '@/services/api'
-import { DsfrButton, DsfrModal } from '@gouvminint/vue-dsfr'
+import { DsfrButton } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useEditModeStore } from '../stores/editMode'
-import { BlockRenderer } from '../vue-antoinette'
+import FaqItem from '@/components/faq/FaqItem.vue'
+import FaqQuestionModal from '@/components/faq/FaqQuestionModal.vue'
+import FaqCategoryModal from '@/components/faq/FaqCategoryModal.vue'
+import { AdminControls } from '../vue-antoinette'
 
 interface FAQItem {
   id: number
@@ -398,7 +185,6 @@ const isAdminMode = computed(() => editModeStore.isAdminMode)
 
 const categories = ref<FAQCategory[]>([])
 const orphans = ref<FAQItem[]>([])
-const expandedItems = reactive<Record<number, boolean>>({})
 
 // Question Form State
 const showForm = ref(false)
@@ -459,21 +245,17 @@ const sortedCategories = computed(() => {
   return [...categories.value].sort((a, b) => a.order - b.order)
 })
 
-const getFilteredQuestions = (cat: FAQCategory) => {
+const getVisibleQuestions = (cat: FAQCategory) => {
   return cat.questions
     .filter((item) => isAdminMode.value || item.is_published)
     .sort((a, b) => a.order - b.order)
 }
 
-const getFilteredOrphans = computed(() => {
+const visibleOrphans = computed(() => {
   return orphans.value
     .filter((item) => isAdminMode.value || item.is_published)
     .sort((a, b) => a.order - b.order)
 })
-
-const toggleAccordion = (id: number) => {
-  expandedItems[id] = !expandedItems[id]
-}
 
 // Category CRUD Actions
 const openAddCategoryForm = () => {
@@ -491,11 +273,11 @@ const editCategory = (cat: FAQCategory) => {
   showCategoryForm.value = true
 }
 
-const saveCategory = async () => {
+const saveCategory = async (data: { label: string }) => {
   try {
     if (editingId.value !== null) {
       const updated = await patchResource(`${API_URL}/faq-items/${editingId.value}/`, {
-        title: categoryForm.label,
+        title: data.label,
         order: categoryForm.order,
       })
       const idx = categories.value.findIndex((item) => item.id === editingId.value)
@@ -508,7 +290,7 @@ const saveCategory = async () => {
       }
     } else {
       const created = await createResource(`${API_URL}/faq-items/`, {
-        title: categoryForm.label,
+        title: data.label,
         order: categoryForm.order,
         parent: null,
         content: [],
@@ -621,7 +403,12 @@ const editItem = (item: FAQItem) => {
   showForm.value = true
 }
 
-const saveItem = async () => {
+const saveItem = async (data: {
+  question: string
+  answer: string
+  categoryId: number | null
+  is_published: boolean
+}) => {
   try {
     let finalId = editingId.value
     let finalOrder = form.order
@@ -629,12 +416,12 @@ const saveItem = async () => {
     if (finalId !== null) {
       const originalInfo = findQuestionById(finalId)
       if (originalInfo) {
-        if (originalInfo.categoryId !== form.categoryId) {
-          if (form.categoryId === null) {
+        if (originalInfo.categoryId !== data.categoryId) {
+          if (data.categoryId === null) {
             finalOrder =
               orphans.value.length > 0 ? Math.max(...orphans.value.map((o) => o.order)) + 1 : 1
           } else {
-            const targetCat = categories.value.find((c) => c.id === form.categoryId)
+            const targetCat = categories.value.find((c) => c.id === data.categoryId)
             finalOrder =
               targetCat && targetCat.questions.length > 0
                 ? Math.max(...targetCat.questions.map((q) => q.order)) + 1
@@ -646,11 +433,11 @@ const saveItem = async () => {
       }
 
       const updated = await patchResource(`${API_URL}/faq-items/${finalId}/`, {
-        title: form.question,
-        content: [{ type: 'rich_text', value: form.answer }],
-        parent: form.categoryId,
+        title: data.question,
+        content: [{ type: 'rich_text', value: data.answer }],
+        parent: data.categoryId,
         order: finalOrder,
-        is_published: form.is_published,
+        is_published: data.is_published,
       })
 
       if (updated) {
@@ -663,21 +450,21 @@ const saveItem = async () => {
           is_published: updated.is_published,
         }
 
-        if (form.categoryId === null) {
+        if (data.categoryId === null) {
           orphans.value.push(mappedItem)
         } else {
-          const targetCat = categories.value.find((c) => c.id === form.categoryId)
+          const targetCat = categories.value.find((c) => c.id === data.categoryId)
           if (targetCat) {
             targetCat.questions.push(mappedItem)
           }
         }
       }
     } else {
-      if (form.categoryId === null) {
+      if (data.categoryId === null) {
         finalOrder =
           orphans.value.length > 0 ? Math.max(...orphans.value.map((o) => o.order)) + 1 : 1
       } else {
-        const targetCat = categories.value.find((c) => c.id === form.categoryId)
+        const targetCat = categories.value.find((c) => c.id === data.categoryId)
         finalOrder =
           targetCat && targetCat.questions.length > 0
             ? Math.max(...targetCat.questions.map((q) => q.order)) + 1
@@ -685,11 +472,11 @@ const saveItem = async () => {
       }
 
       const created = await createResource(`${API_URL}/faq-items/`, {
-        title: form.question,
-        content: [{ type: 'rich_text', value: form.answer }],
-        parent: form.categoryId,
+        title: data.question,
+        content: [{ type: 'rich_text', value: data.answer }],
+        parent: data.categoryId,
         order: finalOrder,
-        is_published: form.is_published,
+        is_published: data.is_published,
       })
 
       if (created) {
@@ -701,10 +488,10 @@ const saveItem = async () => {
           is_published: created.is_published,
         }
 
-        if (form.categoryId === null) {
+        if (data.categoryId === null) {
           orphans.value.push(mappedItem)
         } else {
-          const targetCat = categories.value.find((c) => c.id === form.categoryId)
+          const targetCat = categories.value.find((c) => c.id === data.categoryId)
           if (targetCat) {
             targetCat.questions.push(mappedItem)
           }
@@ -740,8 +527,8 @@ const confirmDeleteItem = async () => {
 const moveItem = async (catId: number | null, currentIndex: number, direction: number) => {
   const list =
     catId !== null
-      ? getFilteredQuestions(categories.value.find((c) => c.id === catId)!)
-      : getFilteredOrphans.value
+      ? getVisibleQuestions(categories.value.find((c) => c.id === catId)!)
+      : visibleOrphans.value
   const targetIndex = currentIndex + direction
   if (targetIndex < 0 || targetIndex >= list.length) return
 
@@ -768,85 +555,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.faq-draft {
-  opacity: 0.75;
-  border-left: 4px solid #ffca00;
-}
-.faq-item-section {
-  position: relative;
-  margin-bottom: 1.5rem !important;
-  border: 1px solid var(--border-default-grey) !important;
-  border-radius: 8px !important;
-  overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0, 0, 145, 0.02);
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
-}
-.faq-item-section:hover {
-  border-color: var(--border-default-blue-france) !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 145, 0.05);
-}
-.faq-item-header {
-  transition: background-color 0.2s ease;
-}
-.faq-item-header--expanded {
-  background-color: var(--background-alt-blue-france);
-}
-.faq-item-header :deep(.fr-accordion__title) {
-  margin: 0;
-}
-.faq-item-header :deep(.fr-accordion__btn) {
-  padding: 1.25rem 1.5rem;
-  background-color: transparent !important;
-}
-.faq-item-section :deep(.fr-accordion::before) {
-  display: none !important;
-}
-.admin-inline-controls {
-  z-index: 10;
-  display: flex;
-  gap: 0.35rem;
-  align-items: center;
-}
-.admin-btn {
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 50% !important;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--background-default-grey) !important;
-  border: 1px solid var(--border-default-grey) !important;
-  color: var(--text-action-high-blue-france) !important;
-  padding: 0 !important;
-  min-height: auto !important;
-  transition: all 0.15s ease-in-out;
-}
-.admin-btn::before {
-  margin: 0 !important;
-}
-.admin-btn:hover:not(:disabled) {
-  background-color: var(--background-alt-blue-france) !important;
-  border-color: var(--border-default-blue-france) !important;
-  color: var(--text-active-blue-france) !important;
-}
-.admin-btn:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-  background-color: var(--background-alt-grey) !important;
-  border-color: var(--border-default-grey) !important;
-  color: var(--text-disabled-grey) !important;
-}
-.admin-btn-delete {
-  color: var(--text-default-error) !important;
-}
-.admin-btn-delete:hover:not(:disabled) {
-  background-color: #fee9e9 !important;
-  border-color: var(--border-plain-error) !important;
-  color: var(--text-default-error) !important;
-}
-
 .category-header-wrapper {
   display: flex;
   align-items: center;
