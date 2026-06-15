@@ -148,8 +148,10 @@
 </template>
 
 <script setup lang="ts">
+import FaqCategoryModal from '@/components/faq/FaqCategoryModal.vue'
+import FaqItem from '@/components/faq/FaqItem.vue'
+import FaqQuestionModal from '@/components/faq/FaqQuestionModal.vue'
 import ConfirmModal from '@/components/shared/ConfirmModal.vue'
-import RichTextEditor from '@/components/shared/RichTextEditor.vue'
 import {
   API_URL,
   createResource,
@@ -160,9 +162,6 @@ import {
 import { DsfrButton } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useEditModeStore } from '../stores/editMode'
-import FaqItem from '@/components/faq/FaqItem.vue'
-import FaqQuestionModal from '@/components/faq/FaqQuestionModal.vue'
-import FaqCategoryModal from '@/components/faq/FaqCategoryModal.vue'
 import { AdminControls } from '../vue-antoinette'
 
 interface FAQItem {
@@ -186,7 +185,6 @@ const isAdminMode = computed(() => editModeStore.isAdminMode)
 const categories = ref<FAQCategory[]>([])
 const orphans = ref<FAQItem[]>([])
 
-// Question Form State
 const showForm = ref(false)
 const editingId = ref<number | null>(null)
 const form = reactive({
@@ -197,14 +195,12 @@ const form = reactive({
   is_published: true,
 })
 
-// Category Form State
 const showCategoryForm = ref(false)
 const categoryForm = reactive({
   label: '',
   order: 0,
 })
 
-// Deletion State
 const showDeleteConfirm = ref(false)
 const showDeleteCategoryConfirm = ref(false)
 const deletingItemId = ref<number | null>(null)
@@ -257,7 +253,6 @@ const visibleOrphans = computed(() => {
     .sort((a, b) => a.order - b.order)
 })
 
-// Category CRUD Actions
 const openAddCategoryForm = () => {
   editingId.value = null
   categoryForm.label = ''

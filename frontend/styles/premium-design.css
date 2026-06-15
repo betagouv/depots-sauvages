@@ -452,8 +452,7 @@ textarea.fr-input {
   height: 200px !important;
 }
 
-/* Enforce native browser list rendering for both Editor and Public View to prevent overlaps and counter conflicts */
-.tiptap-content-wrapper .ProseMirror ul,
+/* Enforce native browser list rendering for Public View to prevent overlaps and counter conflicts */
 .content-styled ul {
   list-style-type: disc !important;
   padding-left: 1.5rem !important;
@@ -461,7 +460,6 @@ textarea.fr-input {
   margin-bottom: 0.5rem !important;
 }
 
-.tiptap-content-wrapper .ProseMirror ol,
 .content-styled ol {
   list-style-type: decimal !important;
   padding-left: 1.5rem !important;
@@ -469,7 +467,6 @@ textarea.fr-input {
   margin-bottom: 0.5rem !important;
 }
 
-.tiptap-content-wrapper .ProseMirror li,
 .content-styled li {
   display: list-item !important;
   list-style: inherit !important;
@@ -479,7 +476,6 @@ textarea.fr-input {
 }
 
 /* Hide all custom counter/bullet pseudo-elements to resolve "01.", "02." overlapping bugs */
-.tiptap-content-wrapper .ProseMirror li::before,
 .content-styled li::before {
   content: none !important;
   display: none !important;
