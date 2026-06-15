@@ -50,7 +50,11 @@ export const API_URLS = {
 }
 
 // API functions
-async function makeRequest(url: string, method: 'GET' | 'POST' | 'PUT' | 'PATCH', data: any) {
+async function makeRequest(
+  url: string,
+  method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
+  data?: any
+) {
   const options: RequestInit = {
     method,
     headers: {
@@ -61,7 +65,7 @@ async function makeRequest(url: string, method: 'GET' | 'POST' | 'PUT' | 'PATCH'
   }
 
   // Only include body for POST, PUT and PATCH requests
-  if (method !== 'GET' && data) {
+  if (method !== 'GET' && method !== 'DELETE' && data) {
     options.body = JSON.stringify(data)
   }
 
@@ -88,7 +92,9 @@ export const updateResource = (url: string, data: any) => makeRequest(url, 'PUT'
 
 export const patchResource = (url: string, data: any) => makeRequest(url, 'PATCH', data)
 
-export const fetchResource = (url: string) => makeRequest(url, 'GET', {})
+export const deleteResource = (url: string) => makeRequest(url, 'DELETE')
+
+export const fetchResource = (url: string) => makeRequest(url, 'GET')
 
 export interface UserInfo {
   is_authenticated: boolean
