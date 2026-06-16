@@ -18,7 +18,7 @@ class TestGuillotineModels:
 
     def test_nested_content_top_level(self):
         """Verifies is_top_level property and top_level queryset filtering."""
-        parent = FAQItem.objects.create(title="Parent", parent=None)
+        parent = FAQItem.objects.create(title="Parent", parent=None, is_top_level=True)
         child = FAQItem.objects.create(title="Child", parent=parent)
 
         assert parent.is_top_level is True

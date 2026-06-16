@@ -65,12 +65,14 @@ class UserInfoViewSet(viewsets.ViewSet):
                     "last_name": request.user.last_name,
                     "email": request.user.email,
                     "procedures_count": Constatation.objects.filter(user=request.user).count(),
+                    "is_staff": request.user.is_staff,
                 }
             )
         return Response(
             {
                 "is_authenticated": False,
                 "proconnect_enabled": settings.PROCONNECT_ENABLED,
+                "is_staff": False,
             }
         )
 

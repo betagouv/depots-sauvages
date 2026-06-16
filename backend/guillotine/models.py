@@ -60,16 +60,13 @@ class NestedContent(models.Model):
         related_name="children",
     )
     order = models.PositiveIntegerField(default=0)
+    is_top_level = models.BooleanField(default=False)
 
     objects = ContentManager()
 
     class Meta:
         abstract = True
         ordering = ["order", "id"]
-
-    @property
-    def is_top_level(self):
-        return self.parent_id is None
 
     def move_up(self):
         """

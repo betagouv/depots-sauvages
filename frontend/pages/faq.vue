@@ -219,6 +219,7 @@ const saveCategory = async (data: { label: string }) => {
       title: data.label,
       parent: null,
       content: [],
+      is_top_level: true,
     })
     showCategoryForm.value = false
     editingId.value = null
@@ -275,6 +276,7 @@ const saveQuestion = async (data: {
       content: [{ type: 'rich_text', value: data.answer }],
       parent: data.categoryId,
       is_published: data.is_published,
+      is_top_level: false,
     })
     showForm.value = false
     editingId.value = null

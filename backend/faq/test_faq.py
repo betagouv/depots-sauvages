@@ -16,7 +16,7 @@ class TestFAQIntegration:
         self.user = User.objects.create_user(username="user", password="password")
         self.admin = User.objects.create_superuser(username="admin", password="password")
         # Set up a category and child questions
-        self.category = FAQItem.objects.create(title="⚖️ Cadre général", parent=None, order=1)
+        self.category = FAQItem.objects.create(title="⚖️ Cadre général", parent=None, order=1, is_top_level=True)
         self.question = FAQItem.objects.create(
             title="Qu'est-ce qu'un dépôt sauvage ?", parent=self.category, order=1
         )

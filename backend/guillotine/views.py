@@ -33,19 +33,19 @@ class NestedTopLevelListMixin:
     def get_top_level_queryset(self, queryset):
         """
         Return the queryset of top-level items.
-        Assumes empty content means the item is top-level.
+        Assumes is_top_level=True means the item is a top-level category/theme.
         """
-        if hasattr(self.serializer_class.Meta.model, "content"):
-            return queryset.filter(content=[])
+        if hasattr(self.serializer_class.Meta.model, "is_top_level"):
+            return queryset.filter(is_top_level=True)
         return queryset
 
     def get_orphans_queryset(self, queryset):
         """
         Return the queryset of top-level standalone/orphan items.
-        Assumes items without parent and with contents, are orphans items.
+        Assumes is_top_level=False means the item is an orphan when parent is null.
         """
-        if hasattr(self.serializer_class.Meta.model, "content"):
-            return queryset.exclude(content=[])
+        if hasattr(self.serializer_class.Meta.model, "is_top_level"):
+            return queryset.filter(is_top_level=False)
         return queryset.none()
 
     def list(self, request, *args, **kwargs):

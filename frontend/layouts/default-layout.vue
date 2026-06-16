@@ -7,7 +7,7 @@
       :quick-links="quickLinks"
     >
       <template #before-quick-links>
-        <div class="fr-header__tools-item admin-toggle-header-item">
+        <div v-if="userInfo?.is_staff" class="fr-header__tools-item admin-toggle-header-item">
           <DsfrToggleSwitch
             label="Mode édition"
             v-model="editModeStore.isAdminMode"
@@ -43,7 +43,7 @@
                     isActive || route.meta.activeMenu === lien.href ? 'page' : undefined
                   "
                   :href="href"
-                  @click="navigate(); hidemodal()"
+                  @click="(navigate(), hidemodal())"
                 >
                   {{ lien.text }}
                 </a>
@@ -57,10 +57,7 @@
     <main role="main" id="content">
       <slot />
     </main>
-    <DsfrFooter
-      :logo-text="logoText"
-      :after-mandatory-links="afterMandatoryLinks"
-    >
+    <DsfrFooter :logo-text="logoText" :after-mandatory-links="afterMandatoryLinks">
       <template #description>
         <strong>Protect’Envi</strong>
         <br />
@@ -89,10 +86,10 @@
 import { DsfrFooter, DsfrFooterLinkList, DsfrHeader, DsfrToggleSwitch } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { useEditModeStore } from '../stores/editMode'
-import { getUserInfo, getBypassAuthConfig } from '../services/api'
-import { LOGIN_URL, LOGOUT_URL } from '../services/urls'
+import { getBypassAuthConfig, getUserInfo } from '../services/api'
 import { PROCONNECT_ENABLED } from '../services/config'
+import { LOGIN_URL, LOGOUT_URL } from '../services/urls'
+import { useEditModeStore } from '../stores/editMode'
 
 interface FooterLink {
   text: string
@@ -165,10 +162,14 @@ onMounted(async () => {
   }
 
   try {
-    const info = await getUserInfo()
-    userInfo.value = info
+    const fetchedUserInfo = await getUserInfo()
+    userInfo.value = fetchedUserInfo
 
-    if (info.is_authenticated) {
+    if (!fetchedUserInfo.is_staff) {
+      editModeStore.setAdminMode(false)
+    }
+
+    if (fetchedUserInfo.is_authenticated) {
       isAuthenticated.value = true
       quickLinks.value.push({
         label: 'Se déconnecter',
@@ -189,7 +190,7 @@ onMounted(async () => {
           onClick: (event) => {
             if (event) event.preventDefault()
             window.location.href = '/login-demo'
-          }
+          },
         })
       }
       if (isProConnectEnabled) {
@@ -205,6 +206,7 @@ onMounted(async () => {
     }
   } catch (error) {
     console.error('Failed to fetch user info:', error)
+    editModeStore.setAdminMode(false)
 
     if (bypassEnabled) {
       quickLinks.value.push({
@@ -216,7 +218,7 @@ onMounted(async () => {
         onClick: (event) => {
           if (event) event.preventDefault()
           window.location.href = '/login-demo'
-        }
+        },
       })
     }
     if (isProConnectEnabled) {
@@ -242,7 +244,7 @@ const footerLinks: FooterLink[] = [
 const afterMandatoryLinks = [
   { label: 'Conditions générales d’utilisation', to: '/cgu' },
   { label: 'Plan du site', to: '/plan-du-site' },
-  { label: 'Foire aux questions', to: '/faq' }
+  { label: 'Foire aux questions', to: '/faq' },
 ]
 </script>
 
@@ -261,15 +263,7 @@ const afterMandatoryLinks = [
   border-right: 1px solid var(--border-default-grey);
 }
 
-.admin-toggle-header-item .fr-toggle {
-  padding: 0;
-  margin: 0;
-}
-
 .admin-toggle-header-item .fr-toggle__label {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--text-title-grey);
   white-space: nowrap;
 }
 

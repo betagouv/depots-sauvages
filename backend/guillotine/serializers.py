@@ -45,8 +45,6 @@ class NestedBlockContentSerializer(
 ):
     """Base model serializer for models inheriting from both BlockContent and NestedContent."""
 
-    is_top_level = serializers.ReadOnlyField()
-
     class Meta:
         fields = [
             "id",
