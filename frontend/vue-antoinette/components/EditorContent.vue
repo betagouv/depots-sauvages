@@ -38,9 +38,14 @@ defineProps<{
   padding: 0.75rem;
 }
 
-:deep(.tiptap) {
+.tiptap-content-wrapper :deep(> div) {
+  height: 100%;
+}
+
+:deep(.tiptap),
+:deep(.ProseMirror) {
   min-height: 100%;
-  outline: none;
+  outline: none !important;
   font-family: inherit;
   font-size: 0.9rem;
   line-height: 1.5;

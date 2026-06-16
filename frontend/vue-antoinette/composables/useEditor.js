@@ -26,6 +26,11 @@ export function useEditor(props, emit) {
         },
       }),
     ],
+    editorProps: {
+      attributes: {
+        class: 'tiptap',
+      },
+    },
     onUpdate: () => {
       emit('update:modelValue', editor.value?.getHTML() || '')
     },

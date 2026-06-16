@@ -29,11 +29,17 @@
         </div>
 
         <div class="fr-col-12">
-          <div class="fr-input-group">
-            <label class="fr-label" for="faq-answer">Réponse</label>
+          <div class="fr-input-group" :class="{ 'fr-input-group--error': showAnswerError }">
+            <label class="fr-label" for="faq-answer">
+              Réponse
+              <span class="fr-hint-text">Ce champ est obligatoire.</span>
+            </label>
             <div class="tiptap-editor-wrapper">
               <RichTextEditor v-model="localForm.answer" />
             </div>
+            <p v-if="showAnswerError" class="fr-error-text" id="faq-answer-error">
+              La réponse est obligatoire.
+            </p>
           </div>
         </div>
 
@@ -91,17 +97,39 @@ const emit = defineEmits<{
 }>()
 
 const localForm = ref<QuestionForm>({ ...props.initialData })
+const showAnswerError = ref(false)
+
+const isAnswerEmpty = (html: string) => {
+  if (!html) return true
+  // Strip tags and HTML space entities to check if it's actually empty
+  const text = html.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim()
+  return text.length === 0
+}
 
 watch(
   () => props.opened,
   (isOpened) => {
     if (isOpened) {
       localForm.value = { ...props.initialData }
+      showAnswerError.value = false
+    }
+  }
+)
+
+watch(
+  () => localForm.value.answer,
+  (newVal) => {
+    if (showAnswerError.value && !isAnswerEmpty(newVal)) {
+      showAnswerError.value = false
     }
   }
 )
 
 const submitForm = () => {
+  if (isAnswerEmpty(localForm.value.answer)) {
+    showAnswerError.value = true
+    return
+  }
   emit('save', { ...localForm.value })
 }
 </script>
