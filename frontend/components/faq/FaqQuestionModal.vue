@@ -69,6 +69,7 @@
 
 <script setup lang="ts">
 import { DsfrModal } from '@gouvminint/vue-dsfr'
+import DOMPurify from 'dompurify'
 import { ref, watch } from 'vue'
 import RichTextEditor from '../shared/RichTextEditor.vue'
 
@@ -101,8 +102,8 @@ const showAnswerError = ref(false)
 
 const isAnswerEmpty = (html: string) => {
   if (!html) return true
-  // Strip tags and HTML space entities to check if it's actually empty
-  const text = html.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim()
+  // Sanitize with ALLOWED_TAGS set to empty array to retrieve only raw text content
+  const text = DOMPurify.sanitize(html, { ALLOWED_TAGS: [] }).trim()
   return text.length === 0
 }
 
