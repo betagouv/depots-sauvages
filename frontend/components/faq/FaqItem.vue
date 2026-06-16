@@ -96,7 +96,7 @@ const isExpanded = ref(false)
 
 const copyUrl = computed(() => {
   if (typeof window === 'undefined') return ''
-  return `${window.location.origin}${route.path}#${props.item.slug}`
+  return `${window.location.origin}/faq/${props.item.slug}`
 })
 
 const toggleAccordion = () => {

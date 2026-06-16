@@ -26,9 +26,9 @@ export function useAnchorScroll(
   })
 
   watch(
-    () => route.hash,
-    (newHash) => {
-      if (newHash === `#${slug}`) {
+    () => [route.hash, route.params.slug],
+    ([newHash, newSlug]) => {
+      if (newHash === `#${slug}` || newSlug === slug) {
         isExpanded.value = true
       }
     },
@@ -38,8 +38,8 @@ export function useAnchorScroll(
   watch(isExpanded, (expanded) => {
     if (expanded) {
       trackEvent(category, 'Ouverture', title)
-      if (route.hash !== `#${slug}`) {
-        router.replace({ hash: `#${slug}` })
+      if (route.params.slug !== slug) {
+        router.replace({ name: 'FAQ', params: { slug } })
       }
       const tryScroll = (attempts = 0) => {
         const el = document.getElementById(slug)
@@ -52,8 +52,8 @@ export function useAnchorScroll(
         }
       }
       tryScroll()
-    } else if (route.hash === `#${slug}`) {
-      router.replace({ hash: '' })
+    } else if (route.params.slug === slug) {
+      router.replace({ name: 'FAQ', params: { slug: '' } })
     }
   }, { immediate: true })
 }

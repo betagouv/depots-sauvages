@@ -136,7 +136,7 @@ const router = createRouter({
       meta: { title: 'Constatation enregistrée' },
     },
     {
-      path: '/faq',
+      path: '/faq/:slug?',
       name: 'FAQ',
       component: () => import('./pages/faq.vue'),
       meta: { title: 'Foire Aux Questions' },
