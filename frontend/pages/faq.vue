@@ -2,7 +2,7 @@
   <div>
     <div class="fr-background-alt--blue-france fr-mb-6w fr-py-6w">
       <div class="fr-container">
-        <h1 class="fr-h1 fr-mb-2w">Foire Aux Questions (FAQ)</h1>
+        <h1 class="fr-h1 fr-mb-2w">Foire Aux Questions</h1>
         <p class="fr-text fr-text--lead fr-mb-0">
           Retrouvez toutes les réponses aux questions les plus fréquentes sur la lutte contre les
           dépôts sauvages.
@@ -20,11 +20,7 @@
       </div>
 
       <div v-else>
-        <div
-          v-for="(cat, catIndex) in topLevel"
-          :key="cat.id"
-          class="faq-category-group fr-mb-6w"
-        >
+        <div v-for="(cat, catIndex) in topLevel" :key="cat.id" class="faq-category-group fr-mb-6w">
           <div
             v-if="getVisibleQuestions(cat).length > 0 || isAdminMode"
             class="fr-mb-3w category-header-wrapper"
@@ -192,13 +188,11 @@ const deletingCategoryId = ref<number | null>(null)
 
 const getVisibleQuestions = (cat: any) => {
   const children = cat.children || []
-  return children
-    .filter((item: any) => isAdminMode.value || item.is_published)
+  return children.filter((item: any) => isAdminMode.value || item.is_published)
 }
 
 const visibleOrphans = computed(() => {
-  return orphans.value
-    .filter((item) => isAdminMode.value || item.is_published)
+  return orphans.value.filter((item) => isAdminMode.value || item.is_published)
 })
 
 const openAddCategoryForm = () => {
