@@ -1,5 +1,6 @@
 <template>
   <section
+    :id="item.slug"
     class="fr-accordion faq-item-section"
     :class="{ 'faq-draft': !item.is_published }"
   >
@@ -21,6 +22,14 @@
             >
           </button>
         </h3>
+      </div>
+
+      <div class="fr-col-auto fr-pr-2w">
+        <CopyButton
+          :text="copyUrl"
+          title="Copier le lien de cette question"
+          copied-title="Lien copié !"
+        />
       </div>
 
       <AdminControls
@@ -53,18 +62,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import CopyButton from '@/components/shared/CopyButton.vue'
+import { useAnchorScroll } from '@/composables/useAnchorScroll'
+import { computed, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import { AdminControls, BlockRenderer } from '../../vue-antoinette'
 
 interface FAQItem {
   id: number
   title: string
+  slug: string
   content: Array<{ type: string; value: string }>
   order: number
   is_published: boolean
 }
 
-defineProps<{
+const props = defineProps<{
   item: FAQItem
   index: number
   listLength: number
@@ -78,11 +91,19 @@ defineEmits<{
   (e: 'delete'): void
 }>()
 
+const route = useRoute()
 const isExpanded = ref(false)
+
+const copyUrl = computed(() => {
+  if (typeof window === 'undefined') return ''
+  return `${window.location.origin}${route.path}#${props.item.slug}`
+})
 
 const toggleAccordion = () => {
   isExpanded.value = !isExpanded.value
 }
+
+useAnchorScroll(isExpanded, props.item.slug, props.item.title)
 </script>
 
 <style scoped>

@@ -39,3 +39,10 @@ export function trackDownload(url) {
     window._paq.push(['trackLink', url, 'download'])
   }
 }
+
+export function trackEvent(category, action, name, value) {
+  if (window._paq) {
+    window._paq.push(['trackEvent', category, action, name, value])
+  }
+}
+
