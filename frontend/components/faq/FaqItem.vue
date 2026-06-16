@@ -34,7 +34,7 @@
 
       <AdminControls
         v-if="isAdminMode"
-        class="fr-col-auto fr-pr-2w"
+        class="fr-col-auto fr-pr-2w faq-item-admin-controls"
         :up-disabled="index === 0"
         :down-disabled="index === listLength - 1"
         up-label="Monter cette question"
@@ -89,7 +89,7 @@ defineEmits<{
   (e: 'down'): void
   (e: 'edit'): void
   (e: 'delete'): void
-}>()
+ }>()
 
 const route = useRoute()
 const isExpanded = ref(false)
@@ -141,5 +141,15 @@ useAnchorScroll(isExpanded, props.item.slug, props.item.title)
 }
 .faq-item-section :deep(.fr-accordion::before) {
   display: none !important;
+}
+
+@media (max-width: 767.98px) {
+  .faq-item-admin-controls {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding-left: 1.5rem !important;
+    padding-bottom: 1.25rem !important;
+    padding-top: 0.5rem !important;
+  }
 }
 </style>

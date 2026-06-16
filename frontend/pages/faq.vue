@@ -329,4 +329,16 @@ onMounted(() => {
 .text-right {
   text-align: right;
 }
+
+@media (max-width: 767.98px) {
+  .category-header-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .category-admin-controls {
+    margin-left: 0 !important;
+    padding-bottom: 0.5rem;
+  }
+}
 </style>
