@@ -12,7 +12,7 @@
 
     <div class="fr-container fr-pb-8w">
       <div
-        v-if="sortedCategories.length === 0 && orphans.length === 0"
+        v-if="categories.length === 0 && orphans.length === 0"
         class="fr-alert fr-alert--info fr-mb-4w"
       >
         <h3 class="fr-alert__title">Aucune question trouvée</h3>
@@ -21,7 +21,7 @@
 
       <div v-else>
         <div
-          v-for="(cat, catIndex) in sortedCategories"
+          v-for="(cat, catIndex) in categories"
           :key="cat.id"
           class="faq-category-group fr-mb-6w"
         >
@@ -30,20 +30,20 @@
             class="fr-mb-3w category-header-wrapper"
           >
             <h2 class="fr-h4 fr-mb-0 category-header">
-              {{ cat.label }}
+              {{ cat.title }}
             </h2>
 
             <AdminControls
               v-if="isAdminMode"
               class="category-admin-controls fr-ml-2w"
               :up-disabled="catIndex === 0"
-              :down-disabled="catIndex === sortedCategories.length - 1"
+              :down-disabled="catIndex === categories.length - 1"
               up-label="Monter cette thématique"
               down-label="Descendre cette thématique"
               edit-label="Modifier cette thématique"
               delete-label="Supprimer cette thématique"
-              @up="moveCategory(catIndex, -1)"
-              @down="moveCategory(catIndex, 1)"
+              @up="moveUp(cat.id)"
+              @down="moveDown(cat.id)"
               @edit="editCategory(cat)"
               @delete="triggerDeleteCategory(cat.id)"
             />
@@ -57,8 +57,8 @@
               :index="index"
               :list-length="getVisibleQuestions(cat).length"
               :is-admin-mode="isAdminMode"
-              @up="moveItem(cat.id, index, -1)"
-              @down="moveItem(cat.id, index, 1)"
+              @up="moveUp(item.id)"
+              @down="moveDown(item.id)"
               @edit="editItem(item)"
               @delete="triggerDeleteItem(item.id)"
             />
@@ -78,8 +78,8 @@
               :index="index"
               :list-length="visibleOrphans.length"
               :is-admin-mode="isAdminMode"
-              @up="moveItem(null, index, -1)"
-              @down="moveItem(null, index, 1)"
+              @up="moveUp(item.id)"
+              @down="moveDown(item.id)"
               @edit="editItem(item)"
               @delete="triggerDeleteItem(item.id)"
             />
@@ -108,10 +108,10 @@
       <FaqQuestionModal
         :opened="showForm"
         :title="editingId ? 'Modifier la question de la FAQ' : 'Ajouter une nouvelle question'"
-        :categories="sortedCategories"
+        :categories="categories.map((c: any) => ({ id: c.id, label: c.title }))"
         :initial-data="form"
         @close="showForm = false"
-        @save="saveItem"
+        @save="saveQuestion"
       />
 
       <FaqCategoryModal
@@ -152,38 +152,24 @@ import FaqCategoryModal from '@/components/faq/FaqCategoryModal.vue'
 import FaqItem from '@/components/faq/FaqItem.vue'
 import FaqQuestionModal from '@/components/faq/FaqQuestionModal.vue'
 import ConfirmModal from '@/components/shared/ConfirmModal.vue'
-import {
-  API_URL,
-  createResource,
-  deleteResource,
-  fetchResource,
-  patchResource,
-} from '@/services/api'
+import * as api from '@/services/api'
 import { DsfrButton } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useEditModeStore } from '../stores/editMode'
-import { AdminControls } from '../vue-antoinette'
-
-interface FAQItem {
-  id: number
-  question: string
-  content: Array<{ type: string; value: string }>
-  order: number
-  is_published: boolean
-}
-
-interface FAQCategory {
-  id: number
-  label: string
-  order: number
-  questions: FAQItem[]
-}
+import { AdminControls, useNestedContent } from '../vue-antoinette'
 
 const editModeStore = useEditModeStore()
 const isAdminMode = computed(() => editModeStore.isAdminMode)
 
-const categories = ref<FAQCategory[]>([])
-const orphans = ref<FAQItem[]>([])
+const {
+  categories,
+  orphans,
+  load: loadFaq,
+  moveUp,
+  moveDown,
+  deleteItem,
+  saveItem,
+} = useNestedContent(`${api.API_URL}/faq-items`, api)
 
 const showForm = ref(false)
 const editingId = ref<number | null>(null)
@@ -191,14 +177,12 @@ const form = reactive({
   question: '',
   answer: '',
   categoryId: null as number | null,
-  order: 1,
   is_published: true,
 })
 
 const showCategoryForm = ref(false)
 const categoryForm = reactive({
   label: '',
-  order: 0,
 })
 
 const showDeleteConfirm = ref(false)
@@ -206,99 +190,44 @@ const showDeleteCategoryConfirm = ref(false)
 const deletingItemId = ref<number | null>(null)
 const deletingCategoryId = ref<number | null>(null)
 
-const loadFaq = async () => {
-  try {
-    const items = await fetchResource(`${API_URL}/faq-items/?parent=null`)
-    categories.value = (items || [])
-      .filter((item: any) => !item.content || item.content.length === 0)
-      .map((cat: any) => ({
-        id: cat.id,
-        label: cat.title,
-        order: cat.order,
-        questions: (cat.children || []).map((q: any) => ({
-          id: q.id,
-          question: q.title,
-          content: q.content || [],
-          order: q.order,
-          is_published: q.is_published,
-        })),
-      }))
-    orphans.value = (items || [])
-      .filter((item: any) => item.content && item.content.length > 0)
-      .map((q: any) => ({
-        id: q.id,
-        question: q.title,
-        content: q.content || [],
-        order: q.order,
-        is_published: q.is_published,
-      }))
-  } catch (error) {
-    console.error('Erreur lors du chargement de la FAQ :', error)
-  }
-}
-
-const sortedCategories = computed(() => {
-  return [...categories.value].sort((a, b) => a.order - b.order)
-})
-
-const getVisibleQuestions = (cat: FAQCategory) => {
-  return cat.questions
-    .filter((item) => isAdminMode.value || item.is_published)
-    .sort((a, b) => a.order - b.order)
+const getVisibleQuestions = (cat: any) => {
+  const children = cat.children || []
+  return children
+    .filter((item: any) => isAdminMode.value || item.is_published)
+    .map((item: any) => ({
+      ...item,
+      question: item.title, // Align with FaqItem expectations
+    }))
 }
 
 const visibleOrphans = computed(() => {
   return orphans.value
     .filter((item) => isAdminMode.value || item.is_published)
-    .sort((a, b) => a.order - b.order)
+    .map((item: any) => ({
+      ...item,
+      question: item.title, // Align with FaqItem expectations
+    }))
 })
 
 const openAddCategoryForm = () => {
   editingId.value = null
   categoryForm.label = ''
-  categoryForm.order =
-    categories.value.length > 0 ? Math.max(...categories.value.map((c) => c.order)) + 1 : 1
   showCategoryForm.value = true
 }
 
-const editCategory = (cat: FAQCategory) => {
+const editCategory = (cat: any) => {
   editingId.value = cat.id
-  categoryForm.label = cat.label
-  categoryForm.order = cat.order
+  categoryForm.label = cat.title
   showCategoryForm.value = true
 }
 
 const saveCategory = async (data: { label: string }) => {
   try {
-    if (editingId.value !== null) {
-      const updated = await patchResource(`${API_URL}/faq-items/${editingId.value}/`, {
-        title: data.label,
-        order: categoryForm.order,
-      })
-      const idx = categories.value.findIndex((item) => item.id === editingId.value)
-      if (idx !== -1 && updated) {
-        categories.value[idx] = {
-          ...categories.value[idx],
-          label: updated.title,
-          order: updated.order,
-        }
-      }
-    } else {
-      const created = await createResource(`${API_URL}/faq-items/`, {
-        title: data.label,
-        order: categoryForm.order,
-        parent: null,
-        content: [],
-      })
-      if (created) {
-        categories.value.push({
-          id: created.id,
-          label: created.title,
-          order: created.order,
-          questions: [],
-        })
-      }
-    }
+    await saveItem(editingId.value, {
+      title: data.label,
+      parent: null,
+      content: [],
+    })
     showCategoryForm.value = false
     editingId.value = null
   } catch (error) {
@@ -314,14 +243,7 @@ const triggerDeleteCategory = (id: number) => {
 const confirmDeleteCategory = async () => {
   if (deletingCategoryId.value !== null) {
     try {
-      await deleteResource(`${API_URL}/faq-items/${deletingCategoryId.value}/`)
-      const cat = categories.value.find((c) => c.id === deletingCategoryId.value)
-      if (cat) {
-        // Append children to orphans
-        const updatedQuestions = cat.questions.map((q) => ({ ...q, categoryId: null }))
-        orphans.value.push(...updatedQuestions)
-      }
-      categories.value = categories.value.filter((item) => item.id !== deletingCategoryId.value)
+      await deleteItem(deletingCategoryId.value)
       showDeleteCategoryConfirm.value = false
       deletingCategoryId.value = null
     } catch (error) {
@@ -330,170 +252,38 @@ const confirmDeleteCategory = async () => {
   }
 }
 
-const moveCategory = async (currentIndex: number, direction: number) => {
-  const cats = [...sortedCategories.value]
-  const targetIndex = currentIndex + direction
-  if (targetIndex < 0 || targetIndex >= cats.length) return
-
-  const currentCat = cats[currentIndex]
-  const targetCat = cats[targetIndex]
-
-  const tempOrder = currentCat.order
-  currentCat.order = targetCat.order
-  targetCat.order = tempOrder
-
-  const originalCurrent = categories.value.find((i) => i.id === currentCat.id)
-  const originalTarget = categories.value.find((i) => i.id === targetCat.id)
-  if (originalCurrent) originalCurrent.order = currentCat.order
-  if (originalTarget) originalTarget.order = targetCat.order
-
-  try {
-    await Promise.all([
-      patchResource(`${API_URL}/faq-items/${currentCat.id}/`, { order: currentCat.order }),
-      patchResource(`${API_URL}/faq-items/${targetCat.id}/`, { order: targetCat.order }),
-    ])
-  } catch (error) {
-    console.error('Erreur lors de la réorganisation des thématiques :', error)
-  }
-}
-
-// Question CRUD Actions
-const findQuestionById = (id: number): { item: FAQItem; categoryId: number | null } | null => {
-  for (const cat of categories.value) {
-    const found = cat.questions.find((q) => q.id === id)
-    if (found) return { item: found, categoryId: cat.id }
-  }
-  const foundOrphan = orphans.value.find((o) => o.id === id)
-  if (foundOrphan) return { item: foundOrphan, categoryId: null }
-  return null
-}
-
-const removeQuestionFromAll = (id: number) => {
-  categories.value.forEach((cat) => {
-    cat.questions = cat.questions.filter((q) => q.id !== id)
-  })
-  orphans.value = orphans.value.filter((o) => o.id !== id)
-}
-
 const openAddForm = () => {
   editingId.value = null
   form.question = ''
   form.answer = ''
-  form.categoryId = categories.value.length > 0 ? sortedCategories.value[0].id : null
-  form.order = 1
+  form.categoryId = categories.value.length > 0 ? categories.value[0].id : null
   form.is_published = true
   showForm.value = true
 }
 
-const editItem = (item: FAQItem) => {
+const editItem = (item: any) => {
   editingId.value = item.id
-  form.question = item.question
+  form.question = item.title
   const richTextBlock = (item.content || []).find((b: any) => b.type === 'rich_text')
   form.answer = richTextBlock ? richTextBlock.value : ''
-
-  const questionInfo = findQuestionById(item.id)
-  form.categoryId = questionInfo ? questionInfo.categoryId : null
-  form.order = item.order
+  form.categoryId = item.parent
   form.is_published = item.is_published
   showForm.value = true
 }
 
-const saveItem = async (data: {
+const saveQuestion = async (data: {
   question: string
   answer: string
   categoryId: number | null
   is_published: boolean
 }) => {
   try {
-    let finalId = editingId.value
-    let finalOrder = form.order
-
-    if (finalId !== null) {
-      const originalInfo = findQuestionById(finalId)
-      if (originalInfo) {
-        if (originalInfo.categoryId !== data.categoryId) {
-          if (data.categoryId === null) {
-            finalOrder =
-              orphans.value.length > 0 ? Math.max(...orphans.value.map((o) => o.order)) + 1 : 1
-          } else {
-            const targetCat = categories.value.find((c) => c.id === data.categoryId)
-            finalOrder =
-              targetCat && targetCat.questions.length > 0
-                ? Math.max(...targetCat.questions.map((q) => q.order)) + 1
-                : 1
-          }
-        } else {
-          finalOrder = originalInfo.item.order
-        }
-      }
-
-      const updated = await patchResource(`${API_URL}/faq-items/${finalId}/`, {
-        title: data.question,
-        content: [{ type: 'rich_text', value: data.answer }],
-        parent: data.categoryId,
-        order: finalOrder,
-        is_published: data.is_published,
-      })
-
-      if (updated) {
-        removeQuestionFromAll(finalId)
-        const mappedItem: FAQItem = {
-          id: updated.id,
-          question: updated.title,
-          content: updated.content || [],
-          order: updated.order,
-          is_published: updated.is_published,
-        }
-
-        if (data.categoryId === null) {
-          orphans.value.push(mappedItem)
-        } else {
-          const targetCat = categories.value.find((c) => c.id === data.categoryId)
-          if (targetCat) {
-            targetCat.questions.push(mappedItem)
-          }
-        }
-      }
-    } else {
-      if (data.categoryId === null) {
-        finalOrder =
-          orphans.value.length > 0 ? Math.max(...orphans.value.map((o) => o.order)) + 1 : 1
-      } else {
-        const targetCat = categories.value.find((c) => c.id === data.categoryId)
-        finalOrder =
-          targetCat && targetCat.questions.length > 0
-            ? Math.max(...targetCat.questions.map((q) => q.order)) + 1
-            : 1
-      }
-
-      const created = await createResource(`${API_URL}/faq-items/`, {
-        title: data.question,
-        content: [{ type: 'rich_text', value: data.answer }],
-        parent: data.categoryId,
-        order: finalOrder,
-        is_published: data.is_published,
-      })
-
-      if (created) {
-        const mappedItem: FAQItem = {
-          id: created.id,
-          question: created.title,
-          content: created.content || [],
-          order: created.order,
-          is_published: created.is_published,
-        }
-
-        if (data.categoryId === null) {
-          orphans.value.push(mappedItem)
-        } else {
-          const targetCat = categories.value.find((c) => c.id === data.categoryId)
-          if (targetCat) {
-            targetCat.questions.push(mappedItem)
-          }
-        }
-      }
-    }
-
+    await saveItem(editingId.value, {
+      title: data.question,
+      content: [{ type: 'rich_text', value: data.answer }],
+      parent: data.categoryId,
+      is_published: data.is_published,
+    })
     showForm.value = false
     editingId.value = null
   } catch (error) {
@@ -509,38 +299,12 @@ const triggerDeleteItem = (id: number) => {
 const confirmDeleteItem = async () => {
   if (deletingItemId.value !== null) {
     try {
-      await deleteResource(`${API_URL}/faq-items/${deletingItemId.value}/`)
-      removeQuestionFromAll(deletingItemId.value)
+      await deleteItem(deletingItemId.value)
       showDeleteConfirm.value = false
       deletingItemId.value = null
     } catch (error) {
       console.error('Erreur lors de la suppression de la question :', error)
     }
-  }
-}
-
-const moveItem = async (catId: number | null, currentIndex: number, direction: number) => {
-  const list =
-    catId !== null
-      ? getVisibleQuestions(categories.value.find((c) => c.id === catId)!)
-      : visibleOrphans.value
-  const targetIndex = currentIndex + direction
-  if (targetIndex < 0 || targetIndex >= list.length) return
-
-  const currentItem = list[currentIndex]
-  const targetItem = list[targetIndex]
-
-  const tempOrder = currentItem.order
-  currentItem.order = targetItem.order
-  targetItem.order = tempOrder
-
-  try {
-    await Promise.all([
-      patchResource(`${API_URL}/faq-items/${currentItem.id}/`, { order: currentItem.order }),
-      patchResource(`${API_URL}/faq-items/${targetItem.id}/`, { order: targetItem.order }),
-    ])
-  } catch (error) {
-    console.error('Erreur lors de la réorganisation des questions :', error)
   }
 }
 

@@ -96,6 +96,8 @@ export const deleteResource = (url: string) => makeRequest(url, 'DELETE')
 
 export const fetchResource = (url: string) => makeRequest(url, 'GET')
 
+export const postResource = (url: string, data: any = {}) => makeRequest(url, 'POST', data)
+
 export interface UserInfo {
   is_authenticated: boolean
   proconnect_enabled: boolean
