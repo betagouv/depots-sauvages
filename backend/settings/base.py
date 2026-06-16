@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "backend.constatations",
     "backend.guillotine",
     "backend.faq",
+    "backend.seo",
 ]
 
 

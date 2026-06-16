@@ -11,7 +11,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from backend.constatations.models import Constatation
-from backend.home.seo_metadata import get_seo_data
+from backend.seo.seo_metadata import get_seo_data
 
 
 class RobotsTxtView(TemplateView):
