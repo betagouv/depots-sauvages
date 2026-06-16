@@ -5,7 +5,7 @@
         <div class="fr-card__body fr-p-4w">
           <ul class="fr-btns-group fr-btns-group--full-width fr-mb-4w">
             <li>
-              <DsfrButton size="lg" @click="openUrl(docConstatUrl)">
+              <DsfrButton size="lg" @click="downloadDocConstat(docConstatUrl)">
                 <span class="fr-icon-download-line fr-mr-1w" aria-hidden="true"></span>
                 Télécharger le rapport de constatation
               </DsfrButton>
@@ -25,7 +25,7 @@
         <div class="fr-card__body fr-p-4w">
           <ul class="fr-btns-group fr-btns-group--full-width fr-mb-4w">
             <li>
-              <DsfrButton size="lg" @click="openUrl(lettreInfoUrl)">
+              <DsfrButton size="lg" @click="downloadLettreInfo(lettreInfoUrl)">
                 <span class="fr-icon-download-line fr-mr-1w" aria-hidden="true"></span>
                 Télécharger la lettre d'information
               </DsfrButton>
@@ -43,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { trackDownload } from '@/services/matomo'
+import { trackAndOpenLink } from '@/services/matomo'
 import { DsfrButton } from '@gouvminint/vue-dsfr'
 
 const props = defineProps<{
@@ -52,11 +52,12 @@ const props = defineProps<{
   lettreInfoUrl: string
 }>()
 
-const openUrl = (url: string) => {
-  if (url) {
-    trackDownload(url)
-    window.open(url, '_blank', 'noopener,noreferrer')
-  }
+const downloadDocConstat = (url: string) => {
+  trackAndOpenLink('Procédures', 'Téléchargement_Rapport_Constat', url)
+}
+
+const downloadLettreInfo = (url: string) => {
+  trackAndOpenLink('Procédures', 'Téléchargement_Lettre_Info', url)
 }
 </script>
 

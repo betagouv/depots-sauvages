@@ -42,7 +42,21 @@ export function trackDownload(url) {
 
 export function trackEvent(category, action, name, value) {
   if (window._paq) {
-    window._paq.push(['trackEvent', category, action, name, value])
+    const args = ['trackEvent', category, action]
+    if (name !== undefined) {
+      args.push(name)
+    }
+    if (value !== undefined && typeof value === 'number') {
+      args.push(value)
+    }
+    window._paq.push(args)
+  }
+}
+
+export function trackAndOpenLink(category, action, url) {
+  if (url) {
+    trackEvent(category, action, url)
+    window.open(url, '_blank', 'noopener,noreferrer')
   }
 }
 

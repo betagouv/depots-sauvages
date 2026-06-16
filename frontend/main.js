@@ -17,14 +17,21 @@ const pinia = createPinia()
 const router = createRouter({
   history: createWebHistory(),
   scrollBehavior(to, from, savedPosition) {
-    if (savedPosition) {
+    if (savedPosition && !to.hash) {
       return savedPosition
     }
     if (to.hash) {
-      return { el: to.hash }
+      try {
+        if (document.querySelector(to.hash)) {
+          return { el: to.hash }
+        }
+      } catch (e) {
+        // Ignore if the hash is not a valid query selector
+      }
+      return false
     }
 
-    // Empêcher le défilement vers le haut lors de la navigation entre l'accueil et les popups Tally
+    // Avoid scroll to top when switching between home, simulateur and calculateur
     const tallyRoutes = ['/', '/simulateur', '/calculateur']
     if (tallyRoutes.includes(to.path) && tallyRoutes.includes(from.path)) {
       return false

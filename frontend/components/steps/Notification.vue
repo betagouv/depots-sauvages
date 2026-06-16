@@ -85,7 +85,7 @@ import { getTodayISOString } from '../../utils/date'
 import { calculateContradictoire } from '../../utils/procedure'
 import ListeActions, { type Action } from './ListeActions.vue'
 
-import { trackDownload } from '../../services/matomo'
+import { trackAndOpenLink } from '../../services/matomo'
 
 const props = defineProps<{
   suivi: SuiviProcedure
@@ -93,10 +93,7 @@ const props = defineProps<{
 }>()
 
 const openUrl = (url: string) => {
-  if (url) {
-    trackDownload(url)
-    window.open(url, '_blank', 'noopener,noreferrer')
-  }
+  trackAndOpenLink('Procédures', 'Téléchargement_Lettre_Info', url)
 }
 
 defineEmits(['next-step'])
