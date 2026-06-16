@@ -39,3 +39,24 @@ export function trackDownload(url) {
     window._paq.push(['trackLink', url, 'download'])
   }
 }
+
+export function trackEvent(category, action, name, value) {
+  if (window._paq) {
+    const args = ['trackEvent', category, action]
+    if (name !== undefined) {
+      args.push(name)
+    }
+    if (value !== undefined && typeof value === 'number') {
+      args.push(value)
+    }
+    window._paq.push(args)
+  }
+}
+
+export function trackAndOpenLink(category, action, url) {
+  if (url) {
+    trackEvent(category, action, url)
+    window.open(url, '_blank', 'noopener,noreferrer')
+  }
+}
+

@@ -36,6 +36,9 @@ INSTALLED_APPS = [
     "backend.procedures",
     "backend.bypass_auth",
     "backend.constatations",
+    "backend.guillotine",
+    "backend.faq",
+    "backend.seo",
 ]
 
 

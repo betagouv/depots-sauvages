@@ -6,6 +6,17 @@
       :logoText="logoText"
       :quick-links="quickLinks"
     >
+      <template #before-quick-links>
+        <div v-if="userInfo?.is_staff" class="fr-header__tools-item admin-toggle-header-item">
+          <DsfrToggleSwitch
+            label="Mode édition"
+            v-model="editModeStore.isAdminMode"
+            :label-left="true"
+            :no-text="true"
+            input-id="admin-mode-toggle-header"
+          />
+        </div>
+      </template>
 
       <template #mainnav="{ hidemodal }">
         <nav
@@ -32,7 +43,7 @@
                     isActive || route.meta.activeMenu === lien.href ? 'page' : undefined
                   "
                   :href="href"
-                  @click="navigate(); hidemodal()"
+                  @click="(navigate(), hidemodal())"
                 >
                   {{ lien.text }}
                 </a>
@@ -46,10 +57,7 @@
     <main role="main" id="content">
       <slot />
     </main>
-    <DsfrFooter
-      :logo-text="logoText"
-      :after-mandatory-links="afterMandatoryLinks"
-    >
+    <DsfrFooter :logo-text="logoText" :after-mandatory-links="afterMandatoryLinks">
       <template #description>
         <strong>Protect’Envi</strong>
         <br />
@@ -75,12 +83,13 @@
 </template>
 
 <script setup lang="ts">
-import { DsfrFooter, DsfrFooterLinkList, DsfrHeader } from '@gouvminint/vue-dsfr'
+import { DsfrFooter, DsfrFooterLinkList, DsfrHeader, DsfrToggleSwitch } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { getUserInfo, getBypassAuthConfig } from '../services/api'
-import { LOGIN_URL, LOGOUT_URL } from '../services/urls'
+import { getBypassAuthConfig, getUserInfo } from '../services/api'
 import { PROCONNECT_ENABLED } from '../services/config'
+import { LOGIN_URL, LOGOUT_URL } from '../services/urls'
+import { useEditModeStore } from '../stores/editMode'
 
 interface FooterLink {
   text: string
@@ -93,6 +102,7 @@ interface BreadcrumbLink {
 }
 
 const route = useRoute()
+const editModeStore = useEditModeStore()
 const logoText = ['Ministère', 'de l’intérieur']
 const breadcrumbLinks: BreadcrumbLink[] = []
 
@@ -106,6 +116,7 @@ const navLinks = computed<NavLink[]>(() => {
     { text: 'Accueil', href: '/' },
     { text: 'Comprendre la procédure', href: '/comprendre-la-procedure' },
     { text: 'Mes procédures', href: '/mes-procedures' },
+    { text: 'FAQ', href: '/faq' },
     { text: 'Contact', href: '/contact' },
   ]
 })
@@ -151,10 +162,14 @@ onMounted(async () => {
   }
 
   try {
-    const info = await getUserInfo()
-    userInfo.value = info
+    const fetchedUserInfo = await getUserInfo()
+    userInfo.value = fetchedUserInfo
 
-    if (info.is_authenticated) {
+    if (!fetchedUserInfo.is_staff) {
+      editModeStore.setAdminMode(false)
+    }
+
+    if (fetchedUserInfo.is_authenticated) {
       isAuthenticated.value = true
       quickLinks.value.push({
         label: 'Se déconnecter',
@@ -175,7 +190,7 @@ onMounted(async () => {
           onClick: (event) => {
             if (event) event.preventDefault()
             window.location.href = '/login-demo'
-          }
+          },
         })
       }
       if (isProConnectEnabled) {
@@ -191,6 +206,7 @@ onMounted(async () => {
     }
   } catch (error) {
     console.error('Failed to fetch user info:', error)
+    editModeStore.setAdminMode(false)
 
     if (bypassEnabled) {
       quickLinks.value.push({
@@ -202,7 +218,7 @@ onMounted(async () => {
         onClick: (event) => {
           if (event) event.preventDefault()
           window.location.href = '/login-demo'
-        }
+        },
       })
     }
     if (isProConnectEnabled) {
@@ -227,7 +243,8 @@ const footerLinks: FooterLink[] = [
 
 const afterMandatoryLinks = [
   { label: 'Conditions générales d’utilisation', to: '/cgu' },
-  { label: 'Plan du site', to: '/plan-du-site' }
+  { label: 'Plan du site', to: '/plan-du-site' },
+  { label: 'Foire aux questions', to: '/faq' },
 ]
 </script>
 
@@ -238,4 +255,28 @@ const afterMandatoryLinks = [
   absolute positioning relative to the header structure.
 */
 
+.admin-toggle-header-item {
+  display: flex;
+  align-items: center;
+  margin-right: 1.5rem;
+  padding-right: 1.5rem;
+  border-right: 1px solid var(--border-default-grey);
+}
+
+.admin-toggle-header-item .fr-toggle__label {
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  .admin-toggle-header-item {
+    margin-right: 0;
+    padding-right: 0;
+    border-right: none;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-default-grey);
+    width: 100%;
+    justify-content: space-between;
+  }
+}
 </style>

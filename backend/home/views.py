@@ -11,7 +11,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from backend.constatations.models import Constatation
-from backend.home.seo_metadata import get_seo_data
+from backend.seo.seo_metadata import get_seo_data
 
 
 class RobotsTxtView(TemplateView):
@@ -65,12 +65,14 @@ class UserInfoViewSet(viewsets.ViewSet):
                     "last_name": request.user.last_name,
                     "email": request.user.email,
                     "procedures_count": Constatation.objects.filter(user=request.user).count(),
+                    "is_staff": request.user.is_staff,
                 }
             )
         return Response(
             {
                 "is_authenticated": False,
                 "proconnect_enabled": settings.PROCONNECT_ENABLED,
+                "is_staff": False,
             }
         )
 

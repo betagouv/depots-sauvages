@@ -426,3 +426,71 @@ textarea.fr-input {
   border-radius: 12px;
   overflow: hidden;
 }
+
+/* --- GLOBAL RICH-TEXT CONTENT STYLE OVERRIDES (FOR FAQ & INLINE CMS) --- */
+
+.content-styled p {
+  margin-bottom: 1rem !important;
+  line-height: 1.6 !important;
+}
+
+.content-styled p:last-child {
+  margin-bottom: 0 !important;
+}
+
+.content-styled a {
+  color: var(--text-action-high-blue-france) !important;
+  text-decoration: underline !important;
+}
+
+.content-styled a:hover {
+  color: var(--text-active-blue-france) !important;
+}
+
+/* 1. Inside the Rich Text Editor (TipTap Modal) */
+.tiptap-content-wrapper {
+  height: 200px !important;
+}
+
+/* Enforce native browser list rendering for Public View to prevent overlaps and counter conflicts */
+.content-styled ul {
+  list-style-type: disc !important;
+  padding-left: 1.5rem !important;
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.content-styled ol {
+  list-style-type: decimal !important;
+  padding-left: 1.5rem !important;
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.content-styled li {
+  display: list-item !important;
+  list-style: inherit !important;
+  padding-left: 0 !important;
+  margin-bottom: 0.5rem !important; /* Spacing between list items */
+  line-height: 1.6 !important;
+}
+
+/* Hide all custom counter/bullet pseudo-elements to resolve "01.", "02." overlapping bugs */
+.content-styled li::before {
+  content: none !important;
+  display: none !important;
+}
+
+/* Make form-containing modals wider on large screens by overriding DSFR column grid wrappers */
+@media (min-width: 768px) {
+  .fr-modal:has(.faq-edit-form) .fr-grid-row--center > [class*='fr-col-'] {
+    flex: 0 0 90% !important;
+    max-width: 1024px !important;
+    width: 90vw !important;
+  }
+
+  /* Make the editor taller inside this large modal */
+  .fr-modal:has(.faq-edit-form) .tiptap-content-wrapper {
+    height: 250px !important;
+  }
+}

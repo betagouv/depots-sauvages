@@ -1,0 +1,3 @@
+"""
+SEO app initialization.
+"""

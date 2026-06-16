@@ -1,5 +1,7 @@
 import re
 
+from backend.seo.faq import get_faq_seo_data
+
 SEO_PATTERNS = [
     # Pages statiques
     (
@@ -79,6 +81,13 @@ SEO_PATTERNS = [
             "desc": "Remplir le formulaire de constatation de dépôt sauvage.",
         },
     ),
+    (
+        r"^/faq$",
+        {
+            "title": "Foire Aux Questions - Protect'Envi",
+            "desc": "Retrouvez toutes les réponses aux questions les plus fréquentes sur la lutte contre les dépôts sauvages.",
+        },
+    ),
     # Pages dynamiques avec identifiants
     (
         r"^/suivi-procedure/[^/]+$",
@@ -108,6 +117,10 @@ def get_seo_data(path):
     normalized_path = "/" + path.strip("/")
     if normalized_path == "//":
         normalized_path = "/"
+    # Dynamic FAQ metadata
+    faq_seo = get_faq_seo_data(normalized_path)
+    if faq_seo:
+        return faq_seo
     for pattern, seo_data in SEO_PATTERNS:
         if re.match(pattern, normalized_path):
             return seo_data

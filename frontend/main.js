@@ -17,14 +17,21 @@ const pinia = createPinia()
 const router = createRouter({
   history: createWebHistory(),
   scrollBehavior(to, from, savedPosition) {
-    if (savedPosition) {
+    if (savedPosition && !to.hash) {
       return savedPosition
     }
     if (to.hash) {
-      return { el: to.hash }
+      try {
+        if (document.querySelector(to.hash)) {
+          return { el: to.hash }
+        }
+      } catch (e) {
+        // Ignore if the hash is not a valid query selector
+      }
+      return false
     }
 
-    // Empêcher le défilement vers le haut lors de la navigation entre l'accueil et les popups Tally
+    // Avoid scroll to top when switching between home, simulateur and calculateur
     const tallyRoutes = ['/', '/simulateur', '/calculateur']
     if (tallyRoutes.includes(to.path) && tallyRoutes.includes(from.path)) {
       return false
@@ -36,7 +43,7 @@ const router = createRouter({
     {
       path: '/',
       component: () => import('./pages/accueil.vue'),
-      meta: { title: "Accueil" },
+      meta: { title: 'Accueil' },
     },
     {
       path: '/simulateur',
@@ -48,25 +55,25 @@ const router = createRouter({
       path: '/calculateur',
       name: 'Calculateur',
       component: () => import('./pages/accueil.vue'),
-      meta: { title: "Calculateur de préjudice" },
+      meta: { title: 'Calculateur de préjudice' },
     },
     {
       path: '/comprendre-la-procedure',
       name: 'ComprendreProcedure',
       component: () => import('./pages/comprendre-la-procedure.vue'),
-      meta: { title: "Comprendre la procédure" },
+      meta: { title: 'Comprendre la procédure' },
     },
     {
       path: '/mes-procedures',
       name: 'MesProcedures',
       component: () => import('./pages/mes-procedures.vue'),
-      meta: { title: "Mes procédures" },
+      meta: { title: 'Mes procédures' },
     },
     {
       path: '/contact',
       name: 'Contact',
       component: () => import('./pages/contact.vue'),
-      meta: { title: "Contact" },
+      meta: { title: 'Contact' },
     },
     {
       path: '/joindre',
@@ -84,49 +91,55 @@ const router = createRouter({
       path: '/demarche-numerique-rejoindre-protectenvi',
       name: 'DemarcheNumeriqueRejoindreProtectEnvi',
       component: () => import('./pages/demarche-numerique-rejoindre-protectenvi.vue'),
-      meta: { hideNavigation: true, title: "Rejoindre le dispositif" },
+      meta: { hideNavigation: true, title: 'Rejoindre le dispositif' },
     },
     {
       path: '/suivi-procedure/:dossier_id',
       name: 'SuiviProcedure',
       component: () => import('./pages/suivi-procedure.vue'),
-      meta: { activeMenu: '/mes-procedures', title: "Suivi de procédure" },
+      meta: { activeMenu: '/mes-procedures', title: 'Suivi de procédure' },
     },
     {
       path: '/rdv',
       name: 'RDV',
       component: () => import('./pages/rdv.vue'),
-      meta: { title: "Prendre rendez-vous" },
+      meta: { title: 'Prendre rendez-vous' },
     },
     {
       path: '/login-demo',
       name: 'LoginDemo',
       component: () => import('./pages/login-demo.vue'),
-      meta: { title: "Connexion démo" },
+      meta: { title: 'Connexion démo' },
     },
     {
       path: '/demarrer-constatation',
       name: 'ConstatationStart',
       component: () => import('./pages/commencer-constatation.vue'),
-      meta: { title: "Démarrer une constatation" },
+      meta: { title: 'Démarrer une constatation' },
     },
     {
       path: '/constatation',
       name: 'ConstatationForm',
       component: () => import('./pages/constatation-form.vue'),
-      meta: { title: "Créer une constatation" },
+      meta: { title: 'Créer une constatation' },
     },
     {
       path: '/constatation/:id',
       name: 'ConstatationEditForm',
       component: () => import('./pages/constatation-form.vue'),
-      meta: { title: "Modifier la constatation" },
+      meta: { title: 'Modifier la constatation' },
     },
     {
       path: '/constatation-fin/:id',
       name: 'ConstatationSuccess',
       component: () => import('./pages/constatation-fin.vue'),
-      meta: { title: "Constatation enregistrée" },
+      meta: { title: 'Constatation enregistrée' },
+    },
+    {
+      path: '/faq/:slug?',
+      name: 'FAQ',
+      component: () => import('./pages/faq.vue'),
+      meta: { title: 'Foire Aux Questions' },
     },
     {
       path: '/mentions-legales',

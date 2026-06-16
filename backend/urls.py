@@ -13,6 +13,7 @@ from backend.dn_signalements.views import (
     SyncUserSignalementsView,
     UserSignalementViewSet,
 )
+from backend.faq.views import FAQItemViewSet
 from backend.home.views import RobotsTxtView, UserInfoViewSet, index_view, logout_view
 from backend.procedures.views import SuiviProcedureViewSet
 
@@ -22,6 +23,7 @@ router.register("user-info", UserInfoViewSet, basename="user-info")
 router.register("dossiers", UserSignalementViewSet, basename="user-dossier")
 router.register("suivi-procedure", SuiviProcedureViewSet, basename="suivi-procedure")
 router.register("constatations", ConstatationViewSet, basename="constatation")
+router.register("faq-items", FAQItemViewSet, basename="faq-item")
 
 
 # Admin Routes
