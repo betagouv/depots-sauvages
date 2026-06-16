@@ -12,7 +12,7 @@
 
     <div class="fr-container fr-pb-8w">
       <div
-        v-if="categories.length === 0 && orphans.length === 0"
+        v-if="topLevel.length === 0 && orphans.length === 0"
         class="fr-alert fr-alert--info fr-mb-4w"
       >
         <h3 class="fr-alert__title">Aucune question trouvée</h3>
@@ -21,7 +21,7 @@
 
       <div v-else>
         <div
-          v-for="(cat, catIndex) in categories"
+          v-for="(cat, catIndex) in topLevel"
           :key="cat.id"
           class="faq-category-group fr-mb-6w"
         >
@@ -37,7 +37,7 @@
               v-if="isAdminMode"
               class="category-admin-controls fr-ml-2w"
               :up-disabled="catIndex === 0"
-              :down-disabled="catIndex === categories.length - 1"
+              :down-disabled="catIndex === topLevel.length - 1"
               up-label="Monter cette thématique"
               down-label="Descendre cette thématique"
               edit-label="Modifier cette thématique"
@@ -108,7 +108,7 @@
       <FaqQuestionModal
         :opened="showForm"
         :title="editingId ? 'Modifier la question de la FAQ' : 'Ajouter une nouvelle question'"
-        :categories="categories.map((c: any) => ({ id: c.id, label: c.title }))"
+        :categories="topLevel.map((c: any) => ({ id: c.id, label: c.title }))"
         :initial-data="form"
         @close="showForm = false"
         @save="saveQuestion"
@@ -162,7 +162,7 @@ const editModeStore = useEditModeStore()
 const isAdminMode = computed(() => editModeStore.isAdminMode)
 
 const {
-  categories,
+  topLevel,
   orphans,
   load: loadFaq,
   moveUp,
@@ -174,7 +174,7 @@ const {
 const showForm = ref(false)
 const editingId = ref<number | null>(null)
 const form = reactive({
-  question: '',
+  title: '',
   answer: '',
   categoryId: null as number | null,
   is_published: true,
@@ -194,19 +194,11 @@ const getVisibleQuestions = (cat: any) => {
   const children = cat.children || []
   return children
     .filter((item: any) => isAdminMode.value || item.is_published)
-    .map((item: any) => ({
-      ...item,
-      question: item.title, // Align with FaqItem expectations
-    }))
 }
 
 const visibleOrphans = computed(() => {
   return orphans.value
     .filter((item) => isAdminMode.value || item.is_published)
-    .map((item: any) => ({
-      ...item,
-      question: item.title, // Align with FaqItem expectations
-    }))
 })
 
 const openAddCategoryForm = () => {
@@ -254,16 +246,16 @@ const confirmDeleteCategory = async () => {
 
 const openAddForm = () => {
   editingId.value = null
-  form.question = ''
+  form.title = ''
   form.answer = ''
-  form.categoryId = categories.value.length > 0 ? categories.value[0].id : null
+  form.categoryId = topLevel.value.length > 0 ? topLevel.value[0].id : null
   form.is_published = true
   showForm.value = true
 }
 
 const editItem = (item: any) => {
   editingId.value = item.id
-  form.question = item.title
+  form.title = item.title
   const richTextBlock = (item.content || []).find((b: any) => b.type === 'rich_text')
   form.answer = richTextBlock ? richTextBlock.value : ''
   form.categoryId = item.parent
@@ -272,14 +264,14 @@ const editItem = (item: any) => {
 }
 
 const saveQuestion = async (data: {
-  question: string
+  title: string
   answer: string
   categoryId: number | null
   is_published: boolean
 }) => {
   try {
     await saveItem(editingId.value, {
-      title: data.question,
+      title: data.title,
       content: [{ type: 'rich_text', value: data.answer }],
       parent: data.categoryId,
       is_published: data.is_published,
