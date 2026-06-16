@@ -195,3 +195,30 @@ if "prod" in ENV_NAME:
 
 if BYPASS_AUTH_ENABLED:
     AUTHENTICATION_BACKENDS.insert(0, "backend.bypass_auth.auth.BypassAuthBackend")
+
+
+# Clever Cloud Cellar (S3 compatible) Storage
+CELLAR_HOST = env("CELLAR_HOST", default=env("CELLAR_ADDON_HOST", default=None))
+CELLAR_KEY_ID = env("CELLAR_KEY_ID", default=env("CELLAR_ADDON_KEY_ID", default=None))
+CELLAR_KEY_SECRET = env("CELLAR_KEY_SECRET", default=env("CELLAR_ADDON_KEY_SECRET", default=None))
+CELLAR_MEDIA_BUCKET_NAME = env("CELLAR_MEDIA_BUCKET_NAME", default=None)
+
+if CELLAR_HOST and CELLAR_KEY_ID and CELLAR_KEY_SECRET and CELLAR_MEDIA_BUCKET_NAME:
+    STORAGES["default"] = {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "OPTIONS": {
+            "access_key": CELLAR_KEY_ID,
+            "secret_key": CELLAR_KEY_SECRET,
+            "bucket_name": CELLAR_MEDIA_BUCKET_NAME,
+            "endpoint_url": f"https://{CELLAR_HOST}",
+            "default_acl": "public-read",
+            "querystring_auth": False,
+        },
+    }
+
+    # Add Cellar origins to CSP if they are default lists
+    cellar_origins = [f"https://{CELLAR_HOST}", f"https://{CELLAR_MEDIA_BUCKET_NAME}.{CELLAR_HOST}"]
+    if "CSP_IMG_SRC" not in env:
+        CONTENT_SECURITY_POLICY["DIRECTIVES"]["img-src"].extend(cellar_origins)
+    if "CSP_MEDIA_SRC" not in env:
+        CONTENT_SECURITY_POLICY["DIRECTIVES"]["media-src"].extend(cellar_origins)
