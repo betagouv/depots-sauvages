@@ -11,7 +11,7 @@
       <div class="fr-grid-row fr-grid-row--gutters">
         <div class="fr-col-12 fr-col-md-6 premium-hero-text">
           <p class="fr-text fr-mb-1w fr-text--bold">
-            Protect'Envi accompagne les collectivités à la mise en œuvre de la procédure
+            Protect'Envi accompagne les collectivités pour mettre en œuvre de la procédure
             administrative qui permet de sanctionner efficacement l'auteur d'un dépôt sauvage.
           </p>
           <ul class="fr-p-0 fr-mt-2w fr-mb-3w" style="list-style: none">
@@ -27,7 +27,10 @@
                 class="fr-icon-checkbox-circle-fill fr-text-default--success fr-mr-1w"
                 aria-hidden="true"
               ></span>
-              <span>Amende jusqu'à <strong>15 000 €</strong> recouvrée au profit de la collectivité</span>
+              <span
+                >Amende jusqu'à <strong>15 000 €</strong> recouvrée au profit de la
+                collectivité</span
+              >
             </li>
             <li class="fr-mb-1w fr-display-flex">
               <span
