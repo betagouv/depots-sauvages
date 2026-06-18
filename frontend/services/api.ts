@@ -117,6 +117,7 @@ export interface UserSignalement {
   date_modification: string | null
   state?: string
   date_constat: string | null
+  heure_constat: string | null
   localisation_depot: string | null
   last_sync: string | null
 }

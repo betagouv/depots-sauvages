@@ -18,7 +18,7 @@
             <strong>Date de constatation :</strong>
           </div>
           <div class="fr-ml-3w fr-text-title--grey">
-            {{ formatDate(dossier.date_constat) }}
+            {{ formatConstatationDate(dossier.date_constat, dossier.heure_constat) }}
           </div>
         </div>
         <div v-if="dossier.localisation_depot" class="fr-col-12 fr-col-md-6 fr-text--sm">
@@ -39,12 +39,13 @@
 </template>
 
 <script setup lang="ts">
-import { formatDate, shouldShowModificationDate } from '../../utils/date'
+import { formatDate, formatConstatationDate, shouldShowModificationDate } from '../../utils/date'
 
 interface DossierData {
   date_creation?: string
   date_modification?: string | null
   date_constat?: string | null
+  heure_constat?: string | null
   localisation_depot?: string | null
 }
 

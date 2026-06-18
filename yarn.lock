@@ -1713,6 +1713,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dayjs@npm:^1.11.21":
+  version: 1.11.21
+  resolution: "dayjs@npm:1.11.21"
+  checksum: 10c0/bd97dfdc4bfea3c66268635690313828b386faa040fbc1f829ff42a2bd748b72c9d9b3c8f9616ce9e61fcb78923f1461a462c969c54b1084458ae1b715898fb0
+  languageName: node
+  linkType: hard
+
 "debug@npm:4, debug@npm:^4.3.4":
   version: 4.4.3
   resolution: "debug@npm:4.4.3"
@@ -1800,6 +1807,7 @@ __metadata:
     "@vitejs/plugin-vue": "npm:^6.0.6"
     axe-core: "npm:^4.11.3"
     camelcase-keys: "npm:^10.0.2"
+    dayjs: "npm:^1.11.21"
     dompurify: "npm:^3.4.10"
     jsdom: "npm:^29.1.0"
     pinia: "npm:^3.0.4"
