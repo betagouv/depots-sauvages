@@ -25,15 +25,7 @@
                 Modèle de courrier de notification
               </a>
             </li>
-            <li>
-              <a
-                href="https://fichiers.numerique.gouv.fr/explorer/items/files/df51fe02-90dd-4afc-9346-8ae9b56fcea4"
-                target="_blank"
-                class="fr-btn fr-btn--secondary"
-              >
-                Aide à l'évaluation de l'amende
-              </a>
-            </li>
+
             <li>
               <a
                 href="https://fichiers.numerique.gouv.fr/explorer/items/files/5f899dd5-ff04-4115-856a-31bfd29006cb"
@@ -63,6 +55,10 @@
                       :min="0"
                       step="50"
                     />
+                    <DsfrAlert type="info" class="fr-mt-2w">
+                      Pour vous aider à évaluer le montant de l’amende,
+                      <a href="#" class="fr-link" @click.prevent="openCalculateur">utilisez notre calculateur</a>.
+                    </DsfrAlert>
                   </div>
                 </div>
               </div>
@@ -161,6 +157,7 @@
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
+import { openTallyPopup } from '../../utils/tally'
 import SelectableChoices from '../shared/SelectableChoices.vue'
 import AttenteDecision from './AttenteDecision.vue'
 import ListeActions, { type Action } from './ListeActions.vue'
@@ -177,6 +174,10 @@ const startNewProcedure = () => {
 }
 
 defineEmits(['back-to-decision', 'go-to-cloture'])
+
+const openCalculateur = () => {
+  openTallyPopup('9qElYG', { layout: 'modal', width: 900 })
+}
 
 const montantError = computed(() => {
   if (props.suivi.montant_amende && props.suivi.montant_amende > 15000) {
@@ -232,7 +233,7 @@ const showActionsList = computed(() => {
 const sanctionActions = computed((): Action[] => [
   {
     id: 'fixer_montant',
-    label: "Fixer le montant de l'amende administrative en utilisant l'aide à l'évaluation fournie",
+    label: "Fixer le montant de l'amende administrative.",
     completed: props.suivi.montant_fixe,
   },
   {
