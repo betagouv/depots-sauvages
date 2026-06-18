@@ -129,15 +129,6 @@ ANYMAIL = {
 EMAIL_RATE_LIMIT = env("EMAIL_RATE_LIMIT", default="10/hour")
 SIGNALEMENT_RATE_LIMIT = env("SIGNALEMENT_RATE_LIMIT", default="10/hour")
 
-# DN Integration Settings - Démarche Numérique
-DN_GRAPHQL_ENDPOINT = env.str(
-    "DN_GRAPHQL_ENDPOINT", default="https://demarche.numerique.gouv.fr/api/v2/graphql"
-)
-DN_API_TOKEN = env("DN_API_TOKEN", default=None)
-DN_REQUEST_TIMEOUT = env.int("DN_REQUEST_TIMEOUT", default=30)
-DN_MAX_RETRIES = env.int("DN_MAX_RETRIES", default=3)
-DN_DEMARCHE_NUMBER = env.int("DN_DEMARCHE_NUMBER")
-
 # Reverse proxy settings
 USE_X_FORWARDED_HOST = True
 USE_X_FORWARDED_PORT = True

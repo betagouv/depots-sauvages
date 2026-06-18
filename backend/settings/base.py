@@ -31,7 +31,6 @@ INSTALLED_APPS = [
     "backend.throttling",
     "backend.home",
     "backend.signalements",
-    "backend.dn",
     "backend.procedures",
     "backend.bypass_auth",
     "backend.constatations",
@@ -191,11 +190,6 @@ CACHES = {
 ANYMAIL = {
     "TEST_MODE": True,
 }
-
-# DN Integration Settings - Démarche Numérique
-DN_GRAPHQL_ENDPOINT = "https://demarche.numerique.gouv.fr/api/v2/graphql"
-DN_REQUEST_TIMEOUT = 30
-DN_MAX_RETRIES = 3
 
 # ProConnect / OIDC / Login Required
 LOGIN_URL = "oidc_authentication_init"
