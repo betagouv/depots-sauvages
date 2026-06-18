@@ -20,6 +20,7 @@ class UserSignalementSerializer(serializers.ModelSerializer):
             "date_creation",
             "date_modification",
             "date_constat",
+            "heure_constat",
             "localisation_depot",
         ]
 

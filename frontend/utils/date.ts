@@ -1,19 +1,28 @@
+import dayjs from 'dayjs'
+import 'dayjs/locale/fr'
+
+dayjs.locale('fr')
+
 export const formatDate = (dateStr?: string | null) => {
   if (!dateStr) return 'Date inconnue'
-  try {
-    const date = new Date(dateStr)
-    if (isNaN(date.getTime())) return 'Date invalide'
-    return date.toLocaleString('fr-FR', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    })
-  } catch (e) {
-    console.error('Error formatting date:', e)
-    return 'Date invalide'
-  }
+  const d = dayjs(dateStr)
+  return d.isValid() ? d.format('D MMMM YYYY [à] HH:mm') : 'Date invalide'
+}
+
+export const formatConstatationDate = (dateStr?: string | null, timeStr?: string | null) => {
+  if (!dateStr) return 'Date inconnue'
+
+  const hasTime = !!timeStr || dateStr.includes('T')
+  const dateTimeStr = dateStr.includes('T')
+    ? dateStr
+    : timeStr
+      ? `${dateStr}T${timeStr}`
+      : `${dateStr}T00:00`
+
+  const d = dayjs(dateTimeStr)
+  if (!d.isValid()) return 'Date invalide'
+
+  return d.format(hasTime ? 'D MMMM YYYY [à] HH:mm' : 'D MMMM YYYY')
 }
 
 export const shouldShowModificationDate = (
@@ -21,12 +30,11 @@ export const shouldShowModificationDate = (
   modificationDate?: string | null
 ) => {
   if (!creationDate || !modificationDate) return false
-  const creation = new Date(creationDate).getTime()
-  const modification = new Date(modificationDate).getTime()
-  // Only show if modification is more than 1 minute after creation
-  return modification - creation > 60000
+  const creation = dayjs(creationDate)
+  const modification = dayjs(modificationDate)
+  return modification.diff(creation) > 60000 // 1 minute
 }
 
 export const getTodayISOString = () => {
-  return new Date().toISOString().split('T')[0]
+  return dayjs().format('YYYY-MM-DD')
 }
