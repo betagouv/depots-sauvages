@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path, re_path
 from django.views.generic import RedirectView
-from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework.routers import DefaultRouter
 
 from backend.bypass_auth.views import BypassAuthConfigView, BypassAuthLoginView
@@ -67,32 +67,28 @@ urlpatterns.extend(
             name="bypass-auth-login",
         ),
         path("api/", include(router.urls)),
-        path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
-        path(
-            "api/schema/swagger-ui/",
-            csp_update(
-                {
-                    "style-src": ["https://cdn.jsdelivr.net"],
-                    "script-src": ["https://cdn.jsdelivr.net", "'unsafe-inline'"],
-                    "img-src": ["https://cdn.jsdelivr.net"],
-                }
-            )(SpectacularSwaggerView.as_view(url_name="schema")),
-            name="swagger-ui",
-        ),
-        path(
-            "api/schema/redoc/",
-            csp_update(
-                {
-                    "style-src": ["https://fonts.googleapis.com"],
-                    "script-src": ["https://cdn.jsdelivr.net"],
-                    "font-src": ["https://fonts.gstatic.com"],
-                }
-            )(SpectacularRedocView.as_view(url_name="schema")),
-            name="redoc",
-        ),
         path("logout/", logout_view, name="logout"),
     ]
 )
+
+# API Schema & Documentation
+if settings.DEBUG and settings.ENV_NAME != "prod":
+    urlpatterns.extend(
+        [
+            path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+            path(
+                "api/swagger/",
+                csp_update(
+                    {
+                        "style-src": ["https://cdn.jsdelivr.net"],
+                        "script-src": ["https://cdn.jsdelivr.net", "'unsafe-inline'"],
+                        "img-src": ["https://cdn.jsdelivr.net"],
+                    }
+                )(SpectacularSwaggerView.as_view(url_name="schema")),
+                name="swagger-ui",
+            ),
+        ]
+    )
 
 
 # OIDC Routes
