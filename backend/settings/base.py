@@ -121,7 +121,15 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
     ],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_THROTTLE_CLASSES": [
+        "backend.throttling.throttles.SafeRateThrottle",
+        "backend.throttling.throttles.UnsafeRateThrottle",
+    ],
 }
+
+# Global rate limits (requests per minute)
+THROTTLE_SAFE_RATE = "300/m"
+THROTTLE_UNSAFE_RATE = "60/m"
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "Dépôts Sauvages API",
