@@ -14,15 +14,15 @@ SEO_PATTERNS = [
     (
         r"^/simulateur$",
         {
-            "title": "Simulateur d'amende pour dépôt sauvage - Protect'Envi",
-            "desc": "Simulez le montant de l'amende pour un dépôt sauvage avec Protect'Envi.",
+            "title": "Simulateur d'éligibilité à la procédure administrative - Protect'Envi",
+            "desc": "Répondez à quelques questions, en 1 minute, pour savoir si Protect'Envi peut vous aider à agir efficacement.",
         },
     ),
     (
         r"^/calculateur$",
         {
-            "title": "Calculateur de préjudice écologique - Protect'Envi",
-            "desc": "Calculez le préjudice écologique d'un dépôt sauvage avec Protect'Envi.",
+            "title": "Calculateur d'amende administrative - Protect'Envi",
+            "desc": "Evaluer le montant de l'amende que vous pouvez émettre en cas de dépôt sauvage",
         },
     ),
     (
