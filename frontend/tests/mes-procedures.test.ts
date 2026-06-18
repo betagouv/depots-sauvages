@@ -116,7 +116,6 @@ describe('Page Mes Procédures', () => {
         },
       },
     })
-
     await waitFor(() => {
       expect(screen.getByText(/Aucune procédure en cours/)).toBeInTheDocument()
       expect(

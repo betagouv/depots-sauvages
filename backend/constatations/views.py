@@ -22,7 +22,7 @@ class ConstatationViewSet(
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Constatation.objects.filter(user=self.request.user)
+        return Constatation.objects.filter(user=self.request.user).order_by("-modified")
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

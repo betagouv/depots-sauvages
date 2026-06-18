@@ -96,7 +96,7 @@ onMounted(async () => {
   try {
     userInfo.value = await getUserInfo()
     if (userInfo.value?.is_authenticated) {
-      await procedureStore.fetchProcedures()
+      await procedureStore.fetchProcedures(true)
     }
   } catch (error) {
     console.error('Failed to fetch data:', error)
