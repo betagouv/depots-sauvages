@@ -5,6 +5,9 @@ from .models import Constatation
 
 class ConstatationSerializer(serializers.ModelSerializer):
     souhaite_porter_plainte = serializers.ReadOnlyField()
+    numero_dossier = serializers.IntegerField(source="id", read_only=True)
+    date_creation = serializers.DateTimeField(source="created", read_only=True)
+    date_modification = serializers.DateTimeField(source="modified", read_only=True)
 
     class Meta:
         model = Constatation

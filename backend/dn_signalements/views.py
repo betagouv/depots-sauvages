@@ -18,9 +18,7 @@ from backend.dn_signalements.dn_mappings import (
     CHAMP_ID_TO_FIELD,
     DATE_CONSTAT_CHAMP_ID,
 )
-from backend.constatations.models import Constatation
 from backend.dn_signalements.models import DNSignalement
-from backend.dn_signalements.serializers import UserSignalementSerializer
 from backend.dn_signalements.tasks import sync_user_dossiers
 from backend.signalements.views import SignalementDocumentDownloadViewMixin
 
@@ -212,18 +210,6 @@ class DNSignalementDocumentDownloadView(SignalementDocumentDownloadViewMixin):
     """
 
     model_class = DNSignalement
-
-
-class UserSignalementViewSet(viewsets.ReadOnlyModelViewSet):
-    """
-    List user dossiers with statuses, from the database.
-    """
-
-    serializer_class = UserSignalementSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        return Constatation.objects.filter(user=self.request.user).order_by("-created")
 
 
 

@@ -11,6 +11,7 @@ from .serializers import ConstatationSerializer
 
 class ConstatationViewSet(
     mixins.CreateModelMixin,
+    mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
     viewsets.GenericViewSet,
