@@ -3,14 +3,6 @@ from model_utils.models import TimeStampedModel
 
 
 class SuiviProcedure(TimeStampedModel):
-    signalement = models.OneToOneField(
-        "dn_signalements.DNSignalement",
-        on_delete=models.CASCADE,
-        related_name="suivi_procedure",
-        verbose_name="Signalement lié",
-        null=True,
-        blank=True,
-    )
     constatation = models.OneToOneField(
         "constatations.Constatation",
         on_delete=models.CASCADE,
@@ -83,4 +75,4 @@ class SuiviProcedure(TimeStampedModel):
         verbose_name_plural = "Suivis de procédures"
 
     def __str__(self):
-        return f"Suivi {self.signalement_id}"
+        return f"Suivi {self.constatation_id or self.id}"

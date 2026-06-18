@@ -8,14 +8,10 @@ from rest_framework.routers import DefaultRouter
 
 from backend.bypass_auth.views import BypassAuthConfigView, BypassAuthLoginView
 from backend.constatations.views import ConstatationDocumentDownloadView, ConstatationViewSet
-from backend.dn_signalements.views import (
-    DNSignalementDocumentDownloadView,
-    ProcessDossierView,
-)
 from backend.faq.views import FAQItemViewSet
 from backend.home.views import UserInfoViewSet, index_view, logout_view
-from backend.seo.views import RobotsTxtView
 from backend.procedures.views import SuiviProcedureViewSet
+from backend.seo.views import RobotsTxtView
 
 # API Routes registration
 router = DefaultRouter()
@@ -38,16 +34,6 @@ urlpatterns.extend(
             "api/constatations/<int:pk>/documents/<str:doc_type>/",
             ConstatationDocumentDownloadView.as_view(),
             name="constatation-document-download",
-        ),
-        path(
-            "api/dn-signalements/<int:pk>/documents/<str:doc_type>/",
-            DNSignalementDocumentDownloadView.as_view(),
-            name="dn-signalement-document-download",
-        ),
-        path(
-            "api/signalements/process-dn-dossier/",
-            ProcessDossierView.as_view(),
-            name="signalements-process-dn-dossier",
         ),
         path(
             "api/bypass-auth/config/",

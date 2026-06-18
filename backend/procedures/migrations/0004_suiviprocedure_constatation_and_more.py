@@ -7,7 +7,6 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("dn_signalements", "0012_delete_userdossier"),
         ("constatations", "0001_initial"),
         ("procedures", "0003_remove_suiviprocedure_motif_abandon_choisi"),
     ]
@@ -28,12 +27,9 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="suiviprocedure",
             name="signalement",
-            field=models.OneToOneField(
+            field=models.IntegerField(
                 blank=True,
                 null=True,
-                on_delete=django.db.models.deletion.CASCADE,
-                related_name="suivi_procedure",
-                to="dn_signalements.dnsignalement",
                 verbose_name="Signalement lié",
             ),
         ),
