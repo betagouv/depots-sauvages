@@ -26,13 +26,6 @@ class BaseRateThrottle(AnonRateThrottle):
         return f"{self.cache_key_prefix}_{client_ip}"
 
 
-class EmailRateThrottle(BaseRateThrottle):
-    """
-    Custom throttle for email sending endpoint.
-    """
-
-    rate = getattr(settings, "EMAIL_RATE_LIMIT")
-    cache_key_prefix = "email_throttle"
 
 
 class SafeRateThrottle(BaseRateThrottle):

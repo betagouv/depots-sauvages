@@ -183,8 +183,6 @@ TASKS_LOGGING = {
 }
 LOGGING["loggers"]["django_tasks"] = TASKS_LOGGING
 
-# Email sending rate limiting
-EMAIL_RATE_LIMIT = "10/m"
 
 # Cache settings - used in particular for rate limiting
 CACHES = {
