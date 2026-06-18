@@ -1,3 +1,4 @@
+from csp.decorators import csp_update
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path, re_path
@@ -69,12 +70,24 @@ urlpatterns.extend(
         path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
         path(
             "api/schema/swagger-ui/",
-            SpectacularSwaggerView.as_view(url_name="schema"),
+            csp_update(
+                {
+                    "style-src": ["https://cdn.jsdelivr.net"],
+                    "script-src": ["https://cdn.jsdelivr.net", "'unsafe-inline'"],
+                    "img-src": ["https://cdn.jsdelivr.net"],
+                }
+            )(SpectacularSwaggerView.as_view(url_name="schema")),
             name="swagger-ui",
         ),
         path(
             "api/schema/redoc/",
-            SpectacularRedocView.as_view(url_name="schema"),
+            csp_update(
+                {
+                    "style-src": ["https://fonts.googleapis.com"],
+                    "script-src": ["https://cdn.jsdelivr.net"],
+                    "font-src": ["https://fonts.gstatic.com"],
+                }
+            )(SpectacularRedocView.as_view(url_name="schema")),
             name="redoc",
         ),
         path("logout/", logout_view, name="logout"),
