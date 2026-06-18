@@ -72,7 +72,7 @@ urlpatterns.extend(
 )
 
 # API Schema & Documentation
-if settings.DEBUG and settings.ENV_NAME != "prod":
+if settings.DEBUG and settings.ENV_NAME == "dev":
     urlpatterns.extend(
         [
             path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
