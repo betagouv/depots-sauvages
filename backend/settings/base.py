@@ -114,6 +114,21 @@ STATICFILES_DIRS = [
     PROJECT_ROOT / "static",
 ]
 
+# Media files (user uploads)
+MEDIA_URL = "/media/"
+MEDIA_ROOT = PROJECT_ROOT / "media"
+
+# Storage Configuration
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
+
 
 # DRF Settings
 REST_FRAMEWORK = {
