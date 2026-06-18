@@ -40,7 +40,6 @@ export type APIResponseStatus = 'success' | 'error' | 'sync_triggered'
 
 // API endpoints
 export const API_URLS = {
-  processDossier: `${API_URL}/signalements/process-dn-dossier/`,
   userInfo: `${API_URL}/user-info/`,
   userProcedures: `${API_URL}/constatations/`,
   bypassAuthConfig: `${API_URL}/bypass-auth/config/`,

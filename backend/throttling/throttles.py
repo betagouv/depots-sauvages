@@ -32,12 +32,3 @@ class EmailRateThrottle(BaseRateThrottle):
 
     rate = getattr(settings, "EMAIL_RATE_LIMIT")
     cache_key_prefix = "email_throttle"
-
-
-class SignalementRateThrottle(BaseRateThrottle):
-    """
-    Custom throttle for signalement submission endpoint.
-    """
-
-    rate = getattr(settings, "SIGNALEMENT_RATE_LIMIT")
-    cache_key_prefix = "signalement_throttle"

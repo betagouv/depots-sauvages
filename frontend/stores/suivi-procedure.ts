@@ -140,9 +140,9 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
     }
   }
 
-  const fetchSuivi = async (dossierId: string, signalementId: number) => {
+  const fetchSuivi = async (dossierId: string, constatationId: number) => {
     try {
-      const data = await fetchResource(`${API_URL}/suivi-procedure/${signalementId}/`)
+      const data = await fetchResource(`${API_URL}/suivi-procedure/${constatationId}/`)
       if (data && typeof data === 'object') {
         procedures[dossierId] = data
       }
@@ -151,12 +151,12 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
     }
   }
 
-  const saveSuivi = async (dossierId: string, signalementId: number) => {
+  const saveSuivi = async (dossierId: string, constatationId: number) => {
     const suivi = procedures[dossierId]
     if (!suivi) return
 
     try {
-      await patchResource(`${API_URL}/suivi-procedure/${signalementId}/`, suivi)
+      await patchResource(`${API_URL}/suivi-procedure/${constatationId}/`, suivi)
     } catch (e) {
       console.error('Erreur lors de la sauvegarde du suivi:', e)
     }

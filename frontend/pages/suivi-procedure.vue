@@ -141,13 +141,13 @@ const activeStep = computed({
 const hasProcedure = computed(() => procedureData.value?.created !== false)
 const auteurIdentifie = computed(() => procedureData.value?.auteur_identifie ?? false)
 
-const signalementId = computed(() => procedureData.value?.id)
+const constatationId = computed(() => procedureData.value?.id)
 const modifyUrl = computed(() => `/constatation/${procedureId.value}`)
 
 // Auto-save logic with debounce
 const debouncedSave = debounce(() => {
-  if (procedureId.value && signalementId.value) {
-    suiviStore.saveSuivi(procedureId.value, signalementId.value)
+  if (procedureId.value && constatationId.value) {
+    suiviStore.saveSuivi(procedureId.value, constatationId.value)
   }
 }, 1000)
 

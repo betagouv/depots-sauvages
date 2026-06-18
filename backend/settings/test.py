@@ -21,7 +21,7 @@ if PROJECT_ROOT not in TEMPLATES[0]["DIRS"]:
     TEMPLATES[0]["DIRS"].append(PROJECT_ROOT)
 
 # Disable rate limiting in tests by setting very high limits
-SIGNALEMENT_RATE_LIMIT = "100/hour"
+
 EMAIL_RATE_LIMIT = "100/hour"
 
 # ProConnect / OIDC Settings

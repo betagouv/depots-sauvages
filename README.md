@@ -174,8 +174,8 @@ Le frontend Vue.js sera désormais accessible à l’adresse : [http://localhost
 depots-sauvages/
 ├── backend/             # Django backend
 │   ├── settings/        # Django configuration
-│   ├── dn_signalements/ # Signalements fais via Démarches Numériques
-│   ├── signalements/    # Core : Modèles abstraits et mixins partagés
+│   ├── constatations/   # Gestion des constatations de dépôts sauvages
+│   ├── procedures/      # Suivi des procédures administratives et pénales
 │   └── urls.py          # URL principale de configuration
 ├── frontend/            # Vue.js front-end
 ├── scripts/             # Scripts utilitaires
