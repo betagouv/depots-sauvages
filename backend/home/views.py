@@ -46,6 +46,11 @@ class IndexView(TemplateView):
         context["seo_description"] = (
             seo_data.get("desc") or "Signaler un dépôt sauvage avec Protect'Envi."
         )
+        context["seo_robots"] = (
+            "noindex, nofollow"
+            if getattr(settings, "ENV_NAME", "") != "prod"
+            else "index, follow"
+        )
         return context
 
 

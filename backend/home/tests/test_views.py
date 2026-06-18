@@ -140,8 +140,8 @@ def test_robots_txt_non_prod(client, settings, env):
     assert response.status_code == 200
     assert "text/plain" in response["Content-Type"]
     content = response.content.decode()
-    assert "Disallow: /" in content
-    assert "Allow: /" not in content
+    assert "Allow: /" in content
+    assert "Disallow: /" not in content
 
 
 @pytest.mark.django_db
@@ -169,3 +169,22 @@ def test_middleware_prod_headers(client, settings):
     settings.ENV_NAME = "prod"
     response = client.get(reverse("index"))
     assert "X-Robots-Tag" not in response
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("env", ["staging", "dev", "local", "development"])
+def test_seo_robots_meta_non_prod(client, settings, env):
+    settings.ENV_NAME = env
+    response = client.get(reverse("index"))
+    assert response.status_code == 200
+    content = response.content.decode()
+    assert '<meta name="robots" content="noindex, nofollow" />' in content
+
+
+@pytest.mark.django_db
+def test_seo_robots_meta_prod(client, settings):
+    settings.ENV_NAME = "prod"
+    response = client.get(reverse("index"))
+    assert response.status_code == 200
+    content = response.content.decode()
+    assert '<meta name="robots" content="index, follow" />' in content
