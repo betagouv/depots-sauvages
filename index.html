@@ -9,6 +9,7 @@
     <meta property="og:description" content="{{ seo_description }}" />
     <meta property="og:type" content="website" />
     <link rel="icon" href="/static/favicon.ico" type="image/x-icon" />
+    <meta name="robots" content="{{ seo_robots }}" />
     <title>{{ seo_title }}</title>
     <script async src="https://tally.so/widgets/embed.js"></script>
   </head>
@@ -17,7 +18,6 @@
       <p>JavaScript est requis pour utiliser cette application.</p>
     </noscript>
     <div id="app"></div>
-    <!-- Load Vue.js app -->
     <script type="module" src="/frontend/main.js"></script>
   </body>
 </html>

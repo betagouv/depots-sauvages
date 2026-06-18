@@ -1,6 +1,6 @@
 User-agent: *
 {% if env_name != "prod" %}
-Disallow: /
+Allow: /
 {% else %}
 Disallow: {{ admin_url }}
 Disallow: /api/
