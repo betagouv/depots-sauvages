@@ -1,7 +1,7 @@
 from django.conf import settings
 
 
-class StagingNoIndexMiddleware:
+class NonProductionNoIndexMiddleware:
     """
     Adds X-Robots-Tag: noindex, nofollow to all HTTP responses
     if the environment is not production, preventing indexing of all pages and assets.

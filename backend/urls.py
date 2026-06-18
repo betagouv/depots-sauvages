@@ -14,7 +14,8 @@ from backend.dn_signalements.views import (
     UserSignalementViewSet,
 )
 from backend.faq.views import FAQItemViewSet
-from backend.home.views import RobotsTxtView, UserInfoViewSet, index_view, logout_view
+from backend.home.views import UserInfoViewSet, index_view, logout_view
+from backend.seo.views import RobotsTxtView
 from backend.procedures.views import SuiviProcedureViewSet
 
 # API Routes registration
