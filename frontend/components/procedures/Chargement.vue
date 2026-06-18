@@ -26,7 +26,7 @@ withDefaults(
     message?: string
   }>(),
   {
-    message: 'Récupération des informations du dossier...',
+    message: 'Récupération des informations de la procédure...',
   }
 )
 </script>

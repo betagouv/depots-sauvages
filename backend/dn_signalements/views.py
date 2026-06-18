@@ -3,8 +3,7 @@ import logging
 from django.contrib.auth.decorators import login_required
 from django.utils import dateparse
 from django.utils.decorators import method_decorator
-from rest_framework import status, viewsets
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -19,7 +18,6 @@ from backend.dn_signalements.dn_mappings import (
     DATE_CONSTAT_CHAMP_ID,
 )
 from backend.dn_signalements.models import DNSignalement
-from backend.dn_signalements.tasks import sync_user_dossiers
 from backend.signalements.views import SignalementDocumentDownloadViewMixin
 
 
@@ -210,16 +208,3 @@ class DNSignalementDocumentDownloadView(SignalementDocumentDownloadViewMixin):
     """
 
     model_class = DNSignalement
-
-
-
-class SyncUserSignalementsView(APIView):
-    """
-    Trigger a background synchronization of user dossiers.
-    """
-
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request):
-        sync_user_dossiers.enqueue(request.user.id)
-        return Response({"status": "sync_triggered"}, status=status.HTTP_202_ACCEPTED)

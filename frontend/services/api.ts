@@ -42,8 +42,7 @@ export type APIResponseStatus = 'success' | 'error' | 'sync_triggered'
 export const API_URLS = {
   processDossier: `${API_URL}/signalements/process-dn-dossier/`,
   userInfo: `${API_URL}/user-info/`,
-  userDossiers: `${API_URL}/constatations/`,
-  syncDossiers: `${API_URL}/dossiers/sync/`,
+  userProcedures: `${API_URL}/constatations/`,
   bypassAuthConfig: `${API_URL}/bypass-auth/config/`,
   bypassAuthLogin: `${API_URL}/bypass-auth/login/`,
   constatations: `${API_URL}/constatations/`,
@@ -109,7 +108,7 @@ export interface UserInfo {
 }
 
 export const getUserInfo = (): Promise<UserInfo> => makeRequest(API_URLS.userInfo, 'GET', {})
-export interface UserSignalement {
+export interface ProcedureOverview {
   id: number
   numero_dossier: number
   title: string
@@ -122,11 +121,8 @@ export interface UserSignalement {
   last_sync: string | null
 }
 
-export const getUserSignalements = (): Promise<UserSignalement[]> =>
-  makeRequest(API_URLS.userDossiers, 'GET', {})
-
-export const syncDossiers = (): Promise<{ status: string }> =>
-  makeRequest(API_URLS.syncDossiers, 'POST', {})
+export const getUserProcedures = (): Promise<ProcedureOverview[]> =>
+  makeRequest(API_URLS.userProcedures, 'GET', {})
 
 export interface BypassAuthConfig {
   enabled: boolean

@@ -3,7 +3,9 @@
     <div class="fr-grid-row">
       <div class="fr-col-12">
         <template v-if="!hasProcedure">
-          <p class="fr-text--lg">Le dossier n'est pas associé à une procédure de dépôt sauvage.</p>
+          <p class="fr-text--lg">
+            La constatation n'est pas associée à une procédure de dépôt sauvage.
+          </p>
         </template>
       </div>
     </div>

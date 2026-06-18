@@ -11,7 +11,6 @@ from backend.constatations.views import ConstatationDocumentDownloadView, Consta
 from backend.dn_signalements.views import (
     DNSignalementDocumentDownloadView,
     ProcessDossierView,
-    SyncUserSignalementsView,
 )
 from backend.faq.views import FAQItemViewSet
 from backend.home.views import UserInfoViewSet, index_view, logout_view
@@ -49,11 +48,6 @@ urlpatterns.extend(
             "api/signalements/process-dn-dossier/",
             ProcessDossierView.as_view(),
             name="signalements-process-dn-dossier",
-        ),
-        path(
-            "api/dossiers/sync/",
-            SyncUserSignalementsView.as_view(),
-            name="dossiers-sync",
         ),
         path(
             "api/bypass-auth/config/",

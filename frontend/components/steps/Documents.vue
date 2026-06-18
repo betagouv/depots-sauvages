@@ -21,8 +21,8 @@
 import { computed } from 'vue'
 
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
-import BandeauInformation from '../dossiers/BandeauInformation.vue'
-import CartesDocuments from '../dossiers/CartesDocuments.vue'
+import BandeauInformation from '../procedures/BandeauInformation.vue'
+import CartesDocuments from '../procedures/CartesDocuments.vue'
 import ListeActions, { type Action } from './ListeActions.vue'
 
 const props = defineProps<{

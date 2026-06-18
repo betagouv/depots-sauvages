@@ -4,7 +4,7 @@ import { render, screen, waitFor } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
 import MesProcedures from '../pages/mes-procedures.vue'
 import * as api from '../services/api'
-import { useDossierStore } from '../stores/dossier'
+import { useProcedureStore } from '../stores/procedure'
 
 vi.mock('../services/api', async () => {
   const actual = await vi.importActual('../services/api')
@@ -98,8 +98,8 @@ describe('Page Mes Procédures', () => {
     })
 
     const pinia = createTestingPinia({ stubActions: true })
-    const dossierStore = useDossierStore(pinia)
-    dossierStore.dossiers = []
+    const procedureStore = useProcedureStore(pinia)
+    procedureStore.procedures = []
 
     render(MesProcedures, {
       global: {
