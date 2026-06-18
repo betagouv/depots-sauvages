@@ -39,7 +39,7 @@ def test_regenerate_constatation_docs_dry_run():
 @pytest.mark.django_db
 def test_regenerate_constatation_docs_all(mocker):
     # Mock the tasks/signals to prevent background execution in tests
-    mock_generate = mocker.patch("backend.signalements.signals.generate_document")
+    mock_generate = mocker.patch("backend.constatations.signals.generate_document")
 
     c1 = Constatation.objects.create(
         commune="Paris",
@@ -76,7 +76,7 @@ def test_regenerate_constatation_docs_all(mocker):
 
 @pytest.mark.django_db
 def test_regenerate_constatation_docs_only_constat(mocker):
-    mock_generate = mocker.patch("backend.signalements.signals.generate_document")
+    mock_generate = mocker.patch("backend.constatations.signals.generate_document")
 
     c1 = Constatation.objects.create(
         commune="Paris",
@@ -96,7 +96,7 @@ def test_regenerate_constatation_docs_only_constat(mocker):
 
 @pytest.mark.django_db
 def test_regenerate_constatation_docs_only_lettre(mocker):
-    mock_generate = mocker.patch("backend.signalements.signals.generate_document")
+    mock_generate = mocker.patch("backend.constatations.signals.generate_document")
 
     c1 = Constatation.objects.create(
         commune="Paris",

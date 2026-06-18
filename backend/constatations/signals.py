@@ -26,7 +26,7 @@ def save_document(instance, odt_data, doc_base_name):
         setattr(instance, f"{doc_base_name}_generated_at", timezone.now())
         setattr(instance, f"{doc_base_name}_should_generate", False)
         instance.save()
-        logger.info(f"Document '{doc_base_name}' saved for signalement {instance.id}")
+        logger.info(f"Document '{doc_base_name}' saved for constatation {instance.id}")
     finally:
         post_save.connect(generate_doc_constat, sender=sender_model)
         post_save.connect(generate_lettre_info, sender=sender_model)
@@ -37,7 +37,7 @@ def generate_document(signalement_id, doc_base_name, model_label):
     Generate document synchronously.
     """
     start_time = time.time()
-    logger.info(f"Starting {doc_base_name} generation for signalement {signalement_id}")
+    logger.info(f"Starting {doc_base_name} generation for constatation {signalement_id}")
     try:
         app_label, model_name = model_label.split(".")
         SignalementModel = apps.get_model(app_label, model_name)
@@ -55,7 +55,9 @@ def generate_document(signalement_id, doc_base_name, model_label):
         save_document(instance, odt_data, doc_base_name)
         end_time = time.time()
         duration = end_time - start_time
-        logger.info(f"Generation completed for signalement {instance.id} in {duration:.2f} seconds")
+        logger.info(
+            f"Generation completed for constatation {instance.id} in {duration:.2f} seconds"
+        )
         return {
             "status": "success",
             "signalement_id": instance.id,
@@ -63,7 +65,8 @@ def generate_document(signalement_id, doc_base_name, model_label):
         }
     except Exception as e:
         logger.error(
-            f"Error generating {doc_base_name} for signalement {signalement_id}: {e}", exc_info=True
+            f"Error generating {doc_base_name} for constatation {signalement_id}: {e}",
+            exc_info=True,
         )
         raise
 
@@ -74,19 +77,19 @@ def generate_document_task(signalement_id, doc_base_name, model_label):
     Generate document in background.
     """
     logger.info(
-        f"Document generation task started for signalement {signalement_id}, "
+        f"Document generation task started for constatation {signalement_id}, "
         f"document {doc_base_name} ({model_label})"
     )
     try:
         result = generate_document(signalement_id, doc_base_name, model_label)
         logger.info(
-            f"Document generation task completed successfully for signalement "
+            f"Document generation task completed successfully for constatation "
             f"{signalement_id}, document {doc_base_name}"
         )
         return result
     except Exception as e:
         logger.error(
-            f"Document generation task failed for signalement {signalement_id}, "
+            f"Document generation task failed for constatation {signalement_id}, "
             f"document {doc_base_name}: {e}",
             exc_info=True,
         )

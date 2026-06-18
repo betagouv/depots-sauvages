@@ -27,7 +27,7 @@ if SENTRY_ENABLED:
 
 LOGGING_LEVEL = env("LOGGING_LEVEL", default="INFO")
 
-LOGGING["loggers"]["backend.signalements"] = {
+LOGGING["loggers"]["backend.constatations"] = {
     "handlers": ["console"],
     "level": LOGGING_LEVEL,
     "propagate": True,
