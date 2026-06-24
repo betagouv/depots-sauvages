@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     # Project apps
     "backend.throttling",
     "backend.home",
+    "backend.current_user",
     "backend.procedures",
     "backend.bypass_auth",
     "backend.constatations.apps.ConstatationsConfig",

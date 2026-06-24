@@ -8,8 +8,9 @@ from rest_framework.routers import DefaultRouter
 
 from backend.bypass_auth.views import BypassAuthConfigView, BypassAuthLoginView
 from backend.constatations.views import ConstatationDocumentDownloadView, ConstatationViewSet
+from backend.current_user.views import UserInfoViewSet
 from backend.faq.views import FAQItemViewSet
-from backend.home.views import UserInfoViewSet, index_view, logout_view
+from backend.home.views import index_view, logout_view
 from backend.procedures.views import SuiviProcedureViewSet
 from backend.seo.views import RobotsTxtView
 
