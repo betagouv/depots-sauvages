@@ -21,13 +21,8 @@ if PROJECT_ROOT not in TEMPLATES[0]["DIRS"]:
     TEMPLATES[0]["DIRS"].append(PROJECT_ROOT)
 
 # Disable rate limiting in tests by setting very high limits
-SIGNALEMENT_RATE_LIMIT = "100/hour"
-EMAIL_RATE_LIMIT = "100/hour"
-
-# DN Integration Settings for tests
-DN_GRAPHQL_ENDPOINT = "https://demarche.numerique.gouv.fr/api/v2/graphql"
-DN_API_TOKEN = "test-token"
-DN_DEMARCHE_NUMBER = 123456
+THROTTLE_SAFE_RATE = "10000/hour"
+THROTTLE_UNSAFE_RATE = "10000/hour"
 
 # ProConnect / OIDC Settings
 PROCONNECT_ENABLED = False

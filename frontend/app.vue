@@ -6,26 +6,22 @@
 
 <script setup lang="ts">
 import DefaultLayout from '@/layouts/default-layout.vue'
-import { getUserInfo } from '@/services/api'
-import { useDossierStore } from '@/stores/dossier'
+import { useUserStore } from '@/stores/user'
+import { useProcedureStore } from '@/stores/procedure'
 import { onMounted } from 'vue'
 
-const dossierStore = useDossierStore()
+const userStore = useUserStore()
+const procedureStore = useProcedureStore()
 
 onMounted(async () => {
   try {
-    const userInfo = await getUserInfo()
+    const userInfo = await userStore.fetchUserInfo()
     if (userInfo.is_authenticated) {
       // Fetch initial data to make it available everywhere
-      await dossierStore.fetchDossiers()
-
-      // Trigger background sync if not already done in this session
-      if (!dossierStore.isSynced) {
-        dossierStore.syncDossiers()
-      }
+      await procedureStore.fetchProcedures()
     }
   } catch (error) {
-    console.error('Error checking auth for sync:', error)
+    console.error('Error checking auth:', error)
   }
 })
 </script>

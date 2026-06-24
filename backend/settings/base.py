@@ -30,12 +30,11 @@ INSTALLED_APPS = [
     # Project apps
     "backend.throttling",
     "backend.home",
-    "backend.signalements",
-    "backend.dn",
-    "backend.dn_signalements",
+    "backend.current_user",
+    "backend.admin_config",
     "backend.procedures",
     "backend.bypass_auth",
-    "backend.constatations",
+    "backend.constatations.apps.ConstatationsConfig",
     "backend.guillotine",
     "backend.faq",
     "backend.seo",
@@ -124,7 +123,15 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
     ],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_THROTTLE_CLASSES": [
+        "backend.throttling.throttles.SafeRateThrottle",
+        "backend.throttling.throttles.UnsafeRateThrottle",
+    ],
 }
+
+# Global rate limits (requests per minute)
+THROTTLE_SAFE_RATE = "300/m"
+THROTTLE_UNSAFE_RATE = "60/m"
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "Dépôts Sauvages API",
@@ -178,8 +185,6 @@ TASKS_LOGGING = {
 }
 LOGGING["loggers"]["django_tasks"] = TASKS_LOGGING
 
-# Email sending rate limiting
-EMAIL_RATE_LIMIT = "10/m"
 
 # Cache settings - used in particular for rate limiting
 CACHES = {
@@ -192,11 +197,6 @@ CACHES = {
 ANYMAIL = {
     "TEST_MODE": True,
 }
-
-# DN Integration Settings - Démarche Numérique
-DN_GRAPHQL_ENDPOINT = "https://demarche.numerique.gouv.fr/api/v2/graphql"
-DN_REQUEST_TIMEOUT = 30
-DN_MAX_RETRIES = 3
 
 # ProConnect / OIDC / Login Required
 LOGIN_URL = "oidc_authentication_init"

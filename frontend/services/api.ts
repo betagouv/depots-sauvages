@@ -5,45 +5,24 @@ export const DN_BASE_URL = import.meta.env.VITE_DN_BASE_URL || 'https://demarche
 
 // Helper to get CSRF token
 const getCSRFToken = (): string => {
-  // First try to get from cookie
   const decodedCookie = decodeURIComponent(document.cookie)
-  const cookieArray = decodedCookie.split(';')
+  const cookies = decodedCookie.split(';').map((c) => c.trim())
 
-  // Try secure cookie first (prod/staging)
-  const secureName = '__Host-csrftoken='
-  for (let cookie of cookieArray) {
-    cookie = cookie.trim()
-    if (cookie.indexOf(secureName) === 0) {
-      return cookie.substring(secureName.length, cookie.length)
-    }
-  }
+  const secureCookie = cookies.find((c) => c.startsWith('__Host-csrftoken='))
+  if (secureCookie) return secureCookie.substring('__Host-csrftoken='.length)
 
-  // Fallback to standard cookie (local dev)
-  const standardName = 'csrftoken='
-  for (let cookie of cookieArray) {
-    cookie = cookie.trim()
-    if (cookie.indexOf(standardName) === 0) {
-      return cookie.substring(standardName.length, cookie.length)
-    }
-  }
+  const standardCookie = cookies.find((c) => c.startsWith('csrftoken='))
+  if (standardCookie) return standardCookie.substring('csrftoken='.length)
 
-  // If not in cookie, try to get from meta tag
-  const element = document.querySelector('meta[name="csrf-token"]')
-  if (element && element.getAttribute('content')) {
-    return element.getAttribute('content') as string
-  }
-
-  return ''
+  return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
 }
 
 export type APIResponseStatus = 'success' | 'error' | 'sync_triggered'
 
 // API endpoints
 export const API_URLS = {
-  processDossier: `${API_URL}/signalements/process-dn-dossier/`,
   userInfo: `${API_URL}/user-info/`,
-  userDossiers: `${API_URL}/dossiers/`,
-  syncDossiers: `${API_URL}/dossiers/sync/`,
+  userProcedures: `${API_URL}/constatations/`,
   bypassAuthConfig: `${API_URL}/bypass-auth/config/`,
   bypassAuthLogin: `${API_URL}/bypass-auth/login/`,
   constatations: `${API_URL}/constatations/`,
@@ -109,7 +88,7 @@ export interface UserInfo {
 }
 
 export const getUserInfo = (): Promise<UserInfo> => makeRequest(API_URLS.userInfo, 'GET', {})
-export interface UserSignalement {
+export interface ProcedureOverview {
   id: number
   numero_dossier: number
   title: string
@@ -122,11 +101,8 @@ export interface UserSignalement {
   last_sync: string | null
 }
 
-export const getUserSignalements = (): Promise<UserSignalement[]> =>
-  makeRequest(API_URLS.userDossiers, 'GET', {})
-
-export const syncDossiers = (): Promise<{ status: string }> =>
-  makeRequest(API_URLS.syncDossiers, 'POST', {})
+export const getUserProcedures = (): Promise<ProcedureOverview[]> =>
+  makeRequest(API_URLS.userProcedures, 'GET', {})
 
 export interface BypassAuthConfig {
   enabled: boolean

@@ -1,17 +1,17 @@
 <template>
   <div class="fr-container fr-py-6w">
-    <ChargementDossier v-if="showLoading" />
+    <Chargement v-if="showLoading" />
     <LoginInvitation v-else-if="!isUserAuthenticated" />
     <div v-else-if="error" class="fr-alert fr-alert--error fr-mb-4w">
       <p>{{ error }}</p>
     </div>
-    <div v-else-if="dossierData">
+    <div v-else-if="procedureData">
       <div class="fr-grid-row">
         <div class="fr-col-12 fr-col-md-10 fr-col-offset-md-1">
           <header class="fr-mb-4w">
             <div class="fr-grid-row fr-grid-row--middle fr-mb-3w">
               <div class="fr-col-auto fr-mr-3w">
-                <h1 class="fr-h1 fr-mb-0">Procédure #{{ dossierData.id }}</h1>
+                <h1 class="fr-h1 fr-mb-0">Procédure #{{ procedureData.id }}</h1>
               </div>
               <div class="fr-col-auto" v-if="hasProcedure">
                 <DsfrBadge
@@ -24,13 +24,10 @@
 
             <p class="fr-text--lead fr-mb-4w">Suivi des actions que vous devez réaliser.</p>
 
-            <DossierMetadata :dossier="dossierData" class="fr-mb-3w" />
+            <Metadata :procedure="procedureData" class="fr-mb-3w" />
 
-            <div v-if="dossierData" class="fr-mt-2w">
-              <DsfrButton
-                secondary
-                @click="router.push(modifyUrl)"
-              >
+            <div v-if="procedureData" class="fr-mt-2w">
+              <DsfrButton secondary @click="router.push(modifyUrl)">
                 <span class="fr-icon-edit-line fr-mr-1w" aria-hidden="true"></span>
                 Modifier la constatation
               </DsfrButton>
@@ -44,18 +41,14 @@
               <Constatation :auteur-identifie="auteurIdentifie" />
             </template>
             <template #step-1>
-              <AucuneProcedure
-                v-if="!hasProcedure"
-                :modify-url="modifyUrl"
-              />
+              <AucuneProcedure v-if="!hasProcedure" :modify-url="modifyUrl" />
               <Documents
                 v-else
                 :suivi="suiviProcedure"
-                :dossier-data="dossierData"
                 :has-procedure="hasProcedure"
                 :auteur-identifie="auteurIdentifie"
-                :doc-constat-url="getDocConstatUrl(dossierData.id)"
-                :lettre-info-url="getLettreInfoUrl(dossierData.id)"
+                :doc-constat-url="getDocConstatUrl(procedureData.id)"
+                :lettre-info-url="getLettreInfoUrl(procedureData.id)"
               />
             </template>
             <template v-if="hasProcedure" #step-2>
@@ -65,11 +58,7 @@
                 :lettre-info-url="getLettreInfoUrl(dossierData.id)"
                 @next-step="activeStep = 3"
               />
-              <Identification
-                v-else
-                :suivi="suiviProcedure"
-                :auteur-identifie="auteurIdentifie"
-              />
+              <Identification v-else :suivi="suiviProcedure" :auteur-identifie="auteurIdentifie" />
             </template>
             <template v-if="hasProcedure" #step-3>
               <SuiviDecision
@@ -113,8 +102,8 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import StepperProcedure from '../components/StepperProcedure.vue'
-import ChargementDossier from '../components/dossiers/ChargementDossier.vue'
-import DossierMetadata from '../components/dossiers/DossierMetadata.vue'
+import Chargement from '../components/procedures/Chargement.vue'
+import Metadata from '../components/procedures/Metadata.vue'
 import LoginInvitation from '../components/shared/LoginInvitation.vue'
 import AucuneProcedure from '../components/steps/AucuneProcedure.vue'
 import Cloture from '../components/steps/Cloture.vue'
@@ -136,29 +125,29 @@ const route = useRoute()
 const router = useRouter()
 const suiviStore = useSuiviStore()
 
-const dossierId = computed(
+const procedureId = computed(
   () => (route.params.dossier_id as string) || (route.query.dossier_id as string)
 )
-const suiviProcedure = computed(() => suiviStore.getOrCreateSuivi(dossierId.value))
+const suiviProcedure = computed(() => suiviStore.getOrCreateSuivi(procedureId.value))
 const showLoading = ref(true)
 const error = ref<string | null>(null)
-const dossierData = ref<any>(null)
+const procedureData = ref<any>(null)
 const isUserAuthenticated = ref(false)
 const activeStep = computed({
   get: () => suiviProcedure.value.etape_en_cours,
   set: (val) => (suiviProcedure.value.etape_en_cours = val),
 })
 
-const hasProcedure = computed(() => dossierData.value?.created !== false)
-const auteurIdentifie = computed(() => dossierData.value?.auteur_identifie ?? false)
+const hasProcedure = computed(() => procedureData.value?.created !== false)
+const auteurIdentifie = computed(() => procedureData.value?.auteur_identifie ?? false)
 
-const signalementId = computed(() => dossierData.value?.id)
-const modifyUrl = computed(() => `/constatation/${dossierId.value}`)
+const constatationId = computed(() => procedureData.value?.id)
+const modifyUrl = computed(() => `/constatation/${procedureId.value}`)
 
 // Auto-save logic with debounce
 const debouncedSave = debounce(() => {
-  if (dossierId.value && signalementId.value) {
-    suiviStore.saveSuivi(dossierId.value, signalementId.value)
+  if (procedureId.value && constatationId.value) {
+    suiviStore.saveSuivi(procedureId.value, constatationId.value)
   }
 }, 1000)
 
@@ -171,13 +160,13 @@ watch(
 )
 
 const getStepStatus = (index: number) =>
-  suiviStore.isStepCompleted(dossierId.value, index, {
+  suiviStore.isStepCompleted(procedureId.value, index, {
     auteurIdentifie: auteurIdentifie.value,
     currentStep: activeStep.value,
   })
 
 const steps = computed(() => {
-  if (!dossierId.value) return []
+  if (!procedureId.value) return []
 
   if (!hasProcedure.value) {
     return [
@@ -220,9 +209,10 @@ const steps = computed(() => {
 })
 
 onMounted(async () => {
-  const dossierId = (route.params.dossier_id as string) || (route.query.dossier_id as string)
+  const currentProcedureId =
+    (route.params.dossier_id as string) || (route.query.dossier_id as string)
 
-  if (!dossierId) {
+  if (!currentProcedureId) {
     error.value = 'Identifiant de dossier manquant.'
     showLoading.value = false
     return
@@ -238,11 +228,11 @@ onMounted(async () => {
     }
 
     // Fetch constatation data directly
-    const dossierRes = await fetchResource(`${API_URLS.constatations}${dossierId}/`)
-    dossierData.value = dossierRes
+    const procedureRes = await fetchResource(`${API_URLS.constatations}${currentProcedureId}/`)
+    procedureData.value = procedureRes
 
     // Then fetch procedure tracking data using the internal ID
-    await suiviStore.fetchSuivi(dossierId, dossierRes.id)
+    await suiviStore.fetchSuivi(currentProcedureId, procedureRes.id)
   } catch (err: any) {
     error.value = err.error || 'Une erreur est survenue lors de la récupération du dossier.'
   } finally {

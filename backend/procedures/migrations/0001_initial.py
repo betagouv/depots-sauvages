@@ -11,7 +11,6 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ("dn_signalements", "0012_delete_userdossier"),
     ]
 
     operations = [
@@ -164,10 +163,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "signalement",
-                    models.OneToOneField(
-                        on_delete=django.db.models.deletion.CASCADE,
-                        related_name="suivi_procedure",
-                        to="dn_signalements.dnsignalement",
+                    models.IntegerField(
+                        blank=True,
+                        null=True,
                         verbose_name="Signalement lié",
                     ),
                 ),

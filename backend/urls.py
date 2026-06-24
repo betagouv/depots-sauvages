@@ -8,21 +8,15 @@ from rest_framework.routers import DefaultRouter
 
 from backend.bypass_auth.views import BypassAuthConfigView, BypassAuthLoginView
 from backend.constatations.views import ConstatationDocumentDownloadView, ConstatationViewSet
-from backend.dn_signalements.views import (
-    DNSignalementDocumentDownloadView,
-    ProcessDossierView,
-    SyncUserSignalementsView,
-    UserSignalementViewSet,
-)
+from backend.current_user.views import UserInfoViewSet, logout_view
 from backend.faq.views import FAQItemViewSet
-from backend.home.views import UserInfoViewSet, index_view, logout_view
-from backend.seo.views import RobotsTxtView
+from backend.home.views import index_view
 from backend.procedures.views import SuiviProcedureViewSet
+from backend.seo.views import RobotsTxtView
 
 # API Routes registration
 router = DefaultRouter()
 router.register("user-info", UserInfoViewSet, basename="user-info")
-router.register("dossiers", UserSignalementViewSet, basename="user-dossier")
 router.register("suivi-procedure", SuiviProcedureViewSet, basename="suivi-procedure")
 router.register("constatations", ConstatationViewSet, basename="constatation")
 router.register("faq-items", FAQItemViewSet, basename="faq-item")
@@ -41,21 +35,6 @@ urlpatterns.extend(
             "api/constatations/<int:pk>/documents/<str:doc_type>/",
             ConstatationDocumentDownloadView.as_view(),
             name="constatation-document-download",
-        ),
-        path(
-            "api/dn-signalements/<int:pk>/documents/<str:doc_type>/",
-            DNSignalementDocumentDownloadView.as_view(),
-            name="dn-signalement-document-download",
-        ),
-        path(
-            "api/signalements/process-dn-dossier/",
-            ProcessDossierView.as_view(),
-            name="signalements-process-dn-dossier",
-        ),
-        path(
-            "api/dossiers/sync/",
-            SyncUserSignalementsView.as_view(),
-            name="dossiers-sync",
         ),
         path(
             "api/bypass-auth/config/",

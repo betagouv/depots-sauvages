@@ -4,6 +4,7 @@
 # don't need to use it.
 
 from django.conf import settings
+from rest_framework.permissions import SAFE_METHODS
 from rest_framework.throttling import AnonRateThrottle
 
 
@@ -25,19 +26,31 @@ class BaseRateThrottle(AnonRateThrottle):
         return f"{self.cache_key_prefix}_{client_ip}"
 
 
-class EmailRateThrottle(BaseRateThrottle):
-    """
-    Custom throttle for email sending endpoint.
-    """
-
-    rate = getattr(settings, "EMAIL_RATE_LIMIT")
-    cache_key_prefix = "email_throttle"
 
 
-class SignalementRateThrottle(BaseRateThrottle):
+class SafeRateThrottle(BaseRateThrottle):
     """
-    Custom throttle for signalement submission endpoint.
+    Throttle class for read-only requests (GET, HEAD, OPTIONS).
     """
 
-    rate = getattr(settings, "SIGNALEMENT_RATE_LIMIT")
-    cache_key_prefix = "signalement_throttle"
+    rate = getattr(settings, "THROTTLE_SAFE_RATE", "300/m")
+    cache_key_prefix = "safe_throttle"
+
+    def allow_request(self, request, view):
+        if request.method not in SAFE_METHODS:
+            return True
+        return super().allow_request(request, view)
+
+
+class UnsafeRateThrottle(BaseRateThrottle):
+    """
+    Throttle class for write requests (POST, PUT, PATCH, DELETE).
+    """
+
+    rate = getattr(settings, "THROTTLE_UNSAFE_RATE", "60/m")
+    cache_key_prefix = "unsafe_throttle"
+
+    def allow_request(self, request, view):
+        if request.method in SAFE_METHODS:
+            return True
+        return super().allow_request(request, view)

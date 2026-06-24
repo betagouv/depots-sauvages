@@ -2,7 +2,7 @@ from django.db import migrations
 from django.db.models.signals import post_save
 
 from backend.constatations.models import Constatation
-from backend.signalements.signals import (
+from backend.constatations.signals import (
     generate_doc_constat,
     generate_document,
     generate_lettre_info,

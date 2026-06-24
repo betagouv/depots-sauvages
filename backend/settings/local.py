@@ -76,15 +76,9 @@ ANYMAIL = {
 }
 
 # Rate limiting
-EMAIL_RATE_LIMIT = env("EMAIL_RATE_LIMIT", default="10/m")
-SIGNALEMENT_RATE_LIMIT = env("SIGNALEMENT_RATE_LIMIT", default="10/m")
+THROTTLE_SAFE_RATE = env("THROTTLE_SAFE_RATE", default="600/m")
+THROTTLE_UNSAFE_RATE = env("THROTTLE_UNSAFE_RATE", default="100/m")
 
-# DN Integration Settings - Démarche Numérique
-DN_GRAPHQL_ENDPOINT = env.str(
-    "DN_GRAPHQL_ENDPOINT", default="https://demarche.numerique.gouv.fr/api/v2/graphql"
-)
-DN_API_TOKEN = env("DN_API_TOKEN", default="")
-DN_DEMARCHE_NUMBER = env.int("DN_DEMARCHE_NUMBER", default=0)
 
 # ProConnect / OIDC Settings
 PROCONNECT_ENABLED = env.bool("VITE_PROCONNECT_ENABLED", default=False)
