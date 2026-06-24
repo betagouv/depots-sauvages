@@ -2,8 +2,8 @@
   <div>
     <div class="fr-background-alt--blue-france fr-mb-6w fr-py-6w">
       <div class="fr-container">
-        <h1 class="fr-h1 fr-mb-3w">Déclaration d'accessibilité</h1>
-        <p class="fr-text fr-text--lead fr-mb-0">Engagement de conformité RGAA de Protect’Envi.</p>
+        <h1 class="fr-h1 fr-mb-3w">Déclaration d’accessibilité</h1>
+        <p class="fr-text fr-text--lead fr-mb-0">Établie le 24 juin 2026.</p>
       </div>
     </div>
 
@@ -11,38 +11,46 @@
       <div class="fr-grid-row">
         <div class="fr-col-12 fr-col-md-8">
           <p>
-            Le Commandement pour l’environnement et la santé (CESAN) de la Gendarmerie nationale
-            s’engage à rendre ses sites internet, applications mobiles et progiciels accessibles
-            conformément à l’article 47 de la loi n° 2005-102 du 11 février 2005.
+            CESAN - Gendarmerie Nationale (Ministère de l'intérieur) s’engage à rendre son service
+            accessible, conformément à l’article 47 de la loi n° 2005-102 du 11 février 2005.
           </p>
           <p>
-            À cette fin, il met en œuvre la stratégie et les actions suivantes : la conception de
-            l'application selon les critères du RGAA, l'utilisation de la bibliothèque de composants
-            officielle de l'État (DSFR) et l'amélioration continue de l'ergonomie.
+            Cette déclaration d’accessibilité s’applique à Portect'Envi (<a
+              href="https://protect-envi.beta.gouv.fr/"
+              >Protect’Envi - Accompagner les collectivités pour mieux lutter contre les dépôts
+              sauvages</a
+            >).
           </p>
 
-          <DsfrAlert type="info" title="Statut de conformité : non conforme" class="fr-mb-4w">
-            L'application Protect’Envi est non conforme avec le référentiel général d’amélioration
-            de l’accessibilité (RGAA), en l'absence d'audit formel réalisé à ce jour. Des travaux de
-            correction et d'optimisation sont continuellement menés pour accroître l'accessibilité
-            globale du service.
-          </DsfrAlert>
+          <hr class="fr-my-4w" />
+
+          <h2>État de conformité</h2>
+          <p>
+            <strong>Portect'Envi</strong> est <strong>non conforme</strong> avec le RGAA. Le site
+            n’a encore pas été audité.
+          </p>
 
           <hr class="fr-my-4w" />
 
-          <h2>Retour d’information et contact</h2>
-          <DsfrHighlight class="fr-ml-0 fr-mb-3w">
-            Si vous n’avez pas accès à un contenu ou à un service, vous pouvez contacter le
-            responsable de Protect’Envi pour être orienté vers une alternative accessible ou obtenir
-            le contenu sous une autre forme :
-            <br />
+          <h2>Amélioration et contact</h2>
+          <p>
+            Si vous n’arrivez pas à accéder à un contenu ou à un service, vous pouvez contacter le
+            responsable de Portect'Envi pour être orienté vers une alternative accessible ou obtenir
+            le contenu sous une autre forme.
+          </p>
+          <p class="fr-mb-1w">
             <strong>E-mail : </strong>
             <a class="fr-link" :href="`mailto:${contactEmail}`">{{ contactEmail }}</a>
-          </DsfrHighlight>
+          </p>
+          <p class="fr-mb-1w">
+            <strong>Formulaire de contact : </strong>
+            <router-link class="fr-link" to="/contact">Cliquer ici pour nous contacter</router-link>
+          </p>
+          <p class="fr-mt-2w">Nous essayons de répondre dans les 2 jours ouvrés.</p>
 
           <hr class="fr-my-4w" />
 
-          <h2>Voies de recours</h2>
+          <h2>Voie de recours</h2>
           <p>
             Cette procédure est à utiliser dans le cas suivant : vous avez signalé au responsable du
             site internet un défaut d’accessibilité qui vous empêche d’accéder à un contenu ou à un
@@ -50,18 +58,37 @@
           </p>
           <p>Vous pouvez :</p>
           <ul class="fr-pl-3w">
-            <li>
-              Écrire un message au
-              <a class="fr-link" href="https://formulaire.defenseurdesdroits.fr/" target="_blank" rel="noopener"
-                >Défenseur des droits</a
+            <li class="fr-mb-1w">
+              <a
+                class="fr-link"
+                href="https://formulaire.defenseurdesdroits.fr/"
+                target="_blank"
+                rel="noopener"
+                >Écrire un message au Défenseur des droits</a
               >
             </li>
-            <li>Contacter le délégué du Défenseur des droits dans votre région</li>
+            <li class="fr-mb-1w">
+              <a
+                class="fr-link"
+                href="https://www.defenseurdesdroits.fr/carte-des-delegues"
+                target="_blank"
+                rel="noopener"
+                >Contacter le délégué du Défenseur des droits dans votre région</a
+              >
+            </li>
             <li>
-              Envoyer un courrier postal (gratuit, sans affranchissement) à l'adresse : Défenseur
-              des droits, Libre réponse 71120, 75342 Paris CEDEX 07
+              Envoyer un courrier par la poste (gratuit, ne pas mettre de timbre) :<br />
+              Défenseur des droits<br />
+              Libre réponse 71120 75342 Paris CEDEX 07
             </li>
           </ul>
+
+          <hr class="fr-my-4w" />
+
+          <p class="fr-text--xs fr-mt-4w">
+            Cette déclaration d’accessibilité a été créé le 24 juin 2026 grâce au Générateur de
+            Déclaration d’Accessibilité.
+          </p>
         </div>
       </div>
     </div>
@@ -69,7 +96,5 @@
 </template>
 
 <script setup lang="ts">
-import { DsfrAlert, DsfrHighlight } from '@gouvminint/vue-dsfr'
-
 const contactEmail = import.meta.env.VITE_CONTACT_EMAIL
 </script>
