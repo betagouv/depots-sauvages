@@ -86,10 +86,11 @@
 import { DsfrFooter, DsfrFooterLinkList, DsfrHeader, DsfrToggleSwitch } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { getBypassAuthConfig, getUserInfo } from '../services/api'
+import { getBypassAuthConfig } from '../services/api'
 import { PROCONNECT_ENABLED } from '../services/config'
 import { LOGIN_URL, LOGOUT_URL } from '../services/urls'
 import { useEditModeStore } from '../stores/editMode'
+import { useUserStore } from '../stores/user'
 
 interface FooterLink {
   text: string
@@ -103,6 +104,7 @@ interface BreadcrumbLink {
 
 const route = useRoute()
 const editModeStore = useEditModeStore()
+const userStore = useUserStore()
 const logoText = ['Ministère', 'de l’intérieur']
 const breadcrumbLinks: BreadcrumbLink[] = []
 
@@ -134,7 +136,7 @@ interface QuickLink {
 const quickLinks = ref<QuickLink[]>([])
 
 const isAuthenticated = ref(false)
-const userInfo = ref<any>(null)
+const userInfo = computed(() => userStore.userInfo)
 
 const goToLogin = (event?: MouseEvent) => {
   if (event) {
@@ -162,8 +164,7 @@ onMounted(async () => {
   }
 
   try {
-    const fetchedUserInfo = await getUserInfo()
-    userInfo.value = fetchedUserInfo
+    const fetchedUserInfo = await userStore.fetchUserInfo()
 
     if (!fetchedUserInfo.is_staff) {
       editModeStore.setAdminMode(false)
