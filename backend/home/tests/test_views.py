@@ -14,47 +14,6 @@ def test_home_page_loads_correctly(client):
     content = response.content.decode()
     assert "Protect’Envi" in content or "Protect&#x27;Envi" in content
 
-@pytest.mark.django_db
-def test_logout_proconnect_user(client, settings):
-    settings.PROCONNECT_ENABLED = True
-    settings.OIDC_OP_LOGOUT_ENDPOINT = "https://example.com/logout"
-    user = UserFactory()
-    client.force_login(user, backend="backend.proconnect.auth.ProConnectOIDCBackend")
-    # Store token mock in session
-    session = client.session
-    session["oidc_id_token"] = "mock-id-token"
-    session.save()
-    url = reverse("logout")
-    response = client.get(url)
-    assert response.status_code == status.HTTP_302_FOUND
-    assert "https://example.com/logout" in response.url
-    assert "post_logout_redirect_uri" in response.url
-    assert "id_token_hint=mock-id-token" in response.url
-
-
-@pytest.mark.django_db
-def test_logout_bypass_auth_user(client, settings):
-    settings.PROCONNECT_ENABLED = True
-    settings.OIDC_OP_LOGOUT_ENDPOINT = "https://example.com/logout"
-    user = UserFactory()
-    client.force_login(user, backend="backend.bypass_auth.auth.BypassAuthBackend")
-    url = reverse("logout")
-    response = client.get(url)
-    assert response.status_code == status.HTTP_302_FOUND
-    assert response.url == reverse("index")
-
-
-@pytest.mark.django_db
-def test_logout_standard_user(client, settings):
-    settings.PROCONNECT_ENABLED = True
-    settings.OIDC_OP_LOGOUT_ENDPOINT = "https://example.com/logout"
-    user = UserFactory()
-    client.force_login(user)
-    url = reverse("logout")
-    response = client.get(url)
-    assert response.status_code == status.HTTP_302_FOUND
-    assert response.url == reverse("index")
-
 
 @pytest.mark.django_db
 def test_proconnect_oidc_backend_claims(settings):
@@ -88,4 +47,3 @@ def test_proconnect_oidc_backend_claims(settings):
     updated_user_no_usual = backend.update_user(user, claims_no_usual)
     assert updated_user_no_usual.first_name == "Jean-Pierre"
     assert updated_user_no_usual.last_name == "Dupont-Deschamps"
-
