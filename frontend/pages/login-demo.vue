@@ -49,8 +49,10 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { getBypassAuthConfig, loginBypassAuth } from '@/services/api'
 
+const route = useRoute()
 const bypassAuthEnabled = ref(false)
 const emailInput = ref('')
 const isLoggingIn = ref(false)
@@ -62,8 +64,9 @@ const handleBypassLogin = async () => {
   errorMessage.value = ''
   try {
     await loginBypassAuth(emailInput.value.trim().toLowerCase())
-    // Redirect to dashboard
-    window.location.href = '/mes-procedures'
+    // Redirect to dashboard or next url
+    const nextPath = (route.query.next as string) || '/mes-procedures'
+    window.location.href = nextPath
   } catch (error: any) {
     console.error('Login failed:', error)
     if (error && (error.detail || error.error)) {
