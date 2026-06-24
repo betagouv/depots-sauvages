@@ -11,20 +11,20 @@
   },
   "dependencies": {
     "@gouvfr/dsfr": "^1.14.4",
-    "@gouvminint/vue-dsfr": "^8.16.1",
-    "@iconify/vue": "^5.0.0",
-    "@tiptap/extension-link": "^3.26.0",
-    "@tiptap/pm": "^3.26.0",
-    "@tiptap/starter-kit": "^3.26.0",
-    "@tiptap/vue-3": "^3.26.0",
+    "@gouvminint/vue-dsfr": "^8.17.0",
+    "@iconify/vue": "^5.0.1",
+    "@tiptap/extension-link": "^3.27.1",
+    "@tiptap/pm": "^3.27.1",
+    "@tiptap/starter-kit": "^3.27.1",
+    "@tiptap/vue-3": "^3.27.1",
     "camelcase-keys": "^10.0.2",
     "dayjs": "^1.11.21",
-    "dompurify": "^3.4.10",
+    "dompurify": "^3.4.11",
     "pinia": "^3.0.4",
     "snakecase-keys": "^9.0.2",
-    "vue": "^3.5.33",
+    "vue": "^3.5.38",
     "vue-matomo": "^4.2.0",
-    "vue-router": "^5.0.6"
+    "vue-router": "^5.1.0"
   },
   "resolutions": {
     "minimatch@npm:9.0.1": "^9.0.5"
@@ -35,12 +35,12 @@
     "@testing-library/user-event": "^14.6.1",
     "@testing-library/vue": "^8.1.0",
     "@types/dompurify": "^3.2.0",
-    "@types/node": "^25.6.0",
-    "@vitejs/plugin-vue": "^6.0.6",
-    "axe-core": "^4.11.3",
-    "jsdom": "^29.1.0",
-    "vite": "^8.0.10",
-    "vitest": "^4.1.5",
+    "@types/node": "^26.0.0",
+    "@vitejs/plugin-vue": "^6.0.7",
+    "axe-core": "^4.12.1",
+    "jsdom": "^29.1.1",
+    "vite": "^8.1.0",
+    "vitest": "^4.1.9",
     "vitest-axe": "^0.1.0"
   },
   "engines": {
