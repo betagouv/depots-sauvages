@@ -24,17 +24,9 @@ Application de signalement des dépôts sauvages destinée aux communes.
 
 ## ✨ Fonctionnalités
 
-### Mes Dossiers
+### Mes Procédures
 
-La page "Mes dossiers" permet aux utilisateurs connectés de consulter l'état de leurs procédures en cours.
-Les données - numéro de dossier, date de dépôt, état d'avancement, sont récupérées **en temps réel** depuis l'API Démarches Numériques, c'est à dire qu'on ne stocke pas les données à cette étape-là.
-
-### Téléchargement des documents
-
-Une page de récupération des documents permet aux utilisateurs de télécharger un rapport de constatation et une lettre d'information.
-Ces documents sont générés sur la base des données récupérées depuis l'API Démarches Numériques. Il y a un stokage local des données pour faciliter le traitement de génération des documents.
-
-L'accès à cette page est restreint au propriétaire du dossier.
+La page "Mes procédures" permet aux utilisateurs connectés de consulter l'état de leurs procédures administratives. Depuis cette interface, ils peuvent suivre les différentes étapes de la procédure, constatation, signature des pièces, notification à l'auteur, décision de poursuites, etc. Il peuvent aussi télécharger des documents préremplis : un rapport de constatation et une lettre d'information.
 
 ## 🚀 Démarrage rapide avec Docker
 
@@ -96,7 +88,7 @@ Afin d'éviter que les environnements de test, de développement et de staging n
 
 - **robots.txt dynamique** : Servi à l'adresse `/robots.txt`, il interdit le crawling de l'ensemble du site (`Disallow: /`) si la variable d'environnement `ENV_NAME` est différente de `prod`.
 
-- **Middleware d'en-tête de non-indexation (`StagingNoIndexMiddleware`)** : Si `ENV_NAME` est différent de `prod`, le serveur Django ajoute automatiquement l'en-tête HTTP `X-Robots-Tag: noindex, nofollow` à toutes les réponses (pages HTML, documents PDF générés, fichiers ODT, API, etc.), bloquant l'indexation de manière absolue.
+- **Middleware d'en-tête de non-indexation (`StagingNoIndexMiddleware`)** : Si `ENV_NAME` est différent de `prod`, le serveur Django ajoute automatiquement l'en-tête HTTP `X-Robots-Tag: noindex, nofollow` à toutes les réponses.
 
 ---
 
