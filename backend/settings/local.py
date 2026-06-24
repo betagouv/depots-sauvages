@@ -76,8 +76,8 @@ ANYMAIL = {
 }
 
 # Rate limiting
-THROTTLE_SAFE_RATE = env("THROTTLE_SAFE_RATE", default="100/m")
-THROTTLE_UNSAFE_RATE = env("THROTTLE_UNSAFE_RATE", default="30/m")
+THROTTLE_SAFE_RATE = env("THROTTLE_SAFE_RATE", default="600/m")
+THROTTLE_UNSAFE_RATE = env("THROTTLE_UNSAFE_RATE", default="100/m")
 
 
 # ProConnect / OIDC Settings

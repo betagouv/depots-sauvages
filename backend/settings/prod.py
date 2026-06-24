@@ -126,8 +126,8 @@ ANYMAIL = {
 }
 
 # Rate limiting
-THROTTLE_SAFE_RATE = env("THROTTLE_SAFE_RATE", default="300/m")
-THROTTLE_UNSAFE_RATE = env("THROTTLE_UNSAFE_RATE", default="60/m")
+THROTTLE_SAFE_RATE = env("THROTTLE_SAFE_RATE", default="400/m")
+THROTTLE_UNSAFE_RATE = env("THROTTLE_UNSAFE_RATE", default="100/m")
 
 
 # Reverse proxy settings
