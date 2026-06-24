@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "backend.throttling",
     "backend.home",
     "backend.current_user",
+    "backend.admin_config",
     "backend.procedures",
     "backend.bypass_auth",
     "backend.constatations.apps.ConstatationsConfig",
