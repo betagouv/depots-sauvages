@@ -26,13 +26,27 @@
             <strong>recouvrée au profit de la mairie</strong>.
           </span>
         </p>
-        <DsfrNotice
-          class="fr-mb-0"
-          title="Les deux procédures ne sont pas exclusives !
-          La procédure administrative est la plus simple et adaptée pour des dépôts du quotidien,
-          tandis que la procédure judiciaire est plus longue mais indispensable pour les dépôts
-          les plus graves."
-        />
+        <DsfrNotice class="fr-mb-0">
+          <template #default>
+            <strong>Les deux procédures sont complémentaires :</strong>
+          </template>
+          <template #desc>
+            <ul class="fr-mt-1w fr-mb-0 fr-pl-3w">
+              <li class="fr-mb-1w">
+                <strong
+                  >La procédure administrative est la plus simple et adaptée pour des dépôts du
+                  quotidien</strong
+                >. Elle relève du pouvoir de police du maire et peut être engagée même en l’absence
+                de délibération municipale préalable sur les sanctions pour les dépôts sauvages.
+              </li>
+              <li>
+                <strong>La procédure judiciaire</strong> est plus longue mais indispensable
+                <strong>pour les dépôts les plus graves ou dont l’auteur n’est pas identifié</strong
+                >.
+              </li>
+            </ul>
+          </template>
+        </DsfrNotice>
       </div>
     </div>
 
