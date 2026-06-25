@@ -2,7 +2,7 @@ from django.conf import settings
 from django.db import models
 from model_utils.models import TimeStampedModel
 
-from .prejudice import PrejudiceMixin
+from backend.constatations.prejudice import PrejudiceMixin
 
 
 class Constatation(PrejudiceMixin, TimeStampedModel):

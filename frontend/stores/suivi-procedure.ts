@@ -44,9 +44,9 @@ export interface SuiviProcedure {
 export const useSuiviStore = defineStore('suiviProcedure', () => {
   const procedures = reactive<Record<string, SuiviProcedure>>({})
 
-  const getOrCreateSuivi = (dossierId: string): SuiviProcedure => {
-    if (!procedures[dossierId] || typeof procedures[dossierId] !== 'object') {
-      procedures[dossierId] = {
+  const getOrCreateSuivi = (constatationId: string): SuiviProcedure => {
+    if (!procedures[constatationId] || typeof procedures[constatationId] !== 'object') {
+      procedures[constatationId] = {
         etape_en_cours: 1,
         preuves_fournies: false,
         constatation_signee: false,
@@ -76,15 +76,15 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
         identification_reussie: null,
       }
     }
-    return procedures[dossierId]
+    return procedures[constatationId]
   }
 
   const isStepCompleted = (
-    dossierId: string,
+    constatationId: string,
     stepIndex: number,
     context: { auteurIdentifie: boolean; currentStep: number }
   ): boolean => {
-    const suivi = procedures[dossierId]
+    const suivi = procedures[constatationId]
     if (!suivi && stepIndex > 0) return false
 
     // Pour l'étape 0, on se base sur le fait qu'on a avancé dans le stepper
@@ -140,23 +140,23 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
     }
   }
 
-  const fetchSuivi = async (dossierId: string, constatationId: number) => {
+  const fetchSuivi = async (constatationId: string, internalConstatationId: number) => {
     try {
-      const data = await fetchResource(`${API_URL}/suivi-procedure/${constatationId}/`)
+      const data = await fetchResource(`${API_URL}/suivi-procedure/${internalConstatationId}/`)
       if (data && typeof data === 'object') {
-        procedures[dossierId] = data
+        procedures[constatationId] = data
       }
     } catch (e) {
       console.error('Erreur lors du chargement du suivi:', e)
     }
   }
 
-  const saveSuivi = async (dossierId: string, constatationId: number) => {
-    const suivi = procedures[dossierId]
+  const saveSuivi = async (constatationId: string, internalConstatationId: number) => {
+    const suivi = procedures[constatationId]
     if (!suivi) return
 
     try {
-      await patchResource(`${API_URL}/suivi-procedure/${constatationId}/`, suivi)
+      await patchResource(`${API_URL}/suivi-procedure/${internalConstatationId}/`, suivi)
     } catch (e) {
       console.error('Erreur lors de la sauvegarde du suivi:', e)
     }

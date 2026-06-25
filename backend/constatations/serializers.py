@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Constatation
+from backend.constatations.models import Constatation
 
 
 class ConstatationSerializer(serializers.ModelSerializer):
