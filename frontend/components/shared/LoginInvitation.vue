@@ -43,7 +43,7 @@ const props = defineProps({
   },
   redirectTo: {
     type: String,
-    default: '',
+    default: '/mes-procedures',
   },
 })
 

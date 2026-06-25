@@ -142,7 +142,8 @@ const goToLogin = (event?: MouseEvent) => {
   if (event) {
     event.preventDefault()
   }
-  window.location.href = LOGIN_URL
+  const nextParam = route.fullPath === '/' ? '/mes-procedures' : route.fullPath
+  window.location.href = `${LOGIN_URL}?next=${encodeURIComponent(nextParam)}`
 }
 
 const goToLogout = (event?: MouseEvent) => {
@@ -182,25 +183,28 @@ onMounted(async () => {
       })
     } else {
       if (bypassEnabled) {
+        const demoUrl = `/login-demo?next=${encodeURIComponent(route.fullPath === '/' ? '/mes-procedures' : route.fullPath)}`
         quickLinks.value.push({
           label: 'Connexion de démo',
           icon: 'fr-icon-user-line',
           iconRight: false,
-          href: '/login-demo',
-          to: '/login-demo',
+          href: demoUrl,
+          to: demoUrl,
           onClick: (event) => {
             if (event) event.preventDefault()
-            window.location.href = '/login-demo'
+            window.location.href = demoUrl
           },
         })
       }
       if (isProConnectEnabled) {
+        const nextParam = route.fullPath === '/' ? '/mes-procedures' : route.fullPath
+        const loginUrlWithNext = `${LOGIN_URL}?next=${encodeURIComponent(nextParam)}`
         quickLinks.value.push({
           label: 'Se connecter via ProConnect',
           icon: 'fr-icon-lock-line',
           iconRight: false,
-          href: LOGIN_URL,
-          to: LOGIN_URL, // for styling
+          href: loginUrlWithNext,
+          to: loginUrlWithNext, // for styling
           onClick: goToLogin,
         })
       }
@@ -210,25 +214,28 @@ onMounted(async () => {
     editModeStore.setAdminMode(false)
 
     if (bypassEnabled) {
+      const demoUrl = `/login-demo?next=${encodeURIComponent(route.fullPath === '/' ? '/mes-procedures' : route.fullPath)}`
       quickLinks.value.push({
         label: 'Connexion de démo',
         icon: 'fr-icon-user-line',
         iconRight: false,
-        href: '/login-demo',
-        to: '/login-demo',
+        href: demoUrl,
+        to: demoUrl,
         onClick: (event) => {
           if (event) event.preventDefault()
-          window.location.href = '/login-demo'
+          window.location.href = demoUrl
         },
       })
     }
     if (isProConnectEnabled) {
+      const nextParam = route.fullPath === '/' ? '/mes-procedures' : route.fullPath
+      const loginUrlWithNext = `${LOGIN_URL}?next=${encodeURIComponent(nextParam)}`
       quickLinks.value.push({
         label: 'Se connecter via ProConnect',
         icon: 'fr-icon-lock-line',
         iconRight: false,
-        href: LOGIN_URL,
-        to: LOGIN_URL, // for styling
+        href: loginUrlWithNext,
+        to: loginUrlWithNext, // for styling
         onClick: goToLogin,
       })
     }
