@@ -55,7 +55,7 @@
               <Notification
                 v-if="auteurIdentifie"
                 :suivi="suiviProcedure"
-                :lettre-info-url="getLettreInfoUrl(dossierData.id)"
+                :lettre-info-url="getLettreInfoUrl(procedureData.id)"
                 @next-step="activeStep = 3"
               />
               <Identification v-else :suivi="suiviProcedure" :auteur-identifie="auteurIdentifie" />

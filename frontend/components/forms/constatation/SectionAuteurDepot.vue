@@ -8,6 +8,23 @@
     </legend>
 
     <div class="fr-fieldset__element">
+      <DsfrCallout title="Comment identifier l'auteur présumé ?">
+        <p>
+          L'auteur présumé peut être celui qui a déposé les déchets, mais aussi le détenteur ou le
+          producteur de ces déchets.
+        </p>
+        <p>
+          Un nom sur un colis ou une facture peut permettre d'identifier quelqu'un et suffit par
+          exemple à initier une procédure administrative.
+        </p>
+        <p>
+          La mairie peut effectuer des recherches complémentaires (source ouverte, témoignages,
+          etc.) mais ne bénéficie pas de pouvoirs d'enquête judiciaire.
+        </p>
+      </DsfrCallout>
+    </div>
+
+    <div class="fr-fieldset__element">
       <BooleanRadioSet
         v-model="store.formData.auteurIdentifie"
         legend="L'auteur présumé des faits est-il identifié ou identifiable partiellement ?"
@@ -20,23 +37,6 @@
     </div>
 
     <template v-if="store.formData.auteurIdentifie === true">
-      <div class="fr-fieldset__element">
-        <DsfrCallout title="Comment identifier l'auteur présumé ?">
-          <p>
-            L'auteur présumé peut être celui qui a déposé les déchets, mais aussi le détenteur ou le
-            producteur de ces déchets.
-          </p>
-          <p>
-            Un nom sur un colis ou une facture peut permettre d'identifier quelqu'un et suffit par
-            exemple à initier une procédure administrative.
-          </p>
-          <p>
-            La mairie peut effectuer des recherches complémentaires (source ouverte, témoignages,
-            etc.) mais ne bénéficie pas de pouvoirs d'enquête judiciaire.
-          </p>
-        </DsfrCallout>
-      </div>
-
       <div class="fr-fieldset__element">
         <DsfrRadioButtonSet
           v-model="store.formData.statutAuteur"
@@ -339,25 +339,6 @@
           </div>
         </div>
       </template>
-    </template>
-
-    <template v-else-if="store.formData.auteurIdentifie === false">
-      <div class="fr-fieldset__element">
-        <DsfrCallout title="Comment identifier l'auteur présumé ?">
-          <p>
-            L'auteur présumé peut être celui qui a déposé les déchets, mais aussi le détenteur ou le
-            producteur de ces déchets.
-          </p>
-          <p>
-            Un nom sur un colis ou une facture peut permettre d'identifier quelqu'un et suffit par
-            exemple à initier une procédure administrative.
-          </p>
-          <p>
-            La mairie peut effectuer des recherches complémentaires (source ouverte, témoignages,
-            etc.) mais ne bénéficie pas de pouvoirs d'enquête judiciaire.
-          </p>
-        </DsfrCallout>
-      </div>
     </template>
 
     <div v-if="showPlainteSection" class="fr-fieldset__element fr-mt-2w">
