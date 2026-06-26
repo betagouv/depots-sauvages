@@ -5,6 +5,17 @@
     iconClass="fr-icon-checkbox-circle-fill"
     iconColor="#00875a"
   >
+    <DsfrCallout
+      title="Attention la procédure n'est pas terminée !"
+      class="fr-mb-4w fr-callout--yellow-tournesol"
+      style="text-align: left;"
+    >
+      <p>
+        Le rapport de constatation généré devra être signé par l'autorité compétente pour avoir une
+        valeur juridique.
+      </p>
+    </DsfrCallout>
+
     <template #actions>
       <DsfrButton label="Accéder au suivi de cette procédure" @click="$emit('goToSuivi')" />
       <DsfrButton secondary label="Voir toutes mes procédures" @click="$emit('goToProcedures')" />
@@ -14,7 +25,7 @@
 
 <script setup lang="ts">
 import PremiumBox from '@/components/shared/PremiumBox.vue'
-import { DsfrButton } from '@gouvminint/vue-dsfr'
+import { DsfrButton, DsfrCallout } from '@gouvminint/vue-dsfr'
 
 defineEmits<{
   (e: 'goToSuivi'): void

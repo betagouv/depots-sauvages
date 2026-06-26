@@ -14,19 +14,6 @@
       <p>
         L'estimation du préjudice est indispensable pour la solidité de la procédure.
       </p>
-      <p class="fr-text--bold fr-mt-2w">
-        Attention le montant du préjudice ne correspond pas au montant de l'amende administrative
-        qui peut être émise contre l'auteur présumé des faits.
-      </p>
-      <p>
-        Le montant de l'amende est décidé par la collectivité dans un second temps, il doit être juste et proportionné avec un maximum de 15 000 €.
-      </p>
-      <p class="fr-mt-2w">
-        Si vous souhaitez évaluer le montant de l'amende vous pouvez
-        <a href="https://protect-envi.beta.gouv.fr/simulateur-amende" target="_blank" rel="noopener noreferrer"
-          >utiliser notre simulateur</a
-        >.
-      </p>
     </DsfrCallout>
 
     <div class="fr-fieldset__element">
