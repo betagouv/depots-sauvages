@@ -81,7 +81,7 @@ const router = createRouter({
     },
     {
       path: '/signalements-dn/:dossier_id',
-      redirect: (to) => ({ name: 'SuiviProcedure', params: { dossier_id: to.params.dossier_id } }),
+      redirect: (to) => ({ name: 'SuiviProcedure', params: { constatation_id: to.params.dossier_id } }),
     },
     {
       path: '/rejoindre-le-dispositif',
@@ -94,7 +94,7 @@ const router = createRouter({
       meta: { hideNavigation: true, title: 'Rejoindre le dispositif' },
     },
     {
-      path: '/suivi-procedure/:dossier_id',
+      path: '/suivi-procedure/:constatation_id',
       name: 'SuiviProcedure',
       component: () => import('./pages/suivi-procedure.vue'),
       meta: { activeMenu: '/mes-procedures', title: 'Suivi de procédure' },

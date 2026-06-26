@@ -125,10 +125,12 @@ const route = useRoute()
 const router = useRouter()
 const suiviStore = useSuiviStore()
 
-const procedureId = computed(
-  () => (route.params.dossier_id as string) || (route.query.dossier_id as string)
+// The identifier in the URL corresponds to the underlying Constatation ID.
+// Each follow-up procedure (SuiviProcedure) is linked 1:1 to its Constatation.
+const constatationId = computed(
+  () => (route.params.constatation_id as string) || (route.query.constatation_id as string)
 )
-const suiviProcedure = computed(() => suiviStore.getOrCreateSuivi(procedureId.value))
+const suiviProcedure = computed(() => suiviStore.getOrCreateSuivi(constatationId.value))
 const showLoading = ref(true)
 const error = ref<string | null>(null)
 const procedureData = ref<any>(null)
@@ -141,13 +143,12 @@ const activeStep = computed({
 const hasProcedure = computed(() => procedureData.value?.created !== false)
 const auteurIdentifie = computed(() => procedureData.value?.auteur_identifie ?? false)
 
-const constatationId = computed(() => procedureData.value?.id)
-const modifyUrl = computed(() => `/constatation/${procedureId.value}`)
+const modifyUrl = computed(() => `/constatation/${constatationId.value}`)
 
 // Auto-save logic with debounce
 const debouncedSave = debounce(() => {
-  if (procedureId.value && constatationId.value) {
-    suiviStore.saveSuivi(procedureId.value, constatationId.value)
+  if (constatationId.value && procedureData.value?.id) {
+    suiviStore.saveSuivi(constatationId.value, procedureData.value.id)
   }
 }, 1000)
 
@@ -160,13 +161,13 @@ watch(
 )
 
 const getStepStatus = (index: number) =>
-  suiviStore.isStepCompleted(procedureId.value, index, {
+  suiviStore.isStepCompleted(constatationId.value, index, {
     auteurIdentifie: auteurIdentifie.value,
     currentStep: activeStep.value,
   })
 
 const steps = computed(() => {
-  if (!procedureId.value) return []
+  if (!constatationId.value) return []
 
   if (!hasProcedure.value) {
     return [
@@ -209,11 +210,11 @@ const steps = computed(() => {
 })
 
 onMounted(async () => {
-  const currentProcedureId =
-    (route.params.dossier_id as string) || (route.query.dossier_id as string)
+  const currentConstatationId =
+    (route.params.constatation_id as string) || (route.query.constatation_id as string)
 
-  if (!currentProcedureId) {
-    error.value = 'Identifiant de dossier manquant.'
+  if (!currentConstatationId) {
+    error.value = 'Identifiant de procédure manquant.'
     showLoading.value = false
     return
   }
@@ -228,11 +229,11 @@ onMounted(async () => {
     }
 
     // Fetch constatation data directly
-    const procedureRes = await fetchResource(`${API_URLS.constatations}${currentProcedureId}/`)
+    const procedureRes = await fetchResource(`${API_URLS.constatations}${currentConstatationId}/`)
     procedureData.value = procedureRes
 
     // Then fetch procedure tracking data using the internal ID
-    await suiviStore.fetchSuivi(currentProcedureId, procedureRes.id)
+    await suiviStore.fetchSuivi(currentConstatationId, procedureRes.id)
   } catch (err: any) {
     error.value = err.error || 'Une erreur est survenue lors de la récupération du dossier.'
   } finally {
