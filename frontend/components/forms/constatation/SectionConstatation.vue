@@ -111,7 +111,8 @@
           to="/comprendre-la-procedure#qui-peut-constater"
           target="_blank"
           rel="noopener noreferrer"
-        >ici</router-link>.
+          >ici</router-link
+        >.
       </DsfrAlert>
     </div>
 
@@ -123,7 +124,7 @@
             :required="true"
             type="date"
             label="Date de la constatation"
-            hint="Le dépôt ne peut être antérieur au 01/01/2025. Cette date doit être comprise entre le 01/01/2025 et le 31/12/2100."
+            hint="Le dépôt ne peut être antérieur au 01/01/2025."
             :error-message="store.errors.dateConstat"
           />
         </div>
@@ -142,11 +143,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { getUserInfo, type UserInfo } from '@/services/api'
 import { useConstatationStore } from '@/stores/constatation'
 import { ConstatantOptions } from '@/types/constatation'
 import { DsfrAlert, DsfrInputGroup, DsfrRadioButtonSet, DsfrSelect } from '@gouvminint/vue-dsfr'
-import { getUserInfo, type UserInfo } from '@/services/api'
+import { ref, watch } from 'vue'
 
 const store = useConstatationStore()
 const userInfo = ref<UserInfo | null>(null)
@@ -175,6 +176,6 @@ watch(
       store.formData.constatantNom = ''
     }
   },
-  { immediate: true },
+  { immediate: true }
 )
 </script>
