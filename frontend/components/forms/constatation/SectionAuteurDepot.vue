@@ -36,6 +36,31 @@
       />
     </div>
 
+    <template v-if="store.formData.auteurIdentifie === false">
+      <div class="fr-fieldset__element">
+        <div class="fr-callout fr-mb-2w fr-callout--blue-cumulus">
+          <h3 class="fr-h4 fr-callout__title">
+            Sans auteur identifié, le dépôt sauvage n'est pas éligible à la procédure
+            administrative.
+          </h3>
+          <p class="fr-callout__text">
+            Vous pouvez cependant déposer plainte en brigade ou commissariat. (Trouvez le point
+            d'accueil le plus proche
+            <a
+              href="https://www.masecurite.interieur.gouv.fr/fr/trouver-un-commissariat-une-gendarmerie/"
+              target="_blank"
+              rel="noopener noreferrer"
+              >ici</a
+            >)
+          </p>
+          <p class="fr-callout__text">
+            Protect'Envi peut vous aider à <strong>générer un rapport de constatation</strong>. Ce
+            document permet de matérialiser les faits et peut appuyer votre dépôt de plainte.
+          </p>
+        </div>
+      </div>
+    </template>
+
     <template v-if="store.formData.auteurIdentifie === true">
       <div class="fr-fieldset__element">
         <DsfrRadioButtonSet
