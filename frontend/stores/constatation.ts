@@ -96,6 +96,13 @@ export const useConstatationStore = defineStore('constatation', {
           formData.constatantRole = 'autre'
         }
 
+        // Default null prejudice values to 0
+        formData.prejudiceNombrePersonnes = formData.prejudiceNombrePersonnes ?? 0
+        formData.prejudiceNombreHeures = formData.prejudiceNombreHeures ?? 0
+        formData.prejudiceNombreVehicules = formData.prejudiceNombreVehicules ?? 0
+        formData.prejudiceKilometrage = formData.prejudiceKilometrage ?? 0
+        formData.prejudiceAutresCouts = formData.prejudiceAutresCouts ?? 0
+
         this.formData = formData
       } catch (error) {
         console.error('Error loading constatation:', error)
