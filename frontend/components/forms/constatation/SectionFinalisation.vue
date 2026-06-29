@@ -76,7 +76,7 @@
 
 <script setup lang="ts">
 import { useConstatationStore } from '@/stores/constatation'
-import { DsfrCallout, DsfrCheckbox, DsfrInputGroup, DsfrRadioButtonSet } from '@gouvminint/vue-dsfr'
+import { DsfrCheckbox, DsfrInputGroup, DsfrRadioButtonSet } from '@gouvminint/vue-dsfr'
 import { computed } from 'vue'
 
 const store = useConstatationStore()
