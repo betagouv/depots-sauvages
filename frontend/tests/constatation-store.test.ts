@@ -76,4 +76,104 @@ describe('ConstatationStore - Prejudice Logic', () => {
       })
     )
   })
+
+  it('doit valider le montant si connu et rejeter les valeurs négatives', () => {
+    const pinia = createTestingPinia({ stubActions: false })
+    const store = useConstatationStore(pinia)
+
+    store.formData.plainteEtat = 'Déposée'
+    store.formData.prejudiceMontantConnu = true
+
+    // Blank amount
+    store.formData.prejudiceMontant = '' as any
+    store.validate()
+    expect(store.errors.prejudiceMontant).toBe('Le montant du préjudice est obligatoire')
+
+    // Negative amount
+    store.formData.prejudiceMontant = -10
+    store.validate()
+    expect(store.errors.prejudiceMontant).toBe('La valeur doit être supérieure ou égale à 0')
+
+    // Valid positive amount
+    store.formData.prejudiceMontant = 150
+    store.validate()
+    expect(store.errors.prejudiceMontant).toBeUndefined()
+  })
+
+  it('doit autoriser les valeurs vides pour les détails du préjudice mais rejeter les négatifs', () => {
+    const pinia = createTestingPinia({ stubActions: false })
+    const store = useConstatationStore(pinia)
+
+    store.formData.plainteEtat = 'Déposée'
+    store.formData.prejudiceMontantConnu = false
+
+    // All empty/blank should be allowed now (Option 1)
+    store.formData.prejudiceNombrePersonnes = '' as any
+    store.formData.prejudiceNombreHeures = undefined as any
+    store.formData.prejudiceNombreVehicules = null as any
+    store.formData.prejudiceKilometrage = '' as any
+    store.formData.prejudiceAutresCouts = '' as any
+
+    store.validate()
+    expect(store.errors.prejudiceNombrePersonnes).toBeUndefined()
+    expect(store.errors.prejudiceNombreHeures).toBeUndefined()
+    expect(store.errors.prejudiceNombreVehicules).toBeUndefined()
+    expect(store.errors.prejudiceKilometrage).toBeUndefined()
+    expect(store.errors.prejudiceAutresCouts).toBeUndefined()
+
+    // Negative value should be blocked
+    store.formData.prejudiceNombrePersonnes = -5
+    store.validate()
+    expect(store.errors.prejudiceNombrePersonnes).toBe('La valeur doit être supérieure ou égale à 0')
+  })
+
+  it('doit convertir les valeurs vides/nulles en 0 pour les détails lors de la sauvegarde', async () => {
+    const pinia = createTestingPinia({ stubActions: false })
+    const store = useConstatationStore(pinia)
+
+    store.formData.plainteEtat = 'Déposée'
+    store.formData.prejudiceMontantConnu = false
+    store.formData.prejudiceNombrePersonnes = '' as any
+    store.formData.prejudiceNombreHeures = null as any
+    store.formData.prejudiceNombreVehicules = 2
+    store.formData.prejudiceKilometrage = undefined as any
+    store.formData.prejudiceAutresCouts = 100
+    ;(api.createResource as any).mockResolvedValue({ id: 42 })
+
+    await store.saveFormData()
+
+    expect(api.createResource).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({
+        prejudice_nombre_personnes: 0,
+        prejudice_nombre_heures: 0,
+        prejudice_nombre_vehicules: 2,
+        prejudice_kilometrage: 0,
+        prejudice_autres_couts: 100,
+      })
+    )
+  })
+
+  it('doit remplacer les valeurs nulles par 0 lors du chargement', async () => {
+    const pinia = createTestingPinia({ stubActions: false })
+    const store = useConstatationStore(pinia)
+
+    const apiResponse = {
+      id: 123,
+      prejudice_nombre_personnes: null,
+      prejudice_nombre_heures: 5,
+      prejudice_nombre_vehicules: null,
+      prejudice_kilometrage: 10,
+      prejudice_autres_couts: null,
+    }
+    vi.spyOn(api, 'fetchResource').mockResolvedValue(apiResponse)
+
+    await store.loadConstatation(123)
+
+    expect(store.formData.prejudiceNombrePersonnes).toBe(0)
+    expect(store.formData.prejudiceNombreHeures).toBe(5)
+    expect(store.formData.prejudiceNombreVehicules).toBe(0)
+    expect(store.formData.prejudiceKilometrage).toBe(10)
+    expect(store.formData.prejudiceAutresCouts).toBe(0)
+  })
 })
