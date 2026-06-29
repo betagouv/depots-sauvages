@@ -5,6 +5,11 @@ class PrejudiceMixin:
     def get_prejudice_montant_calcule(self):
         """
         Calculate the total amount of prejudice when the amount is unknown.
+        Note on cohabitation of prejudice Amounts:
+        The field 'prejudice_montant' serves two distinct purposes depending on 'prejudice_montant_connu':
+        1. When 'prejudice_montant_connu' is True: 'prejudice_montant' holds the user-declared global amount.
+        2. When 'prejudice_montant_connu' is False: 'prejudice_montant' is automatically computed/overwritten
+           on save using this method, which aggregates individual estimation fields (personnel hours, vehicle mileage, etc.).
         """
         if self.prejudice_montant_connu:
             return self.prejudice_montant

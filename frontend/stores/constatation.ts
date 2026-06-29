@@ -10,8 +10,8 @@ import {
 
 import {
   toNumOrNull,
-  validateRequiredPositiveNumber,
   validateOptionalPositiveNumber,
+  validateRequiredPositiveNumber,
 } from '../utils/validation'
 
 export const useConstatationStore = defineStore('constatation', {
@@ -55,6 +55,12 @@ export const useConstatationStore = defineStore('constatation', {
         data.prejudiceKilometrage = null as any
         data.prejudiceAutresCouts = null as any
       } else {
+        // Coexistence of global declared amount vs estimated amount:
+        // 1. User knows the global amount (prejudiceMontantConnu === true):
+        //    We send the user-declared prejudiceMontant. Detailed fields are reset to null.
+        // 2. User does not know the global amount (prejudiceMontantConnu === false):
+        //    The global prejudiceMontant is cleared (set to null) so the backend recalculates
+        //    the total cost from the detailed estimation fields.
         if (data.prejudiceMontantConnu === true) {
           data.prejudiceMontant = toNumOrNull(data.prejudiceMontant) as any
           data.prejudiceNombrePersonnes = null as any

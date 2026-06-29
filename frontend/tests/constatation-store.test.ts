@@ -124,7 +124,9 @@ describe('ConstatationStore - Prejudice Logic', () => {
     // Negative value should be blocked
     store.formData.prejudiceNombrePersonnes = -5
     store.validate()
-    expect(store.errors.prejudiceNombrePersonnes).toBe('La valeur doit être supérieure ou égale à 0')
+    expect(store.errors.prejudiceNombrePersonnes).toBe(
+      'La valeur doit être supérieure ou égale à 0'
+    )
   })
 
   it('doit convertir les valeurs vides/nulles en 0 pour les détails lors de la sauvegarde', async () => {
@@ -175,5 +177,126 @@ describe('ConstatationStore - Prejudice Logic', () => {
     expect(store.formData.prejudiceNombreVehicules).toBe(0)
     expect(store.formData.prejudiceKilometrage).toBe(10)
     expect(store.formData.prejudiceAutresCouts).toBe(0)
+  })
+
+  it('doit permettre de modifier une constatation et de passer de montant inconnu à montant connu sans erreur', async () => {
+    const pinia = createTestingPinia({ stubActions: false })
+    const store = useConstatationStore(pinia)
+
+    const apiResponse = {
+      id: 123,
+      commune: 'Paris',
+      localisation_depot: '123 Rue de Rivoli',
+      nature_terrain: ['Terrain public'],
+      constatant_role: 'maire',
+      constatant_est_utilisateur_connecte: true,
+      date_constat: '2026-06-29',
+      heure_constat: '12:00',
+      volume_depot: 'Moins de 1m3',
+      types_depot: ['Encombrants'],
+      precisions_depot: 'Dépôt sur le trottoir',
+      auteur_identifie: false,
+      indices_disponibles: ['Documents'],
+      precisions_indices: 'des enveloppes',
+      ceci_est_un_test: true,
+      accepte_accompagnement: true,
+      plainte_etat: 'Déposée',
+      prejudice_montant_connu: false,
+      prejudice_nombre_personnes: 5,
+      prejudice_nombre_heures: 2,
+      prejudice_nombre_vehicules: 1,
+      prejudice_kilometrage: 10,
+      prejudice_autres_couts: 50,
+    }
+    vi.spyOn(api, 'fetchResource').mockResolvedValue(apiResponse)
+    vi.spyOn(api, 'updateResource').mockResolvedValue({ id: 123 })
+
+    await store.loadConstatation(123)
+
+    // User changes prejudiceMontantConnu to true (Oui)
+    store.formData.prejudiceMontantConnu = true
+    store.formData.prejudiceMontant = 500
+
+    const isValid = store.validate()
+    console.log('VALIDATION ERRORS:', store.errors)
+    expect(isValid).toBe(true)
+
+    await store.saveFormData()
+
+    expect(api.updateResource).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({
+        prejudice_montant_connu: true,
+        prejudice_montant: 500,
+        prejudice_nombre_personnes: null,
+        prejudice_nombre_heures: null,
+        prejudice_nombre_vehicules: null,
+        prejudice_kilometrage: null,
+        prejudice_autres_couts: null,
+      })
+    )
+  })
+
+  it('doit permettre de modifier une constatation et de passer de montant connu à montant inconnu en réinitialisant le montant global', async () => {
+    const pinia = createTestingPinia({ stubActions: false })
+    const store = useConstatationStore(pinia)
+
+    const apiResponse = {
+      id: 123,
+      commune: 'Paris',
+      localisation_depot: '123 Rue de Rivoli',
+      nature_terrain: ['Terrain public'],
+      constatant_role: 'maire',
+      constatant_est_utilisateur_connecte: true,
+      date_constat: '2026-06-29',
+      heure_constat: '12:00',
+      volume_depot: 'Moins de 1m3',
+      types_depot: ['Encombrants'],
+      precisions_depot: 'Dépôt sur le trottoir',
+      auteur_identifie: false,
+      indices_disponibles: ['Documents'],
+      precisions_indices: 'des enveloppes',
+      ceci_est_un_test: true,
+      accepte_accompagnement: true,
+      plainte_etat: 'Déposée',
+      prejudice_montant_connu: true,
+      prejudice_montant: 850.0,
+      prejudice_nombre_personnes: null,
+      prejudice_nombre_heures: null,
+      prejudice_nombre_vehicules: null,
+      prejudice_kilometrage: null,
+      prejudice_autres_couts: null,
+    }
+    vi.spyOn(api, 'fetchResource').mockResolvedValue(apiResponse)
+    vi.spyOn(api, 'updateResource').mockResolvedValue({ id: 123 })
+
+    await store.loadConstatation(123)
+
+    // User changes prejudiceMontantConnu to false (Non)
+    store.formData.prejudiceMontantConnu = false
+    // User enters detailed estimation fields
+    store.formData.prejudiceNombrePersonnes = 3
+    store.formData.prejudiceNombreHeures = 4
+    store.formData.prejudiceNombreVehicules = 1
+    store.formData.prejudiceKilometrage = 20
+    store.formData.prejudiceAutresCouts = 100
+
+    const isValid = store.validate()
+    expect(isValid).toBe(true)
+
+    await store.saveFormData()
+
+    expect(api.updateResource).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({
+        prejudice_montant_connu: false,
+        prejudice_montant: null,
+        prejudice_nombre_personnes: 3,
+        prejudice_nombre_heures: 4,
+        prejudice_nombre_vehicules: 1,
+        prejudice_kilometrage: 20,
+        prejudice_autres_couts: 100,
+      })
+    )
   })
 })
