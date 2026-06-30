@@ -82,23 +82,10 @@
             title="Avec un auteur présumé identifié, vous pouvez débuter une procédure administrative."
           >
             <p>
-              Le maire ou l'adjoint par délégation, ou le président d'EPCI par transfert de
-              compétence peut engager une <strong>procédure administrative</strong> (article L.541-3
-              du Code de l'environnement).
-            </p>
-            <p>
-              Elle permet de <strong>sanctionner efficacement</strong> les auteurs présumés, avec
-              une <strong>amende pouvant aller jusqu'à 15 000 €</strong>, recouvrée au profit de la
-              mairie.
-            </p>
-            <p>
-              Plus d'informations sur :
-              <a
-                href="https://protect-envi.beta.gouv.fr/comprendre-la-procedure"
-                target="_blank"
-                rel="noopener noreferrer"
-                >https://protect-envi.beta.gouv.fr/comprendre-la-procedure</a
-              >
+              Si l’auteur présumé est une entreprise identifiée, vous pouvez débuter une procédure
+              administrative (article L.541-3 du Code de l'environnement). Vous aurez besoin du nom
+              et de l’adresse de l’entreprise pour lui envoyer la lettre d’information qui sera
+              générée à l’issue de cette constatation.
             </p>
           </DsfrCallout>
         </div>
@@ -195,24 +182,18 @@
         </div>
 
         <div
-          v-if="hasInfo('Plaque d\'immatriculation') || hasInfo('Aucune')"
+          v-if="hasInfo('Nom et prénom') && hasInfo('Adresse postale')"
           class="fr-fieldset__element"
         >
-          <div class="fr-callout fr-mb-2w fr-callout--blue-cumulus">
-            <h3 class="fr-h4 fr-callout__title">
-              Sans l'identité complète de l'auteur présumé, la procédure administrative ne peut pas
-              être initiée.
-            </h3>
-            <p class="fr-callout__text">
-              Vous pouvez cependant déposer plainte en brigade ou commissariat pour initier une
-              procédure judiciaire. En cas d’identification de l'auteur présumé, la communication de
-              l’identité pourra être sollicitée auprès du procureur de la République.
+          <DsfrCallout
+            title="Avec un auteur présumé identifié, vous pouvez débuter une procédure administrative."
+          >
+            <p>
+              Si l’auteur présumé est un un particulier, vous pouvez débuter une procédure
+              administrative (article L.541-3 du Code de l'environnement). Vous pourrez lui adresser
+              la lettre d’information qui sera générée à l’issue de cette constatation.
             </p>
-            <p class="fr-callout__text">
-              Continuez cette démarche afin de générer un rapport de constatation pour matérialiser
-              les faits et appuyer votre dépôt de plainte.
-            </p>
-          </div>
+          </DsfrCallout>
         </div>
 
         <div
@@ -224,82 +205,34 @@
           class="fr-fieldset__element"
         >
           <DsfrCallout
-            title="Rapprochez vous de la gendarmerie ou du commissariat pour obtenir l'identité"
+            title="L’immatriculation n’est pas suffisante pour débuter une procédure administrative."
           >
             <p>
-              La gendarmerie peut communiquer à la police municipale les informations du SIV
-              (système d'immatriculation des véhicules).
+              Nous vous invitons à terminer cette constatation afin d'être accompagné sur les
+              différentes manières d’identifier un auteur à partir d’une plaque d’immatriculation.
             </p>
           </DsfrCallout>
         </div>
 
         <div
-          v-if="hasInfo('Nom et prénom') && !hasInfo('Adresse postale')"
-          class="fr-fieldset__element"
-        >
-          <div class="fr-callout fr-mb-2w fr-callout--blue-cumulus">
-            <h3 class="fr-h4 fr-callout__title">
-              Vous avez le nom et le prénom mais vous n'avez pas l'adresse
-            </h3>
-            <p class="fr-callout__text">
-              Sans l'identité complète de l'auteur présumé, la procédure administrative ne peut pas
-              être initiée.
-            </p>
-            <p class="fr-callout__text">
-              Vous pouvez cependant déposer plainte en brigade ou commissariat pour initier une
-              procédure judiciaire. En cas d’identification de l'auteur présumé, la communication de
-              l’identité pourra être sollicitée auprès du procureur de la République.
-            </p>
-            <p class="fr-callout__text">
-              Continuez cette démarche afin de générer un rapport de constatation pour matérialiser
-              les faits et appuyer votre dépôt de plainte
-            </p>
-            <p class="fr-callout__text">
-              En tant qu’OPJ, le maire peut demander la communication de l’adresse de l'auteur
-              présumé au procureur de la République.
-            </p>
-          </div>
-        </div>
-
-        <div
-          v-if="hasInfo('Nom et prénom') || hasInfo('Adresse postale')"
+          v-if="
+            store.formData.informationsAuteur &&
+            store.formData.informationsAuteur.length > 0 &&
+            !(hasInfo('Nom et prénom') && hasInfo('Adresse postale')) &&
+            !(
+              hasInfo('Plaque d\'immatriculation') &&
+              !hasInfo('Nom et prénom') &&
+              !hasInfo('Adresse postale')
+            )
+          "
           class="fr-fieldset__element"
         >
           <DsfrCallout
-            title="Avec un auteur présumé identifié, vous pouvez débuter une procédure administrative."
+            title="Vous avez besoin du nom/prénom et de l’adresse de l’auteur présumé pour débuter une procédure administrative."
           >
             <p>
-              Le maire ou l'adjoint par délégation, ou le président d'EPCI par transfert de
-              compétence peut engager une <strong>procédure administrative</strong> (article L.541-3
-              du Code de l'environnement).
-            </p>
-            <p>
-              Elle permet de <strong>sanctionner efficacement</strong> les auteurs présumés, avec
-              une <strong>amende pouvant aller jusqu'à 15 000 €</strong>, recouvrée au profit de la
-              mairie.
-            </p>
-            <p>
-              Plus d'informations sur :
-              <a
-                href="https://protect-envi.beta.gouv.fr/comprendre-la-procedure"
-                target="_blank"
-                rel="noopener noreferrer"
-                >https://protect-envi.beta.gouv.fr/comprendre-la-procedure</a
-              >
-            </p>
-          </DsfrCallout>
-        </div>
-
-        <div
-          v-if="hasInfo('Nom et prénom') && hasInfo('Adresse postale')"
-          class="fr-fieldset__element"
-        >
-          <DsfrCallout
-            title="Avec le nom/prénom et l'adresse postale vous disposez de l'identité complète"
-          >
-            <p>
-              Dans le cas où vous avez bien le nom/prénom ET l'adresse postale vous disposez de
-              l'identité complète nécessaire à la procédure administrative.
+              Nous vous invitons à terminer cette constatation afin d'être accompagné sur les
+              différentes manières d’identifier un auteur à partir d’une identité incomplète.
             </p>
           </DsfrCallout>
         </div>
