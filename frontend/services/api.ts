@@ -1,5 +1,12 @@
-// URLs from environment variables
-export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'
+// In development, use VITE_BACKEND_URL (e.g., to query local Django on port 8000 from Vite on port 5173).
+// In production, the frontend and backend are served from the same host. We dynamically use
+// the current origin (window.location.origin) to adapt seamlessly to Scalingo review apps/staging/prod
+// and avoid Content Security Policy (connect-src 'self') errors.
+export const BACKEND_URL = import.meta.env.DEV
+  ? import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'
+  : typeof window !== 'undefined'
+    ? window.location.origin
+    : ''
 export const API_URL = `${BACKEND_URL}/api`
 export const DN_BASE_URL = import.meta.env.VITE_DN_BASE_URL || 'https://demarche.numerique.gouv.fr'
 
