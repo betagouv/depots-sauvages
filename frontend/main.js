@@ -37,6 +37,11 @@ const router = createRouter({
       return false
     }
 
+    // Avoid scroll to top when navigating within the FAQ
+    if (to.path.startsWith('/faq') && from.path.startsWith('/faq')) {
+      return false
+    }
+
     return { top: 0 }
   },
   routes: [
