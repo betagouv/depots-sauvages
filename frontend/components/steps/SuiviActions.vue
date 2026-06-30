@@ -54,6 +54,7 @@
                       :is-invalid="!!montantError"
                       :min="0"
                       step="50"
+                      @keydown="onKeyDownNumber"
                     />
                     <DsfrAlert type="info" class="fr-mt-2w">
                       Pour vous aider à évaluer le montant de l’amende,
@@ -158,6 +159,7 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
 import { openTallyPopup } from '../../utils/tally'
+import { onKeyDownNumber } from '../../utils/input'
 import SelectableChoices from '../shared/SelectableChoices.vue'
 import AttenteDecision from './AttenteDecision.vue'
 import ListeActions, { type Action } from './ListeActions.vue'

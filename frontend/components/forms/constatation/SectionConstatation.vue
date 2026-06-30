@@ -8,10 +8,46 @@
     </legend>
 
     <div class="fr-fieldset__element">
+      <DsfrRadioButtonSet
+        v-model="store.formData.constatantEstUtilisateurConnecte"
+        legend="Au sein de la collectivité, qui a réalisé la constatation de ce dépôt sauvage ?"
+        :options="[
+          { label: 'Moi-même', value: true },
+          { label: 'Une autre personne', value: false },
+        ]"
+        :required="true"
+        :inline="true"
+      />
+    </div>
+
+    <template v-if="!store.formData.constatantEstUtilisateurConnecte">
+      <div class="fr-fieldset__element fr-mb-4w">
+        <div class="fr-grid-row fr-grid-row--gutters">
+          <div class="fr-col-12 fr-col-md-6">
+            <DsfrInputGroup
+              v-model="store.formData.constatantPrenom"
+              :required="true"
+              label="Prénom"
+              :error-message="store.errors.constatantPrenom"
+            />
+          </div>
+          <div class="fr-col-12 fr-col-md-6">
+            <DsfrInputGroup
+              v-model="store.formData.constatantNom"
+              :required="true"
+              label="Nom"
+              :error-message="store.errors.constatantNom"
+            />
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <div class="fr-fieldset__element">
       <DsfrSelect
         v-model="store.formData.constatantRole"
         :required="true"
-        label="Au sein de la collectivité, qui a réalisé la constatation de ce dépôt sauvage ?"
+        label="Quel est le rôle de la personne ayant réalisé la constatation ?"
         :options="ConstatantOptions"
         :error-message="store.errors.constatantRole"
       />
@@ -75,45 +111,10 @@
           to="/comprendre-la-procedure#qui-peut-constater"
           target="_blank"
           rel="noopener noreferrer"
-        >ici</router-link>.
+          >ici</router-link
+        >.
       </DsfrAlert>
     </div>
-
-    <div class="fr-fieldset__element fr-mt-4w">
-      <DsfrRadioButtonSet
-        v-model="store.formData.constatantEstUtilisateurConnecte"
-        legend="La personne qui remplit ce formulaire est-elle la personne qui a réalisé la constatation du dépôt sauvage ?"
-        :options="[
-          { label: 'Oui', value: true },
-          { label: 'Non', value: false },
-        ]"
-        :required="true"
-        :inline="true"
-      />
-    </div>
-
-    <template v-if="!store.formData.constatantEstUtilisateurConnecte">
-      <div class="fr-fieldset__element fr-mb-4w">
-        <div class="fr-grid-row fr-grid-row--gutters">
-          <div class="fr-col-12 fr-col-md-6">
-            <DsfrInputGroup
-              v-model="store.formData.constatantPrenom"
-              :required="true"
-              label="Prénom"
-              :error-message="store.errors.constatantPrenom"
-            />
-          </div>
-          <div class="fr-col-12 fr-col-md-6">
-            <DsfrInputGroup
-              v-model="store.formData.constatantNom"
-              :required="true"
-              label="Nom"
-              :error-message="store.errors.constatantNom"
-            />
-          </div>
-        </div>
-      </div>
-    </template>
 
     <div class="fr-fieldset__element">
       <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--bottom">
@@ -123,7 +124,7 @@
             :required="true"
             type="date"
             label="Date de la constatation"
-            hint="Le dépôt ne peut être antérieur au 01/01/2025. Cette date doit être comprise entre le 01/01/2025 et le 31/12/2100."
+            hint="Le dépôt ne peut être antérieur au 01/01/2025."
             :error-message="store.errors.dateConstat"
           />
         </div>
@@ -142,11 +143,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { getUserInfo, type UserInfo } from '@/services/api'
 import { useConstatationStore } from '@/stores/constatation'
 import { ConstatantOptions } from '@/types/constatation'
 import { DsfrAlert, DsfrInputGroup, DsfrRadioButtonSet, DsfrSelect } from '@gouvminint/vue-dsfr'
-import { getUserInfo, type UserInfo } from '@/services/api'
+import { ref, watch } from 'vue'
 
 const store = useConstatationStore()
 const userInfo = ref<UserInfo | null>(null)
@@ -175,6 +176,6 @@ watch(
       store.formData.constatantNom = ''
     }
   },
-  { immediate: true },
+  { immediate: true }
 )
 </script>

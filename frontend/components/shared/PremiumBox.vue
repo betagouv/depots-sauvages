@@ -13,6 +13,8 @@
         {{ description }}
       </p>
 
+      <slot />
+
       <div class="fr-btns-group fr-btns-group--center">
         <slot name="actions" />
       </div>

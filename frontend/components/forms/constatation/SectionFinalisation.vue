@@ -71,25 +71,12 @@
         </template>
       </DsfrRadioButtonSet>
     </div>
-
-    <DsfrCallout title="Merci pour toutes ces informations." class="fr-mb-2w">
-      <p>
-        Une fois votre constatation enregistrée, vous pourrez accéder au suivi de votre dossier et
-        télécharger votre rapport de constatation directement depuis votre
-        <router-link to="/mes-procedures">espace de suivi</router-link>.
-      </p>
-      <p class="fr-text--bold fr-mt-2w">Attention la procédure n'est pas terminée !</p>
-      <p>
-        Le rapport de constatation généré devra être signé par l'autorité compétente pour avoir une
-        valeur juridique.
-      </p>
-    </DsfrCallout>
   </fieldset>
 </template>
 
 <script setup lang="ts">
 import { useConstatationStore } from '@/stores/constatation'
-import { DsfrCallout, DsfrCheckbox, DsfrInputGroup, DsfrRadioButtonSet } from '@gouvminint/vue-dsfr'
+import { DsfrCheckbox, DsfrInputGroup, DsfrRadioButtonSet } from '@gouvminint/vue-dsfr'
 import { computed } from 'vue'
 
 const store = useConstatationStore()

@@ -8,6 +8,12 @@ import {
   toApiFormat,
 } from '../types/constatation'
 
+import {
+  toNumOrNull,
+  validateOptionalPositiveNumber,
+  validateRequiredPositiveNumber,
+} from '../utils/validation'
+
 export const useConstatationStore = defineStore('constatation', {
   state: () => ({
     currentId: null as number | null,
@@ -48,6 +54,28 @@ export const useConstatationStore = defineStore('constatation', {
         data.prejudiceNombreVehicules = null as any
         data.prejudiceKilometrage = null as any
         data.prejudiceAutresCouts = null as any
+      } else {
+        // Coexistence of global declared amount vs estimated amount:
+        // 1. User knows the global amount (prejudiceMontantConnu === true):
+        //    We send the user-declared prejudiceMontant. Detailed fields are reset to null.
+        // 2. User does not know the global amount (prejudiceMontantConnu === false):
+        //    The global prejudiceMontant is cleared (set to null) so the backend recalculates
+        //    the total cost from the detailed estimation fields.
+        if (data.prejudiceMontantConnu === true) {
+          data.prejudiceMontant = toNumOrNull(data.prejudiceMontant) as any
+          data.prejudiceNombrePersonnes = null as any
+          data.prejudiceNombreHeures = null as any
+          data.prejudiceNombreVehicules = null as any
+          data.prejudiceKilometrage = null as any
+          data.prejudiceAutresCouts = null as any
+        } else {
+          data.prejudiceMontant = null as any
+          data.prejudiceNombrePersonnes = (toNumOrNull(data.prejudiceNombrePersonnes) ?? 0) as any
+          data.prejudiceNombreHeures = (toNumOrNull(data.prejudiceNombreHeures) ?? 0) as any
+          data.prejudiceNombreVehicules = (toNumOrNull(data.prejudiceNombreVehicules) ?? 0) as any
+          data.prejudiceKilometrage = (toNumOrNull(data.prejudiceKilometrage) ?? 0) as any
+          data.prejudiceAutresCouts = (toNumOrNull(data.prejudiceAutresCouts) ?? 0) as any
+        }
       }
 
       const dataToSend = toApiFormat(data)
@@ -73,6 +101,13 @@ export const useConstatationStore = defineStore('constatation', {
           formData.constatantRoleAutre = formData.constatantRole
           formData.constatantRole = 'autre'
         }
+
+        // Default null prejudice values to 0
+        formData.prejudiceNombrePersonnes = formData.prejudiceNombrePersonnes ?? 0
+        formData.prejudiceNombreHeures = formData.prejudiceNombreHeures ?? 0
+        formData.prejudiceNombreVehicules = formData.prejudiceNombreVehicules ?? 0
+        formData.prejudiceKilometrage = formData.prejudiceKilometrage ?? 0
+        formData.prejudiceAutresCouts = formData.prejudiceAutresCouts ?? 0
 
         this.formData = formData
       } catch (error) {
@@ -220,24 +255,38 @@ export const useConstatationStore = defineStore('constatation', {
           this.errors.prejudiceMontantConnu =
             'Veuillez préciser si le montant du préjudice est connu'
         } else if (data.prejudiceMontantConnu === true) {
-          if (!data.prejudiceMontant) {
-            this.errors.prejudiceMontant = 'Le montant du préjudice est obligatoire'
-          }
+          validateRequiredPositiveNumber(
+            data.prejudiceMontant,
+            'prejudiceMontant',
+            this.errors,
+            'Le montant du préjudice est obligatoire'
+          )
         } else if (data.prejudiceMontantConnu === false) {
-          // Allow 0 as a valid number but reject empty values (null, undefined, '') and invalid inputs (NaN)
-          const missing = (v: unknown) =>
-            v === null || v === undefined || v === '' || (typeof v === 'number' && isNaN(v))
-          if (missing(data.prejudiceNombrePersonnes))
-            this.errors.prejudiceNombrePersonnes =
-              'Le nombre de personnes mobilisées est obligatoire'
-          if (missing(data.prejudiceNombreHeures))
-            this.errors.prejudiceNombreHeures = "Le nombre d'heures travaillées est obligatoire"
-          if (missing(data.prejudiceNombreVehicules))
-            this.errors.prejudiceNombreVehicules = 'Le nombre de véhicules utilisés est obligatoire'
-          if (missing(data.prejudiceKilometrage))
-            this.errors.prejudiceKilometrage = 'Le kilométrage est obligatoire'
-          if (missing(data.prejudiceAutresCouts))
-            this.errors.prejudiceAutresCouts = 'Les autres coûts sont obligatoires'
+          validateOptionalPositiveNumber(
+            data.prejudiceNombrePersonnes,
+            'prejudiceNombrePersonnes',
+            this.errors
+          )
+          validateOptionalPositiveNumber(
+            data.prejudiceNombreHeures,
+            'prejudiceNombreHeures',
+            this.errors
+          )
+          validateOptionalPositiveNumber(
+            data.prejudiceNombreVehicules,
+            'prejudiceNombreVehicules',
+            this.errors
+          )
+          validateOptionalPositiveNumber(
+            data.prejudiceKilometrage,
+            'prejudiceKilometrage',
+            this.errors
+          )
+          validateOptionalPositiveNumber(
+            data.prejudiceAutresCouts,
+            'prejudiceAutresCouts',
+            this.errors
+          )
         }
       }
 
