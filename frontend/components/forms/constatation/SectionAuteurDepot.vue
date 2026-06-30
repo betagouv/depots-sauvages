@@ -44,18 +44,18 @@
             administrative.
           </h3>
           <p class="fr-callout__text">
-            Vous pouvez cependant déposer plainte en brigade ou commissariat. (Trouvez le point
-            d'accueil le plus proche
+            Finalisez ce formulaire pour générer un rapport de constatation qui matérialise les
+            faits.
+          </p>
+          <p class="fr-callout__text">
+            Ce document peut également appuyer un éventuel dépôt de plainte en brigade ou au
+            commissariat (trouvez le point d'accueil le plus proche
             <a
-              href="https://www.masecurite.interieur.gouv.fr/fr/trouver-un-commissariat-une-gendarmerie/"
+              href="https://www.masecurite.interieur.gouv.fr/fr/trouver-un-commissariat-une-gendarmerie"
               target="_blank"
               rel="noopener noreferrer"
               >ici</a
-            >)
-          </p>
-          <p class="fr-callout__text">
-            Protect'Envi peut vous aider à <strong>générer un rapport de constatation</strong>. Ce
-            document permet de matérialiser les faits et peut appuyer votre dépôt de plainte.
+            >).
           </p>
         </div>
       </div>
