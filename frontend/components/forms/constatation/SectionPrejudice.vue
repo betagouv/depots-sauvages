@@ -8,7 +8,13 @@
     </legend>
 
     <DsfrCallout title="Pourquoi évaluer le préjudice ?" class="fr-mb-2w">
-      <p>L'estimation du préjudice est indispensable pour la solidité de la procédure.</p>
+      <p>
+        L'évaluation du préjudice est indispensable pour déposer plainte. Sans préjudice établi, le tribunal est susceptible de classer la procédure judiciaire même si l'auteur du dépôt fini par être identifié.
+      </p>
+      <p class="fr-text--sm fr-mt-2w">
+        <span class="fr-icon-info-line fr-mr-1v" aria-hidden="true"></span>
+        le préjudice ne sert que pour le dépôt de plainte et n'a pas d'utilité pour la procédure administrative.
+      </p>
     </DsfrCallout>
 
     <div class="fr-fieldset__element">
