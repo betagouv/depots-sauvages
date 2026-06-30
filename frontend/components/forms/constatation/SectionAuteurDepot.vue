@@ -189,7 +189,7 @@
             title="Avec un auteur présumé identifié, vous pouvez débuter une procédure administrative."
           >
             <p>
-              Si l’auteur présumé est un un particulier, vous pouvez débuter une procédure
+              Si l’auteur présumé est un particulier, vous pouvez débuter une procédure
               administrative (article L.541-3 du Code de l'environnement). Vous pourrez lui adresser
               la lettre d’information qui sera générée à l’issue de cette constatation.
             </p>
