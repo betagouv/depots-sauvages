@@ -40,6 +40,7 @@
           label="Montant du préjudice (en euros)"
           :error-message="store.errors.prejudiceMontant"
           hint="Exemple : 1500 ou 1500.50"
+          @keydown="onKeyDownNumber"
         />
       </div>
 
@@ -70,6 +71,7 @@
           label="Nombre de personnes mobilisées"
           :error-message="store.errors.prejudiceNombrePersonnes"
           hint="Exemple : 3 (élus, agents techniques...)"
+          @keydown="onKeyDownNumber"
         />
       </div>
 
@@ -84,6 +86,7 @@
           label="Nombre d'heures travaillées"
           :error-message="store.errors.prejudiceNombreHeures"
           hint="Temps passé à retirer le dépôt ou à gérer son traitement."
+          @keydown="onKeyDownNumber"
         />
       </div>
 
@@ -98,6 +101,7 @@
           label="Nombre de véhicules utilisés"
           :error-message="store.errors.prejudiceNombreVehicules"
           hint="Nombre de véhicules municipaux ou de location mobilisés."
+          @keydown="onKeyDownNumber"
         />
       </div>
 
@@ -112,6 +116,7 @@
           label="Kilométrage estimé"
           :error-message="store.errors.prejudiceKilometrage"
           hint="Distance totale parcourue pour collecter et acheminer le dépôt."
+          @keydown="onKeyDownNumber"
         />
       </div>
 
@@ -126,6 +131,7 @@
           label="Autres coûts (en euros)"
           :error-message="store.errors.prejudiceAutresCouts"
           hint="Exemple : 150.50 (frais de mise en décharge, traitement spécifique...)"
+          @keydown="onKeyDownNumber"
         />
       </div>
     </template>
@@ -135,6 +141,7 @@
 <script setup lang="ts">
 import BooleanRadioSet from '@/components/shared/BooleanRadioSet.vue'
 import { useConstatationStore } from '@/stores/constatation'
+import { onKeyDownNumber } from '@/utils/input'
 import { DsfrCallout, DsfrInputGroup } from '@gouvminint/vue-dsfr'
 
 const store = useConstatationStore()
