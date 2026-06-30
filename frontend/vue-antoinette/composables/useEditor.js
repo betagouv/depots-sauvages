@@ -8,6 +8,7 @@ export function useEditor(props, emit) {
     content: props.modelValue,
     extensions: [
       StarterKit.configure({
+        link: false,
         bulletList: {
           HTMLAttributes: {
             class: 'tiptap-ul',
