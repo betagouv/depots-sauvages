@@ -4,6 +4,7 @@
 
     <ConstatationSuccess
       v-else-if="userInfo?.is_authenticated"
+      :constatation-id="constatationId"
       @go-to-suivi="router.push(`/suivi-procedure/${constatationId}`)"
       @go-to-procedures="router.push('/mes-procedures')"
     />

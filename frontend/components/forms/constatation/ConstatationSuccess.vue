@@ -1,7 +1,7 @@
 <template>
   <PremiumBox
     title="Constatation enregistrée !"
-    description="La constatation du dépôt sauvage a été enregistrée avec succès. Votre dossier de procédure est maintenant prêt pour les étapes suivantes."
+    description="La constatation du dépôt sauvage a bien été enregistrée. Vous pouvez maintenant accéder au suivi de procédure pour consulter les prochaines étapes."
     iconClass="fr-icon-checkbox-circle-fill"
     iconColor="#00875a"
   >
@@ -17,8 +17,13 @@
     </DsfrCallout>
 
     <template #actions>
-      <DsfrButton label="Accéder au suivi de cette procédure" @click="$emit('goToSuivi')" />
-      <DsfrButton secondary label="Voir toutes mes procédures" @click="$emit('goToProcedures')" />
+      <DsfrButton label="Consulter les prochaines étapes sur mon suivi de procédure" @click="$emit('goToSuivi')" />
+    </template>
+
+    <template #footer>
+      <router-link v-if="constatationId" :to="`/constatation/${constatationId}`" class="fr-link">
+        Modifier la constatation
+      </router-link>
     </template>
   </PremiumBox>
 </template>
@@ -26,6 +31,10 @@
 <script setup lang="ts">
 import PremiumBox from '@/components/shared/PremiumBox.vue'
 import { DsfrButton, DsfrCallout } from '@gouvminint/vue-dsfr'
+
+defineProps<{
+  constatationId?: number | null
+}>()
 
 defineEmits<{
   (e: 'goToSuivi'): void
