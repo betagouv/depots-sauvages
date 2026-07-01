@@ -221,6 +221,42 @@ export const useBackofficeStore = defineStore('backoffice', {
         return status < 5
       })
     },
+    realProcedures: (state) => {
+      return state.procedures.filter((p) => !p.ceci_est_un_test)
+    },
+    activeCommunesCount() {
+      const communes = this.realProcedures.map((p) => p.commune.trim())
+      return new Set(communes).size
+    },
+    liveIdentificationRate() {
+      const realProcs = this.realProcedures
+      if (realProcs.length === 0) return 0
+      const identified = realProcs.filter(
+        (p) => p.suivi_procedure.identification_reussie === true
+      ).length
+      return Math.round((identified / realProcs.length) * 100)
+    },
+    liveCompletionRate() {
+      const realProcs = this.realProcedures
+      if (realProcs.length === 0) return 0
+      const completed = realProcs.filter((p) => p.suivi_procedure.etape_en_cours >= 2).length
+      return Math.round((completed / realProcs.length) * 100)
+    },
+    workloadByAssignee() {
+      const counts = {}
+      this.assignees.forEach((name) => {
+        counts[name] = 0
+      })
+      this.realProcedures.forEach((p) => {
+        const name = p.suivi_procedure.charge_deploiement || 'Non assigné'
+        if (counts[name] !== undefined) {
+          counts[name]++
+        } else {
+          counts[name] = 1
+        }
+      })
+      return counts
+    },
   },
   actions: {
     assignCharge(procedureId, chargeName) {
@@ -252,6 +288,22 @@ export const useBackofficeStore = defineStore('backoffice', {
           procedure.suivi_procedure.identification_reussie =
             current === true ? false : current === false ? null : true
         }
+      }
+    },
+    saveWeeklySnapshot(snapshot) {
+      const existingIndex = this.stats.weeklySnapshots.findIndex((s) => s.date === snapshot.date)
+      if (existingIndex !== -1) {
+        this.stats.weeklySnapshots[existingIndex] = { ...snapshot }
+      } else {
+        this.stats.weeklySnapshots.push({ ...snapshot })
+      }
+    },
+    deleteWeeklySnapshot(date) {
+      this.stats.weeklySnapshots = this.stats.weeklySnapshots.filter((s) => s.date !== date)
+    },
+    updateOkrValue(okrKey, newValue) {
+      if (this.stats.okrs[okrKey]) {
+        this.stats.okrs[okrKey].current = newValue
       }
     },
   },

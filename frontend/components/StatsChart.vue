@@ -1,6 +1,6 @@
 <template>
   <div class="bo-chart-container">
-    <div class="bo-chart-title">
+    <div class="bo-chart-title fr-pb-2w">
       {{ title }}
     </div>
 
