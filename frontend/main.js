@@ -153,7 +153,7 @@ const router = createRouter({
       path: '/backoffice',
       name: 'Backoffice',
       component: () => import('./pages/backoffice.vue'),
-      meta: { title: 'Backoffice - Suivi des procédures' },
+      meta: { title: 'Backoffice - Suivi des procédures', requiresStaff: true },
     },
     {
       path: '/mentions-legales',
@@ -189,6 +189,18 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to) => {
+  if (to.matched.some((record) => record.meta.requiresStaff)) {
+    try {
+      const userInfo = await getUserInfo()
+      if (!userInfo.is_authenticated || !userInfo.is_staff) {
+        return '/'
+      }
+    } catch (error) {
+      console.error('Error checking staff status:', error)
+      return '/'
+    }
+  }
+
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     try {
       const userInfo = await getUserInfo()

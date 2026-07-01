@@ -9,7 +9,7 @@
       <template #before-quick-links>
         <div v-if="userInfo?.is_staff" class="fr-header__tools-item admin-toggle-header-item">
           <DsfrToggleSwitch
-            label="Mode édition"
+            label="Mode admin"
             v-model="editModeStore.isAdminMode"
             :label-left="true"
             :no-text="true"
@@ -114,13 +114,17 @@ interface NavLink {
 }
 
 const navLinks = computed<NavLink[]>(() => {
-  return [
+  const links = [
     { text: 'Accueil', href: '/' },
     { text: 'Comprendre la procédure', href: '/comprendre-la-procedure' },
     { text: 'Mes procédures', href: '/mes-procedures' },
     { text: 'FAQ', href: '/faq' },
     { text: 'Contact', href: '/contact' },
   ]
+  if (editModeStore.isAdminMode && userStore.userInfo?.is_staff) {
+    links.push({ text: 'Backoffice', href: '/backoffice' })
+  }
+  return links
 })
 
 interface QuickLink {
