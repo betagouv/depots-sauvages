@@ -89,7 +89,7 @@ import { useRoute } from 'vue-router'
 import { getBypassAuthConfig } from '../services/api'
 import { PROCONNECT_ENABLED } from '../services/config'
 import { LOGIN_URL, LOGOUT_URL } from '../services/urls'
-import { useAdminModeStore } from '../stores/adminMode'
+import { useAdminModeStore } from '../stores/admin-mode'
 import { useUserStore } from '../stores/user'
 
 interface FooterLink {

@@ -151,7 +151,7 @@ import ConfirmModal from '@/components/shared/ConfirmModal.vue'
 import * as api from '@/services/api'
 import { DsfrButton } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, reactive, ref } from 'vue'
-import { useAdminModeStore } from '../stores/adminMode'
+import { useAdminModeStore } from '../stores/admin-mode'
 import { AdminControls, useNestedContent } from '../vue-antoinette'
 
 const adminModeStore = useAdminModeStore()

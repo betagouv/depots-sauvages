@@ -1,7 +1,73 @@
 import { defineStore } from 'pinia'
 
+export interface SuiviProcedure {
+  etape_en_cours: number
+  preuves_fournies: boolean
+  constatation_signee: boolean
+  lettre_signe: boolean
+  identification_reussie: boolean | null
+  observations_internes: string
+  charge_deploiement: string
+  date_assigned: string | null
+  anomalie: string
+}
+
+export interface BackofficeProcedure {
+  id: number
+  commune: string
+  date_constat: string
+  constatant_role: string
+  volume_depot: string
+  nature_terrain: string[]
+  ceci_est_un_test: boolean
+  user_email: string
+  agent: string
+  auteur_identifie: boolean
+  suivi_procedure: SuiviProcedure
+}
+
+export interface WeeklySnapshot {
+  date: string
+  procedures: number
+  activeCollectivities: number
+  finesCount: number
+  amountFines: number
+  cleanedCount: number
+  cleanedVolume: number
+  webinarsCount: number
+}
+
+export interface OkrMetric {
+  label: string
+  current: number
+  target: number
+  unit: string
+}
+
+export interface BackofficeHistory {
+  date: string
+  total: number
+  success: number
+  abandoned: number
+}
+
+export interface BackofficeState {
+  assignees: string[]
+  procedures: BackofficeProcedure[]
+  stats: {
+    totalActive: number
+    actionRequired: number
+    arWaiting: number
+    decisionToTake: number
+    closedThisMonth: number
+    weeklySnapshots: WeeklySnapshot[]
+    okrs: Record<string, OkrMetric>
+    history: BackofficeHistory[]
+  }
+}
+
 export const useBackofficeStore = defineStore('backoffice', {
-  state: () => ({
+  state: (): BackofficeState => ({
     assignees: ['Anthony', 'Jennifer', 'Non assigné'],
     procedures: [
       {
@@ -118,6 +184,16 @@ export const useBackofficeStore = defineStore('backoffice', {
           webinarsCount: 570,
         },
         {
+          date: '02/06', // preserved duplicate date from original code
+          procedures: 345,
+          activeCollectivities: 180,
+          finesCount: 42,
+          amountFines: 21180.34,
+          cleanedCount: 17,
+          cleanedVolume: 548,
+          webinarsCount: 570,
+        },
+        {
           date: '09/06',
           procedures: 384,
           activeCollectivities: 189,
@@ -212,8 +288,8 @@ export const useBackofficeStore = defineStore('backoffice', {
     },
   }),
   getters: {
-    getProcedureById: (state) => (id) => {
-      return state.procedures.find((p) => p.id === parseInt(id))
+    getProcedureById: (state) => (id: number | string) => {
+      return state.procedures.find((p) => p.id === Number(id))
     },
     proceduresRequiringAction: (state) => {
       return state.procedures.filter((p) => {
@@ -224,30 +300,32 @@ export const useBackofficeStore = defineStore('backoffice', {
     realProcedures: (state) => {
       return state.procedures.filter((p) => !p.ceci_est_un_test)
     },
-    activeCommunesCount() {
-      const communes = this.realProcedures.map((p) => p.commune.trim())
+    activeCommunesCount: (state) => {
+      const realProcs = state.procedures.filter((p) => !p.ceci_est_un_test)
+      const communes = realProcs.map((p) => p.commune.trim())
       return new Set(communes).size
     },
-    liveIdentificationRate() {
-      const realProcs = this.realProcedures
+    liveIdentificationRate: (state) => {
+      const realProcs = state.procedures.filter((p) => !p.ceci_est_un_test)
       if (realProcs.length === 0) return 0
       const identified = realProcs.filter(
         (p) => p.suivi_procedure.identification_reussie === true
       ).length
       return Math.round((identified / realProcs.length) * 100)
     },
-    liveCompletionRate() {
-      const realProcs = this.realProcedures
+    liveCompletionRate: (state) => {
+      const realProcs = state.procedures.filter((p) => !p.ceci_est_un_test)
       if (realProcs.length === 0) return 0
       const completed = realProcs.filter((p) => p.suivi_procedure.etape_en_cours >= 2).length
       return Math.round((completed / realProcs.length) * 100)
     },
-    workloadByAssignee() {
-      const counts = {}
-      this.assignees.forEach((name) => {
+    workloadByAssignee: (state) => {
+      const realProcs = state.procedures.filter((p) => !p.ceci_est_un_test)
+      const counts: Record<string, number> = {}
+      state.assignees.forEach((name) => {
         counts[name] = 0
       })
-      this.realProcedures.forEach((p) => {
+      realProcs.forEach((p) => {
         const name = p.suivi_procedure.charge_deploiement || 'Non assigné'
         if (counts[name] !== undefined) {
           counts[name]++
@@ -259,7 +337,7 @@ export const useBackofficeStore = defineStore('backoffice', {
     },
   },
   actions: {
-    assignCharge(procedureId, chargeName) {
+    assignCharge(procedureId: number, chargeName: string) {
       const procedure = this.procedures.find((p) => p.id === procedureId)
       if (procedure && procedure.suivi_procedure) {
         procedure.suivi_procedure.charge_deploiement = chargeName
@@ -267,13 +345,13 @@ export const useBackofficeStore = defineStore('backoffice', {
           chargeName === 'Non assigné' ? null : new Date().toISOString().split('T')[0]
       }
     },
-    updateNotes(procedureId, notes) {
+    updateNotes(procedureId: number, notes: string) {
       const procedure = this.procedures.find((p) => p.id === procedureId)
       if (procedure && procedure.suivi_procedure) {
         procedure.suivi_procedure.observations_internes = notes
       }
     },
-    toggleSuiviField(procedureId, field) {
+    toggleSuiviField(procedureId: number, field: string) {
       const procedure = this.procedures.find((p) => p.id === procedureId)
       if (procedure && procedure.suivi_procedure) {
         if (field === 'preuves') {
@@ -290,7 +368,7 @@ export const useBackofficeStore = defineStore('backoffice', {
         }
       }
     },
-    saveWeeklySnapshot(snapshot) {
+    saveWeeklySnapshot(snapshot: WeeklySnapshot) {
       const existingIndex = this.stats.weeklySnapshots.findIndex((s) => s.date === snapshot.date)
       if (existingIndex !== -1) {
         this.stats.weeklySnapshots[existingIndex] = { ...snapshot }
@@ -298,10 +376,10 @@ export const useBackofficeStore = defineStore('backoffice', {
         this.stats.weeklySnapshots.push({ ...snapshot })
       }
     },
-    deleteWeeklySnapshot(date) {
+    deleteWeeklySnapshot(date: string) {
       this.stats.weeklySnapshots = this.stats.weeklySnapshots.filter((s) => s.date !== date)
     },
-    updateOkrValue(okrKey, newValue) {
+    updateOkrValue(okrKey: string, newValue: number) {
       if (this.stats.okrs[okrKey]) {
         this.stats.okrs[okrKey].current = newValue
       }

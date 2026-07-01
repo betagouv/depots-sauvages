@@ -10,7 +10,7 @@ import { getUserInfo } from './services/api'
 import { LOGIN_REQUIRED } from './services/config'
 import { initCrisp } from './services/crisp'
 import { initMatomo } from './services/matomo'
-import { useAdminModeStore } from './stores/adminMode'
+import { useAdminModeStore } from './stores/admin-mode'
 import './styles/premium-design.css'
 
 const pinia = createPinia()
