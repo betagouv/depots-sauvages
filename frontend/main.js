@@ -86,7 +86,10 @@ const router = createRouter({
     },
     {
       path: '/signalements-dn/:dossier_id',
-      redirect: (to) => ({ name: 'SuiviProcedure', params: { constatation_id: to.params.dossier_id } }),
+      redirect: (to) => ({
+        name: 'SuiviProcedure',
+        params: { constatation_id: to.params.dossier_id },
+      }),
     },
     {
       path: '/rejoindre-le-dispositif',
@@ -145,6 +148,12 @@ const router = createRouter({
       name: 'FAQ',
       component: () => import('./pages/faq.vue'),
       meta: { title: 'Foire Aux Questions' },
+    },
+    {
+      path: '/backoffice',
+      name: 'Backoffice',
+      component: () => import('./pages/backoffice.vue'),
+      meta: { title: 'Backoffice - Suivi des procédures' },
     },
     {
       path: '/mentions-legales',
