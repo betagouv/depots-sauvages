@@ -10,6 +10,7 @@ import { getUserInfo } from './services/api'
 import { LOGIN_REQUIRED } from './services/config'
 import { initCrisp } from './services/crisp'
 import { initMatomo } from './services/matomo'
+import { useAdminModeStore } from './stores/adminMode'
 import './styles/premium-design.css'
 
 const pinia = createPinia()
@@ -192,7 +193,8 @@ router.beforeEach(async (to) => {
   if (to.matched.some((record) => record.meta.requiresStaff)) {
     try {
       const userInfo = await getUserInfo()
-      if (!userInfo.is_authenticated || !userInfo.is_staff) {
+      const adminModeStore = useAdminModeStore()
+      if (!userInfo.is_authenticated || !userInfo.is_staff || !adminModeStore.isAdminMode) {
         return '/'
       }
     } catch (error) {

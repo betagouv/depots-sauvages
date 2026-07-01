@@ -10,7 +10,7 @@
         <div v-if="userInfo?.is_staff" class="fr-header__tools-item admin-toggle-header-item">
           <DsfrToggleSwitch
             label="Mode admin"
-            v-model="editModeStore.isAdminMode"
+            v-model="adminModeStore.isAdminMode"
             :label-left="true"
             :no-text="true"
             input-id="admin-mode-toggle-header"
@@ -89,7 +89,7 @@ import { useRoute } from 'vue-router'
 import { getBypassAuthConfig } from '../services/api'
 import { PROCONNECT_ENABLED } from '../services/config'
 import { LOGIN_URL, LOGOUT_URL } from '../services/urls'
-import { useEditModeStore } from '../stores/editMode'
+import { useAdminModeStore } from '../stores/adminMode'
 import { useUserStore } from '../stores/user'
 
 interface FooterLink {
@@ -103,7 +103,7 @@ interface BreadcrumbLink {
 }
 
 const route = useRoute()
-const editModeStore = useEditModeStore()
+const adminModeStore = useAdminModeStore()
 const userStore = useUserStore()
 const logoText = ['Ministère', 'de l’intérieur']
 const breadcrumbLinks: BreadcrumbLink[] = []
@@ -121,7 +121,7 @@ const navLinks = computed<NavLink[]>(() => {
     { text: 'FAQ', href: '/faq' },
     { text: 'Contact', href: '/contact' },
   ]
-  if (editModeStore.isAdminMode && userStore.userInfo?.is_staff) {
+  if (adminModeStore.isAdminMode && userStore.userInfo?.is_staff) {
     links.push({ text: 'Backoffice', href: '/backoffice' })
   }
   return links
@@ -172,7 +172,7 @@ onMounted(async () => {
     const fetchedUserInfo = await userStore.fetchUserInfo()
 
     if (!fetchedUserInfo.is_staff) {
-      editModeStore.setAdminMode(false)
+      adminModeStore.setAdminMode(false)
     }
 
     if (fetchedUserInfo.is_authenticated) {
@@ -215,7 +215,7 @@ onMounted(async () => {
     }
   } catch (error) {
     console.error('Failed to fetch user info:', error)
-    editModeStore.setAdminMode(false)
+    adminModeStore.setAdminMode(false)
 
     if (bypassEnabled) {
       const demoUrl = `/login-demo?next=${encodeURIComponent(route.fullPath === '/' ? '/mes-procedures' : route.fullPath)}`
