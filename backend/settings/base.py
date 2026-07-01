@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "backend.current_user",
     "backend.admin_config",
     "backend.procedures",
+    "backend.backoffice",
     "backend.bypass_auth",
     "backend.constatations.apps.ConstatationsConfig",
     "backend.guillotine",

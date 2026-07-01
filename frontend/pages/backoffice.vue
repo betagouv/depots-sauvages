@@ -383,7 +383,7 @@
                       class="fr-text--xs fr-mb-1v"
                       style="color: var(--text-mention-grey); text-transform: uppercase"
                     >
-                      N° Démarche Simplifiée
+                      N° Procédure
                     </p>
                     <p class="fr-text--md">
                       <code>{{ selectedProcedure.id }}</code>
@@ -988,11 +988,15 @@
 <script setup lang="ts">
 import StatsChart from '@/components/StatsChart.vue'
 import { useBackofficeStore } from '@/stores/backoffice'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 const store = useBackofficeStore()
 const currentTab = ref('dashboard')
 const selectedProcedureId = ref<number | null>(null)
+
+onMounted(async () => {
+  await store.fetchProcedures()
+})
 
 // Detailed filters for TAB 2
 const filters = ref({

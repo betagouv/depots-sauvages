@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { API_URL, fetchResource } from '../services/api'
 
 export interface SuiviProcedure {
   etape_en_cours: number
@@ -69,100 +70,7 @@ export interface BackofficeState {
 export const useBackofficeStore = defineStore('backoffice', {
   state: (): BackofficeState => ({
     assignees: ['Anthony', 'Jennifer', 'Non assigné'],
-    procedures: [
-      {
-        id: 512,
-        commune: 'Montmédy',
-        date_constat: '2026-06-27',
-        constatant_role: 'Secrétaire de mairie',
-        volume_depot: '3 m³',
-        nature_terrain: ['Terrain public'],
-        ceci_est_un_test: false,
-        user_email: 'dgs@montmedy.fr',
-        agent: 'dgs@montmedy.fr',
-        auteur_identifie: false,
-        suivi_procedure: {
-          etape_en_cours: 1,
-          preuves_fournies: false,
-          constatation_signee: false,
-          lettre_signe: false,
-          identification_reussie: null,
-          observations_internes: '',
-          charge_deploiement: 'Non assigné',
-          date_assigned: null,
-          anomalie: '',
-        },
-      },
-      {
-        id: 511,
-        commune: 'Fécamp',
-        date_constat: '2026-05-27',
-        constatant_role: 'Gendarme',
-        volume_depot: '10 m³',
-        nature_terrain: ['Terrain privé'],
-        ceci_est_un_test: false,
-        user_email: 'alexis.dereumaux@gendarmerie.interieur.gouv.fr',
-        agent: 'alexis.dereumaux@gendarmerie.interieur.gouv.fr',
-        auteur_identifie: true,
-        suivi_procedure: {
-          etape_en_cours: 1,
-          preuves_fournies: true,
-          constatation_signee: true,
-          lettre_signe: false,
-          identification_reussie: false,
-          observations_internes: "En attente des éléments d'enquête de la gendarmerie.",
-          charge_deploiement: 'Jennifer',
-          date_assigned: '2026-05-28',
-          anomalie: '',
-        },
-      },
-      {
-        id: 510,
-        commune: 'Civray',
-        date_constat: '2026-05-29',
-        constatant_role: 'Garde champêtre',
-        volume_depot: '1 m³',
-        nature_terrain: ['Terrain public'],
-        ceci_est_un_test: false,
-        user_email: 'police@civray.fr',
-        agent: 'police@civray.fr',
-        auteur_identifie: true,
-        suivi_procedure: {
-          etape_en_cours: 3,
-          preuves_fournies: true,
-          constatation_signee: false,
-          lettre_signe: true,
-          identification_reussie: true,
-          observations_internes: 'Relancé le 28/05 — en attente retour mairie de Gardanne',
-          charge_deploiement: 'Anthony',
-          date_assigned: '2026-06-01',
-          anomalie: 'Lettre signée, rapport non signé',
-        },
-      },
-      {
-        id: 509,
-        commune: 'Soissons',
-        date_constat: '2026-06-30',
-        constatant_role: 'Policier municipal',
-        volume_depot: '5 m³',
-        nature_terrain: ['Terrain public'],
-        ceci_est_un_test: false,
-        user_email: 'g.droineau@ville-soissons.fr',
-        agent: 'g.droineau@ville-soissons.fr',
-        auteur_identifie: true,
-        suivi_procedure: {
-          etape_en_cours: 2,
-          preuves_fournies: true,
-          constatation_signee: true,
-          lettre_signe: false,
-          identification_reussie: true,
-          observations_internes: "Lettre d'information en cours de préparation.",
-          charge_deploiement: 'Anthony',
-          date_assigned: '2026-06-30',
-          anomalie: '',
-        },
-      },
-    ],
+    procedures: [],
     // OKR and Weekly stats targets
     stats: {
       totalActive: 84,
@@ -235,7 +143,6 @@ export const useBackofficeStore = defineStore('backoffice', {
         },
       ],
 
-      // OKR S2 2026 tracking metrics (from okr-2026.md)
       okrs: {
         kr1_1: {
           label: 'Procédures administratives engagées (LI)',
@@ -382,6 +289,14 @@ export const useBackofficeStore = defineStore('backoffice', {
     updateOkrValue(okrKey: string, newValue: number) {
       if (this.stats.okrs[okrKey]) {
         this.stats.okrs[okrKey].current = newValue
+      }
+    },
+    async fetchProcedures() {
+      try {
+        const data = await fetchResource(`${API_URL}/backoffice-procedures/`)
+        this.procedures = data as BackofficeProcedure[]
+      } catch (error) {
+        console.error('Failed to fetch backoffice procedures:', error)
       }
     },
   },

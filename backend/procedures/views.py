@@ -24,3 +24,5 @@ class SuiviProcedureViewSet(
         # Ensure the procedure tracking exists as soon as we try to access it
         obj, created = SuiviProcedure.objects.get_or_create(constatation_id=constatation_id)
         return obj
+
+

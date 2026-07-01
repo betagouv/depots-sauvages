@@ -8,6 +8,7 @@ from rest_framework.routers import DefaultRouter
 
 from backend.bypass_auth.views import BypassAuthConfigView, BypassAuthLoginView
 from backend.constatations.views import ConstatationDocumentDownloadView, ConstatationViewSet
+from backend.backoffice.views import BackofficeProceduresViewSet
 from backend.current_user.views import UserInfoViewSet, logout_view
 from backend.faq.views import FAQItemViewSet
 from backend.home.views import index_view
@@ -18,6 +19,7 @@ from backend.seo.views import RobotsTxtView
 router = DefaultRouter()
 router.register("user-info", UserInfoViewSet, basename="user-info")
 router.register("suivi-procedure", SuiviProcedureViewSet, basename="suivi-procedure")
+router.register("backoffice-procedures", BackofficeProceduresViewSet, basename="backoffice-procedures")
 router.register("constatations", ConstatationViewSet, basename="constatation")
 router.register("faq-items", FAQItemViewSet, basename="faq-item")
 
