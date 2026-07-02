@@ -122,39 +122,39 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="proc in store.proceduresRequiringAction" :key="proc.id">
+                <tr v-for="procedure in store.proceduresRequiringAction" :key="procedure.id">
                   <td>
-                    <code>#{{ proc.id }}</code>
+                    <code>#{{ procedure.id }}</code>
                   </td>
                   <td>
-                    <strong>{{ proc.commune }}</strong>
+                    <strong>{{ procedure.commune }}</strong>
                   </td>
                   <td>
-                    <a :href="'mailto:' + proc.user_email" style="font-size: 0.8rem">{{
-                      proc.user_email
+                    <a :href="'mailto:' + procedure.user_email" style="font-size: 0.8rem">{{
+                      procedure.user_email
                     }}</a>
                   </td>
                   <td>
                     <span class="bo-dot bo-dot--active fr-mr-1v"></span>
-                    {{ proc.suivi_procedure.etape_en_cours }}
+                    {{ procedure.suivi_procedure.etape_en_cours }}
                   </td>
                   <td>
-                    <span :class="getBadgeClass(getProcedureStatut(proc))">
-                      {{ getProcedureStatut(proc) }}
+                    <span :class="getBadgeClass(getProcedureStatut(procedure))">
+                      {{ getProcedureStatut(procedure) }}
                     </span>
                   </td>
-                  <td>{{ getDepuisText(proc.date_constat) }}</td>
+                  <td>{{ getDepuisText(procedure.date_constat) }}</td>
                   <td>
                     <span
-                      v-if="proc.suivi_procedure.charge_deploiement === 'Non assigné'"
+                      v-if="procedure.suivi_procedure.charge_deploiement === 'Non assigné'"
                       style="color: #d97706; font-weight: 700"
                     >
                       ⚠ Non assigné
                     </span>
-                    <span v-else>{{ proc.suivi_procedure.charge_deploiement }}</span>
+                    <span v-else>{{ procedure.suivi_procedure.charge_deploiement }}</span>
                   </td>
                   <td>
-                    <button class="fr-btn fr-btn--sm" @click="viewDetail(proc.id)">Gérer</button>
+                    <button class="fr-btn fr-btn--sm" @click="viewDetail(procedure.id)">Gérer</button>
                   </td>
                 </tr>
               </tbody>
@@ -256,34 +256,34 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="proc in filteredProcedures" :key="proc.id">
+              <tr v-for="procedure in filteredProcedures" :key="procedure.id">
                 <td>
-                  <code>#{{ proc.id }}</code>
+                  <code>#{{ procedure.id }}</code>
                 </td>
                 <td>
-                  <strong>{{ proc.commune }}</strong>
+                  <strong>{{ procedure.commune }}</strong>
                 </td>
-                <td>{{ proc.agent }}</td>
-                <td>{{ formatDate(proc.date_constat) }}</td>
+                <td>{{ procedure.agent }}</td>
+                <td>{{ formatDate(procedure.date_constat) }}</td>
                 <td>
-                  <span :class="getBadgeClass(getProcedureStatut(proc))">
-                    ● Étape {{ proc.suivi_procedure.etape_en_cours }} :
-                    {{ getProcedureStatut(proc) }}
+                  <span :class="getBadgeClass(getProcedureStatut(procedure))">
+                    ● Étape {{ procedure.suivi_procedure.etape_en_cours }} :
+                    {{ getProcedureStatut(procedure) }}
                   </span>
                 </td>
-                <td>{{ proc.suivi_procedure.charge_deploiement }}</td>
+                <td>{{ procedure.suivi_procedure.charge_deploiement }}</td>
                 <td>
                   <span
-                    v-if="proc.suivi_procedure.anomalie"
+                    v-if="procedure.suivi_procedure.anomalie"
                     class="fr-text--xs"
                     style="color: #dc2626; font-weight: 700"
                   >
-                    ⚠ {{ proc.suivi_procedure.anomalie }}
+                    ⚠ {{ procedure.suivi_procedure.anomalie }}
                   </span>
                   <span v-else class="fr-text--xs" style="color: #9ca3af">Aucune</span>
                 </td>
                 <td>
-                  <button class="fr-btn fr-btn--sm fr-btn--secondary" @click="viewDetail(proc.id)">
+                  <button class="fr-btn fr-btn--sm fr-btn--secondary" @click="viewDetail(procedure.id)">
                     Consulter
                   </button>
                 </td>
@@ -1126,8 +1126,8 @@ const selectedProcedure = computed(() => {
   return store.getProcedureById(selectedProcedureId.value)
 })
 
-const getProcedureStatut = (proc: any) => {
-  const sp = proc.suivi_procedure
+const getProcedureStatut = (procedure: any) => {
+  const sp = procedure.suivi_procedure
   if (sp.etape_en_cours === 1) {
     if (sp.identification_reussie === false) return 'Auteur non identifié'
     if (!sp.preuves_fournies || !sp.constatation_signee) return 'Pièces incomplètes'
@@ -1157,30 +1157,30 @@ const getAuteurIdentifieText = (val: boolean | null) => {
 }
 
 const filteredProcedures = computed(() => {
-  return store.procedures.filter((proc) => {
+  return store.procedures.filter((procedure) => {
     // Stage Filter
     if (
       filters.value.etape !== 'Tous' &&
-      proc.suivi_procedure.etape_en_cours !== filters.value.etape
+      procedure.suivi_procedure.etape_en_cours !== filters.value.etape
     )
       return false
     // Status Filter
-    if (filters.value.statut !== 'Tous' && getProcedureStatut(proc) !== filters.value.statut)
+    if (filters.value.statut !== 'Tous' && getProcedureStatut(procedure) !== filters.value.statut)
       return false
     // Assignee Filter
     if (
       filters.value.charge !== 'Tous' &&
-      proc.suivi_procedure.charge_deploiement !== filters.value.charge
+      procedure.suivi_procedure.charge_deploiement !== filters.value.charge
     )
       return false
     // Anomalies Filter
-    if (filters.value.anomalie === 'Avec' && !proc.suivi_procedure.anomalie) return false
-    if (filters.value.anomalie === 'Sans' && proc.suivi_procedure.anomalie) return false
+    if (filters.value.anomalie === 'Avec' && !procedure.suivi_procedure.anomalie) return false
+    if (filters.value.anomalie === 'Sans' && procedure.suivi_procedure.anomalie) return false
     // Text search (commune, agent)
     if (filters.value.search) {
       const q = filters.value.search.toLowerCase()
-      const inCommune = proc.commune.toLowerCase().includes(q)
-      const inAgent = proc.agent.toLowerCase().includes(q)
+      const inCommune = procedure.commune.toLowerCase().includes(q)
+      const inAgent = procedure.agent.toLowerCase().includes(q)
       if (!inCommune && !inAgent) return false
     }
     return true
