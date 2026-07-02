@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { API_URL, fetchResource } from '../services/api'
+import { API_URL, fetchResource, patchResource } from '../services/api'
 
 export interface SuiviProcedure {
   etape_en_cours: number
@@ -11,6 +11,27 @@ export interface SuiviProcedure {
   charge_deploiement: string
   date_assigned: string | null
   anomalie: string
+  lettre_envoyee: boolean
+  lettre_envoyee_date: string | null
+  copie_archives: boolean
+  ar_recu: boolean
+  ar_statut: string
+  ar_presentation_date: string | null
+  decision_poursuite: string
+  montant_fixe: boolean
+  montant_amende: string | null
+  arrete_redige: boolean
+  titre_recette_emis: boolean
+  notification_sanction_envoyee: boolean
+  motif_abandon: string
+  souhaite_notifier_abandon: boolean | null
+  notification_abandon_envoyee: boolean
+  nettoyage_fait: boolean | null
+  nettoyage_par: string
+  date_recouvrement_effective: string | null
+  titre_recette_confirme: boolean
+  montant_recouvre: boolean
+  dossier_archive: boolean
 }
 
 export interface BackofficeProcedure {
@@ -25,6 +46,40 @@ export interface BackofficeProcedure {
   agent: string
   auteur_identifie: boolean
   suivi_procedure: SuiviProcedure
+  localisation_depot: string
+  heure_constat: string | null
+  constatant_civilite: string
+  constatant_nom: string
+  constatant_prenom: string
+  proprietaire_terrain_prive: string
+  types_depot: string[]
+  precisions_depot: string
+  photo_dispo: boolean
+  risque_ecoulement: boolean
+  statut_auteur: string | null
+  auteur_civilite: string
+  auteur_nom: string
+  auteur_prenom: string
+  auteur_adresse: string
+  auteur_siret: string
+  entreprise_francaise: boolean | null
+  plainte_etat: string
+  indices_disponibles: string[]
+  precisions_indices: string
+  prejudice_montant_connu: boolean
+  prejudice_montant: number | null
+  prejudice_nombre_personnes: number | null
+  prejudice_nombre_heures: number | null
+  prejudice_nombre_vehicules: number | null
+  prejudice_kilometrage: number | null
+  prejudice_autres_couts: number | null
+  contact_nom: string
+  contact_prenom: string
+  contact_email: string
+  contact_telephone: string
+  accepte_accompagnement: boolean
+  doc_constat_generated_at: string | null
+  lettre_info_generated_at: string | null
 }
 
 export interface WeeklySnapshot {
@@ -244,18 +299,33 @@ export const useBackofficeStore = defineStore('backoffice', {
     },
   },
   actions: {
+    async saveSuivi(procedureId: number) {
+      const procedure = this.procedures.find((p) => p.id === procedureId)
+      if (procedure && procedure.suivi_procedure) {
+        try {
+          // We exclude computed client-only properties from the patch payload
+          const { charge_deploiement, date_assigned, anomalie, ...suiviPayload } =
+            procedure.suivi_procedure
+          await patchResource(`${API_URL}/suivi-procedure/${procedureId}/`, suiviPayload)
+        } catch (error) {
+          console.error('Failed to save suivi procedure:', error)
+        }
+      }
+    },
     assignCharge(procedureId: number, chargeName: string) {
       const procedure = this.procedures.find((p) => p.id === procedureId)
       if (procedure && procedure.suivi_procedure) {
         procedure.suivi_procedure.charge_deploiement = chargeName
         procedure.suivi_procedure.date_assigned =
           chargeName === 'Non assigné' ? null : new Date().toISOString().split('T')[0]
+        this.saveSuivi(procedureId)
       }
     },
     updateNotes(procedureId: number, notes: string) {
       const procedure = this.procedures.find((p) => p.id === procedureId)
       if (procedure && procedure.suivi_procedure) {
         procedure.suivi_procedure.observations_internes = notes
+        this.saveSuivi(procedureId)
       }
     },
     toggleSuiviField(procedureId: number, field: string) {
@@ -273,6 +343,7 @@ export const useBackofficeStore = defineStore('backoffice', {
           procedure.suivi_procedure.identification_reussie =
             current === true ? false : current === false ? null : true
         }
+        this.saveSuivi(procedureId)
       }
     },
     saveWeeklySnapshot(snapshot: WeeklySnapshot) {
