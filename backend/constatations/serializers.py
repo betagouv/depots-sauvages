@@ -16,14 +16,9 @@ class ConstatationSerializer(serializers.ModelSerializer):
 
     def get_suivi_procedure(self, obj):
         sp = getattr(obj, "suivi_procedure", None)
-        if sp:
-            return {
-                "etape_en_cours": sp.etape_en_cours,
-            }
-        return {
-            "etape_en_cours": 1,
-        }
-
+        if not sp:
+            return {"etape_en_cours": 1}
+        return {"etape_en_cours": sp.etape_en_cours}
 
     def get_docs_generation_flags(self, auteur_identifie):
         return {
