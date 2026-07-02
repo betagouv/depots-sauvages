@@ -111,6 +111,7 @@
             <table class="bo-table">
               <thead>
                 <tr>
+                  <th>ID</th>
                   <th>Commune</th>
                   <th>Utilisateur</th>
                   <th>Étape</th>
@@ -122,6 +123,9 @@
               </thead>
               <tbody>
                 <tr v-for="proc in store.proceduresRequiringAction" :key="proc.id">
+                  <td>
+                    <code>#{{ proc.id }}</code>
+                  </td>
                   <td>
                     <strong>{{ proc.commune }}</strong>
                   </td>
@@ -241,6 +245,7 @@
           <table class="bo-table">
             <thead>
               <tr>
+                <th>ID</th>
                 <th>Commune</th>
                 <th>Agent</th>
                 <th>Date Constat</th>
@@ -252,6 +257,9 @@
             </thead>
             <tbody>
               <tr v-for="proc in filteredProcedures" :key="proc.id">
+                <td>
+                  <code>#{{ proc.id }}</code>
+                </td>
                 <td>
                   <strong>{{ proc.commune }}</strong>
                 </td>
@@ -282,7 +290,7 @@
               </tr>
               <tr v-if="filteredProcedures.length === 0">
                 <td
-                  colspan="7"
+                  colspan="8"
                   class="fr-text-center fr-py-3w"
                   style="color: var(--text-mention-grey)"
                 >
