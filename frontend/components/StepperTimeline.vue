@@ -1,16 +1,21 @@
 <template>
-  <div class="bo-stepper">
-    <div
-      v-for="step in stepCount"
-      :key="step"
-      class="bo-step"
-      :class="{
-        'bo-step--completed': currentStep > step,
-        'bo-step--active': currentStep === step,
-      }"
-    >
-      <div class="bo-step-num">{{ step }}</div>
-      <div class="bo-step-lbl">{{ getStepLabel(step) }}</div>
+  <div class="bo-stepper-container">
+    <div class="bo-stepper">
+      <div
+        v-for="step in stepCount"
+        :key="step"
+        class="bo-step"
+        :class="{
+          'bo-step--completed': currentStep > step,
+          'bo-step--active': currentStep === step,
+        }"
+      >
+        <div class="bo-step-num">{{ step }}</div>
+        <div class="bo-step-lbl desktop-only">{{ getStepLabel(step) }}</div>
+      </div>
+    </div>
+    <div class="bo-step-lbl-mobile mobile-only">
+      Étape {{ currentStep }} : <strong>{{ getStepLabel(currentStep) }}</strong>
     </div>
   </div>
 </template>
@@ -30,6 +35,10 @@ withDefaults(
 </script>
 
 <style scoped>
+.bo-stepper-container {
+  width: 100%;
+}
+
 .bo-stepper {
   display: flex;
   justify-content: space-between;
@@ -100,5 +109,38 @@ withDefaults(
 .bo-step--active .bo-step-lbl,
 .bo-step--completed .bo-step-lbl {
   color: var(--text-label-grey);
+}
+
+.desktop-only {
+  display: block;
+}
+
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none;
+  }
+
+  .mobile-only {
+    display: block;
+    text-align: center;
+    margin-top: -1rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.85rem;
+    color: var(--text-label-grey);
+  }
+
+  .bo-stepper {
+    margin-bottom: 1.5rem;
+    padding: 0.75rem 0.5rem;
+  }
+
+  .bo-step {
+    min-width: auto;
+    padding: 0 4px;
+  }
 }
 </style>

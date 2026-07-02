@@ -36,11 +36,12 @@
               <div class="fr-card__content">
                 <h3 class="fr-card__title">Procédure #{{ procedure.id }}</h3>
                 <div class="fr-card__desc">
-                  <Metadata :procedure="procedure" class="fr-mb-2w" />
                   <StepperTimeline
                     v-if="procedure.suivi_procedure"
                     :current-step="procedure.suivi_procedure.etape_en_cours"
+                    class="fr-mt-1w fr-mb-2w"
                   />
+                  <Metadata :procedure="procedure" />
                 </div>
               </div>
 
