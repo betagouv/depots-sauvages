@@ -290,36 +290,30 @@
             </div>
           </div>
 
-          <!-- Chronological Step-by-Step Followup -->
           <div class="premium-box fr-p-3w" style="background: white; border-radius: 8px; box-shadow: var(--shadow-md)">
             <h3 class="fr-h6 fr-mb-3w" style="border-bottom: 1px solid var(--border-default-grey); padding-bottom: 0.5rem; color: var(--text-title-blue-france)">
               <span class="fr-icon-survey-line fr-mr-1w"></span> Actions du Suivi
             </h3>
 
-            <!-- ÉTAPE 1: Pièces jointes -->
             <div class="fr-mb-3w" style="border-left: 2px solid #22C55E; padding-left: 1rem">
               <h4 class="fr-text--sm fr-mb-1w" style="font-weight: 700; color: #15803D">Étape 1 : Constitution du dossier</h4>
               <div style="display: flex; flex-direction: column; gap: 0.5rem">
-                <!-- preuves_fournies -->
-                <div class="premium-action-item fr-p-1v" style="display: flex; align-items: center">
-                  <span class="fr-mr-1w" :class="selectedProcedure.suivi_procedure.preuves_fournies ? 'fr-icon-checkbox-circle-fill' : 'fr-icon-checkbox-blank-line'" :style="{ color: selectedProcedure.suivi_procedure.preuves_fournies ? '#22C55E' : '#9CA3AF' }"></span>
-                  <span class="fr-text--xs">Éléments de preuve joints</span>
-                </div>
-                <!-- constatation_signee -->
-                <div class="premium-action-item fr-p-1v" style="display: flex; align-items: center">
-                  <span class="fr-mr-1w" :class="selectedProcedure.suivi_procedure.constatation_signee ? 'fr-icon-checkbox-circle-fill' : 'fr-icon-checkbox-blank-line'" :style="{ color: selectedProcedure.suivi_procedure.constatation_signee ? '#22C55E' : '#9CA3AF' }"></span>
-                  <span class="fr-text--xs">Rapport de constatation signé</span>
-                </div>
-                <!-- lettre_signe -->
-                <div class="premium-action-item fr-p-1v" style="display: flex; align-items: center">
-                  <span class="fr-mr-1w" :class="selectedProcedure.suivi_procedure.lettre_signe ? 'fr-icon-checkbox-circle-fill' : 'fr-icon-checkbox-blank-line'" :style="{ color: selectedProcedure.suivi_procedure.lettre_signe ? '#22C55E' : '#9CA3AF' }"></span>
-                  <span class="fr-text--xs">Lettre d'information signée</span>
-                </div>
-                <!-- identification_reussie -->
-                <div class="premium-action-item fr-p-1v" style="display: flex; align-items: center">
-                  <span class="fr-mr-1w" :class="selectedProcedure.suivi_procedure.identification_reussie === true ? 'fr-icon-checkbox-circle-fill' : selectedProcedure.suivi_procedure.identification_reussie === false ? 'fr-icon-close-circle-fill' : 'fr-icon-checkbox-blank-line'" :style="{ color: selectedProcedure.suivi_procedure.identification_reussie === true ? '#22C55E' : selectedProcedure.suivi_procedure.identification_reussie === false ? '#EF4444' : '#9CA3AF' }"></span>
-                  <span class="fr-text--xs">Identification auteur : <strong>{{ getAuteurIdentifieText(selectedProcedure.suivi_procedure.identification_reussie) }}</strong></span>
-                </div>
+                <label class="fr-text--xs fr-mb-0" style="display: flex; align-items: center; gap: 0.5rem">
+                  <input type="checkbox" :checked="selectedProcedure.suivi_procedure.preuves_fournies" disabled />
+                  Éléments de preuve joints
+                </label>
+                <label class="fr-text--xs fr-mb-0" style="display: flex; align-items: center; gap: 0.5rem">
+                  <input type="checkbox" :checked="selectedProcedure.suivi_procedure.constatation_signee" disabled />
+                  Rapport de constatation signé
+                </label>
+                <label class="fr-text--xs fr-mb-0" style="display: flex; align-items: center; gap: 0.5rem">
+                  <input type="checkbox" :checked="selectedProcedure.suivi_procedure.lettre_signe" disabled />
+                  Lettre d'information signée
+                </label>
+                <label class="fr-text--xs fr-mb-0" style="display: flex; align-items: center; gap: 0.5rem">
+                  <input type="checkbox" :checked="selectedProcedure.suivi_procedure.identification_reussie === true" disabled />
+                  Identification auteur : <strong>{{ getAuteurIdentifieText(selectedProcedure.suivi_procedure.identification_reussie) }}</strong>
+                </label>
               </div>
             </div>
 
@@ -377,19 +371,19 @@
             <!-- ÉTAPE 3: Décision de poursuite -->
             <div class="fr-mb-3w" :style="{ borderLeft: '2px solid ' + (selectedProcedure.suivi_procedure.etape_en_cours >= 3 ? '#22C55E' : '#9CA3AF'), paddingLeft: '1rem' }">
               <h4 class="fr-text--sm fr-mb-1w" style="font-weight: 700" :style="{ color: selectedProcedure.suivi_procedure.etape_en_cours >= 3 ? '#15803D' : '#4B5563' }">Étape 3 : Décision de poursuite</h4>
-              <div class="fr-select-group fr-mb-0">
-                <select
-                  class="fr-select fr-select--sm"
-                  :value="selectedProcedure.suivi_procedure.decision_poursuite"
-                  disabled
-                  style="padding: 0.25rem"
-                >
-                  <option value="">-- Sélectionner la décision --</option>
-                  <option value="sanction">Sanction administrative</option>
-                  <option value="abandon">Abandon de la procédure</option>
-                  <option value="recherche_adresse">Recherche d'adresse en cours</option>
-                </select>
-              </div>
+              <p class="fr-text--xs fr-mb-0">
+                <span v-if="!selectedProcedure.suivi_procedure.decision_poursuite" style="color: var(--text-mention-grey); font-style: italic">
+                  Aucune décision renseignée
+                </span>
+                <strong v-else>
+                  {{ 
+                    selectedProcedure.suivi_procedure.decision_poursuite === 'sanction' ? 'Sanction administrative' :
+                    selectedProcedure.suivi_procedure.decision_poursuite === 'abandon' ? 'Abandon de la procédure' :
+                    selectedProcedure.suivi_procedure.decision_poursuite === 'recherche_adresse' ? "Recherche d'adresse en cours" :
+                    selectedProcedure.suivi_procedure.decision_poursuite
+                  }}
+                </strong>
+              </p>
             </div>
 
             <!-- ÉTAPE 4: Exécution de la décision -->
@@ -457,7 +451,7 @@
               </div>
 
               <div v-else class="fr-text--xs" style="color: var(--text-mention-grey)">
-                Sélectionnez d'abord une décision d'abandon ou de sanction à l'étape 3.
+                Pas de réponse
               </div>
             </div>
 
