@@ -97,7 +97,6 @@ export interface UserInfo {
 export const getUserInfo = (): Promise<UserInfo> => makeRequest(API_URLS.userInfo, 'GET', {})
 export interface ProcedureOverview {
   id: number
-  numero_dossier: number
   title: string
   date_creation?: string
   date_modification: string | null

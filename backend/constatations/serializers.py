@@ -5,7 +5,6 @@ from backend.constatations.models import Constatation
 
 class ConstatationSerializer(serializers.ModelSerializer):
     souhaite_porter_plainte = serializers.ReadOnlyField()
-    numero_dossier = serializers.IntegerField(source="id", read_only=True)
     date_creation = serializers.DateTimeField(source="created", read_only=True)
     date_modification = serializers.DateTimeField(source="modified", read_only=True)
     suivi_procedure = serializers.SerializerMethodField()
@@ -63,7 +62,6 @@ class ConstatationSerializer(serializers.ModelSerializer):
             "lettre_info_should_generate",
             "lettre_info_generated_at",
             "souhaite_porter_plainte",
-            "numero_dossier",
             "date_creation",
             "date_modification",
             "suivi_procedure",

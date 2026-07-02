@@ -48,18 +48,13 @@
               <div class="fr-card__footer">
                 <ul class="fr-btns-group fr-btns-group--inline-lg">
                   <li>
-                    <DsfrButton
-                      @click="router.push(getSuiviProcedureUrl(procedure.numero_dossier))"
-                    >
+                    <DsfrButton @click="router.push(getSuiviProcedureUrl(procedure.id))">
                       <span class="fr-icon-file-line fr-mr-1w" aria-hidden="true"></span>
                       Suivre la procédure
                     </DsfrButton>
                   </li>
                   <li>
-                    <DsfrButton
-                      secondary
-                      @click="router.push(`/constatation/${procedure.numero_dossier}`)"
-                    >
+                    <DsfrButton secondary @click="router.push(`/constatation/${procedure.id}`)">
                       <span class="fr-icon-edit-line fr-mr-1w" aria-hidden="true"></span>
                       Modifier la constatation
                     </DsfrButton>
