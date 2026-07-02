@@ -8,10 +8,22 @@ class ConstatationSerializer(serializers.ModelSerializer):
     numero_dossier = serializers.IntegerField(source="id", read_only=True)
     date_creation = serializers.DateTimeField(source="created", read_only=True)
     date_modification = serializers.DateTimeField(source="modified", read_only=True)
+    suivi_procedure = serializers.SerializerMethodField()
 
     class Meta:
         model = Constatation
         exclude = ["doc_constat", "lettre_info"]
+
+    def get_suivi_procedure(self, obj):
+        sp = getattr(obj, "suivi_procedure", None)
+        if sp:
+            return {
+                "etape_en_cours": sp.etape_en_cours,
+            }
+        return {
+            "etape_en_cours": 1,
+        }
+
 
     def get_docs_generation_flags(self, auteur_identifie):
         return {

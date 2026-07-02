@@ -8,22 +8,8 @@
 
     <div v-else>
       <!-- Stepper/Timeline progress bar -->
-      <div class="bo-stepper">
-        <div
-          v-for="step in 5"
-          :key="step"
-          class="bo-step"
-          :class="{
-            'bo-step--completed': selectedProcedure.suivi_procedure.etape_en_cours > step,
-            'bo-step--active': selectedProcedure.suivi_procedure.etape_en_cours === step,
-          }"
-          style="cursor: pointer"
-          @click="changeStep(step)"
-        >
-          <div class="bo-step-num">{{ step }}</div>
-          <div class="bo-step-lbl">{{ getStepLabel(step) }}</div>
-        </div>
-      </div>
+      <StepperTimeline :current-step="selectedProcedure.suivi_procedure.etape_en_cours" />
+
 
       <div class="fr-grid-row fr-grid-row--gutters">
         <!-- Left Column: Constatation Details -->
@@ -315,22 +301,22 @@
               <h4 class="fr-text--sm fr-mb-1w" style="font-weight: 700; color: #15803D">Étape 1 : Constitution du dossier</h4>
               <div style="display: flex; flex-direction: column; gap: 0.5rem">
                 <!-- preuves_fournies -->
-                <div class="premium-action-item fr-p-1v" style="cursor: pointer; display: flex; align-items: center" @click="store.toggleSuiviField(selectedProcedure.id, 'preuves')">
+                <div class="premium-action-item fr-p-1v" style="display: flex; align-items: center">
                   <span class="fr-mr-1w" :class="selectedProcedure.suivi_procedure.preuves_fournies ? 'fr-icon-checkbox-circle-fill' : 'fr-icon-checkbox-blank-line'" :style="{ color: selectedProcedure.suivi_procedure.preuves_fournies ? '#22C55E' : '#9CA3AF' }"></span>
                   <span class="fr-text--xs">Éléments de preuve joints</span>
                 </div>
                 <!-- constatation_signee -->
-                <div class="premium-action-item fr-p-1v" style="cursor: pointer; display: flex; align-items: center" @click="store.toggleSuiviField(selectedProcedure.id, 'rapportSigne')">
+                <div class="premium-action-item fr-p-1v" style="display: flex; align-items: center">
                   <span class="fr-mr-1w" :class="selectedProcedure.suivi_procedure.constatation_signee ? 'fr-icon-checkbox-circle-fill' : 'fr-icon-checkbox-blank-line'" :style="{ color: selectedProcedure.suivi_procedure.constatation_signee ? '#22C55E' : '#9CA3AF' }"></span>
                   <span class="fr-text--xs">Rapport de constatation signé</span>
                 </div>
                 <!-- lettre_signe -->
-                <div class="premium-action-item fr-p-1v" style="cursor: pointer; display: flex; align-items: center" @click="store.toggleSuiviField(selectedProcedure.id, 'lettreSignee')">
+                <div class="premium-action-item fr-p-1v" style="display: flex; align-items: center">
                   <span class="fr-mr-1w" :class="selectedProcedure.suivi_procedure.lettre_signe ? 'fr-icon-checkbox-circle-fill' : 'fr-icon-checkbox-blank-line'" :style="{ color: selectedProcedure.suivi_procedure.lettre_signe ? '#22C55E' : '#9CA3AF' }"></span>
                   <span class="fr-text--xs">Lettre d'information signée</span>
                 </div>
                 <!-- identification_reussie -->
-                <div class="premium-action-item fr-p-1v" style="cursor: pointer; display: flex; align-items: center" @click="store.toggleSuiviField(selectedProcedure.id, 'auteurIdentifie')">
+                <div class="premium-action-item fr-p-1v" style="display: flex; align-items: center">
                   <span class="fr-mr-1w" :class="selectedProcedure.suivi_procedure.identification_reussie === true ? 'fr-icon-checkbox-circle-fill' : selectedProcedure.suivi_procedure.identification_reussie === false ? 'fr-icon-close-circle-fill' : 'fr-icon-checkbox-blank-line'" :style="{ color: selectedProcedure.suivi_procedure.identification_reussie === true ? '#22C55E' : selectedProcedure.suivi_procedure.identification_reussie === false ? '#EF4444' : '#9CA3AF' }"></span>
                   <span class="fr-text--xs">Identification auteur : <strong>{{ getAuteurIdentifieText(selectedProcedure.suivi_procedure.identification_reussie) }}</strong></span>
                 </div>
@@ -343,8 +329,8 @@
               <div style="display: flex; flex-direction: column; gap: 0.5rem">
                 <!-- lettre_envoyee & date -->
                 <div style="display: flex; align-items: center; justify-content: space-between">
-                  <label class="fr-text--xs fr-mb-0" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer">
-                    <input type="checkbox" v-model="selectedProcedure.suivi_procedure.lettre_envoyee" @change="saveSuivi" />
+                  <label class="fr-text--xs fr-mb-0" style="display: flex; align-items: center; gap: 0.5rem">
+                    <input type="checkbox" :checked="selectedProcedure.suivi_procedure.lettre_envoyee" disabled />
                     Lettre d'information envoyée
                   </label>
                   <input
@@ -352,14 +338,14 @@
                     type="date"
                     class="fr-input fr-input--sm"
                     style="width: 120px; padding: 0.2rem"
-                    v-model="selectedProcedure.suivi_procedure.lettre_envoyee_date"
-                    @change="saveSuivi"
+                    :value="selectedProcedure.suivi_procedure.lettre_envoyee_date"
+                    disabled
                   />
                 </div>
                 <!-- ar_recu, ar_statut & date -->
                 <div style="display: flex; align-items: center; justify-content: space-between">
-                  <label class="fr-text--xs fr-mb-0" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer">
-                    <input type="checkbox" v-model="selectedProcedure.suivi_procedure.ar_recu" @change="saveSuivi" />
+                  <label class="fr-text--xs fr-mb-0" style="display: flex; align-items: center; gap: 0.5rem">
+                    <input type="checkbox" :checked="selectedProcedure.suivi_procedure.ar_recu" disabled />
                     Accusé de réception (AR) reçu
                   </label>
                 </div>
@@ -368,21 +354,21 @@
                     type="text"
                     class="fr-input fr-input--sm"
                     placeholder="Statut AR (ex: Distribué)"
-                    v-model="selectedProcedure.suivi_procedure.ar_statut"
-                    @change="saveSuivi"
+                    :value="selectedProcedure.suivi_procedure.ar_statut"
+                    disabled
                     style="flex: 1; padding: 0.2rem"
                   />
                   <input
                     type="date"
                     class="fr-input fr-input--sm"
-                    v-model="selectedProcedure.suivi_procedure.ar_presentation_date"
-                    @change="saveSuivi"
+                    :value="selectedProcedure.suivi_procedure.ar_presentation_date"
+                    disabled
                     style="width: 120px; padding: 0.2rem"
                   />
                 </div>
                 <!-- copie_archives -->
-                <label class="fr-text--xs fr-mb-0" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer">
-                  <input type="checkbox" v-model="selectedProcedure.suivi_procedure.copie_archives" @change="saveSuivi" />
+                <label class="fr-text--xs fr-mb-0" style="display: flex; align-items: center; gap: 0.5rem">
+                  <input type="checkbox" :checked="selectedProcedure.suivi_procedure.copie_archives" disabled />
                   Copie archivée dans le dossier
                 </label>
               </div>
@@ -394,8 +380,8 @@
               <div class="fr-select-group fr-mb-0">
                 <select
                   class="fr-select fr-select--sm"
-                  v-model="selectedProcedure.suivi_procedure.decision_poursuite"
-                  @change="saveSuivi"
+                  :value="selectedProcedure.suivi_procedure.decision_poursuite"
+                  disabled
                   style="padding: 0.25rem"
                 >
                   <option value="">-- Sélectionner la décision --</option>
@@ -413,8 +399,8 @@
               <!-- Cas : Sanction -->
               <div v-if="selectedProcedure.suivi_procedure.decision_poursuite === 'sanction'" style="display: flex; flex-direction: column; gap: 0.5rem">
                 <div style="display: flex; align-items: center; justify-content: space-between">
-                  <label class="fr-text--xs fr-mb-0" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer">
-                    <input type="checkbox" v-model="selectedProcedure.suivi_procedure.montant_fixe" @change="saveSuivi" />
+                  <label class="fr-text--xs fr-mb-0" style="display: flex; align-items: center; gap: 0.5rem">
+                    <input type="checkbox" :checked="selectedProcedure.suivi_procedure.montant_fixe" disabled />
                     Montant de l'amende fixé
                   </label>
                   <input
@@ -424,20 +410,20 @@
                     class="fr-input fr-input--sm"
                     style="width: 100px; padding: 0.2rem"
                     placeholder="Montant €"
-                    v-model="selectedProcedure.suivi_procedure.montant_amende"
-                    @change="saveSuivi"
+                    :value="selectedProcedure.suivi_procedure.montant_amende"
+                    disabled
                   />
                 </div>
-                <label class="fr-text--xs fr-mb-0" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer">
-                  <input type="checkbox" v-model="selectedProcedure.suivi_procedure.arrete_redige" @change="saveSuivi" />
+                <label class="fr-text--xs fr-mb-0" style="display: flex; align-items: center; gap: 0.5rem">
+                  <input type="checkbox" :checked="selectedProcedure.suivi_procedure.arrete_redige" disabled />
                   Arrêté de sanction rédigé
                 </label>
-                <label class="fr-text--xs fr-mb-0" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer">
-                  <input type="checkbox" v-model="selectedProcedure.suivi_procedure.titre_recette_emis" @change="saveSuivi" />
+                <label class="fr-text--xs fr-mb-0" style="display: flex; align-items: center; gap: 0.5rem">
+                  <input type="checkbox" :checked="selectedProcedure.suivi_procedure.titre_recette_emis" disabled />
                   Titre de recette émis au Trésor Public
                 </label>
-                <label class="fr-text--xs fr-mb-0" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer">
-                  <input type="checkbox" v-model="selectedProcedure.suivi_procedure.notification_sanction_envoyee" @change="saveSuivi" />
+                <label class="fr-text--xs fr-mb-0" style="display: flex; align-items: center; gap: 0.5rem">
+                  <input type="checkbox" :checked="selectedProcedure.suivi_procedure.notification_sanction_envoyee" disabled />
                   Notification de sanction envoyée à l'auteur
                 </label>
               </div>
@@ -449,8 +435,8 @@
                   <select
                     id="motif-abandon-select"
                     class="fr-select fr-select--sm"
-                    v-model="selectedProcedure.suivi_procedure.motif_abandon"
-                    @change="saveSuivi"
+                    :value="selectedProcedure.suivi_procedure.motif_abandon"
+                    disabled
                     style="padding: 0.25rem"
                   >
                     <option value="">-- Sélectionner le motif --</option>
@@ -460,12 +446,12 @@
                     <option value="Autre">Autre motif</option>
                   </select>
                 </div>
-                <label class="fr-text--xs fr-mb-0" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer">
-                  <input type="checkbox" v-model="selectedProcedure.suivi_procedure.souhaite_notifier_abandon" @change="saveSuivi" />
+                <label class="fr-text--xs fr-mb-0" style="display: flex; align-items: center; gap: 0.5rem">
+                  <input type="checkbox" :checked="selectedProcedure.suivi_procedure.souhaite_notifier_abandon" disabled />
                   Notifier l'abandon à l'auteur
                 </label>
-                <label v-if="selectedProcedure.suivi_procedure.souhaite_notifier_abandon" class="fr-text--xs fr-mb-0" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer">
-                  <input type="checkbox" v-model="selectedProcedure.suivi_procedure.notification_abandon_envoyee" @change="saveSuivi" />
+                <label v-if="selectedProcedure.suivi_procedure.souhaite_notifier_abandon" class="fr-text--xs fr-mb-0" style="display: flex; align-items: center; gap: 0.5rem">
+                  <input type="checkbox" :checked="selectedProcedure.suivi_procedure.notification_abandon_envoyee" disabled />
                   Notification d'abandon envoyée
                 </label>
               </div>
@@ -481,8 +467,8 @@
               <div style="display: flex; flex-direction: column; gap: 0.5rem">
                 <!-- Nettoyage fait -->
                 <div style="display: flex; align-items: center; justify-content: space-between">
-                  <label class="fr-text--xs fr-mb-0" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer">
-                    <input type="checkbox" v-model="selectedProcedure.suivi_procedure.nettoyage_fait" @change="saveSuivi" />
+                  <label class="fr-text--xs fr-mb-0" style="display: flex; align-items: center; gap: 0.5rem">
+                    <input type="checkbox" :checked="selectedProcedure.suivi_procedure.nettoyage_fait" disabled />
                     Nettoyage du dépôt effectué
                   </label>
                   <input
@@ -491,19 +477,19 @@
                     class="fr-input fr-input--sm"
                     style="width: 120px; padding: 0.2rem"
                     placeholder="Par (ex: Auteur)"
-                    v-model="selectedProcedure.suivi_procedure.nettoyage_par"
-                    @change="saveSuivi"
+                    :value="selectedProcedure.suivi_procedure.nettoyage_par"
+                    disabled
                   />
                 </div>
                 <!-- Sanction-specific closing steps -->
                 <div v-if="selectedProcedure.suivi_procedure.decision_poursuite === 'sanction'" style="display: flex; flex-direction: column; gap: 0.5rem">
-                  <label class="fr-text--xs fr-mb-0" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer">
-                    <input type="checkbox" v-model="selectedProcedure.suivi_procedure.titre_recette_confirme" @change="saveSuivi" />
-                    Titre de recette confirmé par le Trésor
+                  <label class="fr-text--xs fr-mb-0" style="display: flex; align-items: center; gap: 0.5rem">
+                    <input type="checkbox" :checked="selectedProcedure.suivi_procedure.titre_recette_confirme" disabled />
+                    Titre de recette confirmed par le Trésor
                   </label>
                   <div style="display: flex; align-items: center; justify-content: space-between">
-                    <label class="fr-text--xs fr-mb-0" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer">
-                      <input type="checkbox" v-model="selectedProcedure.suivi_procedure.montant_recouvre" @change="saveSuivi" />
+                    <label class="fr-text--xs fr-mb-0" style="display: flex; align-items: center; gap: 0.5rem">
+                      <input type="checkbox" :checked="selectedProcedure.suivi_procedure.montant_recouvre" disabled />
                       Amende recouvrée
                     </label>
                     <input
@@ -511,14 +497,14 @@
                       type="date"
                       class="fr-input fr-input--sm"
                       style="width: 120px; padding: 0.2rem"
-                      v-model="selectedProcedure.suivi_procedure.date_recouvrement_effective"
-                      @change="saveSuivi"
+                      :value="selectedProcedure.suivi_procedure.date_recouvrement_effective"
+                      disabled
                     />
                   </div>
                 </div>
                 <!-- dossier_archive -->
-                <label class="fr-text--xs fr-mb-0" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer">
-                  <input type="checkbox" v-model="selectedProcedure.suivi_procedure.dossier_archive" @change="saveSuivi" />
+                <label class="fr-text--xs fr-mb-0" style="display: flex; align-items: center; gap: 0.5rem">
+                  <input type="checkbox" :checked="selectedProcedure.suivi_procedure.dossier_archive" disabled />
                   Dossier clos et archivé
                 </label>
               </div>
@@ -535,6 +521,8 @@ import { useBackofficeStore } from '@/stores/backoffice'
 import { formatDate, getAuteurIdentifieText, getStepLabel } from '@/utils/backoffice'
 import { computed } from 'vue'
 
+import StepperTimeline from '@/components/StepperTimeline.vue'
+
 const store = useBackofficeStore()
 
 const props = defineProps<{
@@ -546,12 +534,6 @@ const selectedProcedure = computed(() => {
   return store.getProcedureById(props.selectedProcedureId)
 })
 
-const changeStep = (step: number) => {
-  if (selectedProcedure.value && selectedProcedure.value.suivi_procedure) {
-    selectedProcedure.value.suivi_procedure.etape_en_cours = step
-    saveSuivi()
-  }
-}
 
 const saveSuivi = () => {
   if (selectedProcedure.value) {

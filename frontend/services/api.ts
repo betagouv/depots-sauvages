@@ -106,6 +106,9 @@ export interface ProcedureOverview {
   heure_constat: string | null
   localisation_depot: string | null
   last_sync: string | null
+  suivi_procedure?: {
+    etape_en_cours: number
+  }
 }
 
 export const getUserProcedures = (): Promise<ProcedureOverview[]> =>

@@ -36,7 +36,11 @@
               <div class="fr-card__content">
                 <h3 class="fr-card__title">Procédure #{{ procedure.id }}</h3>
                 <div class="fr-card__desc">
-                  <Metadata :procedure="procedure" />
+                  <Metadata :procedure="procedure" class="fr-mb-2w" />
+                  <StepperTimeline
+                    v-if="procedure.suivi_procedure"
+                    :current-step="procedure.suivi_procedure.etape_en_cours"
+                  />
                 </div>
               </div>
 
@@ -82,6 +86,7 @@ import AucuneProcedureBox from '../components/procedures/AucuneProcedureBox.vue'
 import Chargement from '../components/procedures/Chargement.vue'
 import Metadata from '../components/procedures/Metadata.vue'
 import LoginInvitation from '../components/shared/LoginInvitation.vue'
+import StepperTimeline from '../components/StepperTimeline.vue'
 import { getUserInfo, type UserInfo } from '../services/api'
 import { getSuiviProcedureUrl } from '../services/urls'
 
