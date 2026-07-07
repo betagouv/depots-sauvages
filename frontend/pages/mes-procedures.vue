@@ -36,12 +36,20 @@
               <div class="fr-card__content">
                 <h3 class="fr-card__title">Procédure #{{ procedure.id }}</h3>
                 <div class="fr-card__desc">
-                  <StepperTimeline
+                  <div
                     v-if="procedure.suivi_procedure"
-                    :current-step="procedure.suivi_procedure.etape_en_cours"
-                    :auteur-identifie="procedure.auteur_identifie"
-                    class="fr-mt-1w fr-mb-2w"
-                  />
+                    class="fr-alert fr-alert--info fr-alert--sm fr-mt-1w fr-mb-2w"
+                  >
+                    <p class="fr-text--sm">
+                      Prochaine étape :
+                      <strong>{{
+                        getStepLabel(
+                          procedure.suivi_procedure.etape_en_cours,
+                          procedure.auteur_identifie
+                        )
+                      }}</strong>
+                    </p>
+                  </div>
                   <Metadata :procedure="procedure" />
                 </div>
               </div>
@@ -77,13 +85,13 @@
 
 <script setup lang="ts">
 import { useProcedureStore } from '@/stores/procedure'
+import { getStepLabel } from '@/utils/backoffice'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import AucuneProcedureBox from '../components/procedures/AucuneProcedureBox.vue'
 import Chargement from '../components/procedures/Chargement.vue'
 import Metadata from '../components/procedures/Metadata.vue'
 import LoginInvitation from '../components/shared/LoginInvitation.vue'
-import StepperTimeline from '../components/StepperTimeline.vue'
 import { getUserInfo, type UserInfo } from '../services/api'
 import { getSuiviProcedureUrl } from '../services/urls'
 
