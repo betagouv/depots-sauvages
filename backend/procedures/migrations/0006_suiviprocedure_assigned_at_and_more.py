@@ -38,4 +38,11 @@ class Migration(migrations.Migration):
                 verbose_name="Assigné à",
             ),
         ),
+        migrations.AddField(
+            model_name="suiviprocedure",
+            name="statut_traitement",
+            field=models.CharField(
+                default="Nouveau", max_length=20, verbose_name="Statut de traitement"
+            ),
+        ),
     ]
