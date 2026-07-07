@@ -41,8 +41,7 @@ import { DsfrCard } from '@gouvminint/vue-dsfr'
 
 const title =
   "🧑‍💻 Webinaire de présentation Protect'Envi (45 min) : Comprendre comment mieux lutter contre les dépôts sauvages"
-const anctLink =
-  'https://rdv.anct.gouv.fr/prendre_rdv?departement=&motif_name_with_location_type=1_webinaire_de_presentation_protect_envi_45_min_comprendre_comment_mieux_lutter_contre_les_depots_sauvages-visio&public_link_organisation_id=1769'
+const anctLink = import.meta.env.VITE_RDV_PAGE_URL || ''
 </script>
 
 <style scoped>
