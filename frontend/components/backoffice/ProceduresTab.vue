@@ -72,34 +72,43 @@
       </div>
     </div>
 
-    <!-- Toolbar with Column Customizer -->
-    <div class="bo-toolbar">
-      <div class="bo-customizer-container">
-        <button
-          class="fr-btn fr-btn--sm fr-btn--secondary bo-customizer-btn"
-          @click="showCustomizer = !showCustomizer"
-        >
-          <span class="fr-icon-settings-5-line" aria-hidden="true"></span>
-          Personnaliser les colonnes
-        </button>
-        <div v-if="showCustomizer" class="bo-customizer-popover">
-          <div class="bo-customizer-title">Colonnes à afficher</div>
-          <div class="bo-customizer-list">
-            <label v-for="col in customizableColumns" :key="col.key" class="bo-customizer-item">
-              <input type="checkbox" v-model="visibleColumns[col.key]" />
-              <span>{{ col.label }}</span>
-            </label>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- Procedures Grid Table -->
     <div class="bo-table-container">
       <table class="bo-table">
         <thead>
           <tr>
-            <th style="width: 40px"></th>
+            <th style="width: 40px; position: relative; text-align: center; vertical-align: middle; padding: 0.25rem;">
+              <!-- Column Customizer -->
+              <div class="bo-customizer-container">
+                <button
+                  class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline"
+                  style="padding: 0.25rem; min-height: auto; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center;"
+                  @click="showCustomizer = !showCustomizer"
+                  title="Personnaliser les colonnes"
+                >
+                  <span class="fr-icon-settings-5-line" aria-hidden="true" style="margin: 0;"></span>
+                </button>
+                <div v-if="showCustomizer" class="bo-customizer-popover" style="left: 0; right: auto; text-align: left;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-default-grey); padding-bottom: 0.5rem; margin-bottom: 0.75rem;">
+                    <div class="bo-customizer-title" style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">Colonnes à afficher</div>
+                    <button
+                      class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline"
+                      style="padding: 0.25rem; min-height: auto;"
+                      @click="showCustomizer = false"
+                      aria-label="Fermer"
+                    >
+                      <span class="fr-icon-close-line" aria-hidden="true"></span>
+                    </button>
+                  </div>
+                  <div class="bo-customizer-list">
+                    <label v-for="col in customizableColumns" :key="col.key" class="bo-customizer-item">
+                      <input type="checkbox" v-model="visibleColumns[col.key]" />
+                      <span>{{ col.label }}</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </th>
             <th v-if="visibleColumns.id">ID</th>
             <th v-if="visibleColumns.commune">Commune</th>
             <th v-if="visibleColumns.agent">Agent constatant</th>
@@ -268,7 +277,7 @@ const visibleColumns = ref<Record<string, boolean>>({
   date_constat: true,
   etape: true,
   traitement: true,
-  montant_amende: true,
+  montant_amende: false,
   montant_prejudice: false,
   assigne_a: true,
   actions: true,
