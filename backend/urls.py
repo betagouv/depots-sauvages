@@ -6,7 +6,11 @@ from django.views.generic import RedirectView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework.routers import DefaultRouter
 
-from backend.backoffice.views import BackofficeProceduresViewSet, BackofficeStaffViewSet
+from backend.backoffice.views import (
+    BackofficeDashboardStatsViewSet,
+    BackofficeProceduresViewSet,
+    BackofficeStaffViewSet,
+)
 from backend.bypass_auth.views import BypassAuthConfigView, BypassAuthLoginView
 from backend.constatations.views import ConstatationDocumentDownloadView, ConstatationViewSet
 from backend.current_user.views import UserInfoViewSet, logout_view
@@ -22,7 +26,13 @@ router.register("suivi-procedure", SuiviProcedureViewSet, basename="suivi-proced
 router.register(
     "backoffice-procedures", BackofficeProceduresViewSet, basename="backoffice-procedures"
 )
+router.register(
+    "backoffice-dashboard-stats",
+    BackofficeDashboardStatsViewSet,
+    basename="backoffice-dashboard-stats",
+)
 router.register("backoffice-staff", BackofficeStaffViewSet, basename="backoffice-staff")
+
 router.register("constatations", ConstatationViewSet, basename="constatation")
 router.register("faq-items", FAQItemViewSet, basename="faq-item")
 

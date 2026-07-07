@@ -383,11 +383,25 @@ export const useBackofficeStore = defineStore('backoffice', {
         console.error('Failed to fetch assignees:', error)
       }
     },
+    async fetchDashboardStats() {
+      try {
+        const data = await fetchResource(`${API_URL}/backoffice-dashboard-stats/`)
+        if (data) {
+          this.stats = {
+            ...this.stats,
+            ...(data as any),
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch dashboard stats:', error)
+      }
+    },
     async fetchProcedures() {
       try {
         const data = await fetchResource(`${API_URL}/backoffice-procedures/`)
         this.procedures = data as BackofficeProcedure[]
         await this.fetchAssignees()
+        await this.fetchDashboardStats()
       } catch (error) {
         console.error('Failed to fetch backoffice procedures:', error)
       }

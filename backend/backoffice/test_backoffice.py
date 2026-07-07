@@ -138,3 +138,73 @@ def test_unassign_suivi_procedure(client):
     assert response.status_code == status.HTTP_200_OK
     sp.refresh_from_db()
     assert sp.assigned_to is None
+
+
+@pytest.mark.django_db
+def test_backoffice_dashboard_stats(client):
+    staff_user = UserFactory(is_staff=True)
+    client.force_login(staff_user)
+
+    # 1. Excluded test
+    c_test = Constatation.objects.create(
+        user=staff_user,
+        commune="Test Commune",
+        ceci_est_un_test=True,
+    )
+    sp_test = c_test.suivi_procedure
+    sp_test.etape_en_cours = 1
+    sp_test.save()
+
+    # 2. Active procedure (etape < 5, not archived)
+    c_active = Constatation.objects.create(
+        user=staff_user,
+        commune="Active",
+        ceci_est_un_test=False,
+    )
+    sp_active = c_active.suivi_procedure
+    sp_active.etape_en_cours = 1
+    sp_active.dossier_archive = False
+    sp_active.save()
+
+    # 3. AR waiting (etape < 5, letter_envoyee=True, ar_recu=False)
+    c_ar = Constatation.objects.create(
+        user=staff_user,
+        commune="AR Waiting",
+        ceci_est_un_test=False,
+    )
+    sp_ar = c_ar.suivi_procedure
+    sp_ar.etape_en_cours = 2
+    sp_ar.lettre_envoyee = True
+    sp_ar.ar_recu = False
+    sp_ar.save()
+
+    # 4. Decision to take (etape = 3)
+    c_dec = Constatation.objects.create(
+        user=staff_user,
+        commune="Decision",
+        ceci_est_un_test=False,
+    )
+    sp_dec = c_dec.suivi_procedure
+    sp_dec.etape_en_cours = 3
+    sp_dec.save()
+
+    # 5. Closed this month (etape = 5)
+    c_closed = Constatation.objects.create(
+        user=staff_user,
+        commune="Closed",
+        ceci_est_un_test=False,
+    )
+    sp_closed = c_closed.suivi_procedure
+    sp_closed.etape_en_cours = 5
+    sp_closed.save()
+
+    url = reverse("backoffice-dashboard-stats-list")
+    response = client.get(url)
+    assert response.status_code == status.HTTP_200_OK
+    data = response.json()
+
+    assert data["totalActive"] == 3
+    assert data["arWaiting"] == 1
+    assert data["decisionToTake"] == 1
+    assert data["closedThisMonth"] == 1
+    assert data["actionRequired"] == 0
