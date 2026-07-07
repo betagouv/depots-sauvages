@@ -4,7 +4,7 @@
       <span class="fr-icon-survey-line fr-mr-1w"></span> Actions du Suivi
     </h3>
 
-    <!-- ÉTAPE 1: Constitution du dossier -->
+
     <div class="bo-step-section bo-step-section--green">
       <h4 class="fr-text--sm fr-mb-1w bo-step-title--green fr-text--bold">Étape 1 : Constitution du dossier</h4>
       <div class="bo-flex-col">
@@ -27,7 +27,7 @@
       </div>
     </div>
 
-    <!-- ÉTAPE 2: Notification -->
+
     <div :class="['bo-step-section', procedure.suivi_procedure?.etape_en_cours >= 2 ? 'bo-step-section--green' : 'bo-step-section--grey']">
       <h4 :class="['fr-text--sm', 'fr-text--bold', 'fr-mb-1w', procedure.suivi_procedure?.etape_en_cours >= 2 ? 'bo-step-title--green' : 'bo-step-title--grey']">Étape 2 : Notification à l'auteur</h4>
       <div class="bo-flex-col">
@@ -75,7 +75,7 @@
       </div>
     </div>
 
-    <!-- ÉTAPE 3: Décision de poursuite -->
+
     <div :class="['bo-step-section', procedure.suivi_procedure?.etape_en_cours >= 3 ? 'bo-step-section--green' : 'bo-step-section--grey']">
       <h4 :class="['fr-text--sm', 'fr-text--bold', 'fr-mb-1w', procedure.suivi_procedure?.etape_en_cours >= 3 ? 'bo-step-title--green' : 'bo-step-title--grey']">Étape 3 : Décision de poursuite</h4>
       <p class="fr-text--xs fr-mb-0">
@@ -93,7 +93,7 @@
       </p>
     </div>
 
-    <!-- ÉTAPE 4: Exécution de la décision -->
+
     <div :class="['bo-step-section', procedure.suivi_procedure?.etape_en_cours >= 4 ? 'bo-step-section--green' : 'bo-step-section--grey']">
       <h4 :class="['fr-text--sm', 'fr-text--bold', 'fr-mb-1w', procedure.suivi_procedure?.etape_en_cours >= 4 ? 'bo-step-title--green' : 'bo-step-title--grey']">Étape 4 : Exécution de la décision</h4>
       
@@ -160,7 +160,7 @@
       </div>
     </div>
 
-    <!-- ÉTAPE 5: Clôture & Recouvrement -->
+
     <div :class="['bo-step-section', procedure.suivi_procedure?.etape_en_cours >= 5 ? 'bo-step-section--green' : 'bo-step-section--grey']" class="fr-mb-0">
       <h4 :class="['fr-text--sm', 'fr-text--bold', 'fr-mb-1w', procedure.suivi_procedure?.etape_en_cours >= 5 ? 'bo-step-title--green' : 'bo-step-title--grey']">Étape 5 : Clôture & Recouvrement</h4>
       <div class="bo-flex-col">

@@ -6,10 +6,10 @@
         <span class="bo-filter-label">Étape :</span>
         <select v-model="filters.etape" class="fr-select bo-select-auto-width">
           <option value="Tous">Tous</option>
-          <option :value="1">1 (Pièces)</option>
-          <option :value="2">2 (Notification)</option>
-          <option :value="3">3 (Décision)</option>
-          <option :value="4">4 (Exécution)</option>
+          <option :value="1">1 (Constatation)</option>
+          <option :value="2">2 (Pièces jointes)</option>
+          <option :value="3">3 (Notification)</option>
+          <option :value="4">4 (Décision)</option>
           <option :value="5">5 (Clôture)</option>
         </select>
       </div>
@@ -85,8 +85,8 @@
             <td>{{ procedure.agent }}</td>
             <td>{{ formatConstatationDate(procedure.date_constat) }}</td>
             <td>
-              <span :class="getBadgeClass(getProcedureStatut(procedure))">
-                {{ procedure.suivi_procedure.etape_en_cours }}. {{ getProcedureStatut(procedure) }}
+              <span :class="getBadgeClass(procedure.suivi_procedure.etape_en_cours)">
+                {{ procedure.suivi_procedure.etape_en_cours }}. {{ getStepLabel(procedure.suivi_procedure.etape_en_cours) }}
               </span>
             </td>
             <td>
@@ -124,9 +124,9 @@
 import { useBackofficeStore } from '@/stores/backoffice'
 import {
   getBadgeClass,
-  getProcedureStatut,
   getProcedureTraitement,
   getTraitementBadgeClass,
+  getStepLabel,
 } from '@/utils/backoffice'
 import { formatConstatationDate } from '@/utils/date'
 import { computed, ref } from 'vue'
