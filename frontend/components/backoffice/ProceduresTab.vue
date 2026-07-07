@@ -140,7 +140,7 @@
               <td v-if="visibleColumns.etape">
                 <span :class="getBadgeClass(procedure.suivi_procedure.etape_en_cours)">
                   {{ procedure.suivi_procedure.etape_en_cours }}.
-                  {{ getStepLabel(procedure.suivi_procedure.etape_en_cours) }}
+                  {{ getStepLabel(procedure.suivi_procedure.etape_en_cours, procedure.auteur_identifie) }}
                 </span>
               </td>
               <td v-if="visibleColumns.traitement">

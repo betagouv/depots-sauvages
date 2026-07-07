@@ -11,11 +11,11 @@
         }"
       >
         <div class="bo-step-num">{{ step }}</div>
-        <div class="bo-step-lbl desktop-only">{{ getStepLabel(step) }}</div>
+        <div class="bo-step-lbl desktop-only">{{ getStepLabel(step, auteurIdentifie) }}</div>
       </div>
     </div>
     <div class="bo-step-lbl-mobile mobile-only">
-      Étape {{ currentStep }} : <strong>{{ getStepLabel(currentStep) }}</strong>
+      Étape {{ currentStep }} : <strong>{{ getStepLabel(currentStep, auteurIdentifie) }}</strong>
     </div>
   </div>
 </template>
@@ -27,9 +27,11 @@ withDefaults(
   defineProps<{
     currentStep: number
     stepCount?: number
+    auteurIdentifie?: boolean
   }>(),
   {
     stepCount: 5,
+    auteurIdentifie: true,
   }
 )
 </script>

@@ -8,7 +8,10 @@
 
     <div v-else>
       <!-- Stepper/Timeline progress bar -->
-      <StepperTimeline :current-step="selectedProcedure.suivi_procedure.etape_en_cours" />
+      <StepperTimeline
+        :current-step="selectedProcedure.suivi_procedure.etape_en_cours"
+        :auteur-identifie="selectedProcedure.auteur_identifie"
+      />
 
 
       <div class="fr-grid-row fr-grid-row--gutters">

@@ -32,7 +32,12 @@ export const getTraitementBadgeClass = (traitement: string) => {
   return 'bo-badge bo-badge--gray'
 }
 
-export const getStepLabel = (step: number) => {
-  const labels = ['Constatation', 'Pièces jointes', 'Notification', 'Décision', 'Clôture']
-  return labels[step - 1]
+export const getStepLabel = (step: number, auteurIdentifie: boolean = true) => {
+  if (auteurIdentifie) {
+    const labels = ['Constatation', 'Pièces jointes', 'Notification', 'Décision', 'Clôture']
+    return labels[step - 1] || ''
+  } else {
+    const labels = ['Constatation', 'Pièces jointes', "Identifier l'auteur", 'Recherche', 'Clôture']
+    return labels[step - 1] || ''
+  }
 }

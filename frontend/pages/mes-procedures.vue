@@ -39,6 +39,7 @@
                   <StepperTimeline
                     v-if="procedure.suivi_procedure"
                     :current-step="procedure.suivi_procedure.etape_en_cours"
+                    :auteur-identifie="procedure.auteur_identifie"
                     class="fr-mt-1w fr-mb-2w"
                   />
                   <Metadata :procedure="procedure" />
