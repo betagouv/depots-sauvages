@@ -72,6 +72,16 @@
       </div>
     </div>
 
+    <!-- Count display / info bar -->
+    <div class="fr-mb-2w" style="display: flex; justify-content: space-between; align-items: center; font-weight: 500;">
+      <span class="fr-text--sm" style="color: var(--text-mention-grey)">
+        Nombre de procédures : <strong>{{ filteredProcedures.length }}</strong>
+        <span v-if="filteredProcedures.length !== store.procedures.length">
+          sur {{ store.procedures.length }} au total
+        </span>
+      </span>
+    </div>
+
     <!-- Procedures Grid Table -->
     <div class="bo-table-container">
       <table class="bo-table">
