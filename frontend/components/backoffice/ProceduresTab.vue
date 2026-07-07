@@ -15,18 +15,19 @@
       </div>
 
       <div class="bo-filter-group">
-        <span class="bo-filter-label">Statut :</span>
-        <select v-model="filters.statut" class="fr-select bo-select-auto-width">
+        <span class="bo-filter-label">Statut traitement :</span>
+        <select v-model="filters.traitement" class="fr-select bo-select-auto-width">
           <option value="Tous">Tous</option>
-          <option value="Pièces incomplètes">Pièces incomplètes</option>
-          <option value="Auteur non identifié">Auteur non identifié</option>
-          <option value="Décision à prendre">Décision à prendre</option>
-          <option value="Lettre à envoyer">Lettre à envoyer</option>
+          <option value="Nouveau">Nouveau</option>
+          <option value="Ouvert">Ouvert</option>
+          <option value="En pause">En pause</option>
+          <option value="Résolu">Résolu</option>
+          <option value="Clôturé">Clôturé</option>
         </select>
       </div>
 
       <div class="bo-filter-group">
-        <span class="bo-filter-label">Chargé :</span>
+        <span class="bo-filter-label">Assigné à :</span>
         <select v-model="filters.charge" class="fr-select bo-select-auto-width">
           <option value="Tous">Tous</option>
           <option
@@ -40,14 +41,11 @@
       </div>
 
       <div class="bo-filter-group">
-        <span class="bo-filter-label">Anomalie :</span>
-        <select
-          v-model="filters.anomalie"
-          class="fr-select bo-select-auto-width"
-        >
-          <option value="Toutes">Toutes</option>
-          <option value="Avec">Avec anomalie ⚠</option>
-          <option value="Sans">Sans anomalie</option>
+        <span class="bo-filter-label">Cas réels :</span>
+        <select v-model="filters.casReels" class="fr-select bo-select-auto-width">
+          <option value="Tous">Tous</option>
+          <option value="Oui">Oui</option>
+          <option value="Non">Non</option>
         </select>
       </div>
 
@@ -68,11 +66,11 @@
           <tr>
             <th>ID</th>
             <th>Commune</th>
-            <th>Agent</th>
+            <th>Agent constatant</th>
             <th>Date Constat</th>
-            <th>Statut</th>
-            <th>Chargé</th>
-            <th>Anomalies / Alertes</th>
+            <th>Étape</th>
+            <th>Traitement</th>
+            <th>Assigné à</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -88,8 +86,12 @@
             <td>{{ formatConstatationDate(procedure.date_constat) }}</td>
             <td>
               <span :class="getBadgeClass(getProcedureStatut(procedure))">
-                ● Étape {{ procedure.suivi_procedure.etape_en_cours }} :
-                {{ getProcedureStatut(procedure) }}
+                {{ procedure.suivi_procedure.etape_en_cours }}. {{ getProcedureStatut(procedure) }}
+              </span>
+            </td>
+            <td>
+              <span :class="getTraitementBadgeClass(getProcedureTraitement(procedure))">
+                {{ getProcedureTraitement(procedure) }}
               </span>
             </td>
             <td>
@@ -97,15 +99,6 @@
                 store.assignees.find((a) => a.id === procedure.suivi_procedure.assigned_to)?.name ||
                 'Non assigné'
               }}
-            </td>
-            <td>
-              <span
-                v-if="procedure.suivi_procedure.anomalie"
-                class="fr-text--xs bo-text-danger fr-text--bold"
-              >
-                ⚠ {{ procedure.suivi_procedure.anomalie }}
-              </span>
-              <span v-else class="fr-text--xs fr-text-mention--grey">Aucune</span>
             </td>
             <td>
               <button
@@ -129,7 +122,12 @@
 
 <script setup lang="ts">
 import { useBackofficeStore } from '@/stores/backoffice'
-import { getBadgeClass, getProcedureStatut } from '@/utils/backoffice'
+import {
+  getBadgeClass,
+  getProcedureStatut,
+  getProcedureTraitement,
+  getTraitementBadgeClass,
+} from '@/utils/backoffice'
 import { formatConstatationDate } from '@/utils/date'
 import { computed, ref } from 'vue'
 
@@ -141,9 +139,9 @@ defineEmits<{
 
 const filters = ref({
   etape: 'Tous',
-  statut: 'Tous',
+  traitement: 'Tous',
   charge: 'Tous',
-  anomalie: 'Toutes',
+  casReels: 'Oui',
   search: '',
 })
 
@@ -154,7 +152,10 @@ const filteredProcedures = computed(() => {
       procedure.suivi_procedure.etape_en_cours !== filters.value.etape
     )
       return false
-    if (filters.value.statut !== 'Tous' && getProcedureStatut(procedure) !== filters.value.statut)
+    if (
+      filters.value.traitement !== 'Tous' &&
+      getProcedureTraitement(procedure) !== filters.value.traitement
+    )
       return false
     if (filters.value.charge !== 'Tous') {
       const assigned = procedure.suivi_procedure.assigned_to
@@ -164,8 +165,8 @@ const filteredProcedures = computed(() => {
         return false
       }
     }
-    if (filters.value.anomalie === 'Avec' && !procedure.suivi_procedure.anomalie) return false
-    if (filters.value.anomalie === 'Sans' && procedure.suivi_procedure.anomalie) return false
+    if (filters.value.casReels === 'Oui' && procedure.ceci_est_un_test) return false
+    if (filters.value.casReels === 'Non' && !procedure.ceci_est_un_test) return false
     if (filters.value.search) {
       const q = filters.value.search.toLowerCase()
       const inCommune = procedure.commune.toLowerCase().includes(q)

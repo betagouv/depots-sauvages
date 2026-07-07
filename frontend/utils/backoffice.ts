@@ -32,6 +32,24 @@ export const getBadgeClass = (status: string) => {
   return 'bo-badge bo-badge--green'
 }
 
+export const getProcedureTraitement = (procedure: any) => {
+  const sp = procedure.suivi_procedure
+  if (sp.dossier_archive) return 'Clôturé'
+  if (sp.etape_en_cours === 5 || sp.montant_recouvre) return 'Résolu'
+  if (sp.observations_internes?.toLowerCase().includes('pause')) return 'En pause'
+  if (sp.assigned_to) return 'Ouvert'
+  return 'Nouveau'
+}
+
+export const getTraitementBadgeClass = (traitement: string) => {
+  if (traitement === 'Nouveau') return 'bo-badge bo-badge--blue'
+  if (traitement === 'Ouvert') return 'bo-badge bo-badge--blue' // or another color if preferred
+  if (traitement === 'En pause') return 'bo-badge bo-badge--yellow'
+  if (traitement === 'Résolu') return 'bo-badge bo-badge--green'
+  if (traitement === 'Clôturé') return 'bo-badge bo-badge--gray'
+  return 'bo-badge bo-badge--gray'
+}
+
 export const getStepLabel = (step: number) => {
   const labels = ['Constatation', 'Pièces jointes', 'Notification', 'Décision', 'Exécution/Clôture']
   return labels[step - 1]
