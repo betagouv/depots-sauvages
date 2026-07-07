@@ -46,25 +46,12 @@
             Détail procédure {{ selectedProcedureId ? `#${selectedProcedureId}` : '' }}
           </button>
         </li>
-        <li role="presentation">
-          <button
-            class="fr-tabs__tab"
-            :aria-selected="currentTab === 'stats'"
-            role="tab"
-            @click="currentTab = 'stats'"
-          >
-            <span class="fr-icon-line-chart-line fr-mr-1w" aria-hidden="true"></span>
-            Statistiques
-          </button>
-        </li>
       </ul>
       <DashboardTab v-if="currentTab === 'dashboard'" />
 
       <ProceduresTab v-if="currentTab === 'list'" @view-detail="viewDetail" />
 
       <DetailTab v-if="currentTab === 'detail'" :selectedProcedureId="selectedProcedureId" />
-
-      <StatsTab v-if="currentTab === 'stats'" />
     </div>
   </div>
 </template>
@@ -73,7 +60,6 @@
 import DashboardTab from '@/components/backoffice/DashboardTab.vue'
 import DetailTab from '@/components/backoffice/DetailTab.vue'
 import ProceduresTab from '@/components/backoffice/ProceduresTab.vue'
-import StatsTab from '@/components/backoffice/StatsTab.vue'
 import { useBackofficeStore } from '@/stores/backoffice'
 import { onMounted, ref } from 'vue'
 

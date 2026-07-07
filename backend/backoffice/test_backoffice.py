@@ -207,4 +207,3 @@ def test_backoffice_dashboard_stats(client):
     assert data["arWaiting"] == 1
     assert data["decisionToTake"] == 1
     assert data["closedThisMonth"] == 1
-    assert data["actionRequired"] == 0

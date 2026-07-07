@@ -9,11 +9,6 @@
         </div>
       </div>
       <div class="bo-kpi-card">
-        <div class="bo-kpi-val bo-kpi-val--warning">{{ store.stats.actionRequired }}</div>
-        <div class="bo-kpi-lbl">Action requise</div>
-        <div class="bo-kpi-desc">Procédures nécessitant une intervention prioritaire immédiate</div>
-      </div>
-      <div class="bo-kpi-card">
         <div class="bo-kpi-val bo-kpi-val--info">{{ store.stats.arWaiting }}</div>
         <div class="bo-kpi-lbl">AR en attente</div>
         <div class="bo-kpi-desc">

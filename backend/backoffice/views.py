@@ -46,7 +46,6 @@ class BackofficeDashboardStatsViewSet(viewsets.ViewSet):
         return Response(
             {
                 "totalActive": total_active,
-                "actionRequired": 0,
                 "arWaiting": ar_waiting,
                 "decisionToTake": decision_to_take,
                 "closedThisMonth": closed_this_month,
