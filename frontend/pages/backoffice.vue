@@ -1,6 +1,5 @@
 <template>
   <div class="fr-container fr-py-5w">
-    <!-- Header -->
     <div class="fr-grid-row fr-grid-row--middle fr-mb-4w">
       <div class="fr-col">
         <h1
@@ -15,8 +14,6 @@
         </p>
       </div>
     </div>
-
-    <!-- Main Navigation Tabs -->
     <div class="fr-tabs" style="box-shadow: none">
       <ul class="fr-tabs__list" role="tablist">
         <li role="presentation">
@@ -64,29 +61,13 @@
           </button>
         </li>
       </ul>
+      <DashboardTab v-if="currentTab === 'dashboard'" />
 
-      <!-- TAB 1: DASHBOARD -->
-      <DashboardTab
-        v-if="currentTab === 'dashboard'"
-        @view-detail="viewDetail"
-      />
+      <ProceduresTab v-if="currentTab === 'list'" @view-detail="viewDetail" />
 
-      <!-- TAB 2: PROCEDURES LIST -->
-      <ProceduresTab
-        v-if="currentTab === 'list'"
-        @view-detail="viewDetail"
-      />
+      <DetailTab v-if="currentTab === 'detail'" :selectedProcedureId="selectedProcedureId" />
 
-      <!-- TAB 3: PROCEDURE DETAIL -->
-      <DetailTab
-        v-if="currentTab === 'detail'"
-        :selectedProcedureId="selectedProcedureId"
-      />
-
-      <!-- TAB 4: STATISTICS -->
-      <StatsTab
-        v-if="currentTab === 'stats'"
-      />
+      <StatsTab v-if="currentTab === 'stats'" />
     </div>
   </div>
 </template>

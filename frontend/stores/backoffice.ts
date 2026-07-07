@@ -259,12 +259,6 @@ export const useBackofficeStore = defineStore('backoffice', {
     getProcedureById: (state) => (id: number | string) => {
       return state.procedures.find((p) => p.id === Number(id))
     },
-    proceduresRequiringAction: (state) => {
-      return state.procedures.filter((p) => {
-        const status = p.suivi_procedure.etape_en_cours
-        return status < 5
-      })
-    },
     realProcedures: (state) => {
       return state.procedures.filter((p) => !p.ceci_est_un_test)
     },

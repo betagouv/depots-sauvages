@@ -15,12 +15,7 @@ export const getProcedureStatut = (procedure: any) => {
   return 'Inconnu'
 }
 
-export const getDepuisText = (dateStr: string) => {
-  if (!dateStr) return 'N/A'
-  const diffTime = Math.abs(new Date().getTime() - new Date(dateStr).getTime())
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-  return `${diffDays} jour${diffDays > 1 ? 's' : ''}`
-}
+
 
 export const getAuteurIdentifieText = (val: boolean | null) => {
   if (val === true) return 'Oui'
