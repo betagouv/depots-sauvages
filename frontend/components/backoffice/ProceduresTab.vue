@@ -83,6 +83,7 @@
             <th>Date Constat</th>
             <th>Étape</th>
             <th>Traitement</th>
+            <th>Montant amende</th>
             <th>Assigné à</th>
             <th>Actions</th>
           </tr>
@@ -109,6 +110,12 @@
               </span>
             </td>
             <td>
+              <span v-if="procedure.suivi_procedure.montant_amende">
+                {{ procedure.suivi_procedure.montant_amende }} €
+              </span>
+              <span v-else class="fr-text-mention--grey">-</span>
+            </td>
+            <td>
               {{
                 store.assignees.find((a) => a.id === procedure.suivi_procedure.personne_assignee)?.name ||
                 'Non assigné'
@@ -124,7 +131,7 @@
             </td>
           </tr>
           <tr v-if="filteredProcedures.length === 0">
-            <td colspan="8" class="fr-text-center fr-py-3w fr-text-mention--grey">
+            <td colspan="9" class="fr-text-center fr-py-3w fr-text-mention--grey">
               Aucune procédure ne correspond aux filtres appliqués.
             </td>
           </tr>
