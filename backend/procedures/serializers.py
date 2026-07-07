@@ -5,7 +5,7 @@ from backend.procedures.models import SuiviProcedure
 
 
 class SuiviProcedureSerializer(serializers.ModelSerializer):
-    assigned_to = serializers.PrimaryKeyRelatedField(
+    personne_assignee = serializers.PrimaryKeyRelatedField(
         queryset=get_user_model().objects.filter(is_staff=True),
         allow_null=True,
         required=False,
@@ -46,8 +46,8 @@ class SuiviProcedureSerializer(serializers.ModelSerializer):
             "montant_recouvre",
             "dossier_archive",
             "statut_traitement",
-            "assigned_to",
-            "assigned_at",
+            "personne_assignee",
+            "date_assignation",
         ]
 
-        read_only_fields = ("created", "modified", "assigned_at")
+        read_only_fields = ("created", "modified", "date_assignation")

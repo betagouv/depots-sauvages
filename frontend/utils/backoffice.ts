@@ -19,7 +19,7 @@ export const getProcedureTraitement = (procedure: any) => {
   if (sp.dossier_archive) return 'Clôturé'
   if (sp.etape_en_cours === 5 || sp.montant_recouvre) return 'Résolu'
   if (sp.observations_internes?.toLowerCase().includes('pause')) return 'En pause'
-  if (sp.assigned_to) return 'Ouvert'
+  if (sp.personne_assignee) return 'Ouvert'
   return 'Nouveau'
 }
 

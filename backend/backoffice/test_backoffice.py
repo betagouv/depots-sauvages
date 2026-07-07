@@ -68,7 +68,7 @@ def test_backoffice_procedures_staff(client):
     assert data[0]["commune"] == "Fécamp"
     assert data[0]["user_email"] == staff_user.email
     assert data[0]["suivi_procedure"]["etape_en_cours"] == 1
-    assert data[0]["suivi_procedure"]["assigned_to"] is None
+    assert data[0]["suivi_procedure"]["personne_assignee"] is None
 
     # Verify second
     assert data[1]["id"] == c1.id
@@ -106,14 +106,14 @@ def test_assign_suivi_procedure(client):
     sp = c.suivi_procedure
     update_url = reverse("suivi-procedure-detail", kwargs={"constatation_id": c.id})
     payload = {
-        "assigned_to": staff_user.id,
+        "personne_assignee": staff_user.id,
         "observations_internes": "Updated note",
     }
     response = client.patch(update_url, payload, content_type="application/json")
     assert response.status_code == status.HTTP_200_OK
     sp.refresh_from_db()
-    assert sp.assigned_to == staff_user
-    assert sp.assigned_at is not None
+    assert sp.personne_assignee == staff_user
+    assert sp.date_assignation is not None
     assert sp.observations_internes == "Updated note"
 
 
@@ -128,16 +128,16 @@ def test_unassign_suivi_procedure(client):
         date_constat="2026-07-01",
     )
     sp = c.suivi_procedure
-    sp.assigned_to = staff_user
+    sp.personne_assignee = staff_user
     sp.save()
     update_url = reverse("suivi-procedure-detail", kwargs={"constatation_id": c.id})
     payload = {
-        "assigned_to": None,
+        "personne_assignee": None,
     }
     response = client.patch(update_url, payload, content_type="application/json")
     assert response.status_code == status.HTTP_200_OK
     sp.refresh_from_db()
-    assert sp.assigned_to is None
+    assert sp.personne_assignee is None
 
 
 @pytest.mark.django_db

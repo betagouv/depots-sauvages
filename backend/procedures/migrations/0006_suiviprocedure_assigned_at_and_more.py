@@ -16,24 +16,24 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name="suiviprocedure",
-            name="assigned_at",
+            name="date_assignation",
             field=model_utils.fields.MonitorField(
                 blank=True,
                 default=None,
-                monitor="assigned_to",
+                monitor="personne_assignee",
                 null=True,
                 verbose_name="Date d'assignation",
             ),
         ),
         migrations.AddField(
             model_name="suiviprocedure",
-            name="assigned_to",
+            name="personne_assignee",
             field=models.ForeignKey(
                 blank=True,
                 limit_choices_to={"is_staff": True},
                 null=True,
                 on_delete=django.db.models.deletion.SET_NULL,
-                related_name="assigned_suivi_procedures",
+                related_name="personne_assignee_suivi_procedures",
                 to=settings.AUTH_USER_MODEL,
                 verbose_name="Assigné à",
             ),

@@ -6,7 +6,7 @@ from backend.procedures.models import SuiviProcedure
 
 
 class BackofficeSuiviProcedureSerializer(serializers.ModelSerializer):
-    assigned_to = serializers.PrimaryKeyRelatedField(
+    personne_assignee = serializers.PrimaryKeyRelatedField(
         queryset=get_user_model().objects.filter(is_staff=True),
         allow_null=True,
         required=False,
@@ -22,8 +22,8 @@ class BackofficeSuiviProcedureSerializer(serializers.ModelSerializer):
             "lettre_signe",
             "identification_reussie",
             "observations_internes",
-            "assigned_to",
-            "assigned_at",
+            "personne_assignee",
+            "date_assignation",
             "anomalie",
             "lettre_envoyee",
             "lettre_envoyee_date",

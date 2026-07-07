@@ -6,11 +6,11 @@
         <span class="bo-filter-label">Étape :</span>
         <select v-model="filters.etape" class="fr-select bo-select-auto-width">
           <option value="Tous">Tous</option>
-          <option :value="1">1 (Constatation)</option>
-          <option :value="2">2 (Pièces jointes)</option>
-          <option :value="3">3 (Notification)</option>
-          <option :value="4">4 (Décision)</option>
-          <option :value="5">5 (Clôture)</option>
+          <option :value="1">1 Constatation</option>
+          <option :value="2">2 Pièces jointes</option>
+          <option :value="3">3 Notification</option>
+          <option :value="4">4 Décision</option>
+          <option :value="5">5 Clôture</option>
         </select>
       </div>
 
@@ -86,7 +86,8 @@
             <td>{{ formatConstatationDate(procedure.date_constat) }}</td>
             <td>
               <span :class="getBadgeClass(procedure.suivi_procedure.etape_en_cours)">
-                {{ procedure.suivi_procedure.etape_en_cours }}. {{ getStepLabel(procedure.suivi_procedure.etape_en_cours) }}
+                {{ procedure.suivi_procedure.etape_en_cours }}.
+                {{ getStepLabel(procedure.suivi_procedure.etape_en_cours) }}
               </span>
             </td>
             <td>
@@ -96,7 +97,7 @@
             </td>
             <td>
               {{
-                store.assignees.find((a) => a.id === procedure.suivi_procedure.assigned_to)?.name ||
+                store.assignees.find((a) => a.id === procedure.suivi_procedure.personne_assignee)?.name ||
                 'Non assigné'
               }}
             </td>
@@ -125,8 +126,8 @@ import { useBackofficeStore } from '@/stores/backoffice'
 import {
   getBadgeClass,
   getProcedureTraitement,
-  getTraitementBadgeClass,
   getStepLabel,
+  getTraitementBadgeClass,
 } from '@/utils/backoffice'
 import { formatConstatationDate } from '@/utils/date'
 import { computed, ref } from 'vue'
@@ -158,7 +159,7 @@ const filteredProcedures = computed(() => {
     )
       return false
     if (filters.value.charge !== 'Tous') {
-      const assigned = procedure.suivi_procedure.assigned_to
+      const assigned = procedure.suivi_procedure.personne_assignee
       if (filters.value.charge === 'None') {
         if (assigned !== null) return false
       } else if (assigned !== Number(filters.value.charge)) {

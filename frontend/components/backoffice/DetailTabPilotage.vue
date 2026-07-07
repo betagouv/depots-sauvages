@@ -31,7 +31,7 @@
       <select
         id="assignee-select"
         class="fr-select"
-        :value="procedure.suivi_procedure?.assigned_to ?? ''"
+        :value="procedure.suivi_procedure?.personne_assignee ?? ''"
         @change="
           store.assignCharge(
             procedure.id,
@@ -50,10 +50,10 @@
         </option>
       </select>
       <p
-        v-if="procedure.suivi_procedure?.assigned_at"
+        v-if="procedure.suivi_procedure?.date_assignation"
         class="fr-text--xs fr-mt-1w fr-mb-0 fr-text-mention--grey"
       >
-        Assignation mise à jour le {{ formatDate(procedure.suivi_procedure.assigned_at) }}
+        Assignation mise à jour le {{ formatDate(procedure.suivi_procedure.date_assignation) }}
       </p>
     </div>
 

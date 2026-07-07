@@ -70,17 +70,17 @@ class SuiviProcedure(TimeStampedModel):
         default="Nouveau",
         verbose_name="Statut de traitement",
     )
-    assigned_to = models.ForeignKey(
+    personne_assignee = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
         limit_choices_to={"is_staff": True},
-        related_name="assigned_suivi_procedures",
+        related_name="personne_assignee_suivi_procedures",
         verbose_name="Assigné à",
     )
-    assigned_at = MonitorField(
-        monitor="assigned_to",
+    date_assignation = MonitorField(
+        monitor="personne_assignee",
         null=True,
         blank=True,
         verbose_name="Date d'assignation",

@@ -8,8 +8,8 @@ export interface SuiviProcedure {
   lettre_signe: boolean
   identification_reussie: boolean | null
   observations_internes: string
-  assigned_to: number | null
-  assigned_at: string | null
+  personne_assignee: number | null
+  date_assignation: string | null
   anomalie: string
   lettre_envoyee: boolean
   lettre_envoyee_date: string | null
@@ -290,7 +290,7 @@ export const useBackofficeStore = defineStore('backoffice', {
         counts[assignee.name] = 0
       })
       realProcs.forEach((p) => {
-        const id = p.suivi_procedure.assigned_to
+        const id = p.suivi_procedure.personne_assignee
         const assignee = state.assignees.find((a) => a.id === id)
         const name = assignee ? assignee.name : 'Non assigné'
         if (counts[name] !== undefined) {
@@ -327,7 +327,7 @@ export const useBackofficeStore = defineStore('backoffice', {
     assignCharge(procedureId: number, assigneeId: number | null) {
       const procedure = this.procedures.find((p) => p.id === procedureId)
       if (procedure && procedure.suivi_procedure) {
-        procedure.suivi_procedure.assigned_to = assigneeId
+        procedure.suivi_procedure.personne_assignee = assigneeId
         this.saveSuivi(procedureId)
       }
     },
