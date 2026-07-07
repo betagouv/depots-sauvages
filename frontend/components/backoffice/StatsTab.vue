@@ -1,6 +1,5 @@
 <template>
   <div class="fr-tabs__panel fr-tabs__panel--selected" role="tabpanel">
-    <!-- OKR S2 2026 Grid -->
     <div class="fr-mb-4w">
       <h3 class="fr-h5" style="display: flex; align-items: center; gap: 0.5rem">
         <span
@@ -63,7 +62,6 @@
               </p>
             </div>
             <div>
-              <!-- Inline OKR Editing Form -->
               <div
                 v-if="editingOkrKey === key"
                 style="display: flex; gap: 0.5rem; align-items: center"
@@ -110,7 +108,6 @@
                   </span>
                 </div>
               </div>
-              <!-- Progress Bar -->
               <div
                 style="
                   background-color: var(--border-default-grey);
@@ -135,11 +132,10 @@
       </div>
     </div>
 
-    <!-- Répartition de la charge par agent -->
     <div class="fr-mb-4w">
       <h3 class="fr-h5" style="display: flex; align-items: center; gap: 0.5rem">
         <span class="fr-icon-user-fill fr-text-title-blue-france" aria-hidden="true"></span>
-        Répartition de la charge de pilotage (Dossiers réels activement suivis)
+        Répartition du traitement
       </h3>
       <div class="fr-grid-row fr-grid-row--gutters">
         <div

@@ -9,9 +9,6 @@
           <span class="fr-icon-settings-5-line fr-text-title-blue-france" aria-hidden="true"></span>
           Back-office de Pilotage
         </h1>
-        <p class="fr-text--lead" style="margin-bottom: 0">
-          Gestion et suivi opérationnel des procédures administratives collectives.
-        </p>
       </div>
     </div>
     <div class="fr-tabs" style="box-shadow: none">
