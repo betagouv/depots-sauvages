@@ -77,23 +77,57 @@
       <table class="bo-table">
         <thead>
           <tr>
-            <th style="width: 40px; position: relative; text-align: center; vertical-align: middle; padding: 0.25rem;">
+            <th
+              style="
+                width: 40px;
+                position: relative;
+                text-align: center;
+                vertical-align: middle;
+                padding: 0.25rem;
+              "
+            >
               <!-- Column Customizer -->
               <div class="bo-customizer-container">
                 <button
                   class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline"
-                  style="padding: 0.25rem; min-height: auto; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center;"
+                  style="
+                    padding: 0.25rem;
+                    min-height: auto;
+                    width: 28px;
+                    height: 28px;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                  "
                   @click="showCustomizer = !showCustomizer"
                   title="Personnaliser les colonnes"
                 >
-                  <span class="fr-icon-settings-5-line" aria-hidden="true" style="margin: 0;"></span>
+                  <span class="fr-icon-settings-5-line" aria-hidden="true" style="margin: 0"></span>
                 </button>
-                <div v-if="showCustomizer" class="bo-customizer-popover" style="left: 0; right: auto; text-align: left;">
-                  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-default-grey); padding-bottom: 0.5rem; margin-bottom: 0.75rem;">
-                    <div class="bo-customizer-title" style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">Colonnes à afficher</div>
+                <div
+                  v-if="showCustomizer"
+                  class="bo-customizer-popover"
+                  style="left: 0; right: auto; text-align: left"
+                >
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                      border-bottom: 1px solid var(--border-default-grey);
+                      padding-bottom: 0.5rem;
+                      margin-bottom: 0.75rem;
+                    "
+                  >
+                    <div
+                      class="bo-customizer-title"
+                      style="margin-bottom: 0; border-bottom: none; padding-bottom: 0"
+                    >
+                      Colonnes à afficher
+                    </div>
                     <button
                       class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline"
-                      style="padding: 0.25rem; min-height: auto;"
+                      style="padding: 0.25rem; min-height: auto"
                       @click="showCustomizer = false"
                       aria-label="Fermer"
                     >
@@ -101,7 +135,11 @@
                     </button>
                   </div>
                   <div class="bo-customizer-list">
-                    <label v-for="col in customizableColumns" :key="col.key" class="bo-customizer-item">
+                    <label
+                      v-for="col in customizableColumns"
+                      :key="col.key"
+                      class="bo-customizer-item"
+                    >
                       <input type="checkbox" v-model="visibleColumns[col.key]" />
                       <span>{{ col.label }}</span>
                     </label>
@@ -149,7 +187,12 @@
               <td v-if="visibleColumns.etape">
                 <span :class="getBadgeClass(procedure.suivi_procedure.etape_en_cours)">
                   {{ procedure.suivi_procedure.etape_en_cours }}.
-                  {{ getStepLabel(procedure.suivi_procedure.etape_en_cours, procedure.auteur_identifie) }}
+                  {{
+                    getStepLabel(
+                      procedure.suivi_procedure.etape_en_cours,
+                      procedure.auteur_identifie
+                    )
+                  }}
                 </span>
               </td>
               <td v-if="visibleColumns.traitement">

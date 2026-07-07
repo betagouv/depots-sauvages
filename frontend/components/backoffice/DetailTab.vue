@@ -13,7 +13,6 @@
         :auteur-identifie="selectedProcedure.auteur_identifie"
       />
 
-
       <div class="fr-grid-row fr-grid-row--gutters">
         <!-- Left Column: Constatation Details -->
         <div class="fr-col-12 fr-col-md-7">
@@ -39,12 +38,12 @@ import { useBackofficeStore } from '@/stores/backoffice'
 import { computed } from 'vue'
 
 import StepperTimeline from '@/components/StepperTimeline.vue'
-import DetailTabGeneral from '@/components/backoffice/DetailTabGeneral.vue'
-import DetailTabDescription from '@/components/backoffice/DetailTabDescription.vue'
 import DetailTabAuthor from '@/components/backoffice/DetailTabAuthor.vue'
-import DetailTabPrejudice from '@/components/backoffice/DetailTabPrejudice.vue'
+import DetailTabDescription from '@/components/backoffice/DetailTabDescription.vue'
 import DetailTabDocuments from '@/components/backoffice/DetailTabDocuments.vue'
+import DetailTabGeneral from '@/components/backoffice/DetailTabGeneral.vue'
 import DetailTabPilotage from '@/components/backoffice/DetailTabPilotage.vue'
+import DetailTabPrejudice from '@/components/backoffice/DetailTabPrejudice.vue'
 import DetailTabSuiviActions from '@/components/backoffice/DetailTabSuiviActions.vue'
 
 const store = useBackofficeStore()
