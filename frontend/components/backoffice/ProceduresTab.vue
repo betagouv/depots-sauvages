@@ -4,7 +4,7 @@
     <div class="bo-filter-bar">
       <div class="bo-filter-group">
         <span class="bo-filter-label">Étape :</span>
-        <select v-model="filters.etape" class="fr-select" style="width: auto; padding-right: 2rem">
+        <select v-model="filters.etape" class="fr-select bo-select-auto-width">
           <option value="Tous">Tous</option>
           <option :value="1">1 (Pièces)</option>
           <option :value="2">2 (Notification)</option>
@@ -16,7 +16,7 @@
 
       <div class="bo-filter-group">
         <span class="bo-filter-label">Statut :</span>
-        <select v-model="filters.statut" class="fr-select" style="width: auto; padding-right: 2rem">
+        <select v-model="filters.statut" class="fr-select bo-select-auto-width">
           <option value="Tous">Tous</option>
           <option value="Pièces incomplètes">Pièces incomplètes</option>
           <option value="Auteur non identifié">Auteur non identifié</option>
@@ -27,7 +27,7 @@
 
       <div class="bo-filter-group">
         <span class="bo-filter-label">Chargé :</span>
-        <select v-model="filters.charge" class="fr-select" style="width: auto; padding-right: 2rem">
+        <select v-model="filters.charge" class="fr-select bo-select-auto-width">
           <option value="Tous">Tous</option>
           <option
             v-for="assignee in store.assignees"
@@ -43,8 +43,7 @@
         <span class="bo-filter-label">Anomalie :</span>
         <select
           v-model="filters.anomalie"
-          class="fr-select"
-          style="width: auto; padding-right: 2rem"
+          class="fr-select bo-select-auto-width"
         >
           <option value="Toutes">Toutes</option>
           <option value="Avec">Avec anomalie ⚠</option>
@@ -52,13 +51,12 @@
         </select>
       </div>
 
-      <div class="bo-filter-group" style="flex-grow: 1">
+      <div class="bo-filter-group bo-flex-grow-1">
         <input
           v-model="filters.search"
           type="text"
-          class="fr-input"
+          class="fr-input bo-w-full"
           placeholder="🔍 Rechercher une commune ou agent..."
-          style="width: 100%"
         />
       </div>
     </div>
@@ -103,12 +101,11 @@
             <td>
               <span
                 v-if="procedure.suivi_procedure.anomalie"
-                class="fr-text--xs"
-                style="color: #dc2626; font-weight: 700"
+                class="fr-text--xs bo-text-danger fr-text--bold"
               >
                 ⚠ {{ procedure.suivi_procedure.anomalie }}
               </span>
-              <span v-else class="fr-text--xs" style="color: #9ca3af">Aucune</span>
+              <span v-else class="fr-text--xs fr-text-mention--grey">Aucune</span>
             </td>
             <td>
               <button
@@ -120,7 +117,7 @@
             </td>
           </tr>
           <tr v-if="filteredProcedures.length === 0">
-            <td colspan="8" class="fr-text-center fr-py-3w" style="color: var(--text-mention-grey)">
+            <td colspan="8" class="fr-text-center fr-py-3w fr-text-mention--grey">
               Aucune procédure ne correspond aux filtres appliqués.
             </td>
           </tr>
