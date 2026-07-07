@@ -1,61 +1,74 @@
 <template>
   <div class="fr-tabs__panel fr-tabs__panel--selected" role="tabpanel">
     <!-- Filter Bar -->
-    <div class="bo-filter-bar">
-      <div class="bo-filter-group">
-        <span class="bo-filter-label">Étape :</span>
-        <select v-model="filters.etape" class="fr-select bo-select-auto-width">
-          <option value="Tous">Tous</option>
-          <option :value="1">1 Constatation</option>
-          <option :value="2">2 Pièces jointes</option>
-          <option :value="3">3 Notification</option>
-          <option :value="4">4 Décision</option>
-          <option :value="5">5 Clôture</option>
-        </select>
-      </div>
-
-      <div class="bo-filter-group">
-        <span class="bo-filter-label">Statut traitement :</span>
-        <select v-model="filters.traitement" class="fr-select bo-select-auto-width">
-          <option value="Tous">Tous</option>
-          <option value="Nouveau">Nouveau</option>
-          <option value="Ouvert">Ouvert</option>
-          <option value="En pause">En pause</option>
-          <option value="Résolu">Résolu</option>
-          <option value="Clôturé">Clôturé</option>
-        </select>
-      </div>
-
-      <div class="bo-filter-group">
-        <span class="bo-filter-label">Assigné à :</span>
-        <select v-model="filters.charge" class="fr-select bo-select-auto-width">
-          <option value="Tous">Tous</option>
-          <option
-            v-for="assignee in store.assignees"
-            :key="assignee.id ?? 'unassigned'"
-            :value="assignee.id ?? 'None'"
-          >
-            {{ assignee.name }}
-          </option>
-        </select>
-      </div>
-
-      <div class="bo-filter-group">
-        <span class="bo-filter-label">Cas réels :</span>
-        <select v-model="filters.casReels" class="fr-select bo-select-auto-width">
-          <option value="Tous">Tous</option>
-          <option value="Oui">Oui</option>
-          <option value="Non">Non</option>
-        </select>
-      </div>
-
-      <div class="bo-filter-group bo-flex-grow-1">
+    <div class="bo-filter-bar-container">
+      <div class="bo-search-row">
+        <label class="bo-filter-label" for="search-input">Rechercher</label>
         <input
+          id="search-input"
           v-model="filters.search"
           type="text"
           class="fr-input bo-w-full"
           placeholder="🔍 Rechercher une commune ou agent..."
         />
+      </div>
+
+      <div class="bo-filters-grid">
+        <div class="bo-filter-group-vertical">
+          <label class="bo-filter-label" for="filter-etape">Étape</label>
+          <select id="filter-etape" v-model="filters.etape" class="fr-select">
+            <option value="Tous">Tous</option>
+            <option :value="1">1 Constatation</option>
+            <option :value="2">2 Pièces jointes</option>
+            <option :value="3">3 Notification</option>
+            <option :value="4">4 Décision</option>
+            <option :value="5">5 Clôture</option>
+          </select>
+        </div>
+
+        <div class="bo-filter-group-vertical">
+          <label class="bo-filter-label" for="filter-traitement">Statut traitement</label>
+          <select id="filter-traitement" v-model="filters.traitement" class="fr-select">
+            <option value="Tous">Tous</option>
+            <option value="Nouveau">Nouveau</option>
+            <option value="Ouvert">Ouvert</option>
+            <option value="En pause">En pause</option>
+            <option value="Résolu">Résolu</option>
+            <option value="Clôturé">Clôturé</option>
+          </select>
+        </div>
+
+        <div class="bo-filter-group-vertical">
+          <label class="bo-filter-label" for="filter-charge">Assigné à</label>
+          <select id="filter-charge" v-model="filters.charge" class="fr-select">
+            <option value="Tous">Tous</option>
+            <option
+              v-for="assignee in store.assignees"
+              :key="assignee.id ?? 'unassigned'"
+              :value="assignee.id ?? 'None'"
+            >
+              {{ assignee.name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="bo-filter-group-vertical">
+          <label class="bo-filter-label" for="filter-cas-reels">Cas réels</label>
+          <select id="filter-cas-reels" v-model="filters.casReels" class="fr-select">
+            <option value="Tous">Tous</option>
+            <option value="Oui">Oui</option>
+            <option value="Non">Non</option>
+          </select>
+        </div>
+
+        <div class="bo-filter-group-vertical">
+          <label class="bo-filter-label" for="filter-auteur-identifie">Auteur identifié</label>
+          <select id="filter-auteur-identifie" v-model="filters.auteurIdentifie" class="fr-select">
+            <option value="Tous">Tous</option>
+            <option value="Oui">Oui</option>
+            <option value="Non">Non</option>
+          </select>
+        </div>
       </div>
     </div>
 
@@ -143,6 +156,7 @@ const filters = ref({
   traitement: 'Tous',
   charge: 'Tous',
   casReels: 'Oui',
+  auteurIdentifie: 'Tous',
   search: '',
 })
 
@@ -168,6 +182,8 @@ const filteredProcedures = computed(() => {
     }
     if (filters.value.casReels === 'Oui' && procedure.ceci_est_un_test) return false
     if (filters.value.casReels === 'Non' && !procedure.ceci_est_un_test) return false
+    if (filters.value.auteurIdentifie === 'Oui' && !procedure.auteur_identifie) return false
+    if (filters.value.auteurIdentifie === 'Non' && procedure.auteur_identifie) return false
     if (filters.value.search) {
       const q = filters.value.search.toLowerCase()
       const inCommune = procedure.commune.toLowerCase().includes(q)
