@@ -44,7 +44,7 @@
               <th>Étape</th>
               <th>Statut</th>
               <th>Depuis</th>
-              <th>Chargé Dépl.</th>
+              <th>Assigné à</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -72,13 +72,15 @@
               </td>
               <td>{{ getDepuisText(procedure.date_constat) }}</td>
               <td>
-                <span
-                  v-if="procedure.suivi_procedure.charge_deploiement === 'Non assigné'"
-                  style="color: #d97706; font-weight: 700"
-                >
-                  ⚠ Non assigné
-                </span>
-                <span v-else>{{ procedure.suivi_procedure.charge_deploiement }}</span>
+                <DsfrBadge
+                  v-if="!procedure.suivi_procedure.assigned_to"
+                  type="warning"
+                  label="Non assigné"
+                />
+                <span v-else>{{
+                  store.assignees.find((a) => a.id === procedure.suivi_procedure.assigned_to)
+                    ?.name || 'Non assigné'
+                }}</span>
               </td>
               <td>
                 <button class="fr-btn fr-btn--sm" @click="$emit('view-detail', procedure.id)">
@@ -94,6 +96,7 @@
 </template>
 
 <script setup lang="ts">
+import { DsfrBadge } from '@gouvminint/vue-dsfr'
 import { useBackofficeStore } from '@/stores/backoffice'
 import { getBadgeClass, getDepuisText, getProcedureStatut } from '@/utils/backoffice'
 

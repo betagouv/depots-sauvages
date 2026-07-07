@@ -8,8 +8,8 @@ export interface SuiviProcedure {
   lettre_signe: boolean
   identification_reussie: boolean | null
   observations_internes: string
-  charge_deploiement: string
-  date_assigned: string | null
+  assigned_to: number | null
+  assigned_at: string | null
   anomalie: string
   lettre_envoyee: boolean
   lettre_envoyee_date: string | null
@@ -107,8 +107,14 @@ export interface BackofficeHistory {
   abandoned: number
 }
 
+export interface Assignee {
+  id: number | null
+  name: string
+  email?: string
+}
+
 export interface BackofficeState {
-  assignees: string[]
+  assignees: Assignee[]
   procedures: BackofficeProcedure[]
   stats: {
     totalActive: number
@@ -124,7 +130,7 @@ export interface BackofficeState {
 
 export const useBackofficeStore = defineStore('backoffice', {
   state: (): BackofficeState => ({
-    assignees: ['Anthony', 'Jennifer', 'Non assigné'],
+    assignees: [{ id: null, name: 'Non assigné' }],
     procedures: [],
     // OKR and Weekly stats targets
     stats: {
@@ -284,11 +290,13 @@ export const useBackofficeStore = defineStore('backoffice', {
     workloadByAssignee: (state) => {
       const realProcs = state.procedures.filter((p) => !p.ceci_est_un_test)
       const counts: Record<string, number> = {}
-      state.assignees.forEach((name) => {
-        counts[name] = 0
+      state.assignees.forEach((assignee) => {
+        counts[assignee.name] = 0
       })
       realProcs.forEach((p) => {
-        const name = p.suivi_procedure.charge_deploiement || 'Non assigné'
+        const id = p.suivi_procedure.assigned_to
+        const assignee = state.assignees.find((a) => a.id === id)
+        const name = assignee ? assignee.name : 'Non assigné'
         if (counts[name] !== undefined) {
           counts[name]++
         } else {
@@ -298,26 +306,32 @@ export const useBackofficeStore = defineStore('backoffice', {
       return counts
     },
   },
+
   actions: {
     async saveSuivi(procedureId: number) {
       const procedure = this.procedures.find((p) => p.id === procedureId)
       if (procedure && procedure.suivi_procedure) {
         try {
-          // We exclude computed client-only properties from the patch payload
-          const { charge_deploiement, date_assigned, anomalie, ...suiviPayload } =
-            procedure.suivi_procedure
-          await patchResource(`${API_URL}/suivi-procedure/${procedureId}/`, suiviPayload)
+          const { anomalie, ...suiviPayload } = procedure.suivi_procedure
+          const updated = await patchResource(
+            `${API_URL}/suivi-procedure/${procedureId}/`,
+            suiviPayload
+          )
+          if (updated) {
+            procedure.suivi_procedure = {
+              ...procedure.suivi_procedure,
+              ...(updated as Partial<SuiviProcedure>),
+            }
+          }
         } catch (error) {
           console.error('Failed to save suivi procedure:', error)
         }
       }
     },
-    assignCharge(procedureId: number, chargeName: string) {
+    assignCharge(procedureId: number, assigneeId: number | null) {
       const procedure = this.procedures.find((p) => p.id === procedureId)
       if (procedure && procedure.suivi_procedure) {
-        procedure.suivi_procedure.charge_deploiement = chargeName
-        procedure.suivi_procedure.date_assigned =
-          chargeName === 'Non assigné' ? null : new Date().toISOString().split('T')[0]
+        procedure.suivi_procedure.assigned_to = assigneeId
         this.saveSuivi(procedureId)
       }
     },
@@ -362,10 +376,24 @@ export const useBackofficeStore = defineStore('backoffice', {
         this.stats.okrs[okrKey].current = newValue
       }
     },
+    async fetchAssignees() {
+      try {
+        const data = await fetchResource(`${API_URL}/backoffice-staff/`)
+        const fetched = (data as any[]).map((u) => ({
+          id: u.id,
+          name: u.name,
+          email: u.email,
+        }))
+        this.assignees = [{ id: null, name: 'Non assigné' }, ...fetched]
+      } catch (error) {
+        console.error('Failed to fetch assignees:', error)
+      }
+    },
     async fetchProcedures() {
       try {
         const data = await fetchResource(`${API_URL}/backoffice-procedures/`)
         this.procedures = data as BackofficeProcedure[]
+        await this.fetchAssignees()
       } catch (error) {
         console.error('Failed to fetch backoffice procedures:', error)
       }

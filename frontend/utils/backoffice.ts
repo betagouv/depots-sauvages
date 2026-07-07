@@ -41,13 +41,3 @@ export const getStepLabel = (step: number) => {
   const labels = ['Constatation', 'Pièces jointes', 'Notification', 'Décision', 'Exécution/Clôture']
   return labels[step - 1]
 }
-
-export const formatDate = (dateStr: string | null) => {
-  if (!dateStr) return 'N/A'
-  const date = new Date(dateStr)
-  return date.toLocaleDateString('fr-FR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  })
-}

@@ -1,32 +1,45 @@
 <template>
-  <div class="premium-box fr-p-3w fr-mb-3w" style="background: white; border-radius: 8px; box-shadow: var(--shadow-md); border-top: 4px solid var(--border-active-blue-france)">
+  <div
+    class="premium-box fr-p-3w fr-mb-3w"
+    style="
+      background: white;
+      border-radius: 8px;
+      box-shadow: var(--shadow-md);
+      border-top: 4px solid var(--border-active-blue-france);
+    "
+  >
     <h3 class="fr-h6 fr-mb-2w" style="color: var(--text-title-blue-france)">
       <span class="fr-icon-user-setting-line fr-mr-1w"></span> Pilotage dossier
     </h3>
-    <!-- Officer Assignee -->
     <div class="fr-select-group fr-mb-2w">
-      <label class="fr-label fr-text--xs" for="assignee-select">Chargé de déploiement</label>
+      <label class="fr-label fr-text--xs" for="assignee-select">Assigné à</label>
       <select
         id="assignee-select"
         class="fr-select"
-        :value="procedure.suivi_procedure?.charge_deploiement"
+        :value="procedure.suivi_procedure?.assigned_to ?? ''"
         @change="
           store.assignCharge(
             procedure.id,
             ($event.target as HTMLSelectElement).value
+              ? Number(($event.target as HTMLSelectElement).value)
+              : null
           )
         "
       >
-        <option v-for="name in store.assignees" :key="name" :value="name">
-          {{ name }}
+        <option
+          v-for="assignee in store.assignees"
+          :key="assignee.id ?? 'unassigned'"
+          :value="assignee.id ?? ''"
+        >
+          {{ assignee.name }}
         </option>
       </select>
       <p
-        v-if="procedure.suivi_procedure?.date_assigned"
+        v-if="procedure.suivi_procedure?.assigned_at"
         class="fr-text--xs fr-mt-1w fr-mb-0"
         style="color: var(--text-mention-grey)"
       >
-        Assigné le {{ formatDate(procedure.suivi_procedure.date_assigned) }}
+        Assignation mise à jour le {{ formatDate(procedure.suivi_procedure.assigned_at) }}
       </p>
     </div>
 
@@ -39,12 +52,7 @@
         placeholder="Relance, appels, blocages..."
         style="min-height: 100px"
         :value="procedure.suivi_procedure?.observations_internes"
-        @change="
-          store.updateNotes(
-            procedure.id,
-            ($event.target as HTMLTextAreaElement).value
-          )
-        "
+        @change="store.updateNotes(procedure.id, ($event.target as HTMLTextAreaElement).value)"
       ></textarea>
     </div>
   </div>
@@ -52,7 +60,7 @@
 
 <script setup lang="ts">
 import { useBackofficeStore } from '@/stores/backoffice'
-import { formatDate } from '@/utils/backoffice'
+import { formatDate } from '@/utils/date'
 
 const store = useBackofficeStore()
 

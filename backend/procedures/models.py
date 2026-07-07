@@ -1,4 +1,6 @@
+from django.conf import settings
 from django.db import models
+from model_utils.fields import MonitorField
 from model_utils.models import TimeStampedModel
 
 
@@ -12,7 +14,6 @@ class SuiviProcedure(TimeStampedModel):
         blank=True,
     )
     etape_en_cours = models.PositiveSmallIntegerField(default=1, verbose_name="Étape active")
-    # Étape 1 : Pièces de procédure
     preuves_fournies = models.BooleanField(default=False, verbose_name="Éléments de preuve joints")
     constatation_signee = models.BooleanField(
         default=False, verbose_name="Rapport de constatation signé"
@@ -21,7 +22,6 @@ class SuiviProcedure(TimeStampedModel):
     identification_reussie = models.BooleanField(
         null=True, blank=True, verbose_name="Identification de l'auteur réussie"
     )
-    # Étape 2 : Notification
     lettre_envoyee = models.BooleanField(default=False, verbose_name="Lettre d'information envoyée")
     lettre_envoyee_date = models.DateField(
         null=True, blank=True, verbose_name="Date d'envoi de la lettre"
@@ -32,11 +32,9 @@ class SuiviProcedure(TimeStampedModel):
     ar_presentation_date = models.DateField(
         null=True, blank=True, verbose_name="Date de présentation de l'AR"
     )
-    # Étape 4 : Actions selon décision
     decision_poursuite = models.CharField(
         max_length=50, blank=True, verbose_name="Décision de poursuite"
     )
-    # - Si Sanction
     montant_fixe = models.BooleanField(default=False, verbose_name="Montant fixé")
     montant_amende = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True, verbose_name="Montant de l'amende"
@@ -46,7 +44,6 @@ class SuiviProcedure(TimeStampedModel):
     notification_sanction_envoyee = models.BooleanField(
         default=False, verbose_name="Notification de sanction envoyée"
     )
-    # - Si Abandon
     motif_abandon = models.CharField(max_length=255, blank=True, verbose_name="Motif d'abandon")
     souhaite_notifier_abandon = models.BooleanField(
         null=True, blank=True, verbose_name="Souhaite notifier l'abandon"
@@ -54,7 +51,6 @@ class SuiviProcedure(TimeStampedModel):
     notification_abandon_envoyee = models.BooleanField(
         default=False, verbose_name="Notification d'abandon envoyée"
     )
-    # Infos Complémentaires / Étape 5
     nettoyage_fait = models.BooleanField(null=True, blank=True, verbose_name="Nettoyage effectué")
     nettoyage_par = models.CharField(
         max_length=255, blank=True, verbose_name="Nettoyage effectué par"
@@ -69,6 +65,22 @@ class SuiviProcedure(TimeStampedModel):
     )
     montant_recouvre = models.BooleanField(default=False, verbose_name="Montant recouvré")
     dossier_archive = models.BooleanField(default=False, verbose_name="Dossier archivé")
+    # Management fields
+    assigned_to = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        limit_choices_to={"is_staff": True},
+        related_name="assigned_suivi_procedures",
+        verbose_name="Assigné à",
+    )
+    assigned_at = MonitorField(
+        monitor="assigned_to",
+        null=True,
+        blank=True,
+        verbose_name="Date d'assignation",
+    )
 
     class Meta:
         verbose_name = "Suivi de procédure"

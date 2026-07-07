@@ -29,7 +29,13 @@
         <span class="bo-filter-label">Chargé :</span>
         <select v-model="filters.charge" class="fr-select" style="width: auto; padding-right: 2rem">
           <option value="Tous">Tous</option>
-          <option v-for="name in store.assignees" :key="name" :value="name">{{ name }}</option>
+          <option
+            v-for="assignee in store.assignees"
+            :key="assignee.id ?? 'unassigned'"
+            :value="assignee.id ?? 'None'"
+          >
+            {{ assignee.name }}
+          </option>
         </select>
       </div>
 
@@ -81,14 +87,19 @@
               <strong>{{ procedure.commune }}</strong>
             </td>
             <td>{{ procedure.agent }}</td>
-            <td>{{ formatDate(procedure.date_constat) }}</td>
+            <td>{{ formatConstatationDate(procedure.date_constat) }}</td>
             <td>
               <span :class="getBadgeClass(getProcedureStatut(procedure))">
                 ● Étape {{ procedure.suivi_procedure.etape_en_cours }} :
                 {{ getProcedureStatut(procedure) }}
               </span>
             </td>
-            <td>{{ procedure.suivi_procedure.charge_deploiement }}</td>
+            <td>
+              {{
+                store.assignees.find((a) => a.id === procedure.suivi_procedure.assigned_to)?.name ||
+                'Non assigné'
+              }}
+            </td>
             <td>
               <span
                 v-if="procedure.suivi_procedure.anomalie"
@@ -121,7 +132,8 @@
 
 <script setup lang="ts">
 import { useBackofficeStore } from '@/stores/backoffice'
-import { formatDate, getBadgeClass, getProcedureStatut } from '@/utils/backoffice'
+import { getBadgeClass, getProcedureStatut } from '@/utils/backoffice'
+import { formatConstatationDate } from '@/utils/date'
 import { computed, ref } from 'vue'
 
 const store = useBackofficeStore()
@@ -140,25 +152,23 @@ const filters = ref({
 
 const filteredProcedures = computed(() => {
   return store.procedures.filter((procedure) => {
-    // Stage Filter
     if (
       filters.value.etape !== 'Tous' &&
       procedure.suivi_procedure.etape_en_cours !== filters.value.etape
     )
       return false
-    // Status Filter
     if (filters.value.statut !== 'Tous' && getProcedureStatut(procedure) !== filters.value.statut)
       return false
-    // Assignee Filter
-    if (
-      filters.value.charge !== 'Tous' &&
-      procedure.suivi_procedure.charge_deploiement !== filters.value.charge
-    )
-      return false
-    // Anomalies Filter
+    if (filters.value.charge !== 'Tous') {
+      const assigned = procedure.suivi_procedure.assigned_to
+      if (filters.value.charge === 'None') {
+        if (assigned !== null) return false
+      } else if (assigned !== Number(filters.value.charge)) {
+        return false
+      }
+    }
     if (filters.value.anomalie === 'Avec' && !procedure.suivi_procedure.anomalie) return false
     if (filters.value.anomalie === 'Sans' && procedure.suivi_procedure.anomalie) return false
-    // Text search (commune, agent)
     if (filters.value.search) {
       const q = filters.value.search.toLowerCase()
       const inCommune = procedure.commune.toLowerCase().includes(q)

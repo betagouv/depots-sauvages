@@ -1,8 +1,16 @@
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
+
 from backend.procedures.models import SuiviProcedure
 
 
 class SuiviProcedureSerializer(serializers.ModelSerializer):
+    assigned_to = serializers.PrimaryKeyRelatedField(
+        queryset=get_user_model().objects.filter(is_staff=True),
+        allow_null=True,
+        required=False,
+    )
+
     class Meta:
         model = SuiviProcedure
         fields = [
@@ -37,5 +45,7 @@ class SuiviProcedureSerializer(serializers.ModelSerializer):
             "titre_recette_confirme",
             "montant_recouvre",
             "dossier_archive",
+            "assigned_to",
+            "assigned_at",
         ]
-        read_only_fields = ("created", "modified")
+        read_only_fields = ("created", "modified", "assigned_at")

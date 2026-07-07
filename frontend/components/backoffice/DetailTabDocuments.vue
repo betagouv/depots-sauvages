@@ -46,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import { formatDate } from '@/utils/backoffice'
+import { formatDate } from '@/utils/date'
 
 defineProps<{
   procedure: any

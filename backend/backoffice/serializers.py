@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from backend.constatations.models import Constatation
@@ -5,8 +6,11 @@ from backend.procedures.models import SuiviProcedure
 
 
 class BackofficeSuiviProcedureSerializer(serializers.ModelSerializer):
-    charge_deploiement = serializers.SerializerMethodField()
-    date_assigned = serializers.SerializerMethodField()
+    assigned_to = serializers.PrimaryKeyRelatedField(
+        queryset=get_user_model().objects.filter(is_staff=True),
+        allow_null=True,
+        required=False,
+    )
     anomalie = serializers.SerializerMethodField()
 
     class Meta:
@@ -18,10 +22,9 @@ class BackofficeSuiviProcedureSerializer(serializers.ModelSerializer):
             "lettre_signe",
             "identification_reussie",
             "observations_internes",
-            "charge_deploiement",
-            "date_assigned",
+            "assigned_to",
+            "assigned_at",
             "anomalie",
-            # New follow-up fields
             "lettre_envoyee",
             "lettre_envoyee_date",
             "copie_archives",
@@ -44,12 +47,6 @@ class BackofficeSuiviProcedureSerializer(serializers.ModelSerializer):
             "montant_recouvre",
             "dossier_archive",
         ]
-
-    def get_charge_deploiement(self, obj):
-        return "Non assigné"
-
-    def get_date_assigned(self, obj):
-        return None
 
     def get_anomalie(self, obj):
         return ""
@@ -74,7 +71,6 @@ class BackofficeProcedureSerializer(serializers.ModelSerializer):
             "agent",
             "auteur_identifie",
             "suivi_procedure",
-            # New details fields
             "localisation_depot",
             "heure_constat",
             "constatant_civilite",
@@ -123,35 +119,16 @@ class BackofficeProcedureSerializer(serializers.ModelSerializer):
         sp = getattr(obj, "suivi_procedure", None)
         if sp:
             return BackofficeSuiviProcedureSerializer(sp).data
-        return {
-            "etape_en_cours": 1,
-            "preuves_fournies": False,
-            "constatation_signee": False,
-            "lettre_signe": False,
-            "identification_reussie": None,
-            "observations_internes": "",
-            "charge_deploiement": "Non assigné",
-            "date_assigned": None,
-            "anomalie": "",
-            "lettre_envoyee": False,
-            "lettre_envoyee_date": None,
-            "copie_archives": False,
-            "ar_recu": False,
-            "ar_statut": "",
-            "ar_presentation_date": None,
-            "decision_poursuite": "",
-            "montant_fixe": False,
-            "montant_amende": None,
-            "arrete_redige": False,
-            "titre_recette_emis": False,
-            "notification_sanction_envoyee": False,
-            "motif_abandon": "",
-            "souhaite_notifier_abandon": None,
-            "notification_abandon_envoyee": False,
-            "nettoyage_fait": None,
-            "nettoyage_par": "",
-            "date_recouvrement_effective": None,
-            "titre_recette_confirme": False,
-            "montant_recouvre": False,
-            "dossier_archive": False,
-        }
+        return BackofficeSuiviProcedureSerializer(SuiviProcedure()).data
+
+
+class StaffUserSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = get_user_model()
+        fields = ["id", "name", "email"]
+
+    def get_name(self, obj):
+        full_name = obj.get_full_name()
+        return full_name if full_name else obj.email

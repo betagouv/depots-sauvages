@@ -14,7 +14,7 @@
       </div>
       <div class="fr-col-6">
         <span class="fr-text--xs fr-mb-0" style="color: var(--text-mention-grey); text-transform: uppercase">Date & Heure</span>
-        <p class="fr-text--md fr-mb-1w">{{ formatDate(procedure.date_constat) }} {{ procedure.heure_constat ? `à ${procedure.heure_constat.substring(0, 5)}` : '' }}</p>
+        <p class="fr-text--md fr-mb-1w">{{ formatConstatationDate(procedure.date_constat, procedure.heure_constat) }}</p>
       </div>
       <div class="fr-col-6">
         <span class="fr-text--xs fr-mb-0" style="color: var(--text-mention-grey); text-transform: uppercase">N° Procédure</span>
@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import { formatDate } from '@/utils/backoffice'
+import { formatConstatationDate } from '@/utils/date'
 
 defineProps<{
   procedure: any

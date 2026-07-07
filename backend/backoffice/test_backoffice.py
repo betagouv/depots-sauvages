@@ -3,7 +3,6 @@ from django.urls import reverse
 from rest_framework import status
 
 from backend.constatations.models import Constatation
-from backend.procedures.models import SuiviProcedure
 from backend.unit_tests.factories import UserFactory
 
 
@@ -69,9 +68,73 @@ def test_backoffice_procedures_staff(client):
     assert data[0]["commune"] == "Fécamp"
     assert data[0]["user_email"] == staff_user.email
     assert data[0]["suivi_procedure"]["etape_en_cours"] == 1
-    assert data[0]["suivi_procedure"]["charge_deploiement"] == "Non assigné"
+    assert data[0]["suivi_procedure"]["assigned_to"] is None
 
     # Verify second
     assert data[1]["id"] == c1.id
     assert data[1]["commune"] == "Montmédy"
     assert data[1]["suivi_procedure"]["observations_internes"] == "Some notes"
+
+
+@pytest.mark.django_db
+def test_backoffice_staff_list(client):
+    admin_user = UserFactory(is_staff=True, first_name="Jennifer", last_name="Dupont")
+    staff_user = UserFactory(is_staff=True, first_name="Anthony", last_name="Martin")
+    regular_user = UserFactory(is_staff=False, first_name="John", last_name="Doe")
+    client.force_login(admin_user)
+    url = reverse("backoffice-staff-list")
+    response = client.get(url)
+    assert response.status_code == status.HTTP_200_OK
+    assignees = response.json()
+    # Must contain both staff members and not regular user
+    names = [a["name"] for a in assignees]
+    assert "Jennifer Dupont" in names
+    assert "Anthony Martin" in names
+    assert "John Doe" not in names
+
+
+@pytest.mark.django_db
+def test_assign_suivi_procedure(client):
+    staff_user = UserFactory(is_staff=True)
+    regular_user = UserFactory(is_staff=False)
+    client.force_login(staff_user)
+    c = Constatation.objects.create(
+        user=regular_user,
+        commune="Paris",
+        date_constat="2026-07-01",
+    )
+    sp = c.suivi_procedure
+    update_url = reverse("suivi-procedure-detail", kwargs={"constatation_id": c.id})
+    payload = {
+        "assigned_to": staff_user.id,
+        "observations_internes": "Updated note",
+    }
+    response = client.patch(update_url, payload, content_type="application/json")
+    assert response.status_code == status.HTTP_200_OK
+    sp.refresh_from_db()
+    assert sp.assigned_to == staff_user
+    assert sp.assigned_at is not None
+    assert sp.observations_internes == "Updated note"
+
+
+@pytest.mark.django_db
+def test_unassign_suivi_procedure(client):
+    staff_user = UserFactory(is_staff=True)
+    regular_user = UserFactory(is_staff=False)
+    client.force_login(staff_user)
+    c = Constatation.objects.create(
+        user=regular_user,
+        commune="Paris",
+        date_constat="2026-07-01",
+    )
+    sp = c.suivi_procedure
+    sp.assigned_to = staff_user
+    sp.save()
+    update_url = reverse("suivi-procedure-detail", kwargs={"constatation_id": c.id})
+    payload = {
+        "assigned_to": None,
+    }
+    response = client.patch(update_url, payload, content_type="application/json")
+    assert response.status_code == status.HTTP_200_OK
+    sp.refresh_from_db()
+    assert sp.assigned_to is None
