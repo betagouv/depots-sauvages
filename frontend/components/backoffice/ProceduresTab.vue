@@ -72,66 +72,152 @@
       </div>
     </div>
 
+    <!-- Toolbar with Column Customizer -->
+    <div class="bo-toolbar">
+      <div class="bo-customizer-container">
+        <button
+          class="fr-btn fr-btn--sm fr-btn--secondary bo-customizer-btn"
+          @click="showCustomizer = !showCustomizer"
+        >
+          <span class="fr-icon-settings-5-line" aria-hidden="true"></span>
+          Personnaliser les colonnes
+        </button>
+        <div v-if="showCustomizer" class="bo-customizer-popover">
+          <div class="bo-customizer-title">Colonnes à afficher</div>
+          <div class="bo-customizer-list">
+            <label v-for="col in customizableColumns" :key="col.key" class="bo-customizer-item">
+              <input type="checkbox" v-model="visibleColumns[col.key]" />
+              <span>{{ col.label }}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Procedures Grid Table -->
     <div class="bo-table-container">
       <table class="bo-table">
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Commune</th>
-            <th>Agent constatant</th>
-            <th>Date Constat</th>
-            <th>Étape</th>
-            <th>Traitement</th>
-            <th>Montant amende</th>
-            <th>Assigné à</th>
-            <th>Actions</th>
+            <th style="width: 40px"></th>
+            <th v-if="visibleColumns.id">ID</th>
+            <th v-if="visibleColumns.commune">Commune</th>
+            <th v-if="visibleColumns.agent">Agent constatant</th>
+            <th v-if="visibleColumns.date_constat">Date Constat</th>
+            <th v-if="visibleColumns.etape">Étape</th>
+            <th v-if="visibleColumns.traitement">Traitement</th>
+            <th v-if="visibleColumns.montant_amende">Montant amende</th>
+            <th v-if="visibleColumns.montant_prejudice">Montant préjudice</th>
+            <th v-if="visibleColumns.assigne_a">Assigné à</th>
+            <th v-if="visibleColumns.actions">Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="procedure in filteredProcedures" :key="procedure.id">
-            <td>
-              <code>#{{ procedure.id }}</code>
-            </td>
-            <td>
-              <strong>{{ procedure.commune }}</strong>
-            </td>
-            <td>{{ procedure.agent }}</td>
-            <td>{{ formatConstatationDate(procedure.date_constat) }}</td>
-            <td>
-              <span :class="getBadgeClass(procedure.suivi_procedure.etape_en_cours)">
-                {{ procedure.suivi_procedure.etape_en_cours }}.
-                {{ getStepLabel(procedure.suivi_procedure.etape_en_cours) }}
-              </span>
-            </td>
-            <td>
-              <span :class="getTraitementBadgeClass(getProcedureTraitement(procedure))">
-                {{ getProcedureTraitement(procedure) }}
-              </span>
-            </td>
-            <td>
-              <span v-if="procedure.suivi_procedure.montant_amende">
-                {{ procedure.suivi_procedure.montant_amende }} €
-              </span>
-              <span v-else class="fr-text-mention--grey">-</span>
-            </td>
-            <td>
-              {{
-                store.assignees.find((a) => a.id === procedure.suivi_procedure.personne_assignee)?.name ||
-                'Non assigné'
-              }}
-            </td>
-            <td>
-              <button
-                class="fr-btn fr-btn--sm fr-btn--secondary"
-                @click="$emit('view-detail', procedure.id)"
-              >
-                Consulter
-              </button>
-            </td>
-          </tr>
+          <template v-for="procedure in filteredProcedures" :key="procedure.id">
+            <tr>
+              <td>
+                <button
+                  class="bo-chevron-btn"
+                  :class="{ 'bo-chevron-btn--expanded': isExpanded(procedure.id) }"
+                  @click="toggleRow(procedure.id)"
+                  :aria-label="
+                    isExpanded(procedure.id) ? 'Masquer les détails' : 'Afficher les détails'
+                  "
+                >
+                  <span class="fr-icon-arrow-right-s-line" aria-hidden="true"></span>
+                </button>
+              </td>
+              <td v-if="visibleColumns.id">
+                <code>#{{ procedure.id }}</code>
+              </td>
+              <td v-if="visibleColumns.commune">
+                <strong>{{ procedure.commune }}</strong>
+              </td>
+              <td v-if="visibleColumns.agent">{{ procedure.agent }}</td>
+              <td v-if="visibleColumns.date_constat">
+                {{ formatConstatationDate(procedure.date_constat) }}
+              </td>
+              <td v-if="visibleColumns.etape">
+                <span :class="getBadgeClass(procedure.suivi_procedure.etape_en_cours)">
+                  {{ procedure.suivi_procedure.etape_en_cours }}.
+                  {{ getStepLabel(procedure.suivi_procedure.etape_en_cours) }}
+                </span>
+              </td>
+              <td v-if="visibleColumns.traitement">
+                <span :class="getTraitementBadgeClass(getProcedureTraitement(procedure))">
+                  {{ getProcedureTraitement(procedure) }}
+                </span>
+              </td>
+              <td v-if="visibleColumns.montant_amende">
+                <span v-if="procedure.suivi_procedure.montant_amende">
+                  {{ procedure.suivi_procedure.montant_amende }} €
+                </span>
+                <span v-else class="fr-text-mention--grey">-</span>
+              </td>
+              <td v-if="visibleColumns.montant_prejudice">
+                <span v-if="procedure.prejudice_montant">
+                  {{ procedure.prejudice_montant }} €
+                </span>
+                <span v-else class="fr-text-mention--grey">-</span>
+              </td>
+              <td v-if="visibleColumns.assigne_a">
+                {{
+                  store.assignees.find((a) => a.id === procedure.suivi_procedure.personne_assignee)
+                    ?.name || 'Non assigné'
+                }}
+              </td>
+              <td v-if="visibleColumns.actions">
+                <button
+                  class="fr-btn fr-btn--sm fr-btn--secondary"
+                  @click="$emit('view-detail', procedure.id)"
+                >
+                  Consulter
+                </button>
+              </td>
+            </tr>
+            <tr v-if="isExpanded(procedure.id)" class="bo-accordion-tr">
+              <td :colspan="activeColumnsCount" class="bo-accordion-td">
+                <div class="bo-accordion-content">
+                  <div class="fr-grid-row fr-grid-row--gutters">
+                    <div class="fr-col-12 fr-col-md-6 fr-col-lg-4">
+                      <DetailTabGeneral :procedure="procedure" />
+                    </div>
+                    <div class="fr-col-12 fr-col-md-6 fr-col-lg-4">
+                      <DetailTabDescription :procedure="procedure" />
+                    </div>
+                    <div class="fr-col-12 fr-col-md-6 fr-col-lg-4">
+                      <DetailTabAuthor :procedure="procedure" />
+                    </div>
+                    <div class="fr-col-12 fr-col-md-6 fr-col-lg-4">
+                      <DetailTabPrejudice :procedure="procedure" />
+                    </div>
+                    <div class="fr-col-12 fr-col-md-6 fr-col-lg-4">
+                      <DetailTabDocuments :procedure="procedure" />
+                    </div>
+                    <div
+                      class="fr-col-12 fr-col-md-6 fr-col-lg-4"
+                      v-if="procedure.suivi_procedure.observations_internes"
+                    >
+                      <div
+                        class="premium-box fr-p-3w fr-mb-3w bo-card"
+                        style="height: 100%; min-height: 200px"
+                      >
+                        <h3 class="fr-h6 fr-mb-2w bo-card-title">
+                          <span class="fr-icon-clipboard-line fr-mr-1w"></span> Observations
+                          Internes
+                        </h3>
+                        <p class="bo-obs-text fr-mb-0">
+                          {{ procedure.suivi_procedure.observations_internes }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </template>
           <tr v-if="filteredProcedures.length === 0">
-            <td colspan="9" class="fr-text-center fr-py-3w fr-text-mention--grey">
+            <td :colspan="activeColumnsCount" class="fr-text-center fr-py-3w fr-text-mention--grey">
               Aucune procédure ne correspond aux filtres appliqués.
             </td>
           </tr>
@@ -152,6 +238,12 @@ import {
 import { formatConstatationDate } from '@/utils/date'
 import { computed, ref } from 'vue'
 
+import DetailTabAuthor from '@/components/backoffice/DetailTabAuthor.vue'
+import DetailTabDescription from '@/components/backoffice/DetailTabDescription.vue'
+import DetailTabDocuments from '@/components/backoffice/DetailTabDocuments.vue'
+import DetailTabGeneral from '@/components/backoffice/DetailTabGeneral.vue'
+import DetailTabPrejudice from '@/components/backoffice/DetailTabPrejudice.vue'
+
 const store = useBackofficeStore()
 
 defineEmits<{
@@ -165,6 +257,49 @@ const filters = ref({
   casReels: 'Oui',
   auteurIdentifie: 'Tous',
   search: '',
+})
+
+// Column customization state
+const showCustomizer = ref(false)
+const visibleColumns = ref<Record<string, boolean>>({
+  id: true,
+  commune: true,
+  agent: true,
+  date_constat: true,
+  etape: true,
+  traitement: true,
+  montant_amende: true,
+  montant_prejudice: false,
+  assigne_a: true,
+  actions: true,
+})
+
+const customizableColumns = [
+  { key: 'agent', label: 'Agent constatant' },
+  { key: 'date_constat', label: 'Date Constat' },
+  { key: 'etape', label: 'Étape active' },
+  { key: 'traitement', label: 'Statut traitement' },
+  { key: 'montant_amende', label: 'Montant amende' },
+  { key: 'montant_prejudice', label: 'Montant préjudice' },
+  { key: 'assigne_a', label: 'Assigné à' },
+]
+
+// Accordion (expanded rows) state
+const expandedRows = ref<Set<number>>(new Set())
+
+const toggleRow = (id: number) => {
+  if (expandedRows.value.has(id)) {
+    expandedRows.value.delete(id)
+  } else {
+    expandedRows.value.add(id)
+  }
+}
+
+const isExpanded = (id: number) => expandedRows.value.has(id)
+
+// Active column count for colspan
+const activeColumnsCount = computed(() => {
+  return Object.values(visibleColumns.value).filter(Boolean).length + 1 // +1 for the chevron column
 })
 
 const filteredProcedures = computed(() => {
