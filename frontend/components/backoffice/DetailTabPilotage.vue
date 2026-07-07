@@ -1,10 +1,33 @@
 <template>
   <div class="premium-box fr-p-3w fr-mb-3w bo-card bo-card--accent-blue">
     <h3 class="fr-h6 fr-mb-2w fr-text-title--blue-france">
-      <span class="fr-icon-user-setting-line fr-mr-1w"></span> Pilotage dossier
+      <span class="fr-icon-user-setting-line fr-mr-1w"></span> Pilotage de la procédure
     </h3>
+
+    <div class="fr-select-group fr-mb-2w">
+      <label class="fr-label fr-text--xs" for="status-select">Statut de traitement</label>
+      <select
+        id="status-select"
+        class="fr-select"
+        :value="procedure.suivi_procedure?.statut_traitement ?? 'Nouveau'"
+        @change="
+          store.updateTraitement(
+            procedure.id,
+            ($event.target as HTMLSelectElement).value
+          )
+        "
+      >
+        <option value="Nouveau">Nouveau</option>
+        <option value="Ouvert">Ouvert</option>
+        <option value="En pause">En pause</option>
+        <option value="Résolu">Résolu</option>
+        <option value="Clôturé">Clôturé</option>
+      </select>
+    </div>
+
     <div class="fr-select-group fr-mb-2w">
       <label class="fr-label fr-text--xs" for="assignee-select">Assigné à</label>
+
       <select
         id="assignee-select"
         class="fr-select"

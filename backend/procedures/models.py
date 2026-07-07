@@ -55,8 +55,6 @@ class SuiviProcedure(TimeStampedModel):
     nettoyage_par = models.CharField(
         max_length=255, blank=True, verbose_name="Nettoyage effectué par"
     )
-    observations_internes = models.TextField(blank=True, verbose_name="Observations internes")
-
     date_recouvrement_effective = models.DateField(
         null=True, blank=True, verbose_name="Date de recouvrement effective"
     )
@@ -65,7 +63,13 @@ class SuiviProcedure(TimeStampedModel):
     )
     montant_recouvre = models.BooleanField(default=False, verbose_name="Montant recouvré")
     dossier_archive = models.BooleanField(default=False, verbose_name="Dossier archivé")
-    # Management fields
+    # Backoffice
+    observations_internes = models.TextField(blank=True, verbose_name="Observations internes")
+    statut_traitement = models.CharField(
+        max_length=20,
+        default="Nouveau",
+        verbose_name="Statut de traitement",
+    )
     assigned_to = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,

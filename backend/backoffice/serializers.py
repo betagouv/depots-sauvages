@@ -46,6 +46,7 @@ class BackofficeSuiviProcedureSerializer(serializers.ModelSerializer):
             "titre_recette_confirme",
             "montant_recouvre",
             "dossier_archive",
+            "statut_traitement",
         ]
 
     def get_anomalie(self, obj):

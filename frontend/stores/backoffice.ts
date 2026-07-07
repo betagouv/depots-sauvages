@@ -32,7 +32,9 @@ export interface SuiviProcedure {
   titre_recette_confirme: boolean
   montant_recouvre: boolean
   dossier_archive: boolean
+  statut_traitement: string
 }
+
 
 export interface BackofficeProcedure {
   id: number
@@ -336,6 +338,14 @@ export const useBackofficeStore = defineStore('backoffice', {
         this.saveSuivi(procedureId)
       }
     },
+    updateTraitement(procedureId: number, status: string) {
+      const procedure = this.procedures.find((p) => p.id === procedureId)
+      if (procedure && procedure.suivi_procedure) {
+        procedure.suivi_procedure.statut_traitement = status
+        this.saveSuivi(procedureId)
+      }
+    },
+
     toggleSuiviField(procedureId: number, field: string) {
       const procedure = this.procedures.find((p) => p.id === procedureId)
       if (procedure && procedure.suivi_procedure) {

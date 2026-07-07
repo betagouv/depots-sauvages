@@ -45,7 +45,9 @@ class SuiviProcedureSerializer(serializers.ModelSerializer):
             "titre_recette_confirme",
             "montant_recouvre",
             "dossier_archive",
+            "statut_traitement",
             "assigned_to",
             "assigned_at",
         ]
+
         read_only_fields = ("created", "modified", "assigned_at")

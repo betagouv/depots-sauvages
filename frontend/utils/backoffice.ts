@@ -34,12 +34,14 @@ export const getBadgeClass = (status: string) => {
 
 export const getProcedureTraitement = (procedure: any) => {
   const sp = procedure.suivi_procedure
+  if (sp.statut_traitement) return sp.statut_traitement
   if (sp.dossier_archive) return 'Clôturé'
   if (sp.etape_en_cours === 5 || sp.montant_recouvre) return 'Résolu'
   if (sp.observations_internes?.toLowerCase().includes('pause')) return 'En pause'
   if (sp.assigned_to) return 'Ouvert'
   return 'Nouveau'
 }
+
 
 export const getTraitementBadgeClass = (traitement: string) => {
   if (traitement === 'Nouveau') return 'bo-badge bo-badge--blue'
