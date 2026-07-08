@@ -62,7 +62,7 @@
     </div>
 
     <!-- Stats des étapes de la procédure -->
-    <div class="fr-mt-4w">
+    <div class="fr-mt-5w">
       <h3 class="fr-h5 bo-flex-center-gap">
         <span class="fr-icon-arrow-right-line fr-text-title-blue-france" aria-hidden="true"></span>
         Suivi des étapes de la procédure
@@ -125,7 +125,7 @@
     </div>
 
     <!-- Treatment Status Distribution -->
-    <div class="fr-mt-4w">
+    <div class="fr-mt-5w">
       <h3 class="fr-h5 bo-flex-center-gap">
         <span class="fr-icon-clipboard-fill fr-text-title-blue-france" aria-hidden="true"></span>
         Statut de traitement des procédures
@@ -148,7 +148,7 @@
       </div>
     </div>
 
-    <div class="fr-mt-4w">
+    <div class="fr-mt-5w">
       <h3 class="fr-h5 bo-flex-center-gap">
         <span class="fr-icon-user-fill fr-text-title-blue-france" aria-hidden="true"></span>
         Répartition du traitement des procédures

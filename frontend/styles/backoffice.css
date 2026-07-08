@@ -815,7 +815,6 @@
   display: flex;
   align-items: center;
   padding-bottom: 0.75rem;
-  border-bottom: 2px solid var(--border-default-grey);
   margin-bottom: 1rem;
 }
 
@@ -830,32 +829,35 @@
 .bo-step-list {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
 
 .bo-step-row-link {
   text-decoration: none;
   color: inherit;
+  background-image: none !important;
+}
+
+.bo-dashboard-card-link {
+  background-image: none !important;
 }
 
 .bo-step-row {
   display: flex;
   align-items: center;
-  padding: 0.5rem 0.25rem;
+  padding: 0.6rem 0.75rem;
   background: transparent;
-  border: none;
-  border-bottom: 1px solid var(--border-default-grey);
-  transition: padding-left 0.2s ease, color 0.2s ease;
-}
-
-.bo-step-row-link:last-child .bo-step-row {
-  border-bottom: none;
+  border-radius: 8px;
+  transition:
+    background-color 0.2s ease,
+    padding-left 0.2s ease,
+    color 0.2s ease;
 }
 
 .bo-step-row-link:hover .bo-step-row {
-  padding-left: 0.5rem;
+  background-color: var(--background-alt-grey-hover);
+  padding-left: 1rem;
   color: var(--text-active-blue-france);
-  border-bottom-color: var(--border-active-blue-france);
 }
 
 .bo-step-num-badge {
