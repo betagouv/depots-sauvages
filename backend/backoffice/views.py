@@ -1,6 +1,4 @@
 from django.contrib.auth import get_user_model
-from django.db.models import Q
-from django.utils import timezone
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser
@@ -36,11 +34,8 @@ class BackofficeDashboardStatsViewSet(viewsets.ViewSet):
 
         decision_to_take = real_procedures.filter(suivi_procedure__etape_en_cours=3).count()
 
-        now = timezone.now()
-        closed_this_month = real_procedures.filter(
-            Q(suivi_procedure__etape_en_cours=5) | Q(suivi_procedure__dossier_archive=True),
-            suivi_procedure__modified__year=now.year,
-            suivi_procedure__modified__month=now.month,
+        closed = real_procedures.filter(
+            suivi_procedure__statut_traitement="Clôturé"
         ).count()
 
         return Response(
@@ -48,7 +43,7 @@ class BackofficeDashboardStatsViewSet(viewsets.ViewSet):
                 "totalActive": total_active,
                 "arWaiting": ar_waiting,
                 "decisionToTake": decision_to_take,
-                "closedThisMonth": closed_this_month,
+                "closed": closed,
             }
         )
 

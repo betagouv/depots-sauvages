@@ -99,7 +99,7 @@ export interface BackofficeState {
     totalActive: number
     arWaiting: number
     decisionToTake: number
-    closedThisMonth: number
+    closed: number
   }
 }
 
@@ -108,10 +108,10 @@ export const useBackofficeStore = defineStore('backoffice', {
     assignees: [{ id: null, name: 'Non assigné' }],
     procedures: [],
     stats: {
-      totalActive: 84,
-      arWaiting: 18,
-      decisionToTake: 7,
-      closedThisMonth: 23,
+      totalActive: 0,
+      arWaiting: 0,
+      decisionToTake: 0,
+      closed: 0,
     },
   }),
   getters: {

@@ -23,9 +23,9 @@
         </div>
       </div>
       <div class="bo-kpi-card">
-        <div class="bo-kpi-val bo-kpi-val--success">{{ store.stats.closedThisMonth }}</div>
-        <div class="bo-kpi-lbl">Clôturées ce mois</div>
-        <div class="bo-kpi-desc">Procédures finalisées ou archivées au cours du mois</div>
+        <div class="bo-kpi-val bo-kpi-val--success">{{ store.stats.closed }}</div>
+        <div class="bo-kpi-lbl">Procédures clôturées</div>
+        <div class="bo-kpi-desc">Procédures avec le statut de traitement clôturé</div>
       </div>
     </div>
 

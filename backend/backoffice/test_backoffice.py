@@ -188,13 +188,14 @@ def test_backoffice_dashboard_stats(client):
     sp_dec.etape_en_cours = 3
     sp_dec.save()
 
-    # 5. Closed this month (etape = 5)
+    # 5. Closed (statut_traitement = "Clôturé")
     c_closed = Constatation.objects.create(
         user=staff_user,
         commune="Closed",
         ceci_est_un_test=False,
     )
     sp_closed = c_closed.suivi_procedure
+    sp_closed.statut_traitement = "Clôturé"
     sp_closed.etape_en_cours = 5
     sp_closed.save()
 
@@ -206,4 +207,4 @@ def test_backoffice_dashboard_stats(client):
     assert data["totalActive"] == 3
     assert data["arWaiting"] == 1
     assert data["decisionToTake"] == 1
-    assert data["closedThisMonth"] == 1
+    assert data["closed"] == 1
