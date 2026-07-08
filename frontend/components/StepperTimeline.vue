@@ -1,18 +1,19 @@
 <template>
   <div class="bo-stepper-container">
     <div class="bo-stepper">
-      <div
-        v-for="step in stepCount"
-        :key="step"
-        class="bo-step"
-        :class="{
-          'bo-step--completed': currentStep > step,
-          'bo-step--active': currentStep === step,
-        }"
-      >
-        <div class="bo-step-num">{{ step }}</div>
-        <div class="bo-step-lbl desktop-only">{{ getStepLabel(step, auteurIdentifie) }}</div>
-      </div>
+      <template v-for="idx in stepCount" :key="idx">
+        <div
+          v-if="getStepLabel(idx - 1, auteurIdentifie)"
+          class="bo-step"
+          :class="{
+            'bo-step--completed': currentStep > idx - 1,
+            'bo-step--active': currentStep === idx - 1,
+          }"
+        >
+          <div class="bo-step-num">{{ idx - 1 }}</div>
+          <div class="bo-step-lbl desktop-only">{{ getStepLabel(idx - 1, auteurIdentifie) }}</div>
+        </div>
+      </template>
     </div>
     <div class="bo-step-lbl-mobile mobile-only">
       Étape {{ currentStep }} : <strong>{{ getStepLabel(currentStep, auteurIdentifie) }}</strong>
@@ -30,7 +31,7 @@ withDefaults(
     auteurIdentifie?: boolean
   }>(),
   {
-    stepCount: 5,
+    stepCount: 6,
     auteurIdentifie: true,
   }
 )

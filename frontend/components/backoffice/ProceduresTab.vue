@@ -18,10 +18,11 @@
           <label class="bo-filter-label" for="filter-etape">Étape</label>
           <select id="filter-etape" v-model="filters.etape" class="fr-select">
             <option value="Tous">Tous</option>
-            <option :value="1">1 Constatation</option>
-            <option :value="2">2 Pièces jointes</option>
-            <option :value="3">3 Notification</option>
-            <option :value="4">4 Décision</option>
+            <option :value="0">0 Constatation</option>
+            <option :value="1">1 Pièces jointes</option>
+            <option :value="2">2 Notification</option>
+            <option :value="3">3 Décision</option>
+            <option :value="4">4 Sanctionner</option>
             <option :value="5">5 Clôture</option>
           </select>
         </div>

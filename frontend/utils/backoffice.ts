@@ -1,5 +1,6 @@
 export const getBadgeClass = (step: number) => {
-  if (step === 1) return 'bo-badge bo-badge--yellow'
+  if (step === 0) return 'bo-badge bo-badge--yellow'
+  if (step === 1) return 'bo-badge bo-badge--gray'
   if (step === 2) return 'bo-badge bo-badge--gray'
   if (step === 3) return 'bo-badge bo-badge--gray'
   if (step === 4) return 'bo-badge bo-badge--blue'
@@ -34,11 +35,25 @@ export const getTraitementBadgeClass = (traitement: string) => {
 
 export const getStepLabel = (step: number, auteurIdentifie: boolean = true) => {
   if (auteurIdentifie) {
-    const labels = ['Constatation', 'Pièces jointes', 'Notification', 'Décision', 'Clôture']
-    return labels[step - 1] || ''
+    const labels = [
+      'Constatation',
+      'Pièces jointes',
+      'Notification',
+      'Décision',
+      'Sanctionner',
+      'Clôture',
+    ]
+    return labels[step] || ''
   } else {
-    const labels = ['Constatation', 'Pièces jointes', "Identifier l'auteur", 'Recherche', 'Clôture']
-    return labels[step - 1] || ''
+    const labels = [
+      'Constatation',
+      'Pièces jointes',
+      "Identifier l'auteur",
+      'Recherche',
+      '',
+      'Clôture',
+    ]
+    return labels[step] || ''
   }
 }
 

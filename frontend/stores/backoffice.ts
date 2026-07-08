@@ -1,6 +1,6 @@
+import { getProcedureTraitement } from '@/utils/backoffice'
 import { defineStore } from 'pinia'
 import { API_URL, fetchResource, patchResource } from '../services/api'
-import { getProcedureTraitement } from '@/utils/backoffice'
 
 export interface SuiviProcedure {
   etape_en_cours: number
@@ -36,7 +36,6 @@ export interface SuiviProcedure {
   statut_traitement: string
   modified: string
 }
-
 
 export interface BackofficeProcedure {
   id: number
@@ -143,11 +142,11 @@ export const useBackofficeStore = defineStore('backoffice', {
     proceduresByStatus: (state) => {
       const realProcs = state.procedures.filter((p) => !p.ceci_est_un_test)
       const counts: Record<string, number> = {
-        'Nouveau': 0,
-        'Ouvert': 0,
+        Nouveau: 0,
+        Ouvert: 0,
         'En pause': 0,
-        'Résolu': 0,
-        'Clôturé': 0,
+        Résolu: 0,
+        Clôturé: 0,
       }
       realProcs.forEach((p) => {
         const status = getProcedureTraitement(p)
@@ -156,6 +155,51 @@ export const useBackofficeStore = defineStore('backoffice', {
         }
       })
       return counts
+    },
+    generalStats: (state) => {
+      const total = state.procedures.length
+      const real = state.procedures.filter((p) => !p.ceci_est_un_test).length
+      const test = state.procedures.filter((p) => p.ceci_est_un_test).length
+      const authorIdentified = state.procedures.filter(
+        (p) => !p.ceci_est_un_test && p.auteur_identifie
+      ).length
+      const authorNotIdentified = state.procedures.filter(
+        (p) => !p.ceci_est_un_test && !p.auteur_identifie
+      ).length
+
+      return {
+        total,
+        real,
+        test,
+        authorIdentified,
+        authorNotIdentified,
+      }
+    },
+    proceduresByStepAndAuthor: (state) => {
+      const realProcs = state.procedures.filter((p) => !p.ceci_est_un_test)
+      const identified: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
+      const notIdentified: Record<number, number> = { 1: 0, 2: 0, 3: 0, 5: 0 }
+
+      realProcs.forEach((p) => {
+        const etape = p.suivi_procedure.etape_en_cours
+        if (p.auteur_identifie) {
+          if (etape >= 5) {
+            identified[5]++
+          } else if (etape in identified) {
+            identified[etape]++
+          }
+        } else {
+          if (etape >= 5) {
+            notIdentified[5]++
+          } else if (etape === 4) {
+            notIdentified[3]++
+          } else if (etape in notIdentified) {
+            notIdentified[etape]++
+          }
+        }
+      })
+
+      return { identified, notIdentified }
     },
   },
 
