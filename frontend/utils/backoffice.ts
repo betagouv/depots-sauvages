@@ -41,3 +41,18 @@ export const getStepLabel = (step: number, auteurIdentifie: boolean = true) => {
     return labels[step - 1] || ''
   }
 }
+
+/**
+ * Generic query parameter parser to parse and typed-coerce query values
+ */
+export const parseQueryParam = (val: any, defaultValue: any) => {
+  if (val === undefined || val === null || val === '') return defaultValue
+
+  // If the val is a digit, parse it as a number
+  const parsedInt = parseInt(val, 10)
+  if (!isNaN(parsedInt) && String(parsedInt) === String(val)) {
+    return parsedInt
+  }
+
+  return val
+}

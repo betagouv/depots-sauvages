@@ -254,9 +254,11 @@ import {
   getProcedureTraitement,
   getStepLabel,
   getTraitementBadgeClass,
+  parseQueryParam,
 } from '@/utils/backoffice'
 import { formatConstatationDate } from '@/utils/date'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 import DetailTabAuthor from '@/components/backoffice/DetailTabAuthor.vue'
 import DetailTabDescription from '@/components/backoffice/DetailTabDescription.vue'
@@ -266,19 +268,83 @@ import DetailTabObservations from '@/components/backoffice/DetailTabObservations
 import DetailTabPrejudice from '@/components/backoffice/DetailTabPrejudice.vue'
 
 const store = useBackofficeStore()
+const route = useRoute()
+const router = useRouter()
 
 defineEmits<{
   (e: 'view-detail', id: number): void
 }>()
 
 const filters = ref({
-  etape: 'Tous',
-  traitement: 'Tous',
-  charge: 'Tous',
-  casReels: 'Oui',
-  auteurIdentifie: 'Tous',
-  search: '',
+  etape: parseQueryParam(route.query.etape, 'Tous'),
+  traitement: parseQueryParam(route.query.traitement, 'Tous'),
+  charge: parseQueryParam(route.query.charge, 'Tous'),
+  casReels: parseQueryParam(route.query.casReels, 'Oui'),
+  auteurIdentifie: parseQueryParam(route.query.auteurIdentifie, 'Tous'),
+  search: parseQueryParam(route.query.search, ''),
 })
+
+// Sync filters changes with route queries
+watch(
+  filters,
+  (newFilters) => {
+    const query = { ...route.query }
+
+    if (newFilters.etape && newFilters.etape !== 'Tous') {
+      query.etape = newFilters.etape.toString()
+    } else {
+      delete query.etape
+    }
+
+    if (newFilters.traitement && newFilters.traitement !== 'Tous') {
+      query.traitement = newFilters.traitement
+    } else {
+      delete query.traitement
+    }
+
+    if (newFilters.charge && newFilters.charge !== 'Tous') {
+      query.charge = newFilters.charge
+    } else {
+      delete query.charge
+    }
+
+    if (newFilters.casReels && newFilters.casReels !== 'Oui') {
+      query.casReels = newFilters.casReels
+    } else {
+      delete query.casReels
+    }
+
+    if (newFilters.auteurIdentifie && newFilters.auteurIdentifie !== 'Tous') {
+      query.auteurIdentifie = newFilters.auteurIdentifie
+    } else {
+      delete query.auteurIdentifie
+    }
+
+    if (newFilters.search) {
+      query.search = newFilters.search
+    } else {
+      delete query.search
+    }
+
+    router.replace({ query })
+  },
+  { deep: true }
+)
+
+// Sync route query changes back to local filters (e.g. browser back/forward)
+watch(
+  () => route.query,
+  (newQuery) => {
+    if (route.query.tab === 'list') {
+      filters.value.etape = parseQueryParam(newQuery.etape, 'Tous')
+      filters.value.traitement = parseQueryParam(newQuery.traitement, 'Tous')
+      filters.value.charge = parseQueryParam(newQuery.charge, 'Tous')
+      filters.value.casReels = parseQueryParam(newQuery.casReels, 'Oui')
+      filters.value.auteurIdentifie = parseQueryParam(newQuery.auteurIdentifie, 'Tous')
+      filters.value.search = parseQueryParam(newQuery.search, '')
+    }
+  }
+)
 
 // Column customization state
 const showCustomizer = ref(false)

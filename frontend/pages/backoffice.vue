@@ -61,11 +61,17 @@ import DashboardTab from '@/components/backoffice/DashboardTab.vue'
 import DetailTab from '@/components/backoffice/DetailTab.vue'
 import ProceduresTab from '@/components/backoffice/ProceduresTab.vue'
 import { useBackofficeStore } from '@/stores/backoffice'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 const store = useBackofficeStore()
-const currentTab = ref('dashboard')
-const selectedProcedureId = ref<number | null>(null)
+const route = useRoute()
+const router = useRouter()
+
+const currentTab = ref((route.query.tab as string) || 'dashboard')
+const selectedProcedureId = ref<number | null>(
+  route.query.procedureId ? parseInt(route.query.procedureId as string, 10) : null
+)
 
 onMounted(async () => {
   await store.fetchProcedures()
@@ -74,7 +80,38 @@ onMounted(async () => {
 const viewDetail = (id: number) => {
   selectedProcedureId.value = id
   currentTab.value = 'detail'
+  router.push({
+    query: {
+      ...route.query,
+      tab: 'detail',
+      procedureId: id.toString(),
+    },
+  })
 }
+
+// Watch local tab changes to update route query
+watch(currentTab, (newTab) => {
+  const query = { ...route.query, tab: newTab }
+  if (newTab !== 'detail') {
+    delete query.procedureId
+    selectedProcedureId.value = null
+  }
+  router.push({ query })
+})
+
+// Watch route changes to update local state (e.g. browser back/forward)
+watch(
+  () => route.query,
+  (newQuery) => {
+    if (newQuery.tab && newQuery.tab !== currentTab.value) {
+      currentTab.value = newQuery.tab as string
+    }
+    const queryId = newQuery.procedureId ? parseInt(newQuery.procedureId as string, 10) : null
+    if (queryId !== selectedProcedureId.value) {
+      selectedProcedureId.value = queryId
+    }
+  }
+)
 </script>
 
 <style>
