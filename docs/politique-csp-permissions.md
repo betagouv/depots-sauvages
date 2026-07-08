@@ -56,3 +56,4 @@ Afin de valider la conformité de ces en-têtes auprès de vos partenaires insti
    * Valide la robustesse de la politique de sécurité du contenu vis-à-vis des contournements connus, par exemple par l'intermédiaire de l'usage de certains scripts de bibliothèques tierces autorisées.
 3. **Security Headers** - [Rapport protect-envi.beta.gouv.fr](https://securityheaders.com/?q=https%3A%2F%2Fprotect-envi.beta.gouv.fr%2F&followRedirects=on) :
    * Analyse rapide de la présence et de la configuration des principaux en-têtes HTTP de sécurité.
+

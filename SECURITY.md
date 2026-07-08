@@ -42,12 +42,17 @@ La plateforme met en œuvre plusieurs couches de défense contre l'injection de 
 
 ---
 
-### C. Contrôle d'accès et prévention contre l'idor
+### C. Contrôle d'accès, permissions et rôle d'administration
 
-Les vulnérabilités de type Insecure Direct Object Reference sont prévenues par une séparation stricte des données côté serveur :
+Les privilèges et le contrôle d'accès sont gérés à plusieurs niveaux pour assurer le cloisonnement et prévenir l'élévation de privilèges :
 
-- Toutes les requêtes API manipulant des constatations filtrent systématiquement les requêtes par rapport à l'utilisateur connecté : Constatation.objects.filter(user=self.request.user).
+- Les vulnérabilités de type Insecure Direct Object Reference (IDOR) sont prévenues par une séparation stricte des données côté serveur : `Constatation.objects.filter(user=self.request.user)`.
 - Il est techniquement impossible pour un utilisateur authentifié de lire, modifier ou télécharger des documents liés à une constatation créée par un autre utilisateur.
+- Les requêtes d'API du back-office sont protégées côté back-end par la classe de permission `IsAdminUser` de Django REST Framework, validant le statut de l'utilisateur connecté de manière indépendante des bascules visuelles du front-end.
+
+> [!TIP]
+> Pour consulter les détails sur l'isolation des sérialiseurs de données, notre gestion des rôles d'administration et de l'authentification (Bypass Auth et ProConnect), consultez le document dédié :
+> 📖 **[Architecture de Sécurité](./docs/architecture-securite.md)**
 
 ---
 
