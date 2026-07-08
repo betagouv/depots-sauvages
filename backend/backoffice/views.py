@@ -34,9 +34,7 @@ class BackofficeDashboardStatsViewSet(viewsets.ViewSet):
 
         decision_to_take = real_procedures.filter(suivi_procedure__etape_en_cours=3).count()
 
-        closed = real_procedures.filter(
-            suivi_procedure__statut_traitement="Clôturé"
-        ).count()
+        closed = real_procedures.filter(suivi_procedure__statut_traitement="Clôturé").count()
 
         return Response(
             {

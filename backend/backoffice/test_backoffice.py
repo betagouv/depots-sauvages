@@ -208,3 +208,47 @@ def test_backoffice_dashboard_stats(client):
     assert data["arWaiting"] == 1
     assert data["decisionToTake"] == 1
     assert data["closed"] == 1
+
+
+@pytest.mark.django_db
+def test_regular_user_cannot_update_backoffice_fields(client):
+    staff_user = UserFactory(is_staff=True)
+    regular_user = UserFactory(is_staff=False)
+    client.force_login(regular_user)
+
+    # Create a constatation owned by regular_user
+    c = Constatation.objects.create(
+        user=regular_user,
+        commune="Paris",
+        date_constat="2026-07-01",
+    )
+    sp = c.suivi_procedure
+
+    update_url = reverse("suivi-procedure-detail", kwargs={"constatation_id": c.id})
+
+    # 1. Try to modify staff-only field `personne_assignee`
+    payload = {
+        "personne_assignee": staff_user.id,
+    }
+    response = client.patch(update_url, payload, content_type="application/json")
+    assert response.status_code == status.HTTP_200_OK
+    sp.refresh_from_db()
+    assert sp.personne_assignee is None
+
+    # 2. Try to modify staff-only field `statut_traitement`
+    payload = {
+        "statut_traitement": "En cours",
+    }
+    response = client.patch(update_url, payload, content_type="application/json")
+    assert response.status_code == status.HTTP_200_OK
+    sp.refresh_from_db()
+    assert sp.statut_traitement == "Nouveau"
+
+    # 3. Try to modify staff-only field `observations_internes`
+    payload = {
+        "observations_internes": "Disallowed note",
+    }
+    response = client.patch(update_url, payload, content_type="application/json")
+    assert response.status_code == status.HTTP_200_OK
+    sp.refresh_from_db()
+    assert sp.observations_internes == ""

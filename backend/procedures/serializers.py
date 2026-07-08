@@ -5,12 +5,6 @@ from backend.procedures.models import SuiviProcedure
 
 
 class SuiviProcedureSerializer(serializers.ModelSerializer):
-    personne_assignee = serializers.PrimaryKeyRelatedField(
-        queryset=get_user_model().objects.filter(is_staff=True),
-        allow_null=True,
-        required=False,
-    )
-
     class Meta:
         model = SuiviProcedure
         fields = [
@@ -40,14 +34,27 @@ class SuiviProcedureSerializer(serializers.ModelSerializer):
             "notification_abandon_envoyee",
             "nettoyage_fait",
             "nettoyage_par",
-            "observations_internes",
             "date_recouvrement_effective",
             "titre_recette_confirme",
             "montant_recouvre",
             "dossier_archive",
+        ]
+
+        read_only_fields = ("created", "modified")
+
+
+class SuiviProcedureStaffSerializer(SuiviProcedureSerializer):
+    personne_assignee = serializers.PrimaryKeyRelatedField(
+        queryset=get_user_model().objects.filter(is_staff=True),
+        allow_null=True,
+        required=False,
+    )
+
+    class Meta(SuiviProcedureSerializer.Meta):
+        fields = SuiviProcedureSerializer.Meta.fields + [
             "statut_traitement",
             "personne_assignee",
             "date_pilotage",
+            "observations_internes",
         ]
-
         read_only_fields = ("created", "modified", "date_pilotage")

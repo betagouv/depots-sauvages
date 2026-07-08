@@ -3,16 +3,20 @@ from rest_framework import mixins, permissions, viewsets
 
 from backend.constatations.models import Constatation
 from backend.procedures.models import SuiviProcedure
-from backend.procedures.serializers import SuiviProcedureSerializer
+from backend.procedures.serializers import SuiviProcedureSerializer, SuiviProcedureStaffSerializer
 
 
 class SuiviProcedureViewSet(
     mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet
 ):
     queryset = SuiviProcedure.objects.all()
-    serializer_class = SuiviProcedureSerializer
     lookup_field = "constatation_id"
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_serializer_class(self):
+        if self.request.user and self.request.user.is_staff:
+            return SuiviProcedureStaffSerializer
+        return SuiviProcedureSerializer
 
     def get_object(self):
         """
