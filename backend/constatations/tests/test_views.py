@@ -70,3 +70,39 @@ def test_update_constatation_prejudice(client):
     assert constatation.prejudice_montant == 500
     assert constatation.prejudice_nombre_personnes is None
 
+
+@pytest.mark.django_db
+def test_download_document_permissions(client):
+    owner = UserFactory(is_staff=False)
+    other_user = UserFactory(is_staff=False)
+    staff_user = UserFactory(is_staff=True)
+
+    c = Constatation.objects.create(
+        user=owner,
+        commune="Paris",
+        doc_constat=b"dummy_content",
+    )
+
+    url = reverse(
+        "constatation-document-download",
+        kwargs={"pk": c.id, "doc_type": "doc-constat"},
+    )
+
+    # 1. Owner download (should succeed)
+    client.force_login(owner)
+    response = client.get(url)
+    assert response.status_code == status.HTTP_200_OK
+    assert b"".join(response.streaming_content) == b"dummy_content"
+
+    # 2. Other user download (should return 404)
+    client.force_login(other_user)
+    response = client.get(url)
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    # 3. Staff user download (should succeed)
+    client.force_login(staff_user)
+    response = client.get(url)
+    assert response.status_code == status.HTTP_200_OK
+    assert b"".join(response.streaming_content) == b"dummy_content"
+
+
