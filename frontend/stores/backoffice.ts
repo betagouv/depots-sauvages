@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { API_URL, fetchResource, patchResource } from '../services/api'
+import { getProcedureTraitement } from '@/utils/backoffice'
 
 export interface SuiviProcedure {
   etape_en_cours: number
@@ -138,6 +139,23 @@ export const useBackofficeStore = defineStore('backoffice', {
       return Object.fromEntries(
         Object.entries(counts).filter(([name, count]) => name === 'Non assigné' || count > 0)
       )
+    },
+    proceduresByStatus: (state) => {
+      const realProcs = state.procedures.filter((p) => !p.ceci_est_un_test)
+      const counts: Record<string, number> = {
+        'Nouveau': 0,
+        'Ouvert': 0,
+        'En pause': 0,
+        'Résolu': 0,
+        'Clôturé': 0,
+      }
+      realProcs.forEach((p) => {
+        const status = getProcedureTraitement(p)
+        if (counts[status] !== undefined) {
+          counts[status]++
+        }
+      })
+      return counts
     },
   },
 

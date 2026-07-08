@@ -723,3 +723,33 @@
   border-top: 1px dashed var(--border-default-grey);
   padding-top: 0.5rem;
 }
+
+.bo-status-card {
+  background-color: var(--background-default-grey) !important;
+  border-top: 4px solid var(--border-active-blue-france);
+  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.bo-status-card--nouveau {
+  border-top-color: #2563eb;
+}
+
+.bo-status-card--ouvert {
+  border-top-color: #000091;
+}
+
+.bo-status-card--pause {
+  border-top-color: #d97706;
+}
+
+.bo-status-card--resolu {
+  border-top-color: #059669;
+}
+
+.bo-status-card--cloture {
+  border-top-color: #6b7280;
+}

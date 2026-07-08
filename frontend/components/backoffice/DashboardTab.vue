@@ -22,10 +22,28 @@
           Procédures à l'étape en attente de choix de poursuite : sanction / abandon
         </div>
       </div>
-      <div class="bo-kpi-card">
-        <div class="bo-kpi-val bo-kpi-val--success">{{ store.stats.closed }}</div>
-        <div class="bo-kpi-lbl">Procédures clôturées</div>
-        <div class="bo-kpi-desc">Procédures avec le statut de traitement clôturé</div>
+    </div>
+
+    <!-- Treatment Status Distribution -->
+    <div class="fr-mt-4w">
+      <h3 class="fr-h5 bo-flex-center-gap">
+        <span class="fr-icon-clipboard-fill fr-text-title-blue-france" aria-hidden="true"></span>
+        Statut de traitement des procédures
+      </h3>
+      <div class="fr-grid-row fr-grid-row--gutters">
+        <div
+          v-for="(count, status) in store.proceduresByStatus"
+          :key="status"
+          class="fr-col-12 fr-col-sm-6 fr-col-md"
+          style="display: flex; flex-direction: column"
+        >
+          <div class="premium-box fr-p-2w bo-status-card" :class="getStatusCardClass(status)">
+            <p class="fr-text--sm fr-mb-1v fr-text-mention--grey">
+              {{ status }}
+            </p>
+            <p class="fr-h3 fr-mb-0">{{ count }} {{ count > 1 ? 'procédures' : 'procédure' }}</p>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -56,4 +74,13 @@
 import { useBackofficeStore } from '@/stores/backoffice'
 
 const store = useBackofficeStore()
+
+const getStatusCardClass = (status: string) => {
+  if (status === 'Nouveau') return 'bo-status-card--nouveau'
+  if (status === 'Ouvert') return 'bo-status-card--ouvert'
+  if (status === 'En pause') return 'bo-status-card--pause'
+  if (status === 'Résolu') return 'bo-status-card--resolu'
+  if (status === 'Clôturé') return 'bo-status-card--cloture'
+  return ''
+}
 </script>
