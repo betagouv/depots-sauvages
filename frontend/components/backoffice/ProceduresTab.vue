@@ -73,7 +73,10 @@
     </div>
 
     <!-- Count display / info bar -->
-    <div class="fr-mb-2w" style="display: flex; justify-content: space-between; align-items: center; font-weight: 500;">
+    <div
+      class="fr-mb-2w"
+      style="display: flex; justify-content: space-between; align-items: center; font-weight: 500"
+    >
       <span class="fr-text--sm" style="color: var(--text-mention-grey)">
         Nombre de procédures : <strong>{{ filteredProcedures.length }}</strong>
         <span v-if="filteredProcedures.length !== store.procedures.length">
@@ -265,11 +268,18 @@
                         style="height: 100%; min-height: 200px"
                       >
                         <h3 class="fr-h6 fr-mb-2w bo-card-title">
-                          <span class="fr-icon-clipboard-line fr-mr-1w"></span> Observations
+                          <span class="fr-icon-clipboard-line fr-mr-1w"> </span> Observations
                           Internes
                         </h3>
-                        <p class="bo-obs-text fr-mb-0">
+                        <p class="bo-obs-text fr-mb-2w">
                           {{ procedure.suivi_procedure.observations_internes }}
+                        </p>
+                        <p
+                          v-if="procedure.suivi_procedure.date_pilotage"
+                          class="fr-text--xs fr-mb-0 fr-text-mention--grey"
+                          style="border-top: 1px dashed var(--border-default-grey); padding-top: 0.5rem;"
+                        >
+                          Date de pilotage : <strong>{{ formatDate(procedure.suivi_procedure.date_pilotage) }}</strong>
                         </p>
                       </div>
                     </div>
@@ -297,7 +307,7 @@ import {
   getStepLabel,
   getTraitementBadgeClass,
 } from '@/utils/backoffice'
-import { formatConstatationDate } from '@/utils/date'
+import { formatDate, formatConstatationDate } from '@/utils/date'
 import { computed, ref } from 'vue'
 
 import DetailTabAuthor from '@/components/backoffice/DetailTabAuthor.vue'

@@ -47,6 +47,7 @@ class BackofficeSuiviProcedureSerializer(serializers.ModelSerializer):
             "montant_recouvre",
             "dossier_archive",
             "statut_traitement",
+            "modified",
         ]
 
     def get_anomalie(self, obj):
@@ -106,6 +107,7 @@ class BackofficeProcedureSerializer(serializers.ModelSerializer):
             "accepte_accompagnement",
             "doc_constat_generated_at",
             "lettre_info_generated_at",
+            "modified",
         ]
 
     def get_user_email(self, obj):

@@ -33,6 +33,7 @@ export interface SuiviProcedure {
   montant_recouvre: boolean
   dossier_archive: boolean
   statut_traitement: string
+  modified: string
 }
 
 
@@ -82,6 +83,7 @@ export interface BackofficeProcedure {
   accepte_accompagnement: boolean
   doc_constat_generated_at: string | null
   lettre_info_generated_at: string | null
+  modified: string
 }
 
 export interface Assignee {
