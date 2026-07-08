@@ -98,3 +98,4 @@ Lors de la validation du formulaire, l'application génère des fichiers au form
 ## Conclusion
 
 L'analyse de la gestion des flux de données et du rendu de l'application démontre le respect rigoureux des exigences de développement sécurisé. Grâce à l'échappement par défaut des frameworks modernes utilisés, tant côté client que côté serveur, et au traitement restrictif des livrables dynamiques, la plateforme présente une excellente robustesse face aux risques d'injections de scripts.
+

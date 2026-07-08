@@ -37,6 +37,8 @@ class ConstatationDocumentDownloadView(View):
     model_class = Constatation
 
     def _get_constatation(self, pk):
+        if self.request.user.is_staff:
+            return get_object_or_404(self.model_class, pk=pk)
         return get_object_or_404(self.model_class, pk=pk, user=self.request.user)
 
     def prepare_doc_constat(self, constatation):

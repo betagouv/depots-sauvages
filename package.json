@@ -18,11 +18,13 @@
     "@tiptap/starter-kit": "^3.27.1",
     "@tiptap/vue-3": "^3.27.1",
     "camelcase-keys": "^10.0.2",
+    "chart.js": "^4.5.1",
     "dayjs": "^1.11.21",
     "dompurify": "^3.4.11",
     "pinia": "^3.0.4",
     "snakecase-keys": "^9.0.2",
     "vue": "^3.5.38",
+    "vue-chartjs": "^5.3.3",
     "vue-matomo": "^4.2.0",
     "vue-router": "^5.1.0"
   },

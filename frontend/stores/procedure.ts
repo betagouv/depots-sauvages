@@ -36,7 +36,7 @@ export const useProcedureStore = defineStore('procedure', {
 
     getProcedureById(id: number | string): ProcedureOverview | undefined {
       const numericId = Number(id)
-      return this.procedures.find((p) => p.numero_dossier === numericId)
+      return this.procedures.find((p) => p.id === numericId)
     },
   },
 })

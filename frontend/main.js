@@ -10,6 +10,7 @@ import { getUserInfo } from './services/api'
 import { LOGIN_REQUIRED } from './services/config'
 import { initCrisp } from './services/crisp'
 import { initMatomo } from './services/matomo'
+import { useAdminModeStore } from './stores/admin-mode'
 import './styles/premium-design.css'
 
 const pinia = createPinia()
@@ -86,7 +87,10 @@ const router = createRouter({
     },
     {
       path: '/signalements-dn/:dossier_id',
-      redirect: (to) => ({ name: 'SuiviProcedure', params: { constatation_id: to.params.dossier_id } }),
+      redirect: (to) => ({
+        name: 'SuiviProcedure',
+        params: { constatation_id: to.params.dossier_id },
+      }),
     },
     {
       path: '/rejoindre-le-dispositif',
@@ -147,6 +151,28 @@ const router = createRouter({
       meta: { title: 'Foire Aux Questions' },
     },
     {
+      path: '/backoffice',
+      redirect: '/tableau-de-bord',
+    },
+    {
+      path: '/tableau-de-bord',
+      name: 'DashboardBackoffice',
+      component: () => import('./pages/backoffice.vue'),
+      meta: { title: 'Backoffice - Tableau de bord', requiresStaff: true, tab: 'dashboard', activeMenu: '/backoffice' },
+    },
+    {
+      path: '/procedures-liste',
+      name: 'ProceduresListBackoffice',
+      component: () => import('./pages/backoffice.vue'),
+      meta: { title: 'Backoffice - Liste des procédures', requiresStaff: true, tab: 'list', activeMenu: '/backoffice' },
+    },
+    {
+      path: '/procedure-detail/:procedureId?',
+      name: 'ProcedureDetailBackoffice',
+      component: () => import('./pages/backoffice.vue'),
+      meta: { title: 'Backoffice - Détail de la procédure', requiresStaff: true, tab: 'detail', activeMenu: '/backoffice' },
+    },
+    {
       path: '/mentions-legales',
       name: 'MentionsLegales',
       component: () => import('./pages/mentions-legales.vue'),
@@ -180,6 +206,19 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to) => {
+  if (to.matched.some((record) => record.meta.requiresStaff)) {
+    try {
+      const userInfo = await getUserInfo()
+      const adminModeStore = useAdminModeStore()
+      if (!userInfo.is_authenticated || !userInfo.is_staff || !adminModeStore.isAdminMode) {
+        return '/'
+      }
+    } catch (error) {
+      console.error('Error checking staff status:', error)
+      return '/'
+    }
+  }
+
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     try {
       const userInfo = await getUserInfo()

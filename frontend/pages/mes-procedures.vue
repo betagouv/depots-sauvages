@@ -36,6 +36,20 @@
               <div class="fr-card__content">
                 <h3 class="fr-card__title">Procédure #{{ procedure.id }}</h3>
                 <div class="fr-card__desc">
+                  <div
+                    v-if="procedure.suivi_procedure"
+                    class="fr-alert fr-alert--info fr-alert--sm fr-mt-1w fr-mb-2w"
+                  >
+                    <p class="fr-text--sm">
+                      Prochaine étape :
+                      <strong>{{
+                        getStepLabel(
+                          procedure.suivi_procedure.etape_en_cours,
+                          procedure.auteur_identifie
+                        )
+                      }}</strong>
+                    </p>
+                  </div>
                   <Metadata :procedure="procedure" />
                 </div>
               </div>
@@ -43,18 +57,13 @@
               <div class="fr-card__footer">
                 <ul class="fr-btns-group fr-btns-group--inline-lg">
                   <li>
-                    <DsfrButton
-                      @click="router.push(getSuiviProcedureUrl(procedure.numero_dossier))"
-                    >
+                    <DsfrButton @click="router.push(getSuiviProcedureUrl(procedure.id))">
                       <span class="fr-icon-file-line fr-mr-1w" aria-hidden="true"></span>
                       Suivre la procédure
                     </DsfrButton>
                   </li>
                   <li>
-                    <DsfrButton
-                      secondary
-                      @click="router.push(`/constatation/${procedure.numero_dossier}`)"
-                    >
+                    <DsfrButton secondary @click="router.push(`/constatation/${procedure.id}`)">
                       <span class="fr-icon-edit-line fr-mr-1w" aria-hidden="true"></span>
                       Modifier la constatation
                     </DsfrButton>
@@ -76,6 +85,7 @@
 
 <script setup lang="ts">
 import { useProcedureStore } from '@/stores/procedure'
+import { getStepLabel } from '@/utils/backoffice'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import AucuneProcedureBox from '../components/procedures/AucuneProcedureBox.vue'

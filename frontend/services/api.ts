@@ -97,7 +97,6 @@ export interface UserInfo {
 export const getUserInfo = (): Promise<UserInfo> => makeRequest(API_URLS.userInfo, 'GET', {})
 export interface ProcedureOverview {
   id: number
-  numero_dossier: number
   title: string
   date_creation?: string
   date_modification: string | null
@@ -106,6 +105,9 @@ export interface ProcedureOverview {
   heure_constat: string | null
   localisation_depot: string | null
   last_sync: string | null
+  suivi_procedure?: {
+    etape_en_cours: number
+  }
 }
 
 export const getUserProcedures = (): Promise<ProcedureOverview[]> =>
