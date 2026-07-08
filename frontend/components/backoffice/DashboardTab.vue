@@ -31,11 +31,12 @@
         Statut de traitement des procédures
       </h3>
       <div class="fr-grid-row fr-grid-row--gutters">
-        <div
+        <router-link
           v-for="(count, status) in store.proceduresByStatus"
           :key="status"
-          class="fr-col-12 fr-col-sm-6 fr-col-md"
-          style="display: flex; flex-direction: column"
+          :to="{ path: '/procedures-liste', query: { traitement: status } }"
+          class="fr-col-12 fr-col-sm-6 fr-col-md bo-dashboard-card-link"
+          style="display: flex; flex-direction: column; text-decoration: none"
         >
           <div class="premium-box fr-p-2w bo-status-card" :class="getStatusCardClass(status)">
             <p class="fr-text--sm fr-mb-1v fr-text-mention--grey">
@@ -43,7 +44,7 @@
             </p>
             <p class="fr-h3 fr-mb-0">{{ count }} {{ count > 1 ? 'procédures' : 'procédure' }}</p>
           </div>
-        </div>
+        </router-link>
       </div>
     </div>
 
@@ -53,10 +54,12 @@
         Répartition du traitement des procédures
       </h3>
       <div class="fr-grid-row fr-grid-row--gutters">
-        <div
+        <router-link
           v-for="(count, agent) in store.workloadByAssignee"
           :key="agent"
-          class="fr-col-12 fr-col-md-4"
+          :to="{ path: '/procedures-liste', query: { charge: getAssigneeIdByName(agent) } }"
+          class="fr-col-12 fr-col-md-4 bo-dashboard-card-link"
+          style="display: flex; flex-direction: column; text-decoration: none"
         >
           <div class="premium-box fr-p-2w bo-workload-card">
             <p class="fr-text--sm fr-mb-1v fr-text-mention--grey">
@@ -64,7 +67,7 @@
             </p>
             <p class="fr-h3 fr-mb-0">{{ count }} {{ count > 1 ? 'procédures' : 'procédure' }}</p>
           </div>
-        </div>
+        </router-link>
       </div>
     </div>
   </div>
@@ -82,5 +85,10 @@ const getStatusCardClass = (status: string) => {
   if (status === 'Résolu') return 'bo-status-card--resolu'
   if (status === 'Clôturé') return 'bo-status-card--cloture'
   return ''
+}
+
+const getAssigneeIdByName = (name: string) => {
+  const assignee = store.assignees.find((a) => a.name === name)
+  return assignee ? (assignee.id ?? 'None') : 'Tous'
 }
 </script>
