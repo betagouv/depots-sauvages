@@ -9,7 +9,7 @@ export interface SuiviProcedure {
   identification_reussie: boolean | null
   observations_internes: string
   personne_assignee: number | null
-  date_assignation: string | null
+  date_pilotage: string | null
   anomalie: string
   lettre_envoyee: boolean
   lettre_envoyee_date: string | null

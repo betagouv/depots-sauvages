@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
-from model_utils.fields import MonitorField
+from django.utils import timezone
+from model_utils import FieldTracker
 from model_utils.models import TimeStampedModel
 
 
@@ -79,11 +80,14 @@ class SuiviProcedure(TimeStampedModel):
         related_name="personne_assignee_suivi_procedures",
         verbose_name="Assigné à",
     )
-    date_assignation = MonitorField(
-        monitor="personne_assignee",
+    date_pilotage = models.DateTimeField(
         null=True,
         blank=True,
-        verbose_name="Date d'assignation",
+        verbose_name="Date de pilotage",
+    )
+
+    tracker = FieldTracker(
+        fields=["personne_assignee", "statut_traitement", "observations_internes"]
     )
 
     class Meta:
@@ -92,3 +96,8 @@ class SuiviProcedure(TimeStampedModel):
 
     def __str__(self):
         return f"Suivi {self.constatation_id or self.id}"
+
+    def save(self, *args, **kwargs):
+        if not self.pk or self.tracker.changed():
+            self.date_pilotage = timezone.now()
+        super().save(*args, **kwargs)

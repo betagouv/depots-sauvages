@@ -47,7 +47,7 @@ class SuiviProcedureSerializer(serializers.ModelSerializer):
             "dossier_archive",
             "statut_traitement",
             "personne_assignee",
-            "date_assignation",
+            "date_pilotage",
         ]
 
-        read_only_fields = ("created", "modified", "date_assignation")
+        read_only_fields = ("created", "modified", "date_pilotage")

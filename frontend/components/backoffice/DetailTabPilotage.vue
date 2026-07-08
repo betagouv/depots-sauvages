@@ -49,12 +49,6 @@
           {{ assignee.name }}
         </option>
       </select>
-      <p
-        v-if="procedure.suivi_procedure?.date_assignation"
-        class="fr-text--xs fr-mt-1w fr-mb-0 fr-text-mention--grey"
-      >
-        Assignation mise à jour le {{ formatDate(procedure.suivi_procedure.date_assignation) }}
-      </p>
     </div>
 
     <!-- Internal Notes -->
@@ -68,6 +62,13 @@
         @change="store.updateNotes(procedure.id, ($event.target as HTMLTextAreaElement).value)"
       ></textarea>
     </div>
+
+    <p
+      v-if="procedure.suivi_procedure?.date_pilotage"
+      class="fr-text--xs fr-mt-2w fr-mb-0 fr-text-mention--grey"
+    >
+      Pilotage mis à jour le {{ formatDate(procedure.suivi_procedure.date_pilotage) }}
+    </p>
   </div>
 </template>
 

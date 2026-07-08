@@ -16,13 +16,11 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name="suiviprocedure",
-            name="date_assignation",
-            field=model_utils.fields.MonitorField(
+            name="date_pilotage",
+            field=models.DateTimeField(
                 blank=True,
-                default=None,
-                monitor="personne_assignee",
                 null=True,
-                verbose_name="Date d'assignation",
+                verbose_name="Date de pilotage",
             ),
         ),
         migrations.AddField(

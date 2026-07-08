@@ -113,7 +113,7 @@ def test_assign_suivi_procedure(client):
     assert response.status_code == status.HTTP_200_OK
     sp.refresh_from_db()
     assert sp.personne_assignee == staff_user
-    assert sp.date_assignation is not None
+    assert sp.date_pilotage is not None
     assert sp.observations_internes == "Updated note"
 
 
