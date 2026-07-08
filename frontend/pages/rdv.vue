@@ -40,7 +40,7 @@
 import { DsfrCard } from '@gouvminint/vue-dsfr'
 
 const title =
-  "🧑‍💻 Webinaire de présentation Protect'Envi (45 min) : Comprendre comment mieux lutter contre les dépôts sauvages"
+  "🧑‍💻 Webinaire de présentation Protect'Envi (60 min) : Comprendre comment mieux lutter contre les dépôts sauvages"
 const anctLink = import.meta.env.VITE_RDV_PAGE_URL || ''
 </script>
 
