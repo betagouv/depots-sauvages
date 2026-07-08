@@ -73,11 +73,8 @@
     </div>
 
     <!-- Count display / info bar -->
-    <div
-      class="fr-mb-2w"
-      style="display: flex; justify-content: space-between; align-items: center; font-weight: 500"
-    >
-      <span class="fr-text--sm" style="color: var(--text-mention-grey)">
+    <div class="fr-mb-2w bo-info-bar">
+      <span class="fr-text--sm fr-text-mention--grey">
         Nombre de procédures : <strong>{{ filteredProcedures.length }}</strong>
         <span v-if="filteredProcedures.length !== store.procedures.length">
           sur {{ store.procedures.length }} au total
@@ -90,57 +87,26 @@
       <table class="bo-table">
         <thead>
           <tr>
-            <th
-              style="
-                width: 40px;
-                position: relative;
-                text-align: center;
-                vertical-align: middle;
-                padding: 0.25rem;
-              "
-            >
+            <th class="bo-th-customizer">
               <!-- Column Customizer -->
               <div class="bo-customizer-container">
                 <button
-                  class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline"
-                  style="
-                    padding: 0.25rem;
-                    min-height: auto;
-                    width: 28px;
-                    height: 28px;
-                    display: inline-flex;
-                    align-items: center;
-                    justify-content: center;
-                  "
+                  class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline bo-customizer-btn-toggle"
                   @click="showCustomizer = !showCustomizer"
                   title="Personnaliser les colonnes"
                 >
-                  <span class="fr-icon-settings-5-line" aria-hidden="true" style="margin: 0"></span>
+                  <span class="fr-icon-settings-5-line" aria-hidden="true"></span>
                 </button>
                 <div
                   v-if="showCustomizer"
-                  class="bo-customizer-popover"
-                  style="left: 0; right: auto; text-align: left"
+                  class="bo-customizer-popover bo-customizer-popover--left"
                 >
-                  <div
-                    style="
-                      display: flex;
-                      justify-content: space-between;
-                      align-items: center;
-                      border-bottom: 1px solid var(--border-default-grey);
-                      padding-bottom: 0.5rem;
-                      margin-bottom: 0.75rem;
-                    "
-                  >
-                    <div
-                      class="bo-customizer-title"
-                      style="margin-bottom: 0; border-bottom: none; padding-bottom: 0"
-                    >
+                  <div class="bo-customizer-header">
+                    <div class="bo-customizer-title bo-customizer-title--no-border">
                       Colonnes à afficher
                     </div>
                     <button
-                      class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline"
-                      style="padding: 0.25rem; min-height: auto"
+                      class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline bo-btn-close-sm"
                       @click="showCustomizer = false"
                       aria-label="Fermer"
                     >
@@ -263,25 +229,7 @@
                       class="fr-col-12 fr-col-md-6 fr-col-lg-4"
                       v-if="procedure.suivi_procedure.observations_internes"
                     >
-                      <div
-                        class="premium-box fr-p-3w fr-mb-3w bo-card"
-                        style="height: 100%; min-height: 200px"
-                      >
-                        <h3 class="fr-h6 fr-mb-2w bo-card-title">
-                          <span class="fr-icon-clipboard-line fr-mr-1w"> </span> Observations
-                          Internes
-                        </h3>
-                        <p class="bo-obs-text fr-mb-2w">
-                          {{ procedure.suivi_procedure.observations_internes }}
-                        </p>
-                        <p
-                          v-if="procedure.suivi_procedure.date_pilotage"
-                          class="fr-text--xs fr-mb-0 fr-text-mention--grey"
-                          style="border-top: 1px dashed var(--border-default-grey); padding-top: 0.5rem;"
-                        >
-                          Date de pilotage : <strong>{{ formatDate(procedure.suivi_procedure.date_pilotage) }}</strong>
-                        </p>
-                      </div>
+                      <DetailTabObservations :procedure="procedure" />
                     </div>
                   </div>
                 </div>
@@ -307,13 +255,14 @@ import {
   getStepLabel,
   getTraitementBadgeClass,
 } from '@/utils/backoffice'
-import { formatDate, formatConstatationDate } from '@/utils/date'
+import { formatConstatationDate } from '@/utils/date'
 import { computed, ref } from 'vue'
 
 import DetailTabAuthor from '@/components/backoffice/DetailTabAuthor.vue'
 import DetailTabDescription from '@/components/backoffice/DetailTabDescription.vue'
 import DetailTabDocuments from '@/components/backoffice/DetailTabDocuments.vue'
 import DetailTabGeneral from '@/components/backoffice/DetailTabGeneral.vue'
+import DetailTabObservations from '@/components/backoffice/DetailTabObservations.vue'
 import DetailTabPrejudice from '@/components/backoffice/DetailTabPrejudice.vue'
 
 const store = useBackofficeStore()
