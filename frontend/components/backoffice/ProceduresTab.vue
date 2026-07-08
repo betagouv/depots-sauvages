@@ -335,7 +335,7 @@ watch(
 watch(
   () => route.query,
   (newQuery) => {
-    if (route.query.tab === 'list') {
+    if (route.path === '/procedures-liste') {
       filters.value.etape = parseQueryParam(newQuery.etape, 'Tous')
       filters.value.traitement = parseQueryParam(newQuery.traitement, 'Tous')
       filters.value.charge = parseQueryParam(newQuery.charge, 'Tous')

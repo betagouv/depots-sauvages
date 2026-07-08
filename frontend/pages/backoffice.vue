@@ -18,7 +18,7 @@
             class="fr-tabs__tab"
             :aria-selected="currentTab === 'dashboard'"
             role="tab"
-            @click="currentTab = 'dashboard'"
+            @click="router.push('/tableau-de-bord')"
           >
             <span class="fr-icon-dashboard-line fr-mr-1w" aria-hidden="true"></span>
             Tableau de bord
@@ -29,7 +29,7 @@
             class="fr-tabs__tab"
             :aria-selected="currentTab === 'list'"
             role="tab"
-            @click="currentTab = 'list'"
+            @click="router.push('/procedures-liste')"
           >
             <span class="fr-icon-list-unordered fr-mr-1w" aria-hidden="true"></span>
             Procédures
@@ -40,7 +40,13 @@
             class="fr-tabs__tab"
             :aria-selected="currentTab === 'detail'"
             role="tab"
-            @click="currentTab = 'detail'"
+            @click="
+              router.push(
+                selectedProcedureId
+                  ? `/procedure-detail/${selectedProcedureId}`
+                  : '/procedure-detail'
+              )
+            "
           >
             <span class="fr-icon-file-text-line fr-mr-1w" aria-hidden="true"></span>
             Détail procédure {{ selectedProcedureId ? `#${selectedProcedureId}` : '' }}
@@ -61,57 +67,29 @@ import DashboardTab from '@/components/backoffice/DashboardTab.vue'
 import DetailTab from '@/components/backoffice/DetailTab.vue'
 import ProceduresTab from '@/components/backoffice/ProceduresTab.vue'
 import { useBackofficeStore } from '@/stores/backoffice'
-import { onMounted, ref, watch } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const store = useBackofficeStore()
 const route = useRoute()
 const router = useRouter()
 
-const currentTab = ref((route.query.tab as string) || 'dashboard')
-const selectedProcedureId = ref<number | null>(
-  route.query.procedureId ? parseInt(route.query.procedureId as string, 10) : null
-)
+const currentTab = computed(() => (route.meta.tab as string) || 'dashboard')
+const selectedProcedureId = computed(() => {
+  const id = route.params.procedureId
+  return id ? parseInt(id as string, 10) : null
+})
 
 onMounted(async () => {
   await store.fetchProcedures()
 })
 
 const viewDetail = (id: number) => {
-  selectedProcedureId.value = id
-  currentTab.value = 'detail'
   router.push({
-    query: {
-      ...route.query,
-      tab: 'detail',
-      procedureId: id.toString(),
-    },
+    path: `/procedure-detail/${id}`,
+    query: route.query,
   })
 }
-
-// Watch local tab changes to update route query
-watch(currentTab, (newTab) => {
-  const query = { ...route.query, tab: newTab }
-  if (newTab !== 'detail') {
-    delete query.procedureId
-    selectedProcedureId.value = null
-  }
-  router.push({ query })
-})
-
-// Watch route changes to update local state (e.g. browser back/forward)
-watch(
-  () => route.query,
-  (newQuery) => {
-    if (newQuery.tab && newQuery.tab !== currentTab.value) {
-      currentTab.value = newQuery.tab as string
-    }
-    const queryId = newQuery.procedureId ? parseInt(newQuery.procedureId as string, 10) : null
-    if (queryId !== selectedProcedureId.value) {
-      selectedProcedureId.value = queryId
-    }
-  }
-)
 </script>
 
 <style>

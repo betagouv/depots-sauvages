@@ -152,9 +152,25 @@ const router = createRouter({
     },
     {
       path: '/backoffice',
-      name: 'Backoffice',
+      redirect: '/tableau-de-bord',
+    },
+    {
+      path: '/tableau-de-bord',
+      name: 'DashboardBackoffice',
       component: () => import('./pages/backoffice.vue'),
-      meta: { title: 'Backoffice - Suivi des procédures', requiresStaff: true },
+      meta: { title: 'Backoffice - Tableau de bord', requiresStaff: true, tab: 'dashboard', activeMenu: '/backoffice' },
+    },
+    {
+      path: '/procedures-liste',
+      name: 'ProceduresListBackoffice',
+      component: () => import('./pages/backoffice.vue'),
+      meta: { title: 'Backoffice - Liste des procédures', requiresStaff: true, tab: 'list', activeMenu: '/backoffice' },
+    },
+    {
+      path: '/procedure-detail/:procedureId?',
+      name: 'ProcedureDetailBackoffice',
+      component: () => import('./pages/backoffice.vue'),
+      meta: { title: 'Backoffice - Détail de la procédure', requiresStaff: true, tab: 'detail', activeMenu: '/backoffice' },
     },
     {
       path: '/mentions-legales',
