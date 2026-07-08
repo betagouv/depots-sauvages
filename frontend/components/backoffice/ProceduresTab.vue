@@ -40,8 +40,8 @@
         </div>
 
         <div class="bo-filter-group-vertical">
-          <label class="bo-filter-label" for="filter-charge">Assigné à</label>
-          <select id="filter-charge" v-model="filters.charge" class="fr-select">
+          <label class="bo-filter-label" for="filter-assignee">Assigné à</label>
+          <select id="filter-assignee" v-model="filters.assignee" class="fr-select">
             <option value="Tous">Tous</option>
             <option
               v-for="assignee in store.assignees"
@@ -279,7 +279,7 @@ defineEmits<{
 const filters = ref({
   etape: parseQueryParam(route.query.etape, 'Tous'),
   traitement: parseQueryParam(route.query.traitement, 'Tous'),
-  charge: parseQueryParam(route.query.charge, 'Tous'),
+  assignee: parseQueryParam(route.query.assignee, 'Tous'),
   casReels: parseQueryParam(route.query.casReels, 'Oui'),
   auteurIdentifie: parseQueryParam(route.query.auteurIdentifie, 'Tous'),
   search: parseQueryParam(route.query.search, ''),
@@ -303,10 +303,10 @@ watch(
       delete query.traitement
     }
 
-    if (newFilters.charge && newFilters.charge !== 'Tous') {
-      query.charge = newFilters.charge
+    if (newFilters.assignee && newFilters.assignee !== 'Tous') {
+      query.assignee = newFilters.assignee
     } else {
-      delete query.charge
+      delete query.assignee
     }
 
     if (newFilters.casReels && newFilters.casReels !== 'Oui') {
@@ -339,7 +339,7 @@ watch(
     if (route.path === '/procedures-liste') {
       filters.value.etape = parseQueryParam(newQuery.etape, 'Tous')
       filters.value.traitement = parseQueryParam(newQuery.traitement, 'Tous')
-      filters.value.charge = parseQueryParam(newQuery.charge, 'Tous')
+      filters.value.assignee = parseQueryParam(newQuery.assignee, 'Tous')
       filters.value.casReels = parseQueryParam(newQuery.casReels, 'Oui')
       filters.value.auteurIdentifie = parseQueryParam(newQuery.auteurIdentifie, 'Tous')
       filters.value.search = parseQueryParam(newQuery.search, '')
@@ -402,11 +402,11 @@ const filteredProcedures = computed(() => {
       getProcedureTraitement(procedure) !== filters.value.traitement
     )
       return false
-    if (filters.value.charge !== 'Tous') {
+    if (filters.value.assignee !== 'Tous') {
       const assigned = procedure.suivi_procedure.personne_assignee
-      if (filters.value.charge === 'None') {
+      if (filters.value.assignee === 'None') {
         if (assigned !== null) return false
-      } else if (assigned !== Number(filters.value.charge)) {
+      } else if (assigned !== Number(filters.value.assignee)) {
         return false
       }
     }

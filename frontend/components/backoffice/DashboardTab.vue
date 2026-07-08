@@ -157,7 +157,7 @@
         <router-link
           v-for="(count, agent) in store.workloadByAssignee"
           :key="agent"
-          :to="{ path: '/procedures-liste', query: { charge: getAssigneeIdByName(agent) } }"
+          :to="{ path: '/procedures-liste', query: { assignee: getAssigneeIdByName(agent) } }"
           class="fr-col-12 fr-col-md-4 bo-dashboard-card-link"
           style="display: flex; flex-direction: column; text-decoration: none"
         >

@@ -224,7 +224,7 @@ export const useBackofficeStore = defineStore('backoffice', {
         }
       }
     },
-    assignCharge(procedureId: number, assigneeId: number | null) {
+    assignAssignee(procedureId: number, assigneeId: number | null) {
       const procedure = this.procedures.find((p) => p.id === procedureId)
       if (procedure && procedure.suivi_procedure) {
         procedure.suivi_procedure.personne_assignee = assigneeId

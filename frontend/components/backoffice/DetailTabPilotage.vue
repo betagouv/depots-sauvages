@@ -33,7 +33,7 @@
         class="fr-select"
         :value="procedure.suivi_procedure?.personne_assignee ?? ''"
         @change="
-          store.assignCharge(
+          store.assignAssignee(
             procedure.id,
             ($event.target as HTMLSelectElement).value
               ? Number(($event.target as HTMLSelectElement).value)
