@@ -132,7 +132,10 @@ export const useBackofficeStore = defineStore('backoffice', {
           counts[name] = 1
         }
       })
-      return counts
+      // Filter out assignees with count === 0, except for 'Non assigné'
+      return Object.fromEntries(
+        Object.entries(counts).filter(([name, count]) => name === 'Non assigné' || count > 0)
+      )
     },
   },
 
