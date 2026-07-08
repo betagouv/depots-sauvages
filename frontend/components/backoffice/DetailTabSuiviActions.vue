@@ -4,16 +4,21 @@
       <span class="fr-icon-survey-line fr-mr-1w"></span> Actions du Suivi
     </h3>
 
-
     <div class="bo-step-section bo-step-section--green">
-      <h4 class="fr-text--sm fr-mb-1w bo-step-title--green fr-text--bold">Étape 1 : Constitution du dossier</h4>
+      <h4 class="fr-text--sm fr-mb-1w bo-step-title--green fr-text--bold">
+        Étape 1 : Constitution du dossier
+      </h4>
       <div class="bo-flex-col">
         <label class="fr-text--xs fr-mb-0 bo-flex-center-gap">
           <input type="checkbox" :checked="procedure.suivi_procedure?.preuves_fournies" disabled />
           Éléments de preuve joints
         </label>
         <label class="fr-text--xs fr-mb-0 bo-flex-center-gap">
-          <input type="checkbox" :checked="procedure.suivi_procedure?.constatation_signee" disabled />
+          <input
+            type="checkbox"
+            :checked="procedure.suivi_procedure?.constatation_signee"
+            disabled
+          />
           Rapport de constatation signé
         </label>
         <label class="fr-text--xs fr-mb-0 bo-flex-center-gap">
@@ -21,15 +26,36 @@
           Lettre d'information signée
         </label>
         <label class="fr-text--xs fr-mb-0 bo-flex-center-gap">
-          <input type="checkbox" :checked="procedure.suivi_procedure?.identification_reussie === true" disabled />
-          Identification auteur : <strong>{{ getAuteurIdentifieText(procedure.suivi_procedure?.identification_reussie) }}</strong>
+          <input
+            type="checkbox"
+            :checked="procedure.suivi_procedure?.identification_reussie === true"
+            disabled
+          />
+          Identification auteur
         </label>
       </div>
     </div>
 
-
-    <div :class="['bo-step-section', procedure.suivi_procedure?.etape_en_cours >= 2 ? 'bo-step-section--green' : 'bo-step-section--grey']">
-      <h4 :class="['fr-text--sm', 'fr-text--bold', 'fr-mb-1w', procedure.suivi_procedure?.etape_en_cours >= 2 ? 'bo-step-title--green' : 'bo-step-title--grey']">Étape 2 : Notification à l'auteur</h4>
+    <div
+      :class="[
+        'bo-step-section',
+        procedure.suivi_procedure?.etape_en_cours >= 2
+          ? 'bo-step-section--green'
+          : 'bo-step-section--grey',
+      ]"
+    >
+      <h4
+        :class="[
+          'fr-text--sm',
+          'fr-text--bold',
+          'fr-mb-1w',
+          procedure.suivi_procedure?.etape_en_cours >= 2
+            ? 'bo-step-title--green'
+            : 'bo-step-title--grey',
+        ]"
+      >
+        Étape 2 : Notification à l'auteur
+      </h4>
       <div class="bo-flex-col">
         <!-- lettre_envoyee & date -->
         <div class="bo-flex-space-between">
@@ -75,28 +101,68 @@
       </div>
     </div>
 
-
-    <div :class="['bo-step-section', procedure.suivi_procedure?.etape_en_cours >= 3 ? 'bo-step-section--green' : 'bo-step-section--grey']">
-      <h4 :class="['fr-text--sm', 'fr-text--bold', 'fr-mb-1w', procedure.suivi_procedure?.etape_en_cours >= 3 ? 'bo-step-title--green' : 'bo-step-title--grey']">Étape 3 : Décision de poursuite</h4>
+    <div
+      :class="[
+        'bo-step-section',
+        procedure.suivi_procedure?.etape_en_cours >= 3
+          ? 'bo-step-section--green'
+          : 'bo-step-section--grey',
+      ]"
+    >
+      <h4
+        :class="[
+          'fr-text--sm',
+          'fr-text--bold',
+          'fr-mb-1w',
+          procedure.suivi_procedure?.etape_en_cours >= 3
+            ? 'bo-step-title--green'
+            : 'bo-step-title--grey',
+        ]"
+      >
+        Étape 3 : Décision de poursuite
+      </h4>
       <p class="fr-text--xs fr-mb-0">
-        <span v-if="!procedure.suivi_procedure?.decision_poursuite" class="fr-text-mention--grey fr-text--italic">
+        <span
+          v-if="!procedure.suivi_procedure?.decision_poursuite"
+          class="fr-text-mention--grey fr-text--italic"
+        >
           Aucune décision renseignée
         </span>
         <strong v-else>
-          {{ 
-            procedure.suivi_procedure?.decision_poursuite === 'sanction' ? 'Sanction administrative' :
-            procedure.suivi_procedure?.decision_poursuite === 'abandon' ? 'Abandon de la procédure' :
-            procedure.suivi_procedure?.decision_poursuite === 'recherche_adresse' ? "Recherche d'adresse en cours" :
-            procedure.suivi_procedure?.decision_poursuite
+          {{
+            procedure.suivi_procedure?.decision_poursuite === 'sanction'
+              ? 'Sanction administrative'
+              : procedure.suivi_procedure?.decision_poursuite === 'abandon'
+                ? 'Abandon de la procédure'
+                : procedure.suivi_procedure?.decision_poursuite === 'recherche_adresse'
+                  ? "Recherche d'adresse en cours"
+                  : procedure.suivi_procedure?.decision_poursuite
           }}
         </strong>
       </p>
     </div>
 
+    <div
+      :class="[
+        'bo-step-section',
+        procedure.suivi_procedure?.etape_en_cours >= 4
+          ? 'bo-step-section--green'
+          : 'bo-step-section--grey',
+      ]"
+    >
+      <h4
+        :class="[
+          'fr-text--sm',
+          'fr-text--bold',
+          'fr-mb-1w',
+          procedure.suivi_procedure?.etape_en_cours >= 4
+            ? 'bo-step-title--green'
+            : 'bo-step-title--grey',
+        ]"
+      >
+        Étape 4 : Exécution de la décision
+      </h4>
 
-    <div :class="['bo-step-section', procedure.suivi_procedure?.etape_en_cours >= 4 ? 'bo-step-section--green' : 'bo-step-section--grey']">
-      <h4 :class="['fr-text--sm', 'fr-text--bold', 'fr-mb-1w', procedure.suivi_procedure?.etape_en_cours >= 4 ? 'bo-step-title--green' : 'bo-step-title--grey']">Étape 4 : Exécution de la décision</h4>
-      
       <!-- Cas : Sanction -->
       <div v-if="procedure.suivi_procedure?.decision_poursuite === 'sanction'" class="bo-flex-col">
         <div class="bo-flex-space-between">
@@ -119,19 +185,32 @@
           Arrêté de sanction rédigé
         </label>
         <label class="fr-text--xs fr-mb-0 bo-flex-center-gap">
-          <input type="checkbox" :checked="procedure.suivi_procedure?.titre_recette_emis" disabled />
+          <input
+            type="checkbox"
+            :checked="procedure.suivi_procedure?.titre_recette_emis"
+            disabled
+          />
           Titre de recette émis au Trésor Public
         </label>
         <label class="fr-text--xs fr-mb-0 bo-flex-center-gap">
-          <input type="checkbox" :checked="procedure.suivi_procedure?.notification_sanction_envoyee" disabled />
+          <input
+            type="checkbox"
+            :checked="procedure.suivi_procedure?.notification_sanction_envoyee"
+            disabled
+          />
           Notification de sanction envoyée à l'auteur
         </label>
       </div>
 
       <!-- Cas : Abandon -->
-      <div v-else-if="procedure.suivi_procedure?.decision_poursuite === 'abandon'" class="bo-flex-col">
+      <div
+        v-else-if="procedure.suivi_procedure?.decision_poursuite === 'abandon'"
+        class="bo-flex-col"
+      >
         <div>
-          <label class="fr-label fr-text--xs fr-mb-1v" for="motif-abandon-select">Motif d'abandon</label>
+          <label class="fr-label fr-text--xs fr-mb-1v" for="motif-abandon-select"
+            >Motif d'abandon</label
+          >
           <select
             id="motif-abandon-select"
             class="fr-select fr-select--sm bo-input-select-sm"
@@ -146,23 +225,50 @@
           </select>
         </div>
         <label class="fr-text--xs fr-mb-0 bo-flex-center-gap">
-          <input type="checkbox" :checked="procedure.suivi_procedure?.souhaite_notifier_abandon" disabled />
+          <input
+            type="checkbox"
+            :checked="procedure.suivi_procedure?.souhaite_notifier_abandon"
+            disabled
+          />
           Notifier l'abandon à l'auteur
         </label>
-        <label v-if="procedure.suivi_procedure?.souhaite_notifier_abandon" class="fr-text--xs fr-mb-0 bo-flex-center-gap">
-          <input type="checkbox" :checked="procedure.suivi_procedure?.notification_abandon_envoyee" disabled />
+        <label
+          v-if="procedure.suivi_procedure?.souhaite_notifier_abandon"
+          class="fr-text--xs fr-mb-0 bo-flex-center-gap"
+        >
+          <input
+            type="checkbox"
+            :checked="procedure.suivi_procedure?.notification_abandon_envoyee"
+            disabled
+          />
           Notification d'abandon envoyée
         </label>
       </div>
 
-      <div v-else class="fr-text--xs fr-text-mention--grey">
-        Pas de réponse
-      </div>
+      <div v-else class="fr-text--xs fr-text-mention--grey">Pas de réponse</div>
     </div>
 
-
-    <div :class="['bo-step-section', procedure.suivi_procedure?.etape_en_cours >= 5 ? 'bo-step-section--green' : 'bo-step-section--grey']" class="fr-mb-0">
-      <h4 :class="['fr-text--sm', 'fr-text--bold', 'fr-mb-1w', procedure.suivi_procedure?.etape_en_cours >= 5 ? 'bo-step-title--green' : 'bo-step-title--grey']">Étape 5 : Clôture & Recouvrement</h4>
+    <div
+      :class="[
+        'bo-step-section',
+        procedure.suivi_procedure?.etape_en_cours >= 5
+          ? 'bo-step-section--green'
+          : 'bo-step-section--grey',
+      ]"
+      class="fr-mb-0"
+    >
+      <h4
+        :class="[
+          'fr-text--sm',
+          'fr-text--bold',
+          'fr-mb-1w',
+          procedure.suivi_procedure?.etape_en_cours >= 5
+            ? 'bo-step-title--green'
+            : 'bo-step-title--grey',
+        ]"
+      >
+        Étape 5 : Clôture & Recouvrement
+      </h4>
       <div class="bo-flex-col">
         <!-- Nettoyage fait -->
         <div class="bo-flex-space-between">
@@ -180,14 +286,25 @@
           />
         </div>
         <!-- Sanction-specific closing steps -->
-        <div v-if="procedure.suivi_procedure?.decision_poursuite === 'sanction'" class="bo-flex-col">
+        <div
+          v-if="procedure.suivi_procedure?.decision_poursuite === 'sanction'"
+          class="bo-flex-col"
+        >
           <label class="fr-text--xs fr-mb-0 bo-flex-center-gap">
-            <input type="checkbox" :checked="procedure.suivi_procedure?.titre_recette_confirme" disabled />
+            <input
+              type="checkbox"
+              :checked="procedure.suivi_procedure?.titre_recette_confirme"
+              disabled
+            />
             Titre de recette confirmé par le Trésor
           </label>
           <div class="bo-flex-space-between">
             <label class="fr-text--xs fr-mb-0 bo-flex-center-gap">
-              <input type="checkbox" :checked="procedure.suivi_procedure?.montant_recouvre" disabled />
+              <input
+                type="checkbox"
+                :checked="procedure.suivi_procedure?.montant_recouvre"
+                disabled
+              />
               Amende recouvrée
             </label>
             <input
@@ -210,8 +327,6 @@
 </template>
 
 <script setup lang="ts">
-import { getAuteurIdentifieText } from '@/utils/backoffice'
-
 defineProps<{
   procedure: any
 }>()
