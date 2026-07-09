@@ -66,6 +66,7 @@ class SuiviProcedureAdmin(admin.ModelAdmin):
                     "nettoyage_fait",
                     "nettoyage_par",
                     "observations_internes",
+                    "notes_traitement",
                     "date_recouvrement_effective",
                     "titre_recette_confirme",
                     "montant_recouvre",

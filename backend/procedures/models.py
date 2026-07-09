@@ -66,6 +66,7 @@ class SuiviProcedure(TimeStampedModel):
     dossier_archive = models.BooleanField(default=False, verbose_name="Dossier archivé")
     # Backoffice
     observations_internes = models.TextField(blank=True, verbose_name="Observations internes")
+    notes_traitement = models.TextField(blank=True, verbose_name="Notes de traitement")
     statut_traitement = models.CharField(
         max_length=20,
         default="Nouveau",
@@ -87,7 +88,7 @@ class SuiviProcedure(TimeStampedModel):
     )
 
     tracker = FieldTracker(
-        fields=["personne_assignee", "statut_traitement", "observations_internes"]
+        fields=["personne_assignee", "statut_traitement", "notes_traitement"]
     )
 
     class Meta:

@@ -228,9 +228,9 @@
                     </div>
                     <div
                       class="fr-col-12 fr-col-md-6 fr-col-lg-4"
-                      v-if="procedure.suivi_procedure.observations_internes"
+                      v-if="procedure.suivi_procedure.notes_traitement"
                     >
-                      <DetailTabObservations :procedure="procedure" />
+                      <DetailTabNotesTraitement :procedure="procedure" />
                     </div>
                   </div>
                 </div>
@@ -265,7 +265,7 @@ import DetailTabAuthor from '@/components/backoffice/DetailTabAuthor.vue'
 import DetailTabDescription from '@/components/backoffice/DetailTabDescription.vue'
 import DetailTabDocuments from '@/components/backoffice/DetailTabDocuments.vue'
 import DetailTabGeneral from '@/components/backoffice/DetailTabGeneral.vue'
-import DetailTabObservations from '@/components/backoffice/DetailTabObservations.vue'
+import DetailTabNotesTraitement from '@/components/backoffice/DetailTabNotesTraitement.vue'
 import DetailTabPrejudice from '@/components/backoffice/DetailTabPrejudice.vue'
 
 const store = useBackofficeStore()

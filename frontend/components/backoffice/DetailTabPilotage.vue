@@ -53,12 +53,12 @@
 
     <!-- Internal Notes -->
     <div class="fr-input-group fr-mb-0">
-      <label class="fr-label fr-text--xs" for="internal-notes">Notes de suivi & Observations</label>
+      <label class="fr-label fr-text--xs" for="internal-notes">Notes de traitement</label>
       <textarea
         id="internal-notes"
         class="fr-input bo-textarea-obs"
         placeholder="Relance, appels, blocages..."
-        :value="procedure.suivi_procedure?.observations_internes"
+        :value="procedure.suivi_procedure?.notes_traitement"
         @change="store.updateNotes(procedure.id, ($event.target as HTMLTextAreaElement).value)"
       ></textarea>
     </div>

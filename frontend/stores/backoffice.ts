@@ -9,6 +9,7 @@ export interface SuiviProcedure {
   lettre_signe: boolean
   identification_reussie: boolean | null
   observations_internes: string
+  notes_traitement: string
   personne_assignee: number | null
   date_pilotage: string | null
   anomalie: string
@@ -234,7 +235,7 @@ export const useBackofficeStore = defineStore('backoffice', {
     updateNotes(procedureId: number, notes: string) {
       const procedure = this.procedures.find((p) => p.id === procedureId)
       if (procedure && procedure.suivi_procedure) {
-        procedure.suivi_procedure.observations_internes = notes
+        procedure.suivi_procedure.notes_traitement = notes
         this.saveSuivi(procedureId)
       }
     },
