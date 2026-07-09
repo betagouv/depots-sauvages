@@ -223,9 +223,6 @@
                     <div class="fr-col-12 fr-col-md-6 fr-col-lg-4">
                       <DetailTabPrejudice :procedure="procedure" />
                     </div>
-                    <div class="fr-col-12 fr-col-md-6 fr-col-lg-4">
-                      <DetailTabDocuments :procedure="procedure" />
-                    </div>
                     <div
                       class="fr-col-12 fr-col-md-6 fr-col-lg-4"
                       v-if="procedure.suivi_procedure.observations_internes || procedure.suivi_procedure.nettoyage_fait"
@@ -269,7 +266,6 @@ import { useRoute, useRouter } from 'vue-router'
 
 import DetailTabAuthor from '@/components/backoffice/DetailTabAuthor.vue'
 import DetailTabDescription from '@/components/backoffice/DetailTabDescription.vue'
-import DetailTabDocuments from '@/components/backoffice/DetailTabDocuments.vue'
 import DetailTabGeneral from '@/components/backoffice/DetailTabGeneral.vue'
 import DetailTabObservations from '@/components/backoffice/DetailTabObservations.vue'
 import DetailTabNotesTraitement from '@/components/backoffice/DetailTabNotesTraitement.vue'
