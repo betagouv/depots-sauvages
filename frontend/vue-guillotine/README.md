@@ -1,6 +1,6 @@
-# Vue Antoinette
+# Vue Guillotine
 
-`vue-antoinette` est une bibliothèque de composants et de composables Vue 3 conçue pour faciliter l'édition et le rendu de contenus "block-based".
+`vue-guillotine` est une bibliothèque de composants et de composables Vue 3 conçue pour faciliter l'édition et le rendu de contenus "block-based".
 
 Elle est pensée comme le pendant frontend headless UI des structures de données générées par le backend **django-guillotine**.
 
@@ -8,7 +8,7 @@ Elle est pensée comme le pendant frontend headless UI des structures de donnée
 
 ## Philosophie et choix d'architecture
 
-L'architecture de `vue-antoinette` repose sur le principe de briques de construction autonomes :
+L'architecture de `vue-guillotine` repose sur le principe de briques de construction autonomes :
 
 - **Éditeur modulaire** : Plutôt que de fournir un composant d'édition monolithique rigide, la bibliothèque fournit des outils et des composants unitaires - `Toolbar`, `ToolbarButton`, `EditorContent`, `LinkInput` et `useEditor`.
 - **Assemblage par le projet client** : L'application cliente assemble ces pièces dans ses propres composants, par exemple en créant un fichier `RichTextEditor.vue`.
@@ -20,7 +20,7 @@ L'architecture de `vue-antoinette` repose sur le principe de briques de construc
 
 - **Tiptap v3** : Moteur d'édition de texte riche, framework wrapper autour de ProseMirror, hautement extensible et personnalisable.
 - **Système de design de l'État français - DSFR** :
-  - Les styles de `vue-antoinette` utilisent nativement les variables CSS sémantiques du DSFR, par exemple `var(--border-default-grey)`, `var(--border-active-blue-france)`, `var(--background-alt-grey)`.
+  - Les styles de `vue-guillotine` utilisent nativement les variables CSS sémantiques du DSFR, par exemple `var(--border-default-grey)`, `var(--border-active-blue-france)`, `var(--background-alt-grey)`.
   - Les éléments générés respectent la nomenclature DSFR, par exemple l'extension Link génère des balises avec la classe `fr-link`.
 
 ---
@@ -77,7 +77,7 @@ Voici comment assembler un éditeur sur-mesure dans votre application :
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { EditorContent, Toolbar, SimpleToolbarButtons, LinkInput, useEditor } from 'vue-antoinette'
+import { EditorContent, Toolbar, SimpleToolbarButtons, LinkInput, useEditor } from 'vue-guillotine'
 
 const props = defineProps<{ modelValue: string }>()
 const emit = defineEmits(['update:modelValue'])
