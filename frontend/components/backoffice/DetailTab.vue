@@ -26,6 +26,7 @@
         <!-- Right Column: Suivi de Procédure Checklist & Pilotage -->
         <div class="fr-col-12 fr-col-md-5">
           <DetailTabPilotage :procedure="selectedProcedure" />
+          <DetailTabObservations :procedure="selectedProcedure" />
           <DetailTabSuiviActions :procedure="selectedProcedure" />
         </div>
       </div>
@@ -42,6 +43,7 @@ import DetailTabAuthor from '@/components/backoffice/DetailTabAuthor.vue'
 import DetailTabDescription from '@/components/backoffice/DetailTabDescription.vue'
 import DetailTabDocuments from '@/components/backoffice/DetailTabDocuments.vue'
 import DetailTabGeneral from '@/components/backoffice/DetailTabGeneral.vue'
+import DetailTabObservations from '@/components/backoffice/DetailTabObservations.vue'
 import DetailTabPilotage from '@/components/backoffice/DetailTabPilotage.vue'
 import DetailTabPrejudice from '@/components/backoffice/DetailTabPrejudice.vue'
 import DetailTabSuiviActions from '@/components/backoffice/DetailTabSuiviActions.vue'

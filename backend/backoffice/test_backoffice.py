@@ -244,11 +244,20 @@ def test_regular_user_cannot_update_backoffice_fields(client):
     sp.refresh_from_db()
     assert sp.statut_traitement == "Nouveau"
 
-    # 3. Try to modify staff-only field `observations_internes`
+    # 3. Modify user-writable field `observations_internes` (allowed)
     payload = {
-        "observations_internes": "Disallowed note",
+        "observations_internes": "Allowed user note",
     }
     response = client.patch(update_url, payload, content_type="application/json")
     assert response.status_code == status.HTTP_200_OK
     sp.refresh_from_db()
-    assert sp.observations_internes == ""
+    assert sp.observations_internes == "Allowed user note"
+
+    # 4. Try to modify staff-only field `notes_traitement` (disallowed)
+    payload = {
+        "notes_traitement": "Disallowed note",
+    }
+    response = client.patch(update_url, payload, content_type="application/json")
+    assert response.status_code == status.HTTP_200_OK
+    sp.refresh_from_db()
+    assert sp.notes_traitement == ""

@@ -38,6 +38,7 @@ class SuiviProcedureSerializer(serializers.ModelSerializer):
             "titre_recette_confirme",
             "montant_recouvre",
             "dossier_archive",
+            "observations_internes",
         ]
 
         read_only_fields = ("created", "modified")
@@ -55,6 +56,6 @@ class SuiviProcedureStaffSerializer(SuiviProcedureSerializer):
             "statut_traitement",
             "personne_assignee",
             "date_pilotage",
-            "observations_internes",
+            "notes_traitement",
         ]
         read_only_fields = ("created", "modified", "date_pilotage")

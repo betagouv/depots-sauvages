@@ -22,6 +22,7 @@ class BackofficeSuiviProcedureSerializer(serializers.ModelSerializer):
             "lettre_signe",
             "identification_reussie",
             "observations_internes",
+            "notes_traitement",
             "personne_assignee",
             "date_pilotage",
             "anomalie",

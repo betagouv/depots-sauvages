@@ -132,20 +132,6 @@
         Étape 5 : Clôture de la procédure
       </h4>
       <div class="bo-flex-col">
-        <div class="bo-flex-space-between">
-          <label class="fr-text--xs fr-mb-0 bo-flex-center-gap">
-            <input type="checkbox" :checked="procedure.suivi_procedure?.nettoyage_fait" disabled />
-            Nettoyage du dépôt effectué
-          </label>
-          <input
-            v-if="procedure.suivi_procedure?.nettoyage_fait"
-            type="text"
-            class="fr-input fr-input--sm bo-input-text-sm bo-input-date-sm"
-            placeholder="Par (ex: Auteur)"
-            :value="procedure.suivi_procedure?.nettoyage_par"
-            disabled
-          />
-        </div>
         <label class="fr-text--xs fr-mb-0 bo-flex-center-gap">
           <input type="checkbox" :checked="procedure.suivi_procedure?.dossier_archive" disabled />
           Dossier clos et archivé
