@@ -202,6 +202,11 @@ const router = createRouter({
       name: 'PlanDuSite',
       component: () => import('./pages/plan-du-site.vue'),
     },
+    {
+      path: '/comment-agir',
+      name: 'CommentAgir',
+      component: () => import('./pages/comment-agir.vue'),
+    },
   ],
 })
 

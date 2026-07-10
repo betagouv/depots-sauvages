@@ -116,7 +116,7 @@ interface NavLink {
 const navLinks = computed<NavLink[]>(() => {
   const links = [
     { text: 'Accueil', href: '/' },
-    { text: 'Comprendre la procédure', href: '/comprendre-la-procedure' },
+    { text: 'Comment agir', href: '/comment-agir' },
     { text: 'Mes procédures', href: '/mes-procedures' },
     { text: 'FAQ', href: '/faq' },
     { text: 'Contact', href: '/contact' },
