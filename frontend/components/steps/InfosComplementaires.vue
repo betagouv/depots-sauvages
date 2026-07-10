@@ -8,6 +8,17 @@
           :options="nettoyageOptions"
         >
           <transition name="fade-slide">
+            <DsfrAlert v-if="!suivi.nettoyage_fait" type="info" small class="fr-mt-3w">
+              <p class="fr-mb-1w">
+                Il est conseillé de retirer rapidement le dépôt pour éviter son extension et limiter
+                l'impact environnemental. Le retrait peut être effectué par la commune ou le
+                propriétaire du terrain.
+              </p>
+              <p>Le retrait peut se faire dès que les constatations sont terminées (photos, fouille).</p>
+            </DsfrAlert>
+          </transition>
+
+          <transition name="fade-slide">
             <div v-if="suivi.nettoyage_fait" class="fr-mt-3w premium-indent">
               <div class="fr-grid-row">
                 <div class="fr-col-12 fr-col-md-6">
@@ -44,6 +55,7 @@
 </template>
 
 <script setup lang="ts">
+import { DsfrAlert } from '@gouvminint/vue-dsfr'
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
 import SelectableChoices from '../shared/SelectableChoices.vue'
 
