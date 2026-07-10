@@ -6,6 +6,7 @@ interface TallyRouteConfig {
   [path: string]: {
     formId: string
     options?: TallyPopupOptions
+    returnPath?: string
   }
 }
 
@@ -23,9 +24,9 @@ export function useTallyRoutes(config: TallyRouteConfig) {
       openTallyPopup(setup.formId, {
         ...setup.options,
         onClose: () => {
-          // If we are still on the specific route when closing, go back to home
+          // If we are still on the specific route when closing, go back to the return path
           if (route.path === path) {
-            router.push('/')
+            router.push(setup.returnPath ?? '/')
           }
           // Call original onClose if provided
           if (setup.options?.onClose) {

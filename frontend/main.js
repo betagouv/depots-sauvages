@@ -115,6 +115,12 @@ const router = createRouter({
       meta: { title: 'Prendre rendez-vous' },
     },
     {
+      path: '/rdv/etre-informe',
+      name: 'RDVEtreInforme',
+      component: () => import('./pages/rdv.vue'),
+      meta: { title: 'Prendre rendez-vous' },
+    },
+    {
       path: '/login-demo',
       name: 'LoginDemo',
       component: () => import('./pages/login-demo.vue'),
@@ -205,6 +211,11 @@ const router = createRouter({
     {
       path: '/comment-agir',
       name: 'CommentAgir',
+      component: () => import('./pages/comment-agir.vue'),
+    },
+    {
+      path: '/comment-agir/etre-informe',
+      name: 'CommentAgirEtreInforme',
       component: () => import('./pages/comment-agir.vue'),
     },
   ],

@@ -54,7 +54,7 @@
     <div class="fr-container fr-pb-8w">
       <section class="fr-mb-7w">
         <h2 class="fr-h3 fr-mb-3w">
-          <span class="fr-icon-shield-check-line fr-mr-1w" aria-hidden="true"></span>
+          <span class="fr-icon-shield-line fr-mr-1w" aria-hidden="true"></span>
           <span>Les collectivités peuvent agir</span>
         </h2>
         <p class="fr-text fr-text--bold">
@@ -143,8 +143,8 @@
             </router-link>
           </li>
         </ul>
-        <router-link to="/faq" class="fr-btn fr-btn--secondary">
-          Trouver la réponse à votre question
+        <router-link to="/faq" class="fr-link fr-link--icon-right fr-icon-arrow-right-line">
+          Consulter toutes les questions fréquentes
         </router-link>
       </section>
 
@@ -213,6 +213,7 @@
                 form-id="Pdyay0"
                 label="Je souhaite recevoir les ressources clés et les prochaines dates par e-mail"
                 variant="secondary"
+                to="/comment-agir/etre-informe"
               />
             </div>
           </div>
@@ -224,7 +225,16 @@
 
 <script setup lang="ts">
 import TallyPopupButton from '@/components/shared/TallyPopupButton.vue'
+import { useTallyRoutes } from '@/composables/useTally'
 import { DsfrBadge, DsfrCallout } from '@gouvminint/vue-dsfr'
+
+useTallyRoutes({
+  '/comment-agir/etre-informe': {
+    formId: 'Pdyay0',
+    options: { layout: 'modal', width: 900 },
+    returnPath: '/comment-agir',
+  },
+})
 
 const steps = [
   {
@@ -276,14 +286,6 @@ const faqItems = [
   {
     question: 'Puis-je agir sur un terrain privé ?',
     slug: 'peut-on-engager-une-procedure-si-le-depot-est-sur-un-terrain-prive',
-  },
-  {
-    question: 'Qui peut constater un dépôt sauvage ?',
-    slug: 'qui-peut-constater-un-depot-sauvage',
-  },
-  {
-    question: 'Puis-je utiliser Stop dépôt sauvage si ma commune est en zone police nationale ?',
-    slug: 'puis-je-utiliser-protectenvi-si-ma-commune-est-en-zone-police-nationale',
   },
 ]
 </script>

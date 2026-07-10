@@ -118,9 +118,14 @@
         <p class="fr-text fr-mb-1w">Nous vous informerons :</p>
         <ul class="fr-pl-3w fr-mb-3w">
           <li class="fr-mb-1w">des prochaines dates des webinaires ;</li>
-          <li class="fr-mb-0">des nouveautés de Stop dépôt sauvage.</li>
+          <li class="fr-mb-0">des nouveautés de Protect'Envi.</li>
         </ul>
-        <TallyPopupButton form-id="Pdyay0" label="📩 Je souhaite être informé" variant="primary" />
+        <TallyPopupButton
+          form-id="Pdyay0"
+          label="📩 Je souhaite être informé"
+          variant="primary"
+          to="/rdv/etre-informe"
+        />
       </section>
     </div>
   </div>
@@ -128,6 +133,15 @@
 
 <script setup lang="ts">
 import TallyPopupButton from '@/components/shared/TallyPopupButton.vue'
+import { useTallyRoutes } from '@/composables/useTally'
 
 const anctLink = import.meta.env.VITE_RDV_PAGE_URL || ''
+
+useTallyRoutes({
+  '/rdv/etre-informe': {
+    formId: 'Pdyay0',
+    options: { layout: 'modal', width: 900 },
+    returnPath: '/rdv',
+  },
+})
 </script>
