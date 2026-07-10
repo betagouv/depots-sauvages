@@ -1,5 +1,5 @@
 <template>
-  <div class="vue-antoinette-renderer">
+  <div class="vue-guillotine-renderer">
     <template v-for="(block, index) in blocks" :key="index">
       <div v-if="block.type === 'rich_text'" class="content-styled" v-html="block.value"></div>
       <h2 v-else-if="block.type === 'heading'" class="fr-h4">

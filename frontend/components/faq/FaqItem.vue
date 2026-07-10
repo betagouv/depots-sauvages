@@ -66,7 +66,7 @@ import CopyButton from '@/components/shared/CopyButton.vue'
 import { useAnchorScroll } from '@/composables/useAnchorScroll'
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { AdminControls, BlockRenderer } from '../../vue-antoinette'
+import { AdminControls, BlockRenderer } from '../../vue-guillotine'
 
 interface FAQItem {
   id: number

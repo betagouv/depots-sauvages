@@ -17,7 +17,7 @@ import {
   SimpleToolbarButtons,
   Toolbar,
   useEditor,
-} from '../../vue-antoinette'
+} from '../../vue-guillotine'
 
 const props = defineProps<{
   modelValue: string
@@ -30,4 +30,3 @@ const emit = defineEmits<{
 const editor = useEditor(props, emit)
 const showLinkInput = ref(false)
 </script>
-

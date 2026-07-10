@@ -152,7 +152,7 @@ import * as api from '@/services/api'
 import { DsfrButton } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useAdminModeStore } from '../stores/admin-mode'
-import { AdminControls, useNestedContent } from '../vue-antoinette'
+import { AdminControls, useNestedContent } from '../vue-guillotine'
 
 const adminModeStore = useAdminModeStore()
 const isAdminMode = computed(() => adminModeStore.isAdminMode)
