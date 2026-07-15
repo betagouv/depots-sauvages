@@ -10,13 +10,16 @@
         </p>
 
         <p class="fr-text fr-text--bold fr-mb-1w">Sur cette page, vous découvrirez :</p>
-        <ul class="fr-p-0 fr-mb-2w" style="list-style: none">
+        <ul class="fr-raw-list fr-mb-2w">
           <li class="fr-mb-1w fr-display-flex">
             <span
               class="fr-icon-checkbox-circle-fill fr-text-default--success fr-mr-1w"
               aria-hidden="true"
             ></span>
-            <span>les avantages de la procédure administrative pour lutter contre les dépôts sauvages</span>
+            <span
+              >les avantages de la procédure administrative pour lutter contre les dépôts
+              sauvages</span
+            >
           </li>
           <li class="fr-mb-1w fr-display-flex">
             <span
@@ -39,7 +42,9 @@
             ></span>
             <span>
               comment aller plus loin grâce à notre webinaire d'accompagnement (
-              <router-link to="/rdv" class="fr-link">Je m'inscris au prochain wébinaire</router-link>
+              <router-link to="/rdv" class="fr-link"
+                >Je m'inscris au prochain wébinaire</router-link
+              >
               )
             </span>
           </li>
@@ -65,7 +70,7 @@
           Contrairement à une idée reçue, il n'est pas toujours nécessaire de déposer plainte pour
           agir contre un dépôt sauvage.
         </p>
-        <p class="fr-text fr-mb-1w">Cette procédure permet à la collectivité de : </p>
+        <p class="fr-text fr-mb-1w">Cette procédure permet à la collectivité de :</p>
         <ul class="fr-p-0 fr-mb-0" style="list-style: none">
           <li class="fr-mb-1w fr-display-flex">
             <span
@@ -87,8 +92,8 @@
               aria-hidden="true"
             ></span>
             <span
-              >prononcer une amende administrative jusqu'à
-              <strong>15&nbsp;000&nbsp;€</strong> et éviter les classements sans suite</span
+              >prononcer une amende administrative jusqu'à <strong>15&nbsp;000&nbsp;€</strong> et
+              éviter les classements sans suite</span
             >
           </li>
           <li class="fr-mb-1w fr-display-flex">
@@ -112,7 +117,9 @@
 
         <div class="fr-grid-row fr-grid-row--gutters">
           <div v-for="step in steps" :key="step.badge" class="fr-col-12 fr-col-md-6">
-            <article class="fr-card fr-card--shadow fr-card--no-arrow fr-p-3w fr-mb-0" style="height: 100%">
+            <article
+              class="fr-card fr-card--shadow fr-card--no-arrow fr-p-3w fr-mb-0 card-full-height"
+            >
               <div class="fr-card__body">
                 <h3 class="fr-h5 fr-mb-2w fr-display-flex fr-flex-wrap fr-gap-1w">
                   <DsfrBadge class="fr-mr-1w" :label="step.badge" type="info" :small="false" />
@@ -124,7 +131,10 @@
           </div>
         </div>
 
-        <DsfrCallout class="fr-mt-4w fr-mb-0" title="Vous souhaitez comprendre chaque étape en détail ?">
+        <DsfrCallout
+          class="fr-mt-4w fr-mb-0"
+          title="Vous souhaitez comprendre chaque étape en détail ?"
+        >
           <router-link to="/comprendre-la-procedure" class="fr-link">
             Consulter le guide complet de la procédure administrative
           </router-link>
@@ -136,7 +146,7 @@
           <span class="fr-icon-question-line fr-mr-1w" aria-hidden="true"></span>
           <span>Les questions les plus fréquentes</span>
         </h2>
-        <ul class="fr-pl-0 fr-mb-3w" style="list-style: none">
+        <ul class="fr-raw-list fr-mb-3w">
           <li v-for="item in faqItems" :key="item.slug" class="fr-mb-2w">
             <router-link :to="`/faq/${item.slug}`" class="fr-link fr-text--bold">
               {{ item.question }}
@@ -165,7 +175,7 @@
               moyens d'agir contre les dépôts sauvages.
             </p>
             <p class="fr-text fr-text--bold fr-mb-1w">À l'issue du webinaire, vous saurez :</p>
-            <ul class="fr-p-0 fr-mb-3w" style="list-style: none">
+            <ul class="fr-raw-list fr-mb-3w">
               <li class="fr-mb-1w fr-display-flex">
                 <span
                   class="fr-icon-checkbox-circle-fill fr-text-default--success fr-mr-1w"
@@ -203,7 +213,7 @@
               Je m'inscris au prochain webinaire
             </router-link>
 
-            <div class="fr-pt-4w" style="border-top: 1px solid var(--border-default-grey)">
+            <div class="fr-pt-4w border-top">
               <h3 class="fr-h6 fr-mb-1w">Vous ne pouvez pas participer ?</h3>
               <p class="fr-text fr-mb-2w">
                 Recevez un récapitulatif des informations essentielles ainsi que les prochaines
@@ -256,7 +266,8 @@ const steps = [
   {
     badge: 'Étape 4',
     title: 'Décision',
-    description: "Le maire ou le président d'intercommunalité décide de sanctionner l'auteur ou non.",
+    description:
+      "Le maire ou le président d'intercommunalité décide de sanctionner l'auteur ou non.",
   },
   {
     badge: 'Étape 5',
@@ -280,7 +291,8 @@ const faqItems = [
     slug: 'comment-identifier-lauteur',
   },
   {
-    question: "Faut-il une délibération du conseil municipal pour lancer une procédure administrative ?",
+    question:
+      'Faut-il une délibération du conseil municipal pour lancer une procédure administrative ?',
     slug: 'faut-il-une-deliberation-du-conseil-municipal-pour-demarrer-une-procedure-administrative',
   },
   {
@@ -289,3 +301,13 @@ const faqItems = [
   },
 ]
 </script>
+
+<style scoped>
+.card-full-height {
+  height: 100%;
+}
+
+.border-top {
+  border-top: 1px solid var(--border-default-grey);
+}
+</style>
