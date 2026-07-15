@@ -105,8 +105,11 @@ export interface ProcedureOverview {
   heure_constat: string | null
   localisation_depot: string | null
   last_sync: string | null
+  auteur_identifie: boolean
   suivi_procedure?: {
     etape_en_cours: number
+    identification_reussie?: boolean | null
+    decision_poursuite?: string | null
   }
 }
 

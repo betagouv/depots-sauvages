@@ -34,38 +34,38 @@
           <div class="fr-card fr-card--no-arrow shadow-card">
             <div class="fr-card__body">
               <div class="fr-card__content">
-                <h3 class="fr-card__title">Procédure #{{ procedure.id }}</h3>
-                <div class="fr-card__desc">
-                  <div
-                    v-if="procedure.suivi_procedure"
-                    class="fr-alert fr-alert--info fr-alert--sm fr-mt-1w fr-mb-2w"
-                  >
-                    <p class="fr-text--sm">
-                      Prochaine étape :
-                      <strong>{{
-                        getStepLabel(
-                          procedure.suivi_procedure.etape_en_cours,
-                          procedure.auteur_identifie
-                        )
-                      }}</strong>
-                    </p>
+                <div class="fr-grid-row fr-grid-row--middle fr-grid-row--gutters fr-mb-1w">
+                  <div class="fr-col-auto">
+                    <h3 class="fr-card__title fr-mb-0">Procédure #{{ procedure.id }}</h3>
                   </div>
+                  <div class="fr-col-auto">
+                    <DsfrBadge
+                      :type="procedure.auteur_identifie ? 'success' : 'info'"
+                      :label="procedure.auteur_identifie ? 'Auteur identifié' : 'Auteur non identifié'"
+                      class="fr-badge--no-icon"
+                    />
+                  </div>
+                </div>
+                <div class="fr-card__desc">
                   <Metadata :procedure="procedure" />
                 </div>
               </div>
 
               <div class="fr-card__footer">
+                <div
+                  v-if="procedure.suivi_procedure"
+                  class="fr-alert fr-alert--info fr-alert--sm fr-mb-2w"
+                >
+                  <p class="fr-text--sm">
+                    Prochaine étape :
+                    <strong>{{ getNextStepTitle(procedure) }}</strong>
+                  </p>
+                </div>
                 <ul class="fr-btns-group fr-btns-group--inline-lg">
                   <li>
                     <DsfrButton @click="router.push(getSuiviProcedureUrl(procedure.id))">
                       <span class="fr-icon-file-line fr-mr-1w" aria-hidden="true"></span>
-                      Suivre la procédure
-                    </DsfrButton>
-                  </li>
-                  <li>
-                    <DsfrButton secondary @click="router.push(`/constatation/${procedure.id}`)">
-                      <span class="fr-icon-edit-line fr-mr-1w" aria-hidden="true"></span>
-                      Modifier la constatation
+                      Continuer la procédure
                     </DsfrButton>
                   </li>
                 </ul>
@@ -85,15 +85,15 @@
 
 <script setup lang="ts">
 import { useProcedureStore } from '@/stores/procedure'
-import { getStepLabel } from '@/utils/backoffice'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import AucuneProcedureBox from '../components/procedures/AucuneProcedureBox.vue'
 import Chargement from '../components/procedures/Chargement.vue'
 import Metadata from '../components/procedures/Metadata.vue'
 import LoginInvitation from '../components/shared/LoginInvitation.vue'
-import { getUserInfo, type UserInfo } from '../services/api'
+import { getUserInfo, type ProcedureOverview, type UserInfo } from '../services/api'
 import { getSuiviProcedureUrl } from '../services/urls'
+import { getCurrentStepTitle } from '../utils/procedure-steps'
 
 const router = useRouter()
 const userInfo = ref<UserInfo | null>(null)
@@ -101,6 +101,13 @@ const procedureStore = useProcedureStore()
 const showLoading = ref(true)
 
 const procedures = computed(() => procedureStore.procedures)
+
+const getNextStepTitle = (procedure: ProcedureOverview) =>
+  getCurrentStepTitle(procedure.suivi_procedure?.etape_en_cours ?? 0, {
+    auteurIdentifie: procedure.auteur_identifie,
+    identificationReussie: procedure.suivi_procedure?.identification_reussie,
+    decisionPoursuite: procedure.suivi_procedure?.decision_poursuite,
+  })
 
 onMounted(async () => {
   try {
