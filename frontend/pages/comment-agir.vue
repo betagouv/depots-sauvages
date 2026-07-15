@@ -209,7 +209,10 @@
               Toutes vos questions pourront être posées en direct à un membre de notre équipe.
             </p>
 
-            <router-link to="/rdv" class="fr-btn fr-btn--lg fr-mb-4w">
+            <router-link
+              to="/rdv"
+              class="fr-btn fr-btn--lg fr-mb-4w fr-icon-video-chat-line fr-btn--icon-left"
+            >
               Je m'inscris au prochain webinaire
             </router-link>
 
@@ -224,6 +227,7 @@
                 label="Je souhaite recevoir les ressources clés et les prochaines dates par e-mail"
                 variant="secondary"
                 to="/comment-agir/etre-informe"
+                icon="fr-icon-mail-line"
               />
             </div>
           </div>
