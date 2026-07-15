@@ -1,5 +1,5 @@
-import { openTallyPopup, type TallyPopupOptions } from '@/utils/tally'
-import { onMounted, watch } from 'vue'
+import { openTallyPopup, closeTallyPopup, type TallyPopupOptions } from '@/utils/tally'
+import { onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 interface TallyRouteConfig {
@@ -17,10 +17,15 @@ interface TallyRouteConfig {
 export function useTallyRoutes(config: TallyRouteConfig) {
   const route = useRoute()
   const router = useRouter()
+  let activeFormId: string | null = null
 
   const handleTallyRoute = (path: string) => {
     const setup = config[path]
     if (setup) {
+      if (activeFormId && activeFormId !== setup.formId) {
+        closeTallyPopup(activeFormId)
+      }
+      activeFormId = setup.formId
       openTallyPopup(setup.formId, {
         ...setup.options,
         onClose: () => {
@@ -32,8 +37,16 @@ export function useTallyRoutes(config: TallyRouteConfig) {
           if (setup.options?.onClose) {
             setup.options.onClose()
           }
+          if (activeFormId === setup.formId) {
+            activeFormId = null
+          }
         },
       })
+    } else {
+      if (activeFormId) {
+        closeTallyPopup(activeFormId)
+        activeFormId = null
+      }
     }
   }
 
@@ -47,4 +60,10 @@ export function useTallyRoutes(config: TallyRouteConfig) {
       handleTallyRoute(newPath)
     }
   )
+
+  onUnmounted(() => {
+    if (activeFormId) {
+      closeTallyPopup(activeFormId)
+    }
+  })
 }
