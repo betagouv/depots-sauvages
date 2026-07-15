@@ -7,111 +7,123 @@
     <div v-else>
       <div class="fr-background-alt--blue-france fr-mb-6w fr-py-6w">
         <div class="fr-container">
-          <h1 class="fr-h1 fr-mb-3w">Lancer une procédure</h1>
+          <h1 class="fr-h1 fr-mb-3w">Démarrer une procédure dépôt sauvage</h1>
           <p class="fr-text fr-text--lead fr-mb-0">
-            Pour initier une procédure, vous devez commencer par établir le constat du dépôt
-            sauvage.
+            Nous allons vous guider étape par étape. Pour engager une procédure, la première étape
+            consiste à établir le constat du dépôt sauvage.
           </p>
         </div>
       </div>
 
       <div class="fr-container fr-pb-8w">
-        <PremiumCallout
-          v-if="dossiersCount > 0"
-          type="banner"
-          title="Vous avez déjà des procédures en cours"
-          :description="`Vous avez actuellement <strong>${dossiersCount} procédure${dossiersCount > 1 ? 's' : ''} en cours</strong>.`"
-          iconClass="fr-icon-folder-2-line"
-          buttonText="Voir mes procédures en cours"
-          buttonTo="/mes-procedures"
-        >
-          <template #button-icon>
-            <span class="fr-icon-eye-line fr-mr-1w" aria-hidden="true"></span>
-          </template>
-        </PremiumCallout>
-
-        <PremiumCallout
-          description="Avant de démarrer votre constatation, vous pouvez vérifier votre éligibilité à la procédure administrative."
-          iconClass="fr-icon-question-line"
-          buttonText="Je vérifie mon éligibilité grâce au simulateur"
-          @click="openSimulator"
-        />
-
         <div class="fr-grid-row fr-grid-row--gutters">
           <div class="fr-col-12 fr-col-md-6">
-            <div
-              class="premium-card premium-card--small premium-card--static"
-              style="align-items: flex-start; text-align: left"
-            >
-              <h2 class="fr-h4">De quoi avez-vous besoin pour réaliser cette constatation ?</h2>
-              <ul class="fr-text--sm fr-mb-0 premium-choices-list" style="padding-left: 1.5rem">
+            <div class="premium-card premium-card--small premium-card--static premium-card--align-left">
+              <h2 class="fr-h4">Ce dont vous avez besoin pour commencer la constatation :</h2>
+              <ul class="fr-text--sm fr-mb-0 premium-choices-list">
                 <li>
-                  Les informations concernant le dépôt sauvage : localisation, descriptions du
-                  dépôt, volumes, types de déchets, etc.
+                  <span class="fr-icon-checkbox-circle-line fr-text-default--success fr-mr-1w" aria-hidden="true"></span>
+                  <span>Informations concernant le dépôt sauvage : localisation, volume estimé, types de déchets, etc.</span>
                 </li>
-                <li>L'identité de la personne habilitée qui a constaté les dépôts sauvages</li>
-                <li>Les informations éventuelles sur le responsable présumé</li>
-                <li>Cette démarche nécessite une authentification via ProConnect.</li>
+                <li>
+                  <span class="fr-icon-checkbox-circle-line fr-text-default--success fr-mr-1w" aria-hidden="true"></span>
+                  <span>Identité de la personne habilitée qui a constaté les dépôts sauvages</span>
+                </li>
+                <li>
+                  <span class="fr-icon-checkbox-circle-line fr-text-default--success fr-mr-1w" aria-hidden="true"></span>
+                  <span>Informations sur l'auteur présumé (si connues)</span>
+                </li>
+                <li>
+                  <span class="fr-icon-time-line fr-text-default--info fr-mr-1w" aria-hidden="true"></span>
+                  <span>Temps estimé : 7 minutes</span>
+                </li>
               </ul>
             </div>
           </div>
 
           <div class="fr-col-12 fr-col-md-6">
-            <div
-              class="premium-card premium-card--small premium-card--static"
-              style="align-items: flex-start; text-align: left"
-            >
-              <h2 class="fr-h4">À l'issue de la constatation :</h2>
-              <ul class="fr-text--sm fr-mb-0 premium-choices-list" style="padding-left: 1.5rem">
+            <div class="premium-card premium-card--small premium-card--static premium-card--align-left">
+              <h2 class="fr-h4">À l'issue de cette étape :</h2>
+              <ul class="fr-text--sm fr-mb-0 premium-choices-list">
                 <li>
-                  Vous pourrez récupérer les documents personnalisés utiles pour votre procédure
+                  <span class="fr-icon-file-text-line fr-text-default--info fr-mr-1w" aria-hidden="true"></span>
+                  <span>Rapport de constatation généré automatiquement</span>
                 </li>
                 <li>
-                  Vous serez guidé étape par étape pour vous permettre d'initier la procédure
-                  adaptée à votre situation
+                  <span class="fr-icon-file-text-line fr-text-default--info fr-mr-1w" aria-hidden="true"></span>
+                  <span>Lettre d'information prête à être envoyée (si l'auteur présumé est identifié)</span>
+                </li>
+                <li>
+                  <span class="fr-icon-arrow-right-line fr-text-default--info fr-mr-1w" aria-hidden="true"></span>
+                  <span>Vous serez guidé étape par étape pour faire avancer la procédure adaptée à votre situation</span>
                 </li>
               </ul>
             </div>
           </div>
         </div>
 
-        <div v-if="userInfo?.is_authenticated" class="fr-mt-6w" style="text-align: center">
-          <router-link
-            to="/constatation"
-            class="fr-btn fr-btn--lg"
-            title="Démarrer la constatation"
-          >
-            Démarrer la constatation
-          </router-link>
-        </div>
+        <div class="constatation-actions">
+          <template v-if="userInfo?.is_authenticated">
+            <div class="premium-text-center">
+              <router-link
+                to="/constatation"
+                class="fr-btn fr-btn--lg"
+                title="Démarrer la constatation"
+              >
+                Démarrer la constatation
+              </router-link>
+            </div>
 
-        <LoginInvitation
-          v-else
-          title="Connectez-vous pour démarrer"
-          description="Pour initier une procédure et accéder au formulaire de constatation de dépôt sauvage, vous devez vous connecter avec ProConnect."
-          redirectTo="/constatation"
-        />
+            <PremiumCallout
+              type="banner"
+              title="Vous avez un doute ?"
+              description="Vous ne savez pas si votre situation permet d'engager une procédure ?"
+              iconClass="fr-icon-question-line"
+              buttonText="Vérifier ma situation en 2 min"
+              buttonTo="/demarrer-constatation/simulateur"
+            />
+          </template>
+
+          <template v-else>
+            <PremiumCallout
+              type="banner"
+              title="Vous avez un doute ?"
+              description="Vous ne savez pas si votre situation permet d'engager une procédure ?"
+              iconClass="fr-icon-question-line"
+              buttonText="Vérifier ma situation en 2 min"
+              buttonTo="/demarrer-constatation/simulateur"
+            />
+
+            <LoginInvitation
+              title="Connectez-vous pour démarrer la constatation"
+              description="Pour initier une procédure et accéder au formulaire de constatation de dépôt sauvage, vous devez vous connecter avec ProConnect."
+              redirectTo="/constatation"
+            />
+          </template>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import LoginInvitation from '../components/shared/LoginInvitation.vue'
 import PageLoader from '../components/shared/PageLoader.vue'
 import PremiumCallout from '../components/shared/PremiumCallout.vue'
+import { useTallyRoutes } from '../composables/useTally'
 import { getUserInfo, type UserInfo } from '../services/api'
-import { openTallyPopup } from '../utils/tally'
 
 const userInfo = ref<UserInfo | null>(null)
 const showLoading = ref(true)
 
-const dossiersCount = computed(() => userInfo.value?.procedures_count || 0)
-
-const openSimulator = () => {
-  openTallyPopup('A7xA8z', { layout: 'modal', width: 900 })
-}
+useTallyRoutes({
+  '/demarrer-constatation/simulateur': {
+    formId: 'A7xA8z',
+    options: { layout: 'modal', width: 900 },
+    returnPath: '/demarrer-constatation',
+  },
+})
 
 onMounted(async () => {
   try {
@@ -125,22 +137,43 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.text-blue {
-  color: var(--text-active-blue-france);
+.premium-card--align-left {
+  align-items: flex-start;
+  text-align: left;
 }
 
-.font-premium {
-  font-weight: 700;
-  color: var(--text-title-blue-france);
+.premium-choices-list {
+  padding-left: 0;
+  list-style-type: none;
 }
 
-.text-muted {
-  color: var(--text-mention-grey);
+.premium-choices-list li {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
 }
 
-@media (min-width: 768px) {
-  .text-md-right {
-    text-align: right;
-  }
+.premium-choices-list li:last-child {
+  margin-bottom: 0;
+}
+
+.premium-choices-list li span:first-child {
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.constatation-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  margin-top: 3rem;
+}
+
+.constatation-actions :deep(.premium-alert-banner) {
+  margin: 0 !important;
+}
+
+.constatation-actions :deep(.premium-block-container) {
+  padding-top: 0 !important;
 }
 </style>

@@ -32,9 +32,10 @@ const router = createRouter({
       return false
     }
 
-    // Avoid scroll to top when switching between home, simulateur and calculateur
-    const tallyRoutes = ['/', '/simulateur', '/calculateur']
-    if (tallyRoutes.includes(to.path) && tallyRoutes.includes(from.path)) {
+    // Avoid scroll to top when toggling or switching between Tally modals on the same parent page
+    const isTallyToParent = to.meta.tallyParent === from.path || from.meta.tallyParent === to.path
+    const isTallySameParent = to.meta.tallyParent && to.meta.tallyParent === from.meta.tallyParent
+    if (isTallyToParent || isTallySameParent) {
       return false
     }
 
@@ -55,13 +56,13 @@ const router = createRouter({
       path: '/simulateur',
       name: 'Simulateur',
       component: () => import('./pages/accueil.vue'),
-      meta: { title: "Simulateur d'amende pour dépôt sauvage" },
+      meta: { title: "Simulateur d'amende pour dépôt sauvage", tallyParent: '/' },
     },
     {
       path: '/calculateur',
       name: 'Calculateur',
       component: () => import('./pages/accueil.vue'),
-      meta: { title: 'Calculateur de préjudice' },
+      meta: { title: 'Calculateur de préjudice', tallyParent: '/' },
     },
     {
       path: '/comprendre-la-procedure',
@@ -133,6 +134,12 @@ const router = createRouter({
       meta: { title: 'Démarrer une constatation' },
     },
     {
+      path: '/demarrer-constatation/simulateur',
+      name: 'ConstatationStartSimulateur',
+      component: () => import('./pages/commencer-constatation.vue'),
+      meta: { title: "Simulateur d'éligibilité", tallyParent: '/demarrer-constatation' },
+    },
+    {
       path: '/constatation',
       name: 'ConstatationForm',
       component: () => import('./pages/constatation-form.vue'),
@@ -164,19 +171,34 @@ const router = createRouter({
       path: '/tableau-de-bord',
       name: 'DashboardBackoffice',
       component: () => import('./pages/backoffice.vue'),
-      meta: { title: 'Backoffice - Tableau de bord', requiresStaff: true, tab: 'dashboard', activeMenu: '/backoffice' },
+      meta: {
+        title: 'Backoffice - Tableau de bord',
+        requiresStaff: true,
+        tab: 'dashboard',
+        activeMenu: '/backoffice',
+      },
     },
     {
       path: '/procedures-liste',
       name: 'ProceduresListBackoffice',
       component: () => import('./pages/backoffice.vue'),
-      meta: { title: 'Backoffice - Liste des procédures', requiresStaff: true, tab: 'list', activeMenu: '/backoffice' },
+      meta: {
+        title: 'Backoffice - Liste des procédures',
+        requiresStaff: true,
+        tab: 'list',
+        activeMenu: '/backoffice',
+      },
     },
     {
       path: '/procedure-detail/:procedureId?',
       name: 'ProcedureDetailBackoffice',
       component: () => import('./pages/backoffice.vue'),
-      meta: { title: 'Backoffice - Détail de la procédure', requiresStaff: true, tab: 'detail', activeMenu: '/backoffice' },
+      meta: {
+        title: 'Backoffice - Détail de la procédure',
+        requiresStaff: true,
+        tab: 'detail',
+        activeMenu: '/backoffice',
+      },
     },
     {
       path: '/mentions-legales',
