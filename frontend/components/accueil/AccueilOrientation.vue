@@ -17,9 +17,6 @@
             <router-link to="/demarrer-constatation" class="fr-btn fr-btn--lg">
               Démarrer une procédure
             </router-link>
-            <router-link to="/simulateur" class="fr-link">
-              Vérifier d'abord si je peux engager une procédure
-            </router-link>
           </div>
         </div>
       </div>
@@ -37,9 +34,6 @@
               class="fr-btn fr-btn--secondary fr-btn--lg"
             >
               Comment agir
-            </router-link>
-            <router-link to="/rdv" class="fr-link">
-              Participer au prochain webinaire
             </router-link>
           </div>
         </div>
