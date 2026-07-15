@@ -7,8 +7,13 @@
           En moins de 60 minutes, découvrez comment les collectivités peuvent agir concrètement
           contre les dépôts sauvages grâce à la procédure administrative.
         </p>
-        <a :href="anctLink" target="_blank" rel="noopener noreferrer" class="fr-btn fr-btn--lg">
-          🎥 Je m'inscris au wébinaire via RDV service public
+        <a
+          :href="anctLink"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="fr-btn fr-btn--lg fr-icon-video-chat-line fr-btn--icon-left"
+        >
+          Je m'inscris au wébinaire via RDV service public
         </a>
       </div>
     </div>
@@ -16,7 +21,7 @@
     <div class="fr-container fr-pb-8w">
       <section class="fr-mb-4w">
         <h2 class="fr-h4 fr-mb-3w">Pendant ce webinaire, vous découvrirez :</h2>
-        <ul class="fr-p-0 fr-mb-0" style="list-style: none">
+        <ul class="fr-raw-list fr-mb-0">
           <li class="fr-mb-1w fr-display-flex">
             <span
               class="fr-icon-checkbox-circle-fill fr-text-default--success fr-mr-1w"
@@ -52,29 +57,29 @@
 
       <section class="fr-mb-4w">
         <h2 class="fr-h4 fr-mb-3w">À qui s'adresse ce wébinaire</h2>
-        <ul class="fr-p-0 fr-mb-0" style="list-style: none">
+        <ul class="fr-raw-list fr-mb-0">
           <li class="fr-mb-1w fr-display-flex">
-            <span class="fr-mr-1w" aria-hidden="true">👨‍💼</span>
+            <span class="fr-icon-user-line fr-text-default--info fr-mr-1w" aria-hidden="true"></span>
             <span>Maires, présidents d'intercommunalité et élus en charge du sujet</span>
           </li>
           <li class="fr-mb-1w fr-display-flex">
-            <span class="fr-mr-1w" aria-hidden="true">🏛️</span>
+            <span class="fr-icon-government-line fr-text-default--info fr-mr-1w" aria-hidden="true"></span>
             <span>Directions générales des services (DGS) et agents administratifs</span>
           </li>
           <li class="fr-mb-1w fr-display-flex">
-            <span class="fr-mr-1w" aria-hidden="true">👮</span>
+            <span class="fr-icon-shield-line fr-text-default--info fr-mr-1w" aria-hidden="true"></span>
             <span>Polices municipales et gardes champêtres</span>
           </li>
           <li class="fr-mb-1w fr-display-flex">
-            <span class="fr-mr-1w" aria-hidden="true">🚛</span>
+            <span class="fr-icon-settings-5-line fr-text-default--info fr-mr-1w" aria-hidden="true"></span>
             <span>Services techniques et environnement</span>
           </li>
           <li class="fr-mb-1w fr-display-flex">
-            <span class="fr-mr-1w" aria-hidden="true">👮</span>
+            <span class="fr-icon-shield-line fr-text-default--info fr-mr-1w" aria-hidden="true"></span>
             <span>Gendarmes ou policiers accompagnant les collectivités</span>
           </li>
           <li class="fr-mb-0 fr-display-flex">
-            <span class="fr-mr-1w" aria-hidden="true">🏘️</span>
+            <span class="fr-icon-community-line fr-text-default--info fr-mr-1w" aria-hidden="true"></span>
             <span>Toute personne impliquée dans la gestion des dépôts sauvages au sein d'une collectivité</span>
           </li>
         </ul>
@@ -84,7 +89,7 @@
 
       <section class="fr-mb-4w">
         <h2 class="fr-h4 fr-mb-3w">Informations pratiques</h2>
-        <ul class="fr-p-0 fr-mb-0" style="list-style: none">
+        <ul class="fr-raw-list fr-mb-0">
           <li class="fr-mb-1w fr-display-flex">
             <span class="fr-icon-calendar-line fr-mr-1w" aria-hidden="true"></span>
             <span>Toutes les semaines</span>
@@ -105,8 +110,13 @@
       </section>
 
       <div class="fr-mb-4w">
-        <a :href="anctLink" target="_blank" rel="noopener noreferrer" class="fr-btn fr-btn--lg">
-          🎥 Je m'inscris au wébinaire via RDV service public
+        <a
+          :href="anctLink"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="fr-btn fr-btn--lg fr-icon-video-chat-line fr-btn--icon-left"
+        >
+          Je m'inscris au wébinaire via RDV service public
         </a>
       </div>
 
@@ -122,9 +132,10 @@
         </ul>
         <TallyPopupButton
           form-id="Pdyay0"
-          label="📩 Je souhaite être informé"
+          label="Je souhaite être informé"
           variant="primary"
           to="/rdv/etre-informe"
+          icon="fr-icon-mail-line"
         />
       </section>
     </div>
