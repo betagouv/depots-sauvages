@@ -33,7 +33,13 @@ const router = createRouter({
     }
 
     // Avoid scroll to top when switching between home, simulateur and calculateur
-    const tallyRoutes = ['/', '/simulateur', '/calculateur']
+    const tallyRoutes = [
+      '/',
+      '/simulateur',
+      '/calculateur',
+      '/demarrer-constatation',
+      '/demarrer-constatation/simulateur',
+    ]
     if (tallyRoutes.includes(to.path) && tallyRoutes.includes(from.path)) {
       return false
     }
@@ -131,6 +137,12 @@ const router = createRouter({
       name: 'ConstatationStart',
       component: () => import('./pages/commencer-constatation.vue'),
       meta: { title: 'Démarrer une constatation' },
+    },
+    {
+      path: '/demarrer-constatation/simulateur',
+      name: 'ConstatationStartSimulateur',
+      component: () => import('./pages/commencer-constatation.vue'),
+      meta: { title: "Simulateur d'éligibilité" },
     },
     {
       path: '/constatation',
