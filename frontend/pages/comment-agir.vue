@@ -5,7 +5,7 @@
         <h1 class="fr-h1 fr-mb-3w">Comment agir contre les dépôts sauvages ?</h1>
         <p class="fr-text fr-text--lead">
           Les maires et les présidents d'intercommunalité disposent d'un levier efficace pour agir
-          contre les dépôts sauvages. Grâce à la procédure administrative, ils peuvent obtenir le
+          contre les dépôts sauvages : la procédure administrative. Ils peuvent ainsi obtenir le
           nettoyage d'un dépôt ou sanctionner son auteur lorsqu'il est identifié.
         </p>
 
@@ -43,7 +43,7 @@
             <span>
               comment aller plus loin grâce à notre webinaire d'accompagnement (
               <router-link to="/rdv" class="fr-link"
-                >Je m'inscris au prochain wébinaire</router-link
+                >Je m'inscris au prochain webinaire</router-link
               >
               )
             </span>

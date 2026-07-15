@@ -13,7 +13,7 @@
           rel="noopener noreferrer"
           class="fr-btn fr-btn--lg fr-icon-video-chat-line fr-btn--icon-left"
         >
-          Je m'inscris au wébinaire via RDV service public
+          Je m'inscris au webinaire via RDV service public
         </a>
       </div>
     </div>
@@ -56,7 +56,7 @@
       <hr class="fr-my-4w" />
 
       <section class="fr-mb-4w">
-        <h2 class="fr-h4 fr-mb-3w">À qui s'adresse ce wébinaire</h2>
+        <h2 class="fr-h4 fr-mb-3w">À qui s'adresse ce webinaire</h2>
         <ul class="fr-raw-list fr-mb-0">
           <li class="fr-mb-1w fr-display-flex">
             <span class="fr-icon-user-line fr-text-default--info fr-mr-1w" aria-hidden="true"></span>
@@ -116,7 +116,7 @@
           rel="noopener noreferrer"
           class="fr-btn fr-btn--lg fr-icon-video-chat-line fr-btn--icon-left"
         >
-          Je m'inscris au wébinaire via RDV service public
+          Je m'inscris au webinaire via RDV service public
         </a>
       </div>
 
