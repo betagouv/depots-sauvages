@@ -58,14 +58,14 @@
           <span>Les collectivités peuvent agir</span>
         </h2>
         <p class="fr-text fr-text--bold">
-          Les collectivités disposent d'un véritable pouvoir d'action grâce à la procédure
-          administrative.
+          Avec la procédure administrative, les collectivités disposent d'un véritable pouvoir
+          d'action.
         </p>
         <p class="fr-text">
           Contrairement à une idée reçue, il n'est pas toujours nécessaire de déposer plainte pour
           agir contre un dépôt sauvage.
         </p>
-        <p class="fr-text fr-mb-1w">Grâce à la procédure administrative, la collectivité peut :</p>
+        <p class="fr-text fr-mb-1w">Cette procédure permet à la collectivité de : </p>
         <ul class="fr-p-0 fr-mb-0" style="list-style: none">
           <li class="fr-mb-1w fr-display-flex">
             <span
