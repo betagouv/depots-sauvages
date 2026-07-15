@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "backend.guillotine",
     "backend.faq",
     "backend.seo",
+    "backend.site_content",
 ]
 
 
