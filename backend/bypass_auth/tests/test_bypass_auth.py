@@ -37,15 +37,14 @@ def test_users(db):
 def test_disabled_by_default(client, settings, test_users):
     regular_user, staff_user, superuser = test_users
     settings.BYPASS_AUTH_ENABLED = False
-    # Config should say disabled
+    # Config should return 404 when disabled
     config_url = reverse("bypass-auth-config")
     response = client.get(config_url)
-    assert response.status_code == status.HTTP_200_OK
-    assert response.data["enabled"] is False
-    # Login endpoint should return PermissionDenied (403)
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    # Login endpoint should return 404 when disabled
     login_url = reverse("bypass-auth-login")
     response = client.post(login_url, {"email": regular_user.username})
-    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert response.status_code == status.HTTP_404_NOT_FOUND
 
 
 @pytest.mark.django_db

@@ -1,12 +1,25 @@
 from django.conf import settings
 from django.contrib.auth import authenticate, login
+from django.http import Http404
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 
-class BypassAuthConfigView(APIView):
+class BaseBypassAuthView(APIView):
+    """
+    Base view for bypass authentication that ensures the feature
+    is enabled in settings before executing any request.
+    """
+
+    def dispatch(self, request, *args, **kwargs):
+        if not getattr(settings, "BYPASS_AUTH_ENABLED", False):
+            raise Http404()
+        return super().dispatch(request, *args, **kwargs)
+
+
+class BypassAuthConfigView(BaseBypassAuthView):
     """
     Returns whether bypass auth is enabled in settings.
     """
@@ -18,7 +31,7 @@ class BypassAuthConfigView(APIView):
         return Response({"enabled": enabled})
 
 
-class BypassAuthLoginView(APIView):
+class BypassAuthLoginView(BaseBypassAuthView):
     """
     Logs in the requested user without credentials by utilizing the
     custom BypassAuthBackend.
