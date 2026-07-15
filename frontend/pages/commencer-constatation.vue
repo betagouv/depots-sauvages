@@ -22,12 +22,21 @@
               <h2 class="fr-h4">Ce dont vous avez besoin pour commencer la constatation :</h2>
               <ul class="fr-text--sm fr-mb-0 premium-choices-list">
                 <li>
-                  ✅ informations concernant le dépôt sauvage : localisation, volume estimé, types
-                  de déchets, etc.
+                  <span class="fr-icon-checkbox-circle-line fr-text-default--success fr-mr-1w" aria-hidden="true"></span>
+                  <span>Informations concernant le dépôt sauvage : localisation, volume estimé, types de déchets, etc.</span>
                 </li>
-                <li>✅ identité de la personne habilitée qui a constaté les dépôts sauvages</li>
-                <li>✅ Informations sur l'auteur présumé (si connues)</li>
-                <li>⏱️ Temps estimé 7 minutes</li>
+                <li>
+                  <span class="fr-icon-checkbox-circle-line fr-text-default--success fr-mr-1w" aria-hidden="true"></span>
+                  <span>Identité de la personne habilitée qui a constaté les dépôts sauvages</span>
+                </li>
+                <li>
+                  <span class="fr-icon-checkbox-circle-line fr-text-default--success fr-mr-1w" aria-hidden="true"></span>
+                  <span>Informations sur l'auteur présumé (si connues)</span>
+                </li>
+                <li>
+                  <span class="fr-icon-time-line fr-text-default--info fr-mr-1w" aria-hidden="true"></span>
+                  <span>Temps estimé : 7 minutes</span>
+                </li>
               </ul>
             </div>
           </div>
@@ -36,13 +45,17 @@
             <div class="premium-card premium-card--small premium-card--static premium-card--align-left">
               <h2 class="fr-h4">À l'issue de cette étape :</h2>
               <ul class="fr-text--sm fr-mb-0 premium-choices-list">
-                <li>📄 Rapport de constatation généré automatiquement</li>
                 <li>
-                  📄 Lettre d'information prête à être envoyée (si l'auteur présumé est identifié)
+                  <span class="fr-icon-file-text-line fr-text-default--info fr-mr-1w" aria-hidden="true"></span>
+                  <span>Rapport de constatation généré automatiquement</span>
                 </li>
                 <li>
-                  ➡️ Vous serez guidé étape par étape pour faire avancer la procédure adaptée à
-                  votre situation
+                  <span class="fr-icon-file-text-line fr-text-default--info fr-mr-1w" aria-hidden="true"></span>
+                  <span>Lettre d'information prête à être envoyée (si l'auteur présumé est identifié)</span>
+                </li>
+                <li>
+                  <span class="fr-icon-arrow-right-line fr-text-default--info fr-mr-1w" aria-hidden="true"></span>
+                  <span>Vous serez guidé étape par étape pour faire avancer la procédure adaptée à votre situation</span>
                 </li>
               </ul>
             </div>
@@ -51,7 +64,7 @@
 
         <div class="constatation-actions">
           <template v-if="userInfo?.is_authenticated">
-            <div style="text-align: center">
+            <div class="premium-text-center">
               <router-link
                 to="/constatation"
                 class="fr-btn fr-btn--lg"
@@ -130,7 +143,23 @@ onMounted(async () => {
 }
 
 .premium-choices-list {
-  padding-left: 1.5rem;
+  padding-left: 0;
+  list-style-type: none;
+}
+
+.premium-choices-list li {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.premium-choices-list li:last-child {
+  margin-bottom: 0;
+}
+
+.premium-choices-list li span:first-child {
+  flex-shrink: 0;
+  margin-top: 0.125rem;
 }
 
 .constatation-actions {
