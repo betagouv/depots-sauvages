@@ -2,10 +2,10 @@
   <div class="fr-py-8w fr-background-alt--grey">
     <div class="fr-container">
       <div class="header-section fr-mb-6w text-center">
-        <h2 class="fr-h2 fr-mb-2w">Les collectivités peuvent agir contre les dépôts sauvages</h2>
+        <h2 class="fr-h2 fr-mb-2w">Les collectivités ont le pouvoir d’agir</h2>
         <p class="fr-text fr-text--lead fr-mb-0 lead-text">
-          Contrairement à une idée reçue, le maire ou le président d'intercommunalité peut agir
-          directement grâce à la procédure administrative.
+          Le maire et le président d'intercommunalité disposent de leviers administratifs directs
+          et efficaces.
         </p>
       </div>
 
@@ -65,11 +65,11 @@ const powers = [
   background-color: var(--background-default-grey);
   border: 1px solid var(--border-default-grey);
   border-radius: 16px;
-  padding: 2.5rem;
+  padding: 1.5rem 2rem;
   height: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex-direction: row;
+  align-items: center;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   box-shadow: 0 4px 20px rgba(0, 0, 100, 0.02);
 }
@@ -89,7 +89,8 @@ const powers = [
   background-color: var(--background-contrast-info, #e3e3fd);
   border-radius: 50%;
   color: var(--text-active-blue-france, #000091);
-  margin-bottom: 1.5rem;
+  margin-right: 1.5rem;
+  flex-shrink: 0;
 }
 
 .power-icon {
