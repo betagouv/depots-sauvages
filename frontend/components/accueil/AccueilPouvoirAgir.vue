@@ -1,11 +1,11 @@
 <template>
-  <div class="fr-py-8w fr-background-alt--grey">
+  <div class="fr-py-8w premium-pouvoir-agir-wrapper">
     <div class="fr-container">
       <div class="header-section fr-mb-6w text-center">
         <h2 class="fr-h2 fr-mb-2w">Les collectivités ont le pouvoir d’agir</h2>
         <p class="fr-text fr-text--lead fr-mb-0 lead-text">
-          Le maire et le président d'intercommunalité disposent de leviers administratifs directs
-          et efficaces.
+          Le maire et le président d'intercommunalité disposent de leviers administratifs directs et
+          efficaces.
         </p>
       </div>
 
@@ -51,6 +51,10 @@ const powers = [
 </script>
 
 <style scoped>
+.premium-pouvoir-agir-wrapper {
+  background: linear-gradient(135deg, var(--background-alt-blue-france) 0%, #f0f2ff 100%);
+}
+
 .header-section {
   max-width: 800px;
   margin-left: auto;
