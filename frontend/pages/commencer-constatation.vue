@@ -9,8 +9,8 @@
         <div class="fr-container">
           <h1 class="fr-h1 fr-mb-3w">Démarrer une procédure dépôt sauvage</h1>
           <p class="fr-text fr-text--lead fr-mb-0">
-            Nous allons vous guider étape par étape. Pour engager une procédure, la première
-            étape consiste à établir le constat du dépôt sauvage.
+            Nous allons vous guider étape par étape. Pour engager une procédure, la première étape
+            consiste à établir le constat du dépôt sauvage.
           </p>
         </div>
       </div>
@@ -18,12 +18,9 @@
       <div class="fr-container fr-pb-8w">
         <div class="fr-grid-row fr-grid-row--gutters">
           <div class="fr-col-12 fr-col-md-6">
-            <div
-              class="premium-card premium-card--small premium-card--static"
-              style="align-items: flex-start; text-align: left"
-            >
+            <div class="premium-card premium-card--small premium-card--static premium-card--align-left">
               <h2 class="fr-h4">Ce dont vous avez besoin pour commencer la constatation :</h2>
-              <ul class="fr-text--sm fr-mb-0 premium-choices-list" style="padding-left: 1.5rem">
+              <ul class="fr-text--sm fr-mb-0 premium-choices-list">
                 <li>
                   ✅ informations concernant le dépôt sauvage : localisation, volume estimé, types
                   de déchets, etc.
@@ -36,12 +33,9 @@
           </div>
 
           <div class="fr-col-12 fr-col-md-6">
-            <div
-              class="premium-card premium-card--small premium-card--static"
-              style="align-items: flex-start; text-align: left"
-            >
+            <div class="premium-card premium-card--small premium-card--static premium-card--align-left">
               <h2 class="fr-h4">À l'issue de cette étape :</h2>
-              <ul class="fr-text--sm fr-mb-0 premium-choices-list" style="padding-left: 1.5rem">
+              <ul class="fr-text--sm fr-mb-0 premium-choices-list">
                 <li>📄 Rapport de constatation généré automatiquement</li>
                 <li>
                   📄 Lettre d'information prête à être envoyée (si l'auteur présumé est identifié)
@@ -130,23 +124,13 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.text-blue {
-  color: var(--text-active-blue-france);
+.premium-card--align-left {
+  align-items: flex-start;
+  text-align: left;
 }
 
-.font-premium {
-  font-weight: 700;
-  color: var(--text-title-blue-france);
-}
-
-.text-muted {
-  color: var(--text-mention-grey);
-}
-
-@media (min-width: 768px) {
-  .text-md-right {
-    text-align: right;
-  }
+.premium-choices-list {
+  padding-left: 1.5rem;
 }
 
 .constatation-actions {
