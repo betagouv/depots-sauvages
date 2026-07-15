@@ -42,6 +42,7 @@ Afin d'éviter toute élévation de privilèges ou fuite de données lors de la 
 
 - L'intégration s'appuie sur la bibliothèque standard `mozilla-django-oidc`.
 - Le backend d'authentification `ProConnectOIDCBackend` ne donne **jamais** de privilèges d'administration (`is_staff` ou `is_superuser`) automatiquement lors de la création ou de la mise à jour de l'utilisateur. L'élévation d'un utilisateur en administrateur doit être réalisée manuellement par un administrateur système via la console d'administration Django.
+- **Protection des données personnelles (PII)** : Lors des étapes de création ou mise à jour utilisateur, le backend filtre les logs pour ne consigner que l'identifiant technique opaque `sub` (niveau `INFO`), garantissant qu'aucune claim d'identité nominative (nom, prénom, e-mail) ne fuite dans les journaux d'application.
 
 ### Mode Démo / Environnement de test (Bypass Auth)
 
@@ -49,6 +50,7 @@ Afin d'éviter toute élévation de privilèges ou fuite de données lors de la 
 - **Mesures de protection** :
   1. Il est formellement bloqué si la variable `ENV_NAME` contient la chaîne `"prod"`.
   2. Il interdit la connexion aux comptes d'administration (`is_staff=True` ou `is_superuser=True`), limitant tout risque d'accès non autorisé si le bypass venait à être activé par erreur.
+  3. **Blocage systématique des endpoints** : Si le paramètre `BYPASS_AUTH_ENABLED` est désactivé (ce qui est le cas par défaut et forcé en production), toutes les requêtes vers les endpoints de bypass d'authentification (`/api/bypass-auth/config/` et `/api/bypass-auth/login/`) sont interceptées au niveau de la classe de base commune et lèvent immédiatement une exception `404 Not Found`. Cela élimine tout risque d'accès réseau ou d'énumération de comptes.
 
 ---
 
@@ -58,4 +60,4 @@ Chaque fonctionnalité de sécurité sensible doit faire l'objet de tests automa
 
 - Les droits d'accès aux routes de backoffice doivent être testés avec des utilisateurs non authentifiés, des utilisateurs standards et des administrateurs.
 - Tout nouveau champ sensible ajouté à un modèle et réservé aux administrateurs doit être couvert par un test de validation de sérialiseur.
-
+- **Cloisonnement des accès (IDOR)** : Le non-accès aux suivis de procédure par des utilisateurs tiers (non propriétaires) est validé par des tests unitaires dédiés (`backend/procedures/tests.py`), garantissant le respect de la politique d'isolation objet.
