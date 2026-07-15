@@ -54,7 +54,7 @@ const isAdminMode = computed(() => adminModeStore.isAdminMode)
 const DEFAULT_STATS: StatItem[] = [
   { number: '600 m³', label: 'de déchets retirés par les auteurs' },
   { number: '500', label: 'procédures engagées' },
-  { number: '26 000 €', label: "d'amendes prononcées" },
+  { number: '60 000 €', label: "d'amendes prononcées" },
   { number: '300+', label: 'collectivités accompagnées' },
 ]
 
