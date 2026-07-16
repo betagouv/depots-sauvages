@@ -16,20 +16,14 @@
                 class="fr-icon-checkbox-circle-fill fr-text-default--success fr-mr-1w"
                 aria-hidden="true"
               ></span>
-              <span
-                ><strong>Accompagnement pas à pas</strong>, accessible sans expertise
-                juridique</span
-              >
+              <span><strong>Accompagnement pas à pas</strong></span>
             </li>
             <li class="fr-mb-2v fr-display-flex">
               <span
                 class="fr-icon-checkbox-circle-fill fr-text-default--success fr-mr-1w"
                 aria-hidden="true"
               ></span>
-              <span
-                ><strong>Procédure juridiquement sécurisée</strong>, conforme au Code de
-                l'environnement</span
-              >
+              <span><strong>Procédure juridiquement sécurisée</strong></span>
             </li>
             <li class="fr-mb-2v fr-display-flex">
               <span

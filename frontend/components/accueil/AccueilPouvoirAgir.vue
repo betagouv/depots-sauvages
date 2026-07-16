@@ -2,10 +2,10 @@
   <div class="fr-py-8w premium-pouvoir-agir-wrapper">
     <div class="fr-container">
       <div class="header-section fr-mb-6w text-center">
-        <h2 class="fr-h2 fr-mb-2w">Les collectivités ont le pouvoir d’agir</h2>
+        <h2 class="fr-h2 fr-mb-2w">Les collectivités peuvent agir</h2>
         <p class="fr-text fr-text--lead fr-mb-0 lead-text">
-          Le maire et le président d'intercommunalité disposent de leviers administratifs directs et
-          efficaces.
+          Contrairement à une idée reçue, le maire ou le président d'intercommunalité peut agir
+          directement grâce à la procédure administrative.
         </p>
       </div>
 
