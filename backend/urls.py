@@ -18,6 +18,7 @@ from backend.faq.views import FAQItemViewSet
 from backend.home.views import index_view
 from backend.procedures.views import SuiviProcedureViewSet
 from backend.seo.views import RobotsTxtView
+from backend.site_content.views import SiteContentViewSet
 
 # API Routes registration
 router = DefaultRouter()
@@ -35,6 +36,7 @@ router.register("backoffice-staff", BackofficeStaffViewSet, basename="backoffice
 
 router.register("constatations", ConstatationViewSet, basename="constatation")
 router.register("faq-items", FAQItemViewSet, basename="faq-item")
+router.register("site-content", SiteContentViewSet, basename="site-content")
 
 
 # Admin Routes
