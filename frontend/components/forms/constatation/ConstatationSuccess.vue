@@ -24,16 +24,20 @@
       <router-link v-if="constatationId" :to="`/constatation/${constatationId}`" class="fr-link">
         Modifier la constatation
       </router-link>
+
+      <TallySurveyEmbed v-if="constatationId && commune" :commune="commune" :id-dossier="constatationId" />
     </template>
   </PremiumBox>
 </template>
 
 <script setup lang="ts">
 import PremiumBox from '@/components/shared/PremiumBox.vue'
+import TallySurveyEmbed from '@/components/shared/TallySurveyEmbed.vue'
 import { DsfrButton, DsfrCallout } from '@gouvminint/vue-dsfr'
 
 defineProps<{
   constatationId?: number | null
+  commune?: string | null
 }>()
 
 defineEmits<{
