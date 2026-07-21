@@ -56,8 +56,15 @@ SEO_PATTERNS = [
     (
         r"^/rdv$",
         {
-            "title": "Prendre rendez-vous - Protect'Envi",
-            "desc": "Prenez rendez-vous avec un conseiller Protect'Envi.",
+            "title": "Participez à notre webinaire - Protect'Envi",
+            "desc": "Inscrivez-vous gratuitement à notre webinaire hebdomadaire pour comprendre comment agir contre les dépôts sauvages.",
+        },
+    ),
+    (
+        r"^/comment-agir$",
+        {
+            "title": "Comment agir contre les dépôts sauvages ? - Protect'Envi",
+            "desc": "Découvrez comment une collectivité peut agir efficacement contre les dépôts sauvages.",
         },
     ),
     (
