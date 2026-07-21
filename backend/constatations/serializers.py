@@ -75,6 +75,7 @@ class ConstatationSerializer(serializers.ModelSerializer):
             "etape_en_cours": sp.etape_en_cours,
             "identification_reussie": sp.identification_reussie,
             "decision_poursuite": sp.decision_poursuite,
+            "dossier_archive": sp.dossier_archive,
         }
 
     def get_docs_generation_flags(self, auteur_identifie):

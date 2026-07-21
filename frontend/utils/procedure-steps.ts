@@ -45,7 +45,7 @@ export const getStepTitles = ({
   if (!auteurIdentifie) {
     const titles = [
       'Réaliser la constatation',
-      'Compléter les pièces de procédure',
+      'Signer les pièces de procédure',
       "Identifier l'auteur",
     ]
     if (identificationReussie === true) {

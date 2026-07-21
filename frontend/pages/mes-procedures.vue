@@ -53,7 +53,13 @@
 
               <div class="fr-card__footer">
                 <div
-                  v-if="procedure.suivi_procedure"
+                  v-if="procedure.suivi_procedure?.dossier_archive"
+                  class="fr-alert fr-alert--success fr-alert--sm fr-mb-2w"
+                >
+                  <p class="fr-text--sm">Procédure clôturée</p>
+                </div>
+                <div
+                  v-else-if="procedure.suivi_procedure"
                   class="fr-alert fr-alert--info fr-alert--sm fr-mb-2w"
                 >
                   <p class="fr-text--sm">

@@ -110,6 +110,7 @@ export interface ProcedureOverview {
     etape_en_cours: number
     identification_reussie?: boolean | null
     decision_poursuite?: string | null
+    dossier_archive?: boolean
   }
 }
 
