@@ -440,11 +440,11 @@
         },
         "django-trackman": {
             "hashes": [
-                "sha256:26cc32cc98c0473978beb0b4713be5f25cb8544debb7fe0c762b9b5e9db7b4de",
-                "sha256:b5042ffac5d16a61a48b8ad7c1c5ea1ce2d57aabac5286c0ceff8463fe2eba49"
+                "sha256:24346966ba05f007e65593b2518765a8e5398040dacaf964e97ade5b1e1c362e",
+                "sha256:268bb6f1f5c095fe08d35f5de0bc2dc60fe1b28fac1aa9de5e4b50e790717da2"
             ],
             "index": "pypi",
-            "version": "==0.1.1"
+            "version": "==0.1.2"
         },
         "djangorestframework": {
             "hashes": [

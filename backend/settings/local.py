@@ -46,7 +46,7 @@ DATABASES = {
     },
 }
 
-DATABASE_ROUTERS = ["backend.stats.router.StatsRouter"]
+DATABASE_ROUTERS = ["trackman.db_routers.TrackingDatabaseRouter"]
 
 # Security settings for development
 ALLOWED_HOSTS = ["*"]

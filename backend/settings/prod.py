@@ -43,7 +43,7 @@ DATABASES = {
 
 if STATS_ENABLED and STATS_DATABASE_URL:
     DATABASES["stats_db"] = env.db("STATS_DATABASE_URL")
-    DATABASE_ROUTERS = ["backend.stats.router.StatsRouter"]
+    DATABASE_ROUTERS = ["trackman.db_routers.TrackingDatabaseRouter"]
 else:
     DATABASE_ROUTERS = []
 
