@@ -45,10 +45,10 @@
           <div class="fr-card fr-card--no-arrow">
             <div class="fr-card__body">
               <div class="fr-card__content">
-                <h4 class="fr-card__title">Besoin d'un accompagnement ?</h4>
+                <h4 class="fr-card__title">Participez à notre webinaire gratuit</h4>
                 <p class="fr-card__desc">
-                  Participez à un webinaire collectif ou réservez une session d'accompagnement
-                  individuelle pour votre cas concret.
+                  Chaque semaine notre équipe vous présente comment agir contre les dépôts
+                  sauvages en moins de 60 minutes.
                 </p>
               </div>
               <div class="fr-card__footer">
@@ -56,7 +56,7 @@
                   <li>
                     <DsfrButton secondary @click="() => router.push({ name: 'RDV' })">
                       <span class="fr-icon-calendar-line fr-mr-1w" aria-hidden="true"></span>
-                      Prendre rendez-vous
+                      Découvrir notre webinaire
                     </DsfrButton>
                   </li>
                 </ul>
@@ -69,47 +69,46 @@
       <section class="fr-mt-6w">
         <h2 class="fr-h3 fr-mb-3w">Ressources utiles</h2>
 
-        <DsfrCallout class="fr-mb-3w" title="Guide ACDéchets" content="">
+        <DsfrCallout class="fr-mb-3w" title="ACDéchets" content="">
+          <p class="fr-text fr-mb-2w">
+            Un guide pédagogique pas à pas proposé par la Région Île-de-France pour aider les
+            collectivités.
+          </p>
           <p class="fr-text fr-mb-0">
-            Pour un accompagnement pas à pas, consultez le
             <a
               href="https://acdechets.smartidf.services/aide-verbalisation"
               class="fr-link fr-icon-external-link-line fr-link--icon-right"
               target="_blank"
               rel="noopener"
             >
-              guide ACDéchets de la Région Île-de-France
+              Découvrez le guide ACDéchets
             </a>
           </p>
         </DsfrCallout>
 
-        <DsfrCallout title="Application Gend'élus" content="">
+        <DsfrCallout title="Gend'Élus" content="">
           <p class="fr-text fr-mb-2w">
-            Retrouvez des conseils pratiques sur l'application à destination des élus, Gend'élus,
-            accessible à tout le monde :
+            Un site web pour accompagner les élus sur toutes les problématiques sécuritaires
+            auxquelles ils peuvent être confrontés :
           </p>
-          <ul class="fr-pl-2w fr-mb-0">
+          <ul class="fr-text--md fr-pl-2w fr-mb-2w">
             <li>
-              <a
-                href="https://play.google.com/store/apps/details?id=com.gendelus&hl=fr&pli=1"
-                class="fr-link fr-icon-external-link-line fr-link--icon-right"
-                target="_blank"
-                rel="noreferrer noopener"
-              >
-                Télécharger sur le Play Store
-              </a>
+              fiches conseils et modules de sensibilisation aux risques cyber et enjeux
+              environnementaux ;
             </li>
-            <li>
-              <a
-                href="https://apps.apple.com/fr/app/gend%C3%A9lus/id6444316373"
-                class="fr-link fr-icon-external-link-line fr-link--icon-right"
-                target="_blank"
-                rel="noreferrer noopener"
-              >
-                Télécharger sur l'App Store
-              </a>
-            </li>
+            <li>tchat avec un gendarme 24h/24 7j/7 ;</li>
+            <li>partage de bonnes pratiques et de ressources utiles ;</li>
           </ul>
+          <p class="fr-text fr-mb-0">
+            <a
+              href="https://www.gendarmerie.interieur.gouv.fr/gendelus"
+              class="fr-link fr-icon-external-link-line fr-link--icon-right"
+              target="_blank"
+              rel="noopener"
+            >
+              Découvrir Gend'Élus
+            </a>
+          </p>
         </DsfrCallout>
       </section>
     </div>
