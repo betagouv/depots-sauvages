@@ -1,7 +1,9 @@
 from io import StringIO
+
 import pytest
 from django.contrib.auth import get_user_model
 from django.core.management import call_command
+
 from backend.constatations.models import Constatation
 from backend.stats.models import StatsConstatation, StatsSuiviProcedure
 
@@ -52,3 +54,14 @@ def test_sync_stats_db_command_full_and_incremental():
     stats_c2 = StatsConstatation.objects.using("stats_db").get(id=c2.id)
     assert stats_c2.commune == "Marseille"
     assert stats_c2.user_hash == ""
+
+
+@pytest.mark.django_db(databases=["default", "stats_db"])
+def test_sync_stats_db_disabled(settings):
+    settings.STATS_ENABLED = False
+    out = StringIO()
+    call_command("sync_stats_db", stdout=out)
+    assert (
+        "Stats feature is disabled (STATS_ENABLED=False). Skipping synchronization."
+        in out.getvalue()
+    )

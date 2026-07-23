@@ -35,6 +35,14 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
+        if not getattr(settings, "STATS_ENABLED", True):
+            self.stdout.write(
+                self.style.WARNING(
+                    "Stats feature is disabled (STATS_ENABLED=False). Skipping synchronization."
+                )
+            )
+            return
+
         if self.stats_db_alias not in settings.DATABASES:
             self.stdout.write(
                 self.style.WARNING(
