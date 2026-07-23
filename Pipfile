@@ -28,6 +28,7 @@ django-csp = "*"
 drf-spectacular = "*"
 django-permissions-policy = "*"
 django-trackman = "*"
+faker = "*"
 
 [dev-packages]
 black = "*"
