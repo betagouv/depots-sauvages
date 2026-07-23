@@ -6,7 +6,11 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": ":memory:",
-    }
+    },
+    "stats_db": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": ":memory:",
+    },
 }
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

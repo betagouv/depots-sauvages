@@ -5,14 +5,7 @@ from model_utils.models import TimeStampedModel
 from backend.constatations.prejudice import PrejudiceMixin
 
 
-class Constatation(PrejudiceMixin, TimeStampedModel):
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="constatations",
-        null=True,
-        blank=True,
-    )
+class ConstatationBaseModel(PrejudiceMixin, TimeStampedModel):
     commune = models.CharField("commune", max_length=255)
     localisation_depot = models.TextField("localisation", blank=True)
     date_constat = models.DateField("date de constatation", null=True, blank=True)
@@ -67,10 +60,6 @@ class Constatation(PrejudiceMixin, TimeStampedModel):
     accepte_accompagnement = models.BooleanField("accepte accompagnement", default=False)
     ceci_est_un_test = models.BooleanField("est un test", null=True, blank=True)
 
-    # Documents fields
-    doc_constat = models.BinaryField("Rapport de constatation", null=True, blank=True)
-    lettre_info = models.BinaryField("Lettre d'information", null=True, blank=True)
-
     # Management fields
     doc_constat_should_generate = models.BooleanField(
         "Générer le rapport de constatation",
@@ -88,15 +77,10 @@ class Constatation(PrejudiceMixin, TimeStampedModel):
     )
 
     class Meta:
-        verbose_name = "constatation"
-        verbose_name_plural = "constatations"
+        abstract = True
 
     @property
     def souhaite_porter_plainte(self):
-        """
-        Property for backward compatibility with document templates.
-        Returns True if a complaint is filed or planned.
-        """
         return self.plainte_etat in ["Déposée", "Sera déposée"]
 
     def save(self, *args, **kwargs):
@@ -115,3 +99,19 @@ class Constatation(PrejudiceMixin, TimeStampedModel):
 
     def __str__(self):
         return f"Constatation à {self.commune} ({self.date_constat})"
+
+
+class Constatation(ConstatationBaseModel):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="constatations",
+        null=True,
+        blank=True,
+    )
+    doc_constat = models.BinaryField("Rapport de constatation", null=True, blank=True)
+    lettre_info = models.BinaryField("Lettre d'information", null=True, blank=True)
+
+    class Meta:
+        verbose_name = "constatation"
+        verbose_name_plural = "constatations"

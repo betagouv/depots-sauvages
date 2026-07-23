@@ -33,9 +33,19 @@ LOGGING["loggers"]["backend.constatations"] = {
     "propagate": True,
 }
 
+STATS_DATABASE_URL = env.str("STATS_DATABASE_URL", default=None)
+STATS_ENABLED = env.bool("STATS_ENABLED", default=bool(STATS_DATABASE_URL))
+TRACKMAN_ENABLED = STATS_ENABLED
+
 DATABASES = {
     "default": env.db("DATABASE_URL", default=f"file:///{PROJECT_ROOT / 'db.sqlite3'}"),
 }
+
+if STATS_ENABLED and STATS_DATABASE_URL:
+    DATABASES["stats_db"] = env.db("STATS_DATABASE_URL")
+    DATABASE_ROUTERS = ["backend.stats.router.StatsRouter"]
+else:
+    DATABASE_ROUTERS = []
 
 # Security settings for production
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
