@@ -8,6 +8,11 @@ chmod 777 /app/documents
 echo "🔄 Running migrations..."
 python manage.py migrate --noinput
 
+if [ "$STATS_ENABLED" = "true" ] || [ -n "$STATS_DATABASE_URL" ]; then
+    echo "🔄 Running stats database migrations..."
+    python manage.py migrate --database=stats_db --noinput
+fi
+
 if [ "$DJANGO_COLLECT_STATIC" = "true" ]; then
     echo "🔄 Collecting static files..."
     python manage.py collectstatic --noinput
