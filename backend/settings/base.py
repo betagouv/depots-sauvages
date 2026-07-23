@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     # Third party apps
     "django_extensions",
     "rest_framework",
+    "trackman",
     "drf_spectacular",
     "corsheaders",
     "django_tasks",
@@ -40,7 +41,10 @@ INSTALLED_APPS = [
     "backend.faq",
     "backend.seo",
     "backend.site_content",
+    "backend.stats",
 ]
+
+TRACKMAN_DATABASE_ALIAS = "stats_db"
 
 
 MIDDLEWARE = [

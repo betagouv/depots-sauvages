@@ -39,8 +39,14 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": PROJECT_ROOT / "db.sqlite3",
-    }
+    },
+    "stats_db": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": PROJECT_ROOT / "db_stats.sqlite3",
+    },
 }
+
+DATABASE_ROUTERS = ["trackman.db_routers.TrackingDatabaseRouter"]
 
 # Security settings for development
 ALLOWED_HOSTS = ["*"]

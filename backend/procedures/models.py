@@ -5,15 +5,7 @@ from model_utils import FieldTracker
 from model_utils.models import TimeStampedModel
 
 
-class SuiviProcedure(TimeStampedModel):
-    constatation = models.OneToOneField(
-        "constatations.Constatation",
-        on_delete=models.CASCADE,
-        related_name="suivi_procedure",
-        verbose_name="Constatation liée",
-        null=True,
-        blank=True,
-    )
+class SuiviProcedureBaseModel(TimeStampedModel):
     etape_en_cours = models.PositiveSmallIntegerField(default=1, verbose_name="Étape active")
     preuves_fournies = models.BooleanField(default=False, verbose_name="Éléments de preuve joints")
     constatation_signee = models.BooleanField(
@@ -72,6 +64,28 @@ class SuiviProcedure(TimeStampedModel):
         default="Nouveau",
         verbose_name="Statut de traitement",
     )
+    date_pilotage = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name="Date de pilotage",
+    )
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return f"Suivi {getattr(self, 'constatation_id', None) or self.id}"
+
+
+class SuiviProcedure(SuiviProcedureBaseModel):
+    constatation = models.OneToOneField(
+        "constatations.Constatation",
+        on_delete=models.CASCADE,
+        related_name="suivi_procedure",
+        verbose_name="Constatation liée",
+        null=True,
+        blank=True,
+    )
     personne_assignee = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -81,11 +95,6 @@ class SuiviProcedure(TimeStampedModel):
         related_name="personne_assignee_suivi_procedures",
         verbose_name="Assigné à",
     )
-    date_pilotage = models.DateTimeField(
-        null=True,
-        blank=True,
-        verbose_name="Date de pilotage",
-    )
 
     tracker = FieldTracker(
         fields=["personne_assignee", "statut_traitement", "notes_traitement"]
@@ -94,9 +103,6 @@ class SuiviProcedure(TimeStampedModel):
     class Meta:
         verbose_name = "Suivi de procédure"
         verbose_name_plural = "Suivis de procédures"
-
-    def __str__(self):
-        return f"Suivi {self.constatation_id or self.id}"
 
     def save(self, *args, **kwargs):
         if not self.pk or self.tracker.changed():
