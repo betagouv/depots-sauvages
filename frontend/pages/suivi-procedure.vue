@@ -120,6 +120,10 @@ import { API_URLS, fetchResource, getUserInfo } from '../services/api'
 import { getDocConstatUrl, getLettreInfoUrl } from '../services/urls'
 import { useSuiviStore } from '../stores/suivi-procedure'
 import { debounce } from '../utils/debounce'
+import { openTallyPopup } from '../utils/tally'
+
+// Formulaire de mesure de l'utilité de l'outil pour initier une procédure
+const UTILITE_INITIATION_PROCEDURE_FORM_ID = 'OD9RMg'
 
 const route = useRoute()
 const router = useRouter()
@@ -158,6 +162,27 @@ watch(
     debouncedSave()
   },
   { deep: true }
+)
+
+// Popup de mesure de l'utilité de l'outil, dès que la lettre d'information a été envoyée
+// (procédure effectivement lancée), en excluant les dossiers de test.
+const shouldShowUtiliteSurvey = computed(
+  () => suiviProcedure.value.lettre_envoyee && procedureData.value?.ceci_est_un_test !== true
+)
+
+watch(
+  shouldShowUtiliteSurvey,
+  (show) => {
+    if (show) {
+      openTallyPopup(UTILITE_INITIATION_PROCEDURE_FORM_ID, {
+        layout: 'default',
+        doNotShowAfterSubmit: true,
+        hideTitle: true,
+        autoClose: 2000,
+      })
+    }
+  },
+  { immediate: true }
 )
 
 const getStepStatus = (index: number) =>
