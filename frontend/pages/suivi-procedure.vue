@@ -120,6 +120,7 @@ import { API_URLS, fetchResource, getUserInfo } from '../services/api'
 import { getDocConstatUrl, getLettreInfoUrl } from '../services/urls'
 import { useSuiviStore } from '../stores/suivi-procedure'
 import { debounce } from '../utils/debounce'
+import { getStepTitles } from '../utils/procedure-steps'
 
 const route = useRoute()
 const router = useRouter()
@@ -171,41 +172,43 @@ const steps = computed(() => {
 
   if (!hasProcedure.value) {
     return [
-      { title: 'Constatation', completed: getStepStatus(0) },
-      { title: 'Procédure à mettre à jour', completed: false },
+      { title: 'Réaliser la constatation', completed: getStepStatus(0) },
+      { title: 'Mettre à jour la procédure', completed: false },
     ]
   }
 
   if (!auteurIdentifie.value) {
+    const titles = getStepTitles({
+      auteurIdentifie: false,
+      identificationReussie: suiviProcedure.value.identification_reussie,
+    })
     const baseSteps = [
-      { title: 'Constatation', completed: getStepStatus(0) },
-      { title: 'Pièces de procédure', completed: getStepStatus(1) },
-      { title: "Identifier l'auteur", completed: getStepStatus(2) },
+      { title: titles[0], completed: getStepStatus(0) },
+      { title: titles[1], completed: getStepStatus(1) },
+      { title: titles[2], completed: getStepStatus(2) },
     ]
 
     if (suiviProcedure.value.identification_reussie === true) {
-      baseSteps.push({ title: 'Mettre à jour le dossier', completed: false })
+      baseSteps.push({ title: titles[3], completed: false })
     } else if (suiviProcedure.value.identification_reussie === false) {
-      baseSteps.push({ title: 'Clôture de la procédure', completed: getStepStatus(5) })
+      baseSteps.push({ title: titles[3], completed: getStepStatus(5) })
     }
 
     return baseSteps
   }
 
-  const actionStepTitle =
-    suiviProcedure.value.decision_poursuite === 'sanction'
-      ? "Sanctionner l'auteur"
-      : suiviProcedure.value.decision_poursuite === 'abandon'
-        ? 'Abandonner les poursuites'
-        : 'Action de poursuite'
+  const titles = getStepTitles({
+    auteurIdentifie: true,
+    decisionPoursuite: suiviProcedure.value.decision_poursuite,
+  })
 
   return [
-    { title: 'Constatation', completed: getStepStatus(0) },
-    { title: 'Signer les pièces de procédure', completed: getStepStatus(1) },
-    { title: "Notifier l'auteur présumé", completed: getStepStatus(2) },
-    { title: 'Décider des poursuites', completed: getStepStatus(3) },
-    { title: actionStepTitle, completed: getStepStatus(4) },
-    { title: 'Clôture de la procédure', completed: getStepStatus(5) },
+    { title: titles[0], completed: getStepStatus(0) },
+    { title: titles[1], completed: getStepStatus(1) },
+    { title: titles[2], completed: getStepStatus(2) },
+    { title: titles[3], completed: getStepStatus(3) },
+    { title: titles[4], completed: getStepStatus(4) },
+    { title: titles[5], completed: getStepStatus(5) },
   ]
 })
 
