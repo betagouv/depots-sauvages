@@ -120,6 +120,7 @@ import { API_URLS, fetchResource, getUserInfo } from '../services/api'
 import { getDocConstatUrl, getLettreInfoUrl } from '../services/urls'
 import { useSuiviStore } from '../stores/suivi-procedure'
 import { debounce } from '../utils/debounce'
+import { getStepTitles } from '../utils/procedure-steps'
 import { openTallyPopup } from '../utils/tally'
 
 // Formulaire de mesure de l'utilité de l'outil pour initier une procédure
