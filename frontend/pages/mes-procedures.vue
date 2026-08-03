@@ -33,7 +33,7 @@
         <div v-for="procedure in procedures" :key="procedure.id" class="fr-col-12">
           <div class="fr-card fr-card--no-arrow shadow-card">
             <div class="fr-card__body">
-              <div class="fr-card__content">
+              <div class="fr-card__content fr-pb-2w">
                 <div class="fr-grid-row fr-grid-row--middle fr-grid-row--gutters fr-mb-1w">
                   <div class="fr-col-auto">
                     <h3 class="fr-card__title fr-mb-0">Procédure #{{ procedure.id }}</h3>
