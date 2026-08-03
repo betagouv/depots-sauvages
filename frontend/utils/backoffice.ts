@@ -1,3 +1,5 @@
+import { getShortStepLabel } from './procedure-steps'
+
 export const getBadgeClass = (step: number) => {
   if (step === 0) return 'bo-badge bo-badge--yellow'
   if (step === 1) return 'bo-badge bo-badge--gray'
@@ -33,29 +35,8 @@ export const getTraitementBadgeClass = (traitement: string) => {
   return 'bo-badge bo-badge--gray'
 }
 
-export const getStepLabel = (step: number, auteurIdentifie: boolean = true) => {
-  if (auteurIdentifie) {
-    const labels = [
-      'Constatation',
-      'Pièces jointes',
-      'Notification',
-      'Décision',
-      'Sanctionner',
-      'Clôture',
-    ]
-    return labels[step] || ''
-  } else {
-    const labels = [
-      'Constatation',
-      'Pièces jointes',
-      "Identifier l'auteur",
-      'Recherche',
-      '',
-      'Clôture',
-    ]
-    return labels[step] || ''
-  }
-}
+export const getStepLabel = (step: number, auteurIdentifie: boolean = true) =>
+  getShortStepLabel(step, auteurIdentifie)
 
 /**
  * Generic query parameter parser to parse and typed-coerce query values
