@@ -41,7 +41,9 @@
                   <div class="fr-col-auto">
                     <DsfrBadge
                       :type="procedure.auteur_identifie ? 'success' : 'info'"
-                      :label="procedure.auteur_identifie ? 'Auteur identifié' : 'Auteur non identifié'"
+                      :label="
+                        procedure.auteur_identifie ? 'Auteur identifié' : 'Auteur non identifié'
+                      "
                       class="fr-badge--no-icon"
                     />
                   </div>
@@ -52,26 +54,35 @@
               </div>
 
               <div class="fr-card__footer">
-                <div
+                <DsfrBadge
                   v-if="procedure.suivi_procedure?.dossier_archive"
-                  class="fr-alert fr-alert--success fr-alert--sm fr-mb-2w"
-                >
-                  <p class="fr-text--sm">Procédure clôturée</p>
-                </div>
-                <div
+                  type="success"
+                  label="Procédure clôturée"
+                  class="fr-mb-2w"
+                />
+                <DsfrBadge
                   v-else-if="procedure.suivi_procedure"
-                  class="fr-alert fr-alert--info fr-alert--sm fr-mb-2w"
-                >
-                  <p class="fr-text--sm">
-                    Prochaine étape :
-                    <strong>{{ getNextStepTitle(procedure) }}</strong>
-                  </p>
-                </div>
+                  type="info"
+                  :label="`Prochaine étape : ${getNextStepTitle(procedure)}`"
+                  class="fr-mb-2w"
+                />
                 <ul class="fr-btns-group fr-btns-group--inline-lg">
                   <li>
                     <DsfrButton @click="router.push(getSuiviProcedureUrl(procedure.id))">
-                      <span class="fr-icon-file-line fr-mr-1w" aria-hidden="true"></span>
-                      Continuer la procédure
+                      <span
+                        :class="
+                          procedure.suivi_procedure?.dossier_archive
+                            ? 'fr-icon-eye-line'
+                            : 'fr-icon-file-line'
+                        "
+                        class="fr-mr-1w"
+                        aria-hidden="true"
+                      ></span>
+                      {{
+                        procedure.suivi_procedure?.dossier_archive
+                          ? 'Consulter la procédure'
+                          : 'Continuer la procédure'
+                      }}
                     </DsfrButton>
                   </li>
                 </ul>
