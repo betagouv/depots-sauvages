@@ -104,15 +104,16 @@ textarea.fr-input {
     0 6px 24px rgba(0, 0, 145, 0.1);
 }
 
-/* Premium Action Bracket (Timeline) */
+/* Premium Action Bracket (Simple Bracket without middle tip) */
 .premium-action-bracket {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  border-left: 3px solid var(--border-active-blue-france);
-  border-radius: 2px;
   margin-left: 0.25rem;
-  padding-left: 1.5rem;
+  padding-left: 1.25rem;
+  border-left: 2px solid var(--border-default-blue-france);
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
 }
 
 @media (max-width: 767px) {

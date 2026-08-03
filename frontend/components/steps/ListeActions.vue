@@ -72,10 +72,9 @@ defineEmits(['update-case'])
 }
 
 .action-details {
-  margin-top: -1px;
-  margin-left: 1.5rem;
-  padding-left: 1rem !important;
-  border-left: 2px solid var(--border-default-blue-france);
+  margin-top: 0.5rem;
+  margin-left: 0.5rem;
+  padding-left: 0.5rem !important;
 }
 
 /* Transitions */
