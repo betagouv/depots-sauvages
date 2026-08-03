@@ -42,9 +42,13 @@ INSTALLED_APPS = [
     "backend.seo",
     "backend.site_content",
     "backend.stats",
+    "backend.activity_logs",
 ]
 
 TRACKMAN_DATABASE_ALIAS = "stats_db"
+TRACKMAN_MODELS = {
+    "activity_log": "activity_logs.ActivityLog",
+}
 
 
 MIDDLEWARE = [
