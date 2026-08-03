@@ -5,6 +5,7 @@
     <ConstatationSuccess
       v-else-if="userInfo?.is_authenticated"
       :constatation-id="constatationId"
+      :commune="commune"
       @go-to-suivi="router.push(`/suivi-procedure/${constatationId}`)"
       @go-to-procedures="router.push('/mes-procedures')"
     />
@@ -24,12 +25,13 @@ import { useRouter } from 'vue-router'
 import ConstatationSuccess from '../components/forms/constatation/ConstatationSuccess.vue'
 import LoginInvitation from '../components/shared/LoginInvitation.vue'
 import PageLoader from '../components/shared/PageLoader.vue'
-import { getUserInfo, type UserInfo } from '../services/api'
+import { API_URLS, fetchResource, getUserInfo, type UserInfo } from '../services/api'
 
 const router = useRouter()
 const userInfo = ref<UserInfo | null>(null)
 const showLoading = ref(true)
 const constatationId = ref<number | null>(null)
+const commune = ref<string | null>(null)
 
 onMounted(async () => {
   try {
@@ -39,6 +41,15 @@ onMounted(async () => {
       const id = parseInt(idParam as string, 10)
       if (!isNaN(id)) {
         constatationId.value = id
+
+        if (userInfo.value.is_authenticated) {
+          try {
+            const constatation = await fetchResource(`${API_URLS.constatations}${id}/`)
+            commune.value = constatation.commune ?? null
+          } catch (error) {
+            console.error('Failed to load constatation:', error)
+          }
+        }
       }
     }
   } catch (error) {

@@ -15,7 +15,7 @@ describe('ConstatationSuccess.vue', () => {
             template: `<button @click="$emit('click')"><slot /><span class="label">{{ label }}</span></button>`,
             props: ['label'],
           },
-          DsfrCallout: true,
+          DsfrAlert: true,
           RouterLink: {
             props: ['to'],
             template: `<a :href="to"><slot /></a>`,
@@ -26,10 +26,10 @@ describe('ConstatationSuccess.vue', () => {
 
     expect(screen.getByText('Constatation enregistrée !')).toBeInTheDocument()
     expect(
-      screen.getByText(/La constatation du dépôt sauvage a bien été enregistrée/)
+      screen.getByText(/Vos documents de procédure ont été pré-remplis automatiquement/)
     ).toBeInTheDocument()
     expect(
-      screen.getByText('Consulter les prochaines étapes sur mon suivi de procédure')
+      screen.getByText('Accéder aux documents sur mon suivi de procédure')
     ).toBeInTheDocument()
 
     const modifyLink = screen.getByText('Modifier la constatation')

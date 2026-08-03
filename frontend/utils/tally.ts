@@ -66,3 +66,26 @@ export const closeTallyPopup = (formId: string) => {
     window.Tally.closePopup(formId)
   }
 }
+
+export const loadTallyEmbeds = () => {
+  const tryLoad = () => {
+    if (typeof window !== 'undefined' && window.Tally) {
+      window.Tally.loadEmbeds()
+      return true
+    }
+    return false
+  }
+
+  if (!tryLoad()) {
+    let attempts = 0
+    const interval = setInterval(() => {
+      attempts++
+      if (tryLoad() || attempts >= 20) {
+        clearInterval(interval)
+        if (attempts >= 20 && !window.Tally) {
+          console.warn('Tally script is not loaded yet after 2 seconds.')
+        }
+      }
+    }, 100)
+  }
+}
