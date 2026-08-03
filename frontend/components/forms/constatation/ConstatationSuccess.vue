@@ -5,15 +5,18 @@
     iconClass="fr-icon-checkbox-circle-fill"
     iconColor="#00875a"
   >
-    <DsfrAlert type="info" small class="fr-mb-4w" style="text-align: left;">
+    <DsfrAlert type="info" small class="fr-mb-4w" style="text-align: left">
       <p class="fr-mb-0">
-        Le(s) document(s) doivent être signés par la personne habilitée pour avoir une valeur
+        Le(s) document(s) doivent être signé(s) par la personne habilitée pour avoir une valeur
         juridique.
       </p>
     </DsfrAlert>
 
     <template #actions>
-      <DsfrButton label="Accéder aux documents sur mon suivi de procédure" @click="$emit('goToSuivi')" />
+      <DsfrButton
+        label="Accéder aux documents sur mon suivi de procédure"
+        @click="$emit('goToSuivi')"
+      />
     </template>
 
     <template #footer>
@@ -21,7 +24,11 @@
         Modifier la constatation
       </router-link>
 
-      <TallySurveyEmbed v-if="constatationId && commune" :commune="commune" :id-dossier="constatationId" />
+      <TallySurveyEmbed
+        v-if="constatationId && commune"
+        :commune="commune"
+        :id-dossier="constatationId"
+      />
     </template>
   </PremiumBox>
 </template>
