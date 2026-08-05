@@ -25,6 +25,8 @@ def test_create_constatation_authenticated(client):
     assert constatation.commune == "Paris"
     log = ActivityLog.objects.get(action="constatation_started")
     assert log.constatation_id == constatation.id
+    assert log.suivi_procedure_id == constatation.suivi_procedure.id
+
 
 
 @pytest.mark.django_db(databases=["default", "stats_db"])

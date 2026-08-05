@@ -33,6 +33,7 @@ class ConstatationAdmin(admin.ModelAdmin):
         "accepte_accompagnement",
         "ceci_est_un_test",
     ]
+    raw_id_fields = ("user",)
     search_fields = [
         "commune",
         "localisation_depot",

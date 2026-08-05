@@ -1,6 +1,6 @@
 from backend.activity_logs.models import ActivityLog
+from backend.procedures.models import SuiviProcedure
 from backend.stats.anonymizer import anonymize_user_hash
-from backend.stats.models import StatsSuiviProcedure
 
 
 class TrackActivityMixin:
@@ -8,7 +8,7 @@ class TrackActivityMixin:
         suivi_procedure_id = None
         if constatation_id is not None:
             suivi_procedure_id = (
-                StatsSuiviProcedure.objects.filter(constatation_id=constatation_id)
+                SuiviProcedure.objects.filter(constatation_id=constatation_id)
                 .values_list("id", flat=True)
                 .first()
             )
@@ -23,3 +23,4 @@ class TrackActivityMixin:
                 **data,
             },
         )
+
