@@ -6,7 +6,7 @@ from backend.constatations.models import Constatation
 from backend.unit_tests.factories import UserFactory
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(databases=["default", "stats_db"])
 def test_create_constatation_authenticated(client):
     user = UserFactory()
     client.force_login(user)
@@ -24,7 +24,7 @@ def test_create_constatation_authenticated(client):
     assert constatation.commune == "Paris"
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(databases=["default", "stats_db"])
 def test_create_constatation_anonymous(client):
     url = reverse("constatation-list")
     data = {
@@ -37,7 +37,7 @@ def test_create_constatation_anonymous(client):
     assert Constatation.objects.count() == 0
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(databases=["default", "stats_db"])
 def test_update_constatation_prejudice(client):
     user = UserFactory()
     client.force_login(user)
@@ -71,7 +71,7 @@ def test_update_constatation_prejudice(client):
     assert constatation.prejudice_nombre_personnes is None
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(databases=["default", "stats_db"])
 def test_download_document_permissions(client):
     owner = UserFactory(is_staff=False)
     other_user = UserFactory(is_staff=False)
@@ -104,5 +104,3 @@ def test_download_document_permissions(client):
     response = client.get(url)
     assert response.status_code == status.HTTP_200_OK
     assert b"".join(response.streaming_content) == b"dummy_content"
-
-
