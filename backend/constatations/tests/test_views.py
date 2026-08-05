@@ -2,6 +2,7 @@ import pytest
 from django.urls import reverse
 from rest_framework import status
 
+from backend.activity_logs.models import ActivityLog
 from backend.constatations.models import Constatation
 from backend.unit_tests.factories import UserFactory
 
@@ -22,6 +23,8 @@ def test_create_constatation_authenticated(client):
     assert constatation is not None
     assert constatation.user == user
     assert constatation.commune == "Paris"
+    log = ActivityLog.objects.get(action="constatation_started")
+    assert log.constatation_id == constatation.id
 
 
 @pytest.mark.django_db(databases=["default", "stats_db"])
