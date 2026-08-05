@@ -23,7 +23,7 @@ def test_create_constatation_authenticated(client):
     assert constatation is not None
     assert constatation.user == user
     assert constatation.commune == "Paris"
-    log = ActivityLog.objects.get(action="constatation_started")
+    log = ActivityLog.objects.get(action="constatation_demarree")
     assert log.constatation_id == constatation.id
     assert log.suivi_procedure_id == constatation.suivi_procedure.id
 

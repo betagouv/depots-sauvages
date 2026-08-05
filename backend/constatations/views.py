@@ -30,7 +30,7 @@ class ConstatationViewSet(
     def perform_create(self, serializer):
         instance = serializer.save(user=self.request.user)
         self._track(
-            action="constatation_started",
+            action="constatation_demarree",
             target="constatation",
             constatation_id=instance.id,
             commune=instance.commune,
@@ -42,7 +42,7 @@ class ConstatationViewSet(
         instance = serializer.save()
         if instance.doc_constat_should_generate and not was_completed:
             self._track(
-                action="constatation_completed",
+                action="constatation_terminee",
                 target="constatation",
                 constatation_id=instance.id,
                 commune=instance.commune,
@@ -92,7 +92,7 @@ class ConstatationDocumentDownloadView(View, TrackActivityMixin):
             raise Http404("Invalid document type")
 
         self._track(
-            action="document_downloaded",
+            action="document_telecharge",
             target="constatation_document",
             constatation_id=constatation.id,
             document_type=doc_type,
