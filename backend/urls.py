@@ -6,6 +6,7 @@ from django.views.generic import RedirectView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework.routers import DefaultRouter
 
+from backend.activity_logs.api_views import UserActionTrackingView
 from backend.backoffice.views import (
     BackofficeDashboardStatsViewSet,
     BackofficeProceduresViewSet,
@@ -62,6 +63,11 @@ urlpatterns.extend(
             "api/bypass-auth/login/",
             BypassAuthLoginView.as_view(),
             name="bypass-auth-login",
+        ),
+        path(
+            "api/track-action/",
+            UserActionTrackingView.as_view(),
+            name="track-user-action",
         ),
         path("api/", include(router.urls)),
         path("logout/", logout_view, name="logout"),
