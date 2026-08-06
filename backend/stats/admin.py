@@ -15,12 +15,7 @@ class StatsConstatationAdmin(admin.ModelAdmin):
         "user_hash",
         "created",
     ]
-    list_filter = [
-        "date_constat",
-        "created",
-        "auteur_identifie",
-        "ceci_est_un_test",
-    ]
+    list_filter = ["date_constat", "created", "auteur_identifie", "ceci_est_un_test"]
     search_fields = [
         "commune",
         "constatant_role",

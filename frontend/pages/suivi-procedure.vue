@@ -60,7 +60,12 @@
                 :constatation-id="procedureData.id"
                 @next-step="activeStep = 3"
               />
-              <Identification v-else :suivi="suiviProcedure" :auteur-identifie="auteurIdentifie" />
+              <Identification
+                v-else
+                :suivi="suiviProcedure"
+                :auteur-identifie="auteurIdentifie"
+                :constatation-id="procedureData.id"
+              />
             </template>
             <template v-if="hasProcedure" #step-3>
               <SuiviDecision

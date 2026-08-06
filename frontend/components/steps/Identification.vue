@@ -94,6 +94,8 @@
 </template>
 
 <script setup lang="ts">
+import { watch } from 'vue'
+import { trackUserAction } from '../../services/tracking'
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
 import SelectableChoices from '../shared/SelectableChoices.vue'
 
@@ -101,12 +103,24 @@ const props = defineProps<{
   suivi: SuiviProcedure
   auteurIdentifie?: boolean
   modifyUrl?: string
+  constatationId?: number | string
 }>()
 
 const identificationOptions = [
   { id: 'id-reussie-oui', label: "Oui, j'ai identifié l'auteur", value: true },
   { id: 'id-reussie-non', label: "Non, je n'ai pas pu identifier l'auteur", value: false },
 ]
+
+watch(
+  () => props.suivi.identification_reussie,
+  (val) => {
+    if (val === true) {
+      trackUserAction('identification_auteur_reussie', props.constatationId)
+    } else if (val === false) {
+      trackUserAction('identification_auteur_echouee', props.constatationId)
+    }
+  }
+)
 </script>
 
 <style scoped>

@@ -38,9 +38,9 @@ class ConstatationViewSet(
         )
 
     def perform_update(self, serializer):
-        was_completed = serializer.instance.doc_constat_should_generate
+        was_draft = serializer.instance.is_draft
         instance = serializer.save()
-        if instance.doc_constat_should_generate and not was_completed:
+        if was_draft and not instance.is_draft:
             self._track(
                 action="constatation_terminee",
                 target="constatation",

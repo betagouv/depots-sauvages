@@ -155,6 +155,7 @@ export interface Constatation {
   ceciEstUnTest: boolean | null
 
   // Management fields
+  isDraft: boolean
   docConstatShouldGenerate: boolean
   lettreInfoShouldGenerate: boolean
 }
@@ -164,6 +165,12 @@ export const toApiFormat = (data: Constatation) => {
   const formatted = { ...data }
   if (formatted.prejudiceMontantConnu === null) {
     formatted.prejudiceMontantConnu = false
+  }
+  if (!formatted.dateConstat) {
+    formatted.dateConstat = null as any
+  }
+  if (!formatted.heureConstat) {
+    formatted.heureConstat = null as any
   }
   return snakecaseKeys(formatted)
 }
@@ -214,6 +221,7 @@ export const createEmptyConstatation = (): Constatation => ({
   ceciEstUnTest: null,
 
   // Management fields
+  isDraft: true,
   docConstatShouldGenerate: true,
   lettreInfoShouldGenerate: true,
 })

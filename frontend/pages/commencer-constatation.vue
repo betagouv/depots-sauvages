@@ -18,23 +18,40 @@
       <div class="fr-container fr-pb-8w">
         <div class="fr-grid-row fr-grid-row--gutters">
           <div class="fr-col-12 fr-col-md-6">
-            <div class="premium-card premium-card--small premium-card--static premium-card--align-left">
+            <div
+              class="premium-card premium-card--small premium-card--static premium-card--align-left"
+            >
               <h2 class="fr-h4">Ce dont vous avez besoin pour commencer la constatation :</h2>
               <ul class="fr-text--sm fr-mb-0 premium-choices-list">
                 <li>
-                  <span class="fr-icon-checkbox-circle-line fr-text-default--success fr-mr-1w" aria-hidden="true"></span>
-                  <span>Informations concernant le dépôt sauvage : localisation, volume estimé, types de déchets, etc.</span>
+                  <span
+                    class="fr-icon-checkbox-circle-line fr-text-default--success fr-mr-1w"
+                    aria-hidden="true"
+                  ></span>
+                  <span
+                    >Informations concernant le dépôt sauvage : localisation, volume estimé, types
+                    de déchets, etc.</span
+                  >
                 </li>
                 <li>
-                  <span class="fr-icon-checkbox-circle-line fr-text-default--success fr-mr-1w" aria-hidden="true"></span>
+                  <span
+                    class="fr-icon-checkbox-circle-line fr-text-default--success fr-mr-1w"
+                    aria-hidden="true"
+                  ></span>
                   <span>Identité de la personne habilitée qui a constaté les dépôts sauvages</span>
                 </li>
                 <li>
-                  <span class="fr-icon-checkbox-circle-line fr-text-default--success fr-mr-1w" aria-hidden="true"></span>
+                  <span
+                    class="fr-icon-checkbox-circle-line fr-text-default--success fr-mr-1w"
+                    aria-hidden="true"
+                  ></span>
                   <span>Informations sur l'auteur présumé (si connues)</span>
                 </li>
                 <li>
-                  <span class="fr-icon-time-line fr-text-default--info fr-mr-1w" aria-hidden="true"></span>
+                  <span
+                    class="fr-icon-time-line fr-text-default--info fr-mr-1w"
+                    aria-hidden="true"
+                  ></span>
                   <span>Temps estimé : 7 minutes</span>
                 </li>
               </ul>
@@ -42,20 +59,37 @@
           </div>
 
           <div class="fr-col-12 fr-col-md-6">
-            <div class="premium-card premium-card--small premium-card--static premium-card--align-left">
+            <div
+              class="premium-card premium-card--small premium-card--static premium-card--align-left"
+            >
               <h2 class="fr-h4">À l'issue de cette étape :</h2>
               <ul class="fr-text--sm fr-mb-0 premium-choices-list">
                 <li>
-                  <span class="fr-icon-file-text-line fr-text-default--info fr-mr-1w" aria-hidden="true"></span>
+                  <span
+                    class="fr-icon-file-text-line fr-text-default--info fr-mr-1w"
+                    aria-hidden="true"
+                  ></span>
                   <span>Rapport de constatation généré automatiquement</span>
                 </li>
                 <li>
-                  <span class="fr-icon-file-text-line fr-text-default--info fr-mr-1w" aria-hidden="true"></span>
-                  <span>Lettre d'information prête à être envoyée (si l'auteur présumé est identifié)</span>
+                  <span
+                    class="fr-icon-file-text-line fr-text-default--info fr-mr-1w"
+                    aria-hidden="true"
+                  ></span>
+                  <span
+                    >Lettre d'information prête à être envoyée (si l'auteur présumé est
+                    identifié)</span
+                  >
                 </li>
                 <li>
-                  <span class="fr-icon-arrow-right-line fr-text-default--info fr-mr-1w" aria-hidden="true"></span>
-                  <span>Vous serez guidé étape par étape pour faire avancer la procédure adaptée à votre situation</span>
+                  <span
+                    class="fr-icon-arrow-right-line fr-text-default--info fr-mr-1w"
+                    aria-hidden="true"
+                  ></span>
+                  <span
+                    >Vous serez guidé étape par étape pour faire avancer la procédure adaptée à
+                    votre situation</span
+                  >
                 </li>
               </ul>
             </div>
@@ -64,13 +98,24 @@
 
         <div class="constatation-actions">
           <template v-if="userInfo?.is_authenticated">
+            <PremiumCallout
+              v-if="latestDraft"
+              type="banner"
+              title="Vous avez une constatation en cours de rédaction"
+              :description="`Un brouillon a été sauvegardé pour la commune de ${latestDraft.localisation_depot || 'votre constatation'}.`"
+              iconClass="fr-icon-edit-line"
+              buttonText="Reprendre le brouillon"
+              :buttonTo="`/constatation/${latestDraft.id}`"
+              class="fr-mb-4w"
+            />
+
             <div class="premium-text-center">
               <router-link
                 to="/constatation"
-                class="fr-btn fr-btn--lg"
+                :class="['fr-btn', latestDraft ? 'fr-btn--secondary' : 'fr-btn--lg']"
                 title="Démarrer la constatation"
               >
-                Démarrer la constatation
+                Démarrer une constatation
               </router-link>
             </div>
 
@@ -107,15 +152,23 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import LoginInvitation from '../components/shared/LoginInvitation.vue'
 import PageLoader from '../components/shared/PageLoader.vue'
 import PremiumCallout from '../components/shared/PremiumCallout.vue'
 import { useTallyRoutes } from '../composables/useTally'
-import { getUserInfo, type UserInfo } from '../services/api'
+import {
+  getUserInfo,
+  getUserProcedures,
+  type ProcedureOverview,
+  type UserInfo,
+} from '../services/api'
 
 const userInfo = ref<UserInfo | null>(null)
 const showLoading = ref(true)
+const userProcedures = ref<ProcedureOverview[]>([])
+
+const latestDraft = computed(() => userProcedures.value.find((p) => p.is_draft))
 
 useTallyRoutes({
   '/demarrer-constatation/simulateur': {
@@ -128,6 +181,9 @@ useTallyRoutes({
 onMounted(async () => {
   try {
     userInfo.value = await getUserInfo()
+    if (userInfo.value?.is_authenticated) {
+      userProcedures.value = await getUserProcedures()
+    }
   } catch (error) {
     console.error('Failed to fetch data:', error)
   } finally {

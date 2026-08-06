@@ -29,6 +29,39 @@ def test_create_constatation_authenticated(client):
 
 
 @pytest.mark.django_db(databases=["default", "stats_db"])
+def test_create_and_complete_draft_constatation(client):
+    user = UserFactory()
+    client.force_login(user)
+    url = reverse("constatation-list")
+    
+    # 1. Autosave draft (partial payload)
+    draft_data = {
+        "commune": "Marseille",
+        "is_draft": True,
+    }
+    res_draft = client.post(url, draft_data, format="json")
+    assert res_draft.status_code == status.HTTP_201_CREATED
+    constatation = Constatation.objects.get(id=res_draft.data["id"])
+    assert constatation.is_draft is True
+    assert constatation.doc_constat_should_generate is False
+
+    # 2. Final submission (is_draft=False)
+    detail_url = reverse("constatation-detail", args=[constatation.id])
+    final_data = {
+        "commune": "Marseille",
+        "is_draft": False,
+        "auteur_identifie": False,
+    }
+    res_final = client.put(detail_url, final_data, content_type="application/json")
+    assert res_final.status_code == status.HTTP_200_OK
+    constatation.refresh_from_db()
+    assert constatation.is_draft is False
+    assert constatation.doc_constat is not None
+    assert ActivityLog.objects.filter(action="constatation_terminee", constatation_id=constatation.id).exists()
+
+
+
+@pytest.mark.django_db(databases=["default", "stats_db"])
 def test_create_constatation_anonymous(client):
     url = reverse("constatation-list")
     data = {

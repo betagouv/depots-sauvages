@@ -7,7 +7,7 @@
       <div v-if="userInfo?.is_authenticated && procedures.length > 0" class="fr-col-auto">
         <router-link to="/demarrer-constatation" class="fr-btn">
           <span class="fr-icon-add-line fr-mr-1w" aria-hidden="true"></span>
-          Démarrer une nouvelle constatation
+          Démarrer une constatation
         </router-link>
       </div>
     </div>
@@ -55,7 +55,13 @@
 
               <div class="fr-card__footer">
                 <DsfrBadge
-                  v-if="procedure.suivi_procedure?.dossier_archive"
+                  v-if="procedure.is_draft"
+                  type="warning"
+                  label="Brouillon de constatation"
+                  class="fr-mb-2w"
+                />
+                <DsfrBadge
+                  v-else-if="procedure.suivi_procedure?.dossier_archive"
                   type="success"
                   label="Procédure clôturée"
                   class="fr-mb-2w"
@@ -68,7 +74,14 @@
                 />
                 <ul class="fr-btns-group fr-btns-group--inline-lg">
                   <li>
-                    <DsfrButton @click="router.push(getSuiviProcedureUrl(procedure.id))">
+                    <DsfrButton
+                      v-if="procedure.is_draft"
+                      @click="router.push(`/constatation/${procedure.id}`)"
+                    >
+                      <span class="fr-icon-edit-line fr-mr-1w" aria-hidden="true"></span>
+                      Reprendre la constatation
+                    </DsfrButton>
+                    <DsfrButton v-else @click="router.push(getSuiviProcedureUrl(procedure.id))">
                       <span
                         :class="
                           procedure.suivi_procedure?.dossier_archive

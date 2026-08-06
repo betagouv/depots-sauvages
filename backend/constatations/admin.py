@@ -16,6 +16,7 @@ class ConstatationAdmin(admin.ModelAdmin):
         "contact_prenom",
         "accepte_accompagnement",
         "ceci_est_un_test",
+        "is_draft",
         "created",
         "modified",
     ]
@@ -32,6 +33,7 @@ class ConstatationAdmin(admin.ModelAdmin):
         "statut_auteur",
         "accepte_accompagnement",
         "ceci_est_un_test",
+        "is_draft",
     ]
     raw_id_fields = ("user",)
     search_fields = [
@@ -68,6 +70,7 @@ class ConstatationAdmin(admin.ModelAdmin):
                     "constatant_nom",
                     "constatant_est_utilisateur_connecte",
                     "ceci_est_un_test",
+                    "is_draft",
                 )
             },
         ),
@@ -145,10 +148,7 @@ class ConstatationAdmin(admin.ModelAdmin):
         (
             "Métadonnées",
             {
-                "fields": (
-                    "created",
-                    "modified",
-                ),
+                "fields": ("created", "modified"),
                 "classes": ("collapse",),
             },
         ),

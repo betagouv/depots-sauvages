@@ -9,6 +9,11 @@ class ConstatationSerializer(serializers.ModelSerializer):
     date_modification = serializers.DateTimeField(source="modified", read_only=True)
     suivi_procedure = serializers.SerializerMethodField()
 
+    date_constat = serializers.DateField(required=False, allow_null=True)
+    heure_constat = serializers.TimeField(required=False, allow_null=True)
+    auteur_identifie = serializers.BooleanField(required=False, allow_null=True)
+
+
     class Meta:
         model = Constatation
         fields = [
@@ -57,6 +62,7 @@ class ConstatationSerializer(serializers.ModelSerializer):
             "contact_telephone",
             "accepte_accompagnement",
             "ceci_est_un_test",
+            "is_draft",
             "doc_constat_should_generate",
             "doc_constat_generated_at",
             "lettre_info_should_generate",
@@ -66,6 +72,10 @@ class ConstatationSerializer(serializers.ModelSerializer):
             "date_modification",
             "suivi_procedure",
         ]
+        extra_kwargs = {
+            "doc_constat_should_generate": {"required": False},
+            "lettre_info_should_generate": {"required": False},
+        }
 
     def get_suivi_procedure(self, obj):
         sp = getattr(obj, "suivi_procedure", None)
@@ -78,18 +88,31 @@ class ConstatationSerializer(serializers.ModelSerializer):
             "dossier_archive": sp.dossier_archive,
         }
 
-    def get_docs_generation_flags(self, auteur_identifie):
+    def get_docs_generation_flags(self, is_draft, auteur_identifie):
+        if is_draft:
+            return {
+                "doc_constat_should_generate": False,
+                "lettre_info_should_generate": False,
+            }
         return {
             "doc_constat_should_generate": True,
             "lettre_info_should_generate": bool(auteur_identifie),
         }
 
     def update(self, instance, validated_data):
+        is_draft = validated_data.get("is_draft", instance.is_draft)
         auteur_identifie = validated_data.get("auteur_identifie", instance.auteur_identifie)
-        validated_data.update(self.get_docs_generation_flags(auteur_identifie))
+        flags = self.get_docs_generation_flags(is_draft, bool(auteur_identifie))
+        for key, val in flags.items():
+            validated_data[key] = val
         return super().update(instance, validated_data)
 
     def create(self, validated_data):
+        is_draft = validated_data.get("is_draft", True)
         auteur_identifie = validated_data.get("auteur_identifie", False)
-        validated_data.update(self.get_docs_generation_flags(auteur_identifie))
+        flags = self.get_docs_generation_flags(is_draft, bool(auteur_identifie))
+        for key, val in flags.items():
+            validated_data[key] = val
         return super().create(validated_data)
+
+
