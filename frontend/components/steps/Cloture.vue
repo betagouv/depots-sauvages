@@ -36,6 +36,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { trackUserAction } from '../../services/tracking'
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
 import { getTodayISOString } from '../../utils/date'
 import AttenteDecision from './AttenteDecision.vue'
@@ -43,6 +44,7 @@ import ListeActions, { type Action } from './ListeActions.vue'
 
 const props = defineProps<{
   suivi: SuiviProcedure
+  constatationId?: number | string
 }>()
 
 const today = getTodayISOString()
@@ -81,9 +83,18 @@ const onUpdateCase = (action: Action, val: boolean) => {
       break
     case 'montant_recouvre':
       props.suivi.montant_recouvre = val
+      if (val) {
+        trackUserAction('montant_recouvre_enregistre', props.constatationId, {
+          recovered_amount: props.suivi.montant_amende,
+          date_recouvrement: props.suivi.date_recouvrement_effective,
+        })
+      }
       break
     case 'archivage':
       props.suivi.dossier_archive = val
+      if (val) {
+        trackUserAction('procedure_cloturee', props.constatationId)
+      }
       break
   }
 }

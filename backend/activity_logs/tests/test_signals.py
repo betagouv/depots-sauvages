@@ -19,7 +19,7 @@ def test_user_logged_in_signal_tracking(rf):
     user_logged_in.send(sender=User, request=request, user=user)
 
     log = ActivityLog.objects.using("stats_db").get(action="utilisateur_connecte")
-    assert log.target == "session"
+    assert log.target == "auth"
     assert log.data["user_is_staff"] is False
     assert log.data["auth_method"] == "password"
 

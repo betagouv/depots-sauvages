@@ -95,7 +95,7 @@ class ConstatationDocumentDownloadView(View, TrackActivityMixin):
         )
         self._track(
             action=action,
-            target="constatation_document",
+            target="document",
             constatation_id=constatation.id,
             document_type=doc_type,
         )

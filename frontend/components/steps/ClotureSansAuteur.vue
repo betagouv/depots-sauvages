@@ -11,11 +11,13 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { trackUserAction } from '../../services/tracking'
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
 import ListeActions, { type Action } from './ListeActions.vue'
 
 const props = defineProps<{
   suivi: SuiviProcedure
+  constatationId?: number | string
 }>()
 
 const actions = computed((): Action[] => [
@@ -29,6 +31,9 @@ const actions = computed((): Action[] => [
 const onUpdateCase = (action: Action, val: boolean) => {
   if (action.id === 'archivage') {
     props.suivi.dossier_archive = val
+    if (val) {
+      trackUserAction('procedure_cloturee', props.constatationId)
+    }
   }
 }
 </script>

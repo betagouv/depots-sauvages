@@ -15,12 +15,31 @@ CONSTATATION_ACTIONS = {
     "lettre_info_telechargee",
     "documents_signes_confirme",
     "notification_auteur_envoyee",
+    "accuse_reception_enregistre",
     "decision_enregistree",
     "procedure_abandonnee",
     "sanction_decidee",
     "documents_sanction_telecharges",
     "procedure_cloturee",
     "montant_recouvre_enregistre",
+}
+
+ACTION_TARGET_MAP = {
+    "utilisateur_connecte": "auth",
+    "constatation_demarree": "constatation",
+    "constatation_terminee": "constatation",
+    "doc_constat_telecharge": "document",
+    "lettre_info_telechargee": "document",
+    "documents_signes_confirme": "suivi_procedure",
+    "notification_auteur_envoyee": "suivi_procedure",
+    "accuse_reception_enregistre": "suivi_procedure",
+    "decision_enregistree": "suivi_procedure",
+    "procedure_abandonnee": "suivi_procedure",
+    "sanction_decidee": "suivi_procedure",
+    "documents_sanction_telecharges": "document",
+    "procedure_cloturee": "suivi_procedure",
+    "montant_recouvre_enregistre": "suivi_procedure",
+    "contact_clic_inscription": "contact",
 }
 
 
@@ -54,7 +73,7 @@ class UserActionTrackingView(TrackingAPIViewMixin, APIView):
         if not action:
             raise exceptions.ValidationError({"action": ["Ce champ est obligatoire."]})
         details["actor"] = anonymize_user_hash(user.id)
-        details["target"] = "backoffice" if user.is_staff else "app"
+        details["target"] = details.get("target") or ACTION_TARGET_MAP.get(action, "app")
         object_id = details.get("object")
         constatation_id, suivi_procedure_id = self._resolve_constatation_and_suivi_procedure_ids(
             object_id, action

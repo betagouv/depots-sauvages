@@ -30,7 +30,7 @@ def test_track_user_action_authenticated(client):
     assert response.status_code == status.HTTP_201_CREATED
     log = ActivityLog.objects.using("stats_db").get(action="notification_auteur_envoyee")
     assert log.actor == anonymize_user_hash(user.id)
-    assert log.target == "app"
+    assert log.target == "suivi_procedure"
     assert log.session_id == client.session.session_key
     assert log.constatation_id == constatation.id
     assert log.suivi_procedure_id == constatation.suivi_procedure.id

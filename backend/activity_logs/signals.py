@@ -13,7 +13,7 @@ def track_user_logged_in(sender, request, user, **kwargs):
             {
                 "action": "utilisateur_connecte",
                 "actor": anonymize_user_hash(user.id),
-                "target": "session",
+                "target": "auth",
                 "session_id": getattr(request.session, "session_key", None),
                 "data": {
                     "user_is_staff": user.is_staff,

@@ -49,6 +49,7 @@
                 :auteur-identifie="auteurIdentifie"
                 :doc-constat-url="getDocConstatUrl(procedureData.id)"
                 :lettre-info-url="getLettreInfoUrl(procedureData.id)"
+                :constatation-id="procedureData.id"
               />
             </template>
             <template v-if="hasProcedure" #step-2>
@@ -56,6 +57,7 @@
                 v-if="auteurIdentifie"
                 :suivi="suiviProcedure"
                 :lettre-info-url="getLettreInfoUrl(procedureData.id)"
+                :constatation-id="procedureData.id"
                 @next-step="activeStep = 3"
               />
               <Identification v-else :suivi="suiviProcedure" :auteur-identifie="auteurIdentifie" />
@@ -64,6 +66,7 @@
               <SuiviDecision
                 v-if="auteurIdentifie"
                 :suivi="suiviProcedure"
+                :constatation-id="procedureData.id"
                 @back-to-notification="activeStep = 2"
               />
               <MettreAjourDossier
@@ -73,12 +76,14 @@
               <ClotureSansAuteur
                 v-else-if="suiviProcedure.identification_reussie === false"
                 :suivi="suiviProcedure"
+                :constatation-id="procedureData.id"
               />
             </template>
             <template v-if="hasProcedure" #step-4>
               <SuiviActions
                 v-if="auteurIdentifie"
                 :suivi="suiviProcedure"
+                :constatation-id="procedureData.id"
                 @back-to-decision="activeStep = 3"
                 @go-to-cloture="activeStep = 5"
               />
@@ -87,6 +92,7 @@
               <Cloture
                 v-if="auteurIdentifie"
                 :suivi="suiviProcedure"
+                :constatation-id="procedureData.id"
                 @back-to-decision="activeStep = 3"
               />
             </template>
