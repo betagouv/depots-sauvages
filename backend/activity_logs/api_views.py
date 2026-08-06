@@ -24,6 +24,7 @@ CONSTATATION_ACTIONS = {
     "documents_sanction_telecharges",
     "procedure_cloturee",
     "recouvrement_confirme",
+    "nettoyage_enregistre",
 }
 
 ACTION_TARGET_MAP = {
@@ -43,6 +44,7 @@ ACTION_TARGET_MAP = {
     "documents_sanction_telecharges": "document",
     "procedure_cloturee": "suivi_procedure",
     "recouvrement_confirme": "suivi_procedure",
+    "nettoyage_enregistre": "suivi_procedure",
     "contact_clic_inscription": "contact",
 }
 

@@ -34,7 +34,11 @@
             </div>
           </header>
 
-          <InfosComplementaires v-if="hasProcedure" :suivi="suiviProcedure" />
+          <InfosComplementaires
+            v-if="hasProcedure"
+            :suivi="suiviProcedure"
+            :constatation-id="constatationId"
+          />
 
           <StepperProcedure :steps="steps" v-model:currentStep="activeStep">
             <template #step-0>

@@ -55,12 +55,15 @@
 </template>
 
 <script setup lang="ts">
+import { watch } from 'vue'
 import { DsfrAlert } from '@gouvminint/vue-dsfr'
+import { trackUserAction } from '../../services/tracking'
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
 import SelectableChoices from '../shared/SelectableChoices.vue'
 
-defineProps<{
+const props = defineProps<{
   suivi: SuiviProcedure
+  constatationId?: number | string
 }>()
 
 const nettoyageOptions = [
@@ -73,6 +76,18 @@ const nettoyageParOptions = [
   { text: 'La collectivité', value: 'mairie' },
   { text: 'Un tiers inconnu / prestataire', value: 'prestataire' },
 ]
+
+watch(
+  () => [props.suivi.nettoyage_fait, props.suivi.nettoyage_par],
+  ([fait, par]) => {
+    if (fait !== null && fait !== undefined) {
+      trackUserAction('nettoyage_enregistre', props.constatationId, {
+        nettoyage_fait: fait,
+        nettoyage_par: fait ? par || null : null,
+      })
+    }
+  }
+)
 </script>
 
 <style scoped>
