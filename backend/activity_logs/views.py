@@ -21,7 +21,7 @@ class TrackActivityMixin:
                 "suivi_procedure_id": suivi_procedure_id,
                 "session_id": getattr(self.request.session, "session_key", None),
                 "data": {
-                    "user_is_staff": self.request.user.is_staff,
+                    "est_staff": self.request.user.is_staff,
                     **data,
                 },
             },

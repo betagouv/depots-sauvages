@@ -21,7 +21,7 @@ def test_track_user_action_authenticated(client):
         "action": "notification_auteur_envoyee",
         "object": str(constatation.id),
         "data": {
-            "sent_date": "2026-08-05",
+            "date_envoi": "2026-08-05",
             "actor_role": "agent",
         },
     }
@@ -34,8 +34,8 @@ def test_track_user_action_authenticated(client):
     assert log.session_id == client.session.session_key
     assert log.constatation_id == constatation.id
     assert log.suivi_procedure_id == constatation.suivi_procedure.id
-    assert log.data["sent_date"] == "2026-08-05"
-    assert log.data["user_is_staff"] is False
+    assert log.data["date_envoi"] == "2026-08-05"
+    assert log.data["est_staff"] is False
 
 
 @pytest.mark.django_db(databases=["default", "stats_db"])
@@ -84,7 +84,7 @@ def test_track_user_action_idempotent_duplicate(client):
     payload = {
         "action": "notification_auteur_envoyee",
         "object": str(constatation.id),
-        "data": {"sent_date": "2026-08-05"},
+        "data": {"date_envoi": "2026-08-05"},
     }
     # Premier appel
     res1 = client.post(url, payload, content_type="application/json")
@@ -94,7 +94,7 @@ def test_track_user_action_idempotent_duplicate(client):
     payload_updated = {
         "action": "notification_auteur_envoyee",
         "object": str(constatation.id),
-        "data": {"sent_date": "2026-08-06"},
+        "data": {"date_envoi": "2026-08-06"},
     }
     res2 = client.post(url, payload_updated, content_type="application/json")
     assert res2.status_code == status.HTTP_201_CREATED
@@ -104,4 +104,4 @@ def test_track_user_action_idempotent_duplicate(client):
         constatation_id=constatation.id,
     )
     assert logs.count() == 1
-    assert logs.first().data["sent_date"] == "2026-08-06"
+    assert logs.first().data["date_envoi"] == "2026-08-06"

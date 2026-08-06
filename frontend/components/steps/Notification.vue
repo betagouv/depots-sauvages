@@ -135,7 +135,7 @@ const trackAccuseReception = () => {
   if (props.suivi.ar_recu) {
     trackUserAction('accuse_reception_enregistre', props.constatationId, {
       ar_statut: props.suivi.ar_statut,
-      ar_presentation_date: props.suivi.ar_presentation_date,
+      date_presentation_ar: props.suivi.ar_presentation_date,
     })
   }
 }
@@ -147,13 +147,24 @@ watch(
   }
 )
 
+watch(
+  () => props.suivi.lettre_envoyee_date,
+  (newDate) => {
+    if (props.suivi.lettre_envoyee && newDate) {
+      trackUserAction('notification_auteur_envoyee', props.constatationId, {
+        date_envoi: newDate,
+      })
+    }
+  }
+)
+
 const onUpdateCase = (action: Action, val: boolean) => {
   switch (action.id) {
     case 'lettre_envoyee':
       props.suivi.lettre_envoyee = val
       if (val) {
         trackUserAction('notification_auteur_envoyee', props.constatationId, {
-          sent_date: props.suivi.lettre_envoyee_date || today,
+          date_envoi: props.suivi.lettre_envoyee_date || today,
         })
       }
       break

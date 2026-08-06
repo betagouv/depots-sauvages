@@ -21,7 +21,7 @@ CONSTATATION_ACTIONS = {
     "sanction_decidee",
     "documents_sanction_telecharges",
     "procedure_cloturee",
-    "montant_recouvre_enregistre",
+    "recouvrement_confirme",
 }
 
 ACTION_TARGET_MAP = {
@@ -38,7 +38,7 @@ ACTION_TARGET_MAP = {
     "sanction_decidee": "suivi_procedure",
     "documents_sanction_telecharges": "document",
     "procedure_cloturee": "suivi_procedure",
-    "montant_recouvre_enregistre": "suivi_procedure",
+    "recouvrement_confirme": "suivi_procedure",
     "contact_clic_inscription": "contact",
 }
 
@@ -85,7 +85,7 @@ class UserActionTrackingView(TrackingAPIViewMixin, APIView):
         data = details.get("data") or {}
         if not isinstance(data, dict):
             data = {}
-        data["user_is_staff"] = user.is_staff
+        data["est_staff"] = user.is_staff
         details["data"] = data
         session_key = getattr(self.request.session, "session_key", None)
         if session_key:

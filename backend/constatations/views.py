@@ -97,7 +97,7 @@ class ConstatationDocumentDownloadView(View, TrackActivityMixin):
             action=action,
             target="document",
             constatation_id=constatation.id,
-            document_type=doc_type,
+            type_document=doc_type,
         )
         return FileResponse(
             response_data["file"],

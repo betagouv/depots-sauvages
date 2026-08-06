@@ -27,6 +27,23 @@ class IdempotentTrackingHandler(TrackingHandler):
             lookup_kwargs["suivi_procedure_id"] = suivi_procedure_id
         elif obj:
             lookup_kwargs["object"] = obj
+
+        existing_log = ActivityLog.objects.using("stats_db").filter(**lookup_kwargs).first()
+        if existing_log:
+            new_data = action_details.get("data") or {}
+            merged_data = {**(existing_log.data or {}), **new_data}
+            existing_log.data = merged_data
+            if action_details.get("target"):
+                existing_log.target = action_details.get("target")
+            if constatation_id:
+                existing_log.constatation_id = constatation_id
+            if suivi_procedure_id:
+                existing_log.suivi_procedure_id = suivi_procedure_id
+            if obj:
+                existing_log.object = obj
+            existing_log.save(using="stats_db")
+            return existing_log
+
         defaults = {
             "target": action_details.get("target"),
             "data": action_details.get("data", {}),

@@ -126,7 +126,7 @@ watch(
     }
     if (newVal && newVal !== 'recherche_adresse') {
       trackUserAction('decision_enregistree', props.constatationId, {
-        decision_type: newVal,
+        type_decision: newVal,
       })
     }
   }

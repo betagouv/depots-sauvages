@@ -16,8 +16,8 @@ def track_user_logged_in(sender, request, user, **kwargs):
                 "target": "auth",
                 "session_id": getattr(request.session, "session_key", None),
                 "data": {
-                    "user_is_staff": user.is_staff,
-                    "auth_method": resolve_auth_method(request),
+                    "est_staff": user.is_staff,
+                    "methode_auth": resolve_auth_method(request),
                 },
             },
             model_alias="activity_log",

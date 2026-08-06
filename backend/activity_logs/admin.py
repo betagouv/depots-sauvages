@@ -7,12 +7,13 @@ from backend.activity_logs.models import ActivityLog
 class ActivityLogAdmin(admin.ModelAdmin):
     list_display = [
         "id",
-        "created",
         "action",
         "actor",
         "target",
         "constatation",
         "suivi_procedure",
+        "created",
+        "modified",
     ]
     list_filter = [
         "action",

@@ -69,7 +69,7 @@ const checkAndTrackSigned = () => {
   const isLettreSigned = !props.auteurIdentifie || props.suivi.lettre_signe
   if (isRapportSigned && isLettreSigned) {
     trackUserAction('documents_signes_confirme', props.constatationId, {
-      signed: true,
+      signe: true,
     })
   }
 }

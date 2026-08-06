@@ -159,7 +159,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { trackUserAction } from '../../services/tracking'
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
@@ -177,7 +177,7 @@ const props = defineProps<{
 
 const trackDocSanction = (docType: string) => {
   trackUserAction('documents_sanction_telecharges', props.constatationId, {
-    document_type: docType,
+    type_document: docType,
   })
 }
 
@@ -225,6 +225,17 @@ const notificationOptions = [
   { id: 'notify-no', label: 'Non, ne pas notifier', value: false },
 ]
 
+watch(
+  () => props.suivi.montant_amende,
+  (newAmount) => {
+    if (props.suivi.montant_fixe && newAmount != null) {
+      trackUserAction('sanction_decidee', props.constatationId, {
+        montant_amende: newAmount,
+      })
+    }
+  }
+)
+
 const onMotifUpdate = (val: string) => {
   // Si NPAI ou Autre auteur, on ne notifie pas (déjà géré ou pas pertinent)
   if (val === 'Auteur introuvable (NPAI)' || val === 'Un auteur identifié') {
@@ -234,7 +245,7 @@ const onMotifUpdate = (val: string) => {
   }
   if (val) {
     trackUserAction('procedure_abandonnee', props.constatationId, {
-      abandon_reason: val,
+      motif_abandon: val,
     })
   }
 }
