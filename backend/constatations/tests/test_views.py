@@ -28,7 +28,6 @@ def test_create_constatation_authenticated(client):
     assert log.suivi_procedure_id == constatation.suivi_procedure.id
 
 
-
 @pytest.mark.django_db(databases=["default", "stats_db"])
 def test_create_constatation_anonymous(client):
     url = reverse("constatation-list")
@@ -109,3 +108,9 @@ def test_download_document_permissions(client):
     response = client.get(url)
     assert response.status_code == status.HTTP_200_OK
     assert b"".join(response.streaming_content) == b"dummy_content"
+
+    # 4. Verify ActivityLogs for download events (owner and staff generated 2 logs across 2 distinct sessions)
+    logs = ActivityLog.objects.using("stats_db").filter(
+        action="doc_constat_telecharge", constatation_id=c.id
+    )
+    assert logs.count() == 2

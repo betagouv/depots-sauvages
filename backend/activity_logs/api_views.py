@@ -11,7 +11,8 @@ from backend.stats.anonymizer import anonymize_user_hash
 CONSTATATION_ACTIONS = {
     "constatation_demarree",
     "constatation_terminee",
-    "document_telecharge",
+    "doc_constat_telecharge",
+    "lettre_info_telechargee",
     "documents_signes_confirme",
     "notification_auteur_envoyee",
     "decision_enregistree",

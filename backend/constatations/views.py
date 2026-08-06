@@ -90,14 +90,15 @@ class ConstatationDocumentDownloadView(View, TrackActivityMixin):
             response_data = self.prepare_lettre_info(constatation)
         else:
             raise Http404("Invalid document type")
-
+        action = (
+            "doc_constat_telecharge" if doc_type == "doc-constat" else "lettre_info_telechargee"
+        )
         self._track(
-            action="document_telecharge",
+            action=action,
             target="constatation_document",
             constatation_id=constatation.id,
             document_type=doc_type,
         )
-
         return FileResponse(
             response_data["file"],
             content_type=response_data["content_type"],
