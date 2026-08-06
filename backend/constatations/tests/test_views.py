@@ -45,10 +45,23 @@ def test_create_and_complete_draft_constatation(client):
     assert constatation.is_draft is True
     assert constatation.doc_constat_should_generate is False
 
-    # 2. Final submission (is_draft=False)
+    # 1b. Autosave update (PUT/PATCH on draft to update commune and constatant_role)
     detail_url = reverse("constatation-detail", args=[constatation.id])
+    autosave_data = {
+        "commune": "Nice",
+        "constatant_role": "Maire",
+        "is_draft": True,
+    }
+    res_autosave = client.put(detail_url, autosave_data, content_type="application/json")
+    assert res_autosave.status_code == status.HTTP_200_OK
+    log = ActivityLog.objects.get(action="constatation_demarree", constatation_id=constatation.id)
+    assert log.data["commune"] == "Nice"
+    assert log.data["constatant_role"] == "Maire"
+
+    # 2. Final submission (is_draft=False)
     final_data = {
-        "commune": "Marseille",
+        "commune": "Nice",
+        "constatant_role": "Maire",
         "is_draft": False,
         "auteur_identifie": False,
     }

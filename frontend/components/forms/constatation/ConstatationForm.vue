@@ -1,7 +1,11 @@
 <template>
   <div class="fr-grid-row fr-grid-row--gutters">
     <div class="fr-col-12 fr-col-md-3">
-      <nav class="fr-summary fr-mb-4w sticky-summary" role="navigation" aria-labelledby="fr-summary-title">
+      <nav
+        class="fr-summary fr-mb-4w sticky-summary"
+        role="navigation"
+        aria-labelledby="fr-summary-title"
+      >
         <p class="fr-summary__title" id="fr-summary-title">Sommaire</p>
         <ol class="fr-summary__list">
           <li>
@@ -35,17 +39,11 @@
         <SectionConstatation id="detail" />
         <SectionDescription id="description" />
         <SectionAuteurDepot id="auteur" />
-        <SectionPrejudice
-          v-if="showPrejudice"
-          id="prejudice"
-        />
+        <SectionPrejudice v-if="showPrejudice" id="prejudice" />
         <SectionFinalisation id="finalisation" />
 
         <div class="fr-grid-row fr-grid-row--center fr-mt-6w">
-          <DsfrButton
-            label="Enregistrer la constatation"
-            type="submit"
-          />
+          <DsfrButton label="Enregistrer la constatation" type="submit" />
         </div>
       </div>
     </div>
@@ -53,19 +51,19 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import { useConstatationStore } from '@/stores/constatation'
 import { DsfrButton } from '@gouvminint/vue-dsfr'
+import { computed } from 'vue'
+import SectionAuteurDepot from './SectionAuteurDepot.vue'
 import SectionConstatation from './SectionConstatation.vue'
 import SectionDescription from './SectionDescription.vue'
 import SectionFinalisation from './SectionFinalisation.vue'
 import SectionLocalisation from './SectionLocalisation.vue'
 import SectionPrejudice from './SectionPrejudice.vue'
-import SectionAuteurDepot from './SectionAuteurDepot.vue'
 
 const store = useConstatationStore()
 
-const showPrejudice = computed(() => 
+const showPrejudice = computed(() =>
   ['Déposée', 'Sera déposée'].includes(store.formData.plainteEtat)
 )
 </script>

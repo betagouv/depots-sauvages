@@ -41,14 +41,22 @@ class ConstatationViewSet(
         was_draft = serializer.instance.is_draft
         instance = serializer.save()
         if was_draft and not instance.is_draft:
-            self._track(
-                action="constatation_terminee",
-                target="constatation",
-                constatation_id=instance.id,
-                commune=instance.commune,
-                auteur_identifie=instance.auteur_identifie,
-                constatant_role=instance.constatant_role,
-            )
+            action = "constatation_terminee"
+        elif instance.is_draft:
+            action = "constatation_demarree"
+        else:
+            return
+        extra_data = {}
+        if action == "constatation_terminee":
+            extra_data["auteur_identifie"] = instance.auteur_identifie
+        self._track(
+            action=action,
+            target="constatation",
+            constatation_id=instance.id,
+            commune=instance.commune,
+            constatant_role=instance.constatant_role,
+            **extra_data,
+        )
 
 
 @method_decorator(login_required, name="dispatch")
