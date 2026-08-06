@@ -1,4 +1,4 @@
-from backend.activity_logs.models import ActivityLog
+from backend.activity_logs.tracking import IdempotentTrackingHandler
 from backend.procedures.models import SuiviProcedure
 from backend.stats.anonymizer import anonymize_user_hash
 
@@ -12,15 +12,18 @@ class TrackActivityMixin:
                 .values_list("id", flat=True)
                 .first()
             )
-        ActivityLog.objects.create(
-            action=action,
-            actor=anonymize_user_hash(self.request.user.id),
-            target=target,
-            constatation_id=constatation_id,
-            suivi_procedure_id=suivi_procedure_id,
-            data={
-                "user_is_staff": self.request.user.is_staff,
-                **data,
+        IdempotentTrackingHandler().track_action(
+            {
+                "action": action,
+                "actor": anonymize_user_hash(self.request.user.id),
+                "target": target,
+                "constatation_id": constatation_id,
+                "suivi_procedure_id": suivi_procedure_id,
+                "session_id": getattr(self.request.session, "session_key", None),
+                "data": {
+                    "user_is_staff": self.request.user.is_staff,
+                    **data,
+                },
             },
+            model_alias="activity_log",
         )
-

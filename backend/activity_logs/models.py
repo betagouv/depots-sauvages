@@ -3,6 +3,13 @@ from trackman.models import TrackingActionModel
 
 
 class ActivityLog(TrackingActionModel):
+    session_id = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        db_index=True,
+        verbose_name="Identifiant de session",
+    )
     constatation = models.ForeignKey(
         "stats.StatsConstatation",
         on_delete=models.SET_NULL,

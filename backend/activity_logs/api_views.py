@@ -1,7 +1,9 @@
-from rest_framework import exceptions, permissions
+from rest_framework import exceptions, permissions, status
+from rest_framework.response import Response
 from rest_framework.views import APIView
 from trackman.api import TrackingAPIViewMixin
 
+from backend.activity_logs.tracking import IdempotentTrackingHandler
 from backend.constatations.models import Constatation
 from backend.procedures.models import SuiviProcedure
 from backend.stats.anonymizer import anonymize_user_hash
@@ -24,6 +26,11 @@ CONSTATATION_ACTIONS = {
 class UserActionTrackingView(TrackingAPIViewMixin, APIView):
     model_alias = "activity_log"
     permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        action_details = self.clean_action_details(request.data)
+        IdempotentTrackingHandler().track_action(action_details, model_alias=self.model_alias)
+        return Response(status=status.HTTP_201_CREATED)
 
     def _resolve_constatation_and_suivi_procedure_ids(self, object_id, action):
         constatation_id = object_id  # The object we looking for is a constatation.
@@ -60,4 +67,7 @@ class UserActionTrackingView(TrackingAPIViewMixin, APIView):
             data = {}
         data["user_is_staff"] = user.is_staff
         details["data"] = data
+        session_key = getattr(self.request.session, "session_key", None)
+        if session_key:
+            details["session_id"] = str(session_key)
         return details

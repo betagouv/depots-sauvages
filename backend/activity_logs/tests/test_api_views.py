@@ -31,6 +31,7 @@ def test_track_user_action_authenticated(client):
     log = ActivityLog.objects.using("stats_db").get(action="notification_auteur_envoyee")
     assert log.actor == anonymize_user_hash(user.id)
     assert log.target == "app"
+    assert log.session_id == client.session.session_key
     assert log.constatation_id == constatation.id
     assert log.suivi_procedure_id == constatation.suivi_procedure.id
     assert log.data["sent_date"] == "2026-08-05"
@@ -72,3 +73,35 @@ def test_track_user_action_missing_action(client):
     response = client.post(url, payload, content_type="application/json")
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "action" in response.data
+
+
+@pytest.mark.django_db(databases=["default", "stats_db"])
+def test_track_user_action_idempotent_duplicate(client):
+    user = UserFactory(is_staff=False)
+    client.force_login(user)
+    constatation = Constatation.objects.create(user=user, commune="Lyon")
+    url = reverse("track-user-action")
+    payload = {
+        "action": "notification_auteur_envoyee",
+        "object": str(constatation.id),
+        "data": {"sent_date": "2026-08-05"},
+    }
+    # Premier appel
+    res1 = client.post(url, payload, content_type="application/json")
+    assert res1.status_code == status.HTTP_201_CREATED
+
+    # Deuxième appel identique durant la même session
+    payload_updated = {
+        "action": "notification_auteur_envoyee",
+        "object": str(constatation.id),
+        "data": {"sent_date": "2026-08-06"},
+    }
+    res2 = client.post(url, payload_updated, content_type="application/json")
+    assert res2.status_code == status.HTTP_201_CREATED
+    # Vérification qu'il n'y a qu'UN seul log en base (avec la donnée mise à jour)
+    logs = ActivityLog.objects.using("stats_db").filter(
+        action="notification_auteur_envoyee",
+        constatation_id=constatation.id,
+    )
+    assert logs.count() == 1
+    assert logs.first().data["sent_date"] == "2026-08-06"
