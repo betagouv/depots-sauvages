@@ -47,14 +47,14 @@
               <div class="fr-card__content">
                 <h4 class="fr-card__title">Participez à notre webinaire gratuit</h4>
                 <p class="fr-card__desc">
-                  Chaque semaine notre équipe vous présente comment agir contre les dépôts
-                  sauvages en moins de 60 minutes.
+                  Chaque semaine notre équipe vous présente comment agir contre les dépôts sauvages
+                  en moins de 60 minutes.
                 </p>
               </div>
               <div class="fr-card__footer">
                 <ul class="fr-btns-group">
                   <li>
-                    <DsfrButton secondary @click="() => router.push({ name: 'RDV' })">
+                    <DsfrButton secondary @click="goToWebinaire">
                       <span class="fr-icon-calendar-line fr-mr-1w" aria-hidden="true"></span>
                       Découvrir notre webinaire
                     </DsfrButton>
@@ -118,18 +118,26 @@
 <script setup lang="ts">
 import { DsfrButton } from '@gouvminint/vue-dsfr'
 import { useRouter } from 'vue-router'
+import { trackUserAction } from '../services/tracking'
 
 const router = useRouter()
 const contactEmail = import.meta.env.VITE_CONTACT_EMAIL
 
 const sendEmail = () => {
+  trackUserAction('contact_clic_inscription', undefined, { destination: 'mail' })
   window.location.href = `mailto:${contactEmail}`
 }
 
 const openCrispChat = () => {
+  trackUserAction('contact_clic_inscription', undefined, { destination: 'tchat' })
   const crisp = (window as any).$crisp
   if (crisp) {
     crisp.push(['do', 'chat:open'])
   }
+}
+
+const goToWebinaire = () => {
+  trackUserAction('contact_clic_inscription', undefined, { destination: 'webinaire' })
+  router.push({ name: 'RDV' })
 }
 </script>

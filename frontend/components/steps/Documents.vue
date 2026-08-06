@@ -20,6 +20,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
+import { trackUserAction } from '../../services/tracking'
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
 import BandeauInformation from '../procedures/BandeauInformation.vue'
 import CartesDocuments from '../procedures/CartesDocuments.vue'
@@ -32,6 +33,7 @@ const props = defineProps<{
   docConstatUrl: string
   lettreInfoUrl: string
   modifyUrl: string
+  constatationId?: number | string
 }>()
 
 const actions = computed((): Action[] => {
@@ -62,6 +64,16 @@ const actions = computed((): Action[] => {
   return baseActions
 })
 
+const checkAndTrackSigned = () => {
+  const isRapportSigned = props.suivi.constatation_signee
+  const isLettreSigned = !props.auteurIdentifie || props.suivi.lettre_signe
+  if (isRapportSigned && isLettreSigned) {
+    trackUserAction('documents_signes_confirme', props.constatationId, {
+      signe: true,
+    })
+  }
+}
+
 const onUpdateCase = (action: Action, val: boolean) => {
   switch (action.id) {
     case 'preuve_photos':
@@ -69,13 +81,14 @@ const onUpdateCase = (action: Action, val: boolean) => {
       break
     case 'rapport_signe':
       props.suivi.constatation_signee = val
+      if (val) checkAndTrackSigned()
       break
     case 'lettre_signee':
       props.suivi.lettre_signe = val
+      if (val) checkAndTrackSigned()
       break
   }
 }
-
 </script>
 
 <style scoped>

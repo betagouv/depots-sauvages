@@ -28,7 +28,7 @@ class ConstatationBaseModel(PrejudiceMixin, TimeStampedModel):
     photo_dispo = models.BooleanField("photos", default=False)
     risque_ecoulement = models.BooleanField("risque écoulement", default=False)
 
-    auteur_identifie = models.BooleanField("auteur présumé identifié", default=False)
+    auteur_identifie = models.BooleanField("auteur présumé identifié", null=True, blank=True)
     statut_auteur = models.CharField(
         "statut de l'auteur présumé", max_length=255, null=True, blank=True
     )
@@ -61,6 +61,7 @@ class ConstatationBaseModel(PrejudiceMixin, TimeStampedModel):
     ceci_est_un_test = models.BooleanField("est un test", null=True, blank=True)
 
     # Management fields
+    is_draft = models.BooleanField("Est un brouillon", default=True)
     doc_constat_should_generate = models.BooleanField(
         "Générer le rapport de constatation",
         default=False,

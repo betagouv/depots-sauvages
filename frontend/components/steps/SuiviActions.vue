@@ -12,6 +12,7 @@
                 href="https://fichiers.numerique.gouv.fr/explorer/items/files/7b97c0e9-ffc9-4863-834f-759821aa1e0a"
                 target="_blank"
                 class="fr-btn fr-btn--secondary"
+                @click="trackDocSanction('arrete_sanction')"
               >
                 Modèle d'arrêté de sanction
               </a>
@@ -21,6 +22,7 @@
                 href="https://fichiers.numerique.gouv.fr/explorer/items/files/563be397-7e6d-4d69-b1aa-42598d2f71c6"
                 target="_blank"
                 class="fr-btn fr-btn--secondary"
+                @click="trackDocSanction('notification_sanction')"
               >
                 Modèle de courrier de notification
               </a>
@@ -31,6 +33,7 @@
                 href="https://fichiers.numerique.gouv.fr/explorer/items/files/5f899dd5-ff04-4115-856a-31bfd29006cb"
                 target="_blank"
                 class="fr-btn fr-btn--secondary"
+                @click="trackDocSanction('titre_recette')"
               >
                 Exemple de titre de recette
               </a>
@@ -91,6 +94,7 @@
                   href="https://fichiers.numerique.gouv.fr/explorer/items/files/25afb89c-abbe-434c-b498-596c12eb60bd"
                   target="_blank"
                   class="fr-btn fr-btn--secondary"
+                  @click="trackDocSanction('notification_abandon')"
                 >
                   Modèle de notification d'abandon
                 </a>
@@ -155,11 +159,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { trackUserAction } from '../../services/tracking'
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
-import { openTallyPopup } from '../../utils/tally'
 import { onKeyDownNumber } from '../../utils/input'
+import { openTallyPopup } from '../../utils/tally'
 import SelectableChoices from '../shared/SelectableChoices.vue'
 import AttenteDecision from './AttenteDecision.vue'
 import ListeActions, { type Action } from './ListeActions.vue'
@@ -167,7 +172,14 @@ import ListeActions, { type Action } from './ListeActions.vue'
 const props = defineProps<{
   suivi: SuiviProcedure
   modifyUrl: string
+  constatationId?: number | string
 }>()
+
+const trackDocSanction = (docType: string) => {
+  trackUserAction('documents_sanction_telecharges', props.constatationId, {
+    type_document: docType,
+  })
+}
 
 const router = useRouter()
 
@@ -213,12 +225,28 @@ const notificationOptions = [
   { id: 'notify-no', label: 'Non, ne pas notifier', value: false },
 ]
 
+watch(
+  () => props.suivi.montant_amende,
+  (newAmount) => {
+    if (props.suivi.montant_fixe && newAmount != null) {
+      trackUserAction('sanction_decidee', props.constatationId, {
+        montant_amende: newAmount,
+      })
+    }
+  }
+)
+
 const onMotifUpdate = (val: string) => {
   // Si NPAI ou Autre auteur, on ne notifie pas (déjà géré ou pas pertinent)
   if (val === 'Auteur introuvable (NPAI)' || val === 'Un auteur identifié') {
     props.suivi.souhaite_notifier_abandon = false
   } else if (!val) {
     props.suivi.souhaite_notifier_abandon = null
+  }
+  if (val) {
+    trackUserAction('procedure_abandonnee', props.constatationId, {
+      motif_abandon: val,
+    })
   }
 }
 
@@ -281,6 +309,11 @@ const onUpdateSanction = (action: Action, val: boolean) => {
   switch (action.id) {
     case 'fixer_montant':
       props.suivi.montant_fixe = val
+      if (val) {
+        trackUserAction('sanction_decidee', props.constatationId, {
+          montant_amende: props.suivi.montant_amende,
+        })
+      }
       break
     case 'arrete_redige':
       props.suivi.arrete_redige = val

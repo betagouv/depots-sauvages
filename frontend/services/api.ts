@@ -106,6 +106,7 @@ export interface ProcedureOverview {
   localisation_depot: string | null
   last_sync: string | null
   auteur_identifie: boolean
+  is_draft?: boolean
   suivi_procedure?: {
     etape_en_cours: number
     identification_reussie?: boolean | null

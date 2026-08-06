@@ -67,10 +67,19 @@ onMounted(async () => {
   }
 })
 
+import { debounce } from '../utils/debounce'
+
+const debouncedAutoSave = debounce(() => {
+  if (store.formData.commune) {
+    store.autoSave()
+  }
+}, 2000)
+
 watch(
   () => store.formData,
   () => {
     if (store.hasBeenSubmitted) store.validate(true)
+    debouncedAutoSave()
   },
   { deep: true }
 )

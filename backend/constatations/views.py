@@ -7,6 +7,8 @@ from django.utils.decorators import method_decorator
 from django.views.generic import View
 from rest_framework import mixins, permissions, viewsets
 
+from backend.activity_logs.views import TrackActivityMixin
+
 from .models import Constatation
 from .serializers import ConstatationSerializer
 
@@ -17,6 +19,7 @@ class ConstatationViewSet(
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
     viewsets.GenericViewSet,
+    TrackActivityMixin,
 ):
     serializer_class = ConstatationSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -25,11 +28,39 @@ class ConstatationViewSet(
         return Constatation.objects.filter(user=self.request.user).order_by("-modified")
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        instance = serializer.save(user=self.request.user)
+        self._track(
+            action="constatation_demarree",
+            target="constatation",
+            constatation_id=instance.id,
+            commune=instance.commune,
+            constatant_role=instance.constatant_role,
+        )
+
+    def perform_update(self, serializer):
+        was_draft = serializer.instance.is_draft
+        instance = serializer.save()
+        if was_draft and not instance.is_draft:
+            action = "constatation_terminee"
+        elif instance.is_draft:
+            action = "constatation_demarree"
+        else:
+            return
+        extra_data = {}
+        if action == "constatation_terminee":
+            extra_data["auteur_identifie"] = instance.auteur_identifie
+        self._track(
+            action=action,
+            target="constatation",
+            constatation_id=instance.id,
+            commune=instance.commune,
+            constatant_role=instance.constatant_role,
+            **extra_data,
+        )
 
 
 @method_decorator(login_required, name="dispatch")
-class ConstatationDocumentDownloadView(View):
+class ConstatationDocumentDownloadView(View, TrackActivityMixin):
     """
     Download documents for Constatation instances securely.
     """
@@ -67,6 +98,15 @@ class ConstatationDocumentDownloadView(View):
             response_data = self.prepare_lettre_info(constatation)
         else:
             raise Http404("Invalid document type")
+        action = (
+            "doc_constat_telecharge" if doc_type == "doc-constat" else "lettre_info_telechargee"
+        )
+        self._track(
+            action=action,
+            target="document",
+            constatation_id=constatation.id,
+            type_document=doc_type,
+        )
         return FileResponse(
             response_data["file"],
             content_type=response_data["content_type"],

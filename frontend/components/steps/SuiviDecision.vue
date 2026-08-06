@@ -70,12 +70,14 @@
 
 <script setup lang="ts">
 import { computed, watch } from 'vue'
+import { trackUserAction } from '../../services/tracking'
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
 import SelectableChoices from '../shared/SelectableChoices.vue'
 
 const props = defineProps<{
   suivi: SuiviProcedure
   modifyUrl?: string
+  constatationId?: number | string
 }>()
 
 defineEmits(['back-to-notification'])
@@ -121,6 +123,11 @@ watch(
   (newVal) => {
     if (newVal === 'abandon' && isNpai.value) {
       props.suivi.motif_abandon = 'Auteur introuvable (NPAI)'
+    }
+    if (newVal && newVal !== 'recherche_adresse') {
+      trackUserAction('decision_enregistree', props.constatationId, {
+        type_decision: newVal,
+      })
     }
   }
 )

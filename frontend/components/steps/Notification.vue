@@ -79,17 +79,19 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
 import { getTodayISOString } from '../../utils/date'
 import { calculateContradictoire } from '../../utils/procedure'
 import ListeActions, { type Action } from './ListeActions.vue'
 
 import { trackAndOpenLink } from '../../services/matomo'
+import { trackUserAction } from '../../services/tracking'
 
 const props = defineProps<{
   suivi: SuiviProcedure
   lettreInfoUrl: string
+  constatationId?: number | string
 }>()
 
 const openUrl = (url: string) => {
@@ -129,16 +131,51 @@ const actions = computed((): Action[] => [
   },
 ])
 
+const trackAccuseReception = () => {
+  if (props.suivi.ar_recu) {
+    trackUserAction('accuse_reception_enregistre', props.constatationId, {
+      ar_statut: props.suivi.ar_statut,
+      date_presentation_ar: props.suivi.ar_presentation_date,
+    })
+  }
+}
+
+watch(
+  () => [props.suivi.ar_statut, props.suivi.ar_presentation_date],
+  () => {
+    trackAccuseReception()
+  }
+)
+
+watch(
+  () => props.suivi.lettre_envoyee_date,
+  (newDate) => {
+    if (props.suivi.lettre_envoyee && newDate) {
+      trackUserAction('notification_auteur_envoyee', props.constatationId, {
+        date_envoi: newDate,
+      })
+    }
+  }
+)
+
 const onUpdateCase = (action: Action, val: boolean) => {
   switch (action.id) {
     case 'lettre_envoyee':
       props.suivi.lettre_envoyee = val
+      if (val) {
+        trackUserAction('notification_auteur_envoyee', props.constatationId, {
+          date_envoi: props.suivi.lettre_envoyee_date || today,
+        })
+      }
       break
     case 'copie_archives':
       props.suivi.copie_archives = val
       break
     case 'ar_recu':
       props.suivi.ar_recu = val
+      if (val) {
+        trackAccuseReception()
+      }
       break
   }
 }

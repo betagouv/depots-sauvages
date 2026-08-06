@@ -20,6 +20,7 @@ export const useConstatationStore = defineStore('constatation', {
     errors: {} as Record<string, string>,
     formData: createEmptyConstatation(),
     hasBeenSubmitted: false,
+    _autoSavePromise: null as Promise<any> | null,
   }),
 
   actions: {
@@ -40,8 +41,8 @@ export const useConstatationStore = defineStore('constatation', {
       }
     },
 
-    async saveFormData() {
-      const data = { ...this.formData }
+    _preparePayload(isDraft: boolean) {
+      const data = { ...this.formData, isDraft }
       if (data.constatantRole === 'autre') {
         data.constatantRole = data.constatantRoleAutre as any
       }
@@ -55,12 +56,6 @@ export const useConstatationStore = defineStore('constatation', {
         data.prejudiceKilometrage = null as any
         data.prejudiceAutresCouts = null as any
       } else {
-        // Coexistence of global declared amount vs estimated amount:
-        // 1. User knows the global amount (prejudiceMontantConnu === true):
-        //    We send the user-declared prejudiceMontant. Detailed fields are reset to null.
-        // 2. User does not know the global amount (prejudiceMontantConnu === false):
-        //    The global prejudiceMontant is cleared (set to null) so the backend recalculates
-        //    the total cost from the detailed estimation fields.
         if (data.prejudiceMontantConnu === true) {
           data.prejudiceMontant = toNumOrNull(data.prejudiceMontant) as any
           data.prejudiceNombrePersonnes = null as any
@@ -78,7 +73,40 @@ export const useConstatationStore = defineStore('constatation', {
         }
       }
 
-      const dataToSend = toApiFormat(data)
+      return toApiFormat(data)
+    },
+
+    async autoSave() {
+      // If a creation or update request is currently pending, wait for it to complete
+      if (this._autoSavePromise) {
+        await this._autoSavePromise
+      }
+
+      const dataToSend = this._preparePayload(true)
+
+      const executeSave = async () => {
+        if (this.currentId) {
+          return await updateResource(`${API_URLS.constatations}${this.currentId}/`, dataToSend)
+        } else {
+          const res = await createResource(API_URLS.constatations, dataToSend)
+          this.currentId = res.id
+          return res
+        }
+      }
+
+      this._autoSavePromise = executeSave().finally(() => {
+        this._autoSavePromise = null
+      })
+
+      try {
+        return await this._autoSavePromise
+      } catch (error) {
+        console.error('Erreur lors de l’autosave constatation:', error)
+      }
+    },
+
+    async saveFormData() {
+      const dataToSend = this._preparePayload(false)
 
       if (this.currentId) {
         return await updateResource(`${API_URLS.constatations}${this.currentId}/`, dataToSend)
