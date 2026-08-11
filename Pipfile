@@ -29,6 +29,7 @@ drf-spectacular = "*"
 django-permissions-policy = "*"
 django-trackman = "*"
 faker = "*"
+filetype = "*"
 
 [dev-packages]
 black = "*"

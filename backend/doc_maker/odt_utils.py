@@ -5,6 +5,7 @@ from django.forms.models import model_to_dict
 from django.template.defaultfilters import floatformat
 from django.utils import timezone
 
+from backend.doc_maker.image_utils import save_base64_to_temp_file
 from backend.doc_maker.odt import ODTProcessor
 
 logger = logging.getLogger(__name__)
@@ -124,6 +125,22 @@ class DocumentContextBuilder:
         self.context["auteur_nom_complet"] = nom_complet.replace("  ", " ").strip()
         return self
 
+    def process_photos(self):
+        """
+        Process photos from base64 strings into temporary file paths for ODT template rendering.
+        """
+        photos = getattr(self.instance, "photos", None) or self.context.get("photos") or []
+        photo_paths = []
+        for index, photo_data in enumerate(photos):
+            try:
+                temp_path = save_base64_to_temp_file(photo_data)
+                if temp_path:
+                    photo_paths.append(temp_path)
+            except Exception as e:
+                logger.error(f"Error decoding photo {index} for constatation: {e}")
+        self.context["photos"] = photo_paths
+        return self
+
     def build(self):
         """Build and return the final context dictionary."""
         self.remove_unneeded_fields()
@@ -134,6 +151,7 @@ class DocumentContextBuilder:
         self.format_constatant_full_name()
         self.format_auteur_adresse()
         self.format_auteur_full_name()
+        self.process_photos()
         return self.context
 
 

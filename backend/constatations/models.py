@@ -26,6 +26,7 @@ class ConstatationBaseModel(PrejudiceMixin, TimeStampedModel):
     types_depot = models.JSONField("types", default=list, blank=True, null=True)
     precisions_depot = models.TextField("précisions", blank=True)
     photo_dispo = models.BooleanField("photos", default=False)
+    photos = models.JSONField("photos list", default=list, blank=True, null=True)
     risque_ecoulement = models.BooleanField("risque écoulement", default=False)
 
     auteur_identifie = models.BooleanField("auteur présumé identifié", null=True, blank=True)
