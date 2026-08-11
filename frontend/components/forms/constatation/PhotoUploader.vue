@@ -5,22 +5,41 @@
       <span v-if="hint" class="fr-hint-text">{{ hint }}</span>
     </label>
 
-    <div class="uppy-container fr-mt-2w">
-      <Dashboard
-        :uppy="uppy"
-        :props="{
-          plugins: [],
-          theme: 'light',
-          height: height,
-          showRemoveButtonAfterComplete: true,
-          note: note,
-        }"
+    <!-- Zone d'upload / Drag & Drop -->
+    <div
+      class="dropzone-container fr-mt-2w"
+      :class="{ 'is-dragging': isDragging }"
+      @dragover.prevent="onDragOver"
+      @dragenter.prevent="onDragEnter"
+      @dragleave.prevent="onDragLeave"
+      @drop.prevent="onDrop"
+      @click="triggerFileInput"
+    >
+      <input
+        ref="fileInputRef"
+        type="file"
+        multiple
+        accept="image/jpeg,image/png,image/webp,image/heic,image/heif"
+        class="file-input-hidden"
+        @change="onFileSelect"
       />
+
+      <div class="dropzone-content">
+        <span class="fr-icon-add-circle-line dropzone-icon" aria-hidden="true"></span>
+        <p class="dropzone-title fr-mb-1v">
+          <strong>Glissez-déposez vos photos ici</strong> ou
+          <span class="browse-link">parcourez vos fichiers</span>
+        </p>
+        <p class="dropzone-note fr-text--xs fr-mb-0">
+          {{ note }}
+        </p>
+      </div>
     </div>
 
+    <!-- Grille unique de prévisualisation et gestion des photos -->
     <div v-if="modelValue.length > 0" class="fr-mt-3w">
       <p class="fr-text--sm fr-mb-2w">
-        <strong>{{ modelValue.length }} photo(s) conservée(s) :</strong>
+        <strong>{{ modelValue.length }} photo(s) ajoutée(s) :</strong>
       </p>
       <div class="photo-preview-grid">
         <div v-for="(photo, index) in modelValue" :key="index" class="photo-preview-item">
@@ -38,14 +57,8 @@
 </template>
 
 <script setup lang="ts">
-import Compressor from '@uppy/compressor'
-import Uppy from '@uppy/core'
-import FrenchLocale from '@uppy/locales/lib/fr_FR'
-import Dashboard from '@uppy/vue/dashboard'
-import { onBeforeUnmount } from 'vue'
-
-import '@uppy/core/css/style.min.css'
-import '@uppy/dashboard/css/style.min.css'
+import Compressor from 'compressorjs'
+import { ref } from 'vue'
 
 const props = withDefaults(
   defineProps<{
@@ -54,15 +67,13 @@ const props = withDefaults(
     label?: string
     hint?: string
     note?: string
-    height?: number
   }>(),
   {
     modelValue: () => [],
     maxFileSizeMb: 20,
     label: '',
     hint: '',
-    note: "JPG/PNG jusqu'à 20 Mo par photo",
-    height: 180,
+    note: 'Formats acceptés : JPG, PNG, WEBP (Max 20 Mo par photo)',
   }
 )
 
@@ -71,31 +82,67 @@ const emit = defineEmits<{
   (e: 'change'): void
 }>()
 
-const maxSizeBytes = props.maxFileSizeMb * 1024 * 1024
+const fileInputRef = ref<HTMLInputElement | null>(null)
+const isDragging = ref(false)
 
-const uppy = new Uppy({
-  id: 'photo-uppy-uploader',
-  autoProceed: true,
-  locale: {
-    ...FrenchLocale,
-    strings: {
-      ...FrenchLocale.strings,
-      dropPasteImportBoth: 'Prendre une photo ou %{browse}',
-      dropPasteFiles: 'Sélectionner des photos ou %{browse}',
-      browseFiles: 'naviguer dans vos fichiers',
-    },
-  },
-  restrictions: {
-    maxFileSize: maxSizeBytes,
-    allowedFileTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif'],
-  },
-}).use(Compressor, {
-  quality: 0.8,
-  maxWidth: 1600,
-  maxHeight: 1600,
-})
+const triggerFileInput = () => {
+  fileInputRef.value?.click()
+}
 
-const fileToBase64 = (file: File | Blob): Promise<string> => {
+const onDragEnter = () => {
+  isDragging.value = true
+}
+
+const onDragOver = () => {
+  isDragging.value = true
+}
+
+const onDragLeave = (e: DragEvent) => {
+  // Éviter le clignotement lors du survol des enfants de la dropzone
+  if (!(e.currentTarget as HTMLElement).contains(e.relatedTarget as Node)) {
+    isDragging.value = false
+  }
+}
+
+const onDrop = (e: DragEvent) => {
+  isDragging.value = false
+  if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
+    processFiles(Array.from(e.dataTransfer.files))
+  }
+}
+
+const onFileSelect = (e: Event) => {
+  const target = e.target as HTMLInputElement
+  if (target.files && target.files.length > 0) {
+    processFiles(Array.from(target.files))
+    target.value = '' // Reset de l'input pour réautoriser l'ajout du même fichier si besoin
+  }
+}
+
+const compressImage = (file: File): Promise<Blob | File> => {
+  return new Promise((resolve) => {
+    // Si ce n'est pas une image standard ou déjà très petite, résoudre directement
+    if (!file.type.startsWith('image/')) {
+      resolve(file)
+      return
+    }
+
+    new Compressor(file, {
+      quality: 0.8,
+      maxWidth: 1600,
+      maxHeight: 1600,
+      success(result) {
+        resolve(result)
+      },
+      error(err) {
+        console.warn('Erreur lors de la compression, utilisation de la photo originale:', err)
+        resolve(file)
+      },
+    })
+  })
+}
+
+const fileToBase64 = (file: Blob | File): Promise<string> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.onload = () => resolve(reader.result as string)
@@ -104,18 +151,35 @@ const fileToBase64 = (file: File | Blob): Promise<string> => {
   })
 }
 
-uppy.on('file-added', async (file) => {
-  try {
-    if (file.data) {
-      const base64 = await fileToBase64(file.data)
-      const newList = [...props.modelValue, base64]
-      emit('update:modelValue', newList)
-      emit('change')
+const processFiles = async (files: File[]) => {
+  const maxSizeBytes = props.maxFileSizeMb * 1024 * 1024
+  const validFiles = files.filter((file) => {
+    if (file.size > maxSizeBytes) {
+      alert(
+        `Le fichier "${file.name}" dépasse la taille maximale autorisée de ${props.maxFileSizeMb} Mo.`
+      )
+      return false
     }
+    return true
+  })
+
+  if (validFiles.length === 0) return
+
+  try {
+    const newBase64List: string[] = []
+    for (const file of validFiles) {
+      const compressed = await compressImage(file)
+      const base64 = await fileToBase64(compressed)
+      newBase64List.push(base64)
+    }
+
+    const updatedList = [...props.modelValue, ...newBase64List]
+    emit('update:modelValue', updatedList)
+    emit('change')
   } catch (err) {
-    console.error("Erreur d'encodage de la photo Uppy:", err)
+    console.error('Erreur lors du traitement des images:', err)
   }
-})
+}
 
 const removePhoto = (index: number) => {
   const newList = [...props.modelValue]
@@ -123,53 +187,53 @@ const removePhoto = (index: number) => {
   emit('update:modelValue', newList)
   emit('change')
 }
-
-onBeforeUnmount(() => {
-  uppy.destroy()
-})
 </script>
 
 <style scoped>
-.uppy-container {
-  border-radius: 12px;
-  overflow: hidden;
-  border: 2px dashed var(--border-action-high-blue-france, #000091);
-  background-color: var(--background-alt-grey, #f6f6f6);
-  transition: all 0.2s ease-in-out;
+.file-input-hidden {
+  display: none;
 }
 
-.uppy-container:hover {
+.dropzone-container {
+  border: 2px dashed var(--border-action-high-blue-france, #000091);
+  border-radius: 12px;
+  background-color: var(--background-alt-grey, #f6f6f6);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.dropzone-container:hover,
+.dropzone-container.is-dragging {
   border-color: var(--border-active-blue-france, #1212ff);
   background-color: var(--background-alt-blue-france, #f5f5fe);
   box-shadow: 0 4px 12px rgba(0, 0, 145, 0.08);
 }
 
-.uppy-container :deep(.uppy-Dashboard-inner) {
-  background-color: transparent !important;
-  border: none !important;
-  width: 100% !important;
-  font-family: inherit;
+.dropzone-icon {
+  font-size: 2rem;
+  color: var(--text-action-high-blue-france, #000091);
+  margin-bottom: 0.5rem;
 }
 
-.uppy-container :deep(.uppy-Dashboard-dropFilesTitle) {
-  font-size: 0.95rem !important;
-  font-weight: 500 !important;
-  color: var(--text-title-grey, #161616) !important;
+.dropzone-title {
+  color: var(--text-title-grey, #161616);
+  font-size: 0.95rem;
 }
 
-.uppy-container :deep(.uppy-Dashboard-browse) {
-  color: var(--text-action-high-blue-france, #000091) !important;
-  font-weight: 600 !important;
-  text-decoration: underline !important;
+.browse-link {
+  color: var(--text-action-high-blue-france, #000091);
+  text-decoration: underline;
+  font-weight: 600;
 }
 
-.uppy-container :deep(.uppy-Dashboard-note) {
-  font-size: 0.8rem !important;
-  color: var(--text-mention-grey, #666) !important;
-}
-
-.uppy-container :deep(.uppy-Dashboard-AddFiles-info) {
-  margin-bottom: 0 !important;
+.dropzone-note {
+  color: var(--text-mention-grey, #666666);
 }
 
 .photo-preview-grid {
@@ -215,26 +279,11 @@ onBeforeUnmount(() => {
   justify-content: center;
 }
 
-/* Optimisations spécifiques mobile */
+/* Optimisations mobiles */
 @media (max-width: 576px) {
-  .uppy-container {
+  .dropzone-container {
+    padding: 1.5rem 1rem;
     border-radius: 8px;
-    border-width: 1.5px;
-  }
-
-  .uppy-container :deep(.uppy-Dashboard-AddFiles-title) {
-    font-size: 0.875rem !important;
-    line-height: 1.35 !important;
-    padding: 0 0.5rem;
-  }
-
-  .uppy-container :deep(.uppy-Dashboard-browse) {
-    display: inline-block;
-    padding: 0.35rem 0.6rem;
-    margin-top: 0.25rem;
-    background-color: var(--background-action-low-blue-france, #e3e3fd);
-    border-radius: 4px;
-    text-decoration: none !important;
   }
 
   .photo-preview-grid {
