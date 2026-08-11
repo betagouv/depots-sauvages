@@ -61,3 +61,24 @@ Chaque fonctionnalité de sécurité sensible doit faire l'objet de tests automa
 - Les droits d'accès aux routes de backoffice doivent être testés avec des utilisateurs non authentifiés, des utilisateurs standards et des administrateurs.
 - Tout nouveau champ sensible ajouté à un modèle et réservé aux administrateurs doit être couvert par un test de validation de sérialiseur.
 - **Cloisonnement des accès (IDOR)** : Le non-accès aux suivis de procédure par des utilisateurs tiers (non propriétaires) est validé par des tests unitaires dédiés (`backend/procedures/tests.py`), garantissant le respect de la politique d'isolation objet.
+
+---
+
+## 5. Traitement Sécurisé des Fichiers et Photos (Upload & Doc Maker)
+
+L'application permet d'ajouter des photos lors d'une constatation pour enrichir le rapport généré. Plusieurs mécanismes de sécurité sont mis en œuvre pour prévenir les failles liées au téléversement de fichiers (telles que le téléchargement de scripts malveillants ou le déni de service) :
+
+### Contrôles côté Client (Front-end)
+
+- **Restriction des types MIME** : L'élément `<input type="file">` est configuré pour n'accepter que les images (`accept="image/*"`).
+- **Limite de taille dynamique** : Une vérification stricte est appliquée sur `file.size` (max 20 Mo par photo) avant tout chargement ou conversion en mémoire afin d'éviter le blocage/OOM du navigateur.
+- **Redimensionnement et re-encodage dynamique** : Avant d'être intégrées au payload, les images sont lues et redimensionnées via l'API Canvas HTML5 (`canvas.toDataURL('image/jpeg')`). Cela neutralise l'exécution potentielle de scripts exécutables cachés dans les métadonnées ou le conteneur du fichier original.
+
+### Contrôles côté Serveur (Back-end)
+
+- **Contrôle de taille binaire (Anti-DoS)** : Rejet strict des images décodées dépassant 20 Mo (`MAX_IMAGE_BYTES`).
+- **Validation du format par Magic Bytes (`filetype`)** : Le serveur ne se fie pas à l'extension fournie ou au type MIME déclaré dans l'en-tête de la requête. Chaque image transmise est analysée au niveau binaire à l'aide de la bibliothèque `filetype` et filtrée via une liste blanche stricte de types MIME (`image/jpeg`, `image/png`, `image/webp`).
+- **Validation stricte de l'extension** : Vérification que l'extension détectée fait partie d'une liste autorisée (`.jpg`, `.jpeg`, `.png`, `.webp`). Rejet immédiat en cas de non-conformité.
+- **Protection contre les bombes de décompression (_Decompression Bomb_)** : Définition d'un seuil maximal de résolution (`Image.MAX_IMAGE_PIXELS = 25_000_000`) via la bibliothèque `Pillow` pour prévenir les attaques par déni de service mémoire.
+- **Vérification de structure et assainissement (Pillow)** : Analyse d'intégrité binaire de l'image (`img.verify()`) puis ré-encodage complet du flux d'image pour supprimer tout EXIF malveillant ou script injecté (stéganographie).
+- **Isolation des fichiers temporaires et nettoyage** : Les images traitées sont stockées temporairement via `tempfile.NamedTemporaryFile` et supprimées du disque (`os.unlink`) dès la génération du rapport terminée.

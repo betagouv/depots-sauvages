@@ -165,6 +165,9 @@ const compressImage = (
   })
 }
 
+const MAX_FILE_SIZE_MB = 20
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024
+
 const handleFileUpload = async (event: Event) => {
   const target = event.target as HTMLInputElement
   if (!target.files) return
@@ -175,6 +178,10 @@ const handleFileUpload = async (event: Event) => {
 
   const files = Array.from(target.files)
   for (const file of files) {
+    if (file.size > MAX_FILE_SIZE_BYTES) {
+      alert(`Le fichier "${file.name}" dépasse la taille maximale autorisée de ${MAX_FILE_SIZE_MB} Mo.`)
+      continue
+    }
     try {
       const compressedBase64 = await compressImage(file)
       store.formData.photos.push(compressedBase64)

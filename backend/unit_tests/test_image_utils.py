@@ -27,3 +27,18 @@ def test_save_base64_to_temp_file_invalid_image():
 def test_save_base64_to_temp_file_empty():
     assert save_base64_to_temp_file("") is None
     assert save_base64_to_temp_file(None) is None
+
+
+def test_save_base64_to_temp_file_unsupported_extension(mocker):
+    png_data_uri = (
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJ"
+        "AAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+    )
+    mock_kind = mocker.MagicMock()
+    mock_kind.mime = "image/png"
+    mock_kind.extension = "exe"  # Extension suspecte/non autorisée
+
+    mocker.patch("filetype.guess", return_value=mock_kind)
+    assert save_base64_to_temp_file(png_data_uri) is None
+
+
