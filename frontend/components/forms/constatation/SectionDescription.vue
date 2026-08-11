@@ -18,40 +18,12 @@
     </div>
 
     <div v-if="store.formData.photoDispo" class="fr-fieldset__element fr-mb-3w">
-      <label class="fr-label" for="photo-upload-input">
-        Ajouter des photos du dépôt
-        <span class="fr-hint-text"
-          >Formats acceptés : JPG, PNG. Vous pouvez sélectionner plusieurs photos.</span
-        >
-      </label>
-      <input
-        id="photo-upload-input"
-        class="fr-upload"
-        type="file"
-        accept="image/*"
-        multiple
-        @change="handleFileUpload"
+      <PhotoUploader
+        v-model="store.formData.photos"
+        label="Ajouter des photos du dépôt"
+        hint="Formats acceptés : JPG, PNG (Max 20 Mo par photo). Vous pouvez ajouter ou glisser-déposer plusieurs photos."
+        @change="store.autoSave()"
       />
-      <div v-if="(store.formData.photos || []).length > 0" class="fr-mt-2w">
-        <p class="fr-text--sm fr-mb-1w">
-          <strong>{{ store.formData.photos.length }} photo(s) chargée(s) :</strong>
-        </p>
-        <div class="photo-preview-grid">
-          <div
-            v-for="(photo, index) in store.formData.photos"
-            :key="index"
-            class="photo-preview-item"
-          >
-            <img :src="photo" alt="Aperçu photo" class="photo-thumbnail" />
-            <button
-              type="button"
-              class="fr-btn fr-btn--tertiary-no-outline fr-btn--sm fr-icon-delete-line"
-              title="Supprimer la photo"
-              @click="removePhoto(index)"
-            />
-          </div>
-        </div>
-      </div>
     </div>
 
     <div class="fr-fieldset__element fr-mb-4w">
@@ -113,116 +85,11 @@
 </template>
 
 <script setup lang="ts">
+import PhotoUploader from '@/components/forms/constatation/PhotoUploader.vue'
 import BooleanRadioSet from '@/components/shared/BooleanRadioSet.vue'
 import { useConstatationStore } from '@/stores/constatation'
 import { TypeDepotOptions, VolumeOptions } from '@/types/constatation'
 import { DsfrCheckboxSet, DsfrInputGroup, DsfrRadioButtonSet } from '@gouvminint/vue-dsfr'
 
 const store = useConstatationStore()
-
-const compressImage = (
-  file: File,
-  maxWidth = 1600,
-  maxHeight = 1600,
-  quality = 0.8
-): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      const img = new Image()
-      img.onload = () => {
-        let width = img.width
-        let height = img.height
-
-        if (width > maxWidth || height > maxHeight) {
-          if (width / height > maxWidth / maxHeight) {
-            height = Math.round((height * maxWidth) / width)
-            width = maxWidth
-          } else {
-            width = Math.round((width * maxHeight) / height)
-            height = maxHeight
-          }
-        }
-
-        const canvas = document.createElement('canvas')
-        canvas.width = width
-        canvas.height = height
-        const ctx = canvas.getContext('2d')
-        if (!ctx) {
-          resolve(e.target?.result as string)
-          return
-        }
-
-        ctx.drawImage(img, 0, 0, width, height)
-        const compressedDataUrl = canvas.toDataURL('image/jpeg', quality)
-        resolve(compressedDataUrl)
-      }
-      img.onerror = () => reject(new Error("Erreur de chargement de l'image"))
-      img.src = e.target?.result as string
-    }
-    reader.onerror = (err) => reject(err)
-    reader.readAsDataURL(file)
-  })
-}
-
-const MAX_FILE_SIZE_MB = 20
-const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024
-
-const handleFileUpload = async (event: Event) => {
-  const target = event.target as HTMLInputElement
-  if (!target.files) return
-
-  if (!Array.isArray(store.formData.photos)) {
-    store.formData.photos = []
-  }
-
-  const files = Array.from(target.files)
-  for (const file of files) {
-    if (file.size > MAX_FILE_SIZE_BYTES) {
-      alert(`Le fichier "${file.name}" dépasse la taille maximale autorisée de ${MAX_FILE_SIZE_MB} Mo.`)
-      continue
-    }
-    try {
-      const compressedBase64 = await compressImage(file)
-      store.formData.photos.push(compressedBase64)
-    } catch (err) {
-      console.error('Erreur lors de la compression de la photo:', err)
-    }
-  }
-  store.autoSave()
-  target.value = ''
-}
-
-const removePhoto = (index: number) => {
-  if (Array.isArray(store.formData.photos)) {
-    store.formData.photos.splice(index, 1)
-    store.autoSave()
-  }
-}
 </script>
-
-<style scoped>
-.photo-preview-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.photo-preview-item {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border: 1px solid var(--border-default-grey);
-  border-radius: 4px;
-  padding: 0.5rem;
-  background-color: var(--background-alt-grey);
-}
-
-.photo-thumbnail {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 4px;
-}
-</style>
