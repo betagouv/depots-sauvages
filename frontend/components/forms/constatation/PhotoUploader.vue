@@ -5,10 +5,9 @@
       <span v-if="hint" class="fr-hint-text">{{ hint }}</span>
     </label>
 
-    <!-- Zone d'upload / Drag & Drop -->
     <div
       class="dropzone-container fr-mt-2w"
-      :class="{ 'is-dragging': isDragging }"
+      :class="{ 'is-dragging': isDragging, 'is-processing': isProcessing }"
       @dragover.prevent="onDragOver"
       @dragenter.prevent="onDragEnter"
       @dragleave.prevent="onDragLeave"
@@ -21,22 +20,30 @@
         multiple
         accept="image/jpeg,image/png,image/webp,image/heic,image/heif"
         class="file-input-hidden"
+        :disabled="isProcessing"
         @change="onFileSelect"
       />
 
       <div class="dropzone-content">
-        <span class="fr-icon-add-circle-line dropzone-icon" aria-hidden="true"></span>
-        <p class="dropzone-title fr-mb-1v">
-          <strong>Glissez-déposez vos photos ici</strong> ou
-          <span class="browse-link">parcourez vos fichiers</span>
-        </p>
-        <p class="dropzone-note fr-text--xs fr-mb-0">
-          {{ note }}
-        </p>
+        <template v-if="isProcessing">
+          <span class="fr-icon-refresh-line dropzone-icon spinner" aria-hidden="true"></span>
+          <p class="dropzone-title fr-mb-1v">
+            <strong>Optimisation de la photo en cours...</strong>
+          </p>
+        </template>
+        <template v-else>
+          <span class="fr-icon-add-circle-line dropzone-icon" aria-hidden="true"></span>
+          <p class="dropzone-title fr-mb-1v">
+            <span class="hide-mobile"> <strong>Glissez-déposez vos photos ici</strong> ou </span>
+            <span class="browse-link">parcourez vos fichiers</span>
+          </p>
+          <p class="dropzone-note fr-text--xs fr-mb-0">
+            {{ note }}
+          </p>
+        </template>
       </div>
     </div>
 
-    <!-- Grille unique de prévisualisation et gestion des photos -->
     <div v-if="modelValue.length > 0" class="fr-mt-3w">
       <p class="fr-text--sm fr-mb-2w">
         <strong>{{ modelValue.length }} photo(s) ajoutée(s) :</strong>
@@ -84,9 +91,12 @@ const emit = defineEmits<{
 
 const fileInputRef = ref<HTMLInputElement | null>(null)
 const isDragging = ref(false)
+const isProcessing = ref(false)
 
 const triggerFileInput = () => {
-  fileInputRef.value?.click()
+  if (!isProcessing.value) {
+    fileInputRef.value?.click()
+  }
 }
 
 const onDragEnter = () => {
@@ -98,7 +108,6 @@ const onDragOver = () => {
 }
 
 const onDragLeave = (e: DragEvent) => {
-  // Éviter le clignotement lors du survol des enfants de la dropzone
   if (!(e.currentTarget as HTMLElement).contains(e.relatedTarget as Node)) {
     isDragging.value = false
   }
@@ -115,13 +124,69 @@ const onFileSelect = (e: Event) => {
   const target = e.target as HTMLInputElement
   if (target.files && target.files.length > 0) {
     processFiles(Array.from(target.files))
-    target.value = '' // Reset de l'input pour réautoriser l'ajout du même fichier si besoin
+    target.value = ''
   }
 }
 
+/**
+ * Fallback image compression using native Canvas if Compressor.js fails.
+ */
+const compressWithCanvasFallback = (file: File): Promise<Blob | File> => {
+  return new Promise((resolve) => {
+    const img = new Image()
+    const url = URL.createObjectURL(file)
+
+    const cleanup = () => URL.revokeObjectURL(url)
+
+    img.onload = () => {
+      const MAX_SIZE = 1600
+      let { width, height } = img
+
+      if (width > MAX_SIZE || height > MAX_SIZE) {
+        if (width > height) {
+          height = Math.round((height * MAX_SIZE) / width)
+          width = MAX_SIZE
+        } else {
+          width = Math.round((width * MAX_SIZE) / height)
+          height = MAX_SIZE
+        }
+      }
+
+      const canvas = document.createElement('canvas')
+      canvas.width = width
+      canvas.height = height
+      const ctx = canvas.getContext('2d')
+      if (!ctx) {
+        cleanup()
+        resolve(file)
+        return
+      }
+
+      ctx.drawImage(img, 0, 0, width, height)
+      canvas.toBlob(
+        (blob) => {
+          cleanup()
+          resolve(blob && blob.size < file.size ? blob : file)
+        },
+        'image/jpeg',
+        0.8
+      )
+    }
+
+    img.onerror = () => {
+      cleanup()
+      resolve(file)
+    }
+
+    img.src = url
+  })
+}
+
+/**
+ * Compress image using Compressor.js or native Canvas fallback.
+ */
 const compressImage = (file: File): Promise<Blob | File> => {
   return new Promise((resolve) => {
-    // Si ce n'est pas une image standard ou déjà très petite, résoudre directement
     if (!file.type.startsWith('image/')) {
       resolve(file)
       return
@@ -134,9 +199,10 @@ const compressImage = (file: File): Promise<Blob | File> => {
       success(result) {
         resolve(result)
       },
-      error(err) {
-        console.warn('Erreur lors de la compression, utilisation de la photo originale:', err)
-        resolve(file)
+      async error(err) {
+        console.warn('Erreur Compressor.js, fallback Canvas natif:', err)
+        const fallbackResult = await compressWithCanvasFallback(file)
+        resolve(fallbackResult)
       },
     })
   })
@@ -165,6 +231,7 @@ const processFiles = async (files: File[]) => {
 
   if (validFiles.length === 0) return
 
+  isProcessing.value = true
   try {
     const newBase64List: string[] = []
     for (const file of validFiles) {
@@ -178,6 +245,8 @@ const processFiles = async (files: File[]) => {
     emit('change')
   } catch (err) {
     console.error('Erreur lors du traitement des images:', err)
+  } finally {
+    isProcessing.value = false
   }
 }
 
@@ -215,10 +284,28 @@ const removePhoto = (index: number) => {
   box-shadow: 0 4px 12px rgba(0, 0, 145, 0.08);
 }
 
+.dropzone-container.is-processing {
+  cursor: wait;
+  opacity: 0.8;
+}
+
 .dropzone-icon {
   font-size: 2rem;
   color: var(--text-action-high-blue-france, #000091);
   margin-bottom: 0.5rem;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .dropzone-title {
@@ -281,6 +368,10 @@ const removePhoto = (index: number) => {
 
 /* Optimisations mobiles */
 @media (max-width: 576px) {
+  .hide-mobile {
+    display: none;
+  }
+
   .dropzone-container {
     padding: 1.5rem 1rem;
     border-radius: 8px;
