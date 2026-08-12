@@ -122,6 +122,7 @@ export interface Constatation {
   typesDepot: TypeDepot[]
   precisionsDepot: string
   photoDispo: boolean
+  photos: string[]
 
   // Responsable
   auteurIdentifie: boolean | null
@@ -194,6 +195,7 @@ export const createEmptyConstatation = (): Constatation => ({
   typesDepot: [],
   precisionsDepot: '',
   photoDispo: false,
+  photos: [],
   auteurIdentifie: null,
   statutAuteur: '',
   auteurCivilite: '',

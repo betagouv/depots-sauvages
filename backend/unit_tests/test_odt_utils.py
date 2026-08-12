@@ -113,3 +113,23 @@ def test_prepare_context_auteur_adresse_regex(monkeypatch):
     assert context["auteur_adresse_l2"] == "75001 Paris"
     assert context["constatant_role_needs_elision"] is True
     assert context["auteur_nom_complet"] == "Marcel Martin"
+
+
+def test_prepare_context_with_photos(monkeypatch, tmp_path):
+    initial_dict = {
+        "constatant_role": "Maire",
+    }
+    monkeypatch.setattr(
+        "backend.doc_maker.odt_utils.model_to_dict", lambda inst: initial_dict.copy()
+    )
+    mock_inst = MagicMock()
+    mock_inst.get_prejudice_montant_calcule.return_value = 0
+    mock_inst.souhaite_porter_plainte = False
+    # Base64 string representing dummy image content
+    mock_inst.photos = [
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+    ]
+    context = prepare_context(mock_inst)
+    assert "photos" in context
+    assert len(context["photos"]) == 1
+    assert context["photos"][0].endswith(".png")

@@ -11,9 +11,18 @@
       <BooleanRadioSet
         v-model="store.formData.photoDispo"
         legend="Disposez vous de photos du dépôt ?"
-        hint="À la fin de cette démarche, vous pourrez récupérer le rapport de constatation. Vous devrez y insérer vos photos."
+        hint="À la fin de cette démarche, vous pourrez récupérer le rapport de constatation. Vous pourrez les joindre ci-dessous."
         id-prefix="photo-dispo"
         :required="true"
+      />
+    </div>
+
+    <div v-if="store.formData.photoDispo" class="fr-fieldset__element fr-mb-3w">
+      <PhotoUploader
+        v-model="store.formData.photos"
+        label="Ajouter des photos du dépôt"
+        hint="Formats acceptés : JPG, PNG (Max 20 Mo par photo). Vous pouvez ajouter ou glisser-déposer plusieurs photos."
+        @change="store.autoSave()"
       />
     </div>
 
@@ -76,6 +85,7 @@
 </template>
 
 <script setup lang="ts">
+import PhotoUploader from '@/components/forms/constatation/PhotoUploader.vue'
 import BooleanRadioSet from '@/components/shared/BooleanRadioSet.vue'
 import { useConstatationStore } from '@/stores/constatation'
 import { TypeDepotOptions, VolumeOptions } from '@/types/constatation'

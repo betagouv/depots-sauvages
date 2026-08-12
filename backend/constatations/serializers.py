@@ -12,7 +12,11 @@ class ConstatationSerializer(serializers.ModelSerializer):
     date_constat = serializers.DateField(required=False, allow_null=True)
     heure_constat = serializers.TimeField(required=False, allow_null=True)
     auteur_identifie = serializers.BooleanField(required=False, allow_null=True)
-
+    photos = serializers.ListField(
+        child=serializers.CharField(),
+        required=False,
+        default=list,
+    )
 
     class Meta:
         model = Constatation
@@ -36,6 +40,7 @@ class ConstatationSerializer(serializers.ModelSerializer):
             "types_depot",
             "precisions_depot",
             "photo_dispo",
+            "photos",
             "risque_ecoulement",
             "auteur_identifie",
             "statut_auteur",
@@ -114,5 +119,3 @@ class ConstatationSerializer(serializers.ModelSerializer):
         for key, val in flags.items():
             validated_data[key] = val
         return super().create(validated_data)
-
-

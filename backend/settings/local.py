@@ -123,3 +123,6 @@ BYPASS_AUTH_ENABLED = env.bool("BYPASS_AUTH_ENABLED", default=False)
 
 if BYPASS_AUTH_ENABLED:
     AUTHENTICATION_BACKENDS.insert(0, "backend.bypass_auth.auth.BypassAuthBackend")
+
+# Maximum request body size for uploads (Base64 photos batching)
+DATA_UPLOAD_MAX_MEMORY_SIZE = env.int("DATA_UPLOAD_MAX_MEMORY_SIZE", default=26214400)  # 25 MB
