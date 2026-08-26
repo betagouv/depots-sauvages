@@ -32,6 +32,8 @@ faker = "*"
 filetype = "*"
 pillow = "*"
 django-filter = "*"
+django-storages = "*"
+boto3 = "*"
 
 [dev-packages]
 black = "*"

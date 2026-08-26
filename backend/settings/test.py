@@ -51,3 +51,12 @@ AUTHENTICATION_BACKENDS = [
     "backend.bypass_auth.auth.BypassAuthBackend",
     "django.contrib.auth.backends.ModelBackend",
 ]
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
