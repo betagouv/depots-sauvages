@@ -1,5 +1,5 @@
 <template>
-  <DsfrModal :opened="opened" :title="title" :is-alert="true" @close="$emit('close')">
+  <DsfrModal :opened="opened" :title="title" :is-alert="true" size="lg" @close="$emit('close')">
     <form @submit.prevent="submitForm" class="fr-container--fluid fr-p-0 blog-edit-form">
       <div class="fr-grid-row fr-grid-row--gutters">
         <div class="fr-col-12">
