@@ -101,6 +101,19 @@ export interface BackofficeState {
     arWaiting: number
     decisionToTake: number
     closed: number
+    generalStats?: {
+      total: number
+      real: number
+      test: number
+      authorIdentified: number
+      authorNotIdentified: number
+    }
+    steps?: {
+      identified: Record<number, number>
+      notIdentified: Record<number, number>
+    }
+    byStatus?: Record<string, number>
+    workloadByAssigneeId?: Record<string, number>
   }
 }
 
@@ -120,13 +133,28 @@ export const useBackofficeStore = defineStore('backoffice', {
       return state.procedures.find((p) => p.id === Number(id))
     },
     workloadByAssignee: (state) => {
+      if (state.stats.workloadByAssigneeId) {
+        const counts: Record<string, number> = {}
+        state.assignees.forEach((assignee) => {
+          counts[assignee.name] = 0
+        })
+        Object.entries(state.stats.workloadByAssigneeId).forEach(([key, count]) => {
+          const id = key === 'null' || key === 'None' ? null : Number(key)
+          const assignee = state.assignees.find((a) => a.id === id)
+          const name = assignee ? assignee.name : 'Non assigné'
+          counts[name] = (counts[name] || 0) + count
+        })
+        return Object.fromEntries(
+          Object.entries(counts).filter(([name, count]) => name === 'Non assigné' || count > 0)
+        )
+      }
       const realProcs = state.procedures.filter((p) => !p.ceci_est_un_test)
       const counts: Record<string, number> = {}
       state.assignees.forEach((assignee) => {
         counts[assignee.name] = 0
       })
       realProcs.forEach((p) => {
-        const id = p.suivi_procedure.personne_assignee
+        const id = p.suivi_procedure?.personne_assignee
         const assignee = state.assignees.find((a) => a.id === id)
         const name = assignee ? assignee.name : 'Non assigné'
         if (counts[name] !== undefined) {
@@ -135,12 +163,14 @@ export const useBackofficeStore = defineStore('backoffice', {
           counts[name] = 1
         }
       })
-      // Filter out assignees with count === 0, except for 'Non assigné'
       return Object.fromEntries(
         Object.entries(counts).filter(([name, count]) => name === 'Non assigné' || count > 0)
       )
     },
     proceduresByStatus: (state) => {
+      if (state.stats.byStatus) {
+        return state.stats.byStatus
+      }
       const realProcs = state.procedures.filter((p) => !p.ceci_est_un_test)
       const counts: Record<string, number> = {
         Nouveau: 0,
@@ -158,6 +188,9 @@ export const useBackofficeStore = defineStore('backoffice', {
       return counts
     },
     generalStats: (state) => {
+      if (state.stats.generalStats) {
+        return state.stats.generalStats
+      }
       const total = state.procedures.length
       const real = state.procedures.filter((p) => !p.ceci_est_un_test).length
       const test = state.procedures.filter((p) => p.ceci_est_un_test).length
@@ -177,12 +210,15 @@ export const useBackofficeStore = defineStore('backoffice', {
       }
     },
     proceduresByStepAndAuthor: (state) => {
+      if (state.stats.steps) {
+        return state.stats.steps
+      }
       const realProcs = state.procedures.filter((p) => !p.ceci_est_un_test)
       const identified: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
       const notIdentified: Record<number, number> = { 1: 0, 2: 0, 3: 0, 5: 0 }
 
       realProcs.forEach((p) => {
-        const etape = p.suivi_procedure.etape_en_cours
+        const etape = p.suivi_procedure?.etape_en_cours ?? 1
         if (p.auteur_identifie) {
           if (etape >= 5) {
             identified[5]++
@@ -250,37 +286,27 @@ export const useBackofficeStore = defineStore('backoffice', {
     toggleSuiviField(procedureId: number, field: string) {
       const procedure = this.procedures.find((p) => p.id === procedureId)
       if (procedure && procedure.suivi_procedure) {
-        if (field === 'preuves') {
-          procedure.suivi_procedure.preuves_fournies = !procedure.suivi_procedure.preuves_fournies
-        } else if (field === 'rapportSigne') {
-          procedure.suivi_procedure.constatation_signee =
-            !procedure.suivi_procedure.constatation_signee
-        } else if (field === 'lettreSignee') {
-          procedure.suivi_procedure.lettre_signe = !procedure.suivi_procedure.lettre_signe
-        } else if (field === 'auteurIdentifie') {
-          const current = procedure.suivi_procedure.identification_reussie
-          procedure.suivi_procedure.identification_reussie =
-            current === true ? false : current === false ? null : true
-        }
+        const current = (procedure.suivi_procedure as any)[field]
+        ;(procedure.suivi_procedure as any)[field] = !current
         this.saveSuivi(procedureId)
       }
     },
-
     async fetchAssignees() {
       try {
-        const data = await fetchResource(`${API_URL}/backoffice-staff/`)
-        const fetched = (data as any[]).map((u) => ({
-          id: u.id,
-          name: u.name,
-          email: u.email,
-        }))
-        this.assignees = [{ id: null, name: 'Non assigné' }, ...fetched]
+        const staff = await fetchResource(`${API_URL}/backoffice-staff/`)
+        if (Array.isArray(staff)) {
+          this.assignees = [
+            { id: null, name: 'Non assigné' },
+            ...staff.map((s: any) => ({ id: s.id, name: s.name, email: s.email })),
+          ]
+        }
       } catch (error) {
-        console.error('Failed to fetch assignees:', error)
+        console.error('Failed to fetch staff assignees:', error)
       }
     },
     async fetchDashboardStats() {
       try {
+        await this.fetchAssignees()
         const data = await fetchResource(`${API_URL}/backoffice-dashboard-stats/`)
         if (data) {
           this.stats = {
@@ -295,7 +321,11 @@ export const useBackofficeStore = defineStore('backoffice', {
     async fetchProcedures() {
       try {
         const data = await fetchResource(`${API_URL}/backoffice-procedures/`)
-        this.procedures = data as BackofficeProcedure[]
+        if (data && typeof data === 'object' && 'results' in data) {
+          this.procedures = data.results as BackofficeProcedure[]
+        } else {
+          this.procedures = data as BackofficeProcedure[]
+        }
         await this.fetchAssignees()
         await this.fetchDashboardStats()
       } catch (error) {

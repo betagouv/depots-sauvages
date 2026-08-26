@@ -81,7 +81,11 @@ const selectedProcedureId = computed(() => {
 })
 
 onMounted(async () => {
-  await store.fetchProcedures()
+  if (currentTab.value === 'dashboard') {
+    await store.fetchDashboardStats()
+  } else {
+    await store.fetchProcedures()
+  }
 })
 
 const viewDetail = (id: number) => {
