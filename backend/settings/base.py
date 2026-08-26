@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     # Third party apps
     "django_extensions",
     "rest_framework",
+    "django_filters",
     "trackman",
     "drf_spectacular",
     "corsheaders",

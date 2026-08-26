@@ -73,14 +73,18 @@
       </div>
     </div>
 
-    <!-- Count display / info bar -->
-    <div class="fr-mb-2w bo-info-bar">
+    <!-- Count display / info bar & Pagination controls -->
+    <div class="fr-mb-2w bo-info-bar" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem">
       <span class="fr-text--sm fr-text-mention--grey">
-        Nombre de procédures : <strong>{{ filteredProcedures.length }}</strong>
-        <span v-if="filteredProcedures.length !== store.procedures.length">
-          sur {{ store.procedures.length }} au total
-        </span>
+        Nombre de procédures : <strong>{{ store.procedures.length }}</strong> sur <strong>{{ store.totalProceduresCount }}</strong> au total
       </span>
+      <DsfrPagination
+        v-if="totalPages > 1"
+        :current-page="page"
+        :first-page="1"
+        :last-page="totalPages"
+        @update:current-page="changePage"
+      />
     </div>
 
     <!-- Procedures Grid Table -->
@@ -109,9 +113,8 @@
                     <button
                       class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline bo-btn-close-sm"
                       @click="showCustomizer = false"
-                      aria-label="Fermer"
                     >
-                      <span class="fr-icon-close-line" aria-hidden="true"></span>
+                      ✕
                     </button>
                   </div>
                   <div class="bo-customizer-list">
@@ -130,9 +133,9 @@
             <th v-if="visibleColumns.id">ID</th>
             <th v-if="visibleColumns.commune">Commune</th>
             <th v-if="visibleColumns.agent">Agent constatant</th>
-            <th v-if="visibleColumns.date_constat">Date Constat</th>
-            <th v-if="visibleColumns.etape">Étape</th>
-            <th v-if="visibleColumns.traitement">Traitement</th>
+            <th v-if="visibleColumns.date_constat">Date constat</th>
+            <th v-if="visibleColumns.etape">Étape active</th>
+            <th v-if="visibleColumns.traitement">Statut traitement</th>
             <th v-if="visibleColumns.montant_amende">Montant amende</th>
             <th v-if="visibleColumns.montant_prejudice">Montant préjudice</th>
             <th v-if="visibleColumns.assigne_a">Assigné à</th>
@@ -140,12 +143,11 @@
           </tr>
         </thead>
         <tbody>
-          <template v-for="procedure in filteredProcedures" :key="procedure.id">
-            <tr>
-              <td>
+          <template v-for="procedure in store.procedures" :key="procedure.id">
+            <tr :class="{ 'bo-row-expanded': isExpanded(procedure.id) }">
+              <td class="bo-td-chevron">
                 <button
-                  class="bo-chevron-btn"
-                  :class="{ 'bo-chevron-btn--expanded': isExpanded(procedure.id) }"
+                  class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline bo-btn-chevron"
                   @click="toggleRow(procedure.id)"
                   :aria-label="
                     isExpanded(procedure.id) ? 'Masquer les détails' : 'Afficher les détails'
@@ -165,11 +167,11 @@
                 {{ formatConstatationDate(procedure.date_constat) }}
               </td>
               <td v-if="visibleColumns.etape">
-                <span :class="getBadgeClass(procedure.suivi_procedure.etape_en_cours)">
-                  {{ procedure.suivi_procedure.etape_en_cours }}.
+                <span :class="getBadgeClass(procedure.suivi_procedure?.etape_en_cours ?? 1)">
+                  {{ procedure.suivi_procedure?.etape_en_cours ?? 1 }}.
                   {{
                     getStepLabel(
-                      procedure.suivi_procedure.etape_en_cours,
+                      procedure.suivi_procedure?.etape_en_cours ?? 1,
                       procedure.auteur_identifie
                     )
                   }}
@@ -181,7 +183,7 @@
                 </span>
               </td>
               <td v-if="visibleColumns.montant_amende">
-                <span v-if="procedure.suivi_procedure.montant_amende">
+                <span v-if="procedure.suivi_procedure?.montant_amende">
                   {{ procedure.suivi_procedure.montant_amende }} €
                 </span>
                 <span v-else class="fr-text-mention--grey">-</span>
@@ -194,7 +196,7 @@
               </td>
               <td v-if="visibleColumns.assigne_a">
                 {{
-                  store.assignees.find((a) => a.id === procedure.suivi_procedure.personne_assignee)
+                  store.assignees.find((a) => a.id === procedure.suivi_procedure?.personne_assignee)
                     ?.name || 'Non assigné'
                 }}
               </td>
@@ -225,13 +227,13 @@
                     </div>
                     <div
                       class="fr-col-12 fr-col-md-6 fr-col-lg-4"
-                      v-if="procedure.suivi_procedure.observations_internes || procedure.suivi_procedure.nettoyage_fait"
+                      v-if="procedure.suivi_procedure?.observations_internes || procedure.suivi_procedure?.nettoyage_fait"
                     >
                       <DetailTabObservations :procedure="procedure" />
                     </div>
                     <div
                       class="fr-col-12 fr-col-md-6 fr-col-lg-4"
-                      v-if="procedure.suivi_procedure.notes_traitement"
+                      v-if="procedure.suivi_procedure?.notes_traitement"
                     >
                       <DetailTabNotesTraitement :procedure="procedure" />
                     </div>
@@ -240,7 +242,7 @@
               </td>
             </tr>
           </template>
-          <tr v-if="filteredProcedures.length === 0">
+          <tr v-if="store.procedures.length === 0">
             <td :colspan="activeColumnsCount" class="fr-text-center fr-py-3w fr-text-mention--grey">
               Aucune procédure ne correspond aux filtres appliqués.
             </td>
@@ -288,46 +290,69 @@ const filters = ref({
   search: parseQueryParam(route.query.search, ''),
 })
 
+const page = ref(1)
+const pageSize = 50
+
+const pageFromQuery = computed(() => {
+  const p = route.query.page
+  return p ? parseInt(p as string, 10) : 1
+})
+
+const totalPages = computed(() => {
+  return Math.ceil(store.totalProceduresCount / pageSize) || 1
+})
+
+const changePage = (newPage: number) => {
+  if (newPage >= 1 && newPage <= totalPages.value) {
+    router.push({
+      query: {
+        ...route.query,
+        page: newPage.toString(),
+      },
+    })
+  }
+}
+
+const fetchBackendProcedures = async () => {
+  await store.fetchProcedures({
+    page: route.query.page || 1,
+    etape: route.query.etape,
+    traitement: route.query.traitement,
+    assignee: route.query.assignee,
+    casReels: route.query.casReels ?? 'Oui',
+    auteurIdentifie: route.query.auteurIdentifie,
+    search: route.query.search,
+  })
+}
+
 // Sync filters changes with route queries
 watch(
   filters,
   (newFilters) => {
-    const query = { ...route.query }
+    const query: Record<string, string> = {}
 
     if (newFilters.etape && newFilters.etape !== 'Tous') {
       query.etape = newFilters.etape.toString()
-    } else {
-      delete query.etape
     }
 
     if (newFilters.traitement && newFilters.traitement !== 'Tous') {
       query.traitement = newFilters.traitement
-    } else {
-      delete query.traitement
     }
 
     if (newFilters.assignee && newFilters.assignee !== 'Tous') {
       query.assignee = newFilters.assignee
-    } else {
-      delete query.assignee
     }
 
     if (newFilters.casReels && newFilters.casReels !== 'Oui') {
       query.casReels = newFilters.casReels
-    } else {
-      delete query.casReels
     }
 
     if (newFilters.auteurIdentifie && newFilters.auteurIdentifie !== 'Tous') {
       query.auteurIdentifie = newFilters.auteurIdentifie
-    } else {
-      delete query.auteurIdentifie
     }
 
     if (newFilters.search) {
       query.search = newFilters.search
-    } else {
-      delete query.search
     }
 
     router.replace({ query })
@@ -335,19 +360,22 @@ watch(
   { deep: true }
 )
 
-// Sync route query changes back to local filters (e.g. browser back/forward)
+// Sync route query changes to backend fetch
 watch(
   () => route.query,
-  (newQuery) => {
+  async (newQuery) => {
     if (route.path === '/procedures-liste') {
+      page.value = parseQueryParam(newQuery.page, 1)
       filters.value.etape = parseQueryParam(newQuery.etape, 'Tous')
       filters.value.traitement = parseQueryParam(newQuery.traitement, 'Tous')
       filters.value.assignee = parseQueryParam(newQuery.assignee, 'Tous')
       filters.value.casReels = parseQueryParam(newQuery.casReels, 'Oui')
       filters.value.auteurIdentifie = parseQueryParam(newQuery.auteurIdentifie, 'Tous')
       filters.value.search = parseQueryParam(newQuery.search, '')
+      await fetchBackendProcedures()
     }
-  }
+  },
+  { immediate: true }
 )
 
 // Column customization state
