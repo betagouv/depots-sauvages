@@ -54,3 +54,18 @@ class TestGuillotineModels:
         top_level_count = FAQItem.objects.filter(parent=None).count()
         new_top_level = FAQItem.objects.create(title="New Top Level", parent=None)
         assert new_top_level.order == top_level_count + 1
+
+    def test_ordered_content_move_up_and_down(self):
+        item1 = FAQItem.objects.create(title="Item 1", parent=None, order=1)
+        item2 = FAQItem.objects.create(title="Item 2", parent=None, order=2)
+        assert item2.move_up() is True
+        item1.refresh_from_db()
+        item2.refresh_from_db()
+        assert item2.order == 1
+        assert item1.order == 2
+        assert item2.move_up() is False
+        assert item2.move_down() is True
+        item1.refresh_from_db()
+        item2.refresh_from_db()
+        assert item2.order == 2
+        assert item1.order == 1

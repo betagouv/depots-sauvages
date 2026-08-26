@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "backend.faq",
     "backend.seo",
     "backend.site_content",
+    "backend.blog",
     "backend.stats",
     "backend.activity_logs",
 ]
@@ -123,6 +124,10 @@ STATIC_ROOT = PROJECT_ROOT / "dist" / "static"
 STATICFILES_DIRS = [
     PROJECT_ROOT / "static",
 ]
+
+# Media files
+MEDIA_URL = "/media/"
+MEDIA_ROOT = PROJECT_ROOT / "media"
 
 
 # DRF Settings

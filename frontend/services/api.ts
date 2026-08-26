@@ -41,18 +41,24 @@ async function makeRequest(
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
   data?: any
 ) {
+  const isFormData = typeof FormData !== 'undefined' && data instanceof FormData
+
+  const headers: Record<string, string> = {
+    'X-CSRFToken': getCSRFToken() || '',
+  }
+  if (!isFormData) {
+    headers['Content-Type'] = 'application/json'
+  }
+
   const options: RequestInit = {
     method,
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRFToken': getCSRFToken() || '',
-    },
+    headers,
     credentials: 'include',
   }
 
   // Only include body for POST, PUT and PATCH requests
   if (method !== 'GET' && method !== 'DELETE' && data) {
-    options.body = JSON.stringify(data)
+    options.body = isFormData ? data : JSON.stringify(data)
   }
 
   const response = await fetch(url, options)

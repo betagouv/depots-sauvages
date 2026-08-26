@@ -6,12 +6,15 @@ from django.views.generic import RedirectView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework.routers import DefaultRouter
 
+from django.conf.urls.static import static
+
 from backend.activity_logs.api_views import UserActionTrackingView
 from backend.backoffice.views import (
     BackofficeDashboardStatsViewSet,
     BackofficeProceduresViewSet,
     BackofficeStaffViewSet,
 )
+from backend.blog.views import BlogArticleViewSet
 from backend.bypass_auth.views import BypassAuthConfigView, BypassAuthLoginView
 from backend.constatations.views import ConstatationDocumentDownloadView, ConstatationViewSet
 from backend.current_user.views import UserInfoViewSet, logout_view
@@ -38,6 +41,7 @@ router.register("backoffice-staff", BackofficeStaffViewSet, basename="backoffice
 router.register("constatations", ConstatationViewSet, basename="constatation")
 router.register("faq-items", FAQItemViewSet, basename="faq-item")
 router.register("site-content", SiteContentViewSet, basename="site-content")
+router.register("blog-articles", BlogArticleViewSet, basename="blog-article")
 
 
 # Admin Routes
@@ -119,11 +123,15 @@ if getattr(settings, "SENTRY_DEBUG", False):
 # Robots.txt Route
 urlpatterns.append(path("robots.txt", RobotsTxtView.as_view(), name="robots_txt"))
 
+# Media files in debug / local dev
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 # Frontend Routes
 # This is a catch-all pattern that serves the compiled frontend.
 # It must be placed at the very end of urlpatterns so that it doesn't
 # intercept requests intended for other routes like API, Admin, or OIDC.
 admin_url = settings.ADMIN_URL_NAME.rstrip("/")
 urlpatterns.append(
-    re_path(r"^(?!%s|api|oidc|sentry-debug|robots\.txt).*" % admin_url, index_view, name="index")
+    re_path(r"^(?!%s|api|oidc|sentry-debug|robots\.txt|media).*" % admin_url, index_view, name="index")
 )

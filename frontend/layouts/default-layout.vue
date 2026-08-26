@@ -119,6 +119,7 @@ const navLinks = computed<NavLink[]>(() => {
     { text: 'Comment agir', href: '/comment-agir' },
     { text: 'Mes procédures', href: '/mes-procedures' },
     { text: 'FAQ', href: '/faq' },
+    { text: 'Blog', href: '/blog' },
     { text: 'Contact', href: '/contact' },
   ]
   if (adminModeStore.isAdminMode && userStore.userInfo?.is_staff) {
@@ -254,6 +255,7 @@ const footerLinks: FooterLink[] = [
 ]
 
 const afterMandatoryLinks = [
+  { label: 'Blog & Retours d’expérience', to: '/blog' },
   { label: 'Conditions générales d’utilisation', to: '/cgu' },
   { label: 'Plan du site', to: '/plan-du-site' },
   { label: 'Foire aux questions', to: '/faq' },
