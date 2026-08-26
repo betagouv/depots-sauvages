@@ -76,19 +76,18 @@
     <!-- Count display / info bar & Pagination controls -->
     <div class="fr-mb-2w bo-info-bar" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem">
       <span class="fr-text--sm fr-text-mention--grey">
-        Nombre de procédures : <strong>{{ store.procedures.length }}</strong> sur <strong>{{ store.totalProceduresCount }}</strong> au total
+        Nombre de procédures : <strong>{{ filteredProcedures.length }}</strong> sur <strong>{{ store.totalProceduresCount }}</strong> au total
       </span>
       <DsfrPagination
         v-if="totalPages > 1"
-        :current-page="page"
-        :first-page="1"
-        :last-page="totalPages"
-        @update:current-page="changePage"
+        :current-page="page - 1"
+        :pages="pages"
+        @update:current-page="(idx) => changePage(idx + 1)"
       />
     </div>
 
     <!-- Procedures Grid Table -->
-    <div class="bo-table-container">
+    <div ref="tableContainerRef" class="bo-table-container">
       <table class="bo-table">
         <thead>
           <tr>
@@ -143,7 +142,7 @@
           </tr>
         </thead>
         <tbody>
-          <template v-for="procedure in store.procedures" :key="procedure.id">
+          <template v-for="procedure in filteredProcedures" :key="procedure.id">
             <tr :class="{ 'bo-row-expanded': isExpanded(procedure.id) }">
               <td class="bo-td-chevron">
                 <button
@@ -242,7 +241,7 @@
               </td>
             </tr>
           </template>
-          <tr v-if="store.procedures.length === 0">
+          <tr v-if="filteredProcedures.length === 0">
             <td :colspan="activeColumnsCount" class="fr-text-center fr-py-3w fr-text-mention--grey">
               Aucune procédure ne correspond aux filtres appliqués.
             </td>
@@ -302,6 +301,20 @@ const totalPages = computed(() => {
   return Math.ceil(store.totalProceduresCount / pageSize) || 1
 })
 
+const pages = computed(() => {
+  const result = []
+  for (let i = 1; i <= totalPages.value; i++) {
+    result.push({
+      label: String(i),
+      title: `Page ${i}`,
+      href: '#',
+    })
+  }
+  return result
+})
+
+const tableContainerRef = ref<HTMLElement | null>(null)
+
 const changePage = (newPage: number) => {
   if (newPage >= 1 && newPage <= totalPages.value) {
     router.push({
@@ -310,6 +323,9 @@ const changePage = (newPage: number) => {
         page: newPage.toString(),
       },
     })
+    if (tableContainerRef.value) {
+      tableContainerRef.value.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
   }
 }
 

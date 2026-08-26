@@ -18,7 +18,7 @@
             class="fr-tabs__tab"
             :aria-selected="currentTab === 'dashboard'"
             role="tab"
-            @click="router.push('/tableau-de-bord')"
+            @click="router.push({ path: '/tableau-de-bord', query: route.query })"
           >
             <span class="fr-icon-dashboard-line fr-mr-1w" aria-hidden="true"></span>
             Tableau de bord
@@ -29,7 +29,7 @@
             class="fr-tabs__tab"
             :aria-selected="currentTab === 'list'"
             role="tab"
-            @click="router.push('/procedures-liste')"
+            @click="router.push({ path: '/procedures-liste', query: route.query })"
           >
             <span class="fr-icon-list-unordered fr-mr-1w" aria-hidden="true"></span>
             Procédures
@@ -41,11 +41,12 @@
             :aria-selected="currentTab === 'detail'"
             role="tab"
             @click="
-              router.push(
-                selectedProcedureId
+              router.push({
+                path: selectedProcedureId
                   ? `/procedure-detail/${selectedProcedureId}`
-                  : '/procedure-detail'
-              )
+                  : '/procedure-detail',
+                query: route.query,
+              })
             "
           >
             <span class="fr-icon-file-text-line fr-mr-1w" aria-hidden="true"></span>
