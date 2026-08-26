@@ -57,10 +57,42 @@ def test_backoffice_procedures_staff(client):
         ceci_est_un_test=False,
     )
 
-    url = reverse("backoffice-procedures-list")
+
+@pytest.mark.django_db
+def test_backoffice_dashboard_stats(client):
+    staff_user = UserFactory(is_staff=True)
+    client.force_login(staff_user)
+
+    Constatation.objects.create(
+        user=staff_user,
+        commune="Montmédy",
+        ceci_est_un_test=False,
+        auteur_identifie=True,
+    )
+    Constatation.objects.create(
+        user=staff_user,
+        commune="Fécamp",
+        ceci_est_un_test=True,
+        auteur_identifie=False,
+    )
+
+    url = reverse("backoffice-dashboard-stats-list")
     response = client.get(url)
     assert response.status_code == status.HTTP_200_OK
     data = response.json()
+    assert "generalStats" in data
+    assert data["generalStats"]["real"] == 1
+    assert data["generalStats"]["test"] == 1
+    assert data["generalStats"]["authorIdentified"] == 1
+    assert "steps" in data
+    assert "byStatus" in data
+
+    url = reverse("backoffice-procedures-list")
+    response = client.get(url)
+    assert response.status_code == status.HTTP_200_OK
+    res = response.json()
+    assert "results" in res
+    data = res["results"]
     assert len(data) == 2
 
     # Verify first (c2 is newer / higher ID, so first in order-by "-id")
