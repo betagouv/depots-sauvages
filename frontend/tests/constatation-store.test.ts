@@ -299,4 +299,49 @@ describe('ConstatationStore - Prejudice Logic', () => {
       })
     )
   })
+
+  it('doit envoyer is_draft=false lors d’un autoSave sur une constatation déjà validée', async () => {
+    const pinia = createTestingPinia({ stubActions: false })
+    const store = useConstatationStore(pinia)
+
+    const apiResponse = {
+      id: 456,
+      commune: 'Lyon',
+      is_draft: false,
+    }
+    vi.spyOn(api, 'fetchResource').mockResolvedValue(apiResponse)
+    vi.spyOn(api, 'updateResource').mockResolvedValue({ id: 456, is_draft: false })
+
+    await store.loadConstatation(456)
+    expect(store.formData.isDraft).toBe(false)
+
+    await store.autoSave()
+
+    expect(api.updateResource).toHaveBeenCalledWith(
+      expect.stringContaining('/456/'),
+      expect.objectContaining({
+        is_draft: false,
+      })
+    )
+  })
+
+  it('doit envoyer is_draft=true lors d’un autoSave sur un brouillon', async () => {
+    const pinia = createTestingPinia({ stubActions: false })
+    const store = useConstatationStore(pinia)
+
+    store.formData.commune = 'Bordeaux'
+    store.formData.isDraft = true
+    store.currentId = 789
+
+    vi.spyOn(api, 'updateResource').mockResolvedValue({ id: 789, is_draft: true })
+
+    await store.autoSave()
+
+    expect(api.updateResource).toHaveBeenCalledWith(
+      expect.stringContaining('/789/'),
+      expect.objectContaining({
+        is_draft: true,
+      })
+    )
+  })
 })

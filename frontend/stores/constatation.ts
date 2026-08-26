@@ -82,7 +82,8 @@ export const useConstatationStore = defineStore('constatation', {
         await this._autoSavePromise
       }
 
-      const dataToSend = this._preparePayload(true)
+      const isDraft = this.formData.isDraft === false ? false : true
+      const dataToSend = this._preparePayload(isDraft)
 
       const executeSave = async () => {
         if (this.currentId) {
@@ -109,10 +110,13 @@ export const useConstatationStore = defineStore('constatation', {
       const dataToSend = this._preparePayload(false)
 
       if (this.currentId) {
-        return await updateResource(`${API_URLS.constatations}${this.currentId}/`, dataToSend)
+        const res = await updateResource(`${API_URLS.constatations}${this.currentId}/`, dataToSend)
+        this.formData.isDraft = false
+        return res
       } else {
         const data = await createResource(API_URLS.constatations, dataToSend)
         this.currentId = data.id
+        this.formData.isDraft = false
         return data
       }
     },
