@@ -209,6 +209,8 @@ CELLAR_KEY_SECRET = env("CELLAR_KEY_SECRET", default=env("CELLAR_ADDON_KEY_SECRE
 CELLAR_MEDIA_BUCKET_NAME = env("CELLAR_MEDIA_BUCKET_NAME", default=None)
 
 if CELLAR_HOST and CELLAR_KEY_ID and CELLAR_KEY_SECRET and CELLAR_MEDIA_BUCKET_NAME:
+    from botocore.config import Config
+
     STORAGES["default"] = {
         "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
         "OPTIONS": {
@@ -218,6 +220,12 @@ if CELLAR_HOST and CELLAR_KEY_ID and CELLAR_KEY_SECRET and CELLAR_MEDIA_BUCKET_N
             "endpoint_url": f"https://{CELLAR_HOST}",
             "default_acl": "public-read",
             "querystring_auth": False,
+            "signature_version": "s3v4",
+            "client_config": Config(
+                signature_version="s3v4",
+                request_checksum_calculation="when_required",
+                response_checksum_validation="when_required",
+            ),
         },
     }
 
