@@ -96,6 +96,7 @@ export interface Assignee {
 export interface BackofficeState {
   assignees: Assignee[]
   procedures: BackofficeProcedure[]
+  totalProceduresCount: number
   stats: {
     totalActive: number
     arWaiting: number
@@ -121,6 +122,7 @@ export const useBackofficeStore = defineStore('backoffice', {
   state: (): BackofficeState => ({
     assignees: [{ id: null, name: 'Non assigné' }],
     procedures: [],
+    totalProceduresCount: 0,
     stats: {
       totalActive: 0,
       arWaiting: 0,
@@ -318,16 +320,26 @@ export const useBackofficeStore = defineStore('backoffice', {
         console.error('Failed to fetch dashboard stats:', error)
       }
     },
-    async fetchProcedures() {
+    async fetchProcedures(params?: Record<string, any>) {
       try {
-        const data = await fetchResource(`${API_URL}/backoffice-procedures/`)
+        const query = new URLSearchParams()
+        if (params) {
+          Object.entries(params).forEach(([key, val]) => {
+            if (val !== undefined && val !== null && val !== '' && val !== 'Tous') {
+              query.append(key, String(val))
+            }
+          })
+        }
+        const queryString = query.toString() ? `?${query.toString()}` : ''
+        const data = await fetchResource(`${API_URL}/backoffice-procedures/${queryString}`)
         if (data && typeof data === 'object' && 'results' in data) {
           this.procedures = data.results as BackofficeProcedure[]
+          this.totalProceduresCount = data.count ?? data.results.length
         } else {
-          this.procedures = data as BackofficeProcedure[]
+          this.procedures = (data as BackofficeProcedure[]) || []
+          this.totalProceduresCount = this.procedures.length
         }
         await this.fetchAssignees()
-        await this.fetchDashboardStats()
       } catch (error) {
         console.error('Failed to fetch backoffice procedures:', error)
       }
