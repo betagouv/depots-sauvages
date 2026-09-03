@@ -117,9 +117,9 @@ const navLinks = computed<NavLink[]>(() => {
   const links = [
     { text: 'Accueil', href: '/' },
     { text: 'Comment agir', href: '/comment-agir' },
-    { text: 'Mes procédures', href: '/mes-procedures' },
     { text: 'FAQ', href: '/faq' },
-    { text: 'Blog', href: '/blog' },
+    { text: 'Articles', href: '/blog' },
+    { text: 'Mes procédures', href: '/mes-procedures' },
     { text: 'Contact', href: '/contact' },
   ]
   if (adminModeStore.isAdminMode && userStore.userInfo?.is_staff) {
