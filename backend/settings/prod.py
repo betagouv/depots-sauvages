@@ -201,3 +201,37 @@ if BYPASS_AUTH_ENABLED:
 
 # Maximum request body size for uploads (Base64 photos batching)
 DATA_UPLOAD_MAX_MEMORY_SIZE = env.int("DATA_UPLOAD_MAX_MEMORY_SIZE", default=26214400)  # 25 MB
+
+# Clever Cloud Cellar (S3 compatible) Storage
+CELLAR_HOST = env("CELLAR_HOST", default=env("CELLAR_ADDON_HOST", default=None))
+CELLAR_KEY_ID = env("CELLAR_KEY_ID", default=env("CELLAR_ADDON_KEY_ID", default=None))
+CELLAR_KEY_SECRET = env("CELLAR_KEY_SECRET", default=env("CELLAR_ADDON_KEY_SECRET", default=None))
+CELLAR_MEDIA_BUCKET_NAME = env("CELLAR_MEDIA_BUCKET_NAME", default=None)
+
+if CELLAR_HOST and CELLAR_KEY_ID and CELLAR_KEY_SECRET and CELLAR_MEDIA_BUCKET_NAME:
+    from botocore.config import Config
+
+    STORAGES["default"] = {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "OPTIONS": {
+            "access_key": CELLAR_KEY_ID,
+            "secret_key": CELLAR_KEY_SECRET,
+            "bucket_name": CELLAR_MEDIA_BUCKET_NAME,
+            "endpoint_url": f"https://{CELLAR_HOST}",
+            "default_acl": "public-read",
+            "querystring_auth": False,
+            "signature_version": "s3v4",
+            "client_config": Config(
+                signature_version="s3v4",
+                request_checksum_calculation="when_required",
+                response_checksum_validation="when_required",
+            ),
+        },
+    }
+
+    # Add Cellar origins to CSP if they are default lists
+    cellar_origins = [f"https://{CELLAR_HOST}", f"https://{CELLAR_MEDIA_BUCKET_NAME}.{CELLAR_HOST}"]
+    if "CSP_IMG_SRC" not in env:
+        CONTENT_SECURITY_POLICY["DIRECTIVES"]["img-src"].extend(cellar_origins)
+    if "CSP_MEDIA_SRC" not in env:
+        CONTENT_SECURITY_POLICY["DIRECTIVES"]["media-src"].extend(cellar_origins)

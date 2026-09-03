@@ -10,14 +10,14 @@ class ReorderViewSetMixin:
     """
 
     @action(detail=True, methods=["post"], url_path="move-up")
-    def move_up(self, request, pk=None):
+    def move_up(self, request, *args, **kwargs):
         instance = self.get_object()
         moved = instance.move_up()
         result = "moved up" if moved else "no change"
         return Response({"result": result})
 
     @action(detail=True, methods=["post"], url_path="move-down")
-    def move_down(self, request, pk=None):
+    def move_down(self, request, *args, **kwargs):
         instance = self.get_object()
         moved = instance.move_down()
         result = "moved down" if moved else "no change"

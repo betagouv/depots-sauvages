@@ -1,14 +1,16 @@
 <template>
   <div class="admin-inline-controls">
     <button
-      class="admin-btn fr-icon-arrow-up-line"
+      class="admin-btn"
+      :class="direction === 'horizontal' ? 'fr-icon-arrow-left-line' : 'fr-icon-arrow-up-line'"
       :aria-label="upLabel"
       :title="upLabel"
       :disabled="upDisabled"
       @click.stop="$emit('up')"
     ></button>
     <button
-      class="admin-btn fr-icon-arrow-down-line"
+      class="admin-btn"
+      :class="direction === 'horizontal' ? 'fr-icon-arrow-right-line' : 'fr-icon-arrow-down-line'"
       :aria-label="downLabel"
       :title="downLabel"
       :disabled="downDisabled"
@@ -38,6 +40,7 @@ withDefaults(
     downLabel?: string
     editLabel?: string
     deleteLabel?: string
+    direction?: 'vertical' | 'horizontal'
   }>(),
   {
     upDisabled: false,
@@ -46,6 +49,7 @@ withDefaults(
     downLabel: 'Descendre',
     editLabel: 'Modifier',
     deleteLabel: 'Supprimer',
+    direction: 'vertical',
   }
 )
 

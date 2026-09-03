@@ -46,21 +46,13 @@ class BlockContent(models.Model):
         super().save(*args, **kwargs)
 
 
-class NestedContent(models.Model):
+class OrderedContent(models.Model):
     """
-    Abstract mixin for nested content.
-    Manages parent/child hierarchy and display order.
+    Abstract mixin for ordered flat or hierarchical content.
+    Provides order field, automatic order assignment, and move_up/move_down operations.
     """
 
-    parent = models.ForeignKey(
-        "self",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="children",
-    )
     order = models.PositiveIntegerField(default=0)
-    is_top_level = models.BooleanField(default=False)
 
     objects = ContentManager()
 
@@ -68,14 +60,12 @@ class NestedContent(models.Model):
         abstract = True
         ordering = ["order", "id"]
 
+    def get_ordering_queryset(self):
+        return self.__class__.objects.all()
+
     def move_up(self):
-        """
-        Swap order with the sibling immediately above.
-        """
         sibling = (
-            self.__class__.objects.filter(parent=self.parent, order__lt=self.order)
-            .order_by("-order")
-            .first()
+            self.get_ordering_queryset().filter(order__lt=self.order).order_by("-order").first()
         )
         if sibling:
             with transaction.atomic():
@@ -86,13 +76,8 @@ class NestedContent(models.Model):
         return False
 
     def move_down(self):
-        """
-        Swap order with the sibling immediately below.
-        """
         sibling = (
-            self.__class__.objects.filter(parent=self.parent, order__gt=self.order)
-            .order_by("order")
-            .first()
+            self.get_ordering_queryset().filter(order__gt=self.order).order_by("order").first()
         )
         if sibling:
             with transaction.atomic():
@@ -104,10 +89,33 @@ class NestedContent(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.pk and (self.order == 0 or self.order is None):
-            siblings = self.__class__.objects.filter(parent=self.parent)
+            siblings = self.get_ordering_queryset()
             if siblings.exists():
                 max_order = siblings.aggregate(models.Max("order"))["order__max"]
                 self.order = (max_order or 0) + 1
             else:
                 self.order = 1
         super().save(*args, **kwargs)
+
+
+class NestedContent(OrderedContent):
+    """
+    Abstract mixin for nested content.
+    Manages parent/child hierarchy and display order within parent scope.
+    """
+
+    parent = models.ForeignKey(
+        "self",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="children",
+    )
+    is_top_level = models.BooleanField(default=False)
+
+    class Meta:
+        abstract = True
+        ordering = ["order", "id"]
+
+    def get_ordering_queryset(self):
+        return self.__class__.objects.filter(parent=self.parent)

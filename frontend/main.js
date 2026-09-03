@@ -164,6 +164,18 @@ const router = createRouter({
       meta: { title: 'Foire Aux Questions' },
     },
     {
+      path: '/blog',
+      name: 'Blog',
+      component: () => import('./pages/blog.vue'),
+      meta: { title: 'Blog & Retours d’expérience' },
+    },
+    {
+      path: '/blog/:slug',
+      name: 'BlogArticle',
+      component: () => import('./pages/blog-article.vue'),
+      meta: { title: 'Article' },
+    },
+    {
       path: '/backoffice',
       redirect: '/tableau-de-bord',
     },
