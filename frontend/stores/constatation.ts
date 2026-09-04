@@ -107,18 +107,36 @@ export const useConstatationStore = defineStore('constatation', {
     },
 
     async saveFormData() {
+      // Wait for any in-flight autoSave to finish first, so its (possibly
+      // stale, is_draft=true) write can never land after this finalization
+      // and revert the constatation back to draft status.
+      if (this._autoSavePromise) {
+        await this._autoSavePromise
+      }
+
       const dataToSend = this._preparePayload(false)
 
-      if (this.currentId) {
-        const res = await updateResource(`${API_URLS.constatations}${this.currentId}/`, dataToSend)
-        this.formData.isDraft = false
-        return res
-      } else {
-        const data = await createResource(API_URLS.constatations, dataToSend)
-        this.currentId = data.id
-        this.formData.isDraft = false
-        return data
+      const executeSave = async () => {
+        if (this.currentId) {
+          const res = await updateResource(
+            `${API_URLS.constatations}${this.currentId}/`,
+            dataToSend
+          )
+          this.formData.isDraft = false
+          return res
+        } else {
+          const data = await createResource(API_URLS.constatations, dataToSend)
+          this.currentId = data.id
+          this.formData.isDraft = false
+          return data
+        }
       }
+
+      this._autoSavePromise = executeSave().finally(() => {
+        this._autoSavePromise = null
+      })
+
+      return await this._autoSavePromise
     },
 
     async loadConstatation(id: number) {
