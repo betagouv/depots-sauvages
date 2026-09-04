@@ -17,7 +17,7 @@
         <router-link
           v-if="buttonTo"
           :to="buttonTo"
-          class="fr-btn fr-btn--secondary hover-premium-btn"
+          :class="buttonVariant === 'primary' ? ['fr-btn'] : ['fr-btn', 'fr-btn--secondary', 'hover-premium-btn']"
         >
           <slot name="button-icon"></slot>
           {{ buttonText }}
@@ -26,7 +26,7 @@
           v-else
           href="#"
           @click.prevent="$emit('click')"
-          class="fr-btn fr-btn--secondary hover-premium-btn"
+          :class="buttonVariant === 'primary' ? ['fr-btn'] : ['fr-btn', 'fr-btn--secondary', 'hover-premium-btn']"
         >
           <slot name="button-icon"></slot>
           {{ buttonText }}
@@ -77,6 +77,10 @@ defineProps({
   buttonTo: {
     type: String,
     default: '',
+  },
+  buttonVariant: {
+    type: String,
+    default: 'secondary', // 'secondary' or 'primary'
   },
 })
 
