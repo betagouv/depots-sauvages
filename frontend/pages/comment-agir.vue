@@ -42,7 +42,7 @@
             ></span>
             <span>
               comment aller plus loin grâce à notre webinaire d'accompagnement (
-              <router-link to="/rdv" class="fr-link"
+              <router-link to="/rdv" class="fr-link" @click="trackSortie('Webinaire')"
                 >Je m'inscris au prochain webinaire</router-link
               >
               )
@@ -135,7 +135,11 @@
           class="fr-mt-4w fr-mb-0"
           title="Vous souhaitez comprendre chaque étape en détail ?"
         >
-          <router-link to="/comprendre-la-procedure" class="fr-link">
+          <router-link
+            to="/comprendre-la-procedure"
+            class="fr-link"
+            @click="trackSortie('Guide complet')"
+          >
             Consulter le guide complet de la procédure administrative
           </router-link>
         </DsfrCallout>
@@ -153,9 +157,15 @@
             </router-link>
           </li>
         </ul>
-        <router-link to="/faq" class="fr-link fr-link--icon-right fr-icon-arrow-right-line">
+        <router-link
+          to="/faq"
+          class="fr-link fr-link--icon-right fr-icon-arrow-right-line"
+          @click="trackSortie('FAQ')"
+        >
           Consulter toutes les questions fréquentes
         </router-link>
+
+        <ClarteFeedback page-name="Comment agir" />
       </section>
 
       <section>
@@ -212,6 +222,7 @@
             <router-link
               to="/rdv"
               class="fr-btn fr-btn--lg fr-mb-4w fr-icon-video-chat-line fr-btn--icon-left"
+              @click="trackSortie('Webinaire')"
             >
               Je m'inscris au prochain webinaire
             </router-link>
@@ -238,14 +249,29 @@
 </template>
 
 <script setup lang="ts">
+import ClarteFeedback from '@/components/shared/ClarteFeedback.vue'
 import TallyPopupButton from '@/components/shared/TallyPopupButton.vue'
+import { useScrollDepth } from '@/composables/useScrollDepth'
 import { useTallyRoutes } from '@/composables/useTally'
+import { trackEvent } from '@/services/matomo'
 import { DsfrBadge, DsfrCallout } from '@gouvminint/vue-dsfr'
+
+const PAGE_NAME = 'Comment agir'
+
+useScrollDepth(PAGE_NAME)
+
+const trackSortie = (destination: string) => {
+  trackEvent('Parcours information', `Sortie - ${destination}`, PAGE_NAME)
+}
 
 useTallyRoutes({
   '/comment-agir/etre-informe': {
     formId: 'Pdyay0',
-    options: { layout: 'modal', width: 900 },
+    options: {
+      layout: 'modal',
+      width: 900,
+      onSubmit: () => trackSortie('Être informé'),
+    },
     returnPath: '/comment-agir',
   },
 })

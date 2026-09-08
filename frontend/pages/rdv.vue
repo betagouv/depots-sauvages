@@ -12,6 +12,7 @@
           target="_blank"
           rel="noopener noreferrer"
           class="fr-btn fr-btn--lg fr-icon-video-chat-line fr-btn--icon-left"
+          @click="trackSortie('Inscription webinaire')"
         >
           Je m'inscris au webinaire via RDV service public
         </a>
@@ -115,6 +116,7 @@
           target="_blank"
           rel="noopener noreferrer"
           class="fr-btn fr-btn--lg fr-icon-video-chat-line fr-btn--icon-left"
+          @click="trackSortie('Inscription webinaire')"
         >
           Je m'inscris au webinaire via RDV service public
         </a>
@@ -145,13 +147,24 @@
 <script setup lang="ts">
 import TallyPopupButton from '@/components/shared/TallyPopupButton.vue'
 import { useTallyRoutes } from '@/composables/useTally'
+import { trackEvent } from '@/services/matomo'
+
+const PAGE_NAME = 'Prendre rendez-vous'
 
 const anctLink = import.meta.env.VITE_RDV_PAGE_URL || ''
+
+const trackSortie = (destination: string) => {
+  trackEvent('Parcours information', `Sortie - ${destination}`, PAGE_NAME)
+}
 
 useTallyRoutes({
   '/rdv/etre-informe': {
     formId: 'Pdyay0',
-    options: { layout: 'modal', width: 900 },
+    options: {
+      layout: 'modal',
+      width: 900,
+      onSubmit: () => trackSortie('Être informé'),
+    },
     returnPath: '/rdv',
   },
 })

@@ -397,13 +397,62 @@
           </ul>
         </DsfrCallout>
       </section>
+
+      <section class="fr-mt-6w">
+        <h2 class="fr-h3 fr-mb-2w">
+          <span class="fr-icon-arrow-right-line fr-mr-1w" aria-hidden="true"></span>
+          <span>Et maintenant&nbsp;?</span>
+        </h2>
+        <p class="fr-text fr-mb-3w">
+          Que vous ayez un dépôt à traiter dès aujourd'hui ou que vous prépariez votre commune,
+          voici comment poursuivre.
+        </p>
+        <ul class="fr-btns-group fr-btns-group--inline-md fr-mb-0">
+          <li>
+            <router-link
+              to="/rdv"
+              class="fr-btn fr-icon-video-chat-line fr-btn--icon-left"
+              @click="trackSortie('Webinaire')"
+            >
+              M'inscrire au prochain webinaire
+            </router-link>
+          </li>
+          <li>
+            <router-link
+              to="/demarrer-constatation"
+              class="fr-btn fr-btn--secondary fr-icon-draft-line fr-btn--icon-left"
+              @click="trackSortie('Constatation')"
+            >
+              Constater un dépôt sauvage
+            </router-link>
+          </li>
+          <li>
+            <router-link
+              to="/faq"
+              class="fr-btn fr-btn--secondary fr-icon-question-line fr-btn--icon-left"
+              @click="trackSortie('FAQ')"
+            >
+              Consulter la FAQ
+            </router-link>
+          </li>
+        </ul>
+
+        <ClarteFeedback page-name="Comprendre la procédure" />
+      </section>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import ClarteFeedback from '@/components/shared/ClarteFeedback.vue'
+import { useScrollDepth } from '@/composables/useScrollDepth'
+import { trackEvent } from '@/services/matomo'
 import { DsfrBadge, DsfrCallout, DsfrCard, DsfrNotice } from '@gouvminint/vue-dsfr'
 import { reactive } from 'vue'
+
+const PAGE_NAME = 'Comprendre la procédure'
+
+useScrollDepth(PAGE_NAME)
 
 const accordions = reactive({
   moyens: true,
@@ -412,5 +461,12 @@ const accordions = reactive({
 
 const toggleAccordion = (key: keyof typeof accordions) => {
   accordions[key] = !accordions[key]
+  if (accordions[key]) {
+    trackEvent('Parcours information', 'Ouverture accordéon', `${PAGE_NAME} - ${key}`)
+  }
+}
+
+const trackSortie = (destination: string) => {
+  trackEvent('Parcours information', `Sortie - ${destination}`, PAGE_NAME)
 }
 </script>

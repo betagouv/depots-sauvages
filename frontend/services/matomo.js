@@ -16,6 +16,9 @@ export function initMatomo(router) {
   window._paq.push(['setSiteId', matomoSiteId])
   window._paq.push(['disableCookies'])
   window._paq.push(['enableLinkTracking'])
+  // Ping every 15s so time spent on the last page of a visit is measured too,
+  // which matters for content pages people read and then leave.
+  window._paq.push(['enableHeartBeatTimer', 15])
 
   const script = document.createElement('script')
   script.async = true
