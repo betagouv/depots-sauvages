@@ -33,7 +33,7 @@
         <p class="fr-mt-1v">
           Vos données seront conservées pendant 12 mois puis supprimées. Vous pouvez à tout moment
           réclamer la modification ou la suppression de ces données en nous contactant sur
-          <a href="mailto:contact@protect-envi.beta.gouv.fr">contact@protect-envi.beta.gouv.fr</a>
+          <a :href="`mailto:${contactEmail}`">{{ contactEmail }}</a>
         </p>
       </div>
     </div>
@@ -65,7 +65,7 @@
         <template #legend>
           Concernant la démarche que vous venez de remplir : *
           <span class="fr-hint-text">
-            Le dispositif Protect'Envi étant en expérimentation merci de nous préciser s'il s'agit
+            Le dispositif <strong>Stop Dépôt Sauvage</strong> étant en expérimentation merci de nous préciser s'il s'agit
             d'un cas réel ou simplement d'un test.
           </span>
         </template>
@@ -78,6 +78,8 @@
 import { useConstatationStore } from '@/stores/constatation'
 import { DsfrCheckbox, DsfrInputGroup, DsfrRadioButtonSet } from '@gouvminint/vue-dsfr'
 import { computed } from 'vue'
+
+const contactEmail = import.meta.env.VITE_CONTACT_EMAIL || 'contact@stopdepotsauvage.beta.gouv.fr'
 
 const store = useConstatationStore()
 

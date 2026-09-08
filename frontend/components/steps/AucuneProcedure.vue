@@ -10,7 +10,7 @@
       <DsfrAlert
         type="info"
         title="Note"
-        description="Les formulaires de Protect'Envi évoluent régulièrement. Si vous avez rempli une version antérieure de la procédure, une mise à jour de certaines informations est nécessaire pour accéder à vos documents."
+        description="Les formulaires de Stop Dépôt Sauvage évoluent régulièrement. Si vous avez rempli une version antérieure de la procédure, une mise à jour de certaines informations est nécessaire pour accéder à vos documents."
         small
       />
     </div>

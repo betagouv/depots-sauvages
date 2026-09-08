@@ -17,10 +17,10 @@ class IndexView(TemplateView):
         seo_data = get_seo_data(self.request.path) or {}
         context["seo_title"] = (
             seo_data.get("title")
-            or "Protect’Envi - Accompagner les collectivités pour mieux lutter contre les dépôts sauvages."
+            or "Stop Dépôt Sauvage - Accompagner les collectivités pour mieux lutter contre les dépôts sauvages."
         )
         context["seo_description"] = (
-            seo_data.get("desc") or "Signaler un dépôt sauvage avec Protect'Envi."
+            seo_data.get("desc") or "Signaler un dépôt sauvage avec Stop Dépôt Sauvage."
         )
         context["seo_robots"] = (
             "noindex, nofollow" if getattr(settings, "ENV_NAME", "") != "prod" else "index, follow"

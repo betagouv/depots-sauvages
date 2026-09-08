@@ -4,7 +4,7 @@
       <div class="fr-container">
         <h1 class="fr-h1 fr-mb-3w">Plan du site</h1>
         <p class="fr-text fr-text--lead fr-mb-0">
-          Arborescence complète des pages disponibles sur Protect’Envi.
+          Arborescence complète des pages disponibles sur <strong>Stop Dépôt Sauvage</strong>.
         </p>
       </div>
     </div>
@@ -22,7 +22,7 @@
                 <router-link class="fr-link" to="/comprendre-la-procedure">Comprendre la procédure</router-link>
               </li>
               <li class="fr-mb-1w">
-                <router-link class="fr-link" to="/demarche-numerique-rejoindre-protectenvi">Rejoindre le dispositif</router-link>
+                <router-link class="fr-link" to="/demarche-numerique-rejoindre-stop-depot-sauvage">Rejoindre le dispositif</router-link>
               </li>
               <li class="fr-mb-1w">
                 <router-link class="fr-link" to="/mes-procedures">Mes procédures (espace connecté)</router-link>

@@ -15,7 +15,13 @@ export default defineConfig(({ mode }) => {
       global: 'window',
     },
     server: {
-      allowedHosts: ['localhost', '.local', '.protect-envi.beta.gouv.fr'],
+      allowedHosts: [
+        'localhost',
+        '.local',
+        '.protect-envi.beta.gouv.fr',
+        '.stopdepotsauvage.beta.gouv.fr',
+        '.stop-depot-sauvage.beta.gouv.fr',
+      ],
       fs: {
         allow: [
           '.', // Project root and node_modules

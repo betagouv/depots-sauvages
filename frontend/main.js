@@ -84,7 +84,7 @@ const router = createRouter({
     },
     {
       path: '/joindre',
-      redirect: '/demarche-numerique-rejoindre-protectenvi',
+      redirect: '/demarche-numerique-rejoindre-stop-depot-sauvage',
     },
     {
       path: '/signalements-dn/:dossier_id',
@@ -95,11 +95,15 @@ const router = createRouter({
     },
     {
       path: '/rejoindre-le-dispositif',
-      redirect: '/demarche-numerique-rejoindre-protectenvi',
+      redirect: '/demarche-numerique-rejoindre-stop-depot-sauvage',
     },
     {
       path: '/demarche-numerique-rejoindre-protectenvi',
-      name: 'DemarcheNumeriqueRejoindreProtectEnvi',
+      redirect: '/demarche-numerique-rejoindre-stop-depot-sauvage',
+    },
+    {
+      path: '/demarche-numerique-rejoindre-stop-depot-sauvage',
+      name: 'DemarcheNumeriqueRejoindreStopDepotSauvage',
       component: () => import('./pages/demarche-numerique-rejoindre-protectenvi.vue'),
       meta: { hideNavigation: true, title: 'Rejoindre le dispositif' },
     },

@@ -170,7 +170,7 @@
               contre les dépôts sauvages.
             </p>
             <p class="fr-text">
-              Chaque semaine, les équipes de Protect'Envi présentent la procédure administrative,
+              Chaque semaine, les équipes de <strong>Stop Dépôt Sauvage</strong> présentent la procédure administrative,
               expliquent des cas concrets et répondent aux questions des collectivités sur leurs
               moyens d'agir contre les dépôts sauvages.
             </p>

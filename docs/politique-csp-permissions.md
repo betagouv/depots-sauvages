@@ -1,6 +1,6 @@
 # Politique de sécurité du contenu et permissions policy
 
-Ce document détaille la configuration des en-têtes HTTP de sécurité de l'application Protect'Envi - Dépôts Sauvages - en production, notamment la politique de sécurité du contenu et la politique de permissions.
+Ce document détaille la configuration des en-têtes HTTP de sécurité de l'application Stop Dépôt Sauvage - Dépôts Sauvages - en production, notamment la politique de sécurité du contenu et la politique de permissions.
 
 ---
 
@@ -49,11 +49,11 @@ L'en-tête est défini de manière restrictive dans les paramètres de configura
 
 Afin de valider la conformité de ces en-têtes auprès de vos partenaires institutionnels, nous recommandons de tester l'URL de production à l'aide des outils de référence suivants :
 
-1. **Mozilla Observatory** - [Rapport protect-envi.beta.gouv.fr](https://observatory.mozilla.org/analyze/protect-envi.beta.gouv.fr) :
+1. **Mozilla Observatory** - [Rapport stopdepotsauvage.beta.gouv.fr](https://observatory.mozilla.org/analyze/stopdepotsauvage.beta.gouv.fr) :
    * Analyse et note la configuration des en-têtes HTTP de sécurité comme le chiffrement, les types de contenus et les en-têtes de sécurité.
    * La configuration en place permet de viser la note maximale A ou A+.
-2. **CSP Evaluator de Google** - [Analyse de protect-envi.beta.gouv.fr](https://csp-evaluator.withgoogle.com/?csp=https://protect-envi.beta.gouv.fr/) :
+2. **CSP Evaluator de Google** - [Analyse de stopdepotsauvage.beta.gouv.fr](https://csp-evaluator.withgoogle.com/?csp=https://stopdepotsauvage.beta.gouv.fr/) :
    * Valide la robustesse de la politique de sécurité du contenu vis-à-vis des contournements connus, par exemple par l'intermédiaire de l'usage de certains scripts de bibliothèques tierces autorisées.
-3. **Security Headers** - [Rapport protect-envi.beta.gouv.fr](https://securityheaders.com/?q=https%3A%2F%2Fprotect-envi.beta.gouv.fr%2F&followRedirects=on) :
+3. **Security Headers** - [Rapport stopdepotsauvage.beta.gouv.fr](https://securityheaders.com/?q=https%3A%2F%2Fstopdepotsauvage.beta.gouv.fr%2F&followRedirects=on) :
    * Analyse rapide de la présence et de la configuration des principaux en-têtes HTTP de sécurité.
 

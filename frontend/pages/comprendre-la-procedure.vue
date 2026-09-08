@@ -106,7 +106,7 @@
                 <ul class="fr-text fr-pl-2w">
                   <li>
                     Rédaction d'un <strong>rapport de constatation</strong> à l'aide de
-                    <em>Protect'Envi</em>, en mobilité ou au bureau
+                    <strong>Stop Dépôt Sauvage</strong>, en mobilité ou au bureau
                   </li>
                   <li>Photos, localisation précise, description du dépôt</li>
                 </ul>
@@ -235,7 +235,7 @@
             <p class="fr-text">L'autorité titulaire du pouvoir de police administrative.</p>
             <h4 class="fr-h5 fr-mb-1w">Comment&nbsp;?</h4>
             <ul class="fr-text fr-pl-2w">
-              <li>Génération automatique via <em>Protect'Envi</em> ;</li>
+              <li>Génération automatique via <strong>Stop Dépôt Sauvage</strong> ;</li>
               <li>
                 Envoi <strong>recommandé avec accusé de réception</strong> ou
                 <strong>remise en mains propres</strong> ;
@@ -283,12 +283,12 @@
               Comment choisir le montant de l'amende et prendre l'arrêté&nbsp;?
             </h4>
             <p class="fr-text">
-              En contactant directement l'équipe Protect'Envi :
+              En contactant directement l'équipe <strong>Stop Dépôt Sauvage</strong> :
               <a
-                href="mailto:contact@protect-envi.beta.gouv.fr"
+                :href="`mailto:${contactEmail}`"
                 class="fr-link"
-                aria-label="Envoyer un e-mail à contact@protect-envi.beta.gouv.fr"
-                >contact@protect-envi.beta.gouv.fr</a
+                :aria-label="`Envoyer un e-mail à ${contactEmail}`"
+                >{{ contactEmail }}</a
               >.
             </p>
           </div>
@@ -390,7 +390,7 @@
               <strong>action locale directe contre les dépôts sauvages</strong> ;
             </li>
             <li>
-              L'outil <em>Protect'Envi</em> facilite la <strong>traçabilité</strong> et la
+              L'outil <strong>Stop Dépôt Sauvage</strong> facilite la <strong>traçabilité</strong> et la
               <strong>production automatique des documents officiels</strong>
               (rapport, lettres, arrêtés, etc.).
             </li>
@@ -404,6 +404,8 @@
 <script setup lang="ts">
 import { DsfrBadge, DsfrCallout, DsfrCard, DsfrNotice } from '@gouvminint/vue-dsfr'
 import { reactive } from 'vue'
+
+const contactEmail = import.meta.env.VITE_CONTACT_EMAIL || 'contact@stopdepotsauvage.beta.gouv.fr'
 
 const accordions = reactive({
   moyens: true,

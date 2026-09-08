@@ -4,7 +4,7 @@
       <div class="fr-container">
         <h1 class="fr-h1 fr-mb-3w">Conditions générales d’utilisation</h1>
         <p class="fr-text fr-text--lead fr-mb-0">
-          Modalités et règles d'utilisation de la plateforme Protect’Envi.
+          Modalités et règles d'utilisation de la plateforme <strong>Stop Dépôt Sauvage</strong>.
         </p>
       </div>
     </div>
@@ -14,12 +14,12 @@
         <div class="fr-col-12 fr-col-md-8">
           <p>
             Les présentes conditions générales d'utilisation (ci-après désignées « CGU ») définissent
-            le cadre juridique de l'utilisation de la plateforme <strong>Protect’Envi</strong> par les utilisateurs.
+            le cadre juridique de l'utilisation de la plateforme <strong>Stop Dépôt Sauvage</strong> par les utilisateurs.
           </p>
 
           <h2>1. Présentation du service</h2>
           <p>
-            Protect’Envi est un service public numérique développé par le <strong>Commandement pour l’environnement et la santé (CESAN)</strong>
+            <strong>Stop Dépôt Sauvage</strong> est un service public numérique développé par le <strong>Commandement pour l’environnement et la santé (CESAN)</strong>
             de la Gendarmerie nationale.
           </p>
           <p>
@@ -64,7 +64,7 @@
 
           <h2>4. Responsabilité de l'éditeur</h2>
           <p>
-            Protect’Envi met tout en œuvre pour assurer la disponibilité du service. Toutefois, le service étant en constante évolution (mode "bêta"), l'éditeur ne peut garantir une accessibilité ininterrompue ou une absence totale d'anomalies.
+            <strong>Stop Dépôt Sauvage</strong> met tout en œuvre pour assurer la disponibilité du service. Toutefois, le service étant en constante évolution (mode "bêta"), l'éditeur ne peut garantir une accessibilité ininterrompue ou une absence totale d'anomalies.
           </p>
           <p>
             L'éditeur ne saurait être tenu responsable :
@@ -72,12 +72,12 @@
           <ul class="fr-pl-3w fr-mb-3w">
             <li>Des interruptions temporaires du service pour maintenance ou mise à jour.</li>
             <li>De la perte éventuelle de données saisies (il est recommandé aux utilisateurs de conserver une copie des procès-verbaux et rapports générés).</li>
-            <li>De l'issue des procédures administratives ou judiciaires engagées à la suite de l'utilisation de la plateforme. Protect’Envi fournit un outil d'accompagnement juridique et technique, mais la responsabilité finale des actes de poursuite ou de sanction incombe exclusivement aux autorités compétentes.</li>
+            <li>De l'issue des procédures administratives ou judiciaires engagées à la suite de l'utilisation de la plateforme. <strong>Stop Dépôt Sauvage</strong> fournit un outil d'accompagnement juridique et technique, mais la responsabilité finale des actes de poursuite ou de sanction incombe exclusivement aux autorités compétentes.</li>
           </ul>
 
           <h2>5. Propriété intellectuelle</h2>
           <p>
-            Les contenus de la plateforme sont protégés par le droit d'auteur. Sauf mention contraire, les textes et éléments graphiques produits par Protect’Envi sont mis à disposition sous licence ouverte <a href="https://github.com/etalab/licence-ouverte/blob/master/LO.md" target="_blank" rel="noopener">licence etalab-2.0</a>.
+            Les contenus de la plateforme sont protégés par le droit d'auteur. Sauf mention contraire, les textes et éléments graphiques produits par <strong>Stop Dépôt Sauvage</strong> sont mis à disposition sous licence ouverte <a href="https://github.com/etalab/licence-ouverte/blob/master/LO.md" target="_blank" rel="noopener">licence etalab-2.0</a>.
           </p>
 
           <h2>6. Modification des conditions</h2>

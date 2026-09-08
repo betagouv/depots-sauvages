@@ -18,8 +18,14 @@
     <template #footer>
       <div class="premium-info-footer fr-p-3w">
         <p class="fr-text--sm fr-mb-0 text-left">
-          <span class="fr-icon-info-line fr-mr-1w" aria-hidden="true" style="vertical-align: middle; color: var(--text-active-blue-france)"></span>
-          <strong>Comment ça marche ?</strong> Une fois la constatation du dépôt sauvage effectuée, Protect'Envi génère automatiquement vos documents de procédure et vous guide pas à pas.
+          <span
+            class="fr-icon-info-line fr-mr-1w"
+            aria-hidden="true"
+            style="vertical-align: middle; color: var(--text-active-blue-france)"
+          ></span>
+          <strong>Comment ça marche ?</strong> Une fois la constatation du dépôt sauvage effectuée,
+          <strong>Stop Dépôt Sauvage</strong> génère automatiquement vos documents de procédure et
+          vous guide pas à pas.
         </p>
       </div>
     </template>
