@@ -76,67 +76,41 @@ export const useConstatationStore = defineStore('constatation', {
       return toApiFormat(data)
     },
 
-    async autoSave() {
-      // If a creation or update request is currently pending, wait for it to complete
+    async performSave(isDraft: boolean) {
       if (this._autoSavePromise) {
-        await this._autoSavePromise
+        try {
+          await this._autoSavePromise
+        } catch {}
       }
-
-      const isDraft = this.formData.isDraft === false ? false : true
       const dataToSend = this._preparePayload(isDraft)
-
       const executeSave = async () => {
         if (this.currentId) {
-          return await updateResource(`${API_URLS.constatations}${this.currentId}/`, dataToSend)
-        } else {
-          const res = await createResource(API_URLS.constatations, dataToSend)
-          this.currentId = res.id
+          const res = await updateResource(`${API_URLS.constatations}${this.currentId}/`, dataToSend)
+          if (!isDraft) this.formData.isDraft = false
           return res
         }
+        const data = await createResource(API_URLS.constatations, dataToSend)
+        this.currentId = data.id
+        if (!isDraft) this.formData.isDraft = false
+        return data
       }
-
       this._autoSavePromise = executeSave().finally(() => {
         this._autoSavePromise = null
       })
+      return await this._autoSavePromise
+    },
 
+    async autoSave() {
       try {
-        return await this._autoSavePromise
+        const isDraft = this.formData.isDraft === false ? false : true
+        return await this.performSave(isDraft)
       } catch (error) {
         console.error('Erreur lors de l’autosave constatation:', error)
       }
     },
 
     async saveFormData() {
-      // Wait for any in-flight autoSave to finish first, so its (possibly
-      // stale, is_draft=true) write can never land after this finalization
-      // and revert the constatation back to draft status.
-      if (this._autoSavePromise) {
-        await this._autoSavePromise
-      }
-
-      const dataToSend = this._preparePayload(false)
-
-      const executeSave = async () => {
-        if (this.currentId) {
-          const res = await updateResource(
-            `${API_URLS.constatations}${this.currentId}/`,
-            dataToSend
-          )
-          this.formData.isDraft = false
-          return res
-        } else {
-          const data = await createResource(API_URLS.constatations, dataToSend)
-          this.currentId = data.id
-          this.formData.isDraft = false
-          return data
-        }
-      }
-
-      this._autoSavePromise = executeSave().finally(() => {
-        this._autoSavePromise = null
-      })
-
-      return await this._autoSavePromise
+      return await this.performSave(false)
     },
 
     async loadConstatation(id: number) {
