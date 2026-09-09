@@ -58,11 +58,11 @@ interface TestimonialItem {
 const adminModeStore = useAdminModeStore()
 const isAdminMode = computed(() => adminModeStore.isAdminMode)
 
-const DEFAULT_TITLE = "Ils ont agi avec Protect'Envi"
+const DEFAULT_TITLE = "Ils ont agi avec Stop Dépôt Sauvage"
 const DEFAULT_TESTIMONIALS: TestimonialItem[] = [
   {
     quote:
-      "Protect'Envi permet de générer des courriers parfaitement structurés, que nous envoyons aux auteurs présumés des dépôts. Sur les trois derniers courriers envoyés, j'ai obtenu un retour en moins d'une semaine à chaque fois.",
+      "Stop Dépôt Sauvage permet de générer des courriers parfaitement structurés, que nous envoyons aux auteurs présumés des dépôts. Sur les trois derniers courriers envoyés, j'ai obtenu un retour en moins d'une semaine à chaque fois.",
     author: 'Philippe Barneron',
     source: 'Maire de Peyrins (26) — commune de 2 700 habitants',
   },

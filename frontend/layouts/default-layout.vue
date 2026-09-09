@@ -1,7 +1,17 @@
 <template>
   <div>
+    <DsfrNotice
+      v-if="isRenameNoticeVisible"
+      :closeable="true"
+      desc="Protect'Envi devient Stop Dépôt Sauvage. Vos démarches et fonctionnalités restent inchangées."
+      class="fr-mb-0 rename-top-notice fr-notice--no-icon"
+      @close="dismissRenameNotice"
+    >
+      <span class="fr-icon-sparkling-2-fill fr-mr-1v" aria-hidden="true"></span>Nouveau nom :
+    </DsfrNotice>
+
     <DsfrHeader
-      service-title="Protect’Envi"
+      service-title="Stop Dépôt Sauvage"
       service-description="Accompagner les collectivités pour mieux lutter contre les dépôts sauvages."
       :logoText="logoText"
       :quick-links="quickLinks"
@@ -59,7 +69,7 @@
     </main>
     <DsfrFooter :logo-text="logoText" :after-mandatory-links="afterMandatoryLinks">
       <template #description>
-        <strong>Protect’Envi</strong>
+        <strong>Stop Dépôt Sauvage</strong>
         <br />
         Accompagner les collectivités pour mieux lutter contre les dépôts sauvages.
       </template>
@@ -83,7 +93,13 @@
 </template>
 
 <script setup lang="ts">
-import { DsfrFooter, DsfrFooterLinkList, DsfrHeader, DsfrToggleSwitch } from '@gouvminint/vue-dsfr'
+import {
+  DsfrFooter,
+  DsfrFooterLinkList,
+  DsfrHeader,
+  DsfrNotice,
+  DsfrToggleSwitch,
+} from '@gouvminint/vue-dsfr'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { getBypassAuthConfig } from '../services/api'
@@ -91,6 +107,18 @@ import { PROCONNECT_ENABLED } from '../services/config'
 import { LOGIN_URL, LOGOUT_URL } from '../services/urls'
 import { useAdminModeStore } from '../stores/admin-mode'
 import { useUserStore } from '../stores/user'
+
+const RENAME_NOTICE_STORAGE_KEY = 'hide-rename-notice-stop-depot-sauvage'
+const isRenameNoticeVisible = ref(false)
+
+const dismissRenameNotice = () => {
+  isRenameNoticeVisible.value = false
+  try {
+    localStorage.setItem(RENAME_NOTICE_STORAGE_KEY, 'true')
+  } catch (e) {
+    console.warn('Unable to persist notice dismissal to localStorage', e)
+  }
+}
 
 interface FooterLink {
   text: string
@@ -161,6 +189,13 @@ const goToLogout = (event?: MouseEvent) => {
 const isProConnectEnabled = PROCONNECT_ENABLED
 
 onMounted(async () => {
+  try {
+    if (localStorage.getItem(RENAME_NOTICE_STORAGE_KEY) !== 'true') {
+      isRenameNoticeVisible.value = true
+    }
+  } catch (e) {
+    isRenameNoticeVisible.value = true
+  }
   let bypassEnabled = false
   try {
     const bypassConfig = await getBypassAuthConfig()
@@ -292,5 +327,16 @@ const afterMandatoryLinks = [
     width: 100%;
     justify-content: space-between;
   }
+}
+
+.rename-top-notice {
+  background-color: var(--background-alt-orange-terre-battue, #fef4f2);
+  color: var(--text-title-grey, #161616);
+  border-bottom: 1px solid var(--border-default-grey, #dddddd);
+}
+
+.rename-top-notice .fr-notice__title,
+.rename-top-notice .fr-icon-sparkling-2-fill {
+  color: var(--text-action-high-orange-terre-battue, #d64d00);
 }
 </style>

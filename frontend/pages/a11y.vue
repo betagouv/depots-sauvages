@@ -15,9 +15,9 @@
             accessible, conformément à l’article 47 de la loi n° 2005-102 du 11 février 2005.
           </p>
           <p>
-            Cette déclaration d’accessibilité s’applique à Portect'Envi (<a
-              href="https://protect-envi.beta.gouv.fr/"
-              >Protect’Envi - Accompagner les collectivités pour mieux lutter contre les dépôts
+            Cette déclaration d’accessibilité s’applique à <strong>Stop Dépôt Sauvage</strong> (<a
+              href="https://stopdepotsauvage.beta.gouv.fr/"
+              ><strong>Stop Dépôt Sauvage</strong> - Accompagner les collectivités pour mieux lutter contre les dépôts
               sauvages</a
             >).
           </p>
@@ -26,7 +26,7 @@
 
           <h2>État de conformité</h2>
           <p>
-            <strong>Portect'Envi</strong> est <strong>non conforme</strong> avec le RGAA. Le site
+            <strong>Stop Dépôt Sauvage</strong> est <strong>non conforme</strong> avec le RGAA. Le site
             n’a encore pas été audité.
           </p>
 
@@ -35,7 +35,7 @@
           <h2>Amélioration et contact</h2>
           <p>
             Si vous n’arrivez pas à accéder à un contenu ou à un service, vous pouvez contacter le
-            responsable de Portect'Envi pour être orienté vers une alternative accessible ou obtenir
+            responsable de <strong>Stop Dépôt Sauvage</strong> pour être orienté vers une alternative accessible ou obtenir
             le contenu sous une autre forme.
           </p>
           <p class="fr-mb-1w">

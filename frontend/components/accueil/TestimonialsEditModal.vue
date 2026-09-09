@@ -16,7 +16,7 @@
               type="text"
               id="testimonials-title"
               required
-              placeholder="Ex: Ils ont agi avec Protect'Envi"
+              placeholder="Ex: Ils ont agi avec Stop Dépôt Sauvage"
             />
           </div>
         </div>

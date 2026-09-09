@@ -4,7 +4,7 @@
       <div class="fr-container">
         <h1 class="fr-h1 fr-mb-3w">Gestion des cookies</h1>
         <p class="fr-text fr-text--lead fr-mb-0">
-          Politique relative aux traceurs et cookies utilisés sur Protect’Envi.
+          Politique relative aux traceurs et cookies utilisés sur <strong>Stop Dépôt Sauvage</strong>.
         </p>
       </div>
     </div>
@@ -18,7 +18,7 @@
 
           <h2>Cookies de mesure d'audience (Matomo)</h2>
           <p>
-            Protect’Envi utilise l'outil de mesure d'audience anonyme <strong>Matomo</strong> (recommandé par la CNIL et hébergé en France) afin d'analyser l'utilisation du site, d'évaluer les performances et d'améliorer continuellement l'ergonomie générale du service.
+            <strong>Stop Dépôt Sauvage</strong> utilise l'outil de mesure d'audience anonyme <strong>Matomo</strong> (recommandé par la CNIL et hébergé en France) afin d'analyser l'utilisation du site, d'évaluer les performances et d'améliorer continuellement l'ergonomie générale du service.
           </p>
 
           <DsfrHighlight class="fr-ml-0 fr-mb-4w">

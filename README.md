@@ -1,4 +1,4 @@
-# Dépôts Sauvages - Protect Envi
+# Dépôts Sauvages - Stop Dépôt Sauvage
 
 Application de signalement des dépôts sauvages destinée aux communes.
 

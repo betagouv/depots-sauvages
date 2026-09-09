@@ -25,8 +25,8 @@ export function initMatomo(router) {
 
   router.afterEach((to) => {
     const title = to.meta.title
-      ? `${to.meta.title} - Protect'Envi`
-      : 'Protect’Envi - Accompagner les collectivités pour mieux lutter contre les dépôts sauvages.'
+      ? `${to.meta.title} - Stop Dépôt Sauvage`
+      : 'Stop Dépôt Sauvage - Accompagner les collectivités pour mieux lutter contre les dépôts sauvages.'
     document.title = title
     window._paq.push(['setCustomUrl', window.location.origin + to.fullPath])
     window._paq.push(['setDocumentTitle', title])

@@ -128,7 +128,7 @@
         <p class="fr-text fr-mb-1w">Nous vous informerons :</p>
         <ul class="fr-pl-3w fr-mb-3w">
           <li class="fr-mb-1w">des prochaines dates des webinaires ;</li>
-          <li class="fr-mb-0">des nouveautés de Protect'Envi.</li>
+          <li class="fr-mb-0">des nouveautés de <strong>Stop Dépôt Sauvage</strong>.</li>
         </ul>
         <TallyPopupButton
           form-id="Pdyay0"

@@ -16,7 +16,7 @@ def get_faq_seo_data(path: str) -> dict | None:
     try:
         faq_item = FAQItem.objects.filter(slug=slug).first()
         if faq_item:
-            desc = "Protect'Envi - Foire Aux Questions"
+            desc = "Stop Dépôt Sauvage - Foire Aux Questions"
             for block in faq_item.content or []:
                 if block.get("type") == "rich_text" and block.get("value"):
                     plain_text = strip_tags(block["value"])
@@ -27,7 +27,7 @@ def get_faq_seo_data(path: str) -> dict | None:
                         desc = plain_text
                     break
             return {
-                "title": f"{faq_item.title} FAQ - Protect'Envi",
+                "title": f"{faq_item.title} FAQ - Stop Dépôt Sauvage",
                 "desc": desc,
             }
     except Exception:

@@ -4,7 +4,7 @@
       <div class="fr-container">
         <h1 class="fr-h1 fr-mb-3w">Contactez-nous</h1>
         <p class="fr-text fr-text--lead fr-mb-0">
-          Contactez-nous et posez vos questions sur Protect’Envi et les procédures dépôts sauvages
+          Contactez-nous et posez vos questions sur le service <strong>Stop Dépôt Sauvage</strong> et les procédures dépôts sauvages
         </p>
       </div>
     </div>

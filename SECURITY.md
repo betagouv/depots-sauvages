@@ -1,6 +1,6 @@
 # Politique et auto-évaluation de sécurité - security
 
-Ce document détaille la politique de sécurité de l'application Protect'Envi - Dépôts Sauvages en production, ainsi que notre auto-évaluation technique démontrant la robustesse de la plateforme.
+Ce document détaille la politique de sécurité de l'application Stop Dépôt Sauvage - Dépôts Sauvages en production, ainsi que notre auto-évaluation technique démontrant la robustesse de la plateforme.
 
 ---
 
@@ -8,7 +8,7 @@ Ce document détaille la politique de sécurité de l'application Protect'Envi -
 
 Si vous découvrez une faille de sécurité dans cette application, merci de ne pas utiliser l'outil de ticket public - GitHub Issues. Signalez-la de manière responsable afin que nous puissions la corriger rapidement :
 
-- Contact principal : Envoyez un e-mail détaillé à contact@protect-envi.beta.gouv.fr
+- Contact principal : Envoyez un e-mail détaillé à contact@stopdepotsauvage.beta.gouv.fr
 - Canal officiel - DINUM : Si vous souhaitez utiliser le protocole de divulgation de vulnérabilités officiel de l'État, ou en l'absence de réponse, déposez un signalement sur la plateforme de la DINUM : [vdp.numerique.gouv.fr](https://vdp.numerique.gouv.fr/)
 
 ---

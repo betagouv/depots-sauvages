@@ -1,7 +1,7 @@
 <template>
   <div class="fr-container fr-py-8w">
     <h2 class="fr-h2 fr-mb-6w premium-text-center">
-      Protect'Envi accompagne les collectivités de A à Z
+      <strong>Stop Dépôt Sauvage</strong> accompagne les collectivités de A à Z
     </h2>
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12 fr-col-md-4">

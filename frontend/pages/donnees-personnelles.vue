@@ -13,10 +13,10 @@
       <div class="fr-grid-row">
         <div class="fr-col-12 fr-col-md-8">
           <p>
-            Le service Protect’Envi est développé par le CESAN de la Gendarmerie nationale. Nous
-            accordons une grande importance à la protection et à la confidentialité de vos données
-            personnelles conformément au Règlement Général sur la Protection des Données (RGPD) et à
-            la loi Informatique et Libertés.
+            Le service <strong>Stop Dépôt Sauvage</strong> est développé par le CESAN de la
+            Gendarmerie nationale. Nous accordons une grande importance à la protection et à la
+            confidentialité de vos données personnelles conformément au Règlement Général sur la
+            Protection des Données (RGPD) et à la loi Informatique et Libertés.
           </p>
 
           <h2>Responsable de traitement</h2>
@@ -26,7 +26,10 @@
           </p>
 
           <h2>Données collectées et finalités</h2>
-          <p>Protect’Envi traite des données personnelles pour les finalités suivantes :</p>
+          <p>
+            <strong>Stop Dépôt Sauvage</strong> traite des données personnelles pour les finalités
+            suivantes :
+          </p>
 
           <DsfrHighlight class="fr-ml-0 fr-mb-4w">
             <ul class="fr-pl-2w fr-mb-0">
