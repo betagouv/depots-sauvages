@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, ref, watch } from 'vue'
+import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import ConstatationForm from '../components/forms/constatation/ConstatationForm.vue'
 import LoginInvitation from '../components/shared/LoginInvitation.vue'
@@ -84,6 +84,10 @@ watch(
   { deep: true }
 )
 
+onUnmounted(() => {
+  debouncedAutoSave.cancel()
+})
+
 const scrollToFirstError = async () => {
   await nextTick()
   const firstError = document.querySelector<HTMLElement>(
@@ -93,11 +97,11 @@ const scrollToFirstError = async () => {
 }
 
 const submitForm = async () => {
+  debouncedAutoSave.cancel()
   if (!store.validate()) {
     scrollToFirstError()
     return
   }
-
   try {
     const data = await store.saveFormData()
     if (data && data.id) {
