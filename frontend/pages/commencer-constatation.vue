@@ -106,6 +106,7 @@
               iconClass="fr-icon-edit-line"
               buttonText="Reprendre le brouillon"
               :buttonTo="`/constatation/${latestDraft.id}`"
+              buttonVariant="primary"
               class="fr-mb-4w"
             />
 
@@ -113,9 +114,9 @@
               <router-link
                 to="/constatation"
                 :class="['fr-btn', latestDraft ? 'fr-btn--secondary' : 'fr-btn--lg']"
-                title="Démarrer la constatation"
+                title="Démarrer une nouvelle constatation"
               >
-                Démarrer une constatation
+                {{ latestDraft ? 'Démarrer une nouvelle constatation' : 'Démarrer une constatation' }}
               </router-link>
             </div>
 

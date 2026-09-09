@@ -344,4 +344,48 @@ describe('ConstatationStore - Prejudice Logic', () => {
       })
     )
   })
+
+  it('doit attendre la fin d’un autoSave en cours avant d’envoyer la validation finale (évite qu’un autoSave en retard écrase is_draft=false)', async () => {
+    const pinia = createTestingPinia({ stubActions: false })
+    const store = useConstatationStore(pinia)
+
+    store.formData.commune = 'Reaea'
+    store.currentId = 999
+
+    const callOrder: string[] = []
+    let resolveAutoSave: () => void = () => {}
+
+    ;(api.updateResource as any)
+      .mockImplementationOnce(() => {
+        callOrder.push('autoSave:called')
+        return new Promise((resolve) => {
+          resolveAutoSave = () => {
+            callOrder.push('autoSave:resolved')
+            resolve({ id: 999, is_draft: true })
+          }
+        })
+      })
+      .mockImplementationOnce(() => {
+        callOrder.push('saveFormData:called')
+        return Promise.resolve({ id: 999, is_draft: false })
+      })
+
+    // Simule un autoSave débounce toujours en vol quand l'utilisateur valide le formulaire
+    const autoSavePromise = store.autoSave()
+    const saveFormDataPromise = store.saveFormData()
+
+    // Laisse tourner les microtasks en attente sans résoudre l'autoSave
+    await Promise.resolve()
+    await Promise.resolve()
+    await Promise.resolve()
+
+    expect(callOrder).toEqual(['autoSave:called'])
+
+    resolveAutoSave()
+    await autoSavePromise
+    await saveFormDataPromise
+
+    expect(callOrder).toEqual(['autoSave:called', 'autoSave:resolved', 'saveFormData:called'])
+    expect(store.formData.isDraft).toBe(false)
+  })
 })
