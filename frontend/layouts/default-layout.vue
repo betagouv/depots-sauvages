@@ -1,15 +1,5 @@
 <template>
   <div>
-    <DsfrNotice
-      v-if="isRenameNoticeVisible"
-      :closeable="true"
-      desc="Protect'Envi devient Stop Dépôt Sauvage. Vos démarches et fonctionnalités restent inchangées."
-      class="fr-mb-0 rename-top-notice fr-notice--no-icon"
-      @close="dismissRenameNotice"
-    >
-      <span class="fr-icon-sparkling-2-fill fr-mr-1v" aria-hidden="true"></span>Nouveau nom :
-    </DsfrNotice>
-
     <DsfrHeader
       service-title="Stop Dépôt Sauvage"
       service-description="Accompagner les collectivités pour mieux lutter contre les dépôts sauvages."
@@ -17,6 +7,13 @@
       :quick-links="quickLinks"
     >
       <template #before-quick-links>
+        <div class="fr-header__tools-item header-rename-badge-item">
+          <DsfrBadge
+            label="Anciennement Protect'Envi"
+            type="info"
+            :small="true"
+          />
+        </div>
         <div v-if="userInfo?.is_staff" class="fr-header__tools-item admin-toggle-header-item">
           <DsfrToggleSwitch
             label="Mode admin"
@@ -94,10 +91,10 @@
 
 <script setup lang="ts">
 import {
+  DsfrBadge,
   DsfrFooter,
   DsfrFooterLinkList,
   DsfrHeader,
-  DsfrNotice,
   DsfrToggleSwitch,
 } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, ref } from 'vue'
@@ -107,18 +104,6 @@ import { PROCONNECT_ENABLED } from '../services/config'
 import { LOGIN_URL, LOGOUT_URL } from '../services/urls'
 import { useAdminModeStore } from '../stores/admin-mode'
 import { useUserStore } from '../stores/user'
-
-const RENAME_NOTICE_STORAGE_KEY = 'hide-rename-notice-stop-depot-sauvage'
-const isRenameNoticeVisible = ref(false)
-
-const dismissRenameNotice = () => {
-  isRenameNoticeVisible.value = false
-  try {
-    localStorage.setItem(RENAME_NOTICE_STORAGE_KEY, 'true')
-  } catch (e) {
-    console.warn('Unable to persist notice dismissal to localStorage', e)
-  }
-}
 
 interface FooterLink {
   text: string
@@ -189,13 +174,6 @@ const goToLogout = (event?: MouseEvent) => {
 const isProConnectEnabled = PROCONNECT_ENABLED
 
 onMounted(async () => {
-  try {
-    if (localStorage.getItem(RENAME_NOTICE_STORAGE_KEY) !== 'true') {
-      isRenameNoticeVisible.value = true
-    }
-  } catch (e) {
-    isRenameNoticeVisible.value = true
-  }
   let bypassEnabled = false
   try {
     const bypassConfig = await getBypassAuthConfig()
@@ -329,14 +307,18 @@ const afterMandatoryLinks = [
   }
 }
 
-.rename-top-notice {
-  background-color: var(--background-alt-orange-terre-battue, #fef4f2);
-  color: var(--text-title-grey, #161616);
-  border-bottom: 1px solid var(--border-default-grey, #dddddd);
+.header-rename-badge-item {
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
 }
 
-.rename-top-notice .fr-notice__title,
-.rename-top-notice .fr-icon-sparkling-2-fill {
-  color: var(--text-action-high-orange-terre-battue, #d64d00);
+@media (max-width: 767px) {
+  .header-rename-badge-item {
+    margin-right: 0;
+    padding: 0.5rem 0;
+    width: 100%;
+    justify-content: center;
+  }
 }
 </style>
