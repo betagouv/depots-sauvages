@@ -13,7 +13,7 @@
         </div>
         <a
           v-if="procedure.doc_constat_generated_at"
-          :href="`/api/constatations/${procedure.id}/documents/doc_constat/`"
+          :href="getDocConstatUrl(procedure.id)"
           target="_blank"
           class="fr-btn fr-btn--sm fr-btn--secondary fr-icon-download-line"
         >
@@ -31,7 +31,7 @@
         </div>
         <a
           v-if="procedure.lettre_info_generated_at"
-          :href="`/api/constatations/${procedure.id}/documents/lettre_info/`"
+          :href="getLettreInfoUrl(procedure.id)"
           target="_blank"
           class="fr-btn fr-btn--sm fr-btn--secondary fr-icon-download-line"
         >
@@ -62,6 +62,7 @@
 </template>
 
 <script setup lang="ts">
+import { getDocConstatUrl, getLettreInfoUrl } from '@/services/urls'
 import { formatDate } from '@/utils/date'
 
 defineProps<{
