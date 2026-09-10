@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     "backend.procedures",
     "backend.backoffice",
     "backend.bypass_auth",
-    "backend.constatations.apps.ConstatationsConfig",
+    "backend.constatations",
     "backend.guillotine",
     "backend.faq",
     "backend.seo",
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "backend.blog",
     "backend.stats",
     "backend.activity_logs",
+    "backend.proconnect",
 ]
 
 TRACKMAN_DATABASE_ALIAS = "stats_db"
