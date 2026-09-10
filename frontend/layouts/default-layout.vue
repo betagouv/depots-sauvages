@@ -7,13 +7,6 @@
       :quick-links="quickLinks"
     >
       <template #before-quick-links>
-        <div class="fr-header__tools-item header-rename-badge-item">
-          <DsfrBadge
-            label="Anciennement Protect'Envi"
-            type="info"
-            :small="true"
-          />
-        </div>
         <div v-if="userInfo?.is_staff" class="fr-header__tools-item admin-toggle-header-item">
           <DsfrToggleSwitch
             label="Mode admin"
@@ -66,7 +59,7 @@
     </main>
     <DsfrFooter :logo-text="logoText" :after-mandatory-links="afterMandatoryLinks">
       <template #description>
-        <strong>Stop Dépôt Sauvage</strong>
+        <strong>Stop Dépôt Sauvage - Protect'Envi</strong>
         <br />
         Accompagner les collectivités pour mieux lutter contre les dépôts sauvages.
       </template>
@@ -91,7 +84,6 @@
 
 <script setup lang="ts">
 import {
-  DsfrBadge,
   DsfrFooter,
   DsfrFooterLinkList,
   DsfrHeader,
@@ -304,21 +296,6 @@ const afterMandatoryLinks = [
     border-bottom: 1px solid var(--border-default-grey);
     width: 100%;
     justify-content: space-between;
-  }
-}
-
-.header-rename-badge-item {
-  display: flex;
-  align-items: center;
-  margin-right: 1rem;
-}
-
-@media (max-width: 767px) {
-  .header-rename-badge-item {
-    margin-right: 0;
-    padding: 0.5rem 0;
-    width: 100%;
-    justify-content: center;
   }
 }
 </style>
