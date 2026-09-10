@@ -1,7 +1,7 @@
 <template>
   <div>
     <DsfrHeader
-      service-title="Stop Dépôt Sauvage"
+      service-title="Stop Dépôt Sauvage - Protect'Envi"
       service-description="Accompagner les collectivités pour mieux lutter contre les dépôts sauvages."
       :logoText="logoText"
       :quick-links="quickLinks"
@@ -83,12 +83,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-  DsfrFooter,
-  DsfrFooterLinkList,
-  DsfrHeader,
-  DsfrToggleSwitch,
-} from '@gouvminint/vue-dsfr'
+import { DsfrFooter, DsfrFooterLinkList, DsfrHeader, DsfrToggleSwitch } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { getBypassAuthConfig } from '../services/api'
