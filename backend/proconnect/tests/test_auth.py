@@ -58,6 +58,13 @@ def test_proconnect_profile_sync_on_create_and_update(settings):
 
 @pytest.mark.django_db
 def test_proconnect_profile_sync_with_missing_claims(settings):
+    settings.OIDC_OP_TOKEN_ENDPOINT = "https://example.com/token"
+    settings.OIDC_OP_USER_ENDPOINT = "https://example.com/userinfo"
+    settings.OIDC_OP_JWKS_ENDPOINT = "https://example.com/jwks"
+    settings.OIDC_RP_CLIENT_ID = "mock-client"
+    settings.OIDC_RP_CLIENT_SECRET = "mock-secret"
+    settings.OIDC_RP_SIGN_ALGO = "RS256"
+
     backend = ProConnectOIDCBackend()
     claims = {
         "sub": "user-sub-67890",
