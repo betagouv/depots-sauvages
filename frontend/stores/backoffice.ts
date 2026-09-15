@@ -81,7 +81,8 @@ export interface BackofficeProcedure {
   contact_prenom: string
   contact_email: string
   contact_telephone: string
-  accepte_accompagnement: boolean
+  accepte_traitement_donnees: boolean
+  besoin_accompagnement: boolean
   doc_constat_generated_at: string | null
   lettre_info_generated_at: string | null
   modified: string
