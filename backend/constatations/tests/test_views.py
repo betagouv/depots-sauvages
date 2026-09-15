@@ -33,7 +33,7 @@ def test_create_and_complete_draft_constatation(client):
     user = UserFactory()
     client.force_login(user)
     url = reverse("constatation-list")
-    
+
     # 1. Autosave draft (partial payload)
     draft_data = {
         "commune": "Marseille",
@@ -70,8 +70,9 @@ def test_create_and_complete_draft_constatation(client):
     constatation.refresh_from_db()
     assert constatation.is_draft is False
     assert constatation.doc_constat is not None
-    assert ActivityLog.objects.filter(action="constatation_terminee", constatation_id=constatation.id).exists()
-
+    assert ActivityLog.objects.filter(
+        action="constatation_terminee", constatation_id=constatation.id
+    ).exists()
 
 
 @pytest.mark.django_db(databases=["default", "stats_db"])
@@ -160,3 +161,31 @@ def test_download_document_permissions(client):
         action="doc_constat_telecharge", constatation_id=c.id
     )
     assert logs.count() == 2
+
+
+@pytest.mark.django_db(databases=["default", "stats_db"])
+def test_list_constatations_returns_lightweight_payload(client):
+    user = UserFactory()
+    client.force_login(user)
+    c = Constatation.objects.create(
+        user=user,
+        commune="Lyon",
+        localisation_depot="Rue de la République",
+        photos=["data:image/jpeg;base64,largephotodata" * 100],
+        doc_constat=b"binary_odt_content",
+        lettre_info=b"binary_lettre_content",
+    )
+    url = reverse("constatation-list")
+    response = client.get(url)
+    assert response.status_code == status.HTTP_200_OK
+    data = response.json()
+    assert len(data) == 1
+    item = data[0]
+    assert item["id"] == c.id
+    assert item["commune"] == "Lyon"
+    assert item["localisation_depot"] == "Rue de la République"
+    assert "suivi_procedure" in item
+    # Verify that heavy fields like photos are not in the list response
+    assert "photos" not in item
+    assert "doc_constat" not in item
+    assert "lettre_info" not in item

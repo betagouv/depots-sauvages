@@ -35,6 +35,7 @@ class ConstatationAdmin(admin.ModelAdmin):
         "ceci_est_un_test",
         "is_draft",
     ]
+    list_per_page = 25
     raw_id_fields = ("user",)
     search_fields = [
         "commune",
@@ -153,3 +154,11 @@ class ConstatationAdmin(admin.ModelAdmin):
             },
         ),
     )
+
+    def get_queryset(self, request):
+        return (
+            super()
+            .get_queryset(request)
+            .defer("doc_constat", "lettre_info", "photos")
+            .select_related("user")
+        )

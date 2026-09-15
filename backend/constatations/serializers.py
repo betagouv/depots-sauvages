@@ -3,6 +3,43 @@ from rest_framework import serializers
 from backend.constatations.models import Constatation
 
 
+class ConstatationListSerializer(serializers.ModelSerializer):
+    """
+    Lightweight serializer for listing constatations (e.g. mes-procedures page).
+    Excludes heavy payloads like photos (Base64), full precisions, and unnecessary detail fields.
+    """
+
+    date_creation = serializers.DateTimeField(source="created", read_only=True)
+    date_modification = serializers.DateTimeField(source="modified", read_only=True)
+    suivi_procedure = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Constatation
+        fields = [
+            "id",
+            "commune",
+            "localisation_depot",
+            "date_constat",
+            "heure_constat",
+            "auteur_identifie",
+            "is_draft",
+            "date_creation",
+            "date_modification",
+            "suivi_procedure",
+        ]
+
+    def get_suivi_procedure(self, obj):
+        sp = getattr(obj, "suivi_procedure", None)
+        if not sp:
+            return {"etape_en_cours": 1}
+        return {
+            "etape_en_cours": sp.etape_en_cours,
+            "identification_reussie": sp.identification_reussie,
+            "decision_poursuite": sp.decision_poursuite,
+            "dossier_archive": sp.dossier_archive,
+        }
+
+
 class ConstatationSerializer(serializers.ModelSerializer):
     souhaite_porter_plainte = serializers.ReadOnlyField()
     date_creation = serializers.DateTimeField(source="created", read_only=True)

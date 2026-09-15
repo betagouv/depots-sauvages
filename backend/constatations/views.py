@@ -10,7 +10,7 @@ from rest_framework import mixins, permissions, viewsets
 from backend.activity_logs.views import TrackActivityMixin
 
 from .models import Constatation
-from .serializers import ConstatationSerializer
+from .serializers import ConstatationListSerializer, ConstatationSerializer
 
 
 class ConstatationViewSet(
@@ -24,8 +24,22 @@ class ConstatationViewSet(
     serializer_class = ConstatationSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    DOCUMENT_BINARY_FIELDS = ("doc_constat", "lettre_info")
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return ConstatationListSerializer
+        return ConstatationSerializer
+
     def get_queryset(self):
-        return Constatation.objects.filter(user=self.request.user).order_by("-modified")
+        qs = (
+            Constatation.objects.filter(user=self.request.user)
+            .defer(*self.DOCUMENT_BINARY_FIELDS)
+            .order_by("-modified")
+        )
+        if self.action == "list":
+            return qs.defer("photos").select_related("suivi_procedure")
+        return qs
 
     def perform_create(self, serializer):
         instance = serializer.save(user=self.request.user)
