@@ -27,6 +27,9 @@
           <span v-if="procedure.contact_email"> | ✉ {{ procedure.contact_email }}</span>
           <span v-if="procedure.contact_telephone"> | 📞 {{ procedure.contact_telephone }}</span>
         </p>
+        <p v-if="procedure.besoin_accompagnement" class="fr-mb-0 fr-mt-1w">
+          <span class="fr-badge fr-badge--sm fr-badge--info">Accompagnement demandé</span>
+        </p>
       </div>
     </div>
   </div>

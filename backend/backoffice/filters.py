@@ -9,6 +9,8 @@ class BackofficeProcedureFilterSet(django_filters.FilterSet):
     casReels = django_filters.CharFilter(method="filter_cas_reels")
     auteur_identifie = django_filters.CharFilter(method="filter_auteur_identifie")
     auteurIdentifie = django_filters.CharFilter(method="filter_auteur_identifie")
+    besoin_accompagnement = django_filters.CharFilter(method="filter_besoin_accompagnement")
+    besoinAccompagnement = django_filters.CharFilter(method="filter_besoin_accompagnement")
     etape = django_filters.CharFilter(method="filter_etape")
     traitement = django_filters.CharFilter(field_name="suivi_procedure__statut_traitement")
     assignee = django_filters.CharFilter(method="filter_assignee")
@@ -21,6 +23,8 @@ class BackofficeProcedureFilterSet(django_filters.FilterSet):
             "casReels",
             "auteur_identifie",
             "auteurIdentifie",
+            "besoin_accompagnement",
+            "besoinAccompagnement",
             "etape",
             "traitement",
             "assignee",
@@ -39,6 +43,13 @@ class BackofficeProcedureFilterSet(django_filters.FilterSet):
             return queryset.filter(auteur_identifie=True)
         elif value == "Non":
             return queryset.filter(auteur_identifie=False)
+        return queryset
+
+    def filter_besoin_accompagnement(self, queryset, name, value):
+        if value == "Oui":
+            return queryset.filter(besoin_accompagnement=True)
+        elif value == "Non":
+            return queryset.filter(besoin_accompagnement=False)
         return queryset
 
     def filter_etape(self, queryset, name, value):

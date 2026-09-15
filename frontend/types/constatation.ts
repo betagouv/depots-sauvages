@@ -152,7 +152,8 @@ export interface Constatation {
   contactPrenom: string
   contactEmail: string
   contactTelephone: string
-  accepteAccompagnement: boolean
+  accepteTraitementDonnees: boolean
+  besoinAccompagnement: boolean
   ceciEstUnTest: boolean | null
 
   // Management fields
@@ -219,7 +220,8 @@ export const createEmptyConstatation = (): Constatation => ({
   contactPrenom: '',
   contactEmail: '',
   contactTelephone: '',
-  accepteAccompagnement: false,
+  accepteTraitementDonnees: false,
+  besoinAccompagnement: false,
   ceciEstUnTest: null,
 
   // Management fields

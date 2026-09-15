@@ -320,8 +320,9 @@ export const useConstatationStore = defineStore('constatation', {
       // Finalisation
       if (data.ceciEstUnTest === null)
         this.errors.ceciEstUnTest = "Veuillez préciser s'il s'agit d'un test ou d'un cas réel"
-      if (!data.accepteAccompagnement)
-        this.errors.accepteAccompagnement = "Vous devez accepter d'être recontacté"
+      if (!data.accepteTraitementDonnees)
+        this.errors.accepteTraitementDonnees =
+          'Vous devez prendre connaissance des informations sur le traitement de vos données pour continuer'
 
       if (onlyExisting) {
         const filteredErrors: Record<string, string> = {}
