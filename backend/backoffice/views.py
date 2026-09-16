@@ -26,7 +26,7 @@ class BackofficeProceduresViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_class = BackofficeProcedureFilterSet
     queryset = (
-        Constatation.objects.defer("doc_constat", "lettre_info")
+        Constatation.objects.defer("doc_constat", "lettre_info", "photos")
         .select_related("user", "suivi_procedure")
         .order_by("-id")
     )

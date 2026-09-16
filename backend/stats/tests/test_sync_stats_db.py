@@ -22,6 +22,7 @@ def test_sync_stats_db_command_full_and_incremental():
         contact_telephone="0601020304",
         doc_constat=b"PDF_BINARY_DATA",
         lettre_info=b"LETTRE_BINARY_DATA",
+        photos=["data:image/jpeg;base64,large_photo_string" * 50],
     )
     s1 = c1.suivi_procedure
     s1.observations_internes = "Remarque confidentielle"
@@ -39,6 +40,7 @@ def test_sync_stats_db_command_full_and_incremental():
     assert stats_c1.contact_telephone == ""
     assert not hasattr(stats_c1, "doc_constat")
     assert not hasattr(stats_c1, "lettre_info")
+    assert stats_c1.photos == []
     stats_s1 = StatsSuiviProcedure.objects.using("stats_db").get(id=s1.id)
     assert stats_s1.constatation_id == c1.id
     assert stats_s1.observations_internes == "[ANONYMIZED]"
