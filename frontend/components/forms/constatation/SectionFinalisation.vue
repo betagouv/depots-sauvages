@@ -9,36 +9,46 @@
 
     <div class="fr-fieldset__element">
       <fieldset class="fr-fieldset">
-        <legend class="fr-fieldset__legend fr-text--bold">Accompagnement personnalisé *</legend>
+        <legend class="fr-fieldset__legend fr-text--bold">Traitement de vos données *</legend>
         <DsfrCheckbox
-          v-model="store.formData.accepteAccompagnement"
-          label="Je comprends que je peux être recontacté(e) dans le cadre d'un accompagnement personnalisé."
-          name="accepteAccompagnement"
+          v-model="store.formData.accepteTraitementDonnees"
+          label="J'ai pris connaissance des informations ci-dessous et du traitement de mes données par Stop Dépôt Sauvage dans le cadre de ma procédure (rédaction du constat, génération de la lettre d'information, suivi du dossier)."
+          name="accepteTraitementDonnees"
           :required="true"
-          :error-message="store.errors.accepteAccompagnement"
-          @update:model-value="store.clearFieldError('accepteAccompagnement')"
+          :error-message="store.errors.accepteTraitementDonnees"
+          @update:model-value="store.clearFieldError('accepteTraitementDonnees')"
         />
       </fieldset>
       <div class="fr-ml-4w fr-mt-1w fr-text--sm fr-text--mention-grey">
-        <p class="fr-mb-1v">
-          Les informations saisies dans ce formulaire sont uniquement utilisées pour :
-        </p>
+        <p class="fr-mb-1v">Les informations saisies dans ce formulaire sont utilisées pour :</p>
         <ul class="fr-mb-0">
-          <li>Vous transmettre les documents demandés (rapport et lettre d'information) ;</li>
-          <li>
-            Échanger avec vous et assurer le suivi de votre demande si vous avez accepté un
-            accompagnement personnalisé.
-          </li>
+          <li>Générer les documents liés à votre procédure (constat et lettre d'information) ;</li>
+          <li>Assurer le suivi de votre dossier.</li>
         </ul>
         <p class="fr-mt-1v">
-          Vos données seront conservées pendant 12 mois puis supprimées. Vous pouvez à tout moment
-          réclamer la modification ou la suppression de ces données en nous contactant sur
-          <a :href="`mailto:${contactEmail}`">{{ contactEmail }}</a>
+          Vos données sont conservées le temps nécessaire au traitement de votre procédure, y compris
+          en cas de recours devant le tribunal administratif, et au maximum 2 ans après sa clôture.
+          Vous pouvez à tout moment demander la modification ou la suppression de ces données en nous
+          contactant sur <a :href="`mailto:${contactEmail}`">{{ contactEmail }}</a>
         </p>
       </div>
     </div>
 
-    <div v-if="store.formData.accepteAccompagnement" class="fr-fieldset__element">
+    <div class="fr-fieldset__element">
+      <fieldset class="fr-fieldset">
+        <legend class="fr-fieldset__legend fr-text--bold">
+          Besoin d'un accompagnement ? (optionnel)
+        </legend>
+        <DsfrCheckbox
+          v-model="store.formData.besoinAccompagnement"
+          label="J'ai besoin d'aide pour la suite de cette procédure et je souhaite être recontacté(e) par mail ou téléphone par l'équipe Stop Dépôt Sauvage."
+          name="besoinAccompagnement"
+          @update:model-value="onBesoinAccompagnementChange"
+        />
+      </fieldset>
+    </div>
+
+    <div v-if="store.formData.besoinAccompagnement" class="fr-fieldset__element">
       <DsfrInputGroup
         v-model="store.formData.contactTelephone"
         type="tel"
@@ -82,6 +92,11 @@ import { computed } from 'vue'
 const contactEmail = import.meta.env.VITE_CONTACT_EMAIL || 'contact@stopdepotsauvage.beta.gouv.fr'
 
 const store = useConstatationStore()
+
+// Sans demande d'accompagnement, il n'y a plus de finalité à conserver le numéro saisi
+const onBesoinAccompagnementChange = (value: boolean) => {
+  if (!value) store.formData.contactTelephone = ''
+}
 
 const showPrejudice = computed(() =>
   ['Déposée', 'Sera déposée'].includes(store.formData.plainteEtat)

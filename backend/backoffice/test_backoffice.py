@@ -293,3 +293,43 @@ def test_regular_user_cannot_update_backoffice_fields(client):
     assert response.status_code == status.HTTP_200_OK
     sp.refresh_from_db()
     assert sp.notes_traitement == ""
+
+
+@pytest.mark.django_db
+def test_backoffice_procedures_filter_besoin_accompagnement(client):
+    staff_user = UserFactory(is_staff=True)
+    client.force_login(staff_user)
+
+    avec_accompagnement = Constatation.objects.create(
+        user=staff_user,
+        commune="Montmédy",
+        date_constat="2026-06-27",
+        constatant_role="Secrétaire de mairie",
+        ceci_est_un_test=False,
+        besoin_accompagnement=True,
+    )
+    sans_accompagnement = Constatation.objects.create(
+        user=staff_user,
+        commune="Fécamp",
+        date_constat="2026-05-27",
+        constatant_role="Gendarme",
+        ceci_est_un_test=False,
+        besoin_accompagnement=False,
+    )
+
+    url = reverse("backoffice-procedures-list")
+
+    def ids_for(params):
+        response = client.get(url, params)
+        assert response.status_code == status.HTTP_200_OK
+        data = response.json()
+        results = data["results"] if isinstance(data, dict) and "results" in data else data
+        return {item["id"] for item in results}
+
+    # Sans filtre, les deux procédures remontent
+    assert ids_for({}) == {avec_accompagnement.id, sans_accompagnement.id}
+
+    # Le filtre accepte le snake_case et le camelCase
+    assert ids_for({"besoin_accompagnement": "Oui"}) == {avec_accompagnement.id}
+    assert ids_for({"besoinAccompagnement": "Oui"}) == {avec_accompagnement.id}
+    assert ids_for({"besoinAccompagnement": "Non"}) == {sans_accompagnement.id}

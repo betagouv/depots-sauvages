@@ -122,7 +122,7 @@ describe('SectionAuteurDepot - Validation Entreprise', () => {
     store.formData.typesDepot = ['Pneus']
     store.formData.precisionsDepot = 'Dépôt de pneus'
     store.formData.ceciEstUnTest = false
-    store.formData.accepteAccompagnement = true
+    store.formData.accepteTraitementDonnees = true
 
     store.formData.auteurIdentifie = true
     store.formData.statutAuteur = 'entreprise'

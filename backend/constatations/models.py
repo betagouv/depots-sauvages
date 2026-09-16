@@ -58,7 +58,10 @@ class ConstatationBaseModel(PrejudiceMixin, TimeStampedModel):
     contact_prenom = models.CharField("prénom du contact", max_length=255, blank=True)
     contact_email = models.EmailField("email du contact", blank=True)
     contact_telephone = models.CharField("téléphone du contact", max_length=255, blank=True)
-    accepte_accompagnement = models.BooleanField("accepte accompagnement", default=False)
+    accepte_traitement_donnees = models.BooleanField(
+        "accepte le traitement des données", default=False
+    )
+    besoin_accompagnement = models.BooleanField("besoin d'accompagnement", default=False)
     ceci_est_un_test = models.BooleanField("est un test", null=True, blank=True)
 
     # Management fields
