@@ -15,7 +15,7 @@ from backend.stats.anonymizer import (
 class StatsConstatation(ConstatationBaseModel, TrackingBaseModel):
     user_hash = models.CharField("hash utilisateur", max_length=64, blank=True, null=True)
 
-    stats_exclude = {"doc_constat", "lettre_info"}
+    stats_exclude = {"doc_constat", "lettre_info", "photos"}
     stats_anonymize = {
         "user_hash": anonymize_user_hash,
         "constatant_nom": anonymize_fake_name,

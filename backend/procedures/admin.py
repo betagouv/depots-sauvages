@@ -8,9 +8,26 @@ class SuiviProcedureAdmin(admin.ModelAdmin):
     list_display = ("constatation", "etape_en_cours", "created", "modified")
     list_display_links = ("constatation",)
     list_filter = ("etape_en_cours", "decision_poursuite")
-    search_fields = ("constatation__id",)
+    list_per_page = 25
+    search_fields = (
+        "constatation__id",
+        "constatation__commune",
+        "constatation__user__email",
+    )
     readonly_fields = ("created", "modified")
     raw_id_fields = ("constatation",)
+
+    def get_queryset(self, request):
+        return (
+            super()
+            .get_queryset(request)
+            .defer(
+                "constatation__doc_constat",
+                "constatation__lettre_info",
+                "constatation__photos",
+            )
+            .select_related("constatation__user", "personne_assignee")
+        )
 
     fieldsets = (
         (

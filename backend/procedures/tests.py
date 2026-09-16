@@ -1,8 +1,11 @@
 import pytest
+from django.contrib.admin.sites import site
+from django.test import RequestFactory
 from django.urls import reverse
 from rest_framework import status
 
 from backend.constatations.models import Constatation
+from backend.procedures.admin import SuiviProcedureAdmin
 from backend.procedures.models import SuiviProcedure
 from backend.unit_tests.factories import UserFactory
 
@@ -92,3 +95,29 @@ def test_suivi_procedure_staff_access(client):
     suivi = SuiviProcedure.objects.get(constatation=constatation)
     assert suivi.etape_en_cours == 3
     assert suivi.notes_traitement == "Staff note"
+
+
+def test_suivi_procedure_admin_queryset_optimizations(db):
+    owner = UserFactory()
+    staff_user = UserFactory(is_staff=True)
+    constatation = Constatation.objects.create(
+        user=owner,
+        commune="Marseille",
+        photos=["data:image/jpeg;base64,samplephoto" * 50],
+        doc_constat=b"sample_doc",
+        lettre_info=b"sample_lettre",
+    )
+    suivi = constatation.suivi_procedure
+    suivi.personne_assignee = staff_user
+    suivi.save()
+    admin_instance = SuiviProcedureAdmin(SuiviProcedure, site)
+    request = RequestFactory().get("/admin/procedures/suiviprocedure/")
+    request.user = staff_user
+    qs = admin_instance.get_queryset(request)
+    fetched_suivi = qs.get(id=suivi.id)
+    assert fetched_suivi.constatation.commune == "Marseille"
+    assert fetched_suivi.personne_assignee.id == staff_user.id
+    deferred = fetched_suivi.constatation.get_deferred_fields()
+    assert "doc_constat" in deferred
+    assert "lettre_info" in deferred
+    assert "photos" in deferred

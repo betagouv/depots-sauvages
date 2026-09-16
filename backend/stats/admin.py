@@ -21,6 +21,7 @@ class StatsConstatationAdmin(admin.ModelAdmin):
         "constatant_role",
         "user_hash",
     ]
+    list_per_page = 25
     readonly_fields = [
         "created",
         "modified",
@@ -41,6 +42,7 @@ class StatsSuiviProcedureAdmin(admin.ModelAdmin):
         "statut_traitement",
         "created",
     ]
+    list_per_page = 25
     readonly_fields = [
         "created",
         "modified",
