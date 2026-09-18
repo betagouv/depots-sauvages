@@ -34,6 +34,7 @@ pillow = "*"
 django-filter = "*"
 django-storages = "*"
 boto3 = "*"
+requests = "*"
 
 [dev-packages]
 black = "*"

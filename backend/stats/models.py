@@ -56,3 +56,50 @@ class StatsSuiviProcedure(SuiviProcedureBaseModel, TrackingBaseModel):
         db_table = "stats_suivi_procedure"
         verbose_name = "Statistique Suivi de procédure"
         verbose_name_plural = "Statistiques Suivis de procédures"
+
+
+class ExternalMetric(TrackingBaseModel):
+    """Agrégat journalier issu d'une source externe (Matomo, Tally, RDV Service Public).
+
+    Une ligne = un jour, une métrique, une modalité, et le nombre d'occurrences.
+
+    Deux règles structurent ce modèle :
+
+    1. On ne stocke jamais de réponse individuelle ni de donnée personnelle. Les
+       collecteurs (`backend/stats/collectors/`) interrogent les API, comptent, et
+       jettent le détail.
+    2. On ne stocke jamais de taux ni de moyenne pré-calculés. Une moyenne de moyennes
+       journalières est fausse dès que le nombre de réponses varie d'un jour à l'autre.
+       En gardant les effectifs, Metabase recalcule la valeur exacte sur n'importe
+       quelle période : `SUM(dimension * value) / SUM(value)`.
+    """
+
+    class Source(models.TextChoices):
+        MATOMO = "matomo", "Matomo"
+        TALLY = "tally", "Tally"
+        RDV = "rdv", "RDV Service Public"
+
+    source = models.CharField("source", max_length=20, choices=Source.choices)
+    metric = models.CharField("métrique", max_length=64)
+    date = models.DateField("jour")
+    dimension = models.CharField("modalité", max_length=128, blank=True, default="")
+    value = models.DecimalField("valeur", max_digits=14, decimal_places=2)
+    details = models.JSONField("détails", default=dict, blank=True)
+    collected_at = models.DateTimeField("collecté le", auto_now=True)
+
+    class Meta:
+        db_table = "stats_external_metric"
+        verbose_name = "Métrique externe"
+        verbose_name_plural = "Métriques externes"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["source", "metric", "date", "dimension"],
+                name="unique_external_metric",
+            )
+        ]
+        indexes = [
+            models.Index(fields=["source", "metric", "date"], name="external_metric_lookup_idx"),
+        ]
+
+    def __str__(self):
+        return f"{self.date} {self.source}.{self.metric}[{self.dimension}] = {self.value}"
