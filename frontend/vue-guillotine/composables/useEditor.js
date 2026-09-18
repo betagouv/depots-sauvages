@@ -24,6 +24,13 @@ export function useEditor(props, emit) {
         openOnClick: false,
         HTMLAttributes: {
           class: 'fr-link',
+          // L'extension pose sinon target="_blank" et rel="nofollow" sur TOUS
+          // les liens, y compris internes : le lecteur perd son onglet et les
+          // moteurs cessent de suivre notre propre maillage. Le comportement
+          // est décidé à l'affichage, selon la destination du lien
+          // (voir vue-guillotine/utils/links.ts).
+          target: null,
+          rel: null,
         },
       }),
     ],
