@@ -1,9 +1,9 @@
-from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.db.models import Max
 
 from backend.constatations.models import Constatation
 from backend.procedures.models import SuiviProcedure
+from backend.stats.db import get_stats_db_alias, stats_are_enabled, stats_db_is_configured
 from backend.stats.models import StatsConstatation, StatsSuiviProcedure
 
 SYNC_REGISTRY = [
@@ -19,7 +19,7 @@ class Command(BaseCommand):
 
     @property
     def stats_db_alias(self):
-        return getattr(settings, "STATS_DATABASE_ALIAS", "stats_db")
+        return get_stats_db_alias()
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -35,7 +35,7 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        if not getattr(settings, "STATS_ENABLED", True):
+        if not stats_are_enabled():
             self.stdout.write(
                 self.style.WARNING(
                     "Stats feature is disabled (STATS_ENABLED=False). Skipping synchronization."
@@ -43,7 +43,7 @@ class Command(BaseCommand):
             )
             return
 
-        if self.stats_db_alias not in settings.DATABASES:
+        if not stats_db_is_configured():
             self.stdout.write(
                 self.style.WARNING(
                     f"Database alias '{self.stats_db_alias}' is not configured in DATABASES. Skipping synchronization."

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from backend.stats.models import StatsConstatation, StatsSuiviProcedure
+from backend.stats.models import ExternalMetric, StatsConstatation, StatsSuiviProcedure
 
 
 @admin.register(StatsConstatation)
@@ -26,6 +26,23 @@ class StatsConstatationAdmin(admin.ModelAdmin):
         "created",
         "modified",
     ]
+
+
+@admin.register(ExternalMetric)
+class ExternalMetricAdmin(admin.ModelAdmin):
+    list_display = [
+        "date",
+        "source",
+        "metric",
+        "dimension",
+        "value",
+        "collected_at",
+    ]
+    list_filter = ["source", "metric", "date"]
+    search_fields = ["metric", "dimension"]
+    date_hierarchy = "date"
+    list_per_page = 50
+    readonly_fields = ["collected_at"]
 
 
 @admin.register(StatsSuiviProcedure)

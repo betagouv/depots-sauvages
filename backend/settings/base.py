@@ -53,6 +53,34 @@ TRACKMAN_MODELS = {
     "activity_log": "activity_logs.ActivityLog",
 }
 
+# Sources externes alimentant le board OKR (voir backend/stats/collectors/).
+# Clé d'API à définir par variable d'environnement, jamais dans le dépôt.
+TALLY_API_KEY = ""
+
+# Formulaires Tally collectés. Seuls les effectifs de réponses entrent en base :
+# aucune réponse individuelle, aucun verbatim, aucune donnée personnelle.
+# `question_id` prime sur `question_contains` ; à renseigner si un formulaire venait
+# à contenir plusieurs questions au libellé proche.
+TALLY_FORMS = [
+    {
+        # KR 1.4 — note d'utilisabilité du formulaire de constatation
+        "form_id": "VLArqN",
+        "metric": "utilisabilite_constatation",
+        "question_id": "",
+        "question_contains": "",
+        "scale": "note_1_5",
+    },
+    {
+        # KR 3.1.1 — utilité perçue : « Stop Dépôt Sauvage m'a permis d'engager
+        # cette procédure plus facilement. »
+        "form_id": "OD9RMg",
+        "metric": "utilite_procedure",
+        "question_id": "",
+        "question_contains": "plus facilement",
+        "scale": "accord_5",
+    },
+]
+
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
