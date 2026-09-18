@@ -14,4 +14,5 @@ class RobotsTxtView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["env_name"] = settings.ENV_NAME
         context["admin_url"] = f"/{settings.ADMIN_URL_NAME.rstrip('/')}/"
+        context["sitemap_url"] = f"{settings.SITE_BASE_URL.rstrip('/')}/sitemap.xml"
         return context

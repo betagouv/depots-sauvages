@@ -1,6 +1,21 @@
 import re
 
+from backend.seo.blog import get_blog_seo_data
 from backend.seo.faq import get_faq_seo_data
+
+# Pages réservées aux utilisateurs connectés ou à l'administration : elles ne
+# doivent pas être proposées à l'indexation, même en production.
+PRIVATE_PATH_PREFIXES = (
+    "/mes-procedures",
+    "/suivi-procedure/",
+    "/constatation",
+    "/constatation-fin/",
+    "/tableau-de-bord",
+    "/backoffice",
+    "/procedures-liste",
+    "/procedure-detail/",
+    "/login-demo",
+)
 
 SEO_PATTERNS = [
     # Pages statiques
@@ -95,6 +110,13 @@ SEO_PATTERNS = [
             "desc": "Retrouvez toutes les réponses aux questions les plus fréquentes sur la lutte contre les dépôts sauvages.",
         },
     ),
+    (
+        r"^/blog$",
+        {
+            "title": "Blog & Retours d'expérience - Stop Dépôt Sauvage",
+            "desc": "Conseils pratiques et retours d'expérience pour aider les communes à traiter leurs dépôts sauvages par la voie administrative.",
+        },
+    ),
     # Pages dynamiques avec identifiants
     (
         r"^/suivi-procedure/[^/]+$",
@@ -120,14 +142,28 @@ SEO_PATTERNS = [
 ]
 
 
-def get_seo_data(path):
+def normalize_path(path):
     normalized_path = "/" + path.strip("/")
     if normalized_path == "//":
         normalized_path = "/"
+    return normalized_path
+
+
+def is_private_path(path):
+    """Indique si la page doit rester hors de l'index des moteurs de recherche."""
+    return normalize_path(path).startswith(PRIVATE_PATH_PREFIXES)
+
+
+def get_seo_data(path):
+    normalized_path = normalize_path(path)
     # Dynamic FAQ metadata
     faq_seo = get_faq_seo_data(normalized_path)
     if faq_seo:
         return faq_seo
+    # Dynamic blog article metadata
+    blog_seo = get_blog_seo_data(normalized_path)
+    if blog_seo:
+        return blog_seo
     for pattern, seo_data in SEO_PATTERNS:
         if re.match(pattern, normalized_path):
             return seo_data
