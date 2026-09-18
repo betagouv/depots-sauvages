@@ -51,7 +51,7 @@
         </p>
       </div>
 
-      <div class="article-body">
+      <div class="article-body" @click="trackBodyLinkClick">
         <BlockRenderer v-if="article.content && article.content.length" :blocks="article.content" />
       </div>
 
@@ -80,7 +80,7 @@
 import type { BlogArticleItem } from '@/components/blog/BlogArticleCard.vue'
 import BlogArticleModal, { type BlogArticleFormData } from '@/components/blog/BlogArticleModal.vue'
 import * as api from '@/services/api'
-import { trackPageViewWithTitle } from '@/services/matomo'
+import { trackEvent, trackPageViewWithTitle } from '@/services/matomo'
 import { DsfrBreadcrumb } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -146,6 +146,27 @@ const loadArticle = async () => {
     trackPageViewWithTitle('Article introuvable')
   } finally {
     isLoading.value = false
+  }
+}
+
+/**
+ * Mesure ce sur quoi les lecteurs cliquent à l'intérieur d'un article.
+ * Les intitulés décrivent l'action observée, pas l'intention supposée.
+ */
+const trackBodyLinkClick = (event: MouseEvent) => {
+  const link = (event.target as HTMLElement)?.closest?.('a[href]')
+  if (!link) {
+    return
+  }
+  const href = link.getAttribute('href') || ''
+  const slug = (route.params.slug as string) || ''
+
+  if (href.includes('/demarrer-constatation')) {
+    trackEvent('Blog', 'Clic vers démarrer une constatation', slug)
+  } else if (href.includes('/blog/')) {
+    trackEvent('Blog', 'Clic vers un autre article', `${slug} → ${href}`)
+  } else {
+    trackEvent('Blog', 'Clic lien dans article', `${slug} → ${href}`)
   }
 }
 
