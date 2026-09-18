@@ -135,4 +135,49 @@ describe('Page Blog Article Détail', () => {
     })
     expect(await findByText('Article de test')).toBeInTheDocument()
   })
+
+  it('déclare la vue de page Matomo avec le titre réel de l article', async () => {
+    ;(window as any)._paq = []
+    ;(api.fetchResource as any).mockResolvedValue(mockArticle)
+    const pinia = createTestingPinia({ stubActions: true })
+    const { findByText } = render(BlogArticlePage, {
+      global: {
+        plugins: [pinia],
+        stubs: {
+          DsfrBreadcrumb: true,
+          RouterLink: { template: '<a><slot /></a>' },
+          BlockRenderer: { template: '<div><slot /></div>' },
+          BlogArticleModal: true,
+        },
+      },
+    })
+    await findByText('Article de test')
+
+    const expectedTitle = 'Article de test - Stop Dépôt Sauvage'
+    expect(document.title).toBe(expectedTitle)
+    expect((window as any)._paq).toContainEqual(['setDocumentTitle', expectedTitle])
+    expect((window as any)._paq).toContainEqual(['trackPageView'])
+  })
+
+  it('signale un article introuvable plutôt que de rester muet', async () => {
+    ;(window as any)._paq = []
+    ;(api.fetchResource as any).mockRejectedValue(new Error('404'))
+    const pinia = createTestingPinia({ stubActions: true })
+    const { findByText } = render(BlogArticlePage, {
+      global: {
+        plugins: [pinia],
+        stubs: {
+          DsfrBreadcrumb: true,
+          RouterLink: { template: '<a><slot /></a>' },
+          BlockRenderer: { template: '<div><slot /></div>' },
+          BlogArticleModal: true,
+        },
+      },
+    })
+    await findByText('Article introuvable')
+    expect((window as any)._paq).toContainEqual([
+      'setDocumentTitle',
+      'Article introuvable - Stop Dépôt Sauvage',
+    ])
+  })
 })
