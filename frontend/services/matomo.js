@@ -1,5 +1,41 @@
 import { MATOMO_ENABLED } from './config'
 
+const DEFAULT_TITLE =
+  'Stop Dépôt Sauvage - Accompagner les collectivités pour mieux lutter contre les dépôts sauvages.'
+
+// Le site répond sur deux domaines (stopdepotsauvage redirige vers protect-envi).
+// Sans cette liste, Matomo compte les liens d'un domaine vers l'autre comme des
+// sorties du site : le parcours « article -> constatation » devient illisible.
+const SITE_DOMAINS = ['*.protect-envi.beta.gouv.fr', '*.stopdepotsauvage.beta.gouv.fr']
+
+// Sans battement de cœur, le temps passé sur la dernière page d'une visite est
+// compté comme nul, ce qui fausse la lecture de l'engagement sur les articles.
+const HEARTBEAT_DELAY_SECONDS = 15
+
+export function buildPageTitle(title) {
+  return title ? `${title} - Stop Dépôt Sauvage` : DEFAULT_TITLE
+}
+
+function pushPageView(title, url) {
+  if (!window._paq) {
+    return
+  }
+  window._paq.push(['setCustomUrl', url])
+  window._paq.push(['setDocumentTitle', title])
+  window._paq.push(['trackPageView'])
+}
+
+/**
+ * Enregistre la vue de page avec un titre connu seulement après chargement des
+ * données (article de blog par exemple), pour les routes marquées
+ * `meta.deferPageView`.
+ */
+export function trackPageViewWithTitle(title) {
+  const pageTitle = buildPageTitle(title)
+  document.title = pageTitle
+  pushPageView(pageTitle, window.location.origin + window.location.pathname)
+}
+
 export function initMatomo(router) {
   const matomoHost = import.meta.env.VITE_MATOMO_HOST
   const matomoSiteId = parseInt(import.meta.env.VITE_MATOMO_SITE_ID)
@@ -15,6 +51,8 @@ export function initMatomo(router) {
   ])
   window._paq.push(['setSiteId', matomoSiteId])
   window._paq.push(['disableCookies'])
+  window._paq.push(['setDomains', SITE_DOMAINS])
+  window._paq.push(['enableHeartBeatTimer', HEARTBEAT_DELAY_SECONDS])
   window._paq.push(['enableLinkTracking'])
 
   const script = document.createElement('script')
@@ -24,13 +62,14 @@ export function initMatomo(router) {
   document.head.appendChild(script)
 
   router.afterEach((to) => {
-    const title = to.meta.title
-      ? `${to.meta.title} - Stop Dépôt Sauvage`
-      : 'Stop Dépôt Sauvage - Accompagner les collectivités pour mieux lutter contre les dépôts sauvages.'
+    const title = buildPageTitle(to.meta.title)
     document.title = title
-    window._paq.push(['setCustomUrl', window.location.origin + to.fullPath])
-    window._paq.push(['setDocumentTitle', title])
-    window._paq.push(['trackPageView'])
+    // Les pages dont le titre dépend d'un contenu chargé à l'affichage
+    // déclarent leur vue de page elles-mêmes, une fois le titre réel connu.
+    if (to.meta.deferPageView) {
+      return
+    }
+    pushPageView(title, window.location.origin + to.fullPath)
   })
 }
 
@@ -59,4 +98,3 @@ export function trackAndOpenLink(category, action, url) {
     window.open(url, '_blank', 'noopener,noreferrer')
   }
 }
-
