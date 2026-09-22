@@ -354,7 +354,8 @@
               <strong>action locale directe contre les dépôts sauvages</strong> ;
             </li>
             <li>
-              L'outil <strong>Stop Dépôt Sauvage</strong> facilite la <strong>traçabilité</strong> et la
+              L'outil <strong>Stop Dépôt Sauvage</strong> facilite la
+              <strong>traçabilité</strong> et la
               <strong>production automatique des documents officiels</strong>
               (rapport, lettres, arrêtés, etc.).
             </li>
@@ -410,7 +411,6 @@ import { reactive } from 'vue'
 
 const contactEmail = import.meta.env.VITE_CONTACT_EMAIL || 'contact@stopdepotsauvage.beta.gouv.fr'
 
-// Liens Légifrance vers la version en vigueur de chaque article
 const articles = {
   l5413: {
     id: 'LEGIARTI000048247402',
