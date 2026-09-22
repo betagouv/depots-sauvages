@@ -397,6 +397,45 @@
           </ul>
         </DsfrCallout>
       </section>
+
+      <section class="fr-mt-8w">
+        <h2 id="et-maintenant" class="fr-h3 fr-mb-3w">
+          <span class="fr-icon-arrow-right-line fr-mr-1w" aria-hidden="true"></span>
+          <span>Et maintenant&nbsp;?</span>
+        </h2>
+        <div class="fr-grid-row fr-grid-row--gutters">
+          <div class="fr-col-12 fr-col-md-6">
+            <div class="next-step-card next-step-card--primary">
+              <h3 class="fr-h4 fr-mb-2w">J'ai un dépôt sauvage à traiter</h3>
+              <p class="fr-text fr-mb-4w next-step-card__text">
+                Vous avez un cas concret&nbsp;: <strong>Stop Dépôt Sauvage</strong> vous guide pas à
+                pas, de la constatation à l'amende.
+              </p>
+              <router-link to="/demarrer-constatation" class="fr-btn fr-btn--lg">
+                Démarrer une procédure
+              </router-link>
+            </div>
+          </div>
+          <div class="fr-col-12 fr-col-md-6">
+            <div class="next-step-card next-step-card--secondary">
+              <h3 class="fr-h4 fr-mb-2w">J'ai encore des questions</h3>
+              <p class="fr-text fr-mb-4w next-step-card__text">
+                Chaque semaine, l'équipe répond en direct aux questions des collectivités lors d'un
+                webinaire d'une heure.
+              </p>
+              <router-link to="/rdv" class="fr-btn fr-btn--secondary fr-btn--lg">
+                Participer au prochain webinaire
+              </router-link>
+            </div>
+          </div>
+        </div>
+        <p class="fr-text fr-mt-4w fr-mb-0">
+          Vous pouvez aussi
+          <router-link to="/faq" class="fr-link">consulter la FAQ</router-link>
+          ou
+          <router-link to="/contact" class="fr-link">nous contacter</router-link>.
+        </p>
+      </section>
     </div>
   </div>
 </template>
@@ -416,3 +455,29 @@ const toggleAccordion = (key: keyof typeof accordions) => {
   accordions[key] = !accordions[key]
 }
 </script>
+
+<style scoped>
+.next-step-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: 100%;
+  padding: 2rem;
+  background-color: var(--background-default-grey);
+  border: 1px solid var(--border-default-grey);
+  border-radius: 12px;
+  box-shadow: var(--premium-shadow);
+}
+
+.next-step-card--primary {
+  border-top: 4px solid var(--border-active-blue-france);
+}
+
+.next-step-card--secondary {
+  border-top: 4px solid var(--border-default-blue-france);
+}
+
+.next-step-card__text {
+  flex-grow: 1;
+}
+</style>
