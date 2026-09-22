@@ -15,6 +15,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sitemaps",
     #
     # Third party apps
     "django_extensions",
@@ -118,6 +119,23 @@ try:
     locale.setlocale(locale.LC_TIME, "fr_FR.UTF-8")
 except locale.Error:
     pass  # Fallback to system default
+
+# Adresse publique du site, utilisée pour les URL absolues destinées aux moteurs
+# de recherche et aux réseaux sociaux (canonical, Open Graph, sitemap.xml).
+#
+# BASCULE DE DOMAINE — à faire le jour où stopdepotsauvage.beta.gouv.fr devient
+# le domaine servi (aujourd'hui il redirige vers protect-envi) :
+#   1. passer SITE_BASE_URL à https://stopdepotsauvage.beta.gouv.fr ;
+#   2. mettre en place une redirection permanente (301) CHEMIN PAR CHEMIN depuis
+#      protect-envi (…/blog/mon-article -> …/blog/mon-article). Une redirection
+#      globale vers la page d'accueil ferait perdre le référencement de chaque
+#      article ;
+#   3. re-soumettre sitemap.xml dans la Search Console du nouveau domaine.
+SITE_BASE_URL = "https://protect-envi.beta.gouv.fr"
+
+# Image utilisée pour les partages (réseaux sociaux, messageries) quand la page
+# n'en fournit pas de plus spécifique.
+SEO_DEFAULT_IMAGE = "/static/depot-de-dechet-sauvage-image-accueil.webp"
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = "/static/"

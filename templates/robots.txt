@@ -6,3 +6,4 @@ Disallow: {{ admin_url }}
 Disallow: /api/
 Allow: /
 {% endif %}
+Sitemap: {{ sitemap_url }}
