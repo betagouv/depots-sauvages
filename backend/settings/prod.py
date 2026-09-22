@@ -47,6 +47,9 @@ if STATS_ENABLED and STATS_DATABASE_URL:
 else:
     DATABASE_ROUTERS = []
 
+# Sources externes du board OKR
+TALLY_API_KEY = env.str("TALLY_API_KEY", default="")
+
 # Security settings for production
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 SECURE_BROWSER_XSS_FILTER = env.bool("SECURE_BROWSER_XSS_FILTER", default=True)

@@ -48,6 +48,9 @@ DATABASES = {
 
 DATABASE_ROUTERS = ["trackman.db_routers.TrackingDatabaseRouter"]
 
+# Sources externes du board OKR
+TALLY_API_KEY = env.str("TALLY_API_KEY", default="")
+
 # Security settings for development
 ALLOWED_HOSTS = ["*"]
 SECURE_BROWSER_XSS_FILTER = False
