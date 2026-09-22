@@ -10,7 +10,10 @@
         <ol class="fr-pl-4w fr-mb-2w fr-text">
           <li>
             <strong>Mettre en œuvre une procédure administrative</strong> sur le fondement de
-            l'article <strong>L.541-3 du Code de l'environnement</strong>.
+            l'article
+            <a v-bind="lawLinkAttrs(articles.l5413)"
+              ><strong>L.541-3 du Code de l'environnement</strong></a
+            >.
           </li>
           <li>
             <strong>Déposer plainte</strong> pour initier une procédure
@@ -59,28 +62,44 @@
         <p class="fr-text">Il s'agit de l'autorité titulaire du pouvoir de police.</p>
         <div class="fr-grid-row fr-grid-row--gutters">
           <div class="fr-col-12 fr-col-md-4">
-            <DsfrCard
-              no-arrow
-              title="Le maire"
-              description="Article L.541-3 du Code de l'environnement, article L.2212-2 du CGCT."
-              class="fr-card--shadow"
-            />
+            <div class="fr-card fr-card--no-arrow fr-card--shadow">
+              <div class="fr-card__body">
+                <div class="fr-card__content">
+                  <h3 class="fr-card__title">Le maire</h3>
+                  <p class="fr-card__desc">
+                    <a v-bind="lawLinkAttrs(articles.l5413)"
+                      >Article L.541-3 du Code de l'environnement</a
+                    >, <a v-bind="lawLinkAttrs(articles.l22122)">article L.2212-2 du CGCT</a>.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="fr-col-12 fr-col-md-4">
-            <DsfrCard
-              no-arrow
-              title="Adjoints ou conseillers municipaux"
-              description="Ayant reçu délégation – article L.2122-18 du CGCT."
-              class="fr-card--shadow"
-            />
+            <div class="fr-card fr-card--no-arrow fr-card--shadow">
+              <div class="fr-card__body">
+                <div class="fr-card__content">
+                  <h3 class="fr-card__title">Adjoints ou conseillers municipaux</h3>
+                  <p class="fr-card__desc">
+                    Ayant reçu délégation –
+                    <a v-bind="lawLinkAttrs(articles.l212218)">article L.2122-18 du CGCT</a>.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="fr-col-12 fr-col-md-4">
-            <DsfrCard
-              no-arrow
-              title="Président de l'EPCI"
-              description="En cas de transfert de compétence – article L.5211-9-2 du CGCT."
-              class="fr-card--shadow"
-            />
+            <div class="fr-card fr-card--no-arrow fr-card--shadow">
+              <div class="fr-card__body">
+                <div class="fr-card__content">
+                  <h3 class="fr-card__title">Président de l'EPCI</h3>
+                  <p class="fr-card__desc">
+                    En cas de transfert de compétence –
+                    <a v-bind="lawLinkAttrs(articles.l5211192)">article L.5211-9-2 du CGCT</a>.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -137,8 +156,10 @@
               <span>Recherche du responsable</span>
             </h3>
             <p class="fr-text">
-              Le responsable est le <strong>producteur ou détenteur des déchets</strong> (article
-              L.541-2 du Code de l'environnement).
+              Le responsable est le <strong>producteur ou détenteur des déchets</strong> (<a
+                v-bind="lawLinkAttrs(articles.l5412)"
+                >article L.541-2 du Code de l'environnement</a
+              >).
             </p>
             <h5 class="fr-h6 fr-mb-1w">Il peut s'agir :</h5>
             <ul class="fr-text fr-pl-2w">
@@ -309,71 +330,14 @@
               <li>
                 En cas de non-respect, elle peut prononcer une
                 <strong>nouvelle amende</strong> allant jusqu'à
-                <strong>150&nbsp;000&nbsp;€</strong> et d'autres sanctions complémentaires (article
-                L.541-3 du Code de l'environnement).
+                <strong>150&nbsp;000&nbsp;€</strong> et d'autres sanctions complémentaires (<a
+                  v-bind="lawLinkAttrs(articles.l5413)"
+                  >article L.541-3 du Code de l'environnement</a
+                >).
               </li>
             </ul>
           </div>
         </article>
-      </section>
-
-      <section class="fr-my-8w">
-        <h2 class="fr-h3 fr-mb-3w">
-          <span class="fr-icon-scales-3-line fr-mr-1w" aria-hidden="true"></span>
-          <span>Textes de loi et références</span>
-        </h2>
-        <ul class="fr-text fr-pl-2w fr-mb-0">
-          <li>
-            <a
-              href="https://www.legifrance.gouv.fr/codes/id/LEGIARTI000006584365/1990-09-30"
-              target="_blank"
-              rel="noreferrer noopener"
-              title="Article L.541-3 du Code de l'environnement - Nouvelle fenêtre"
-            >
-              Article L.541-3 du Code de l'environnement
-            </a>
-          </li>
-          <li>
-            <a
-              href="https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006743353"
-              target="_blank"
-              rel="noreferrer noopener"
-              title="Article L.541-2 du Code de l'environnement - Nouvelle fenêtre"
-            >
-              Article L.541-2 du Code de l'environnement
-            </a>
-          </li>
-          <li>
-            <a
-              href="https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000037703945"
-              target="_blank"
-              rel="noreferrer noopener"
-              title="Article L.2212-2 du Code général des collectivités territoriales - Nouvelle fenêtre"
-            >
-              Article L.2212-2 du Code général des collectivités territoriales
-            </a>
-          </li>
-          <li>
-            <a
-              href="https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000031104930"
-              target="_blank"
-              rel="noreferrer noopener"
-              title="Article L.2122-18 du Code général des collectivités territoriales - Nouvelle fenêtre"
-            >
-              Article L.2122-18 du Code général des collectivités territoriales
-            </a>
-          </li>
-          <li>
-            <a
-              href="https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000048850168"
-              target="_blank"
-              rel="noreferrer noopener"
-              title="Article L.5211-9-2 du Code général des collectivités territoriales - Nouvelle fenêtre"
-            >
-              Article L.5211-9-2 du Code général des collectivités territoriales
-            </a>
-          </li>
-        </ul>
       </section>
 
       <section>
@@ -390,22 +354,92 @@
               <strong>action locale directe contre les dépôts sauvages</strong> ;
             </li>
             <li>
-              L'outil <strong>Stop Dépôt Sauvage</strong> facilite la <strong>traçabilité</strong> et la
+              L'outil <strong>Stop Dépôt Sauvage</strong> facilite la
+              <strong>traçabilité</strong> et la
               <strong>production automatique des documents officiels</strong>
               (rapport, lettres, arrêtés, etc.).
             </li>
           </ul>
         </DsfrCallout>
       </section>
+
+      <section class="fr-mt-8w">
+        <h2 id="et-maintenant" class="fr-h3 fr-mb-3w">
+          <span class="fr-icon-arrow-right-line fr-mr-1w" aria-hidden="true"></span>
+          <span>Et maintenant&nbsp;?</span>
+        </h2>
+        <div class="fr-grid-row fr-grid-row--gutters">
+          <div class="fr-col-12 fr-col-md-6">
+            <div class="next-step-card next-step-card--primary">
+              <h3 class="fr-h4 fr-mb-2w">J'ai un dépôt sauvage à traiter</h3>
+              <p class="fr-text fr-mb-4w next-step-card__text">
+                Vous avez un cas concret&nbsp;: <strong>Stop Dépôt Sauvage</strong> vous guide pas à
+                pas, de la constatation à l'amende.
+              </p>
+              <router-link to="/demarrer-constatation" class="fr-btn fr-btn--lg">
+                Démarrer une procédure
+              </router-link>
+            </div>
+          </div>
+          <div class="fr-col-12 fr-col-md-6">
+            <div class="next-step-card next-step-card--secondary">
+              <h3 class="fr-h4 fr-mb-2w">J'ai encore des questions</h3>
+              <p class="fr-text fr-mb-4w next-step-card__text">
+                Chaque semaine, l'équipe répond en direct aux questions des collectivités lors d'un
+                webinaire d'une heure.
+              </p>
+              <router-link to="/rdv" class="fr-btn fr-btn--secondary fr-btn--lg">
+                Participer au prochain webinaire
+              </router-link>
+            </div>
+          </div>
+        </div>
+        <p class="fr-text fr-mt-4w fr-mb-0">
+          Vous pouvez aussi
+          <router-link to="/faq" class="fr-link">consulter la FAQ</router-link>
+          ou
+          <router-link to="/contact" class="fr-link">nous contacter</router-link>.
+        </p>
+      </section>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { DsfrBadge, DsfrCallout, DsfrCard, DsfrNotice } from '@gouvminint/vue-dsfr'
+import { DsfrBadge, DsfrCallout, DsfrNotice } from '@gouvminint/vue-dsfr'
 import { reactive } from 'vue'
 
 const contactEmail = import.meta.env.VITE_CONTACT_EMAIL || 'contact@stopdepotsauvage.beta.gouv.fr'
+
+const articles = {
+  l5413: {
+    id: 'LEGIARTI000048247402',
+    label: "Article L.541-3 du Code de l'environnement",
+  },
+  l5412: {
+    id: 'LEGIARTI000023268608',
+    label: "Article L.541-2 du Code de l'environnement",
+  },
+  l22122: {
+    id: 'LEGIARTI000029946370',
+    label: 'Article L.2212-2 du Code général des collectivités territoriales',
+  },
+  l212218: {
+    id: 'LEGIARTI000041410795',
+    label: 'Article L.2122-18 du Code général des collectivités territoriales',
+  },
+  l5211192: {
+    id: 'LEGIARTI000048850168',
+    label: 'Article L.5211-9-2 du Code général des collectivités territoriales',
+  },
+}
+
+const lawLinkAttrs = (article: { id: string; label: string }) => ({
+  href: `https://www.legifrance.gouv.fr/codes/article_lc/${article.id}`,
+  target: '_blank',
+  rel: 'noreferrer noopener',
+  title: `${article.label} - Nouvelle fenêtre`,
+})
 
 const accordions = reactive({
   moyens: true,
@@ -416,3 +450,29 @@ const toggleAccordion = (key: keyof typeof accordions) => {
   accordions[key] = !accordions[key]
 }
 </script>
+
+<style scoped>
+.next-step-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: 100%;
+  padding: 2rem;
+  background-color: var(--background-default-grey);
+  border: 1px solid var(--border-default-grey);
+  border-radius: 12px;
+  box-shadow: var(--premium-shadow);
+}
+
+.next-step-card--primary {
+  border-top: 4px solid var(--border-active-blue-france);
+}
+
+.next-step-card--secondary {
+  border-top: 4px solid var(--border-default-blue-france);
+}
+
+.next-step-card__text {
+  flex-grow: 1;
+}
+</style>
