@@ -9,6 +9,8 @@ class BackofficeProcedureFilterSet(django_filters.FilterSet):
     casReels = django_filters.CharFilter(method="filter_cas_reels")
     auteur_identifie = django_filters.CharFilter(method="filter_auteur_identifie")
     auteurIdentifie = django_filters.CharFilter(method="filter_auteur_identifie")
+    besoin_accompagnement = django_filters.CharFilter(method="filter_besoin_accompagnement")
+    besoinAccompagnement = django_filters.CharFilter(method="filter_besoin_accompagnement")
     etape = django_filters.CharFilter(method="filter_etape")
     traitement = django_filters.CharFilter(field_name="suivi_procedure__statut_traitement")
     assignee = django_filters.CharFilter(method="filter_assignee")
@@ -21,11 +23,20 @@ class BackofficeProcedureFilterSet(django_filters.FilterSet):
             "casReels",
             "auteur_identifie",
             "auteurIdentifie",
+            "besoin_accompagnement",
+            "besoinAccompagnement",
             "etape",
             "traitement",
             "assignee",
             "search",
         ]
+
+    def filter_boolean_field(self, queryset, field_name, value):
+        if value == "Oui":
+            return queryset.filter(**{field_name: True})
+        elif value == "Non":
+            return queryset.filter(**{field_name: False})
+        return queryset
 
     def filter_cas_reels(self, queryset, name, value):
         if value == "Oui":
@@ -35,11 +46,10 @@ class BackofficeProcedureFilterSet(django_filters.FilterSet):
         return queryset
 
     def filter_auteur_identifie(self, queryset, name, value):
-        if value == "Oui":
-            return queryset.filter(auteur_identifie=True)
-        elif value == "Non":
-            return queryset.filter(auteur_identifie=False)
-        return queryset
+        return self.filter_boolean_field(queryset, "auteur_identifie", value)
+
+    def filter_besoin_accompagnement(self, queryset, name, value):
+        return self.filter_boolean_field(queryset, "besoin_accompagnement", value)
 
     def filter_etape(self, queryset, name, value):
         if value and value != "Tous" and value.isdigit():

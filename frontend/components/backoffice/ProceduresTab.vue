@@ -70,6 +70,21 @@
             <option value="Non">Non</option>
           </select>
         </div>
+
+        <div class="bo-filter-group-vertical">
+          <label class="bo-filter-label" for="filter-besoin-accompagnement">
+            Besoin d'accompagnement
+          </label>
+          <select
+            id="filter-besoin-accompagnement"
+            v-model="filters.besoinAccompagnement"
+            class="fr-select"
+          >
+            <option value="Tous">Tous</option>
+            <option value="Oui">Oui</option>
+            <option value="Non">Non</option>
+          </select>
+        </div>
       </div>
     </div>
 
@@ -138,6 +153,7 @@
             <th v-if="visibleColumns.montant_amende">Montant amende</th>
             <th v-if="visibleColumns.montant_prejudice">Montant préjudice</th>
             <th v-if="visibleColumns.assigne_a">Assigné à</th>
+            <th v-if="visibleColumns.besoin_accompagnement">Accompagnement</th>
             <th v-if="visibleColumns.actions">Actions</th>
           </tr>
         </thead>
@@ -198,6 +214,15 @@
                   store.assignees.find((a) => a.id === procedure.suivi_procedure?.personne_assignee)
                     ?.name || 'Non assigné'
                 }}
+              </td>
+              <td v-if="visibleColumns.besoin_accompagnement">
+                <span
+                  v-if="procedure.besoin_accompagnement"
+                  class="fr-badge fr-badge--sm fr-badge--info"
+                >
+                  Demandé
+                </span>
+                <span v-else class="fr-text-mention--grey" aria-label="Non demandé">-</span>
               </td>
               <td v-if="visibleColumns.actions">
                 <button
@@ -286,6 +311,7 @@ const filters = ref({
   assignee: parseQueryParam(route.query.assignee, 'Tous'),
   casReels: parseQueryParam(route.query.casReels, 'Oui'),
   auteurIdentifie: parseQueryParam(route.query.auteurIdentifie, 'Tous'),
+  besoinAccompagnement: parseQueryParam(route.query.besoinAccompagnement, 'Tous'),
   search: parseQueryParam(route.query.search, ''),
 })
 
@@ -337,6 +363,7 @@ const fetchBackendProcedures = async () => {
     assignee: route.query.assignee,
     casReels: route.query.casReels ?? 'Oui',
     auteurIdentifie: route.query.auteurIdentifie,
+    besoinAccompagnement: route.query.besoinAccompagnement,
     search: route.query.search,
   })
 }
@@ -367,6 +394,10 @@ watch(
       query.auteurIdentifie = newFilters.auteurIdentifie
     }
 
+    if (newFilters.besoinAccompagnement && newFilters.besoinAccompagnement !== 'Tous') {
+      query.besoinAccompagnement = newFilters.besoinAccompagnement
+    }
+
     if (newFilters.search) {
       query.search = newFilters.search
     }
@@ -387,6 +418,7 @@ watch(
       filters.value.assignee = parseQueryParam(newQuery.assignee, 'Tous')
       filters.value.casReels = parseQueryParam(newQuery.casReels, 'Oui')
       filters.value.auteurIdentifie = parseQueryParam(newQuery.auteurIdentifie, 'Tous')
+      filters.value.besoinAccompagnement = parseQueryParam(newQuery.besoinAccompagnement, 'Tous')
       filters.value.search = parseQueryParam(newQuery.search, '')
       await fetchBackendProcedures()
     }
@@ -406,6 +438,7 @@ const visibleColumns = ref<Record<string, boolean>>({
   montant_amende: false,
   montant_prejudice: false,
   assigne_a: true,
+  besoin_accompagnement: true,
   actions: true,
 })
 
@@ -417,6 +450,7 @@ const customizableColumns = [
   { key: 'montant_amende', label: 'Montant amende' },
   { key: 'montant_prejudice', label: 'Montant préjudice' },
   { key: 'assigne_a', label: 'Assigné à' },
+  { key: 'besoin_accompagnement', label: 'Accompagnement' },
 ]
 
 // Accordion (expanded rows) state
@@ -461,6 +495,10 @@ const filteredProcedures = computed(() => {
     if (filters.value.casReels === 'Non' && !procedure.ceci_est_un_test) return false
     if (filters.value.auteurIdentifie === 'Oui' && !procedure.auteur_identifie) return false
     if (filters.value.auteurIdentifie === 'Non' && procedure.auteur_identifie) return false
+    if (filters.value.besoinAccompagnement === 'Oui' && !procedure.besoin_accompagnement)
+      return false
+    if (filters.value.besoinAccompagnement === 'Non' && procedure.besoin_accompagnement)
+      return false
     if (filters.value.search) {
       const q = filters.value.search.toLowerCase()
       const inCommune = procedure.commune.toLowerCase().includes(q)
