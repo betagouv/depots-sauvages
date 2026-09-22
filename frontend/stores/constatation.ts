@@ -43,6 +43,9 @@ export const useConstatationStore = defineStore('constatation', {
 
     _preparePayload(isDraft: boolean) {
       const data = { ...this.formData, isDraft }
+      if (!data.besoinAccompagnement) {
+        data.contactTelephone = ''
+      }
       if (data.constatantRole === 'autre') {
         data.constatantRole = data.constatantRoleAutre as any
       }

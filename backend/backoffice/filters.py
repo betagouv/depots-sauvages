@@ -31,6 +31,13 @@ class BackofficeProcedureFilterSet(django_filters.FilterSet):
             "search",
         ]
 
+    def filter_boolean_field(self, queryset, field_name, value):
+        if value == "Oui":
+            return queryset.filter(**{field_name: True})
+        elif value == "Non":
+            return queryset.filter(**{field_name: False})
+        return queryset
+
     def filter_cas_reels(self, queryset, name, value):
         if value == "Oui":
             return queryset.filter(ceci_est_un_test=False)
@@ -39,18 +46,10 @@ class BackofficeProcedureFilterSet(django_filters.FilterSet):
         return queryset
 
     def filter_auteur_identifie(self, queryset, name, value):
-        if value == "Oui":
-            return queryset.filter(auteur_identifie=True)
-        elif value == "Non":
-            return queryset.filter(auteur_identifie=False)
-        return queryset
+        return self.filter_boolean_field(queryset, "auteur_identifie", value)
 
     def filter_besoin_accompagnement(self, queryset, name, value):
-        if value == "Oui":
-            return queryset.filter(besoin_accompagnement=True)
-        elif value == "Non":
-            return queryset.filter(besoin_accompagnement=False)
-        return queryset
+        return self.filter_boolean_field(queryset, "besoin_accompagnement", value)
 
     def filter_etape(self, queryset, name, value):
         if value and value != "Tous" and value.isdigit():

@@ -222,7 +222,7 @@
                 >
                   Demandé
                 </span>
-                <span v-else class="fr-text-mention--grey">-</span>
+                <span v-else class="fr-text-mention--grey" aria-label="Non demandé">-</span>
               </td>
               <td v-if="visibleColumns.actions">
                 <button
