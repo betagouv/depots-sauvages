@@ -122,7 +122,13 @@ pipenv shell
 python manage.py migrate
 ```
 
-4. Créez un super-utilisateur si nécessaire :
+4. Chargez les données initiales de configuration ProConnect (habilitations par défaut) :
+
+```bash
+python manage.py loaddata proconnect_access_config
+```
+
+5. Créez un super-utilisateur si nécessaire :
 
 ```bash
 python manage.py createsuperuser

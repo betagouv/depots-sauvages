@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "anymail",
     "python_odt_template",
     "csp",
+    "solo",
     #
     # Project apps
     "backend.throttling",
