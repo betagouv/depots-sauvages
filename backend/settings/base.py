@@ -228,9 +228,9 @@ ANYMAIL = {
 # ProConnect / OIDC / Login Required
 LOGIN_URL = "oidc_authentication_init"
 LOGIN_REDIRECT_URL = "index"
+LOGIN_REDIRECT_URL_FAILURE = "/acces-restreint"
 LOGOUT_REDIRECT_URL = "index"
 OIDC_STORE_ID_TOKEN = True
-
 LOGIN_REQUIRED = True
 
 # Admin configuration
