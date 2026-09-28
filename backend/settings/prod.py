@@ -132,6 +132,8 @@ TASKS["default"]["BACKEND"] = "django_tasks_db.DatabaseBackend"
 EMAIL_BACKEND = env("EMAIL_BACKEND", default="anymail.backends.brevo.EmailBackend")
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
 SERVER_EMAIL = env("SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
+ADMIN_EMAIL = env("ADMIN_EMAIL", default=DEFAULT_FROM_EMAIL)
+
 
 # Anymail settings for production
 ANYMAIL = {

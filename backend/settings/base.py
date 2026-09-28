@@ -224,6 +224,9 @@ CACHES = {
 ANYMAIL = {
     "TEST_MODE": True,
 }
+DEFAULT_FROM_EMAIL = "contact@depots-sauvages.beta.gouv.fr"
+ADMIN_EMAIL = DEFAULT_FROM_EMAIL
+
 
 # ProConnect / OIDC / Login Required
 LOGIN_URL = "oidc_authentication_init"

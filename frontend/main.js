@@ -77,6 +77,12 @@ const router = createRouter({
       meta: { title: 'Mes procédures' },
     },
     {
+      path: '/acces-restreint',
+      name: 'AccesRestreint',
+      component: () => import('./pages/acces-restreint.vue'),
+      meta: { title: 'Accès réservé - Demande d’accès' },
+    },
+    {
       path: '/contact',
       name: 'Contact',
       component: () => import('./pages/contact.vue'),
