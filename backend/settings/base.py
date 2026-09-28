@@ -233,8 +233,12 @@ LOGOUT_REDIRECT_URL = "index"
 OIDC_STORE_ID_TOKEN = True
 LOGIN_REQUIRED = True
 
+# External Services APIs
+RECHERCHE_ENTREPRISES_API_URL = "https://recherche-entreprises.api.gouv.fr"
+
 # Admin configuration
 ENABLE_ADMIN = True
+
 ADMIN_URL_NAME = "admin"
 
 # Bypass Auth Configuration

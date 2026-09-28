@@ -153,13 +153,14 @@ def test_is_eligible_rejected_for_unauthorized_legal_category():
         "siret": "19753471000014",
         "organization_label": "Rectorat de Paris",
     }
-    # 7331 is collèges/académie/rectorat (not in allowed prefixes)
+    # 7331 is middle schools / academy / rectorate (not in allowed prefixes)
     with patch("backend.proconnect.auth.get_nature_juridique_for_siren", return_value="7331"):
         assert backend.is_eligible_proconnect_user(claims) is False
 
 
 @pytest.mark.django_db
 def test_get_or_create_user_rejected_stores_session_info():
+
     backend = ProConnectOIDCBackend()
     request = create_request_with_session()
     backend.request = request

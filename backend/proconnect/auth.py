@@ -12,11 +12,13 @@ logger = logging.getLogger(__name__)
 
 
 def get_nature_juridique_for_siren(siren: str) -> str:
-    """Interroge l'API Recherche d'entreprises pour récupérer la catégorie / nature juridique."""
+    """
+    Query the Recherche d'entreprises API to retrieve legal category / nature juridique.
+    """
     if not siren:
         return ""
     api_url = getattr(
-        settings, "RECHERCHE_ENTREPRISES_API", "https://recherche-entreprises.api.gouv.fr"
+        settings, "RECHERCHE_ENTREPRISES_API_URL", "https://recherche-entreprises.api.gouv.fr"
     )
     url = f"{api_url}/search?{urllib.parse.urlencode({'q': siren})}"
     req = urllib.request.Request(url, headers={"User-Agent": "depots-sauvages-proconnect-auth"})
@@ -27,9 +29,7 @@ def get_nature_juridique_for_siren(siren: str) -> str:
             if results:
                 return str(results[0].get("nature_juridique") or "").strip()
     except Exception as exc:
-        logger.warning(
-            f"Erreur lors de la récupération de la nature juridique pour le SIREN {siren}: {exc}"
-        )
+        logger.warning(f"Error fetching legal category (nature juridique) for SIREN {siren}: {exc}")
     return ""
 
 
@@ -54,27 +54,28 @@ def sync_proconnect_profile(user, claims):
 
 class ProConnectOIDCBackend(OIDCAuthenticationBackend):
     def is_eligible_proconnect_user(self, claims) -> bool:
-        """Vérifie si l'utilisateur a le rôle agent_public et appartient à un organisme éligible."""
+        """Check if user has agent_public role and belongs to an authorized organization."""
         roles = claims.get("roles") or []
         if isinstance(roles, str):
             roles = [roles]
         if "agent_public" not in roles:
-            logger.info("ProConnect accès refusé: rôle 'agent_public' absent")
+            logger.info("ProConnect access denied: 'agent_public' role missing")
             return False
         siret = str(claims.get("siret") or "").strip()
         siren = siret[:9] if len(siret) >= 9 else ""
         if not siren:
-            logger.info("ProConnect accès refusé: aucun SIRET/SIREN fourni")
+            logger.info("ProConnect access denied: no SIRET/SIREN provided")
             return False
         config = ProConnectAccessConfig.get_solo()
         if config.est_siren_autorise(siren):
             return True
-        # Résolution de la catégorie / nature juridique
+        # Resolve legal category / nature juridique
         nature_juridique = get_nature_juridique_for_siren(siren)
         if nature_juridique and config.est_categorie_juridique_autorisee(nature_juridique):
             return True
         logger.info(
-            f"ProConnect refusé: SIREN {siren} (nature juridique: {nature_juridique}) non habilité"
+            f"ProConnect access denied: SIREN {siren} "
+            f"(nature juridique: {nature_juridique}) unauthorized"
         )
         return False
 
