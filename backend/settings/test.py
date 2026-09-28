@@ -32,6 +32,16 @@ THROTTLE_UNSAFE_RATE = "10000/hour"
 PROCONNECT_ENABLED = False
 SENTRY_ENABLED = False
 
+# Default mock OIDC endpoints to allow instantiating OIDC backends in tests
+OIDC_OP_TOKEN_ENDPOINT = "https://example.com/token"
+OIDC_OP_USER_ENDPOINT = "https://example.com/userinfo"
+OIDC_OP_JWKS_ENDPOINT = "https://example.com/jwks"
+OIDC_OP_AUTHORIZATION_ENDPOINT = "https://example.com/auth"
+OIDC_OP_LOGOUT_ENDPOINT = "https://example.com/logout"
+OIDC_RP_CLIENT_ID = "mock-client"
+OIDC_RP_CLIENT_SECRET = "mock-secret"
+OIDC_RP_SIGN_ALGO = "RS256"
+
 if "mozilla_django_oidc" in INSTALLED_APPS:
     INSTALLED_APPS.remove("mozilla_django_oidc")
 
