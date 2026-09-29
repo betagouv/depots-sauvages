@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "anymail",
     "python_odt_template",
     "csp",
+    "solo",
     #
     # Project apps
     "backend.throttling",
@@ -223,17 +224,24 @@ CACHES = {
 ANYMAIL = {
     "TEST_MODE": True,
 }
+DEFAULT_FROM_EMAIL = "contact@depots-sauvages.beta.gouv.fr"
+ADMIN_EMAIL = DEFAULT_FROM_EMAIL
+
 
 # ProConnect / OIDC / Login Required
 LOGIN_URL = "oidc_authentication_init"
 LOGIN_REDIRECT_URL = "index"
+LOGIN_REDIRECT_URL_FAILURE = "/acces-restreint"
 LOGOUT_REDIRECT_URL = "index"
 OIDC_STORE_ID_TOKEN = True
-
 LOGIN_REQUIRED = True
+
+# External Services APIs
+RECHERCHE_ENTREPRISES_API_URL = "https://recherche-entreprises.api.gouv.fr"
 
 # Admin configuration
 ENABLE_ADMIN = True
+
 ADMIN_URL_NAME = "admin"
 
 # Bypass Auth Configuration

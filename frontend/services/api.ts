@@ -33,7 +33,11 @@ export const API_URLS = {
   bypassAuthConfig: `${API_URL}/bypass-auth/config/`,
   bypassAuthLogin: `${API_URL}/bypass-auth/login/`,
   constatations: `${API_URL}/constatations/`,
+  proconnectRejectedInfo: `${API_URL}/proconnect/rejected-info/`,
+  proconnectDemanderAcces: `${API_URL}/proconnect/demander-acces/`,
+  backofficeProConnectConfig: `${API_URL}/backoffice/proconnect-config/`,
 }
+
 
 // API functions
 async function makeRequest(
@@ -142,3 +146,29 @@ export const loginBypassAuth = (
   email: string
 ): Promise<{ message: string; user: BypassAuthUser }> =>
   makeRequest(API_URLS.bypassAuthLogin, 'POST', { email })
+
+export interface ProConnectRejectedInfo {
+  siret?: string
+  siren?: string
+  organization_label?: string
+  email?: string
+  name?: string
+}
+
+export interface ProConnectAccessRequestPayload {
+  siret?: string
+  siren?: string
+  organization_label?: string
+  email: string
+  name?: string
+  message?: string
+}
+
+export const getProConnectRejectedInfo = (): Promise<ProConnectRejectedInfo> =>
+  makeRequest(API_URLS.proconnectRejectedInfo, 'GET')
+
+export const submitProConnectAccessRequest = (
+  payload: ProConnectAccessRequestPayload
+): Promise<{ success: boolean; message: string }> =>
+  makeRequest(API_URLS.proconnectDemanderAcces, 'POST', payload)
+
