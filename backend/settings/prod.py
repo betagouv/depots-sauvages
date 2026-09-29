@@ -64,7 +64,7 @@ API_ADRESSE_DATA_GOUV = "https://api-adresse.data.gouv.fr"
 
 # API Entreprises
 RECHERCHE_ENTREPRISES_API_URL = env(
-    "RECHERCHE_ENTREPRISES_API_URL", "https://recherche-entreprises.api.gouv.fr"
+    "RECHERCHE_ENTREPRISES_API_URL", default="https://recherche-entreprises.api.gouv.fr"
 )
 
 # Content Security Policy (django-csp 4.0+)
@@ -105,7 +105,7 @@ CONTENT_SECURITY_POLICY = {
                 CRISP_WSS,
                 ICONIFY,
                 API_ADRESSE_DATA_GOUV,
-                RECHERCHE_ENTREPRISES_API,
+                RECHERCHE_ENTREPRISES_API_URL,
             ],
         ),
     }
