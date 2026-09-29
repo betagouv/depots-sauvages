@@ -19,16 +19,10 @@
             title-tag="h2"
             class="fr-mb-4w"
           >
-            <p>
-              La plateforme Stop Déchets Sauvages habilite par défaut les <strong>communes</strong>,
-              les <strong>intercommunalités</strong> (CC, CA, CU, Métropoles), les
-              <strong>syndicats de collecte / traitement des déchets</strong>, ainsi que les corps
-              habilités de l'État (Gendarmerie, ONF, OFB).
-            </p>
             <p class="fr-mb-0">
-              Si votre établissement est compétent ou mandaté pour constater et instruire des
-              infractions liées aux dépôts sauvages, vous pouvez solliciter une activation en
-              quelques secondes ci-dessous.
+              L'accès est réservé aux collectivités et services compétents dans la lutte contre les
+              dépôts sauvages. Si votre structure en fait partie, vous pouvez demander une
+              activation ci-dessous.
             </p>
           </DsfrAlert>
 
@@ -49,84 +43,86 @@
             </div>
           </DsfrAlert>
 
-          <div v-else class="fr-card fr-card--no-arrow shadow-card fr-p-4w">
-            <h2 class="fr-h3 fr-mb-2w">Demander l'accès pour votre établissement</h2>
-            <p class="fr-text--sm fr-text--mention-grey fr-mb-4w">
-              Ces informations ont été automatiquement pré-remplies à partir de votre profil
-              ProConnect.
-            </p>
+          <div v-else class="fr-card fr-card--no-arrow shadow-card">
+            <div class="fr-card__body fr-p-4w">
+              <h2 class="fr-h3 fr-mb-2w">Demander l'accès pour votre établissement</h2>
+              <p class="fr-text--sm fr-text--mention-grey fr-mb-4w">
+                Ces informations ont été automatiquement pré-remplies à partir de votre profil
+                ProConnect.
+              </p>
 
-            <form @submit.prevent="handleSubmit">
-              <div class="fr-mb-3w">
-                <DsfrInputGroup
-                  v-model="form.organization_label"
-                  label="Établissement / Organisation"
-                  hint="Nom de votre collectivité ou administration"
-                  :required="true"
-                />
-              </div>
-
-              <div class="fr-grid-row fr-grid-row--gutters fr-mb-3w">
-                <div class="fr-col-12 fr-col-md-6">
+              <form @submit.prevent="handleSubmit">
+                <div class="fr-mb-3w">
                   <DsfrInputGroup
-                    v-model="form.siren"
-                    label="Numéro SIREN"
-                    hint="9 chiffres"
-                    maxlength="9"
-                  />
-                </div>
-                <div class="fr-col-12 fr-col-md-6">
-                  <DsfrInputGroup
-                    v-model="form.siret"
-                    label="Numéro SIRET (optionnel)"
-                    hint="14 chiffres"
-                    maxlength="14"
-                  />
-                </div>
-              </div>
-
-              <div class="fr-grid-row fr-grid-row--gutters fr-mb-3w">
-                <div class="fr-col-12 fr-col-md-6">
-                  <DsfrInputGroup v-model="form.name" label="Nom et prénom de l'agent" />
-                </div>
-                <div class="fr-col-12 fr-col-md-6">
-                  <DsfrInputGroup
-                    v-model="form.email"
-                    type="email"
-                    label="Adresse e-mail professionnelle"
-                    hint="Pour recevoir la notification d'activation"
+                    v-model="form.organization_label"
+                    label="Établissement / Organisation"
+                    hint="Nom de votre collectivité ou administration"
                     :required="true"
                   />
                 </div>
-              </div>
 
-              <div class="fr-mb-4w">
-                <DsfrInputGroup
-                  v-model="form.message"
-                  :is-textarea="true"
-                  label="Précision sur votre fonction ou mission (optionnel)"
-                  hint="Ex : Police municipale, service environnement, gestion des déchets..."
-                  placeholder="Expliquez brièvement votre rôle dans la lutte contre les dépôts sauvages..."
-                  rows="3"
-                />
-              </div>
+                <div class="fr-grid-row fr-grid-row--gutters fr-mb-3w">
+                  <div class="fr-col-12 fr-col-md-6">
+                    <DsfrInputGroup
+                      v-model="form.siren"
+                      label="Numéro SIREN"
+                      hint="9 chiffres"
+                      maxlength="9"
+                    />
+                  </div>
+                  <div class="fr-col-12 fr-col-md-6">
+                    <DsfrInputGroup
+                      v-model="form.siret"
+                      label="Numéro SIRET (optionnel)"
+                      hint="14 chiffres"
+                      maxlength="14"
+                    />
+                  </div>
+                </div>
 
-              <DsfrAlert v-if="errorMessage" type="error" class="fr-mb-3w">
-                <p>{{ errorMessage }}</p>
-              </DsfrAlert>
+                <div class="fr-grid-row fr-grid-row--gutters fr-mb-3w">
+                  <div class="fr-col-12 fr-col-md-6">
+                    <DsfrInputGroup v-model="form.name" label="Nom et prénom de l'agent" />
+                  </div>
+                  <div class="fr-col-12 fr-col-md-6">
+                    <DsfrInputGroup
+                      v-model="form.email"
+                      type="email"
+                      label="Adresse e-mail professionnelle"
+                      hint="Pour recevoir la notification d'activation"
+                      :required="true"
+                    />
+                  </div>
+                </div>
 
-              <div class="fr-btns-group fr-btns-group--right fr-btns-group--inline-md">
-                <DsfrButton secondary to="/"> Annuler </DsfrButton>
-                <DsfrButton type="submit" :disabled="isSubmitting || !form.email">
-                  <span
-                    v-if="isSubmitting"
-                    class="fr-icon-refresh-line fr-icon--sm fr-mr-1w"
-                    aria-hidden="true"
-                  ></span>
-                  {{ isSubmitting ? 'Transmission en cours...' : "Demander l'ouverture d'accès" }}
-                </DsfrButton>
-              </div>
-            </form>
+                <div class="fr-mb-4w">
+                  <DsfrInputGroup
+                    v-model="form.message"
+                    :is-textarea="true"
+                    label="Précision sur votre fonction ou mission (optionnel)"
+                    hint="Ex : Police municipale, service environnement, gestion des déchets..."
+                    placeholder="Expliquez brièvement votre rôle dans la lutte contre les dépôts sauvages..."
+                    rows="3"
+                  />
+                </div>
+
+                <DsfrAlert v-if="errorMessage" type="error" class="fr-mb-3w">
+                  <p>{{ errorMessage }}</p>
+                </DsfrAlert>
+
+                <div class="fr-btns-group fr-btns-group--right fr-btns-group--inline-md">
+                  <DsfrButton secondary to="/"> Annuler </DsfrButton>
+                  <DsfrButton type="submit" :disabled="isSubmitting || !form.email">
+                    <span
+                      v-if="isSubmitting"
+                      class="fr-icon-refresh-line fr-icon--sm fr-mr-1w"
+                      aria-hidden="true"
+                    ></span>
+                    {{ isSubmitting ? 'Transmission en cours...' : "Demander l'ouverture d'accès" }}
+                  </DsfrButton>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
