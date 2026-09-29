@@ -1,6 +1,6 @@
 import { MATOMO_ENABLED } from './config'
 
-export function initMatomo(router) {
+export function initMatomo() {
   const matomoHost = import.meta.env.VITE_MATOMO_HOST
   const matomoSiteId = parseInt(import.meta.env.VITE_MATOMO_SITE_ID)
 
@@ -22,16 +22,14 @@ export function initMatomo(router) {
   script.src = `${matomoHost.endsWith('/') ? matomoHost : matomoHost + '/'}matomo.js`
   script.onerror = () => console.error('[Matomo] Erreur lors du chargement du script')
   document.head.appendChild(script)
+}
 
-  router.afterEach((to) => {
-    const title = to.meta.title
-      ? `${to.meta.title} - Stop Dépôt Sauvage`
-      : 'Stop Dépôt Sauvage - Accompagner les collectivités pour mieux lutter contre les dépôts sauvages.'
-    document.title = title
-    window._paq.push(['setCustomUrl', window.location.origin + to.fullPath])
+export function trackPageView(title, path) {
+  if (window._paq) {
+    window._paq.push(['setCustomUrl', window.location.origin + path])
     window._paq.push(['setDocumentTitle', title])
     window._paq.push(['trackPageView'])
-  })
+  }
 }
 
 export function trackDownload(url) {
@@ -59,4 +57,3 @@ export function trackAndOpenLink(category, action, url) {
     window.open(url, '_blank', 'noopener,noreferrer')
   }
 }
-

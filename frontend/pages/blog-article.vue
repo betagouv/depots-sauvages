@@ -80,6 +80,7 @@
 import type { BlogArticleItem } from '@/components/blog/BlogArticleCard.vue'
 import BlogArticleModal, { type BlogArticleFormData } from '@/components/blog/BlogArticleModal.vue'
 import * as api from '@/services/api'
+import { setPageTitle } from '@/services/pageTitle'
 import { DsfrBreadcrumb } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -139,6 +140,7 @@ const loadArticle = async () => {
     console.error('Erreur chargement article :', err)
     article.value = null
   } finally {
+    setPageTitle(article.value?.title || 'Article introuvable', route.path)
     isLoading.value = false
   }
 }

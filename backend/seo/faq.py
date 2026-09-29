@@ -1,8 +1,7 @@
 import re
 
-from django.utils.html import strip_tags
-
 from backend.faq.models import FAQItem
+from backend.seo.utils import excerpt_from_blocks, page_title
 
 
 def get_faq_seo_data(path: str) -> dict | None:
@@ -12,24 +11,10 @@ def get_faq_seo_data(path: str) -> dict | None:
     faq_match = re.match(r"^/faq/(?P<slug>[\w-]+)$", path)
     if not faq_match:
         return None
-    slug = faq_match.group("slug")
-    try:
-        faq_item = FAQItem.objects.filter(slug=slug).first()
-        if faq_item:
-            desc = "Stop Dépôt Sauvage - Foire Aux Questions"
-            for block in faq_item.content or []:
-                if block.get("type") == "rich_text" and block.get("value"):
-                    plain_text = strip_tags(block["value"])
-                    plain_text = plain_text.replace("&nbsp;", " ").strip()
-                    if len(plain_text) > 150:
-                        desc = plain_text[:147] + "..."
-                    else:
-                        desc = plain_text
-                    break
-            return {
-                "title": f"{faq_item.title} FAQ - Stop Dépôt Sauvage",
-                "desc": desc,
-            }
-    except Exception:
-        pass
-    return None
+    faq_item = FAQItem.objects.filter(slug=faq_match.group("slug")).first()
+    if not faq_item:
+        return None
+    return {
+        "title": page_title(faq_item.title),
+        "desc": excerpt_from_blocks(faq_item.content) or "Stop Dépôt Sauvage - Foire Aux Questions",
+    }

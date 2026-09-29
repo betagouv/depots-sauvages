@@ -10,6 +10,7 @@ import { getUserInfo } from './services/api'
 import { LOGIN_REQUIRED } from './services/config'
 import { initCrisp } from './services/crisp'
 import { initMatomo } from './services/matomo'
+import { initPageTitles } from './services/pageTitle'
 import { useAdminModeStore } from './stores/admin-mode'
 import './styles/premium-design.css'
 
@@ -165,7 +166,7 @@ const router = createRouter({
       path: '/faq/:slug?',
       name: 'FAQ',
       component: () => import('./pages/faq.vue'),
-      meta: { title: 'Foire Aux Questions' },
+      meta: { title: 'Foire Aux Questions', dynamicTitle: true },
     },
     {
       path: '/blog',
@@ -177,7 +178,7 @@ const router = createRouter({
       path: '/blog/:slug',
       name: 'BlogArticle',
       component: () => import('./pages/blog-article.vue'),
-      meta: { title: 'Article' },
+      meta: { title: 'Article', dynamicTitle: true },
     },
     {
       path: '/backoffice',
@@ -292,7 +293,8 @@ app.use(router)
 app.use(pinia)
 app.use(VueDsfr)
 
-initMatomo(router)
+initMatomo()
+initPageTitles(router)
 initCrisp()
 
 app.mount('#app')

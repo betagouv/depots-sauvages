@@ -1,8 +1,17 @@
 from django.conf import settings
+from django.templatetags.static import static
 from django.views.decorators.cache import never_cache
 from django.views.generic import TemplateView
 
 from backend.seo.seo_metadata import get_seo_data
+
+
+def default_share_image_url():
+    # Repli sans empreinte si l'image n'est pas dans le manifeste de collectstatic
+    try:
+        return static("og-image.jpg")
+    except ValueError:
+        return f"{settings.STATIC_URL}og-image.jpg"
 
 
 class IndexView(TemplateView):
@@ -22,6 +31,12 @@ class IndexView(TemplateView):
         context["seo_description"] = (
             seo_data.get("desc") or "Signaler un dépôt sauvage avec Stop Dépôt Sauvage."
         )
+        request = self.request
+        context["seo_image"] = request.build_absolute_uri(
+            seo_data.get("image") or default_share_image_url()
+        )
+        context["seo_url"] = request.build_absolute_uri(request.path)
+        context["seo_type"] = seo_data.get("type") or "website"
         context["seo_robots"] = (
             "noindex, nofollow" if getattr(settings, "ENV_NAME", "") != "prod" else "index, follow"
         )
