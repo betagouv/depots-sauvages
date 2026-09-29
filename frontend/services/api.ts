@@ -35,7 +35,9 @@ export const API_URLS = {
   constatations: `${API_URL}/constatations/`,
   proconnectRejectedInfo: `${API_URL}/proconnect/rejected-info/`,
   proconnectDemanderAcces: `${API_URL}/proconnect/demander-acces/`,
+  backofficeProConnectConfig: `${API_URL}/backoffice/proconnect-config/`,
 }
+
 
 // API functions
 async function makeRequest(

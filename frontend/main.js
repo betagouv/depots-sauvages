@@ -223,6 +223,18 @@ const router = createRouter({
       },
     },
     {
+      path: '/proconnect-acces',
+      name: 'ProConnectAccesBackoffice',
+      component: () => import('./pages/backoffice.vue'),
+      meta: {
+        title: 'Backoffice - Règles d’accès ProConnect',
+        requiresStaff: true,
+        tab: 'proconnect',
+        activeMenu: '/backoffice',
+      },
+    },
+
+    {
       path: '/mentions-legales',
       name: 'MentionsLegales',
       component: () => import('./pages/mentions-legales.vue'),

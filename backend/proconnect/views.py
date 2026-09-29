@@ -2,14 +2,19 @@ import logging
 
 from django.conf import settings
 from rest_framework import status
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from backend.proconnect.emails import send_proconnect_access_request_notification_task
-from backend.proconnect.serializers import ProConnectAccessRequestSerializer
+from backend.proconnect.models import ProConnectAccessConfig
+from backend.proconnect.serializers import (
+    ProConnectAccessConfigSerializer,
+    ProConnectAccessRequestSerializer,
+)
 
 logger = logging.getLogger(__name__)
+
 
 
 class ProConnectRejectedInfoView(APIView):
@@ -52,3 +57,26 @@ class ProConnectAccessRequestView(APIView):
             {"success": True, "message": "Votre demande a été transmise à notre équipe."},
             status=status.HTTP_200_OK,
         )
+
+
+class ProConnectAccessConfigView(APIView):
+    """
+    API endpoint for viewing and updating ProConnect access restrictions.
+    Restricted to staff users.
+    """
+
+    permission_classes = [IsAdminUser]
+
+    def get(self, request):
+        config = ProConnectAccessConfig.get_solo()
+        serializer = ProConnectAccessConfigSerializer(config)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request):
+        config = ProConnectAccessConfig.get_solo()
+        serializer = ProConnectAccessConfigSerializer(config, data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+

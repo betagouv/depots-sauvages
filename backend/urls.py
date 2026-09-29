@@ -21,9 +21,14 @@ from backend.current_user.views import UserInfoViewSet, logout_view
 from backend.faq.views import FAQItemViewSet
 from backend.home.views import index_view
 from backend.procedures.views import SuiviProcedureViewSet
-from backend.proconnect.views import ProConnectAccessRequestView, ProConnectRejectedInfoView
+from backend.proconnect.views import (
+    ProConnectAccessConfigView,
+    ProConnectAccessRequestView,
+    ProConnectRejectedInfoView,
+)
 from backend.seo.views import RobotsTxtView
 from backend.site_content.views import SiteContentViewSet
+
 
 # API Routes registration
 router = DefaultRouter()
@@ -84,6 +89,12 @@ urlpatterns.extend(
             ProConnectAccessRequestView.as_view(),
             name="proconnect-demander-acces",
         ),
+        path(
+            "api/backoffice/proconnect-config/",
+            ProConnectAccessConfigView.as_view(),
+            name="backoffice-proconnect-config",
+        ),
+
         path("api/", include(router.urls)),
         path("logout/", logout_view, name="logout"),
     ]
