@@ -140,9 +140,9 @@ const loadArticle = async () => {
     console.error('Erreur chargement article :', err)
     article.value = null
   } finally {
-    setPageTitle(article.value?.title || 'Article introuvable', route.path)
     isLoading.value = false
   }
+  setPageTitle(article.value?.title || 'Article introuvable', route.path)
 }
 
 const openEditModal = () => {

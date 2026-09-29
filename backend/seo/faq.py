@@ -11,7 +11,7 @@ def get_faq_seo_data(path: str) -> dict | None:
     faq_match = re.match(r"^/faq/(?P<slug>[\w-]+)$", path)
     if not faq_match:
         return None
-    faq_item = FAQItem.objects.filter(slug=faq_match.group("slug")).first()
+    faq_item = FAQItem.objects.published().filter(slug=faq_match.group("slug")).first()
     if not faq_item:
         return None
     return {

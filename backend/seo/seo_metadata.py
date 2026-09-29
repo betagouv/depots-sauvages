@@ -6,8 +6,6 @@ from backend.seo.faq import get_faq_seo_data
 
 logger = logging.getLogger(__name__)
 
-# Pages déclinées par contenu (une question, un article...) : chaque fonction reconnaît
-# son format d'adresse et renvoie title, desc et éventuellement image et type.
 DYNAMIC_SEO_RESOLVERS = [get_faq_seo_data, get_blog_seo_data]
 
 SEO_PATTERNS = [

@@ -49,6 +49,13 @@ def test_seo_metadata_dynamic_faq(client):
 
 
 @pytest.mark.django_db
+def test_seo_metadata_unpublished_faq_item_is_generic(client):
+    FAQItem.objects.create(title="Question brouillon", slug="question-brouillon", is_published=False)
+    content = client.get("/faq/question-brouillon").content.decode()
+    assert "Question brouillon - Stop Dépôt Sauvage" not in content
+
+
+@pytest.mark.django_db
 def test_seo_metadata_blog_article(client):
     BlogArticle.objects.create(
         title="Retour d'expérience de Mougins",

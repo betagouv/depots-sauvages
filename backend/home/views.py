@@ -6,14 +6,6 @@ from django.views.generic import TemplateView
 from backend.seo.seo_metadata import get_seo_data
 
 
-def default_share_image_url():
-    # Repli sans empreinte si l'image n'est pas dans le manifeste de collectstatic
-    try:
-        return static("og-image.jpg")
-    except ValueError:
-        return f"{settings.STATIC_URL}og-image.jpg"
-
-
 class IndexView(TemplateView):
     """
     Serve Vue Application
@@ -33,7 +25,7 @@ class IndexView(TemplateView):
         )
         request = self.request
         context["seo_image"] = request.build_absolute_uri(
-            seo_data.get("image") or default_share_image_url()
+            seo_data.get("image") or static("og-image.jpg")
         )
         context["seo_url"] = request.build_absolute_uri(request.path)
         context["seo_type"] = seo_data.get("type") or "website"

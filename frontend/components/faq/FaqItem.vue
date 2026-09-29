@@ -106,7 +106,6 @@ const toggleAccordion = () => {
 
 useAnchorScroll(isExpanded, props.item.slug, props.item.title)
 
-// Question ouverte : titre de l'onglet et page vue Matomo au nom de la question
 watch(isExpanded, (expanded) => {
   if (expanded) {
     setPageTitle(props.item.title, `/faq/${props.item.slug}`)
