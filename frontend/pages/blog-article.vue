@@ -52,7 +52,11 @@
       </div>
 
       <div class="article-body">
-        <BlockRenderer v-if="article.content && article.content.length" :blocks="article.content" />
+        <BlockRenderer
+          v-if="article.content && article.content.length"
+          :blocks="article.content"
+          :site-hosts="SITE_HOSTS"
+        />
       </div>
 
       <div class="article-footer fr-mt-8w fr-pt-4w">
@@ -79,9 +83,10 @@
 <script setup lang="ts">
 import type { BlogArticleItem } from '@/components/blog/BlogArticleCard.vue'
 import BlogArticleModal, { type BlogArticleFormData } from '@/components/blog/BlogArticleModal.vue'
+import { SITE_HOSTS } from '@/constants/site'
 import * as api from '@/services/api'
 import { DsfrBreadcrumb } from '@gouvminint/vue-dsfr'
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAdminModeStore } from '../stores/admin-mode'
 import { BlockRenderer } from '../vue-guillotine'
@@ -134,6 +139,7 @@ const loadArticle = async () => {
   const slug = route.params.slug as string
   try {
     const data = await api.fetchResource(`${api.API_URL}/blog-articles/${slug}/`)
+    if (slug !== route.params.slug) return
     article.value = data
   } catch (err) {
     console.error('Erreur chargement article :', err)
@@ -188,9 +194,11 @@ const handleSave = async (data: BlogArticleFormData) => {
   }
 }
 
-onMounted(() => {
-  loadArticle()
-})
+watch(
+  () => route.params.slug,
+  (slug) => slug && loadArticle(),
+  { immediate: true }
+)
 </script>
 
 <style scoped>

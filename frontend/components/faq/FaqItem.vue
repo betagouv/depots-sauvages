@@ -55,7 +55,7 @@
       :style="isExpanded ? 'max-height: none;' : undefined"
     >
       <div class="fr-p-3w">
-        <BlockRenderer :blocks="item.content" />
+        <BlockRenderer :blocks="item.content" :site-hosts="SITE_HOSTS" />
       </div>
     </div>
   </section>
@@ -64,6 +64,7 @@
 <script setup lang="ts">
 import CopyButton from '@/components/shared/CopyButton.vue'
 import { useAnchorScroll } from '@/composables/useAnchorScroll'
+import { SITE_HOSTS } from '@/constants/site'
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { AdminControls, BlockRenderer } from '../../vue-guillotine'
@@ -89,7 +90,7 @@ defineEmits<{
   (e: 'down'): void
   (e: 'edit'): void
   (e: 'delete'): void
- }>()
+}>()
 
 const route = useRoute()
 const isExpanded = ref(false)

@@ -38,6 +38,7 @@ L'architecture de `vue-guillotine` repose sur le principe de briques de construc
 ### 2. Rendu de blocs
 
 - **`BlockRenderer`** : Composant de rendu dynamique d'une liste de blocs compatible avec le format JSON de type guillotine ou blocks.
+  - Liens du texte riche : les liens vers le site (domaine courant ou domaines passés dans la prop `siteHosts`, sous-domaines compris) s'ouvrent dans le même onglet via `vue-router`. Les autres sites et les fichiers (`/media/`, `/static/`, PDF…) s'ouvrent dans un nouvel onglet, avec `rel="noopener noreferrer"` et un `title` « nouvelle fenêtre ».
   - Gère par défaut les types `rich_text` et `heading` sous forme de titre `h2` avec la classe `fr-h4`.
   - Propose un système de slots dynamiques nommés d'après le type du bloc pour permettre au projet client d'étendre facilement le rendu, par exemple `<template #mon_bloc_perso="{ block }">`.
 
@@ -50,7 +51,7 @@ L'architecture de `vue-guillotine` repose sur le principe de briques de construc
 Initialise une instance de Tiptap configurée pour l'écosystème :
 
 - Configure `StarterKit` avec des classes CSS spécifiques pour les listes ordonnées/puces (`tiptap-ol`, `tiptap-ul`).
-- Configure l'extension `Link` (ouverture au clic désactivée, classe `fr-link`).
+- Configure l'extension `Link` (ouverture au clic désactivée, classe `fr-link`, sans `target` ni `rel` enregistrés : ils sont posés à l'affichage par `BlockRenderer`).
 - Synchronise la valeur bidirectionnelle (`modelValue`) avec gestion du cycle de mise à jour pour éviter les curseurs qui sautent.
 
 ### `useBlockList(initialBlocks)`

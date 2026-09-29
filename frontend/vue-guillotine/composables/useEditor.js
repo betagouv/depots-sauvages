@@ -20,8 +20,7 @@ export function useEditor(props, emit) {
           },
         },
       }),
-      // Pas de target/rel enregistrés : c'est BlockRenderer qui décide à l'affichage
-      // (même onglet pour les pages du site, nouvel onglet pour les autres sites).
+      // target/rel are set at render time by BlockRenderer
       Link.extend({
         addAttributes() {
           return {
