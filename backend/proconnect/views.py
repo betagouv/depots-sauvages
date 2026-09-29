@@ -16,7 +16,6 @@ from backend.proconnect.serializers import (
 logger = logging.getLogger(__name__)
 
 
-
 class ProConnectRejectedInfoView(APIView):
     """
     Returns metadata about the rejected organization stored in session
@@ -78,5 +77,11 @@ class ProConnectAccessConfigView(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         serializer.save()
+        logger.info(
+            "ProConnect access config updated by user %s (%s). Sirens count: %d, Categories count: %d",
+            request.user.pk,
+            request.user.username,
+            len(serializer.validated_data.get("sirens_autorises", [])),
+            len(serializer.validated_data.get("categories_juridiques_autorisees", [])),
+        )
         return Response(serializer.data, status=status.HTTP_200_OK)
-

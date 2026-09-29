@@ -39,9 +39,15 @@ class ProConnectAccessConfig(SingletonModel):
             return False
         clean_cat = str(categorie_juridique).strip()
         prefixes = tuple(
-            str(item.get("code") if isinstance(item, dict) else item).strip()
-            for item in (self.categories_juridiques_autorisees or [])
+            p
+            for p in (
+                str(item.get("code") if isinstance(item, dict) else item).strip()
+                for item in (self.categories_juridiques_autorisees or [])
+            )
+            if p
         )
+        if not prefixes:
+            return False
         return clean_cat.startswith(prefixes)
 
 

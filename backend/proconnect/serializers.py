@@ -27,9 +27,10 @@ class ProConnectAccessRequestSerializer(serializers.Serializer):
 class CategorieJuridiqueItemSerializer(serializers.Serializer):
     code = serializers.RegexField(
         regex=r"^\d+$",
+        max_length=10,
         error_messages={"invalid": "Le code doit contenir uniquement des chiffres."},
     )
-    nom = serializers.CharField(required=False, allow_blank=True, default="")
+    nom = serializers.CharField(required=False, allow_blank=True, max_length=255, default="")
 
     def validate_code(self, value):
         return value.strip()
@@ -39,8 +40,8 @@ class CategorieJuridiqueItemSerializer(serializers.Serializer):
 
 
 class SirenItemSerializer(serializers.Serializer):
-    siren = serializers.CharField()
-    nom = serializers.CharField(required=False, allow_blank=True, default="")
+    siren = serializers.CharField(max_length=9)
+    nom = serializers.CharField(required=False, allow_blank=True, max_length=255, default="")
 
     def validate_siren(self, value):
         siren = value.strip().replace(" ", "")

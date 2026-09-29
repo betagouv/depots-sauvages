@@ -55,3 +55,9 @@ def test_est_categorie_juridique_autorisee():
     assert (
         config.est_categorie_juridique_autorisee("7150") is False
     )  # Deconcentrated service without whitelist
+    assert config.est_categorie_juridique_autorisee("") is False
+    assert config.est_categorie_juridique_autorisee(None) is False
+    config.categories_juridiques_autorisees = [{"code": "", "nom": ""}, ""]
+    config.save()
+    assert config.est_categorie_juridique_autorisee("7150") is False
+    assert config.est_categorie_juridique_autorisee("5499") is False

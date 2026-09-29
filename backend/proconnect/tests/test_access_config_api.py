@@ -93,3 +93,23 @@ def test_proconnect_access_config_duplicate_error():
     data = response.json()
     assert "sirens_autorises" in data
     assert any("en double" in str(err) for err in data["sirens_autorises"])
+
+
+@pytest.mark.django_db
+def test_proconnect_access_config_max_length_validation():
+    staff_user = UserFactory(is_staff=True)
+    client = APIClient()
+    client.force_authenticate(user=staff_user)
+    url = reverse("backoffice-proconnect-config")
+    long_code_payload = {
+        "categories_juridiques_autorisees": [{"code": "12345678901", "nom": "Trop long"}],
+        "sirens_autorises": [],
+    }
+    response = client.put(url, long_code_payload, format="json")
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    long_nom_payload = {
+        "categories_juridiques_autorisees": [],
+        "sirens_autorises": [{"siren": "157000019", "nom": "A" * 256}],
+    }
+    response = client.put(url, long_nom_payload, format="json")
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
