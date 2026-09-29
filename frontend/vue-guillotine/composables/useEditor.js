@@ -20,10 +20,22 @@ export function useEditor(props, emit) {
           },
         },
       }),
-      Link.configure({
+      // Pas de target/rel enregistrés : c'est BlockRenderer qui décide à l'affichage
+      // (même onglet pour les pages du site, nouvel onglet pour les autres sites).
+      Link.extend({
+        addAttributes() {
+          return {
+            ...this.parent?.(),
+            target: { default: null, parseHTML: () => null },
+            rel: { default: null, parseHTML: () => null },
+          }
+        },
+      }).configure({
         openOnClick: false,
         HTMLAttributes: {
           class: 'fr-link',
+          target: null,
+          rel: null,
         },
       }),
     ],
