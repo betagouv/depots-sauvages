@@ -5,6 +5,12 @@ import { axe } from 'vitest-axe'
 import AccesRestreint from '../pages/acces-restreint.vue'
 import * as api from '../services/api'
 
+vi.mock('vue-router', () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+  }),
+}))
+
 vi.mock('../services/api', () => ({
   getProConnectRejectedInfo: vi.fn(),
   submitProConnectAccessRequest: vi.fn(),

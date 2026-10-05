@@ -39,7 +39,7 @@
               ouvrées.
             </p>
             <div class="fr-mt-2w">
-              <DsfrButton secondary to="/"> Retourner à l'accueil </DsfrButton>
+              <DsfrButton secondary @click="router.push('/')"> Retourner à l'accueil </DsfrButton>
             </div>
           </DsfrAlert>
 
@@ -57,6 +57,7 @@
                     v-model="form.organization_label"
                     label="Établissement / Organisation"
                     hint="Nom de votre collectivité ou administration"
+                    :readonly="true"
                     :required="true"
                   />
                 </div>
@@ -68,6 +69,7 @@
                       label="Numéro SIREN"
                       hint="9 chiffres"
                       maxlength="9"
+                      :readonly="true"
                     />
                   </div>
                   <div class="fr-col-12 fr-col-md-6">
@@ -76,13 +78,18 @@
                       label="Numéro SIRET (optionnel)"
                       hint="14 chiffres"
                       maxlength="14"
+                      :readonly="true"
                     />
                   </div>
                 </div>
 
                 <div class="fr-grid-row fr-grid-row--gutters fr-mb-3w">
                   <div class="fr-col-12 fr-col-md-6">
-                    <DsfrInputGroup v-model="form.name" label="Nom et prénom de l'agent" />
+                    <DsfrInputGroup
+                      v-model="form.name"
+                      label="Nom et prénom de l'agent"
+                      :readonly="true"
+                    />
                   </div>
                   <div class="fr-col-12 fr-col-md-6">
                     <DsfrInputGroup
@@ -90,6 +97,7 @@
                       type="email"
                       label="Adresse e-mail professionnelle"
                       hint="Pour recevoir la notification d'activation"
+                      :readonly="true"
                       :required="true"
                     />
                   </div>
@@ -111,7 +119,9 @@
                 </DsfrAlert>
 
                 <div class="fr-btns-group fr-btns-group--right fr-btns-group--inline-md">
-                  <DsfrButton secondary to="/"> Annuler </DsfrButton>
+                  <DsfrButton type="button" secondary @click="router.push('/')">
+                    Annuler
+                  </DsfrButton>
                   <DsfrButton type="submit" :disabled="isSubmitting || !form.email">
                     <span
                       v-if="isSubmitting"
@@ -133,11 +143,14 @@
 <script setup lang="ts">
 import { DsfrAlert, DsfrButton, DsfrInputGroup } from '@gouvminint/vue-dsfr'
 import { onMounted, reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import {
   getProConnectRejectedInfo,
   submitProConnectAccessRequest,
   type ProConnectAccessRequestPayload,
 } from '../services/api'
+
+const router = useRouter()
 
 const form = reactive<ProConnectAccessRequestPayload>({
   organization_label: '',
@@ -190,8 +203,19 @@ const handleSubmit = async () => {
 
 <style scoped>
 .shadow-card {
+  height: auto !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   border: 1px solid #e5e5e5;
   border-radius: 4px;
+}
+
+.shadow-card .fr-card__body {
+  height: auto !important;
+}
+
+:deep(input[readonly]) {
+  background-color: var(--background-contrast-grey) !important;
+  color: var(--text-mention-grey) !important;
+  cursor: not-allowed;
 }
 </style>
