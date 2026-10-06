@@ -128,13 +128,32 @@ python manage.py migrate
 python manage.py loaddata proconnect_access_config
 ```
 
-5. Créez un super-utilisateur si nécessaire :
+5. (Optionnel en local) Chargez l'échantillon d'entités publiques locales Sirene pour tester ProConnect hors-ligne :
+
+```bash
+python manage.py loaddata sample_public_entities
+```
+
+> **Autonomie vis-à-vis de l'API externe (Production) :**
+> Pour pré-remplir ou mettre à jour la base locale avec l'ensemble des entités publiques françaises (catégories juridiques `7xxx` : communes, EPCI, départements, régions, CCAS...), lancez la commande d'import :
+>
+> ```bash
+> python manage.py import_sirene_public
+> ```
+>
+> Vous pouvez également spécifier un fichier local CSV/ZIP téléchargé :
+>
+> ```bash
+> python manage.py import_sirene_public --file=/chemin/vers/StockUniteLegale_utf8.zip
+> ```
+
+6. Créez un super-utilisateur si nécessaire :
 
 ```bash
 python manage.py createsuperuser
 ```
 
-5. Lancez le serveur de développement :
+7. Lancez le serveur de développement :
 
 ```bash
 python manage.py runserver

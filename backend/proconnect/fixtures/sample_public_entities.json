@@ -1,0 +1,66 @@
+[
+  {
+    "model": "proconnect.publicentitysirene",
+    "pk": "217500016",
+    "fields": {
+      "categorie_juridique": "7210",
+      "denomination": "Ville de Paris"
+    }
+  },
+  {
+    "model": "proconnect.publicentitysirene",
+    "pk": "216901231",
+    "fields": {
+      "categorie_juridique": "7210",
+      "denomination": "Ville de Lyon"
+    }
+  },
+  {
+    "model": "proconnect.publicentitysirene",
+    "pk": "211300553",
+    "fields": {
+      "categorie_juridique": "7210",
+      "denomination": "Ville de Marseille"
+    }
+  },
+  {
+    "model": "proconnect.publicentitysirene",
+    "pk": "200054781",
+    "fields": {
+      "categorie_juridique": "7344",
+      "denomination": "Métropole du Grand Paris"
+    }
+  },
+  {
+    "model": "proconnect.publicentitysirene",
+    "pk": "267500452",
+    "fields": {
+      "categorie_juridique": "7361",
+      "denomination": "Centre d'Action Sociale de la Ville de Paris"
+    }
+  },
+  {
+    "model": "proconnect.publicentitysirene",
+    "pk": "200053726",
+    "fields": {
+      "categorie_juridique": "7346",
+      "denomination": "Communauté de Communes du Pays de Valois"
+    }
+  },
+  {
+    "model": "proconnect.publicentitysirene",
+    "pk": "227500018",
+    "fields": {
+      "categorie_juridique": "7220",
+      "denomination": "Département de Paris"
+    }
+  },
+  {
+    "model": "proconnect.publicentitysirene",
+    "pk": "237500079",
+    "fields": {
+      "categorie_juridique": "7230",
+      "denomination": "Région Île-de-France"
+    }
+  }
+]

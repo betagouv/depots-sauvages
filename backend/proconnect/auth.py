@@ -6,7 +6,7 @@ import urllib.request
 from django.conf import settings
 from mozilla_django_oidc.auth import OIDCAuthenticationBackend
 
-from backend.proconnect.models import ProConnectAccessConfig, ProConnectProfile
+from backend.proconnect.models import ProConnectAccessConfig, ProConnectProfile, PublicEntitySirene
 
 logger = logging.getLogger(__name__)
 
@@ -27,10 +27,28 @@ def get_nature_juridique_for_siren(siren: str) -> str:
             data = json.loads(resp.read().decode())
             results = data.get("results") or []
             if results:
-                return str(results[0].get("nature_juridique") or "").strip()
+                cat = str(results[0].get("nature_juridique") or "").strip()
+                nom = str(
+                    results[0].get("nom_complet") or results[0].get("nom_raison_sociale") or ""
+                ).strip()
+                if cat:
+                    PublicEntitySirene.objects.update_or_create(
+                        siren=siren,
+                        defaults={"categorie_juridique": cat, "denomination": nom},
+                    )
+                return cat
     except Exception as exc:
         logger.warning(f"Error fetching legal category (nature juridique) for SIREN {siren}: {exc}")
     return ""
+
+
+def resolve_nature_juridique(siren: str) -> str:
+    if not siren:
+        return ""
+    entity = PublicEntitySirene.objects.filter(siren=siren).first()
+    if entity and entity.categorie_juridique:
+        return entity.categorie_juridique
+    return get_nature_juridique_for_siren(siren)
 
 
 def sync_proconnect_profile(user, claims):
@@ -69,8 +87,7 @@ class ProConnectOIDCBackend(OIDCAuthenticationBackend):
         config = ProConnectAccessConfig.get_solo()
         if config.est_siren_autorise(siren):
             return True
-        # Resolve legal category / nature juridique
-        nature_juridique = get_nature_juridique_for_siren(siren)
+        nature_juridique = resolve_nature_juridique(siren)
         if nature_juridique and config.est_categorie_juridique_autorisee(nature_juridique):
             return True
         logger.info(

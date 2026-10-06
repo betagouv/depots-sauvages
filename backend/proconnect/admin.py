@@ -1,7 +1,7 @@
 from django.contrib import admin
 from solo.admin import SingletonModelAdmin
 
-from backend.proconnect.models import ProConnectAccessConfig, ProConnectProfile
+from backend.proconnect.models import ProConnectAccessConfig, ProConnectProfile, PublicEntitySirene
 
 
 @admin.register(ProConnectAccessConfig)
@@ -36,3 +36,11 @@ class ProConnectProfileAdmin(admin.ModelAdmin):
         "organization_label",
     )
     readonly_fields = ("created", "modified", "user")
+
+
+@admin.register(PublicEntitySirene)
+class PublicEntitySireneAdmin(admin.ModelAdmin):
+    list_display = ("siren", "categorie_juridique", "denomination", "modified")
+    search_fields = ("siren", "denomination", "categorie_juridique")
+    list_filter = ("categorie_juridique",)
+    readonly_fields = ("created", "modified")

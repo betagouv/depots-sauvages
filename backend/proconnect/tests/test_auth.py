@@ -204,3 +204,48 @@ def test_get_nature_juridique_for_siren_api_error_returns_empty_string():
     with patch("urllib.request.urlopen", side_effect=Exception("API timeout")):
         nature = get_nature_juridique_for_siren("218710606")
         assert nature == ""
+
+
+@pytest.mark.django_db
+def test_proconnect_auth_uses_local_public_entity_without_api_call():
+    from backend.proconnect.models import PublicEntitySirene
+
+    PublicEntitySirene.objects.create(
+        siren="217500016",
+        categorie_juridique="7210",
+        denomination="Ville de Paris",
+    )
+    backend = ProConnectOIDCBackend()
+    claims = {
+        "roles": ["agent_public"],
+        "siret": "21750001600019",
+        "organization_label": "Ville de Paris",
+    }
+    with patch("backend.proconnect.auth.get_nature_juridique_for_siren") as mock_api:
+        assert backend.is_eligible_proconnect_user(claims) is True
+        mock_api.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_proconnect_auth_fallback_api_caches_in_public_entity():
+    from backend.proconnect.models import PublicEntitySirene
+
+    siren = "218710606"
+    assert not PublicEntitySirene.objects.filter(siren=siren).exists()
+    backend = ProConnectOIDCBackend()
+    claims = {
+        "roles": ["agent_public"],
+        "siret": f"{siren}00011",
+        "organization_label": "Mairie Inconnue",
+    }
+    fake_response = MagicMock()
+    fake_response.read.return_value = (
+        b'{"results": [{"nature_juridique": "7210", "nom_complet": "Mairie Inconnue"}]}'
+    )
+    fake_response.__enter__.return_value = fake_response
+    with patch("urllib.request.urlopen", return_value=fake_response):
+        assert backend.is_eligible_proconnect_user(claims) is True
+    cached = PublicEntitySirene.objects.filter(siren=siren).first()
+    assert cached is not None
+    assert cached.categorie_juridique == "7210"
+    assert cached.denomination == "Mairie Inconnue"

@@ -73,3 +73,18 @@ class ProConnectProfile(TimeStampedModel):
 
     def __str__(self):
         return f"{self.user.email} - {self.organization_label or self.siret or 'Sans organisation'}"
+
+
+class PublicEntitySirene(TimeStampedModel):
+    siren = models.CharField(max_length=9, primary_key=True, verbose_name="SIREN")
+    categorie_juridique = models.CharField(
+        max_length=4, db_index=True, verbose_name="Catégorie Juridique"
+    )
+    denomination = models.CharField(max_length=255, blank=True, verbose_name="Dénomination")
+
+    class Meta:
+        verbose_name = "Entité publique Sirene"
+        verbose_name_plural = "Entités publiques Sirene"
+
+    def __str__(self):
+        return f"{self.siren} - {self.denomination or self.categorie_juridique}"
