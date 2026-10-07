@@ -1,12 +1,17 @@
 import logging
-from typing import Any
 
 from backend.activity_logs.tracking import IdempotentTrackingHandler
 
 logger = logging.getLogger(__name__)
 
 
-def track_proconnect_activity(action: str, actor: str, session_id: str | None = None, data: dict[str, Any] | None = None, target: str = "auth") -> None:
+def track_proconnect_activity(
+    action,
+    actor,
+    session_id=None,
+    data=None,
+    target="auth",
+):
     try:
         IdempotentTrackingHandler().track_action(
             {
@@ -22,7 +27,13 @@ def track_proconnect_activity(action: str, actor: str, session_id: str | None = 
         logger.debug(f"Failed to record ProConnect activity log: {exc}")
 
 
-def record_proconnect_sentry_event(event_type: str, siren: str = "", reason: str = "", organization_label: str = "", extra: dict[str, Any] | None = None) -> None:
+def record_proconnect_sentry_event(
+    event_type,
+    siren="",
+    reason="",
+    organization_label="",
+    extra=None,
+):
     try:
         import sentry_sdk
 

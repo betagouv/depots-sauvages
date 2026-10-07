@@ -73,7 +73,7 @@ def sync_proconnect_profile(user, claims):
 
 
 class ProConnectOIDCBackend(OIDCAuthenticationBackend):
-    def check_proconnect_eligibility(self, claims) -> tuple[bool, str, dict]:
+    def check_proconnect_eligibility(self, claims):
         if not getattr(settings, "PROCONNECT_ACCESS_RESTRICTIONS_ENABLED", True):
             return True, "", {}
         roles = claims.get("roles") or []
@@ -103,7 +103,7 @@ class ProConnectOIDCBackend(OIDCAuthenticationBackend):
             {"siren": siren, "nature_juridique": nature_juridique},
         )
 
-    def is_eligible_proconnect_user(self, claims) -> bool:
+    def is_eligible_proconnect_user(self, claims):
         eligible, _, _ = self.check_proconnect_eligibility(claims)
         return eligible
 
