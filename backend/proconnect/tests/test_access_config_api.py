@@ -49,10 +49,10 @@ def test_proconnect_access_config_get_and_put():
     assert put_response.status_code == status.HTTP_200_OK
     assert len(put_response.json()["sirens_autorises"]) == 2
     config = ProConnectAccessConfig.get_solo()
-    assert config.est_siren_autorise("157000019") is True
-    assert config.est_siren_autorise("999999999") is False
-    assert config.est_categorie_juridique_autorisee("7210") is True
-    assert config.est_categorie_juridique_autorisee("5499") is False
+    assert config.is_siren_allowed("157000019") is True
+    assert config.is_siren_allowed("999999999") is False
+    assert config.is_legal_category_allowed("7210") is True
+    assert config.is_legal_category_allowed("5499") is False
 
 
 @pytest.mark.django_db

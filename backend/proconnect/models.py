@@ -24,7 +24,7 @@ class ProConnectAccessConfig(SingletonModel):
     def __str__(self):
         return "Configuration d'accès ProConnect"
 
-    def est_siren_autorise(self, siren: str) -> bool:
+    def is_siren_allowed(self, siren: str) -> bool:
         if not siren:
             return False
         clean_siren = str(siren).strip()
@@ -34,10 +34,10 @@ class ProConnectAccessConfig(SingletonModel):
         ]
         return clean_siren in sirens
 
-    def est_categorie_juridique_autorisee(self, categorie_juridique: str) -> bool:
-        if not categorie_juridique:
+    def is_legal_category_allowed(self, legal_category: str) -> bool:
+        if not legal_category:
             return False
-        clean_cat = str(categorie_juridique).strip()
+        clean_cat = str(legal_category).strip()
         prefixes = tuple(
             p
             for p in (

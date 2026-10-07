@@ -87,10 +87,10 @@ class ProConnectOIDCBackend(OIDCAuthenticationBackend):
             logger.info("ProConnect access denied: no SIRET/SIREN provided")
             return False
         config = ProConnectAccessConfig.get_solo()
-        if config.est_siren_autorise(siren):
+        if config.is_siren_allowed(siren):
             return True
         nature_juridique = resolve_nature_juridique(siren)
-        if nature_juridique and config.est_categorie_juridique_autorisee(nature_juridique):
+        if nature_juridique and config.is_legal_category_allowed(nature_juridique):
             return True
         logger.info(
             f"ProConnect access denied: SIREN {siren} "
