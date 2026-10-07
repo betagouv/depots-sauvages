@@ -61,6 +61,16 @@ def record_proconnect_sentry_event(
             if "refuse" in event_type:
                 sentry_sdk.capture_message(
                     f"ProConnect access denied: {reason} (SIREN: {siren or 'N/A'})",
+                    level="warning",
+                )
+            elif event_type == "proconnect_demande_acces_envoyee":
+                sentry_sdk.capture_message(
+                    f"ProConnect access requested: {organization_label or 'N/A'} (SIREN: {siren or 'N/A'})",
+                    level="warning",
+                )
+            elif event_type == "proconnect_config_modifiee":
+                sentry_sdk.capture_message(
+                    "ProConnect configuration modified",
                     level="info",
                 )
     except Exception as exc:

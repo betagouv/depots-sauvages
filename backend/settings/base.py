@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "backend.stats",
     "backend.activity_logs",
     "backend.proconnect",
+    "backend.sentry",
 ]
 
 TRACKMAN_DATABASE_ALIAS = "stats_db"
