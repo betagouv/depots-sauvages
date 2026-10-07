@@ -46,6 +46,9 @@ ACTION_TARGET_MAP = {
     "recouvrement_confirme": "suivi_procedure",
     "nettoyage_enregistre": "suivi_procedure",
     "contact_clic_inscription": "contact",
+    "proconnect_acces_refuse": "auth",
+    "proconnect_demande_acces_envoyee": "contact",
+    "proconnect_config_modifiee": "admin",
 }
 
 

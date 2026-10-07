@@ -38,7 +38,7 @@ def test_proconnect_access_request_requires_session():
     assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(databases=["default", "stats_db"])
 def test_proconnect_access_request_uses_session_data_and_ignores_forged_payload(settings):
     settings.ADMIN_EMAIL = "admin@depots-sauvages.beta.gouv.fr"
     client = APIClient()
@@ -60,9 +60,18 @@ def test_proconnect_access_request_uses_session_data_and_ignores_forged_payload(
         "name": "Evil Actor",
         "message": "Nous souhaitons déclarer des dépôts sauvages aux abords des lycées.",
     }
-    response = client.post(url, forged_payload, format="json")
-    assert response.status_code == status.HTTP_200_OK
-    assert response.json()["success"] is True
+    from unittest.mock import patch
+
+    with patch("backend.proconnect.views.record_proconnect_sentry_event") as mock_sentry:
+        response = client.post(url, forged_payload, format="json")
+        assert response.status_code == status.HTTP_200_OK
+        assert response.json()["success"] is True
+        mock_sentry.assert_called_once_with(
+            event_type="proconnect_demande_acces_envoyee",
+            siren="123456789",
+            reason="demande_acces",
+            organization_label="Académie de Paris",
+        )
     assert len(mail.outbox) == 1
     sent_email = mail.outbox[0]
     assert "Demande d'accès ProConnect" in sent_email.subject
@@ -78,3 +87,15 @@ def test_proconnect_access_request_uses_session_data_and_ignores_forged_payload(
     assert "Académie de Paris" in sent_email.body
     assert "Nous souhaitons déclarer des dépôts sauvages" in sent_email.body
     assert "proconnect/proconnectaccessconfig/" in sent_email.body
+    from backend.activity_logs.models import ActivityLog
+
+    log = (
+        ActivityLog.objects.using("stats_db")
+        .filter(action="proconnect_demande_acces_envoyee")
+        .first()
+    )
+    assert log is not None
+    assert log.target == "contact"
+    assert log.data["siren"] == "123456789"
+    assert log.data["organization_label"] == "Académie de Paris"
+    assert log.data["a_message_personnalise"] is True

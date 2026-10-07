@@ -24,7 +24,7 @@ def test_proconnect_access_config_permissions():
     assert response.status_code == status.HTTP_200_OK
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(databases=["default", "stats_db"])
 def test_proconnect_access_config_get_and_put():
     staff_user = UserFactory(is_staff=True)
     client = APIClient()
@@ -45,14 +45,26 @@ def test_proconnect_access_config_get_and_put():
             {"siren": "662043116", "nom": "ONF"},
         ],
     }
-    put_response = client.put(url, new_payload, format="json")
-    assert put_response.status_code == status.HTTP_200_OK
-    assert len(put_response.json()["sirens_autorises"]) == 2
+    from unittest.mock import patch
+    with patch("backend.proconnect.views.record_proconnect_sentry_event") as mock_sentry:
+        put_response = client.put(url, new_payload, format="json")
+        assert put_response.status_code == status.HTTP_200_OK
+        assert len(put_response.json()["sirens_autorises"]) == 2
+        mock_sentry.assert_called_once_with(
+            event_type="proconnect_config_modifiee",
+            extra={"sirens_count": 2, "categories_juridiques_count": 2},
+        )
     config = ProConnectAccessConfig.get_solo()
     assert config.is_siren_allowed("157000019") is True
     assert config.is_siren_allowed("999999999") is False
     assert config.is_legal_category_allowed("7210") is True
     assert config.is_legal_category_allowed("5499") is False
+    from backend.activity_logs.models import ActivityLog
+    log = ActivityLog.objects.using("stats_db").filter(action="proconnect_config_modifiee").first()
+    assert log is not None
+    assert log.target == "admin"
+    assert log.data["sirens_count"] == 2
+    assert log.data["categories_juridiques_count"] == 2
 
 
 @pytest.mark.django_db

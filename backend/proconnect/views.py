@@ -8,10 +8,12 @@ from rest_framework.views import APIView
 
 from backend.proconnect.emails import send_proconnect_access_request_notification_task
 from backend.proconnect.models import ProConnectAccessConfig
+from backend.proconnect.monitoring import record_proconnect_sentry_event, track_proconnect_activity
 from backend.proconnect.serializers import (
     ProConnectAccessConfigSerializer,
     ProConnectAccessRequestSerializer,
 )
+from backend.stats.anonymizer import anonymize_user_hash
 
 logger = logging.getLogger(__name__)
 
@@ -66,6 +68,24 @@ class ProConnectAccessRequestView(APIView):
         admin_path = f"/{admin_url_name}/proconnect/proconnectaccessconfig/"
         admin_link = request.build_absolute_uri(admin_path) if request else admin_path
         send_proconnect_access_request_notification_task.enqueue(merged_data, admin_link)
+        session_key = getattr(request.session, "session_key", None)
+        track_proconnect_activity(
+            action="proconnect_demande_acces_envoyee",
+            actor=anonymize_user_hash(merged_data.get("email", "")),
+            session_id=session_key,
+            target="contact",
+            data={
+                "siren": merged_data.get("siren", ""),
+                "organization_label": merged_data.get("organization_label", ""),
+                "a_message_personnalise": bool(merged_data.get("message")),
+            },
+        )
+        record_proconnect_sentry_event(
+            event_type="proconnect_demande_acces_envoyee",
+            siren=merged_data.get("siren", ""),
+            reason="demande_acces",
+            organization_label=merged_data.get("organization_label", ""),
+        )
         return Response(
             {"success": True, "message": "Votre demande a été transmise à notre équipe."},
             status=status.HTTP_200_OK,
@@ -91,11 +111,33 @@ class ProConnectAccessConfigView(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         serializer.save()
+        sirens_count = len(serializer.validated_data.get("sirens_autorises", []))
+        categories_count = len(
+            serializer.validated_data.get("categories_juridiques_autorisees", [])
+        )
         logger.info(
             "ProConnect access config updated by user %s (%s). Sirens count: %d, Categories count: %d",
             request.user.pk,
             request.user.username,
-            len(serializer.validated_data.get("sirens_autorises", [])),
-            len(serializer.validated_data.get("categories_juridiques_autorisees", [])),
+            sirens_count,
+            categories_count,
+        )
+        session_key = getattr(request.session, "session_key", None)
+        track_proconnect_activity(
+            action="proconnect_config_modifiee",
+            actor=anonymize_user_hash(request.user.id),
+            session_id=session_key,
+            target="admin",
+            data={
+                "sirens_count": sirens_count,
+                "categories_juridiques_count": categories_count,
+            },
+        )
+        record_proconnect_sentry_event(
+            event_type="proconnect_config_modifiee",
+            extra={
+                "sirens_count": sirens_count,
+                "categories_juridiques_count": categories_count,
+            },
         )
         return Response(serializer.data, status=status.HTTP_200_OK)

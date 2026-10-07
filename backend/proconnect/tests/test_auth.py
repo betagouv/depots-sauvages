@@ -158,13 +158,11 @@ def test_is_eligible_rejected_for_unauthorized_legal_category():
         assert backend.is_eligible_proconnect_user(claims) is False
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(databases=["default", "stats_db"])
 def test_get_or_create_user_rejected_stores_session_info():
-
     backend = ProConnectOIDCBackend()
     request = create_request_with_session()
     backend.request = request
-
     user_info = {
         "sub": "non-eligible-sub",
         "email": "agent@rectorat.fr",
@@ -174,18 +172,34 @@ def test_get_or_create_user_rejected_stores_session_info():
         "organization_label": "Rectorat de Paris",
         "roles": ["agent_public"],
     }
-
     with patch.object(backend, "get_userinfo", return_value=user_info):
         with patch("backend.proconnect.auth.get_nature_juridique_for_siren", return_value="7331"):
-            user = backend.get_or_create_user("fake_access_token", "fake_id_token", {})
-            assert user is None
-            assert "proconnect_rejected_info" in request.session
-            rejected = request.session["proconnect_rejected_info"]
-            assert rejected["siret"] == "19753471000014"
-            assert rejected["siren"] == "197534710"
-            assert rejected["organization_label"] == "Rectorat de Paris"
-            assert rejected["email"] == "agent@rectorat.fr"
-            assert rejected["name"] == "Jean Valjean"
+            with patch("backend.proconnect.auth.record_proconnect_sentry_event") as mock_sentry:
+                user = backend.get_or_create_user("fake_access_token", "fake_id_token", {})
+                assert user is None
+                assert "proconnect_rejected_info" in request.session
+                rejected = request.session["proconnect_rejected_info"]
+                assert rejected["siret"] == "19753471000014"
+                assert rejected["siren"] == "197534710"
+                assert rejected["organization_label"] == "Rectorat de Paris"
+                assert rejected["email"] == "agent@rectorat.fr"
+                assert rejected["name"] == "Jean Valjean"
+                mock_sentry.assert_called_once_with(
+                    event_type="proconnect_acces_refuse",
+                    siren="197534710",
+                    reason="etablissement_non_autorise",
+                    organization_label="Rectorat de Paris",
+                    extra={"nature_juridique": "7331"},
+                )
+    from backend.activity_logs.models import ActivityLog
+
+    log = ActivityLog.objects.using("stats_db").filter(action="proconnect_acces_refuse").first()
+    assert log is not None
+    assert log.target == "auth"
+    assert log.data["motif_refus"] == "etablissement_non_autorise"
+    assert log.data["siren"] == "197534710"
+    assert log.data["nature_juridique"] == "7331"
+    assert log.data["organization_label"] == "Rectorat de Paris"
 
 
 @pytest.mark.django_db
