@@ -35,7 +35,7 @@
           class="fr-btn fr-btn--primary fr-btn--sm"
           :class="{ 'fr-btn--secondary': !hasUnsavedChanges }"
           :disabled="isSaving || isLoading || !hasUnsavedChanges"
-          @click="saveConfig"
+s          @click="saveConfig"
         >
           <span
             :class="isSaving ? 'fr-icon-refresh-line' : 'fr-icon-checkbox-circle-line'"
@@ -416,6 +416,7 @@
 <script setup lang="ts">
 import { API_URLS, fetchResource, updateResource } from '@/services/api'
 import { computed, onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 
 interface SirenRule {
   siren: string
@@ -429,6 +430,7 @@ interface CategoryRule {
   isNew?: boolean
 }
 
+const route = useRoute()
 const sirens = ref<SirenRule[]>([])
 const categories = ref<CategoryRule[]>([])
 const initialSirens = ref<string>('[]')
@@ -695,6 +697,10 @@ const saveConfig = async () => {
 
 onMounted(() => {
   fetchConfig()
+  const sirenQuery = route.query.siren
+  if (typeof sirenQuery === 'string' && /^\d{9}$/.test(sirenQuery.trim())) {
+    newSiren.value = sirenQuery.trim()
+  }
 })
 </script>
 

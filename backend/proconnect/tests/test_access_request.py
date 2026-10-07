@@ -78,6 +78,7 @@ def test_proconnect_access_request_uses_session_data_and_ignores_forged_payload(
     assert "Académie de Paris" in sent_email.subject
     assert "Mairie Pirate" not in sent_email.subject
     assert sent_email.to == ["admin@depots-sauvages.beta.gouv.fr"]
+    assert sent_email.reply_to == ["agent@ac-paris.fr"]
     assert "123456789" in sent_email.body
     assert "999999999" not in sent_email.body
     assert "Jean Dupont" in sent_email.body
@@ -86,7 +87,7 @@ def test_proconnect_access_request_uses_session_data_and_ignores_forged_payload(
     assert "hacker@evil.com" not in sent_email.body
     assert "Académie de Paris" in sent_email.body
     assert "Nous souhaitons déclarer des dépôts sauvages" in sent_email.body
-    assert "proconnect/proconnectaccessconfig/" in sent_email.body
+    assert "/proconnect-acces" in sent_email.body
     from backend.activity_logs.models import ActivityLog
 
     log = (

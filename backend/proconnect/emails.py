@@ -1,7 +1,7 @@
 import logging
 
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 from django_tasks import task
 
 logger = logging.getLogger(__name__)
@@ -21,33 +21,38 @@ def send_proconnect_access_request_notification_task(validated_data: dict, admin
             "ADMIN_EMAIL",
             getattr(settings, "DEFAULT_FROM_EMAIL", "contact@depots-sauvages.beta.gouv.fr"),
         )
-        subject = f"[Stop Déchets Sauvages] Demande d'accès ProConnect : {organization_label or siren or email}"
+        subject_org = f"{organization_label} ({siren})" if organization_label and siren else (organization_label or siren or email)
+        subject = f"[Stop Déchets Sauvages] Demande d'accès ProConnect : {subject_org}"
         content = (
-            f"Une demande d'ouverture d'accès ProConnect a été déposée sur Stop Déchets Sauvages.\n\n"
-            f"--- Détails du demandeur ---\n"
+            "Une demande d'ouverture d'accès ProConnect a été déposée sur Stop Déchets Sauvages.\n\n"
+            "--- Détails du demandeur ---\n"
             f"Nom : {name or 'Non précisé'}\n"
             f"Email : {email}\n"
             f"Organisme : {organization_label or 'Non précisé'}\n"
             f"SIREN : {siren or 'Non précisé'}\n"
-            f"SIRET : {siret or 'Non précisé'}\n"
+            f"SIRET : {siret or 'Non précisé'}\n\n"
             f"Commentaire de l'agent :\n{message or 'Aucun'}\n\n"
-            f"--- Action administrateur ---\n"
-            f"Pour autoriser cet établissement, vous pouvez ajouter le SIREN '{siren}' "
-            f"dans la liste blanche de configuration ProConnect via le lien suivant :\n"
-            f"{admin_link}\n"
+            "--- Action administrateur ---\n"
+            "Pour autoriser cet établissement, accédez à la gestion des accès ProConnect dans le back-office :\n"
+            f"{admin_link}\n\n"
+            "Actions possibles :\n"
+            f"1. Ajouter le SIREN '{siren}' dans la liste blanche (dérogation spécifique).\n"
+            "2. Ou ajouter la catégorie juridique correspondante pour autoriser l'ensemble des structures similaires.\n\n"
+            f"Pour répondre directement à l'agent une fois l'accès configuré, vous pouvez répondre à ce message ou lui écrire à : {email}\n"
         )
         from_email = getattr(
             settings,
             "SERVER_EMAIL",
             getattr(settings, "DEFAULT_FROM_EMAIL", "contact@depots-sauvages.beta.gouv.fr"),
         )
-        send_mail(
+        mail_obj = EmailMessage(
             subject=subject,
-            message=content,
+            body=content,
             from_email=from_email,
-            recipient_list=[admin_email],
-            fail_silently=True,
+            to=[admin_email],
+            reply_to=[email] if email else None,
         )
+        mail_obj.send(fail_silently=True)
         logger.info(f"Demande d'accès ProConnect envoyée avec succès pour {email} ({siren})")
     except Exception as exc:
         logger.error(

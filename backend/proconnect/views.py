@@ -64,8 +64,7 @@ class ProConnectAccessRequestView(APIView):
             "name": rejected_info.get("name", ""),
             "message": serializer.validated_data.get("message", ""),
         }
-        admin_url_name = getattr(settings, "ADMIN_URL_NAME", "admin").rstrip("/")
-        admin_path = f"/{admin_url_name}/proconnect/proconnectaccessconfig/"
+        admin_path = "/proconnect-acces"
         admin_link = request.build_absolute_uri(admin_path) if request else admin_path
         send_proconnect_access_request_notification_task.enqueue(merged_data, admin_link)
         session_key = getattr(request.session, "session_key", None)
