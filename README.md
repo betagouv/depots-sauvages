@@ -159,7 +159,34 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
-Le back-end Django sera désormais accessible à l’adresse : [http://localhost:8000](http://localhost:8000)
+8. _(Optionnel en local, géré par le Procfile sur Scalingo)_ Traitement des tâches asynchrones (`django-tasks`) :
+
+Le projet utilise `django-tasks` avec plusieurs files d'attente (`default`, `emails`, `documents`).
+
+- En local avec `backend.settings.local`, les tâches s'exécutent par défaut en mode synchrone (`ImmediateBackend`).
+- En staging/production ou pour tester le worker asynchrone avec base de données, lancez le worker en précisant toutes les files :
+
+```bash
+python manage.py db_worker --queue-name default,emails,documents
+```
+
+> [!IMPORTANT]
+> Sur **Scalingo**, ce worker est lancé via le `Procfile` (`scripts/start_worker.sh`).
+> Assurez-vous que l'argument `--queue-name default,emails,documents` écoute bien **toutes** les files, notamment `emails`, sinon les e-mails transactionnels (ex: demandes d'accès ProConnect) resteront bloqués en statut `READY` dans la base de données sans être envoyés.
+
+### ✉️ Configuration des e-mails (Brevo)
+
+Par défaut en développement local, Django utilise la console (`anymail.backends.console.EmailBackend`). Pour envoyer de vrais e-mails via Brevo en local ou sur les environnements déployés, assurez-vous de configurer dans le `.env` :
+
+```dotenv
+EMAIL_BACKEND=anymail.backends.brevo.EmailBackend
+BREVO_API_KEY=xkeysib-xxxx...
+BREVO_SENDER_DOMAIN=stopdepotsauvage.beta.gouv.fr
+DEFAULT_FROM_EMAIL="Stop Dépôt Sauvage <contact@stopdepotsauvage.beta.gouv.fr>"
+```
+
+> [!NOTE]
+> L'adresse IP de votre machine de dev ou les plages IP Outscale de Scalingo doivent être préalablement autorisées dans votre console de sécurité Brevo (_Authorized IPs_).
 
 ### 🔧 Configuration du Frontend (Vue.js)
 
