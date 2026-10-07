@@ -61,7 +61,11 @@ CRISP_WSS = "wss://client.relay.crisp.chat"
 GRIST = "https://grist.numerique.gouv.fr"
 ICONIFY = "https://api.iconify.design"
 API_ADRESSE_DATA_GOUV = "https://api-adresse.data.gouv.fr"
-RECHERCHE_ENTREPRISES_API = "https://recherche-entreprises.api.gouv.fr"
+
+# API Entreprises
+RECHERCHE_ENTREPRISES_API_URL = env(
+    "RECHERCHE_ENTREPRISES_API_URL", default="https://recherche-entreprises.api.gouv.fr"
+)
 
 # Content Security Policy (django-csp 4.0+)
 CONTENT_SECURITY_POLICY = {
@@ -101,7 +105,7 @@ CONTENT_SECURITY_POLICY = {
                 CRISP_WSS,
                 ICONIFY,
                 API_ADRESSE_DATA_GOUV,
-                RECHERCHE_ENTREPRISES_API,
+                RECHERCHE_ENTREPRISES_API_URL,
             ],
         ),
     }
@@ -128,6 +132,8 @@ TASKS["default"]["BACKEND"] = "django_tasks_db.DatabaseBackend"
 EMAIL_BACKEND = env("EMAIL_BACKEND", default="anymail.backends.brevo.EmailBackend")
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
 SERVER_EMAIL = env("SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
+ADMIN_EMAIL = env("ADMIN_EMAIL", default=DEFAULT_FROM_EMAIL)
+
 
 # Anymail settings for production
 ANYMAIL = {
@@ -177,6 +183,9 @@ if PROCONNECT_ENABLED:
     OIDC_OP_LOGOUT_ENDPOINT = env("OIDC_OP_LOGOUT_ENDPOINT", default="")
     OIDC_RP_SIGN_ALGO = "RS256"
     OIDC_RP_SCOPES = "openid email given_name usual_name roles siret organization_label"
+    PROCONNECT_ACCESS_RESTRICTIONS_ENABLED = env.bool(
+        "PROCONNECT_ACCESS_RESTRICTIONS_ENABLED", default=True
+    )
 
 
 # Auth Configuration

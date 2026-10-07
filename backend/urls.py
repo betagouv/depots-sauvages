@@ -1,12 +1,11 @@
 from csp.decorators import csp_update
 from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
 from django.views.generic import RedirectView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework.routers import DefaultRouter
-
-from django.conf.urls.static import static
 
 from backend.activity_logs.api_views import UserActionTrackingView
 from backend.backoffice.views import (
@@ -21,6 +20,11 @@ from backend.current_user.views import UserInfoViewSet, logout_view
 from backend.faq.views import FAQItemViewSet
 from backend.home.views import index_view
 from backend.procedures.views import SuiviProcedureViewSet
+from backend.proconnect.views import (
+    ProConnectAccessConfigView,
+    ProConnectAccessRequestView,
+    ProConnectRejectedInfoView,
+)
 from backend.seo.views import RobotsTxtView
 from backend.site_content.views import SiteContentViewSet
 
@@ -73,6 +77,21 @@ urlpatterns.extend(
             UserActionTrackingView.as_view(),
             name="track-user-action",
         ),
+        path(
+            "api/proconnect/rejected-info/",
+            ProConnectRejectedInfoView.as_view(),
+            name="proconnect-rejected-info",
+        ),
+        path(
+            "api/proconnect/demander-acces/",
+            ProConnectAccessRequestView.as_view(),
+            name="proconnect-demander-acces",
+        ),
+        path(
+            "api/backoffice/proconnect-config/",
+            ProConnectAccessConfigView.as_view(),
+            name="backoffice-proconnect-config",
+        ),
         path("api/", include(router.urls)),
         path("logout/", logout_view, name="logout"),
     ]
@@ -113,11 +132,9 @@ urlpatterns.append(
 
 # Sentry Debug
 if getattr(settings, "SENTRY_DEBUG", False):
+    from backend.sentry.views import sentry_debug_view
 
-    def trigger_error(request):
-        division_by_zero = 1 / 0  # noqa
-
-    urlpatterns.append(path("sentry-debug/", trigger_error))
+    urlpatterns.append(re_path(r"^sentry-debug/?$", sentry_debug_view))
 
 
 # Robots.txt Route
@@ -133,5 +150,7 @@ if settings.DEBUG:
 # intercept requests intended for other routes like API, Admin, or OIDC.
 admin_url = settings.ADMIN_URL_NAME.rstrip("/")
 urlpatterns.append(
-    re_path(r"^(?!%s|api|oidc|sentry-debug|robots\.txt|media).*" % admin_url, index_view, name="index")
+    re_path(
+        r"^(?!%s|api|oidc|sentry-debug|robots\.txt|media).*" % admin_url, index_view, name="index"
+    )
 )

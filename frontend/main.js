@@ -77,6 +77,12 @@ const router = createRouter({
       meta: { title: 'Mes procédures' },
     },
     {
+      path: '/acces-restreint',
+      name: 'AccesRestreint',
+      component: () => import('./pages/acces-restreint.vue'),
+      meta: { title: 'Accès réservé - Demande d’accès' },
+    },
+    {
       path: '/contact',
       name: 'Contact',
       component: () => import('./pages/contact.vue'),
@@ -216,6 +222,18 @@ const router = createRouter({
         activeMenu: '/backoffice',
       },
     },
+    {
+      path: '/proconnect-acces',
+      name: 'ProConnectAccesBackoffice',
+      component: () => import('./pages/backoffice.vue'),
+      meta: {
+        title: 'Backoffice - Règles d’accès ProConnect',
+        requiresStaff: true,
+        tab: 'proconnect',
+        activeMenu: '/backoffice',
+      },
+    },
+
     {
       path: '/mentions-legales',
       name: 'MentionsLegales',

@@ -1,0 +1,36 @@
+[
+  {
+    "model": "proconnect.proconnectaccessconfig",
+    "pk": 1,
+    "fields": {
+      "categories_juridiques_autorisees": [
+        {
+          "code": "72",
+          "nom": "Toutes les collectivités territoriales pures (Communes 7210, Départements 7220, Régions 7230)"
+        },
+        {
+          "code": "731",
+          "nom": "Démembrements communaux (Communes associées et déléguées 7312, Sections de commune 7313)"
+        },
+        {
+          "code": "734",
+          "nom": "Intercommunalités & Coopération métropolitaine (Pôles métropolitains 7340, Arrondissements Paris/Lyon/Marseille 7341, CU 7343, Métropoles 7344, CC 7346, Communautés de villes 7347, CA 7348, Autres groupements 7349)"
+        },
+        {
+          "code": "735",
+          "nom": "Syndicats intercommunaux & Syndicats mixtes (SIVU 7353, Syndicats mixtes fermés 7354, Syndicats mixtes ouverts / traitement ordures ménagères SICTOM 7355)"
+        },
+        {
+          "code": "7361",
+          "nom": "Centre communal d'action sociale (CCAS - agents communaux mutualisés)"
+        }
+      ],
+      "sirens_autorises": [
+        { "siren": "157000019", "nom": "Gendarmerie Nationale (DGGN)" },
+        { "siren": "662043116", "nom": "Office National des Forêts (ONF)" },
+        { "siren": "130025943", "nom": "Office Français de la Biodiversité (OFB)" },
+        { "siren": "130025265", "nom": "DINUM (Beta.gouv.fr / Support)" }
+      ]
+    }
+  }
+]

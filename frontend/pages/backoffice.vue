@@ -53,20 +53,36 @@
             Détail procédure {{ selectedProcedureId ? `#${selectedProcedureId}` : '' }}
           </button>
         </li>
+        <li role="presentation">
+          <button
+            class="fr-tabs__tab"
+            :aria-selected="currentTab === 'proconnect'"
+            role="tab"
+            @click="router.push({ path: '/proconnect-acces', query: route.query })"
+          >
+            <span class="fr-icon-lock-line fr-mr-1w" aria-hidden="true"></span>
+            Accès ProConnect
+          </button>
+        </li>
       </ul>
       <DashboardTab v-if="currentTab === 'dashboard'" />
 
       <ProceduresTab v-if="currentTab === 'list'" @view-detail="viewDetail" />
 
       <DetailTab v-if="currentTab === 'detail'" :selectedProcedureId="selectedProcedureId" />
+
+      <ProConnectConfigTab v-if="currentTab === 'proconnect'" />
     </div>
   </div>
 </template>
 
+
 <script setup lang="ts">
 import DashboardTab from '@/components/backoffice/DashboardTab.vue'
 import DetailTab from '@/components/backoffice/DetailTab.vue'
+import ProConnectConfigTab from '@/components/backoffice/ProConnectConfigTab.vue'
 import ProceduresTab from '@/components/backoffice/ProceduresTab.vue'
+
 import { useBackofficeStore } from '@/stores/backoffice'
 import { computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'

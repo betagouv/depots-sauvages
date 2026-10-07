@@ -43,6 +43,17 @@ Afin d'éviter toute élévation de privilèges ou fuite de données lors de la 
 - L'intégration s'appuie sur la bibliothèque standard `mozilla-django-oidc`.
 - Le backend d'authentification `ProConnectOIDCBackend` ne donne **jamais** de privilèges d'administration (`is_staff` ou `is_superuser`) automatiquement lors de la création ou de la mise à jour de l'utilisateur. L'élévation d'un utilisateur en administrateur doit être réalisée manuellement par un administrateur système via la console d'administration Django.
 - **Protection des données personnelles (PII)** : Lors des étapes de création ou mise à jour utilisateur, le backend filtre les logs pour ne consigner que l'identifiant technique opaque `sub` (niveau `INFO`), garantissant qu'aucune claim d'identité nominative (nom, prénom, e-mail) ne fuite dans les journaux d'application.
+- **Contrôle d'accès et filtrage des organisations habilitées** :
+  - Seuls les agents publics disposant du rôle `agent_public` et appartenant à une organisation autorisée sont admis à se connecter.
+  - La politique d'habilitation repose sur le modèle singleton `ProConnectAccessConfig`, combinant :
+    1. Une règle générale par préfixe de **catégorie juridique INSEE** (ex: `72` pour les communes, `734` pour les intercommunalités).
+    2. Une **liste blanche de SIREN** pour les organismes spécifiques (ex: Gendarmerie, ONF, OFB, DINUM).
+  - **Résolution sécurisée et gestion des refus** : En cas de rejet, l'utilisateur est redirigé vers `/acces-restreint` sans créer de compte ni session authentifiée, tout en lui permettant de transmettre une demande d'accès (`/api/proconnect/demander-acces/`, protégée par rate limiting).
+  - **Gestion via le Back-office de Pilotage** :
+    - Interface dédiée (`/proconnect-acces`) intégrée dans l'espace d'administration et soumise aux gardes de navigation (`requiresStaff: true` et validation du mode administrateur).
+    - API dédiée (`/api/backoffice/proconnect-config/`) strictement réservée aux membres du personnel (`IsAdminUser`), protégée contre les attaques CSRF (`SessionAuthentication`) et couverte par le rate limiting applicatif (`UnsafeRateThrottle`).
+    - Validation stricte des saisies : vérification de longueur et de format (SIREN à 9 chiffres, codes préfixes numériques avec `max_length`), dédoublonnage automatique et neutralisation défensive des préfixes vides pour empêcher tout contournement par correspondance universelle (wildcard bypass).
+    - Traçabilité : chaque modification de la politique d'accès fait l'objet d'un journal d'audit (`logger.info`) consignant l'identité de l'administrateur et le nombre de règles configurées.
 
 ### Mode Démo / Environnement de test (Bypass Auth)
 

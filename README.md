@@ -122,19 +122,71 @@ pipenv shell
 python manage.py migrate
 ```
 
-4. Créez un super-utilisateur si nécessaire :
+4. Chargez les données initiales de configuration ProConnect (habilitations par défaut) :
+
+```bash
+python manage.py loaddata proconnect_access_config
+```
+
+5. (Optionnel en local) Chargez l'échantillon d'entités publiques locales Sirene pour tester ProConnect hors-ligne :
+
+```bash
+python manage.py loaddata sample_public_entities
+```
+
+> **Autonomie vis-à-vis de l'API externe (Production) :**
+> Pour pré-remplir ou mettre à jour la base locale avec l'ensemble des entités publiques françaises (catégories juridiques `7xxx` : communes, EPCI, départements, régions, CCAS...), lancez la commande d'import :
+>
+> ```bash
+> python manage.py import_sirene_public
+> ```
+>
+> Vous pouvez également spécifier un fichier local CSV/ZIP téléchargé :
+>
+> ```bash
+> python manage.py import_sirene_public --file=/chemin/vers/StockUniteLegale_utf8.zip
+> ```
+
+6. Créez un super-utilisateur si nécessaire :
 
 ```bash
 python manage.py createsuperuser
 ```
 
-5. Lancez le serveur de développement :
+7. Lancez le serveur de développement :
 
 ```bash
 python manage.py runserver
 ```
 
-Le back-end Django sera désormais accessible à l’adresse : [http://localhost:8000](http://localhost:8000)
+8. _(Optionnel en local, géré par le Procfile sur Scalingo)_ Traitement des tâches asynchrones (`django-tasks`) :
+
+Le projet utilise `django-tasks` avec plusieurs files d'attente (`default`, `emails`, `documents`).
+
+- En local avec `backend.settings.local`, les tâches s'exécutent par défaut en mode synchrone (`ImmediateBackend`).
+- En staging/production ou pour tester le worker asynchrone avec base de données, lancez le worker en précisant toutes les files :
+
+```bash
+python manage.py db_worker --queue-name default,emails,documents
+```
+
+> [!IMPORTANT]
+> Sur **Scalingo**, ce worker est lancé via le `Procfile` (`scripts/start_worker.sh`).
+> Assurez-vous que l'argument `--queue-name default,emails,documents` écoute bien **toutes** les files, notamment `emails`, sinon les e-mails transactionnels (ex: demandes d'accès ProConnect) resteront bloqués en statut `READY` dans la base de données sans être envoyés.
+
+### ✉️ Configuration des e-mails (Brevo)
+
+Par défaut en développement local, Django utilise la console (`anymail.backends.console.EmailBackend`). Pour envoyer de vrais e-mails via Brevo en local ou sur les environnements déployés, assurez-vous de configurer dans le `.env` :
+
+```dotenv
+EMAIL_BACKEND=anymail.backends.brevo.EmailBackend
+BREVO_API_KEY=xkeysib-xxxx...
+BREVO_SENDER_DOMAIN=stopdepotsauvage.beta.gouv.fr
+DEFAULT_FROM_EMAIL="Stop Dépôt Sauvage <contact@stopdepotsauvage.beta.gouv.fr>"
+```
+
+> [!NOTE]
+> L'adresse IP de votre machine de dev ou les plages IP Outscale de Scalingo doivent être préalablement autorisées dans votre console de sécurité Brevo (_Authorized IPs_).
 
 ### 🔧 Configuration du Frontend (Vue.js)
 

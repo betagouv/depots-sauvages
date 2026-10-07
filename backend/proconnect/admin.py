@@ -1,6 +1,26 @@
 from django.contrib import admin
+from solo.admin import SingletonModelAdmin
 
-from backend.proconnect.models import ProConnectProfile
+from backend.proconnect.models import ProConnectAccessConfig, ProConnectProfile, PublicEntitySirene
+
+
+@admin.register(ProConnectAccessConfig)
+class ProConnectAccessConfigAdmin(SingletonModelAdmin):
+    fieldsets = (
+        (
+            "Règles d'accès",
+            {
+                "fields": (
+                    "categories_juridiques_autorisees",
+                    "sirens_autorises",
+                ),
+                "description": (
+                    "Configuration des catégories juridiques des collectivités (avec préfixes et libellés) "
+                    "et des SIREN spécifiques autorisés (Gendarmerie, ONF, OFB, dérogations)."
+                ),
+            },
+        ),
+    )
 
 
 @admin.register(ProConnectProfile)
@@ -16,3 +36,11 @@ class ProConnectProfileAdmin(admin.ModelAdmin):
         "organization_label",
     )
     readonly_fields = ("created", "modified", "user")
+
+
+@admin.register(PublicEntitySirene)
+class PublicEntitySireneAdmin(admin.ModelAdmin):
+    list_display = ("siren", "categorie_juridique", "denomination", "modified")
+    search_fields = ("siren", "denomination", "categorie_juridique")
+    list_filter = ("categorie_juridique",)
+    readonly_fields = ("created", "modified")
