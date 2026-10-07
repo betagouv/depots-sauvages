@@ -73,6 +73,8 @@ def sync_proconnect_profile(user, claims):
 class ProConnectOIDCBackend(OIDCAuthenticationBackend):
     def is_eligible_proconnect_user(self, claims) -> bool:
         """Check if user has agent_public role and belongs to an authorized organization."""
+        if not getattr(settings, "PROCONNECT_ACCESS_RESTRICTIONS_ENABLED", True):
+            return True
         roles = claims.get("roles") or []
         if isinstance(roles, str):
             roles = [roles]

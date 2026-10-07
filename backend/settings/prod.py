@@ -183,6 +183,9 @@ if PROCONNECT_ENABLED:
     OIDC_OP_LOGOUT_ENDPOINT = env("OIDC_OP_LOGOUT_ENDPOINT", default="")
     OIDC_RP_SIGN_ALGO = "RS256"
     OIDC_RP_SCOPES = "openid email given_name usual_name roles siret organization_label"
+    PROCONNECT_ACCESS_RESTRICTIONS_ENABLED = env.bool(
+        "PROCONNECT_ACCESS_RESTRICTIONS_ENABLED", default=True
+    )
 
 
 # Auth Configuration

@@ -235,6 +235,7 @@ LOGIN_REDIRECT_URL_FAILURE = "/acces-restreint"
 LOGOUT_REDIRECT_URL = "index"
 OIDC_STORE_ID_TOKEN = True
 LOGIN_REQUIRED = True
+PROCONNECT_ACCESS_RESTRICTIONS_ENABLED = True
 
 # External Services APIs
 RECHERCHE_ENTREPRISES_API_URL = "https://recherche-entreprises.api.gouv.fr"

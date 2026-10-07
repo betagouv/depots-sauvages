@@ -249,3 +249,14 @@ def test_proconnect_auth_fallback_api_caches_in_public_entity():
     assert cached is not None
     assert cached.categorie_juridique == "7210"
     assert cached.denomination == "Mairie Inconnue"
+
+
+@pytest.mark.django_db
+def test_is_eligible_when_restrictions_disabled(settings):
+    settings.PROCONNECT_ACCESS_RESTRICTIONS_ENABLED = False
+    backend = ProConnectOIDCBackend()
+    unauthorized_claims = {
+        "roles": ["particulier"],
+        "siret": "",
+    }
+    assert backend.is_eligible_proconnect_user(unauthorized_claims) is True
