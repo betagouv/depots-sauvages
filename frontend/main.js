@@ -10,6 +10,7 @@ import { getUserInfo } from './services/api'
 import { LOGIN_REQUIRED } from './services/config'
 import { initCrisp } from './services/crisp'
 import { initMatomo } from './services/matomo'
+import { initPageTitle } from './services/pageTitle'
 import { useAdminModeStore } from './stores/admin-mode'
 import './styles/premium-design.css'
 
@@ -310,6 +311,7 @@ app.use(router)
 app.use(pinia)
 app.use(VueDsfr)
 
+initPageTitle(router)
 initMatomo(router)
 initCrisp()
 

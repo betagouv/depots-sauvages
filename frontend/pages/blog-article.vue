@@ -80,6 +80,8 @@
 import type { BlogArticleItem } from '@/components/blog/BlogArticleCard.vue'
 import BlogArticleModal, { type BlogArticleFormData } from '@/components/blog/BlogArticleModal.vue'
 import * as api from '@/services/api'
+import { trackPageView } from '@/services/matomo'
+import { setPageTitle } from '@/services/pageTitle'
 import { DsfrBreadcrumb } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -141,6 +143,8 @@ const loadArticle = async () => {
   } finally {
     isLoading.value = false
   }
+  const title = article.value ? article.value.title : 'Article introuvable'
+  trackPageView(setPageTitle(title), route.path)
 }
 
 const openEditModal = () => {
