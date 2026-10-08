@@ -1,6 +1,13 @@
+import logging
 import re
 
+from backend.seo.blog import get_blog_seo_data
 from backend.seo.faq import get_faq_seo_data
+
+logger = logging.getLogger(__name__)
+
+# Dynamic content metadata, checked before SEO_PATTERNS
+CONTENT_SEO_RESOLVERS = [get_faq_seo_data, get_blog_seo_data]
 
 SEO_PATTERNS = [
     # Pages statiques
@@ -95,6 +102,13 @@ SEO_PATTERNS = [
             "desc": "Retrouvez toutes les réponses aux questions les plus fréquentes sur la lutte contre les dépôts sauvages.",
         },
     ),
+    (
+        r"^/blog$",
+        {
+            "title": "Blog & Retours d’expérience - Stop Dépôt Sauvage",
+            "desc": "Retours d'expérience de collectivités et conseils pratiques pour lutter contre les dépôts sauvages.",
+        },
+    ),
     # Pages dynamiques avec identifiants
     (
         r"^/suivi-procedure/[^/]+$",
@@ -124,10 +138,14 @@ def get_seo_data(path):
     normalized_path = "/" + path.strip("/")
     if normalized_path == "//":
         normalized_path = "/"
-    # Dynamic FAQ metadata
-    faq_seo = get_faq_seo_data(normalized_path)
-    if faq_seo:
-        return faq_seo
+    for resolver in CONTENT_SEO_RESOLVERS:
+        try:
+            seo_data = resolver(normalized_path)
+        except Exception:
+            logger.exception("SEO metadata error for %s", normalized_path)
+            seo_data = None
+        if seo_data:
+            return seo_data
     for pattern, seo_data in SEO_PATTERNS:
         if re.match(pattern, normalized_path):
             return seo_data
