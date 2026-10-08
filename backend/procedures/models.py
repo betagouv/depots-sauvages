@@ -19,6 +19,9 @@ class SuiviProcedureBaseModel(TimeStampedModel):
     lettre_envoyee_date = models.DateField(
         null=True, blank=True, verbose_name="Date d'envoi de la lettre"
     )
+    numero_suivi_lettre = models.CharField(
+        max_length=50, blank=True, verbose_name="Numéro de suivi du recommandé"
+    )
     copie_archives = models.BooleanField(default=False, verbose_name="Copie archivée")
     ar_recu = models.BooleanField(default=False, verbose_name="Accusé de réception reçu")
     ar_statut = models.CharField(max_length=20, blank=True, verbose_name="Statut de l'AR")

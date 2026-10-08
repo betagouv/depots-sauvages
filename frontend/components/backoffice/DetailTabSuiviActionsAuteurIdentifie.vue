@@ -58,6 +58,18 @@
             disabled
           />
         </div>
+        <div
+          v-if="procedure.suivi_procedure?.numero_suivi_lettre"
+          class="bo-flex-gap-05 fr-ml-2w"
+        >
+          <input
+            type="text"
+            class="fr-input fr-input--sm bo-input-text-sm"
+            aria-label="Numéro de suivi du recommandé"
+            :value="procedure.suivi_procedure?.numero_suivi_lettre"
+            disabled
+          />
+        </div>
         <div class="bo-flex-space-between">
           <label class="fr-text--xs fr-mb-0 bo-flex-center-gap">
             <input type="checkbox" :checked="procedure.suivi_procedure?.ar_recu" disabled />
