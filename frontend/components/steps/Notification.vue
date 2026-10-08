@@ -14,14 +14,36 @@
     <h4 class="fr-h6 fr-mb-2w">Ce qu'il vous reste à faire :</h4>
     <ListeActions step-id="notification" :actions="actions" @update-case="onUpdateCase">
       <template #extra-lettre_envoyee>
-        <div class="fr-col-12 fr-col-md-6">
-          <DsfrInput
-            v-model="suivi.lettre_envoyee_date"
-            label="Date d'envoi du courrier"
-            label-visible
-            type="date"
-            :max="today"
-          />
+        <div class="fr-grid-row fr-grid-row--gutters">
+          <div class="fr-col-12 fr-col-md-6">
+            <DsfrInput
+              v-model="suivi.lettre_envoyee_date"
+              label="Date d'envoi du courrier"
+              label-visible
+              type="date"
+              :max="today"
+            />
+          </div>
+          <div class="fr-col-12 fr-col-md-6">
+            <DsfrInput
+              v-model="suivi.numero_suivi_lettre"
+              label="Numéro de suivi"
+              label-visible
+              placeholder="ex. : 1A00915820380"
+              maxlength="50"
+            />
+            <a
+              v-if="laPosteSuiviUrl"
+              :href="laPosteSuiviUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="fr-link fr-link--sm fr-mt-1w"
+              title="Suivre ce courrier sur laposte.fr - nouvelle fenêtre"
+              @click="trackEvent('Procédures', 'Suivi_Recommande_LaPoste')"
+            >
+              Suivre ce courrier sur laposte.fr
+            </a>
+          </div>
         </div>
       </template>
 
@@ -85,7 +107,7 @@ import { getTodayISOString } from '../../utils/date'
 import { calculateContradictoire } from '../../utils/procedure'
 import ListeActions, { type Action } from './ListeActions.vue'
 
-import { trackAndOpenLink } from '../../services/matomo'
+import { trackAndOpenLink, trackEvent } from '../../services/matomo'
 import { trackUserAction } from '../../services/tracking'
 
 const props = defineProps<{
@@ -101,6 +123,13 @@ const openUrl = (url: string) => {
 defineEmits(['next-step'])
 
 const today = getTodayISOString()
+
+const laPosteSuiviUrl = computed(() => {
+  const numero = (props.suivi.numero_suivi_lettre || '').replace(/\s/g, '')
+  return numero
+    ? `https://www.laposte.fr/outils/suivre-vos-envois?code=${encodeURIComponent(numero)}`
+    : ''
+})
 
 const contradictoire = computed(() => calculateContradictoire(props.suivi.ar_presentation_date))
 

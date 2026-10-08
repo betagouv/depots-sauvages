@@ -19,6 +19,7 @@ class SuiviProcedureSerializer(serializers.ModelSerializer):
             "identification_reussie",
             "lettre_envoyee",
             "lettre_envoyee_date",
+            "numero_suivi_lettre",
             "copie_archives",
             "ar_recu",
             "ar_statut",

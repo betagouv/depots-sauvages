@@ -15,6 +15,7 @@ export interface SuiviProcedure {
   anomalie: string
   lettre_envoyee: boolean
   lettre_envoyee_date: string | null
+  numero_suivi_lettre: string
   copie_archives: boolean
   ar_recu: boolean
   ar_statut: string
