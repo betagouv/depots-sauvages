@@ -27,9 +27,9 @@
           <div class="fr-col-12 fr-col-md-6">
             <DsfrInput
               v-model="suivi.numero_suivi_lettre"
-              label="Numéro de suivi"
+              label="Numéro de suivi (facultatif)"
               label-visible
-              hint="Facultatif. Indiqué sur la preuve de dépôt, ex. : 1A00915820380"
+              placeholder="ex. : 1A00915820380"
               maxlength="50"
             />
             <a
