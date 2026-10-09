@@ -1,6 +1,43 @@
 from rest_framework import serializers
 
 from backend.constatations.models import Constatation
+from backend.procedures.models import SuiviProcedure
+
+
+class SuiviProcedureResumeSerializer(serializers.ModelSerializer):
+    """
+    Résumé du suivi envoyé avec la liste des procédures (tableau de bord « Mes procédures »).
+    Contient les champs nécessaires pour savoir quelles sections du suivi sont « Fait »
+    et ranger chaque dossier dans sa colonne.
+    """
+
+    class Meta:
+        model = SuiviProcedure
+        fields = [
+            "etape_en_cours",
+            "preuves_fournies",
+            "constatation_signee",
+            "lettre_signe",
+            "identification_reussie",
+            "lettre_envoyee",
+            "lettre_envoyee_date",
+            "copie_archives",
+            "ar_recu",
+            "ar_statut",
+            "ar_presentation_date",
+            "decision_poursuite",
+            "montant_fixe",
+            "montant_amende",
+            "arrete_redige",
+            "titre_recette_emis",
+            "notification_sanction_envoyee",
+            "motif_abandon",
+            "souhaite_notifier_abandon",
+            "notification_abandon_envoyee",
+            "titre_recette_confirme",
+            "montant_recouvre",
+            "dossier_archive",
+        ]
 
 
 class ConstatationListSerializer(serializers.ModelSerializer):
@@ -22,6 +59,9 @@ class ConstatationListSerializer(serializers.ModelSerializer):
             "date_constat",
             "heure_constat",
             "auteur_identifie",
+            "statut_auteur",
+            "auteur_nom",
+            "auteur_prenom",
             "is_draft",
             "date_creation",
             "date_modification",
@@ -32,12 +72,7 @@ class ConstatationListSerializer(serializers.ModelSerializer):
         sp = getattr(obj, "suivi_procedure", None)
         if not sp:
             return {"etape_en_cours": 1}
-        return {
-            "etape_en_cours": sp.etape_en_cours,
-            "identification_reussie": sp.identification_reussie,
-            "decision_poursuite": sp.decision_poursuite,
-            "dossier_archive": sp.dossier_archive,
-        }
+        return SuiviProcedureResumeSerializer(sp).data
 
 
 class ConstatationSerializer(serializers.ModelSerializer):
