@@ -22,11 +22,27 @@
       </div>
       <div class="fr-col-12 bo-dashed-separator">
         <span class="fr-text--xs fr-mb-0 bo-text-mention-uppercase">Contact Collectivité</span>
-        <p class="fr-text--sm fr-mb-0">
+        <p v-if="procedure.contact_prenom || procedure.contact_nom" class="fr-text--sm fr-mb-0">
           <strong>{{ procedure.contact_prenom }} {{ procedure.contact_nom }}</strong>
-          <span v-if="procedure.contact_email"> | ✉ {{ procedure.contact_email }}</span>
-          <span v-if="procedure.contact_telephone"> | 📞 {{ procedure.contact_telephone }}</span>
         </p>
+        <div class="fr-grid-row fr-grid-row--gutters fr-mt-0">
+          <div class="fr-col-6">
+            <span class="fr-text--xs fr-mb-0 bo-text-mention-uppercase">Email</span>
+            <p class="fr-text--sm fr-mb-0" data-testid="contact-email">
+              <a v-if="contactEmail" :href="`mailto:${contactEmail}`">{{ contactEmail }}</a>
+              <em v-else class="bo-text-non-renseigne">Non renseigné</em>
+            </p>
+          </div>
+          <div class="fr-col-6">
+            <span class="fr-text--xs fr-mb-0 bo-text-mention-uppercase">Téléphone</span>
+            <p class="fr-text--sm fr-mb-0" data-testid="contact-telephone">
+              <a v-if="procedure.contact_telephone" :href="`tel:${procedure.contact_telephone}`">{{
+                procedure.contact_telephone
+              }}</a>
+              <em v-else class="bo-text-non-renseigne">Non renseigné</em>
+            </p>
+          </div>
+        </div>
         <p v-if="procedure.besoin_accompagnement" class="fr-mb-0 fr-mt-1w">
           <span class="fr-badge fr-badge--sm fr-badge--info">Accompagnement demandé</span>
         </p>
@@ -36,9 +52,19 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { formatConstatationDate } from '@/utils/date'
 
-defineProps<{
+const props = defineProps<{
   procedure: any
 }>()
+
+// L'email du compte est la source fiable (contact_email n'est plus saisi dans le formulaire)
+const contactEmail = computed(() => props.procedure.user_email || props.procedure.contact_email)
 </script>
+
+<style scoped>
+.bo-text-non-renseigne {
+  color: var(--text-mention-grey);
+}
+</style>
