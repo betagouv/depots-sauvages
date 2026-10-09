@@ -113,7 +113,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import StepperProcedure from '../components/StepperProcedure.vue'
@@ -252,6 +252,17 @@ const steps = computed(() => {
   ]
 })
 
+// Après ouverture d'une section depuis le tableau de bord : on y amène directement l'utilisateur,
+// et on place le focus sur son titre pour les utilisateurs de clavier et de lecteur d'écran.
+let allerALaSectionOuverte = false
+const afficherSectionOuverte = async () => {
+  await nextTick()
+  const section = document.querySelector<HTMLElement>('.step--active')
+  if (!section) return
+  section.scrollIntoView({ block: 'start' })
+  section.querySelector<HTMLElement>('.step-title')?.focus({ preventScroll: true })
+}
+
 onMounted(async () => {
   const currentConstatationId =
     (route.params.constatation_id as string) || (route.query.constatation_id as string)
@@ -286,11 +297,13 @@ onMounted(async () => {
       etapeDemandee < steps.value.length
     ) {
       activeStep.value = etapeDemandee
+      allerALaSectionOuverte = true
     }
   } catch (err: any) {
     error.value = err.error || 'Une erreur est survenue lors de la récupération du dossier.'
   } finally {
     showLoading.value = false
+    if (allerALaSectionOuverte) await afficherSectionOuverte()
   }
 })
 </script>

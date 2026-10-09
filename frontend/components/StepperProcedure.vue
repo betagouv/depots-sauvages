@@ -29,7 +29,7 @@
       <div class="step-content">
         <header class="step-header fr-mb-1w" @click="$emit('update:currentStep', index)">
           <div class="step-header-container">
-            <h3 class="step-title fr-h6 fr-mb-0">{{ step.title }}</h3>
+            <h3 class="step-title fr-h6 fr-mb-0" tabindex="-1">{{ step.title }}</h3>
             <div class="step-badges">
               <span
                 v-if="step.optional"
@@ -81,6 +81,7 @@ defineEmits(['update:currentStep'])
 
 .step-item {
   display: flex;
+  scroll-margin-top: 1rem;
   gap: 1.25rem;
 }
 
