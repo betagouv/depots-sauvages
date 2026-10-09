@@ -216,8 +216,19 @@ describe('Page Mes Procédures', () => {
       )
       expect(screen.queryByText('Sarah Blanc')).not.toBeInTheDocument()
 
-      await fireEvent.click(screen.getByRole('button', { name: /Afficher les 1 dossier clôturé/ }))
+      await fireEvent.click(screen.getByLabelText(/Afficher les dossiers clôturés \(1\)/))
       expect(screen.getByRole('region', { name: /Clôturé/ })).toHaveTextContent('Issue : Abandon')
+    })
+
+    it('cumule la recherche et l’interrupteur des dossiers clôturés', async () => {
+      renderTableau()
+      const champ = await screen.findByRole('searchbox')
+      await fireEvent.update(champ, 'blanc')
+      expect(screen.queryByText('Sarah Blanc')).not.toBeInTheDocument()
+      expect(screen.getByText(/1 dossier clôturé correspond/)).toBeInTheDocument()
+
+      await fireEvent.click(screen.getByLabelText(/Afficher les dossiers clôturés/))
+      expect(screen.getByText('Sarah Blanc')).toBeInTheDocument()
     })
 
     it('affiche la commune quand les dossiers concernent plusieurs communes', async () => {

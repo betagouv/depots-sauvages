@@ -23,7 +23,7 @@
 
       <template v-if="procedures.length > 0">
         <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--bottom fr-mb-2w">
-          <div class="fr-col-12 fr-col-md-6">
+          <div class="fr-col-12 fr-col-md-5">
             <DsfrSearchBar
               id="recherche-procedures"
               v-model="recherche"
@@ -39,6 +39,13 @@
               v-model="filtreAuteur"
               label="Auteur identifié"
               :options="optionsFiltreAuteur"
+            />
+          </div>
+          <div class="fr-col-12 fr-col-md-4">
+            <DsfrToggleSwitch
+              v-model="afficherClotures"
+              input-id="afficher-clotures"
+              :label="`Afficher les dossiers clôturés (${nbClotures})`"
             />
           </div>
         </div>
@@ -63,19 +70,6 @@
             class="tableau-de-bord__colonne"
           />
         </div>
-
-        <DsfrButton
-          v-if="nbClotures > 0 && !filtreActif"
-          secondary
-          :aria-expanded="afficherClotures ? 'true' : 'false'"
-          @click="afficherClotures = !afficherClotures"
-        >
-          {{
-            afficherClotures
-              ? 'Masquer les dossiers clôturés'
-              : `Afficher les ${nbClotures} dossier${nbClotures > 1 ? 's' : ''} clôturé${nbClotures > 1 ? 's' : ''}`
-          }}
-        </DsfrButton>
       </template>
 
       <AucuneProcedureBox v-else class="fr-mt-5w" />
@@ -146,22 +140,40 @@ const nbClotures = computed(
 
 const filtreActif = computed(() => recherche.value.trim() !== '' || filtreAuteur.value !== 'tous')
 
-// Pendant une recherche, on n'affiche que les colonnes qui ont un résultat (clôturés compris),
-// pour que le dossier trouvé soit visible sans faire défiler des colonnes vides.
+// Les réglages se cumulent : l'interrupteur décide si les clôturés sont affichés, y compris
+// pendant une recherche. Pendant une recherche ou un filtre, on n'affiche que les colonnes qui
+// ont un résultat, pour que le dossier trouvé soit visible sans faire défiler des colonnes vides.
 const colonnesAffichees = computed(() =>
-  filtreActif.value
-    ? colonnes.value.filter((colonne) => colonne.items.length > 0)
-    : colonnes.value.filter((colonne) => colonne.id !== 'cloture' || afficherClotures.value)
+  colonnes.value
+    .filter((colonne) => colonne.id !== 'cloture' || afficherClotures.value)
+    .filter((colonne) => !filtreActif.value || colonne.items.length > 0)
 )
 
+const pluriel = (nombre: number, mot: string) => `${nombre} ${mot}${nombre > 1 ? 's' : ''}`
+
 const resumeResultats = computed(() => {
-  const total = proceduresFiltrees.value.length
-  const enCours = total - nbClotures.value
-  const filtre = filtreActif.value
-  if (filtre && total === 0) return 'Aucun dossier ne correspond à votre recherche.'
-  return `${enCours} dossier${enCours > 1 ? 's' : ''} en cours${
-    nbClotures.value ? `, ${nbClotures.value} clôturé${nbClotures.value > 1 ? 's' : ''}` : ''
-  }${filtre ? ' correspondant à votre recherche' : ''}`
+  const enCours = proceduresFiltrees.value.length - nbClotures.value
+  const clotures = nbClotures.value
+  const suffixe = filtreActif.value ? ' correspondant à votre recherche' : ''
+
+  if (afficherClotures.value) {
+    if (filtreActif.value && enCours + clotures === 0) {
+      return 'Aucun dossier ne correspond à votre recherche.'
+    }
+    return `${pluriel(enCours, 'dossier')} en cours, ${pluriel(clotures, 'clôturé')}${suffixe}`
+  }
+
+  if (filtreActif.value && enCours === 0) {
+    return clotures
+      ? `Aucun dossier en cours ne correspond à votre recherche. ${pluriel(clotures, 'dossier')} ${
+          clotures > 1 ? 'clôturés correspondent' : 'clôturé correspond'
+        } : activez « Afficher les dossiers clôturés ».`
+      : 'Aucun dossier ne correspond à votre recherche.'
+  }
+  const masques = clotures
+    ? ` (${pluriel(clotures, 'clôturé')} ${clotures > 1 ? 'masqués' : 'masqué'})`
+    : ''
+  return `${pluriel(enCours, 'dossier')} en cours${suffixe}${masques}`
 })
 
 onMounted(async () => {
