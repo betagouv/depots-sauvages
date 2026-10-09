@@ -2,6 +2,7 @@ import dayjs from 'dayjs'
 import { describe, expect, it } from 'vitest'
 import type { ProcedureOverview } from '../services/api'
 import {
+  comparerDansColonne,
   comparerProcedures,
   correspondRecherche,
   getPlacementProcedure,
@@ -154,5 +155,13 @@ describe('Recherche et tri', () => {
     const recent = dossier({}, { id: 1, date_constat: '2026-10-01' })
     const ancien = dossier({}, { id: 2, date_constat: '2026-08-01' })
     expect([recent, ancien].sort(comparerProcedures).map((d) => d.id)).toEqual([2, 1])
+  })
+  it('met les dossiers clôturés les plus récents en haut', () => {
+    const recent = dossier({}, { id: 1, date_constat: '2026-10-01' })
+    const ancien = dossier({}, { id: 2, date_constat: '2026-08-01' })
+    const ordre = (colonne: Parameters<typeof comparerDansColonne>[0]) =>
+      [ancien, recent].sort(comparerDansColonne(colonne)).map((d) => d.id)
+    expect(ordre('cloture')).toEqual([1, 2])
+    expect(ordre('decision')).toEqual([2, 1])
   })
 })

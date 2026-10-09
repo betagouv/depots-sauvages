@@ -88,7 +88,7 @@ import LoginInvitation from '../components/shared/LoginInvitation.vue'
 import { getUserInfo, type UserInfo } from '../services/api'
 import {
   COLONNES,
-  comparerProcedures,
+  comparerDansColonne,
   correspondRecherche,
   getPlacementProcedure,
 } from '../utils/tableau-de-bord'
@@ -122,15 +122,15 @@ const proceduresFiltrees = computed(() =>
       if (filtreAuteur.value === 'non_identifie') return p.auteur_identifie !== true
       return true
     })
-    .slice()
-    .sort(comparerProcedures)
     .map((procedure) => ({ procedure, placement: getPlacementProcedure(procedure) }))
 )
 
 const colonnes = computed(() =>
   COLONNES.map((colonne) => ({
     ...colonne,
-    items: proceduresFiltrees.value.filter((item) => item.placement.colonne === colonne.id),
+    items: proceduresFiltrees.value
+      .filter((item) => item.placement.colonne === colonne.id)
+      .sort((a, b) => comparerDansColonne(colonne.id)(a.procedure, b.procedure)),
   }))
 )
 

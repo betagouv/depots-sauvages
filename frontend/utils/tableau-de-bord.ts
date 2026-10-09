@@ -256,3 +256,19 @@ export const comparerProcedures = (a: ProcedureOverview, b: ProcedureOverview) =
   }
   return a.id - b.id
 }
+
+/**
+ * Ordre des cartes dans une colonne. Pour les colonnes en cours, le plus ancien est en haut
+ * (le plus urgent). Pour les clôturés, il n'y a plus rien à faire : le plus récent est en haut.
+ * La date de clôture n'étant pas enregistrée, la date du constat sert d'approximation.
+ */
+export const comparerDansColonne =
+  (colonne: ColonneId) => (a: ProcedureOverview, b: ProcedureOverview) => {
+    if (colonne !== 'cloture') return comparerProcedures(a, b)
+    if (a.date_constat !== b.date_constat) {
+      if (!a.date_constat) return 1
+      if (!b.date_constat) return -1
+      return a.date_constat > b.date_constat ? -1 : 1
+    }
+    return b.id - a.id
+  }
