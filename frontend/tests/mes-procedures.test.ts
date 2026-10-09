@@ -2,6 +2,9 @@ import { createTestingPinia } from '@pinia/testing'
 import '@testing-library/jest-dom'
 import { render, screen, waitFor } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
+import { axe } from 'vitest-axe'
+import VueDsfr from '@gouvminint/vue-dsfr'
+import { fireEvent } from '@testing-library/vue'
 import MesProcedures from '../pages/mes-procedures.vue'
 import * as api from '../services/api'
 import { useProcedureStore } from '../stores/procedure'
@@ -123,6 +126,124 @@ describe('Page Mes Procédures', () => {
           /Vous n'avez pas encore créé de constatation pour initier une procédure administrative/
         )
       ).toBeInTheDocument()
+    })
+  })
+
+  describe('Tableau de bord en colonnes', () => {
+    const procedures = [
+      {
+        id: 10,
+        commune: 'Nangy',
+        date_modification: null,
+        date_constat: '2026-09-01',
+        heure_constat: null,
+        localisation_depot: 'Chemin des Saules',
+        auteur_identifie: true,
+        auteur_nom: 'Dupont',
+        auteur_prenom: 'Marc',
+        is_draft: false,
+        suivi_procedure: {
+          etape_en_cours: 1,
+          preuves_fournies: true,
+          constatation_signee: true,
+          lettre_signe: true,
+        },
+      },
+      {
+        id: 11,
+        commune: 'Reignier-Ésery',
+        date_modification: null,
+        date_constat: '2026-09-05',
+        heure_constat: null,
+        localisation_depot: null,
+        auteur_identifie: true,
+        auteur_nom: 'Martin',
+        auteur_prenom: 'Lucie',
+        is_draft: false,
+        suivi_procedure: { etape_en_cours: 1 },
+      },
+      {
+        id: 12,
+        commune: 'Nangy',
+        date_modification: null,
+        date_constat: '2026-06-01',
+        heure_constat: null,
+        localisation_depot: null,
+        auteur_identifie: true,
+        auteur_nom: 'Blanc',
+        auteur_prenom: 'Sarah',
+        is_draft: false,
+        suivi_procedure: {
+          etape_en_cours: 5,
+          preuves_fournies: true,
+          constatation_signee: true,
+          lettre_signe: true,
+          lettre_envoyee: true,
+          copie_archives: true,
+          ar_recu: true,
+          ar_statut: 'distribue',
+          ar_presentation_date: '2026-06-10',
+          decision_poursuite: 'abandon',
+          motif_abandon: 'Indulgence',
+          souhaite_notifier_abandon: false,
+        },
+      },
+    ]
+
+    const renderTableau = () => {
+      ;(api.getUserInfo as any).mockResolvedValue({
+        is_authenticated: true,
+        proconnect_enabled: true,
+      })
+      const pinia = createTestingPinia({ stubActions: true })
+      useProcedureStore(pinia).procedures = procedures as any
+      return render(MesProcedures, {
+        global: {
+          plugins: [pinia, VueDsfr],
+          stubs: {
+            RouterLink: { props: ['to'], template: '<a :href="to"><slot /></a>' },
+          },
+        },
+      })
+    }
+
+    it('range chaque dossier dans sa colonne et masque les clôturés', async () => {
+      renderTableau()
+      const colonne = await screen.findByRole('region', { name: /Lettre à envoyer/ })
+      expect(colonne).toHaveTextContent('Marc Dupont')
+      expect(screen.getByRole('region', { name: /Documents à signer/ })).toHaveTextContent(
+        'Lucie Martin'
+      )
+      expect(screen.queryByText('Sarah Blanc')).not.toBeInTheDocument()
+
+      await fireEvent.click(screen.getByRole('button', { name: /Afficher les 1 dossier clôturé/ }))
+      expect(screen.getByRole('region', { name: /Clôturé/ })).toHaveTextContent('Issue : Abandon')
+    })
+
+    it('affiche la commune quand les dossiers concernent plusieurs communes', async () => {
+      renderTableau()
+      expect(await screen.findByText(/Nangy · Chemin des Saules/)).toBeInTheDocument()
+    })
+
+    it('filtre les dossiers par nom du contrevenant', async () => {
+      renderTableau()
+      const champ = await screen.findByRole('searchbox')
+      await fireEvent.update(champ, 'dupont')
+      expect(screen.getByText('Marc Dupont')).toBeInTheDocument()
+      expect(screen.queryByText('Lucie Martin')).not.toBeInTheDocument()
+    })
+
+    it('ouvre la bonne section du suivi depuis le bouton de la carte', async () => {
+      renderTableau()
+      const lien = await screen.findByRole('link', { name: /Indiquer l'envoi/ })
+      expect(lien).toHaveAttribute('href', '/suivi-procedure/10?etape=2')
+    })
+
+    it('est accessible (A11y)', async () => {
+      const { container } = renderTableau()
+      await screen.findByRole('region', { name: /Lettre à envoyer/ })
+      const results = await axe(container)
+      expect(results.violations).toEqual([])
     })
   })
 })

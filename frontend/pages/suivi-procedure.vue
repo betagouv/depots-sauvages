@@ -277,6 +277,16 @@ onMounted(async () => {
 
     // Then fetch procedure tracking data using the internal ID
     await suiviStore.fetchSuivi(currentConstatationId, procedureRes.id)
+
+    // Ouvre la section demandée depuis le tableau de bord « Mes procédures » (?etape=N)
+    const etapeDemandee = Number.parseInt(String(route.query.etape ?? ''), 10)
+    if (
+      Number.isInteger(etapeDemandee) &&
+      etapeDemandee >= 0 &&
+      etapeDemandee < steps.value.length
+    ) {
+      activeStep.value = etapeDemandee
+    }
   } catch (err: any) {
     error.value = err.error || 'Une erreur est survenue lors de la récupération du dossier.'
   } finally {

@@ -41,40 +41,100 @@ export interface SuiviProcedure {
   identification_reussie: boolean | null
 }
 
+/** Suivi vierge, tel qu'il existe avant toute saisie. */
+export const createEmptySuivi = (): SuiviProcedure => ({
+  etape_en_cours: 1,
+  preuves_fournies: false,
+  constatation_signee: false,
+  lettre_signe: false,
+  lettre_envoyee: false,
+  lettre_envoyee_date: '',
+  copie_archives: false,
+  ar_recu: false,
+  ar_statut: '',
+  ar_presentation_date: '',
+  montant_fixe: false,
+  arrete_redige: false,
+  titre_recette_emis: false,
+  notification_sanction_envoyee: false,
+  notification_abandon_envoyee: false,
+  decision_poursuite: '',
+  souhaite_notifier_abandon: null,
+  montant_amende: null,
+  motif_abandon: '',
+  date_recouvrement_effective: '',
+  nettoyage_fait: null,
+  nettoyage_par: '',
+  observations_internes: '',
+  titre_recette_confirme: false,
+  montant_recouvre: false,
+  dossier_archive: false,
+  identification_reussie: null,
+})
+
+/**
+ * Indique si une section du suivi est « Fait », à partir des seules données saisies.
+ * Règle unique, partagée par les étiquettes « Fait » de la page de suivi
+ * et par les colonnes du tableau de bord « Mes procédures ».
+ * L'étape 0 (constatation) n'est pas gérée ici : elle dépend de la navigation dans le stepper.
+ */
+export const isSuiviStepCompleted = (
+  suivi: SuiviProcedure,
+  stepIndex: number,
+  context: { auteurIdentifie: boolean }
+): boolean => {
+  switch (stepIndex) {
+    case 1:
+      return (
+        suivi.preuves_fournies &&
+        suivi.constatation_signee &&
+        (!context.auteurIdentifie || suivi.lettre_signe)
+      )
+    case 2:
+      if (!context.auteurIdentifie) {
+        return suivi.identification_reussie !== null
+      }
+      return suivi.lettre_envoyee && suivi.copie_archives && suivi.ar_recu
+    case 3:
+      if (suivi.decision_poursuite === 'recherche_adresse') return false
+      return suivi.decision_poursuite !== ''
+    case 4:
+      if (suivi.decision_poursuite === 'sanction') {
+        return (
+          suivi.montant_fixe &&
+          suivi.arrete_redige &&
+          suivi.titre_recette_emis &&
+          suivi.notification_sanction_envoyee
+        )
+      }
+      if (suivi.decision_poursuite === 'abandon') {
+        if (suivi.motif_abandon === 'Auteur introuvable (NPAI)') {
+          return true
+        }
+        return (
+          suivi.motif_abandon !== '' &&
+          (suivi.motif_abandon === 'Un auteur identifié' ||
+            suivi.souhaite_notifier_abandon === false ||
+            (suivi.souhaite_notifier_abandon === true && suivi.notification_abandon_envoyee))
+        )
+      }
+      return false
+    case 5:
+      if (suivi.decision_poursuite === 'sanction') {
+        return suivi.titre_recette_confirme && suivi.montant_recouvre && suivi.dossier_archive
+      }
+      return suivi.dossier_archive
+    default:
+      return false
+  }
+}
+
 export const useSuiviStore = defineStore('suiviProcedure', () => {
   const procedures = reactive<Record<string, SuiviProcedure>>({})
 
   const getOrCreateSuivi = (constatationId: string): SuiviProcedure => {
     if (!procedures[constatationId] || typeof procedures[constatationId] !== 'object') {
-      procedures[constatationId] = {
-        etape_en_cours: 1,
-        preuves_fournies: false,
-        constatation_signee: false,
-        lettre_signe: false,
-        lettre_envoyee: false,
-        lettre_envoyee_date: '',
-        copie_archives: false,
-        ar_recu: false,
-        ar_statut: '',
-        ar_presentation_date: '',
-        montant_fixe: false,
-        arrete_redige: false,
-        titre_recette_emis: false,
-        notification_sanction_envoyee: false,
-        notification_abandon_envoyee: false,
-        decision_poursuite: '',
-        souhaite_notifier_abandon: null,
-        montant_amende: null,
-        motif_abandon: '',
-        date_recouvrement_effective: '',
-        nettoyage_fait: null,
-        nettoyage_par: '',
-        observations_internes: '',
-        titre_recette_confirme: false,
-        montant_recouvre: false,
-        dossier_archive: false,
-        identification_reussie: null,
-      }
+      procedures[constatationId] = createEmptySuivi()
     }
     return procedures[constatationId]
   }
@@ -94,50 +154,7 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
 
     if (!suivi) return false
 
-    switch (stepIndex) {
-      case 1:
-        return (
-          suivi.preuves_fournies &&
-          suivi.constatation_signee &&
-          (!context.auteurIdentifie || suivi.lettre_signe)
-        )
-      case 2:
-        if (!context.auteurIdentifie) {
-          return suivi.identification_reussie !== null
-        }
-        return suivi.lettre_envoyee && suivi.copie_archives && suivi.ar_recu
-      case 3:
-        if (suivi.decision_poursuite === 'recherche_adresse') return false
-        return suivi.decision_poursuite !== ''
-      case 4:
-        if (suivi.decision_poursuite === 'sanction') {
-          return (
-            suivi.montant_fixe &&
-            suivi.arrete_redige &&
-            suivi.titre_recette_emis &&
-            suivi.notification_sanction_envoyee
-          )
-        }
-        if (suivi.decision_poursuite === 'abandon') {
-          if (suivi.motif_abandon === 'Auteur introuvable (NPAI)') {
-            return true
-          }
-          return (
-            suivi.motif_abandon !== '' &&
-            (suivi.motif_abandon === 'Un auteur identifié' ||
-              suivi.souhaite_notifier_abandon === false ||
-              (suivi.souhaite_notifier_abandon === true && suivi.notification_abandon_envoyee))
-          )
-        }
-        return false
-      case 5:
-        if (suivi.decision_poursuite === 'sanction') {
-          return suivi.titre_recette_confirme && suivi.montant_recouvre && suivi.dossier_archive
-        }
-        return suivi.dossier_archive
-      default:
-        return false
-    }
+    return isSuiviStepCompleted(suivi, stepIndex, context)
   }
 
   const fetchSuivi = async (constatationId: string, internalConstatationId: number) => {
@@ -170,4 +187,3 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
     saveSuivi,
   }
 })
-
