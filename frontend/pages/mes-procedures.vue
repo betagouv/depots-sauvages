@@ -167,7 +167,7 @@ const resumeResultats = computed(() => {
     return clotures
       ? `Aucun dossier en cours ne correspond à votre recherche. ${pluriel(clotures, 'dossier')} ${
           clotures > 1 ? 'clôturés correspondent' : 'clôturé correspond'
-        } : activez « Afficher les dossiers clôturés ».`
+        } : activez « Afficher les dossiers clôturés » pour ${clotures > 1 ? 'les' : 'le'} voir.`
       : 'Aucun dossier ne correspond à votre recherche.'
   }
   // Le nombre de clôturés masqués figure déjà dans le libellé de l'interrupteur

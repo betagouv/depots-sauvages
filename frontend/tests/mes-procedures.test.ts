@@ -225,7 +225,11 @@ describe('Page Mes Procédures', () => {
       const champ = await screen.findByRole('searchbox')
       await fireEvent.update(champ, 'blanc')
       expect(screen.queryByText('Sarah Blanc')).not.toBeInTheDocument()
-      expect(screen.getByText(/1 dossier clôturé correspond/)).toBeInTheDocument()
+      expect(
+        screen.getByText(
+          /1 dossier clôturé correspond : activez « Afficher les dossiers clôturés » pour le voir\./
+        )
+      ).toBeInTheDocument()
 
       await fireEvent.click(screen.getByLabelText(/Afficher les dossiers clôturés/))
       expect(screen.getByText('Sarah Blanc')).toBeInTheDocument()
