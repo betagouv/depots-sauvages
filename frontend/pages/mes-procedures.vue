@@ -15,12 +15,6 @@
     <Chargement v-if="showLoading" message="Récupération de vos procédures..." />
 
     <div v-else-if="userInfo?.is_authenticated">
-      <p v-if="userInfo.first_name && userInfo.last_name" class="fr-text--sm fr-mb-3w">
-        Utilisateur connecté :
-        <strong>{{ userInfo.first_name }} {{ userInfo.last_name }}</strong>
-        <span v-if="userInfo.email"> - {{ userInfo.email }}</span>
-      </p>
-
       <template v-if="procedures.length > 0">
         <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--bottom fr-mb-2w">
           <div class="fr-col-12 fr-col-md-5">

@@ -25,7 +25,7 @@ vi.mock('vue-router', () => ({
 }))
 
 describe('Page Mes Procédures', () => {
-  it('doit afficher l’identité de l’utilisateur connecté', async () => {
+  it('n’affiche plus l’identité de l’utilisateur (prévue dans le bandeau du site)', async () => {
     // Mock user info
     ;(api.getUserInfo as any).mockResolvedValue({
       is_authenticated: true,
@@ -53,12 +53,10 @@ describe('Page Mes Procédures', () => {
       },
     })
 
-    await waitFor(() => {
-      // Use findByText which is more robust and handles normalized whitespace
-      expect(screen.getByText('Jean Dupont')).toBeInTheDocument()
-      // Correct the email expectation to match the component: " - jean.dupont@example.com"
-      expect(screen.getByText(/jean\.dupont@example\.com/)).toBeInTheDocument()
-    })
+    // On attend la fin du chargement avant de vérifier l'absence
+    await screen.findByText(/Aucune procédure en cours/)
+    expect(screen.queryByText(/Jean/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/jean\.dupont@example\.com/)).not.toBeInTheDocument()
   })
 
   it('doit rester stable si l’utilisateur n’est pas connecté', async () => {
