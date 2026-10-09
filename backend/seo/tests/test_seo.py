@@ -3,6 +3,7 @@ from django.urls import reverse
 
 from backend.blog.models import BlogArticle
 from backend.faq.models import FAQItem
+from backend.seo.utils import clean_text
 
 
 @pytest.mark.django_db
@@ -79,6 +80,11 @@ def test_seo_metadata_blog_article_without_summary(client):
     assert description.startswith("Un dépôt sauvage Un dépôt sauvage")
     assert description.endswith("...")
     assert len(description) <= 150
+
+
+def test_clean_text_keeps_space_between_paragraphs():
+    html = "<p>Loi AGEC de 2020.</p><p>Elle permet au maire<br>d'agir.</p><ul><li>Un</li><li>Deux</li></ul>"
+    assert clean_text(html) == "Loi AGEC de 2020. Elle permet au maire d'agir. Un Deux"
 
 
 @pytest.mark.django_db
