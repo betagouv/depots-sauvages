@@ -65,7 +65,7 @@
         </div>
 
         <DsfrButton
-          v-if="nbClotures > 0"
+          v-if="nbClotures > 0 && !filtreActif"
           secondary
           :aria-expanded="afficherClotures ? 'true' : 'false'"
           @click="afficherClotures = !afficherClotures"
@@ -144,14 +144,20 @@ const nbClotures = computed(
   () => colonnes.value.find((colonne) => colonne.id === 'cloture')?.items.length ?? 0
 )
 
+const filtreActif = computed(() => recherche.value.trim() !== '' || filtreAuteur.value !== 'tous')
+
+// Pendant une recherche, on n'affiche que les colonnes qui ont un résultat (clôturés compris),
+// pour que le dossier trouvé soit visible sans faire défiler des colonnes vides.
 const colonnesAffichees = computed(() =>
-  colonnes.value.filter((colonne) => colonne.id !== 'cloture' || afficherClotures.value)
+  filtreActif.value
+    ? colonnes.value.filter((colonne) => colonne.items.length > 0)
+    : colonnes.value.filter((colonne) => colonne.id !== 'cloture' || afficherClotures.value)
 )
 
 const resumeResultats = computed(() => {
   const total = proceduresFiltrees.value.length
   const enCours = total - nbClotures.value
-  const filtre = recherche.value.trim() !== '' || filtreAuteur.value !== 'tous'
+  const filtre = filtreActif.value
   if (filtre && total === 0) return 'Aucun dossier ne correspond à votre recherche.'
   return `${enCours} dossier${enCours > 1 ? 's' : ''} en cours${
     nbClotures.value ? `, ${nbClotures.value} clôturé${nbClotures.value > 1 ? 's' : ''}` : ''
@@ -182,6 +188,7 @@ onMounted(async () => {
 
 .tableau-de-bord__colonne {
   flex: 0 0 17rem;
+  min-width: 0;
 }
 
 /* Sur mobile, les colonnes s'empilent : pas de défilement horizontal */

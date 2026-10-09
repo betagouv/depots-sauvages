@@ -27,9 +27,10 @@
       </li>
     </ul>
 
-    <ul v-if="placement.alertes.length" class="carte-procedure__alertes fr-mb-1w">
-      <li v-for="alerte in placement.alertes" :key="alerte">
-        <span class="fr-badge fr-badge--sm fr-badge--warning">{{ alerte }}</span>
+    <ul v-if="placement.alertes.length" class="carte-procedure__alertes fr-text--sm fr-mb-1w">
+      <li v-for="alerte in placement.alertes" :key="alerte" class="fr-text-default--warning">
+        <span class="fr-icon-warning-fill fr-icon--sm fr-mr-1v" aria-hidden="true"></span>
+        <span class="fr-sr-only">Attention : </span>{{ alerte }}
       </li>
     </ul>
 
@@ -66,6 +67,8 @@ const dateConstat = computed(() => dayjs(props.procedure.date_constat).format('D
 
 <style scoped>
 .carte-procedure {
+  /* Ancre les textes réservés aux lecteurs d'écran dans la zone de défilement */
+  position: relative;
   background-color: var(--background-default-grey);
   border: 1px solid var(--border-default-grey);
 }
