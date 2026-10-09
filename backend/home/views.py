@@ -22,6 +22,8 @@ class IndexView(TemplateView):
         context["seo_description"] = (
             seo_data.get("desc") or "Signaler un dépôt sauvage avec Stop Dépôt Sauvage."
         )
+        context["seo_type"] = seo_data.get("type") or "website"
+        context["seo_url"] = self.request.build_absolute_uri(self.request.path)
         context["seo_robots"] = (
             "noindex, nofollow" if getattr(settings, "ENV_NAME", "") != "prod" else "index, follow"
         )
