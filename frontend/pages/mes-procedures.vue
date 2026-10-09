@@ -170,10 +170,8 @@ const resumeResultats = computed(() => {
         } : activez « Afficher les dossiers clôturés ».`
       : 'Aucun dossier ne correspond à votre recherche.'
   }
-  const masques = clotures
-    ? ` (${pluriel(clotures, 'clôturé')} ${clotures > 1 ? 'masqués' : 'masqué'})`
-    : ''
-  return `${pluriel(enCours, 'dossier')} en cours${suffixe}${masques}`
+  // Le nombre de clôturés masqués figure déjà dans le libellé de l'interrupteur
+  return `${pluriel(enCours, 'dossier')} en cours${suffixe}`
 })
 
 onMounted(async () => {
