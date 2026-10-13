@@ -60,7 +60,6 @@
             :key="colonne.id"
             :titre="colonne.titre"
             :items="colonne.items"
-            :afficher-commune="afficherCommune"
             class="tableau-de-bord__colonne"
           />
         </div>
@@ -102,11 +101,6 @@ const optionsFiltreAuteur = [
 ]
 
 const procedures = computed(() => procedureStore.procedures)
-
-// La commune n'est utile que si l'utilisateur a des dossiers sur plusieurs communes
-const afficherCommune = computed(
-  () => new Set(procedures.value.map((p) => p.commune).filter(Boolean)).size > 1
-)
 
 const proceduresFiltrees = computed(() =>
   procedures.value

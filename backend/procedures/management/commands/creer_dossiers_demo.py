@@ -246,6 +246,18 @@ def scenarios():
 
 DATE_FIELDS = ("lettre_envoyee_date", "ar_presentation_date", "date_recouvrement_effective")
 
+# Lieux du dépôt variés, saisis en texte libre comme dans la réalité : courts, longs (coupés à
+# 2 lignes sur la carte) et redondants avec la commune (« Route de Nangy » à Nangy).
+LIEUX = (
+    "Chemin des Saules, près du point d'apport volontaire",
+    "Route de Nangy",
+    "Parking du stade",
+    "Bord du Foron, sous le pont de la D903, derrière le local technique de l'association",
+    "Lieu-dit Les Granges",
+    "Rue de la Mairie",
+    "Forêt communale, chemin forestier n°3",
+)
+
 
 class Command(BaseCommand):
     help = (
@@ -285,8 +297,8 @@ class Command(BaseCommand):
                 deleted, _ = Constatation.objects.filter(user=user, ceci_est_un_test=True).delete()
                 self.stdout.write(f"{deleted} objets de démo supprimés.")
 
-            for scenario in scenarios():
-                self._create_dossier(user, scenario, today)
+            for index, scenario in enumerate(scenarios()):
+                self._create_dossier(user, scenario, today, LIEUX[index % len(LIEUX)])
 
         self.stdout.write(
             self.style.SUCCESS(
@@ -295,14 +307,14 @@ class Command(BaseCommand):
             )
         )
 
-    def _create_dossier(self, user, scenario, today):
+    def _create_dossier(self, user, scenario, today, lieu):
         auteur_identifie = scenario.get("auteur_identifie", True)
         constatation = Constatation.objects.create(
             user=user,
             ceci_est_un_test=True,
             is_draft=scenario.get("is_draft", False),
             commune=scenario["commune"],
-            localisation_depot="Chemin des Saules, près du point d'apport volontaire",
+            localisation_depot=lieu,
             date_constat=today - timedelta(days=scenario["constat"]),
             auteur_identifie=auteur_identifie,
             statut_auteur=scenario.get(

@@ -1,6 +1,6 @@
 import { createTestingPinia } from '@pinia/testing'
 import '@testing-library/jest-dom'
-import { render, screen, waitFor } from '@testing-library/vue'
+import { render, screen, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
 import { axe } from 'vitest-axe'
 import VueDsfr from '@gouvminint/vue-dsfr'
@@ -233,9 +233,11 @@ describe('Page Mes Procédures', () => {
       expect(screen.getByText('Sarah Blanc')).toBeInTheDocument()
     })
 
-    it('affiche la commune quand les dossiers concernent plusieurs communes', async () => {
+    it('affiche le lieu du dépôt suivi de la commune, sans ambiguïté avec l’adresse de l’auteur', async () => {
       renderTableau()
-      expect(await screen.findByText(/Nangy · Chemin des Saules/)).toBeInTheDocument()
+      expect(await screen.findByText('Dépôt : Chemin des Saules – Nangy')).toBeInTheDocument()
+      expect(screen.getByText('Dépôt : Reignier-Ésery')).toBeInTheDocument()
+      expect(screen.getByText(/n°10 · Constat du 01\/09\/2026/)).toBeInTheDocument()
     })
 
     it('filtre les dossiers par nom du contrevenant', async () => {
@@ -246,10 +248,17 @@ describe('Page Mes Procédures', () => {
       expect(screen.queryByText('Lucie Martin')).not.toBeInTheDocument()
     })
 
-    it('ouvre la bonne section du suivi depuis le bouton de la carte', async () => {
+    it('rend toute la carte cliquable, avec un seul lien au nom complet', async () => {
       renderTableau()
-      const lien = await screen.findByRole('link', { name: /Indiquer l'envoi/ })
-      expect(lien).toHaveAttribute('href', '/suivi-procedure/10?etape=2')
+      const colonne = await screen.findByRole('region', { name: /Lettre à envoyer/ })
+      const liens = within(colonne).getAllByRole('link')
+      expect(liens).toHaveLength(1)
+      expect(liens[0]).toHaveAccessibleName(
+        "Particulier : Marc Dupont, dossier n°10. Indiquer l'envoi"
+      )
+      expect(liens[0]).toHaveAttribute('href', '/suivi-procedure/10?etape=2')
+      // Le verbe est aussi affiché en pied de carte
+      expect(colonne).toHaveTextContent("Indiquer l'envoi")
     })
 
     it('est accessible (A11y)', async () => {

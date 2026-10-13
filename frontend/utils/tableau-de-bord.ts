@@ -50,7 +50,11 @@ export interface PlacementProcedure {
   alertes: string[]
   /** Issue du dossier, pour la colonne Clôturé */
   issue?: string
-  action: { label: string; to: string; secondaire?: boolean }
+  /**
+   * Lien de la carte. Le verbe n'est affiché que quand l'utilisateur doit agir : sans verbe
+   * (contradictoire en cours, dossier clôturé), la carte ne montre qu'une flèche.
+   */
+  action: { label?: string; to: string }
 }
 
 const AR_STATUT_ALERTES: Record<string, string> = {
@@ -105,7 +109,7 @@ export const getPlacementProcedure = (procedure: ProcedureOverview): PlacementPr
         libelle: 'Auteur non identifié',
         issue: 'Auteur non identifié',
         alertes: [],
-        action: { label: 'Consulter', to: versSection(procedure, 3), secondaire: true },
+        action: { to: versSection(procedure, 3) },
       }
     }
     const auteurRetrouve = suivi.identification_reussie === true
@@ -155,7 +159,7 @@ export const getPlacementProcedure = (procedure: ProcedureOverview): PlacementPr
         colonne: 'contradictoire',
         info: finContradictoire(contradictoire.joursRestants, contradictoire.dateFin),
         alertes: alerteAr ? [alerteAr] : [],
-        action: { label: 'Voir le dossier', to: versSection(procedure, 2), secondaire: true },
+        action: { to: versSection(procedure, 2) },
       }
     }
     if (!fait(2)) {
@@ -225,7 +229,7 @@ export const getPlacementProcedure = (procedure: ProcedureOverview): PlacementPr
     issue,
     info: montant ? `Amende de ${montant}` : undefined,
     alertes: [],
-    action: { label: 'Consulter', to: versSection(procedure, 5), secondaire: true },
+    action: { to: versSection(procedure, 5) },
   }
 }
 

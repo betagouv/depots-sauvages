@@ -6,11 +6,7 @@
     </h2>
     <ul v-if="items.length" class="colonne-procedures__liste">
       <li v-for="item in items" :key="item.procedure.id" class="fr-mb-1w">
-        <CarteProcedure
-          :procedure="item.procedure"
-          :placement="item.placement"
-          :afficher-commune="afficherCommune"
-        />
+        <CarteProcedure :procedure="item.procedure" :placement="item.placement" />
       </li>
     </ul>
     <p v-else class="fr-text--sm fr-text-mention--grey fr-px-1w">Aucun dossier</p>
@@ -26,7 +22,6 @@ defineProps<{
   id: string
   titre: string
   items: { procedure: ProcedureOverview; placement: PlacementProcedure }[]
-  afficherCommune: boolean
 }>()
 </script>
 
