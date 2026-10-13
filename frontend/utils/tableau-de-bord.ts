@@ -100,14 +100,22 @@ export const getPlacementProcedure = (procedure: ProcedureOverview): PlacementPr
         action: { to: versSection(procedure, 3) },
       }
     }
-    const auteurRetrouve = suivi.identification_reussie === true
+    // Until the identity is entered in the app, the author stays unidentified: same verb whether
+    // the search is pending (section 2) or the author was found (section 3, enter the identity).
+    let action: PlacementProcedure['action'] = {
+      label: "Identifier l'auteur",
+      to: versSection(procedure, 2),
+    }
+    if (suivi.identification_reussie === true) {
+      action = { label: "Identifier l'auteur", to: versSection(procedure, 3) }
+    } else if (suivi.identification_reussie === false) {
+      action = { label: 'Clôturer le dossier', to: versSection(procedure, 3) }
+    }
     return {
       colonne: 'a_completer',
       libelle: 'Auteur non identifié',
       alertes: [],
-      action: auteurRetrouve
-        ? { label: 'Mettre à jour le dossier', to: versSection(procedure, 3) }
-        : { label: "Identifier l'auteur", to: versSection(procedure, 2) },
+      action,
     }
   }
 
@@ -115,7 +123,7 @@ export const getPlacementProcedure = (procedure: ProcedureOverview): PlacementPr
     return {
       colonne: 'documents_a_signer',
       alertes: [],
-      action: { label: 'Indiquer la signature', to: versSection(procedure, 1) },
+      action: { label: 'Marquer comme signé', to: versSection(procedure, 1) },
     }
   }
 
@@ -123,7 +131,7 @@ export const getPlacementProcedure = (procedure: ProcedureOverview): PlacementPr
     return {
       colonne: 'lettre_a_envoyer',
       alertes: [],
-      action: { label: "Indiquer l'envoi", to: versSection(procedure, 2) },
+      action: { label: 'Marquer comme envoyé', to: versSection(procedure, 2) },
     }
   }
 
@@ -134,7 +142,7 @@ export const getPlacementProcedure = (procedure: ProcedureOverview): PlacementPr
     return {
       colonne: 'attente_reception',
       alertes: [],
-      action: { label: 'Indiquer la réception', to: versSection(procedure, 2) },
+      action: { label: "Indiquer le statut de l'AR", to: versSection(procedure, 2) },
     }
   }
 
@@ -154,7 +162,7 @@ export const getPlacementProcedure = (procedure: ProcedureOverview): PlacementPr
         alertes: [
           `Contradictoire terminé — étape restante : ${etapesNotificationRestantes(suivi).join(', ')}`,
         ],
-        action: { label: 'Compléter la notification', to: versSection(procedure, 2) },
+        action: { label: 'Garder une copie pour archive', to: versSection(procedure, 2) },
       }
     }
   } else if (!fait(2)) {
@@ -164,7 +172,7 @@ export const getPlacementProcedure = (procedure: ProcedureOverview): PlacementPr
         'Courrier revenu (NPAI)',
         `Étape restante : ${etapesNotificationRestantes(suivi).join(', ')}`,
       ],
-      action: { label: 'Compléter la notification', to: versSection(procedure, 2) },
+      action: { label: 'Garder une copie pour archive', to: versSection(procedure, 2) },
     }
   }
 

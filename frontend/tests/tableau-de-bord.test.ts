@@ -51,6 +51,24 @@ describe('Rangement des dossiers en colonnes', () => {
     expect(placement.colonne).toBe('a_completer')
     expect(placement.libelle).toBe('Auteur non identifié')
     expect(placement.action.label).toBe("Identifier l'auteur")
+    expect(placement.action.to).toBe('/suivi-procedure/1?etape=2')
+  })
+
+  it("garde « Identifier l'auteur » une fois l'auteur retrouvé, vers la saisie de l'identité", () => {
+    const placement = getPlacementProcedure(
+      dossier({ ...SIGNE, identification_reussie: true }, { auteur_identifie: false })
+    )
+    expect(placement.action.label).toBe("Identifier l'auteur")
+    expect(placement.action.to).toBe('/suivi-procedure/1?etape=3')
+  })
+
+  it('propose de clôturer le dossier quand l’auteur est introuvable', () => {
+    const placement = getPlacementProcedure(
+      dossier({ ...SIGNE, identification_reussie: false }, { auteur_identifie: false })
+    )
+    expect(placement.colonne).toBe('a_completer')
+    expect(placement.action.label).toBe('Clôturer le dossier')
+    expect(placement.action.to).toBe('/suivi-procedure/1?etape=3')
   })
 
   it("n'utilise jamais la dernière section ouverte (etape_en_cours)", () => {
@@ -66,7 +84,7 @@ describe('Rangement des dossiers en colonnes', () => {
   it('attend la réception tant que la date de présentation manque', () => {
     const placement = getPlacementProcedure(dossier({ ...ENVOYE, lettre_envoyee_date: ilYA(3) }))
     expect(placement.colonne).toBe('attente_reception')
-    expect(placement.action.label).toBe('Indiquer la réception')
+    expect(placement.action.label).toBe("Indiquer le statut de l'AR")
   })
 
   it('démarre le contradictoire à la date de présentation', () => {
@@ -88,6 +106,7 @@ describe('Rangement des dossiers en colonnes', () => {
     const placement = getPlacementProcedure(dossier({ ...RECU(20), copie_archives: false }))
     expect(placement.colonne).toBe('contradictoire')
     expect(placement.alertes[0]).toMatch(/copie aux archives/)
+    expect(placement.action.label).toBe('Garder une copie pour archive')
   })
 
   it('passe en « Décision à prendre » à la fin du contradictoire', () => {

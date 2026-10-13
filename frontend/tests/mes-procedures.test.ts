@@ -254,11 +254,11 @@ describe('Page Mes Procédures', () => {
       const liens = within(colonne).getAllByRole('link')
       expect(liens).toHaveLength(1)
       expect(liens[0]).toHaveAccessibleName(
-        "Particulier : Marc Dupont, dossier n°10. Indiquer l'envoi"
+        'Particulier : Marc Dupont, dossier n°10. Marquer comme envoyé'
       )
       expect(liens[0]).toHaveAttribute('href', '/suivi-procedure/10?etape=2')
       // Action verb is also displayed at the bottom of the card
-      expect(colonne).toHaveTextContent("Indiquer l'envoi")
+      expect(colonne).toHaveTextContent('Marquer comme envoyé')
     })
 
     it('est accessible (A11y)', async () => {
