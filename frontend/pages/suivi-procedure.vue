@@ -76,6 +76,7 @@
                 v-if="auteurIdentifie"
                 :suivi="suiviProcedure"
                 :constatation-id="procedureData.id"
+                :modify-url="modifyUrl"
                 @back-to-notification="activeStep = 2"
               />
               <MettreAjourDossier
