@@ -9,7 +9,6 @@ from django.utils import timezone
 
 from backend.constatations.models import Constatation
 
-# Étapes du suivi entièrement cochées, réutilisées pour composer les scénarios
 SIGNE = {"preuves_fournies": True, "constatation_signee": True, "lettre_signe": True}
 ENVOYE = {**SIGNE, "lettre_envoyee": True, "copie_archives": True}
 SANCTION_FAITE = {
@@ -22,16 +21,9 @@ SANCTION_FAITE = {
 
 
 def scenarios():
-    """
-    Dossiers fictifs couvrant chaque colonne du tableau de bord « Mes procédures ».
-    Les dates sont exprimées en jours avant aujourd'hui, pour que les délais
-    (contradictoire notamment) restent parlants quel que soit le jour du test.
-    """
     return [
-        # --- À compléter ---
         {"commune": "Nangy", "constat": 2, "is_draft": True, "auteur_identifie": None},
         {"commune": "Nangy", "constat": 20, "auteur_identifie": False, "suivi": {}},
-        # --- Documents à signer ---
         {"nom": "Martin", "prenom": "Lucie", "commune": "Arthaz-Pont-Notre-Dame", "constat": 4},
         {
             "nom": "Bernard",
@@ -40,7 +32,6 @@ def scenarios():
             "constat": 9,
             "suivi": {"preuves_fournies": True, "constatation_signee": True},
         },
-        # Dossier « mal coché » : décision prise alors que les documents ne sont pas signés
         {
             "nom": "Chevalier",
             "prenom": "Paul",
@@ -48,7 +39,6 @@ def scenarios():
             "constat": 60,
             "suivi": {"decision_poursuite": "sanction", "lettre_envoyee": True},
         },
-        # --- Lettre à envoyer ---
         {
             "nom": "Petit",
             "prenom": "Antoine",
@@ -63,7 +53,6 @@ def scenarios():
             "constat": 12,
             "suivi": SIGNE,
         },
-        # --- En attente de réception ---
         {
             "nom": "Durand",
             "prenom": "Pierre",
@@ -71,7 +60,6 @@ def scenarios():
             "constat": 15,
             "suivi": {**ENVOYE, "lettre_envoyee_date": 5},
         },
-        # --- Contradictoire en cours ---
         {
             "nom": "Leroy",
             "prenom": "Julie",
@@ -98,7 +86,6 @@ def scenarios():
                 "ar_presentation_date": 7,
             },
         },
-        # Contradictoire terminé, mais la copie aux archives n'est pas cochée
         {
             "nom": "Fournier",
             "prenom": "Claire",
@@ -113,7 +100,6 @@ def scenarios():
                 "ar_presentation_date": 20,
             },
         },
-        # --- Décision à prendre ---
         {
             "nom": "Dupont",
             "prenom": "Marc",
@@ -147,7 +133,6 @@ def scenarios():
                 "decision_poursuite": "recherche_adresse",
             },
         },
-        # --- Auteur à sanctionner ---
         {
             "nom": "Roux",
             "prenom": "Thomas",
@@ -164,7 +149,6 @@ def scenarios():
                 "montant_amende": Decimal("500"),
             },
         },
-        # --- Abandon des poursuites ---
         {
             "nom": "Garnier",
             "prenom": "Léa",
@@ -179,7 +163,6 @@ def scenarios():
                 "decision_poursuite": "abandon",
             },
         },
-        # --- Clôturé ---
         {
             "nom": "Faure",
             "prenom": "Nicolas",
@@ -246,8 +229,6 @@ def scenarios():
 
 DATE_FIELDS = ("lettre_envoyee_date", "ar_presentation_date", "date_recouvrement_effective")
 
-# Lieux du dépôt variés, saisis en texte libre comme dans la réalité : courts, longs (coupés à
-# 2 lignes sur la carte) et redondants avec la commune (« Route de Nangy » à Nangy).
 LIEUX = (
     "Chemin des Saules, près du point d'apport volontaire",
     "Route de Nangy",
@@ -278,9 +259,9 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        if "prod" in getattr(settings, "ENV_NAME", ""):
-            raise CommandError("Commande interdite en production.")
-
+        env_name = getattr(settings, "ENV_NAME", "").lower()
+        if "prod" in env_name or env_name not in ("dev", "development", "test", "testing", "local"):
+            raise CommandError("Commande interdite en production (réservée à dev/test).")
         email = options["email"].strip().lower()
         User = get_user_model()
         user, created = User.objects.get_or_create(
@@ -289,17 +270,13 @@ class Command(BaseCommand):
         )
         if user.is_staff or user.is_superuser:
             raise CommandError("Le compte de démo ne doit pas être un compte administrateur.")
-
         today = timezone.localdate()
-
         with transaction.atomic():
             if options["reset"]:
                 deleted, _ = Constatation.objects.filter(user=user, ceci_est_un_test=True).delete()
                 self.stdout.write(f"{deleted} objets de démo supprimés.")
-
             for index, scenario in enumerate(scenarios()):
-                self._create_dossier(user, scenario, today, LIEUX[index % len(LIEUX)])
-
+                self.create_dossier(user, scenario, today, LIEUX[index % len(LIEUX)])
         self.stdout.write(
             self.style.SUCCESS(
                 f"{len(scenarios())} dossiers de démo créés pour {email}"
@@ -307,7 +284,7 @@ class Command(BaseCommand):
             )
         )
 
-    def _create_dossier(self, user, scenario, today, lieu):
+    def create_dossier(self, user, scenario, today, lieu):
         auteur_identifie = scenario.get("auteur_identifie", True)
         constatation = Constatation.objects.create(
             user=user,

@@ -113,14 +113,24 @@ const proceduresFiltrees = computed(() =>
     .map((procedure) => ({ procedure, placement: getPlacementProcedure(procedure) }))
 )
 
-const colonnes = computed(() =>
-  COLONNES.map((colonne) => ({
+const colonnes = computed(() => {
+  const itemsParColonne = COLONNES.reduce(
+    (acc, col) => {
+      acc[col.id] = []
+      return acc
+    },
+    {} as Record<string, (typeof proceduresFiltrees.value)[number][]>
+  )
+  for (const item of proceduresFiltrees.value) {
+    itemsParColonne[item.placement.colonne]?.push(item)
+  }
+  return COLONNES.map((colonne) => ({
     ...colonne,
-    items: proceduresFiltrees.value
-      .filter((item) => item.placement.colonne === colonne.id)
-      .sort((a, b) => comparerDansColonne(colonne.id)(a.procedure, b.procedure)),
+    items: (itemsParColonne[colonne.id] ?? []).sort((a, b) =>
+      comparerDansColonne(colonne.id)(a.procedure, b.procedure)
+    ),
   }))
-)
+})
 
 const nbClotures = computed(
   () => colonnes.value.find((colonne) => colonne.id === 'cloture')?.items.length ?? 0
