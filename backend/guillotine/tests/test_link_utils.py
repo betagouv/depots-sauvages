@@ -13,6 +13,9 @@ def test_is_internal_url():
     assert is_internal_url("/calculateur") is True
     assert is_internal_url("#anchor") is True
     assert is_internal_url("mailto:test@example.com") is True
+    assert is_internal_url("https://stopdepotsauvage.beta.gouv.fr/calculateur") is True
+    assert is_internal_url("https://www.stopdepotsauvage.beta.gouv.fr/calculateur") is True
+    assert is_internal_url("https://stop-depot-sauvage.beta.gouv.fr/rdv") is True
     assert is_internal_url("https://protect-envi.beta.gouv.fr/calculateur") is True
     assert is_internal_url("https://depots-sauvages.beta.gouv.fr/contact") is True
     assert is_internal_url("http://localhost:5173/page") is True

@@ -1,6 +1,12 @@
 const INTERNAL_HOSTS = [
-  'depots-sauvages.beta.gouv.fr',
+  'stopdepotsauvage.beta.gouv.fr',
+  'www.stopdepotsauvage.beta.gouv.fr',
+  'stop-depot-sauvage.beta.gouv.fr',
+  'www.stop-depot-sauvage.beta.gouv.fr',
   'protect-envi.beta.gouv.fr',
+  'www.protect-envi.beta.gouv.fr',
+  'depots-sauvages.beta.gouv.fr',
+  'www.depots-sauvages.beta.gouv.fr',
   'localhost',
   '127.0.0.1',
 ]

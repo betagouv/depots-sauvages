@@ -13,6 +13,9 @@ describe('vue-guillotine link handling', () => {
     })
 
     it('detects internal domain names as internal', () => {
+      expect(isInternalUrl('https://stopdepotsauvage.beta.gouv.fr')).toBe(true)
+      expect(isInternalUrl('https://www.stopdepotsauvage.beta.gouv.fr/calculateur')).toBe(true)
+      expect(isInternalUrl('https://stop-depot-sauvage.beta.gouv.fr')).toBe(true)
       expect(isInternalUrl('https://protect-envi.beta.gouv.fr')).toBe(true)
       expect(isInternalUrl('https://protect-envi.beta.gouv.fr/demarrer-constatation')).toBe(true)
       expect(isInternalUrl('https://depots-sauvages.beta.gouv.fr/contact')).toBe(true)
