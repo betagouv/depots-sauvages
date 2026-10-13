@@ -27,9 +27,9 @@ def test_create_demo_procedures_forbidden_in_production():
 
 
 @pytest.mark.django_db(databases=["default", "stats_db"])
-@override_settings(ENV_NAME="unknown_env")
-def test_create_demo_procedures_forbidden_in_unknown_env():
-    with pytest.raises(CommandError):
-        call_command("create_demo_procedures", email="demo@example.com")
-    assert not Constatation.objects.exists()
+@override_settings(ENV_NAME="staging")
+def test_create_demo_procedures_allowed_in_staging():
+    call_command("create_demo_procedures", email="demo-staging@example.com")
+    assert Constatation.objects.filter(user__username="demo-staging@example.com").exists()
+
 

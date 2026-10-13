@@ -260,8 +260,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         env_name = getattr(settings, "ENV_NAME", "").lower()
-        if "prod" in env_name or env_name not in ("dev", "development", "test", "testing", "local"):
-            raise CommandError("Commande interdite en production (réservée à dev/test).")
+        if "prod" in env_name:
+            raise CommandError("Commande interdite en production.")
         email = options["email"].strip().lower()
         User = get_user_model()
         user, created = User.objects.get_or_create(
