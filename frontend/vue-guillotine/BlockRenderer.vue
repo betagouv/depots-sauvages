@@ -1,7 +1,11 @@
 <template>
   <div class="vue-guillotine-renderer">
     <template v-for="(block, index) in blocks" :key="index">
-      <div v-if="block.type === 'rich_text'" class="content-styled" v-html="block.value"></div>
+      <div
+        v-if="block.type === 'rich_text'"
+        class="content-styled"
+        v-html="cleanHtmlLinks(block.value)"
+      ></div>
       <h2 v-else-if="block.type === 'heading'" class="fr-h4">
         {{ block.value }}
       </h2>
@@ -15,6 +19,9 @@
 </template>
 
 <script setup lang="ts">
+import { defineProps } from 'vue'
+import { cleanHtmlLinks } from './utils/linkUtils.js'
+
 interface Block {
   type: string
   value: any

@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from backend.guillotine.link_utils import clean_blocks_content
+
 
 class BlockContentSerializerMixin(serializers.Serializer):
     """
@@ -8,6 +10,12 @@ class BlockContentSerializerMixin(serializers.Serializer):
     """
 
     content = serializers.JSONField(required=False)
+
+    def validate_content(self, value):
+        if isinstance(value, list):
+            cleaned_value, _ = clean_blocks_content(value)
+            return cleaned_value
+        return value
 
 
 class NestedContentSerializerMixin(serializers.Serializer):
