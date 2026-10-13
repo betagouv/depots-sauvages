@@ -2,42 +2,7 @@ from rest_framework import serializers
 
 from backend.constatations.models import Constatation
 from backend.procedures.models import SuiviProcedure
-
-
-class SuiviProcedureResumeSerializer(serializers.ModelSerializer):
-    """
-    Résumé du suivi envoyé avec la liste des procédures (tableau de bord « Mes procédures »).
-    Contient les champs nécessaires pour savoir quelles sections du suivi sont « Fait »
-    et ranger chaque dossier dans sa colonne.
-    """
-
-    class Meta:
-        model = SuiviProcedure
-        fields = [
-            "etape_en_cours",
-            "preuves_fournies",
-            "constatation_signee",
-            "lettre_signe",
-            "identification_reussie",
-            "lettre_envoyee",
-            "lettre_envoyee_date",
-            "copie_archives",
-            "ar_recu",
-            "ar_statut",
-            "ar_presentation_date",
-            "decision_poursuite",
-            "montant_fixe",
-            "montant_amende",
-            "arrete_redige",
-            "titre_recette_emis",
-            "notification_sanction_envoyee",
-            "motif_abandon",
-            "souhaite_notifier_abandon",
-            "notification_abandon_envoyee",
-            "titre_recette_confirme",
-            "montant_recouvre",
-            "dossier_archive",
-        ]
+from backend.procedures.serializers import SuiviProcedureResumeSerializer
 
 
 class ConstatationListSerializer(serializers.ModelSerializer):

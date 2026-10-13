@@ -4,6 +4,42 @@ from rest_framework import serializers
 from backend.procedures.models import SuiviProcedure
 
 
+class SuiviProcedureResumeSerializer(serializers.ModelSerializer):
+    """
+    Summary of procedure follow-up sent with the list of procedures
+    (dashboard "Mes procédures"). Contains fields needed to determine which
+    sections are completed and place each file in its corresponding column.
+    """
+
+    class Meta:
+        model = SuiviProcedure
+        fields = [
+            "etape_en_cours",
+            "preuves_fournies",
+            "constatation_signee",
+            "lettre_signe",
+            "identification_reussie",
+            "lettre_envoyee",
+            "lettre_envoyee_date",
+            "copie_archives",
+            "ar_recu",
+            "ar_statut",
+            "ar_presentation_date",
+            "decision_poursuite",
+            "montant_fixe",
+            "montant_amende",
+            "arrete_redige",
+            "titre_recette_emis",
+            "notification_sanction_envoyee",
+            "motif_abandon",
+            "souhaite_notifier_abandon",
+            "notification_abandon_envoyee",
+            "titre_recette_confirme",
+            "montant_recouvre",
+            "dossier_archive",
+        ]
+
+
 class SuiviProcedureSerializer(serializers.ModelSerializer):
     class Meta:
         model = SuiviProcedure
