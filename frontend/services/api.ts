@@ -121,7 +121,7 @@ export interface ProcedureOverview {
   auteur_nom?: string
   auteur_prenom?: string
   is_draft?: boolean
-  // Résumé du suivi : tous les champs utiles pour savoir quelles sections sont « Fait »
+  // Procedure tracking summary: fields needed to determine which sections are completed
   suivi_procedure?: Partial<SuiviProcedure> & { etape_en_cours: number }
 }
 

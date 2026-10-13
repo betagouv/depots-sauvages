@@ -8,13 +8,13 @@ import {
 import { calculateContradictoire } from './procedure'
 
 /**
- * Tableau de bord « Mes procédures » : rangement des dossiers en colonnes.
+ * "Mes procédures" dashboard: files placement across columns.
  *
- * Règle : chaque section de la page de suivi correspond à une colonne, et un dossier
- * se trouve dans la colonne de la première section qui n'est pas encore « Fait »
- * (voir isSuiviStepCompleted). La section « Notifier l'auteur » est découpée en
- * 3 colonnes selon les dates saisies, la section « Sanctionner / Abandonner » en 2
- * selon la décision. Le champ etape_en_cours (dernière section ouverte) n'est jamais utilisé.
+ * Rule: each section on the tracking page corresponds to a column, and a file
+ * is placed in the column of the first section not yet marked as completed
+ * (see isSuiviStepCompleted). The "Notifier l'auteur" section is split into
+ * 3 columns depending on dates, and "Sanctionner / Abandonner" into 2 depending
+ * on the decision. The etape_en_cours field (last opened section) is intentionally ignored.
  */
 
 export type ColonneId =
@@ -241,9 +241,9 @@ export const comparerProcedures = (a: ProcedureOverview, b: ProcedureOverview) =
 }
 
 /**
- * Ordre des cartes dans une colonne. Pour les colonnes en cours, le plus ancien est en haut
- * (le plus urgent). Pour les clôturés, il n'y a plus rien à faire : le plus récent est en haut.
- * La date de clôture n'étant pas enregistrée, la date du constat sert d'approximation.
+ * Card order within a column. Active columns show oldest records first (highest priority).
+ * Closed column shows newest records first. Since closure date is not recorded,
+ * constatation date is used as an approximation.
  */
 export const comparerDansColonne =
   (colonne: ColonneId) => (a: ProcedureOverview, b: ProcedureOverview) => {

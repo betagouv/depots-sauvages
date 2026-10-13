@@ -8,8 +8,8 @@ export interface ContradictoireInfo {
 }
 
 /**
- * Calcule les informations de délai de contradictoire (AR + 10 jours)
- * @param arDate Date de présentation de l'AR (ISO string)
+ * Calculates contradictory period details (delivery date + 10 days)
+ * @param arDate AR presentation date (ISO string)
  */
 export const calculateContradictoire = (arDate: string | null | undefined): ContradictoireInfo => {
   if (!arDate) {

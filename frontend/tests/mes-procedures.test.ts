@@ -53,7 +53,7 @@ describe('Page Mes Procédures', () => {
       },
     })
 
-    // On attend la fin du chargement avant de vérifier l'absence
+    // Wait until loading finishes before asserting absence
     await screen.findByText(/Aucune procédure en cours/)
     expect(screen.queryByText(/Jean/)).not.toBeInTheDocument()
     expect(screen.queryByText(/jean\.dupont@example\.com/)).not.toBeInTheDocument()
@@ -257,7 +257,7 @@ describe('Page Mes Procédures', () => {
         "Particulier : Marc Dupont, dossier n°10. Indiquer l'envoi"
       )
       expect(liens[0]).toHaveAttribute('href', '/suivi-procedure/10?etape=2')
-      // Le verbe est aussi affiché en pied de carte
+      // Action verb is also displayed at the bottom of the card
       expect(colonne).toHaveTextContent("Indiquer l'envoi")
     })
 

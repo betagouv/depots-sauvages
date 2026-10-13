@@ -138,9 +138,9 @@ const nbClotures = computed(
 
 const filtreActif = computed(() => recherche.value.trim() !== '' || filtreAuteur.value !== 'tous')
 
-// Les réglages se cumulent : l'interrupteur décide si les clôturés sont affichés, y compris
-// pendant une recherche. Pendant une recherche ou un filtre, on n'affiche que les colonnes qui
-// ont un résultat, pour que le dossier trouvé soit visible sans faire défiler des colonnes vides.
+// Settings are cumulative: switch toggles closed files, including during searches.
+// During an active filter/search, only columns with matching items are displayed
+// so the found item is immediately visible without scrolling through empty columns.
 const colonnesAffichees = computed(() =>
   colonnes.value
     .filter((colonne) => colonne.id !== 'cloture' || afficherClotures.value)

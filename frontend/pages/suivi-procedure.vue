@@ -252,8 +252,7 @@ const steps = computed(() => {
   ]
 })
 
-// Après ouverture d'une section depuis le tableau de bord : on y amène directement l'utilisateur,
-// et on place le focus sur son titre pour les utilisateurs de clavier et de lecteur d'écran.
+// When navigating from dashboard (?etape=N), scroll directly to active section and set focus
 let allerALaSectionOuverte = false
 const afficherSectionOuverte = async () => {
   await nextTick()

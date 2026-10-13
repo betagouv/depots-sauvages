@@ -13,7 +13,7 @@ def test_create_demo_procedures_creates_and_resets():
     assert nb >= 15
     assert all(c.ceci_est_un_test for c in qs)
     assert qs.filter(auteur_nom="Dupont").get().suivi_procedure.ar_presentation_date is not None
-    # --reset ne duplique pas les dossiers
+    # --reset flag does not duplicate demo procedures
     call_command("create_demo_procedures", email="demo@example.com", reset=True)
     assert qs.count() == nb
 

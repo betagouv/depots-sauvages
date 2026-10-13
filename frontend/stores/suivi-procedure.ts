@@ -41,7 +41,7 @@ export interface SuiviProcedure {
   identification_reussie: boolean | null
 }
 
-/** Suivi vierge, tel qu'il existe avant toute saisie. */
+/** Empty procedure tracking instance before any user input. */
 export const createEmptySuivi = (): SuiviProcedure => ({
   etape_en_cours: 1,
   preuves_fournies: false,
@@ -73,10 +73,9 @@ export const createEmptySuivi = (): SuiviProcedure => ({
 })
 
 /**
- * Indique si une section du suivi est « Fait », à partir des seules données saisies.
- * Règle unique, partagée par les étiquettes « Fait » de la page de suivi
- * et par les colonnes du tableau de bord « Mes procédures ».
- * L'étape 0 (constatation) n'est pas gérée ici : elle dépend de la navigation dans le stepper.
+ * Indicates whether a procedure tracking section is completed based solely on user input.
+ * Shared rule between the "Fait" badges on the tracking page and columns in "Mes procédures" dashboard.
+ * Step 0 (constatation) is not handled here as it relies on stepper navigation.
  */
 export const isSuiviStepCompleted = (
   suivi: SuiviProcedure,

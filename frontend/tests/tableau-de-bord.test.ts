@@ -73,7 +73,7 @@ describe('Rangement des dossiers en colonnes', () => {
     const placement = getPlacementProcedure(dossier(RECU(3)))
     expect(placement.colonne).toBe('contradictoire')
     expect(placement.info).toMatch(/^Fin du contradictoire dans 7 jours \(\d{2}\/\d{2}\)$/)
-    // Rien à faire pendant le contradictoire : pas de verbe d'action, la carte n'a qu'une flèche
+    // Nothing to do during the contradictory phase: no action verb, card only has an arrow
     expect(placement.action.label).toBeUndefined()
     expect(placement.action.to).toBe('/suivi-procedure/1?etape=2')
   })

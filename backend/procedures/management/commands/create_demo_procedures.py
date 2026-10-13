@@ -9,6 +9,7 @@ from django.utils import timezone
 
 from backend.constatations.models import Constatation
 
+# Pre-checked procedure steps reused to compose test scenarios
 SIGNE = {"preuves_fournies": True, "constatation_signee": True, "lettre_signe": True}
 ENVOYE = {**SIGNE, "lettre_envoyee": True, "copie_archives": True}
 SANCTION_FAITE = {
@@ -21,6 +22,11 @@ SANCTION_FAITE = {
 
 
 def scenarios():
+    """
+    Mock cases covering every column of the "Mes procédures" dashboard.
+    Dates are defined in days before today so deadlines (especially contradictory periods)
+    remain meaningful whenever tests or demos are executed.
+    """
     return [
         {"commune": "Nangy", "constat": 2, "is_draft": True, "auteur_identifie": None},
         {"commune": "Nangy", "constat": 20, "auteur_identifie": False, "suivi": {}},
@@ -32,6 +38,7 @@ def scenarios():
             "constat": 9,
             "suivi": {"preuves_fournies": True, "constatation_signee": True},
         },
+        # Incomplete workflow edge case: decision taken without signed documents
         {
             "nom": "Chevalier",
             "prenom": "Paul",
@@ -39,13 +46,7 @@ def scenarios():
             "constat": 60,
             "suivi": {"decision_poursuite": "sanction", "lettre_envoyee": True},
         },
-        {
-            "nom": "Petit",
-            "prenom": "Antoine",
-            "commune": "Reignier-Ésery",
-            "constat": 8,
-            "suivi": SIGNE,
-        },
+        {"nom": "Petit", "prenom": "Antoine", "commune": "Reignier-Ésery", "constat": 8, "suivi": SIGNE},
         {
             "nom": "Bâti Express SARL",
             "statut_auteur": "entreprise",
@@ -86,6 +87,7 @@ def scenarios():
                 "ar_presentation_date": 7,
             },
         },
+        # Contradictory ended, but copy to archives is unchecked
         {
             "nom": "Fournier",
             "prenom": "Claire",
@@ -229,6 +231,7 @@ def scenarios():
 
 DATE_FIELDS = ("lettre_envoyee_date", "ar_presentation_date", "date_recouvrement_effective")
 
+# Varied dump site locations, matching typical free-text entries
 LIEUX = (
     "Chemin des Saules, près du point d'apport volontaire",
     "Route de Nangy",

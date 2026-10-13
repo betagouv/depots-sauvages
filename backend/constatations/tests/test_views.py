@@ -219,6 +219,6 @@ def test_list_constatations_includes_auteur_and_suivi_resume(client):
     assert resume["lettre_envoyee_date"] == "2026-10-01"
     assert resume["ar_presentation_date"] == "2026-10-03"
     assert resume["dossier_archive"] is False
-    # Les notes internes et observations ne sont pas envoyées dans la liste
+    # Internal notes and processing notes are not included in the list view
     assert "observations_internes" not in resume
     assert "notes_traitement" not in resume
