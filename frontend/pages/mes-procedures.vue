@@ -168,7 +168,6 @@ const resumeResultats = computed(() => {
         } : activez « Afficher les dossiers clôturés » pour ${clotures > 1 ? 'les' : 'le'} voir.`
       : 'Aucun dossier ne correspond à votre recherche.'
   }
-  // Le nombre de clôturés masqués figure déjà dans le libellé de l'interrupteur
   return `${pluriel(enCours, 'dossier')} en cours${suffixe}`
 })
 
@@ -199,7 +198,6 @@ onMounted(async () => {
   min-width: 0;
 }
 
-/* Sur mobile, les colonnes s'empilent : pas de défilement horizontal */
 @media (max-width: 47.99em) {
   .tableau-de-bord {
     flex-direction: column;

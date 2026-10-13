@@ -42,18 +42,10 @@ export const COLONNES: { id: ColonneId; titre: string }[] = [
 
 export interface PlacementProcedure {
   colonne: ColonneId
-  /** Libellé affiché sur la carte quand le nom du contrevenant ne suffit pas (« Brouillon »…) */
   libelle?: string
-  /** Information neutre (ex. fin du contradictoire) */
   info?: string
-  /** Points d'attention, toujours affichés avec une icône et un texte */
   alertes: string[]
-  /** Issue du dossier, pour la colonne Clôturé */
   issue?: string
-  /**
-   * Lien de la carte. Le verbe n'est affiché que quand l'utilisateur doit agir : sans verbe
-   * (contradictoire en cours, dossier clôturé), la carte ne montre qu'une flèche.
-   */
   action: { label?: string; to: string }
 }
 
@@ -71,14 +63,12 @@ const formatMontant = (montant: number | string | null | undefined) => {
   return `${Number(montant).toLocaleString('fr-FR')} €`
 }
 
-/** Libellé lisible de la fin du contradictoire, ex. « dans 3 jours (12/10) » */
 const finContradictoire = (joursRestants: number, dateFin: string | null) => {
   const date = dateFin ? ` (${dateFin.slice(0, 5)})` : ''
   if (joursRestants === 1) return `Fin du contradictoire dans 1 jour${date}`
   return `Fin du contradictoire dans ${joursRestants} jours${date}`
 }
 
-/** Étapes de la section « Notifier l'auteur » qui restent à cocher */
 const etapesNotificationRestantes = (suivi: SuiviProcedure) => {
   const restantes: string[] = []
   if (!suivi.copie_archives) restantes.push('copie aux archives')
@@ -91,7 +81,6 @@ export const getPlacementProcedure = (procedure: ProcedureOverview): PlacementPr
   const fait = (etape: number) =>
     isSuiviStepCompleted(suivi, etape, { auteurIdentifie: !!procedure.auteur_identifie })
 
-  // 1. Constatation en brouillon
   if (procedure.is_draft) {
     return {
       colonne: 'a_completer',
@@ -101,7 +90,6 @@ export const getPlacementProcedure = (procedure: ProcedureOverview): PlacementPr
     }
   }
 
-  // Parcours « auteur non identifié » : le dossier reste à compléter jusqu'à sa clôture
   if (!procedure.auteur_identifie) {
     if (suivi.dossier_archive) {
       return {
@@ -123,7 +111,6 @@ export const getPlacementProcedure = (procedure: ProcedureOverview): PlacementPr
     }
   }
 
-  // 2. Documents à signer
   if (!fait(1)) {
     return {
       colonne: 'documents_a_signer',
@@ -132,7 +119,6 @@ export const getPlacementProcedure = (procedure: ProcedureOverview): PlacementPr
     }
   }
 
-  // 3 à 5. Section « Notifier l'auteur », découpée selon les dates saisies
   if (!suivi.lettre_envoyee) {
     return {
       colonne: 'lettre_a_envoyer',
@@ -163,7 +149,6 @@ export const getPlacementProcedure = (procedure: ProcedureOverview): PlacementPr
       }
     }
     if (!fait(2)) {
-      // Contradictoire terminé, mais une case de la section reste à cocher
       return {
         colonne: 'contradictoire',
         alertes: [
@@ -183,7 +168,6 @@ export const getPlacementProcedure = (procedure: ProcedureOverview): PlacementPr
     }
   }
 
-  // 6. Décision à prendre
   if (!fait(3)) {
     const alertes: string[] = []
     if (alerteAr) alertes.push(alerteAr)
@@ -200,7 +184,6 @@ export const getPlacementProcedure = (procedure: ProcedureOverview): PlacementPr
     }
   }
 
-  // 7 et 8. Sanction ou abandon en cours
   if (!fait(4)) {
     if (suivi.decision_poursuite === 'sanction') {
       const montant = formatMontant(suivi.montant_amende)
@@ -218,7 +201,6 @@ export const getPlacementProcedure = (procedure: ProcedureOverview): PlacementPr
     }
   }
 
-  // 9. Clôturé
   let issue = 'Abandon'
   if (suivi.decision_poursuite === 'sanction') {
     issue = suivi.montant_recouvre ? 'Amende recouvrée' : 'Amende émise'
@@ -233,7 +215,6 @@ export const getPlacementProcedure = (procedure: ProcedureOverview): PlacementPr
   }
 }
 
-/** Nom affiché sur la carte : « Prénom Nom », ou la raison sociale pour une entreprise */
 export const getNomContrevenant = (procedure: ProcedureOverview) =>
   [procedure.auteur_prenom, procedure.auteur_nom]
     .map((part) => (part ?? '').trim())
@@ -243,7 +224,6 @@ export const getNomContrevenant = (procedure: ProcedureOverview) =>
 const normaliser = (texte: string) =>
   texte.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim()
 
-/** Recherche par nom du contrevenant, n° de dossier ou commune (sans tenir compte des accents) */
 export const correspondRecherche = (procedure: ProcedureOverview, recherche: string) => {
   const terme = normaliser(recherche).replace(/^#/, '')
   if (!terme) return true
@@ -251,7 +231,6 @@ export const correspondRecherche = (procedure: ProcedureOverview, recherche: str
   return champs.some((champ) => normaliser(champ).includes(terme))
 }
 
-/** Tri stable : date du constat la plus ancienne en haut, puis n° de dossier */
 export const comparerProcedures = (a: ProcedureOverview, b: ProcedureOverview) => {
   if (a.date_constat !== b.date_constat) {
     if (!a.date_constat) return 1

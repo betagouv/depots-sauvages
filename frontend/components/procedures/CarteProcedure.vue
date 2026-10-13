@@ -1,9 +1,4 @@
 <template>
-  <!--
-    Carte DSFR entièrement cliquable (fr-enlarge-link) : un seul lien, sur le nom, qui couvre
-    toute la carte. La flèche en bas à droite est fournie par le DSFR ; le verbe d'action
-    n'apparaît à côté que quand l'utilisateur doit agir.
-  -->
   <div class="carte-procedure fr-card fr-card--sm fr-enlarge-link">
     <div class="fr-card__body">
       <div class="fr-card__content">
@@ -47,7 +42,6 @@
           </p>
         </div>
 
-        <!-- Déjà lu par les lecteurs d'écran dans le nom du lien : masqué pour eux ici -->
         <div v-if="placement.action.label" class="fr-card__end" aria-hidden="true">
           <p class="carte-procedure__verbe fr-text--sm fr-text--bold fr-mb-0">
             {{ placement.action.label }}
@@ -71,16 +65,13 @@ const props = defineProps<{
 
 const nom = computed(() => getNomContrevenant(props.procedure))
 
-/** Le titre est toujours une personne : son nom, ou « Auteur non identifié » */
 const titre = computed(() => {
   if (!props.procedure.auteur_identifie) return 'Auteur non identifié'
   return nom.value || 'Nom à compléter'
 })
 
-/** Icône d'identité, doublée d'un texte pour les lecteurs d'écran */
 const identite = computed(() => {
   if (!props.procedure.auteur_identifie) {
-    // Le titre dit déjà « Auteur non identifié »
     return { icone: 'fr-icon-user-search-line', libelle: '' }
   }
   if (props.procedure.statut_auteur === 'entreprise') {
@@ -89,7 +80,6 @@ const identite = computed(() => {
   return { icone: 'fr-icon-user-line', libelle: 'Particulier' }
 })
 
-/** Fin du nom du lien pour les lecteurs d'écran : n° du dossier et verbe d'action éventuel */
 const complementLien = computed(() => {
   const verbe = props.placement.action.label
   return `, dossier n°${props.procedure.id}${verbe ? `. ${verbe}` : ''}`
@@ -97,7 +87,6 @@ const complementLien = computed(() => {
 
 const dateConstat = computed(() => dayjs(props.procedure.date_constat).format('DD/MM/YYYY'))
 
-/** « lieu du dépôt – commune » : la commune à la fin, la plupart des comptes n'en ont qu'une */
 const lieu = computed(() =>
   [props.procedure.localisation_depot, props.procedure.commune]
     .map((part) => (part ?? '').trim())
@@ -108,7 +97,6 @@ const lieu = computed(() =>
 
 <style scoped>
 .carte-procedure {
-  /* Ancre les textes réservés aux lecteurs d'écran dans la zone de défilement */
   position: relative;
 }
 
@@ -117,12 +105,10 @@ const lieu = computed(() =>
 }
 
 .carte-procedure__desc {
-  /* Le DSFR prévoit une description en un seul paragraphe : on y empile plusieurs lignes */
   display: block;
 }
 
 .carte-procedure__lieu {
-  /* Jusqu'à 2 lignes, pour que la commune (en fin de ligne) reste visible le plus souvent */
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
