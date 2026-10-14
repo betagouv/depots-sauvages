@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import { LA_POSTE_SUIVI_BASE_URL } from '../services/config'
 
 export interface ContradictoireInfo {
   dateFin: string | null
@@ -38,4 +39,12 @@ export const calculateContradictoire = (arDate: string | null | undefined): Cont
     joursRestantsLabel: label,
     isExpired: joursRestants < 0,
   }
+}
+
+export const buildLaPosteSuiviUrl = (
+  numeroSuivi: string | null | undefined,
+  baseUrl: string = LA_POSTE_SUIVI_BASE_URL
+): string => {
+  const numero = (numeroSuivi || '').replace(/\s/g, '').toUpperCase()
+  return numero ? `${baseUrl}?code=${encodeURIComponent(numero)}` : ''
 }

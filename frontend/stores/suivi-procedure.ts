@@ -14,6 +14,7 @@ export interface SuiviProcedure {
   // Étape 2 : Notification
   lettre_envoyee: boolean
   lettre_envoyee_date: string
+  numero_suivi_lettre: string
   copie_archives: boolean
   ar_recu: boolean
   ar_statut: string
@@ -49,6 +50,7 @@ export const createEmptySuivi = (): SuiviProcedure => ({
   lettre_signe: false,
   lettre_envoyee: false,
   lettre_envoyee_date: '',
+  numero_suivi_lettre: '',
   copie_archives: false,
   ar_recu: false,
   ar_statut: '',
