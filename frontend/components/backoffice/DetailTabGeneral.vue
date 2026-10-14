@@ -30,7 +30,7 @@
             <span class="fr-text--xs fr-mb-0 bo-text-mention-uppercase">Email</span>
             <p class="fr-text--sm fr-mb-0" data-testid="contact-email">
               <a v-if="contactEmail" :href="`mailto:${contactEmail}`">{{ contactEmail }}</a>
-              <em v-else class="bo-text-non-renseigne">Non renseigné</em>
+              <em v-else class="fr-text-mention--grey">Non renseigné</em>
             </p>
           </div>
           <div class="fr-col-6">
@@ -39,12 +39,12 @@
               <a v-if="procedure.contact_telephone" :href="`tel:${procedure.contact_telephone}`">{{
                 procedure.contact_telephone
               }}</a>
-              <em v-else class="bo-text-non-renseigne">Non renseigné</em>
+              <em v-else class="fr-text-mention--grey">Non renseigné</em>
             </p>
           </div>
         </div>
         <p v-if="procedure.besoin_accompagnement" class="fr-mb-0 fr-mt-1w">
-          <span class="fr-badge fr-badge--sm fr-badge--info">Accompagnement demandé</span>
+          <DsfrBadge type="info" small label="Accompagnement demandé" />
         </p>
       </div>
     </div>
@@ -53,18 +53,13 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { DsfrBadge } from '@gouvminint/vue-dsfr'
 import { formatConstatationDate } from '@/utils/date'
 
 const props = defineProps<{
   procedure: any
-}>()
+ }>()
 
-// L'email du compte est la source fiable (contact_email n'est plus saisi dans le formulaire)
+// Account email is the source of truth (contact_email is no longer collected in the form, kept as fallback)
 const contactEmail = computed(() => props.procedure.user_email || props.procedure.contact_email)
 </script>
-
-<style scoped>
-.bo-text-non-renseigne {
-  color: var(--text-mention-grey);
-}
-</style>
