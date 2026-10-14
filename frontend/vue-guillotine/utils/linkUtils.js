@@ -1,4 +1,4 @@
-const INTERNAL_HOSTS = [
+export const INTERNAL_HOSTS = [
   'stopdepotsauvage.beta.gouv.fr',
   'www.stopdepotsauvage.beta.gouv.fr',
   'stop-depot-sauvage.beta.gouv.fr',
@@ -10,6 +10,8 @@ const INTERNAL_HOSTS = [
   'localhost',
   '127.0.0.1',
 ]
+
+export const NEW_WINDOW_MENTION = 'nouvelle fenêtre'
 
 export function isInternalUrl(url) {
   if (!url) return false
@@ -36,6 +38,9 @@ export function isInternalUrl(url) {
 export function normalizeLinkHref(url) {
   if (!url) return ''
   const trimmed = url.trim()
+  if (trimmed.startsWith('#') || trimmed.startsWith('mailto:') || trimmed.startsWith('tel:')) {
+    return trimmed
+  }
   try {
     const parsed = new URL(trimmed, 'https://protect-envi.beta.gouv.fr')
     const currentHost = typeof window !== 'undefined' && window.location?.hostname
@@ -68,6 +73,12 @@ export function cleanHtmlLinks(htmlContent) {
     } else {
       attrs.target = '_blank'
       attrs.rel = 'noopener noreferrer'
+      // RGAA 13.1: opening a new window must be explicitly announced in the link title.
+      if (!attrs.title) {
+        attrs.title = NEW_WINDOW_MENTION
+      } else if (!attrs.title.includes(NEW_WINDOW_MENTION)) {
+        attrs.title = `${attrs.title} - ${NEW_WINDOW_MENTION}`
+      }
     }
     const formatted = Object.entries(attrs)
       .map(([k, v]) => `${k}="${v}"`)

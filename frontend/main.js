@@ -182,8 +182,9 @@ const router = createRouter({
     {
       path: '/blog/:slug',
       name: 'BlogArticle',
+      // The real title is known only after fetching article data: page triggers trackPageView itself
       component: () => import('./pages/blog-article.vue'),
-      meta: { title: 'Article' },
+      meta: { title: 'Article', deferPageView: true },
     },
     {
       path: '/backoffice',

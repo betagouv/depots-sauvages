@@ -2,6 +2,7 @@ from csp.decorators import csp_update
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path, re_path
 from django.views.generic import RedirectView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
@@ -25,6 +26,7 @@ from backend.proconnect.views import (
     ProConnectAccessRequestView,
     ProConnectRejectedInfoView,
 )
+from backend.seo.sitemaps import SITEMAPS
 from backend.seo.views import RobotsTxtView
 from backend.site_content.views import SiteContentViewSet
 
@@ -137,8 +139,16 @@ if getattr(settings, "SENTRY_DEBUG", False):
     urlpatterns.append(re_path(r"^sentry-debug/?$", sentry_debug_view))
 
 
-# Robots.txt Route
+# Robots.txt & sitemap.xml Routes
 urlpatterns.append(path("robots.txt", RobotsTxtView.as_view(), name="robots_txt"))
+urlpatterns.append(
+    path(
+        "sitemap.xml",
+        sitemap,
+        {"sitemaps": SITEMAPS},
+        name="django.contrib.sitemaps.views.sitemap",
+    )
+)
 
 # Media files in debug / local dev
 if settings.DEBUG:
@@ -151,6 +161,8 @@ if settings.DEBUG:
 admin_url = settings.ADMIN_URL_NAME.rstrip("/")
 urlpatterns.append(
     re_path(
-        r"^(?!%s|api|oidc|sentry-debug|robots\.txt|media).*" % admin_url, index_view, name="index"
+        r"^(?!%s|api|oidc|sentry-debug|robots\.txt|sitemap\.xml|media).*" % admin_url,
+        index_view,
+        name="index",
     )
 )

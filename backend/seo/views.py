@@ -1,10 +1,12 @@
 from django.conf import settings
 from django.views.generic import TemplateView
 
+from backend.seo.seo_metadata import is_production
+
 
 class RobotsTxtView(TemplateView):
     """
-    Serve dynamic robots.txt based on settings.ENV_NAME
+    Serve dynamic robots.txt based on environment
     """
 
     template_name = "robots.txt"
@@ -13,5 +15,7 @@ class RobotsTxtView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["env_name"] = settings.ENV_NAME
+        context["is_prod"] = is_production()
         context["admin_url"] = f"/{settings.ADMIN_URL_NAME.rstrip('/')}/"
+        context["sitemap_url"] = f"{settings.SITE_BASE_URL.rstrip('/')}/sitemap.xml"
         return context

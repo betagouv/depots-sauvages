@@ -51,7 +51,7 @@
         </p>
       </div>
 
-      <div class="article-body">
+      <div class="article-body" @click="trackBodyLinkClick">
         <BlockRenderer v-if="article.content && article.content.length" :blocks="article.content" />
       </div>
 
@@ -80,8 +80,9 @@
 import type { BlogArticleItem } from '@/components/blog/BlogArticleCard.vue'
 import BlogArticleModal, { type BlogArticleFormData } from '@/components/blog/BlogArticleModal.vue'
 import * as api from '@/services/api'
+import { trackEvent, trackPageViewWithTitle } from '@/services/matomo'
 import { DsfrBreadcrumb } from '@gouvminint/vue-dsfr'
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAdminModeStore } from '../stores/admin-mode'
 import { BlockRenderer } from '../vue-guillotine'
@@ -135,11 +136,33 @@ const loadArticle = async () => {
   try {
     const data = await api.fetchResource(`${api.API_URL}/blog-articles/${slug}/`)
     article.value = data
+    // Track page view with actual article title once loaded
+    trackPageViewWithTitle(data.title)
   } catch (err) {
     console.error('Erreur chargement article :', err)
     article.value = null
+    // Track 404 to identify broken links in analytics
+    trackPageViewWithTitle('Article introuvable')
   } finally {
     isLoading.value = false
+  }
+}
+
+// Track clicks on article body links (constatation conversion, internal links, external links).
+const trackBodyLinkClick = (event: MouseEvent) => {
+  const link = (event.target as HTMLElement)?.closest?.('a[href]')
+  if (!link) {
+    return
+  }
+  const href = link.getAttribute('href') || ''
+  const slug = (route.params.slug as string) || ''
+
+  if (href.includes('/demarrer-constatation')) {
+    trackEvent('Blog', 'Clic vers démarrer une constatation', slug)
+  } else if (href.includes('/blog/')) {
+    trackEvent('Blog', 'Clic vers un autre article', `${slug} → ${href}`)
+  } else {
+    trackEvent('Blog', 'Clic lien dans article', `${slug} → ${href}`)
   }
 }
 
@@ -191,6 +214,16 @@ const handleSave = async (data: BlogArticleFormData) => {
 onMounted(() => {
   loadArticle()
 })
+
+// Navigation between articles reuses this component: reload when slug changes
+watch(
+  () => route.params.slug,
+  (slug, previousSlug) => {
+    if (slug && slug !== previousSlug) {
+      loadArticle()
+    }
+  }
+)
 </script>
 
 <style scoped>

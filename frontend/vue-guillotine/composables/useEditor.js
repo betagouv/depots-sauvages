@@ -45,6 +45,9 @@ export function useEditor(props, emit) {
         openOnClick: false,
         HTMLAttributes: {
           class: 'fr-link',
+          // Prevent extension from enforcing target="_blank" and rel="nofollow" on internal links.
+          target: null,
+          rel: null,
         },
       }),
     ],

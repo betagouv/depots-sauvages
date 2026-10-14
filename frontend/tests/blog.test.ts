@@ -8,6 +8,7 @@ import BlogArticleModal from '../components/blog/BlogArticleModal.vue'
 import BlogPage from '../pages/blog.vue'
 import BlogArticlePage from '../pages/blog-article.vue'
 import * as api from '../services/api'
+import { cleanHtmlLinks, isInternalUrl, normalizeLinkHref } from '../vue-guillotine/utils/linkUtils.js'
 
 vi.mock('vue-router', () => ({
   useRoute: () => ({
@@ -134,5 +135,136 @@ describe('Page Blog Article Détail', () => {
       },
     })
     expect(await findByText('Article de test')).toBeInTheDocument()
+  })
+
+  it('déclare la vue de page Matomo avec le titre réel de l article', async () => {
+    ;(window as any)._paq = []
+    ;(api.fetchResource as any).mockResolvedValue(mockArticle)
+    const pinia = createTestingPinia({ stubActions: true })
+    const { findByText } = render(BlogArticlePage, {
+      global: {
+        plugins: [pinia],
+        stubs: {
+          DsfrBreadcrumb: true,
+          RouterLink: { template: '<a><slot /></a>' },
+          BlockRenderer: { template: '<div><slot /></div>' },
+          BlogArticleModal: true,
+        },
+      },
+    })
+    await findByText('Article de test')
+
+    const expectedTitle = 'Article de test - Stop Dépôt Sauvage'
+    expect(document.title).toBe(expectedTitle)
+    expect((window as any)._paq).toContainEqual(['setDocumentTitle', expectedTitle])
+    expect((window as any)._paq).toContainEqual(['trackPageView'])
+  })
+
+  it('signale un article introuvable plutôt que de rester muet', async () => {
+    ;(window as any)._paq = []
+    ;(api.fetchResource as any).mockRejectedValue(new Error('404'))
+    const pinia = createTestingPinia({ stubActions: true })
+    const { findByText } = render(BlogArticlePage, {
+      global: {
+        plugins: [pinia],
+        stubs: {
+          DsfrBreadcrumb: true,
+          RouterLink: { template: '<a><slot /></a>' },
+          BlockRenderer: { template: '<div><slot /></div>' },
+          BlogArticleModal: true,
+        },
+      },
+    })
+    await findByText('Article introuvable')
+    expect((window as any)._paq).toContainEqual([
+      'setDocumentTitle',
+      'Article introuvable - Stop Dépôt Sauvage',
+    ])
+  })
+})
+
+describe('Normalisation des liens des contenus éditoriaux', () => {
+  it('ramène un lien vers le site en navigation interne', () => {
+    const html =
+      '<p><a target="_blank" rel="noopener noreferrer nofollow" class="fr-link" ' +
+      'href="https://stopdepotsauvage.beta.gouv.fr/demarrer-constatation">Démarrer</a></p>'
+    const cleaned = cleanHtmlLinks(html)
+    expect(cleaned).toContain('href="/demarrer-constatation"')
+    expect(cleaned).not.toContain('target=')
+    expect(cleaned).not.toContain('rel=')
+    expect(cleaned).toContain('class="fr-link"')
+  })
+
+  it('traite aussi les liens vers l autre domaine du site et les liens relatifs', () => {
+    expect(normalizeLinkHref('https://protect-envi.beta.gouv.fr/blog/mon-article')).toBe(
+      '/blog/mon-article'
+    )
+    expect(normalizeLinkHref('/faq')).toBe('/faq')
+  })
+
+  it('laisse un lien externe s ouvrir dans un nouvel onglet sans nofollow', () => {
+    const html = '<p><a href="https://www.legifrance.gouv.fr/article">L541-3</a></p>'
+    const cleaned = cleanHtmlLinks(html)
+    expect(cleaned).toContain('target="_blank"')
+    expect(cleaned).toContain('rel="noopener noreferrer"')
+    expect(cleaned).not.toContain('nofollow')
+  })
+
+  it('ne touche pas aux ancres relatives', () => {
+    expect(isInternalUrl('#section-2')).toBe(true)
+    expect(normalizeLinkHref('#section-2')).toBe('#section-2')
+  })
+
+  it('renvoie le contenu inchangé quand il ne comporte aucun lien', () => {
+    const html = '<p>Un texte sans lien.</p>'
+    expect(cleanHtmlLinks(html)).toBe(html)
+  })
+})
+
+describe('Mesure des clics dans un article', () => {
+  beforeEach(() => {
+    vi.resetAllMocks()
+  })
+
+  it('distingue le clic vers la constatation des autres liens', async () => {
+    ;(window as any)._paq = []
+    ;(api.fetchResource as any).mockResolvedValue({
+      ...mockArticle,
+      content: [
+        {
+          type: 'rich_text',
+          value:
+            '<p><a href="https://stopdepotsauvage.beta.gouv.fr/demarrer-constatation">Démarrer</a>' +
+            '<a href="https://www.legifrance.gouv.fr/article">Légifrance</a></p>',
+        },
+      ],
+    })
+    const pinia = createTestingPinia({ stubActions: true })
+    const { findByText, getByText } = render(BlogArticlePage, {
+      global: {
+        plugins: [pinia],
+        stubs: {
+          DsfrBreadcrumb: true,
+          RouterLink: { template: '<a><slot /></a>' },
+          BlogArticleModal: true,
+        },
+      },
+    })
+    await findByText('Article de test')
+
+    await fireEvent.click(getByText('Démarrer'))
+    expect((window as any)._paq).toContainEqual([
+      'trackEvent',
+      'Blog',
+      'Clic vers démarrer une constatation',
+      'test-article',
+    ])
+
+    await fireEvent.click(getByText('Légifrance'))
+    expect(
+      (window as any)._paq.some(
+        (entry: any[]) => entry[2] === 'Clic lien dans article' && entry[0] === 'trackEvent'
+      )
+    ).toBe(true)
   })
 })

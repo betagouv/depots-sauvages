@@ -1,8 +1,9 @@
 User-agent: *
-{% if env_name != "prod" %}
+{% if not is_prod and env_name != "prod" %}
 Allow: /
 {% else %}
 Disallow: {{ admin_url }}
 Disallow: /api/
 Allow: /
 {% endif %}
+Sitemap: {{ sitemap_url }}

@@ -47,6 +47,10 @@ if STATS_ENABLED and STATS_DATABASE_URL:
 else:
     DATABASE_ROUTERS = []
 
+# Public site URL (canonical, Open Graph, sitemap.xml).
+# See "DOMAIN SWITCH PROCEDURE" in backend/settings/base.py before modifying.
+SITE_BASE_URL = env.str("SITE_BASE_URL", default=SITE_BASE_URL)  # noqa: F405
+
 # Security settings for production
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 SECURE_BROWSER_XSS_FILTER = env.bool("SECURE_BROWSER_XSS_FILTER", default=True)

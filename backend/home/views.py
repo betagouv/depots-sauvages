@@ -1,8 +1,7 @@
-from django.conf import settings
 from django.views.decorators.cache import never_cache
 from django.views.generic import TemplateView
 
-from backend.seo.seo_metadata import get_seo_data
+from backend.seo.seo_metadata import build_seo_context
 
 
 class IndexView(TemplateView):
@@ -14,17 +13,7 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        seo_data = get_seo_data(self.request.path) or {}
-        context["seo_title"] = (
-            seo_data.get("title")
-            or "Stop Dépôt Sauvage - Accompagner les collectivités pour mieux lutter contre les dépôts sauvages."
-        )
-        context["seo_description"] = (
-            seo_data.get("desc") or "Signaler un dépôt sauvage avec Stop Dépôt Sauvage."
-        )
-        context["seo_robots"] = (
-            "noindex, nofollow" if getattr(settings, "ENV_NAME", "") != "prod" else "index, follow"
-        )
+        context.update(build_seo_context(self.request.path))
         return context
 
 
