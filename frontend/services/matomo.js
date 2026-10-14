@@ -1,12 +1,19 @@
+import { INTERNAL_HOSTS } from '../vue-guillotine/utils/linkUtils.js'
 import { MATOMO_ENABLED } from './config'
 
 const DEFAULT_TITLE =
   'Stop Dépôt Sauvage - Accompagner les collectivités pour mieux lutter contre les dépôts sauvages.'
 
-// Le site répond sur deux domaines (stopdepotsauvage redirige vers protect-envi).
+// Le site répond sur plusieurs domaines/alias (stopdepotsauvage, protect-envi, etc.).
 // Sans cette liste, Matomo compte les liens d'un domaine vers l'autre comme des
 // sorties du site : le parcours « article -> constatation » devient illisible.
-const SITE_DOMAINS = ['*.protect-envi.beta.gouv.fr', '*.stopdepotsauvage.beta.gouv.fr']
+const SITE_DOMAINS = Array.from(
+  new Set(
+    INTERNAL_HOSTS.filter((host) => !host.includes('localhost') && !host.includes('127.0.0.1')).map(
+      (host) => `*.${host.replace(/^www\./, '')}`
+    )
+  )
+)
 
 // Sans battement de cœur, le temps passé sur la dernière page d'une visite est
 // compté comme nul, ce qui fausse la lecture de l'engagement sur les articles.

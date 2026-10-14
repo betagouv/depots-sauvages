@@ -21,15 +21,12 @@ from backend.current_user.views import UserInfoViewSet, logout_view
 from backend.faq.views import FAQItemViewSet
 from backend.home.views import index_view
 from backend.procedures.views import SuiviProcedureViewSet
-<<<<<<< HEAD
 from backend.proconnect.views import (
     ProConnectAccessConfigView,
     ProConnectAccessRequestView,
     ProConnectRejectedInfoView,
 )
-=======
 from backend.seo.sitemaps import SITEMAPS
->>>>>>> ce51fd3 (Donne à chaque article de blog sa propre identité pour les moteurs)
 from backend.seo.views import RobotsTxtView
 from backend.site_content.views import SiteContentViewSet
 
