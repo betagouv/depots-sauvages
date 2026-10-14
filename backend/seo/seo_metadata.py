@@ -3,8 +3,7 @@ import re
 from backend.seo.blog import get_blog_seo_data
 from backend.seo.faq import get_faq_seo_data
 
-# Pages réservées aux utilisateurs connectés ou à l'administration : elles ne
-# doivent pas être proposées à l'indexation, même en production.
+# Authenticated or backoffice pages excluded from search engine indexing even in production.
 PRIVATE_PATH_PREFIXES = (
     "/mes-procedures",
     "/suivi-procedure/",
@@ -150,7 +149,7 @@ def normalize_path(path):
 
 
 def is_private_path(path):
-    """Indique si la page doit rester hors de l'index des moteurs de recherche."""
+    """Returns True if the path should remain excluded from search engine index."""
     return normalize_path(path).startswith(PRIVATE_PATH_PREFIXES)
 
 

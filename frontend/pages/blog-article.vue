@@ -136,20 +136,19 @@ const loadArticle = async () => {
   try {
     const data = await api.fetchResource(`${api.API_URL}/blog-articles/${slug}/`)
     article.value = data
-    // Sans cela, les articles remonteraient tous sous le même titre générique
-    // dans Matomo et seraient indiscernables les uns des autres.
+    // Track page view with actual article title once loaded
     trackPageViewWithTitle(data.title)
   } catch (err) {
     console.error('Erreur chargement article :', err)
     article.value = null
-    // Permet de repérer les liens morts dans les rapports de fréquentation.
+    // Track 404 to identify broken links in analytics
     trackPageViewWithTitle('Article introuvable')
   } finally {
     isLoading.value = false
   }
 }
 
-// Mesure les clics sur les liens du corps d'article (conversion constatation, maillage interne, liens externes).
+// Track clicks on article body links (constatation conversion, internal links, external links).
 const trackBodyLinkClick = (event: MouseEvent) => {
   const link = (event.target as HTMLElement)?.closest?.('a[href]')
   if (!link) {
@@ -216,8 +215,7 @@ onMounted(() => {
   loadArticle()
 })
 
-// La navigation d'un article à l'autre réutilise ce composant : sans cette
-// surveillance, le contenu affiché resterait celui de l'article précédent.
+// Navigation between articles reuses this component: reload when slug changes
 watch(
   () => route.params.slug,
   (slug, previousSlug) => {

@@ -73,7 +73,7 @@ export function cleanHtmlLinks(htmlContent) {
     } else {
       attrs.target = '_blank'
       attrs.rel = 'noopener noreferrer'
-      // RGAA 13.1 : l'ouverture d'une nouvelle fenêtre doit être annoncée.
+      // RGAA 13.1: opening a new window must be explicitly announced in the link title.
       if (!attrs.title) {
         attrs.title = NEW_WINDOW_MENTION
       } else if (!attrs.title.includes(NEW_WINDOW_MENTION)) {

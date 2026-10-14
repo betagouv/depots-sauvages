@@ -17,7 +17,7 @@ SITE_NAME = "Stop Dépôt Sauvage"
 
 
 def absolute_url(path_or_url):
-    """Complète une adresse relative avec le domaine public du site."""
+    """Resolves a relative path to a full public URL using SITE_BASE_URL."""
     if not path_or_url:
         return None
     if path_or_url.startswith(("http://", "https://")):
@@ -26,10 +26,7 @@ def absolute_url(path_or_url):
 
 
 def build_article_jsonld(seo_data, canonical, image):
-    """
-    Décrit un article de blog au format schema.org, pour que les moteurs sachent
-    qu'il s'agit d'un article daté et non d'une page quelconque.
-    """
+    """Builds schema.org BlogPosting structured data for search engines."""
     jsonld = {
         "@context": "https://schema.org",
         "@type": "BlogPosting",
@@ -85,7 +82,7 @@ class IndexView(TemplateView):
             context["seo_published_time"] = seo_data.get("published_time")
             context["seo_modified_time"] = seo_data.get("modified_time")
             jsonld = build_article_jsonld(seo_data, canonical, image)
-            # `</script>` dans une chaîne fermerait la balise : on l'échappe.
+            # Escape '</' sequence to prevent prematurely closing script tags
             context["seo_jsonld"] = mark_safe(
                 json.dumps(jsonld, ensure_ascii=False).replace("<", "\\u003C")
             )

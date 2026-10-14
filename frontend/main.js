@@ -182,8 +182,7 @@ const router = createRouter({
     {
       path: '/blog/:slug',
       name: 'BlogArticle',
-      // Le titre réel n'est connu qu'une fois l'article chargé : la page
-      // déclare elle-même sa vue de page à Matomo (voir services/matomo.js).
+      // The real title is known only after fetching article data: page triggers trackPageView itself
       component: () => import('./pages/blog-article.vue'),
       meta: { title: 'Article', deferPageView: true },
     },

@@ -7,9 +7,7 @@ from django.contrib.sitemaps import Sitemap
 from backend.blog.models import BlogArticle
 from backend.faq.models import FAQItem
 
-# Pages publiques stables, celles qu'on veut voir remonter dans les moteurs.
-# Les pages privées (suivi de dossier, tableau de bord) et les alias de
-# redirection en sont volontairement absents.
+# Stable public pages intended for search engine indexing.
 STATIC_PUBLIC_PATHS = [
     ("/", 1.0),
     ("/comment-agir", 0.8),
@@ -26,17 +24,15 @@ STATIC_PUBLIC_PATHS = [
 
 @dataclass
 class _PublicSite:
-    """Domaine public du site, tel que déclaré dans les réglages."""
+    """Public domain as configured in settings."""
 
     domain: str
 
 
 class BaseSiteSitemap(Sitemap):
     """
-    Sitemap construit sur SITE_BASE_URL plutôt que sur le domaine appelé.
-
-    Le site répond aujourd'hui sur deux domaines : sans cela, le sitemap
-    listerait des adresses différentes selon la porte d'entrée utilisée.
+    Sitemap built on top of SITE_BASE_URL rather than the requested domain,
+    ensuring consistent absolute URLs across aliases and domains.
     """
 
     protocol = "https"

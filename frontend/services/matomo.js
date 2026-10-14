@@ -4,9 +4,8 @@ import { MATOMO_ENABLED } from './config'
 const DEFAULT_TITLE =
   'Stop Dépôt Sauvage - Accompagner les collectivités pour mieux lutter contre les dépôts sauvages.'
 
-// Le site répond sur plusieurs domaines/alias (stopdepotsauvage, protect-envi, etc.).
-// Sans cette liste, Matomo compte les liens d'un domaine vers l'autre comme des
-// sorties du site : le parcours « article -> constatation » devient illisible.
+// The site responds on multiple domains/aliases (stopdepotsauvage, protect-envi, etc.).
+// Without this list, Matomo treats cross-domain clicks as outlinks.
 const SITE_DOMAINS = Array.from(
   new Set(
     INTERNAL_HOSTS.filter((host) => !host.includes('localhost') && !host.includes('127.0.0.1')).map(
@@ -15,8 +14,7 @@ const SITE_DOMAINS = Array.from(
   )
 )
 
-// Sans battement de cœur, le temps passé sur la dernière page d'une visite est
-// compté comme nul, ce qui fausse la lecture de l'engagement sur les articles.
+// Heartbeat timer ensures time spent on the last page of a visit is accurately counted.
 const HEARTBEAT_DELAY_SECONDS = 15
 
 export function buildPageTitle(title) {
@@ -33,9 +31,8 @@ function pushPageView(title, url) {
 }
 
 /**
- * Enregistre la vue de page avec un titre connu seulement après chargement des
- * données (article de blog par exemple), pour les routes marquées
- * `meta.deferPageView`.
+ * Tracks page view with custom title for routes with `meta.deferPageView`
+ * (e.g. blog articles whose real titles are known only after fetching data).
  */
 export function trackPageViewWithTitle(title) {
   const pageTitle = buildPageTitle(title)
@@ -71,8 +68,7 @@ export function initMatomo(router) {
   router.afterEach((to) => {
     const title = buildPageTitle(to.meta.title)
     document.title = title
-    // Les pages dont le titre dépend d'un contenu chargé à l'affichage
-    // déclarent leur vue de page elles-mêmes, une fois le titre réel connu.
+    // Routes with deferPageView manually trigger trackPageView once their content is loaded
     if (to.meta.deferPageView) {
       return
     }

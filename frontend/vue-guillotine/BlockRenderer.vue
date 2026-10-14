@@ -34,7 +34,7 @@ defineProps<{
 
 const router = useRouter()
 
-// Intercepte les clics sur les liens internes pour naviguer via le routeur SPA sans rechargement.
+// Intercept clicks on internal links to navigate via SPA router without full page reload.
 const handleClick = (event: MouseEvent) => {
   if (event.defaultPrevented || event.button !== 0) {
     return

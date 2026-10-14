@@ -5,8 +5,7 @@ from backend.blog.models import BlogArticle
 SITE_NAME = "Stop Dépôt Sauvage"
 TITLE_SUFFIX = f" - {SITE_NAME}"
 
-# Google tronque les titres autour de 60-65 caractères et les descriptions autour
-# de 155 : au-delà, le suffixe du site n'apporte rien et mange le titre de l'article.
+# Search engines truncate titles around 60-65 chars and descriptions around 155 chars.
 MAX_TITLE_LENGTH = 65
 MAX_DESCRIPTION_LENGTH = 155
 
@@ -14,7 +13,7 @@ BLOG_ARTICLE_PATH = re.compile(r"^/blog/(?P<slug>[\w-]+)$")
 
 
 def _build_title(title: str) -> str:
-    """Ajoute le nom du site au titre de l'article s'il reste assez de place."""
+    """Appends site name to the article title if there is enough room."""
     title = " ".join(title.split())
     if len(title) + len(TITLE_SUFFIX) <= MAX_TITLE_LENGTH:
         return f"{title}{TITLE_SUFFIX}"
@@ -22,12 +21,7 @@ def _build_title(title: str) -> str:
 
 
 def _build_description(summary: str) -> str:
-    """
-    Normalise le chapô de l'article pour en faire une meta description.
-
-    Les chapôs saisis contiennent des retours à la ligne et dépassent souvent la
-    longueur affichée par les moteurs : on les aplatit et on tronque sur un mot.
-    """
+    """Normalizes the article summary into a clean meta description, flattened and truncated on a word boundary."""
     description = " ".join((summary or "").split())
     if len(description) <= MAX_DESCRIPTION_LENGTH:
         return description
@@ -38,12 +32,7 @@ def _build_description(summary: str) -> str:
 
 
 def get_blog_seo_data(path: str) -> dict | None:
-    """
-    Renvoie les métadonnées SEO d'un article de blog publié, ou None.
-
-    Le titre et la description sont dérivés des champs déjà saisis (titre et
-    chapô) : aucune ressaisie n'est demandée à la rédaction.
-    """
+    """Returns SEO metadata for a published blog article, or None."""
     match = BLOG_ARTICLE_PATH.match(path)
     if not match:
         return None

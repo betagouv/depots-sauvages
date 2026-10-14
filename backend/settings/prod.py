@@ -47,8 +47,8 @@ if STATS_ENABLED and STATS_DATABASE_URL:
 else:
     DATABASE_ROUTERS = []
 
-# Adresse publique du site (canonical, Open Graph, sitemap.xml).
-# Voir la note « BASCULE DE DOMAINE » dans backend/settings/base.py avant de la changer.
+# Public site URL (canonical, Open Graph, sitemap.xml).
+# See "DOMAIN SWITCH PROCEDURE" in backend/settings/base.py before modifying.
 SITE_BASE_URL = env.str("SITE_BASE_URL", default=SITE_BASE_URL)  # noqa: F405
 
 # Security settings for production
