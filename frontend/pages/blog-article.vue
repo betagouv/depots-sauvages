@@ -149,10 +149,7 @@ const loadArticle = async () => {
   }
 }
 
-/**
- * Mesure ce sur quoi les lecteurs cliquent à l'intérieur d'un article.
- * Les intitulés décrivent l'action observée, pas l'intention supposée.
- */
+// Mesure les clics sur les liens du corps d'article (conversion constatation, maillage interne, liens externes).
 const trackBodyLinkClick = (event: MouseEvent) => {
   const link = (event.target as HTMLElement)?.closest?.('a[href]')
   if (!link) {

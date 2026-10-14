@@ -34,12 +34,7 @@ defineProps<{
 
 const router = useRouter()
 
-/**
- * Les liens vers le site restent dans l'application : le lecteur garde sa page
- * et son bouton « retour », et la visite n'est pas découpée en deux.
- * Les raccourcis habituels (Ctrl, Cmd, clic du milieu) continuent d'ouvrir un
- * nouvel onglet, comme sur n'importe quel lien.
- */
+// Intercepte les clics sur les liens internes pour naviguer via le routeur SPA sans rechargement.
 const handleClick = (event: MouseEvent) => {
   if (event.defaultPrevented || event.button !== 0) {
     return
