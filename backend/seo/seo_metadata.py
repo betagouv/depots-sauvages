@@ -1,7 +1,19 @@
+import json
 import re
+from urllib.parse import urljoin
+
+from django.conf import settings
+from django.utils.safestring import mark_safe
 
 from backend.seo.blog import get_blog_seo_data
 from backend.seo.faq import get_faq_seo_data
+
+DEFAULT_TITLE = (
+    "Stop Dépôt Sauvage - Accompagner les collectivités pour mieux lutter contre "
+    "les dépôts sauvages."
+)
+DEFAULT_DESCRIPTION = "Signaler un dépôt sauvage avec Stop Dépôt Sauvage."
+SITE_NAME = "Stop Dépôt Sauvage"
 
 # Authenticated or backoffice pages excluded from search engine indexing even in production.
 PRIVATE_PATH_PREFIXES = (
@@ -141,25 +153,23 @@ SEO_PATTERNS = [
 ]
 
 
-def normalize_path(path):
+def normalize_path(path: str) -> str:
     normalized_path = "/" + path.strip("/")
     if normalized_path == "//":
         normalized_path = "/"
     return normalized_path
 
 
-def is_private_path(path):
+def is_private_path(path: str) -> bool:
     """Returns True if the path should remain excluded from search engine index."""
     return normalize_path(path).startswith(PRIVATE_PATH_PREFIXES)
 
 
-def get_seo_data(path):
+def get_seo_data(path: str) -> dict | None:
     normalized_path = normalize_path(path)
-    # Dynamic FAQ metadata
     faq_seo = get_faq_seo_data(normalized_path)
     if faq_seo:
         return faq_seo
-    # Dynamic blog article metadata
     blog_seo = get_blog_seo_data(normalized_path)
     if blog_seo:
         return blog_seo
@@ -167,3 +177,69 @@ def get_seo_data(path):
         if re.match(pattern, normalized_path):
             return seo_data
     return None
+
+
+def is_production() -> bool:
+    """Returns True if the current environment is production."""
+    return "prod" in getattr(settings, "ENV_NAME", "").lower()
+
+
+def absolute_url(path_or_url: str | None) -> str | None:
+    """Resolves a relative path to a full public URL using SITE_BASE_URL."""
+    if not path_or_url:
+        return None
+    if path_or_url.startswith(("http://", "https://")):
+        return path_or_url
+    return urljoin(settings.SITE_BASE_URL.rstrip("/") + "/", path_or_url.lstrip("/"))
+
+
+def build_article_jsonld(seo_data: dict, canonical: str, image: str | None) -> dict:
+    """Builds schema.org BlogPosting structured data for search engines."""
+    jsonld = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": seo_data.get("title"),
+        "description": seo_data.get("desc"),
+        "mainEntityOfPage": canonical,
+        "url": canonical,
+        "inLanguage": "fr-FR",
+        "publisher": {
+            "@type": "Organization",
+            "name": SITE_NAME,
+            "url": settings.SITE_BASE_URL,
+        },
+    }
+    if image:
+        jsonld["image"] = image
+    if seo_data.get("published_time"):
+        jsonld["datePublished"] = seo_data["published_time"]
+    if seo_data.get("modified_time"):
+        jsonld["dateModified"] = seo_data["modified_time"]
+    return jsonld
+
+
+def build_seo_context(path: str) -> dict:
+    """Builds complete SEO template context (tags, canonical, robots, OG, and JSON-LD)."""
+    seo_data = get_seo_data(path) or {}
+    canonical = absolute_url(normalize_path(path))
+    image = absolute_url(seo_data.get("image") or settings.SEO_DEFAULT_IMAGE)
+    context = {
+        "seo_title": seo_data.get("title") or DEFAULT_TITLE,
+        "seo_description": seo_data.get("desc") or DEFAULT_DESCRIPTION,
+        "seo_site_name": SITE_NAME,
+        "seo_robots": (
+            "index, follow" if is_production() and not is_private_path(path) else "noindex, nofollow"
+        ),
+        "seo_canonical": canonical,
+        "seo_og_type": seo_data.get("og_type", "website"),
+        "seo_image": image,
+    }
+    if seo_data.get("og_type") == "article":
+        context["seo_published_time"] = seo_data.get("published_time")
+        context["seo_modified_time"] = seo_data.get("modified_time")
+        jsonld = build_article_jsonld(seo_data, canonical, image)
+        # Escape '</' sequence to prevent prematurely closing script tags
+        context["seo_jsonld"] = mark_safe(
+            json.dumps(jsonld, ensure_ascii=False).replace("<", "\\u003C")
+        )
+    return context

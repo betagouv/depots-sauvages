@@ -1,4 +1,4 @@
-from django.conf import settings
+from backend.seo.seo_metadata import is_production
 
 
 class NonProductionNoIndexMiddleware:
@@ -12,6 +12,6 @@ class NonProductionNoIndexMiddleware:
 
     def __call__(self, request):
         response = self.get_response(request)
-        if getattr(settings, "ENV_NAME", "") != "prod":
+        if not is_production():
             response["X-Robots-Tag"] = "noindex, nofollow"
         return response

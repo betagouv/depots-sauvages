@@ -252,3 +252,39 @@ def test_robots_txt_announces_sitemap(client, settings):
     response = client.get(reverse("robots_txt"))
     content = response.content.decode()
     assert "Sitemap: https://stopdepotsauvage.beta.gouv.fr/sitemap.xml" in content
+
+
+@pytest.mark.parametrize(
+    "env,expected",
+    [
+        ("prod", True),
+        ("production", True),
+        ("PROD", True),
+        ("staging", False),
+        ("dev", False),
+        ("local", False),
+        ("development", False),
+        ("", False),
+    ],
+)
+def test_is_production_helper(settings, env, expected):
+    from backend.seo.seo_metadata import is_production
+
+    settings.ENV_NAME = env
+    assert is_production() is expected
+
+
+@pytest.mark.django_db
+def test_build_seo_context_unit(settings):
+    from backend.seo.seo_metadata import build_seo_context
+
+    settings.ENV_NAME = "prod"
+    settings.SITE_BASE_URL = "https://stopdepotsauvage.beta.gouv.fr"
+    ctx = build_seo_context("/comment-agir")
+    assert ctx["seo_title"] == "Comment agir contre les dépôts sauvages ? - Stop Dépôt Sauvage"
+    assert ctx["seo_canonical"] == "https://stopdepotsauvage.beta.gouv.fr/comment-agir"
+    assert ctx["seo_robots"] == "index, follow"
+
+    # Private path should be noindex
+    ctx_private = build_seo_context("/mes-procedures")
+    assert ctx_private["seo_robots"] == "noindex, nofollow"
