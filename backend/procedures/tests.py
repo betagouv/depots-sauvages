@@ -29,12 +29,14 @@ def test_suivi_procedure_owner_access(client):
     data = {
         "etape_en_cours": 2,
         "preuves_fournies": True,
+        "numero_suivi_lettre": "1A00915820380",
     }
     response = client.put(url, data, content_type="application/json")
     assert response.status_code == status.HTTP_200_OK
     suivi.refresh_from_db()
     assert suivi.etape_en_cours == 2
     assert suivi.preuves_fournies is True
+    assert suivi.numero_suivi_lettre == "1A00915820380"
 
 
 @pytest.mark.django_db

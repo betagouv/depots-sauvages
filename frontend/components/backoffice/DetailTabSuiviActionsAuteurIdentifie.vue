@@ -60,7 +60,7 @@
         </div>
         <div
           v-if="procedure.suivi_procedure?.numero_suivi_lettre"
-          class="bo-flex-gap-05 fr-ml-2w"
+          class="bo-flex-gap-05 fr-ml-2w bo-flex-align-center"
         >
           <input
             type="text"
@@ -69,6 +69,14 @@
             :value="procedure.suivi_procedure?.numero_suivi_lettre"
             disabled
           />
+          <a
+            :href="buildLaPosteSuiviUrl(procedure.suivi_procedure.numero_suivi_lettre)"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="fr-btn fr-btn--tertiary-no-outline fr-btn--sm fr-icon-external-link-line"
+            title="Suivre ce courrier sur laposte.fr - nouvelle fenêtre"
+          >
+          </a>
         </div>
         <div class="bo-flex-space-between">
           <label class="fr-text--xs fr-mb-0 bo-flex-center-gap">
@@ -305,6 +313,8 @@
 </template>
 
 <script setup lang="ts">
+import { buildLaPosteSuiviUrl } from '@/utils/procedure'
+
 defineProps<{
   procedure: any
 }>()

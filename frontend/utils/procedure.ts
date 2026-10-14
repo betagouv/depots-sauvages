@@ -39,3 +39,10 @@ export const calculateContradictoire = (arDate: string | null | undefined): Cont
     isExpired: joursRestants < 0,
   }
 }
+
+export const buildLaPosteSuiviUrl = (numeroSuivi: string | null | undefined): string => {
+  const numero = (numeroSuivi || '').replace(/\s/g, '').toUpperCase()
+  return numero
+    ? `https://www.laposte.fr/outils/suivre-vos-envois?code=${encodeURIComponent(numero)}`
+    : ''
+}

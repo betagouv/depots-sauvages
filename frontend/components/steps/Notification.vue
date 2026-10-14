@@ -104,7 +104,7 @@
 import { computed, watch } from 'vue'
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
 import { getTodayISOString } from '../../utils/date'
-import { calculateContradictoire } from '../../utils/procedure'
+import { calculateContradictoire, buildLaPosteSuiviUrl } from '../../utils/procedure'
 import ListeActions, { type Action } from './ListeActions.vue'
 
 import { trackAndOpenLink, trackEvent } from '../../services/matomo'
@@ -124,12 +124,7 @@ defineEmits(['next-step'])
 
 const today = getTodayISOString()
 
-const laPosteSuiviUrl = computed(() => {
-  const numero = (props.suivi.numero_suivi_lettre || '').replace(/\s/g, '')
-  return numero
-    ? `https://www.laposte.fr/outils/suivre-vos-envois?code=${encodeURIComponent(numero)}`
-    : ''
-})
+const laPosteSuiviUrl = computed(() => buildLaPosteSuiviUrl(props.suivi.numero_suivi_lettre))
 
 const contradictoire = computed(() => calculateContradictoire(props.suivi.ar_presentation_date))
 

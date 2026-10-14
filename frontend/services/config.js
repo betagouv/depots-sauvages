@@ -15,3 +15,6 @@ export const LOGIN_REQUIRED = getEnvBool('VITE_LOGIN_REQUIRED', true)
 export const PROCONNECT_ENABLED = getEnvBool('VITE_PROCONNECT_ENABLED', false)
 export const MATOMO_ENABLED = getEnvBool('VITE_MATOMO_ENABLED', false)
 export const CRISP_ENABLED = getEnvBool('VITE_CRISP_ENABLED', false)
+export const LA_POSTE_SUIVI_BASE_URL =
+  import.meta.env.VITE_LA_POSTE_SUIVI_URL || 'https://www.laposte.fr/outils/suivre-vos-envois'
+
