@@ -1,8 +1,8 @@
-import { describe, expect, it, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
+import { describe, expect, it, vi } from 'vitest'
 import NotificationStep from '../components/steps/Notification.vue'
-import { buildLaPosteSuiviUrl } from '../utils/procedure'
 import * as matomo from '../services/matomo'
+import { buildLaPosteSuiviUrl } from '../utils/procedure'
 
 vi.mock('../services/matomo', () => ({
   trackAndOpenLink: vi.fn(),
@@ -26,6 +26,12 @@ describe('Notification.vue & Suivi La Poste', () => {
       expect(buildLaPosteSuiviUrl('   ')).toBe('')
       expect(buildLaPosteSuiviUrl(null)).toBe('')
       expect(buildLaPosteSuiviUrl(undefined)).toBe('')
+    })
+
+    it('utilise une base URL personnalisée si fournie', () => {
+      expect(buildLaPosteSuiviUrl('1A009', 'https://custom.laposte.fr/suivi')).toBe(
+        'https://custom.laposte.fr/suivi?code=1A009'
+      )
     })
   })
 

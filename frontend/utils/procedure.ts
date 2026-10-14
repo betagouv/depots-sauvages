@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import { LA_POSTE_SUIVI_BASE_URL } from '../services/config'
 
 export interface ContradictoireInfo {
   dateFin: string | null
@@ -40,9 +41,10 @@ export const calculateContradictoire = (arDate: string | null | undefined): Cont
   }
 }
 
-export const buildLaPosteSuiviUrl = (numeroSuivi: string | null | undefined): string => {
+export const buildLaPosteSuiviUrl = (
+  numeroSuivi: string | null | undefined,
+  baseUrl: string = LA_POSTE_SUIVI_BASE_URL
+): string => {
   const numero = (numeroSuivi || '').replace(/\s/g, '').toUpperCase()
-  return numero
-    ? `https://www.laposte.fr/outils/suivre-vos-envois?code=${encodeURIComponent(numero)}`
-    : ''
+  return numero ? `${baseUrl}?code=${encodeURIComponent(numero)}` : ''
 }
