@@ -64,7 +64,9 @@
 <script setup lang="ts">
 import CopyButton from '@/components/shared/CopyButton.vue'
 import { useAnchorScroll } from '@/composables/useAnchorScroll'
-import { computed, ref } from 'vue'
+import { trackPageView } from '@/services/matomo'
+import { setPageTitle } from '@/services/pageTitle'
+import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { AdminControls, BlockRenderer } from '../../vue-guillotine'
 
@@ -104,6 +106,16 @@ const toggleAccordion = () => {
 }
 
 useAnchorScroll(isExpanded, props.item.slug, props.item.title)
+
+watch(
+  isExpanded,
+  (expanded) => {
+    if (expanded) {
+      trackPageView(setPageTitle(props.item.title), `/faq/${props.item.slug}`)
+    }
+  },
+  { immediate: true }
+)
 </script>
 
 <style scoped>

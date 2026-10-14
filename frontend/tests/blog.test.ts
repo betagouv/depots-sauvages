@@ -8,6 +8,7 @@ import BlogArticleModal from '../components/blog/BlogArticleModal.vue'
 import BlogPage from '../pages/blog.vue'
 import BlogArticlePage from '../pages/blog-article.vue'
 import * as api from '../services/api'
+import { trackPageView } from '../services/matomo'
 
 vi.mock('vue-router', () => ({
   useRoute: () => ({
@@ -31,6 +32,11 @@ vi.mock('../services/api', async () => {
     postResource: vi.fn(),
   }
 })
+
+vi.mock('../services/matomo', () => ({
+  trackPageView: vi.fn(),
+  trackEvent: vi.fn(),
+}))
 
 const mockArticle: BlogArticleItem = {
   id: 1,
@@ -134,5 +140,38 @@ describe('Page Blog Article Détail', () => {
       },
     })
     expect(await findByText('Article de test')).toBeInTheDocument()
+  })
+
+  const renderArticlePage = () =>
+    render(BlogArticlePage, {
+      global: {
+        plugins: [createTestingPinia({ stubActions: true })],
+        stubs: {
+          DsfrBreadcrumb: true,
+          RouterLink: { template: '<a><slot /></a>' },
+          BlockRenderer: { template: '<div><slot /></div>' },
+          BlogArticleModal: true,
+        },
+      },
+    })
+
+  it('pose le vrai titre dans l onglet et envoie une seule page vue', async () => {
+    ;(api.fetchResource as any).mockResolvedValue(mockArticle)
+    const { findByText } = renderArticlePage()
+    await findByText('Article de test')
+    expect(document.title).toBe('Article de test - Stop Dépôt Sauvage')
+    expect(trackPageView).toHaveBeenCalledTimes(1)
+    expect(trackPageView).toHaveBeenCalledWith(
+      'Article de test - Stop Dépôt Sauvage',
+      '/blog/test-article'
+    )
+  })
+
+  it('indique un article introuvable quand le chargement échoue', async () => {
+    ;(api.fetchResource as any).mockRejectedValue(new Error('404'))
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+    renderArticlePage()
+    await vi.waitFor(() => expect(trackPageView).toHaveBeenCalledTimes(1))
+    expect(document.title).toBe('Article introuvable - Stop Dépôt Sauvage')
   })
 })
