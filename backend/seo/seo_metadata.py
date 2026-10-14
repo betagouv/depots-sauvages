@@ -153,19 +153,19 @@ SEO_PATTERNS = [
 ]
 
 
-def normalize_path(path: str) -> str:
+def normalize_path(path):
     normalized_path = "/" + path.strip("/")
     if normalized_path == "//":
         normalized_path = "/"
     return normalized_path
 
 
-def is_private_path(path: str) -> bool:
+def is_private_path(path):
     """Returns True if the path should remain excluded from search engine index."""
     return normalize_path(path).startswith(PRIVATE_PATH_PREFIXES)
 
 
-def get_seo_data(path: str) -> dict | None:
+def get_seo_data(path):
     normalized_path = normalize_path(path)
     faq_seo = get_faq_seo_data(normalized_path)
     if faq_seo:
@@ -179,12 +179,12 @@ def get_seo_data(path: str) -> dict | None:
     return None
 
 
-def is_production() -> bool:
+def is_production():
     """Returns True if the current environment is production."""
     return "prod" in getattr(settings, "ENV_NAME", "").lower()
 
 
-def absolute_url(path_or_url: str | None) -> str | None:
+def absolute_url(path_or_url):
     """Resolves a relative path to a full public URL using SITE_BASE_URL."""
     if not path_or_url:
         return None
@@ -193,7 +193,7 @@ def absolute_url(path_or_url: str | None) -> str | None:
     return urljoin(settings.SITE_BASE_URL.rstrip("/") + "/", path_or_url.lstrip("/"))
 
 
-def build_article_jsonld(seo_data: dict, canonical: str, image: str | None) -> dict:
+def build_article_jsonld(seo_data, canonical, image):
     """Builds schema.org BlogPosting structured data for search engines."""
     jsonld = {
         "@context": "https://schema.org",
@@ -218,7 +218,7 @@ def build_article_jsonld(seo_data: dict, canonical: str, image: str | None) -> d
     return jsonld
 
 
-def build_seo_context(path: str) -> dict:
+def build_seo_context(path):
     """Builds complete SEO template context (tags, canonical, robots, OG, and JSON-LD)."""
     seo_data = get_seo_data(path) or {}
     canonical = absolute_url(normalize_path(path))

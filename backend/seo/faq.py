@@ -5,7 +5,7 @@ from django.utils.html import strip_tags
 from backend.faq.models import FAQItem
 
 
-def get_faq_seo_data(path: str) -> dict | None:
+def get_faq_seo_data(path):
     """
     Checks if the path is a dynamic FAQ page and returns its SEO title and description.
     """

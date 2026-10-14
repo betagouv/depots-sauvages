@@ -12,7 +12,7 @@ MAX_DESCRIPTION_LENGTH = 155
 BLOG_ARTICLE_PATH = re.compile(r"^/blog/(?P<slug>[\w-]+)$")
 
 
-def _build_title(title: str) -> str:
+def _build_title(title):
     """Appends site name to the article title if there is enough room."""
     title = " ".join(title.split())
     if len(title) + len(TITLE_SUFFIX) <= MAX_TITLE_LENGTH:
@@ -20,7 +20,7 @@ def _build_title(title: str) -> str:
     return title
 
 
-def _build_description(summary: str) -> str:
+def _build_description(summary):
     """Normalizes the article summary into a clean meta description, flattened and truncated on a word boundary."""
     description = " ".join((summary or "").split())
     if len(description) <= MAX_DESCRIPTION_LENGTH:
@@ -31,7 +31,7 @@ def _build_description(summary: str) -> str:
     return f"{truncated.rstrip(',;:.')}…"
 
 
-def get_blog_seo_data(path: str) -> dict | None:
+def get_blog_seo_data(path):
     """Returns SEO metadata for a published blog article, or None."""
     match = BLOG_ARTICLE_PATH.match(path)
     if not match:
