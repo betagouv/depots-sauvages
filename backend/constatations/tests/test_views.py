@@ -189,3 +189,36 @@ def test_list_constatations_returns_lightweight_payload(client):
     assert "photos" not in item
     assert "doc_constat" not in item
     assert "lettre_info" not in item
+
+
+@pytest.mark.django_db(databases=["default", "stats_db"])
+def test_list_constatations_includes_auteur_and_suivi_resume(client):
+    user = UserFactory()
+    client.force_login(user)
+    c = Constatation.objects.create(
+        user=user,
+        commune="Reignier-Ésery",
+        auteur_identifie=True,
+        auteur_nom="Dupont",
+        auteur_prenom="Marc",
+        is_draft=False,
+    )
+    suivi = c.suivi_procedure
+    suivi.lettre_envoyee = True
+    suivi.lettre_envoyee_date = "2026-10-01"
+    suivi.ar_presentation_date = "2026-10-03"
+    suivi.save()
+
+    response = client.get(reverse("constatation-list"))
+    assert response.status_code == status.HTTP_200_OK
+    item = response.json()[0]
+    assert item["auteur_nom"] == "Dupont"
+    assert item["auteur_prenom"] == "Marc"
+    resume = item["suivi_procedure"]
+    assert resume["lettre_envoyee"] is True
+    assert resume["lettre_envoyee_date"] == "2026-10-01"
+    assert resume["ar_presentation_date"] == "2026-10-03"
+    assert resume["dossier_archive"] is False
+    # Internal notes and processing notes are not included in the list view
+    assert "observations_internes" not in resume
+    assert "notes_traitement" not in resume

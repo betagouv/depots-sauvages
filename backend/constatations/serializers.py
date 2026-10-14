@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
 from backend.constatations.models import Constatation
+from backend.procedures.models import SuiviProcedure
+from backend.procedures.serializers import SuiviProcedureResumeSerializer
 
 
 class ConstatationListSerializer(serializers.ModelSerializer):
@@ -22,6 +24,9 @@ class ConstatationListSerializer(serializers.ModelSerializer):
             "date_constat",
             "heure_constat",
             "auteur_identifie",
+            "statut_auteur",
+            "auteur_nom",
+            "auteur_prenom",
             "is_draft",
             "date_creation",
             "date_modification",
@@ -32,12 +37,7 @@ class ConstatationListSerializer(serializers.ModelSerializer):
         sp = getattr(obj, "suivi_procedure", None)
         if not sp:
             return {"etape_en_cours": 1}
-        return {
-            "etape_en_cours": sp.etape_en_cours,
-            "identification_reussie": sp.identification_reussie,
-            "decision_poursuite": sp.decision_poursuite,
-            "dossier_archive": sp.dossier_archive,
-        }
+        return SuiviProcedureResumeSerializer(sp).data
 
 
 class ConstatationSerializer(serializers.ModelSerializer):

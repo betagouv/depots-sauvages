@@ -113,7 +113,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import StepperProcedure from '../components/StepperProcedure.vue'
@@ -252,6 +252,16 @@ const steps = computed(() => {
   ]
 })
 
+// When navigating from dashboard (?etape=N), scroll directly to active section and set focus
+let allerALaSectionOuverte = false
+const afficherSectionOuverte = async () => {
+  await nextTick()
+  const section = document.querySelector<HTMLElement>('.step--active')
+  if (!section) return
+  section.scrollIntoView({ block: 'start' })
+  section.querySelector<HTMLElement>('.step-title')?.focus({ preventScroll: true })
+}
+
 onMounted(async () => {
   const currentConstatationId =
     (route.params.constatation_id as string) || (route.query.constatation_id as string)
@@ -277,10 +287,21 @@ onMounted(async () => {
 
     // Then fetch procedure tracking data using the internal ID
     await suiviStore.fetchSuivi(currentConstatationId, procedureRes.id)
+
+    const etapeDemandee = Number.parseInt(String(route.query.etape ?? ''), 10)
+    if (
+      Number.isInteger(etapeDemandee) &&
+      etapeDemandee >= 0 &&
+      etapeDemandee < steps.value.length
+    ) {
+      activeStep.value = etapeDemandee
+      allerALaSectionOuverte = true
+    }
   } catch (err: any) {
     error.value = err.error || 'Une erreur est survenue lors de la récupération du dossier.'
   } finally {
     showLoading.value = false
+    if (allerALaSectionOuverte) await afficherSectionOuverte()
   }
 })
 </script>

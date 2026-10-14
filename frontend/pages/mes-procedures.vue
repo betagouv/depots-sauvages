@@ -1,5 +1,5 @@
 <template>
-  <div class="fr-container fr-py-5w">
+  <div class="fr-container--fluid fr-px-2w fr-px-md-4w fr-py-5w">
     <div class="fr-grid-row fr-grid-row--middle fr-mb-2w">
       <div class="fr-col">
         <h1>Mes procédures</h1>
@@ -15,99 +15,57 @@
     <Chargement v-if="showLoading" message="Récupération de vos procédures..." />
 
     <div v-else-if="userInfo?.is_authenticated">
-      <div v-if="userInfo && userInfo.is_authenticated" class="fr-mb-4w">
-        <p v-if="userInfo.first_name && userInfo.last_name" class="fr-text--lead">
-          Utilisateur connecté :
-          <strong>{{ userInfo.first_name }} {{ userInfo.last_name }}</strong>
-          <span v-if="userInfo.email"> - {{ userInfo.email }}</span>
-        </p>
-      </div>
-
-      <div v-if="procedures.length > 0" class="fr-mb-2w">
-        <p class="fr-text--bold">
-          {{ procedures.length }} procédure{{ procedures.length > 1 ? 's' : '' }}
-        </p>
-      </div>
-
-      <div class="fr-grid-row fr-grid-row--gutters">
-        <div v-for="procedure in procedures" :key="procedure.id" class="fr-col-12">
-          <div class="fr-card fr-card--no-arrow shadow-card">
-            <div class="fr-card__body">
-              <div class="fr-card__content fr-pb-2w">
-                <div class="fr-grid-row fr-grid-row--middle fr-grid-row--gutters fr-mb-1w">
-                  <div class="fr-col-auto">
-                    <h3 class="fr-card__title fr-mb-0">Procédure #{{ procedure.id }}</h3>
-                  </div>
-                  <div class="fr-col-auto">
-                    <DsfrBadge
-                      :type="procedure.auteur_identifie ? 'success' : 'info'"
-                      :label="
-                        procedure.auteur_identifie ? 'Auteur identifié' : 'Auteur non identifié'
-                      "
-                      class="fr-badge--no-icon"
-                    />
-                  </div>
-                </div>
-                <div class="fr-card__desc">
-                  <Metadata :procedure="procedure" />
-                </div>
-              </div>
-
-              <div class="fr-card__footer">
-                <DsfrBadge
-                  v-if="procedure.is_draft"
-                  type="warning"
-                  label="Brouillon de constatation"
-                  class="fr-mb-2w"
-                />
-                <DsfrBadge
-                  v-else-if="procedure.suivi_procedure?.dossier_archive"
-                  type="success"
-                  label="Procédure clôturée"
-                  class="fr-mb-2w"
-                />
-                <DsfrBadge
-                  v-else-if="procedure.suivi_procedure"
-                  type="info"
-                  :label="`Prochaine étape : ${getNextStepTitle(procedure)}`"
-                  class="fr-mb-2w"
-                />
-                <ul class="fr-btns-group fr-btns-group--inline-lg">
-                  <li>
-                    <DsfrButton
-                      v-if="procedure.is_draft"
-                      @click="router.push(`/constatation/${procedure.id}`)"
-                    >
-                      <span class="fr-icon-edit-line fr-mr-1w" aria-hidden="true"></span>
-                      Reprendre la constatation
-                    </DsfrButton>
-                    <DsfrButton v-else @click="router.push(getSuiviProcedureUrl(procedure.id))">
-                      <span
-                        :class="
-                          procedure.suivi_procedure?.dossier_archive
-                            ? 'fr-icon-eye-line'
-                            : 'fr-icon-file-line'
-                        "
-                        class="fr-mr-1w"
-                        aria-hidden="true"
-                      ></span>
-                      {{
-                        procedure.suivi_procedure?.dossier_archive
-                          ? 'Consulter la procédure'
-                          : 'Continuer la procédure'
-                      }}
-                    </DsfrButton>
-                  </li>
-                </ul>
-              </div>
-            </div>
+      <template v-if="procedures.length > 0">
+        <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--bottom fr-mb-2w">
+          <div class="fr-col-12 fr-col-md-5">
+            <DsfrSearchBar
+              id="recherche-procedures"
+              v-model="recherche"
+              label="Rechercher un dossier"
+              placeholder="Nom du contrevenant, n° de dossier ou commune"
+              button-text="Rechercher"
+              @search="(valeur: string) => (recherche = valeur)"
+            />
+          </div>
+          <div class="fr-col-12 fr-col-md-3">
+            <DsfrSelect
+              select-id="filtre-auteur"
+              v-model="filtreAuteur"
+              label="Auteur identifié"
+              :options="optionsFiltreAuteur"
+            />
+          </div>
+          <div class="fr-col-12 fr-col-md-4">
+            <DsfrToggleSwitch
+              v-model="afficherClotures"
+              input-id="afficher-clotures"
+              :label="`Afficher les dossiers clôturés (${nbClotures})`"
+            />
           </div>
         </div>
-      </div>
-      <AucuneProcedureBox
-        v-if="procedures.length === 0 && userInfo?.is_authenticated"
-        class="fr-mt-5w"
-      />
+
+        <p class="fr-text--bold fr-mb-2w" aria-live="polite">
+          {{ resumeResultats }}
+        </p>
+
+        <div
+          class="tableau-de-bord fr-mb-3w"
+          role="region"
+          aria-label="Dossiers rangés par étape"
+          tabindex="0"
+        >
+          <ColonneProcedures
+            v-for="colonne in colonnesAffichees"
+            :id="colonne.id"
+            :key="colonne.id"
+            :titre="colonne.titre"
+            :items="colonne.items"
+            class="tableau-de-bord__colonne"
+          />
+        </div>
+      </template>
+
+      <AucuneProcedureBox v-else class="fr-mt-5w" />
     </div>
     <LoginInvitation v-else />
   </div>
@@ -116,28 +74,102 @@
 <script setup lang="ts">
 import { useProcedureStore } from '@/stores/procedure'
 import { computed, onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
 import AucuneProcedureBox from '../components/procedures/AucuneProcedureBox.vue'
 import Chargement from '../components/procedures/Chargement.vue'
-import Metadata from '../components/procedures/Metadata.vue'
+import ColonneProcedures from '../components/procedures/ColonneProcedures.vue'
 import LoginInvitation from '../components/shared/LoginInvitation.vue'
-import { getUserInfo, type ProcedureOverview, type UserInfo } from '../services/api'
-import { getSuiviProcedureUrl } from '../services/urls'
-import { getCurrentStepTitle } from '../utils/procedure-steps'
+import { getUserInfo, type UserInfo } from '../services/api'
+import {
+  COLONNES,
+  comparerDansColonne,
+  correspondRecherche,
+  getPlacementProcedure,
+} from '../utils/tableau-de-bord'
 
-const router = useRouter()
 const userInfo = ref<UserInfo | null>(null)
 const procedureStore = useProcedureStore()
 const showLoading = ref(true)
 
+const recherche = ref('')
+const filtreAuteur = ref('tous')
+const afficherClotures = ref(false)
+
+const optionsFiltreAuteur = [
+  { value: 'tous', text: 'Tous' },
+  { value: 'identifie', text: 'Identifié' },
+  { value: 'non_identifie', text: 'Non identifié' },
+]
+
 const procedures = computed(() => procedureStore.procedures)
 
-const getNextStepTitle = (procedure: ProcedureOverview) =>
-  getCurrentStepTitle(procedure.suivi_procedure?.etape_en_cours ?? 0, {
-    auteurIdentifie: procedure.auteur_identifie,
-    identificationReussie: procedure.suivi_procedure?.identification_reussie,
-    decisionPoursuite: procedure.suivi_procedure?.decision_poursuite,
-  })
+const proceduresFiltrees = computed(() =>
+  procedures.value
+    .filter((p) => correspondRecherche(p, recherche.value))
+    .filter((p) => {
+      if (filtreAuteur.value === 'identifie') return p.auteur_identifie === true
+      if (filtreAuteur.value === 'non_identifie') return p.auteur_identifie !== true
+      return true
+    })
+    .map((procedure) => ({ procedure, placement: getPlacementProcedure(procedure) }))
+)
+
+const colonnes = computed(() => {
+  const itemsParColonne = COLONNES.reduce(
+    (acc, col) => {
+      acc[col.id] = []
+      return acc
+    },
+    {} as Record<string, (typeof proceduresFiltrees.value)[number][]>
+  )
+  for (const item of proceduresFiltrees.value) {
+    itemsParColonne[item.placement.colonne]?.push(item)
+  }
+  return COLONNES.map((colonne) => ({
+    ...colonne,
+    items: (itemsParColonne[colonne.id] ?? []).sort((a, b) =>
+      comparerDansColonne(colonne.id)(a.procedure, b.procedure)
+    ),
+  }))
+})
+
+const nbClotures = computed(
+  () => colonnes.value.find((colonne) => colonne.id === 'cloture')?.items.length ?? 0
+)
+
+const filtreActif = computed(() => recherche.value.trim() !== '' || filtreAuteur.value !== 'tous')
+
+// Settings are cumulative: switch toggles closed files, including during searches.
+// During an active filter/search, only columns with matching items are displayed
+// so the found item is immediately visible without scrolling through empty columns.
+const colonnesAffichees = computed(() =>
+  colonnes.value
+    .filter((colonne) => colonne.id !== 'cloture' || afficherClotures.value)
+    .filter((colonne) => !filtreActif.value || colonne.items.length > 0)
+)
+
+const pluriel = (nombre: number, mot: string) => `${nombre} ${mot}${nombre > 1 ? 's' : ''}`
+
+const resumeResultats = computed(() => {
+  const enCours = proceduresFiltrees.value.length - nbClotures.value
+  const clotures = nbClotures.value
+  const suffixe = filtreActif.value ? ' correspondant à votre recherche' : ''
+
+  if (afficherClotures.value) {
+    if (filtreActif.value && enCours + clotures === 0) {
+      return 'Aucun dossier ne correspond à votre recherche.'
+    }
+    return `${pluriel(enCours, 'dossier')} en cours, ${pluriel(clotures, 'clôturé')}${suffixe}`
+  }
+
+  if (filtreActif.value && enCours === 0) {
+    return clotures
+      ? `Aucun dossier en cours ne correspond à votre recherche. ${pluriel(clotures, 'dossier')} ${
+          clotures > 1 ? 'clôturés correspondent' : 'clôturé correspond'
+        } : activez « Afficher les dossiers clôturés » pour ${clotures > 1 ? 'les' : 'le'} voir.`
+      : 'Aucun dossier ne correspond à votre recherche.'
+  }
+  return `${pluriel(enCours, 'dossier')} en cours${suffixe}`
+})
 
 onMounted(async () => {
   try {
@@ -154,8 +186,26 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.shadow-card {
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e5e5e5;
+.tableau-de-bord {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.tableau-de-bord__colonne {
+  flex: 0 0 17rem;
+  min-width: 0;
+}
+
+@media (max-width: 47.99em) {
+  .tableau-de-bord {
+    flex-direction: column;
+    overflow-x: visible;
+  }
+
+  .tableau-de-bord__colonne {
+    flex: 1 1 auto;
+  }
 }
 </style>

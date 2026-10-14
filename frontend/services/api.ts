@@ -1,3 +1,4 @@
+import type { SuiviProcedure } from '../stores/suivi-procedure'
 // In development, use VITE_BACKEND_URL (e.g., to query local Django on port 8000 from Vite on port 5173).
 // In production, the frontend and backend are served from the same host. We dynamically use
 // the current origin (window.location.origin) to adapt seamlessly to Scalingo review apps/staging/prod
@@ -37,7 +38,6 @@ export const API_URLS = {
   proconnectDemanderAcces: `${API_URL}/proconnect/demander-acces/`,
   backofficeProConnectConfig: `${API_URL}/backoffice/proconnect-config/`,
 }
-
 
 // API functions
 async function makeRequest(
@@ -107,22 +107,22 @@ export interface UserInfo {
 export const getUserInfo = (): Promise<UserInfo> => makeRequest(API_URLS.userInfo, 'GET', {})
 export interface ProcedureOverview {
   id: number
-  title: string
+  title?: string
+  commune?: string
   date_creation?: string
   date_modification: string | null
   state?: string
   date_constat: string | null
   heure_constat: string | null
   localisation_depot: string | null
-  last_sync: string | null
-  auteur_identifie: boolean
+  last_sync?: string | null
+  auteur_identifie: boolean | null
+  statut_auteur?: string | null
+  auteur_nom?: string
+  auteur_prenom?: string
   is_draft?: boolean
-  suivi_procedure?: {
-    etape_en_cours: number
-    identification_reussie?: boolean | null
-    decision_poursuite?: string | null
-    dossier_archive?: boolean
-  }
+  // Procedure tracking summary: fields needed to determine which sections are completed
+  suivi_procedure?: Partial<SuiviProcedure> & { etape_en_cours: number }
 }
 
 export const getUserProcedures = (): Promise<ProcedureOverview[]> =>
@@ -171,4 +171,3 @@ export const submitProConnectAccessRequest = (
   payload: ProConnectAccessRequestPayload
 ): Promise<{ success: boolean; message: string }> =>
   makeRequest(API_URLS.proconnectDemanderAcces, 'POST', payload)
-
