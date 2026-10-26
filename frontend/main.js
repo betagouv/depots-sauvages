@@ -62,7 +62,7 @@ const router = createRouter({
       path: '/calculateur',
       name: 'Calculateur',
       component: () => import('./pages/accueil.vue'),
-      meta: { title: 'Calculateur de préjudice', tallyParent: '/' },
+      meta: { title: "Calculateur d'amende", tallyParent: '/' },
     },
     {
       path: '/comprendre-la-procedure',
