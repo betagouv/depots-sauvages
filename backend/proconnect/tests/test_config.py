@@ -13,8 +13,9 @@ def load_proconnect_fixture(db):
 def test_proconnect_access_config_fixture():
     config = ProConnectAccessConfig.get_solo()
     assert config is not None
-    assert len(config.categories_juridiques_autorisees) == 5
+    assert len(config.categories_juridiques_autorisees) == 6
     codes = [item["code"] for item in config.categories_juridiques_autorisees]
+    assert "71" in codes
     assert "72" in codes
     assert "734" in codes
     assert "735" in codes
@@ -25,6 +26,8 @@ def test_proconnect_access_config_fixture():
     assert "662043116" in sirens  # ONF
     assert "130025943" in sirens  # OFB
     assert "130025265" in sirens  # DINUM
+    assert "130026032" in sirens  # ANCT
+    assert "385290309" in sirens  # ADEME
 
 
 @pytest.mark.django_db
@@ -47,14 +50,13 @@ def test_is_siren_allowed():
 @pytest.mark.django_db
 def test_is_legal_category_allowed():
     config = ProConnectAccessConfig.get_solo()
+    assert config.is_legal_category_allowed("7120") is True  # State administration / Bercy
     assert config.is_legal_category_allowed("7210") is True  # Municipality
     assert config.is_legal_category_allowed("7346") is True  # Community of municipalities
     assert config.is_legal_category_allowed("7354") is True  # Mixed syndicate
     assert config.is_legal_category_allowed("7361") is True  # CCAS
     assert config.is_legal_category_allowed("7331") is False  # School / Rectorate
-    assert (
-        config.is_legal_category_allowed("7150") is False
-    )  # Deconcentrated service without whitelist
+    assert config.is_legal_category_allowed("8412") is False  # Unauthorized category
     assert config.is_legal_category_allowed("") is False
     assert config.is_legal_category_allowed(None) is False
     config.categories_juridiques_autorisees = [{"code": "", "nom": ""}, ""]

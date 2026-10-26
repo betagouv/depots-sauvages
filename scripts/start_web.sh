@@ -6,8 +6,10 @@ echo "🔄 Starting the Django app ($DJANGO_SETTINGS_MODULE)"
 # Gunicorn worker recycling configuration to mitigate memory leaks
 GUNICORN_MAX_REQUESTS=${GUNICORN_MAX_REQUESTS:-500}
 GUNICORN_MAX_REQUESTS_JITTER=${GUNICORN_MAX_REQUESTS_JITTER:-50}
+GUNICORN_TIMEOUT=${GUNICORN_TIMEOUT:-60}
 
 gunicorn backend.wsgi \
     --max-requests "$GUNICORN_MAX_REQUESTS" \
     --max-requests-jitter "$GUNICORN_MAX_REQUESTS_JITTER" \
+    --timeout "$GUNICORN_TIMEOUT" \
     --log-file -

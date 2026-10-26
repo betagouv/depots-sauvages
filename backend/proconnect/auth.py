@@ -1,7 +1,4 @@
-import json
 import logging
-import urllib.parse
-import urllib.request
 
 from django.conf import settings
 from mozilla_django_oidc.auth import OIDCAuthenticationBackend
@@ -13,44 +10,11 @@ from backend.stats.anonymizer import anonymize_user_hash
 logger = logging.getLogger(__name__)
 
 
-def get_nature_juridique_for_siren(siren: str) -> str:
-    """
-    Query the Recherche d'entreprises API to retrieve legal category / nature juridique.
-    """
-    if not siren:
-        return ""
-    api_url = getattr(
-        settings, "RECHERCHE_ENTREPRISES_API_URL", "https://recherche-entreprises.api.gouv.fr"
-    )
-    url = f"{api_url}/search?{urllib.parse.urlencode({'q': siren})}"
-    req = urllib.request.Request(url, headers={"User-Agent": "depots-sauvages-proconnect-auth"})
-    try:
-        with urllib.request.urlopen(req, timeout=5) as resp:
-            data = json.loads(resp.read().decode())
-            results = data.get("results") or []
-            if results:
-                cat = str(results[0].get("nature_juridique") or "").strip()
-                nom = str(
-                    results[0].get("nom_complet") or results[0].get("nom_raison_sociale") or ""
-                ).strip()
-                if cat:
-                    PublicEntitySirene.objects.update_or_create(
-                        siren=siren,
-                        defaults={"categorie_juridique": cat, "denomination": nom},
-                    )
-                return cat
-    except Exception as exc:
-        logger.warning(f"Error fetching legal category (nature juridique) for SIREN {siren}: {exc}")
-    return ""
-
-
 def resolve_nature_juridique(siren: str) -> str:
     if not siren:
         return ""
     entity = PublicEntitySirene.objects.filter(siren=siren).first()
-    if entity and entity.categorie_juridique:
-        return entity.categorie_juridique
-    return get_nature_juridique_for_siren(siren)
+    return entity.categorie_juridique if entity else ""
 
 
 def sync_proconnect_profile(user, claims):

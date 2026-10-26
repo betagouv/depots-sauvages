@@ -5,6 +5,10 @@
     "fields": {
       "categories_juridiques_autorisees": [
         {
+          "code": "71",
+          "nom": "Administration de l'État, Ministères et Services déconcentrés (7110, 7120, DDI, Préfectures...)"
+        },
+        {
           "code": "72",
           "nom": "Toutes les collectivités territoriales pures (Communes 7210, Départements 7220, Régions 7230)"
         },
@@ -29,7 +33,9 @@
         { "siren": "157000019", "nom": "Gendarmerie Nationale (DGGN)" },
         { "siren": "662043116", "nom": "Office National des Forêts (ONF)" },
         { "siren": "130025943", "nom": "Office Français de la Biodiversité (OFB)" },
-        { "siren": "130025265", "nom": "DINUM (Beta.gouv.fr / Support)" }
+        { "siren": "130025265", "nom": "DINUM (Beta.gouv.fr / Support)" },
+        { "siren": "130026032", "nom": "Agence Nationale de la Cohésion des Territoires (ANCT)" },
+        { "siren": "385290309", "nom": "ADEME" }
       ]
     }
   }

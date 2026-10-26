@@ -5,7 +5,8 @@ from django.contrib.sessions.middleware import SessionMiddleware
 from django.core.management import call_command
 from django.test import RequestFactory
 
-from backend.proconnect.auth import ProConnectOIDCBackend, get_nature_juridique_for_siren
+from backend.proconnect.auth import ProConnectOIDCBackend, resolve_nature_juridique
+from backend.proconnect.models import PublicEntitySirene
 
 
 @pytest.fixture(autouse=True)
@@ -141,8 +142,12 @@ def test_is_eligible_accepted_for_allowed_legal_category():
         "siret": "21871060600011",
         "organization_label": "Commune de Nexon",
     }
-    with patch("backend.proconnect.auth.get_nature_juridique_for_siren", return_value="7210"):
-        assert backend.is_eligible_proconnect_user(claims) is True
+    PublicEntitySirene.objects.create(
+        siren="218710606",
+        categorie_juridique="7210",
+        denomination="Commune de Nexon",
+    )
+    assert backend.is_eligible_proconnect_user(claims) is True
 
 
 @pytest.mark.django_db
@@ -154,8 +159,12 @@ def test_is_eligible_rejected_for_unauthorized_legal_category():
         "organization_label": "Rectorat de Paris",
     }
     # 7331 is middle schools / academy / rectorate (not in allowed prefixes)
-    with patch("backend.proconnect.auth.get_nature_juridique_for_siren", return_value="7331"):
-        assert backend.is_eligible_proconnect_user(claims) is False
+    PublicEntitySirene.objects.create(
+        siren="197534710",
+        categorie_juridique="7331",
+        denomination="Rectorat de Paris",
+    )
+    assert backend.is_eligible_proconnect_user(claims) is False
 
 
 @pytest.mark.django_db(databases=["default", "stats_db"])
@@ -172,25 +181,29 @@ def test_get_or_create_user_rejected_stores_session_info():
         "organization_label": "Rectorat de Paris",
         "roles": ["agent_public"],
     }
+    PublicEntitySirene.objects.create(
+        siren="197534710",
+        categorie_juridique="7331",
+        denomination="Rectorat de Paris",
+    )
     with patch.object(backend, "get_userinfo", return_value=user_info):
-        with patch("backend.proconnect.auth.get_nature_juridique_for_siren", return_value="7331"):
-            with patch("backend.proconnect.auth.record_proconnect_sentry_event") as mock_sentry:
-                user = backend.get_or_create_user("fake_access_token", "fake_id_token", {})
-                assert user is None
-                assert "proconnect_rejected_info" in request.session
-                rejected = request.session["proconnect_rejected_info"]
-                assert rejected["siret"] == "19753471000014"
-                assert rejected["siren"] == "197534710"
-                assert rejected["organization_label"] == "Rectorat de Paris"
-                assert rejected["email"] == "agent@rectorat.fr"
-                assert rejected["name"] == "Jean Valjean"
-                mock_sentry.assert_called_once_with(
-                    event_type="proconnect_acces_refuse",
-                    siren="197534710",
-                    reason="etablissement_non_autorise",
-                    organization_label="Rectorat de Paris",
-                    extra={"nature_juridique": "7331"},
-                )
+        with patch("backend.proconnect.auth.record_proconnect_sentry_event") as mock_sentry:
+            user = backend.get_or_create_user("fake_access_token", "fake_id_token", {})
+            assert user is None
+            assert "proconnect_rejected_info" in request.session
+            rejected = request.session["proconnect_rejected_info"]
+            assert rejected["siret"] == "19753471000014"
+            assert rejected["siren"] == "197534710"
+            assert rejected["organization_label"] == "Rectorat de Paris"
+            assert rejected["email"] == "agent@rectorat.fr"
+            assert rejected["name"] == "Jean Valjean"
+            mock_sentry.assert_called_once_with(
+                event_type="proconnect_acces_refuse",
+                siren="197534710",
+                reason="etablissement_non_autorise",
+                organization_label="Rectorat de Paris",
+                extra={"nature_juridique": "7331"},
+            )
     from backend.activity_logs.models import ActivityLog
 
     log = ActivityLog.objects.using("stats_db").filter(action="proconnect_acces_refuse").first()
@@ -203,27 +216,23 @@ def test_get_or_create_user_rejected_stores_session_info():
 
 
 @pytest.mark.django_db
-def test_get_nature_juridique_for_siren_api_success():
-    fake_response = MagicMock()
-    fake_response.read.return_value = b'{"results": [{"nature_juridique": "7210"}]}'
-    fake_response.__enter__.return_value = fake_response
-
-    with patch("urllib.request.urlopen", return_value=fake_response):
-        nature = get_nature_juridique_for_siren("218710606")
-        assert nature == "7210"
-
-
-@pytest.mark.django_db
-def test_get_nature_juridique_for_siren_api_error_returns_empty_string():
-    with patch("urllib.request.urlopen", side_effect=Exception("API timeout")):
-        nature = get_nature_juridique_for_siren("218710606")
-        assert nature == ""
+def test_resolve_nature_juridique_found():
+    PublicEntitySirene.objects.create(
+        siren="218710606",
+        categorie_juridique="7210",
+        denomination="Commune de Nexon",
+    )
+    assert resolve_nature_juridique("218710606") == "7210"
 
 
 @pytest.mark.django_db
-def test_proconnect_auth_uses_local_public_entity_without_api_call():
-    from backend.proconnect.models import PublicEntitySirene
+def test_resolve_nature_juridique_unknown():
+    assert resolve_nature_juridique("999999999") == ""
+    assert resolve_nature_juridique("") == ""
 
+
+@pytest.mark.django_db
+def test_proconnect_auth_uses_local_public_entity():
     PublicEntitySirene.objects.create(
         siren="217500016",
         categorie_juridique="7210",
@@ -235,34 +244,7 @@ def test_proconnect_auth_uses_local_public_entity_without_api_call():
         "siret": "21750001600019",
         "organization_label": "Ville de Paris",
     }
-    with patch("backend.proconnect.auth.get_nature_juridique_for_siren") as mock_api:
-        assert backend.is_eligible_proconnect_user(claims) is True
-        mock_api.assert_not_called()
-
-
-@pytest.mark.django_db
-def test_proconnect_auth_fallback_api_caches_in_public_entity():
-    from backend.proconnect.models import PublicEntitySirene
-
-    siren = "218710606"
-    assert not PublicEntitySirene.objects.filter(siren=siren).exists()
-    backend = ProConnectOIDCBackend()
-    claims = {
-        "roles": ["agent_public"],
-        "siret": f"{siren}00011",
-        "organization_label": "Mairie Inconnue",
-    }
-    fake_response = MagicMock()
-    fake_response.read.return_value = (
-        b'{"results": [{"nature_juridique": "7210", "nom_complet": "Mairie Inconnue"}]}'
-    )
-    fake_response.__enter__.return_value = fake_response
-    with patch("urllib.request.urlopen", return_value=fake_response):
-        assert backend.is_eligible_proconnect_user(claims) is True
-    cached = PublicEntitySirene.objects.filter(siren=siren).first()
-    assert cached is not None
-    assert cached.categorie_juridique == "7210"
-    assert cached.denomination == "Mairie Inconnue"
+    assert backend.is_eligible_proconnect_user(claims) is True
 
 
 @pytest.mark.django_db
