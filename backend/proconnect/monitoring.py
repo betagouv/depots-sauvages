@@ -59,6 +59,7 @@ def record_proconnect_sentry_event(
                 if v:
                     scope.set_extra(k, v)
             if "refuse" in event_type:
+                scope.fingerprint = ["proconnect_acces_refuse", str(siren or "N/A"), str(reason or "N/A")]
                 sentry_sdk.capture_message(
                     f"ProConnect access denied: {reason} (SIREN: {siren or 'N/A'})",
                     level="warning",
