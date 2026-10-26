@@ -76,7 +76,7 @@ import SelectableChoices from '../shared/SelectableChoices.vue'
 
 const props = defineProps<{
   suivi: SuiviProcedure
-  modifyUrl?: string
+  modifyUrl: string
   constatationId?: number | string
 }>()
 
