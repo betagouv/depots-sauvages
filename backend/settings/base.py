@@ -59,6 +59,7 @@ TRACKMAN_MODELS = {
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
+    "backend.constatations.middleware.RequestDataTooBigMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django_permissions_policy.PermissionsPolicyMiddleware",
     "backend.seo.middleware.NonProductionNoIndexMiddleware",

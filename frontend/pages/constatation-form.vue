@@ -98,6 +98,10 @@ const scrollToFirstError = async () => {
 
 const submitForm = async () => {
   debouncedAutoSave.cancel()
+  if (store.saveError) {
+    scrollToFirstError()
+    return
+  }
   if (!store.validate()) {
     scrollToFirstError()
     return
@@ -118,11 +122,10 @@ const submitForm = async () => {
           store.errors[key] = val
         }
       }
-      scrollToFirstError()
     }
+    scrollToFirstError()
   }
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

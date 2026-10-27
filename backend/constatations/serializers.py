@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
 from backend.constatations.models import Constatation
-from backend.procedures.models import SuiviProcedure
 from backend.procedures.serializers import SuiviProcedureResumeSerializer
 
 
@@ -53,6 +52,7 @@ class ConstatationSerializer(serializers.ModelSerializer):
         child=serializers.CharField(),
         required=False,
         default=list,
+        max_length=10,
     )
 
     class Meta:

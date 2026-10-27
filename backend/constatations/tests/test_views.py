@@ -222,3 +222,18 @@ def test_list_constatations_includes_auteur_and_suivi_resume(client):
     # Internal notes and processing notes are not included in the list view
     assert "observations_internes" not in resume
     assert "notes_traitement" not in resume
+
+
+@pytest.mark.django_db(databases=["default", "stats_db"])
+def test_constatation_photos_max_length_validation(client):
+    user = UserFactory()
+    client.force_login(user)
+    payload = {
+        "commune": "Lyon",
+        "photos": [f"data:image/jpeg;base64,photo{i}" for i in range(11)],
+    }
+    response = client.post(
+        reverse("constatation-list"), data=payload, content_type="application/json"
+    )
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert "photos" in response.json()

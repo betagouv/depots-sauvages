@@ -378,4 +378,46 @@ describe('ConstatationStore - Prejudice Logic', () => {
     expect(callOrder).toEqual(['autoSave:called', 'autoSave:resolved', 'saveFormData:called'])
     expect(store.formData.isDraft).toBe(false)
   })
+
+  it('définit saveError avec un message explicite quand le serveur rejette pour taille excessive', async () => {
+    const pinia = createTestingPinia({ stubActions: false })
+    const store = useConstatationStore(pinia)
+    store.formData.commune = 'Marseille'
+    store.currentId = 111
+    vi.spyOn(api, 'updateResource').mockRejectedValue(
+      'RequestDataTooBig: Request body exceeded settings.DATA_UPLOAD_MAX_MEMORY_SIZE'
+    )
+    await store.autoSave()
+    expect(store.saveError).toContain('Le volume des photos dépasse la taille maximale autorisée')
+    store.clearSaveError()
+    expect(store.saveError).toBeNull()
+  })
+
+  it('définit saveError et relance l’erreur lors de saveFormData en cas de taille excessive', async () => {
+    const pinia = createTestingPinia({ stubActions: false })
+    const store = useConstatationStore(pinia)
+    store.formData.commune = 'Nantes'
+    store.currentId = 222
+    vi.spyOn(api, 'updateResource').mockRejectedValue(
+      'Request body exceeded settings.DATA_UPLOAD_MAX_MEMORY_SIZE'
+    )
+    await expect(store.saveFormData()).rejects.toBeDefined()
+    expect(store.saveError).toContain('Le volume des photos dépasse la taille maximale autorisée')
+  })
+
+  it('définit saveError quand l’API renvoie l’erreur structurée request_data_too_big', async () => {
+    const pinia = createTestingPinia({ stubActions: false })
+    const store = useConstatationStore(pinia)
+    store.formData.commune = 'Rennes'
+    store.currentId = 333
+    const apiError = {
+      error: 'request_data_too_big',
+      detail: 'Request body exceeded the maximum allowed size.',
+    }
+    vi.spyOn(api, 'updateResource').mockRejectedValue(apiError)
+    await store.autoSave()
+    expect(store.saveError).toBe(
+      'Le volume des photos dépasse la taille maximale autorisée par le serveur. Veuillez supprimer des photos ou utiliser des fichiers plus légers.'
+    )
+  })
 })
