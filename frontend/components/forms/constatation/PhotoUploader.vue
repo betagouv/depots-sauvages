@@ -71,6 +71,7 @@ const props = withDefaults(
   defineProps<{
     modelValue?: string[]
     maxFileSizeMb?: number
+    maxPhotos?: number
     label?: string
     hint?: string
     note?: string
@@ -78,9 +79,10 @@ const props = withDefaults(
   {
     modelValue: () => [],
     maxFileSizeMb: 20,
+    maxPhotos: 10,
     label: '',
     hint: '',
-    note: 'Formats acceptés : JPG, PNG, WEBP (Max 20 Mo par photo)',
+    note: 'Formats acceptés : JPG, PNG, WEBP (Max 20 Mo par photo, max 10 photos)',
   }
 )
 
@@ -94,7 +96,7 @@ const isDragging = ref(false)
 const isProcessing = ref(false)
 
 const triggerFileInput = () => {
-  if (!isProcessing.value) {
+  if (!isProcessing.value && props.modelValue.length < props.maxPhotos) {
     fileInputRef.value?.click()
   }
 }
@@ -128,20 +130,14 @@ const onFileSelect = (e: Event) => {
   }
 }
 
-/**
- * Fallback image compression using native Canvas if Compressor.js fails.
- */
 const compressWithCanvasFallback = (file: File): Promise<Blob | File> => {
   return new Promise((resolve) => {
     const img = new Image()
     const url = URL.createObjectURL(file)
-
     const cleanup = () => URL.revokeObjectURL(url)
-
     img.onload = () => {
-      const MAX_SIZE = 1600
+      const MAX_SIZE = 1280
       let { width, height } = img
-
       if (width > MAX_SIZE || height > MAX_SIZE) {
         if (width > height) {
           height = Math.round((height * MAX_SIZE) / width)
@@ -151,7 +147,6 @@ const compressWithCanvasFallback = (file: File): Promise<Blob | File> => {
           height = MAX_SIZE
         }
       }
-
       const canvas = document.createElement('canvas')
       canvas.width = width
       canvas.height = height
@@ -161,7 +156,6 @@ const compressWithCanvasFallback = (file: File): Promise<Blob | File> => {
         resolve(file)
         return
       }
-
       ctx.drawImage(img, 0, 0, width, height)
       canvas.toBlob(
         (blob) => {
@@ -169,33 +163,27 @@ const compressWithCanvasFallback = (file: File): Promise<Blob | File> => {
           resolve(blob && blob.size < file.size ? blob : file)
         },
         'image/jpeg',
-        0.8
+        0.7
       )
     }
-
     img.onerror = () => {
       cleanup()
       resolve(file)
     }
-
     img.src = url
   })
 }
 
-/**
- * Compress image using Compressor.js or native Canvas fallback.
- */
 const compressImage = (file: File): Promise<Blob | File> => {
   return new Promise((resolve) => {
     if (!file.type.startsWith('image/')) {
       resolve(file)
       return
     }
-
     new Compressor(file, {
-      quality: 0.8,
-      maxWidth: 1600,
-      maxHeight: 1600,
+      quality: 0.7,
+      maxWidth: 1280,
+      maxHeight: 1280,
       success(result) {
         resolve(result)
       },
@@ -218,8 +206,21 @@ const fileToBase64 = (file: Blob | File): Promise<string> => {
 }
 
 const processFiles = async (files: File[]) => {
+  const currentCount = props.modelValue.length
+  const availableSlots = props.maxPhotos - currentCount
+  if (availableSlots <= 0) {
+    alert(`Vous avez atteint le nombre maximal de ${props.maxPhotos} photos.`)
+    return
+  }
+  let filesToProcess = files
+  if (files.length > availableSlots) {
+    alert(
+      `Seules les ${availableSlots} première(s) photo(s) seront ajoutées pour ne pas dépasser la limite de ${props.maxPhotos} photos.`
+    )
+    filesToProcess = files.slice(0, availableSlots)
+  }
   const maxSizeBytes = props.maxFileSizeMb * 1024 * 1024
-  const validFiles = files.filter((file) => {
+  const validFiles = filesToProcess.filter((file) => {
     if (file.size > maxSizeBytes) {
       alert(
         `Le fichier "${file.name}" dépasse la taille maximale autorisée de ${props.maxFileSizeMb} Mo.`
@@ -228,9 +229,7 @@ const processFiles = async (files: File[]) => {
     }
     return true
   })
-
   if (validFiles.length === 0) return
-
   isProcessing.value = true
   try {
     const newBase64List: string[] = []
@@ -239,7 +238,6 @@ const processFiles = async (files: File[]) => {
       const base64 = await fileToBase64(compressed)
       newBase64List.push(base64)
     }
-
     const updatedList = [...props.modelValue, ...newBase64List]
     emit('update:modelValue', updatedList)
     emit('change')

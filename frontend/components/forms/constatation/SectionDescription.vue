@@ -21,7 +21,7 @@
       <PhotoUploader
         v-model="store.formData.photos"
         label="Ajouter des photos du dépôt"
-        hint="Formats acceptés : JPG, PNG (Max 20 Mo par photo). Vous pouvez ajouter ou glisser-déposer plusieurs photos."
+        hint="Formats acceptés : JPG, PNG (Max 20 Mo par photo, max 10 photos). Vous pouvez ajouter ou glisser-déposer plusieurs photos."
         @change="store.autoSave()"
       />
     </div>
