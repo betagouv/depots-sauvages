@@ -17,4 +17,6 @@ export const MATOMO_ENABLED = getEnvBool('VITE_MATOMO_ENABLED', false)
 export const CRISP_ENABLED = getEnvBool('VITE_CRISP_ENABLED', false)
 export const LA_POSTE_SUIVI_BASE_URL =
   import.meta.env.VITE_LA_POSTE_SUIVI_URL || 'https://www.laposte.fr/outils/suivre-vos-envois'
+export const SENTRY_ENABLED = getEnvBool('VITE_SENTRY_ENABLED', false)
+export const SENTRY_DSN = import.meta.env.VITE_SENTRY_DSN || ''
 

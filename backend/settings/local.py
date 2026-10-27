@@ -1,7 +1,6 @@
 import environ
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
 
+from backend.sentry.config import init_sentry
 from backend.settings.base import *  # noqa
 
 env = environ.Env()
@@ -18,21 +17,7 @@ INSTALLED_APPS = ["whitenoise.runserver_nostatic"] + INSTALLED_APPS
 DEBUG = True
 
 SENTRY_DEBUG = env.bool("SENTRY_DEBUG", default=DEBUG)
-SENTRY_ENABLED = env.bool("SENTRY_ENABLED", default=False)
-SENTRY_RELEASE = env.str("SENTRY_RELEASE", default=None)
-
-if SENTRY_ENABLED:
-    sentry_sdk.init(
-        dsn=env(
-            "SENTRY_DSN",
-            default="https://e4726a0f536286183d2122364f00ed29@sentry.incubateur.net/289",
-        ),
-        integrations=[DjangoIntegration()],
-        send_default_pii=env.bool("SENTRY_SEND_DEFAULT_PII", default=False),
-        environment=ENV_NAME,
-        release=SENTRY_RELEASE,
-    )
-
+init_sentry(env, env_name=ENV_NAME, is_debug=SENTRY_DEBUG)
 
 
 LOGGING["loggers"]["root"]["level"] = "DEBUG"

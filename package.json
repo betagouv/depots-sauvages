@@ -13,6 +13,7 @@
     "@gouvfr/dsfr": "^1.14.4",
     "@gouvminint/vue-dsfr": "^8.17.0",
     "@iconify/vue": "^5.0.1",
+    "@sentry/vue": "^11.9.0",
     "@tiptap/extension-link": "^3.32.0",
     "@tiptap/pm": "^3.32.0",
     "@tiptap/starter-kit": "^3.32.0",

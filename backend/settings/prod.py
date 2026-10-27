@@ -1,6 +1,4 @@
 import environ
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
 
 from backend.settings.base import *  # noqa
 
@@ -10,25 +8,11 @@ ENV_NAME = env("ENV_NAME")
 
 SECRET_KEY = env("SECRET_KEY")
 
+from backend.sentry.config import init_sentry
+
 DEBUG = env.bool("DEBUG", default=False)
 SENTRY_DEBUG = env.bool("SENTRY_DEBUG", default=False)
-SENTRY_ENABLED = env.bool("SENTRY_ENABLED", default=False)
-SENTRY_RELEASE = env.str(
-    "SENTRY_RELEASE",
-    default=env.str("CONTAINER_VERSION", default=env.str("SOURCE_VERSION", default=None)),
-)
-
-if SENTRY_ENABLED:
-    sentry_sdk.init(
-        dsn=env("SENTRY_DSN"),
-        integrations=[DjangoIntegration()],
-        traces_sample_rate=env.float("SENTRY_TRACES_SAMPLE_RATE", default=0.1),
-        profiles_sample_rate=env.float("SENTRY_PROFILES_SAMPLE_RATE", default=0.1),
-        send_default_pii=env.bool("SENTRY_SEND_DEFAULT_PII", default=False),
-        environment=ENV_NAME,
-        release=SENTRY_RELEASE,
-    )
-
+SENTRY_ORIGIN = init_sentry(env, env_name=ENV_NAME, is_debug=SENTRY_DEBUG)
 
 
 LOGGING_LEVEL = env("LOGGING_LEVEL", default="INFO")
@@ -116,7 +100,8 @@ CONTENT_SECURITY_POLICY = {
                 ICONIFY,
                 API_ADRESSE_DATA_GOUV,
                 RECHERCHE_ENTREPRISES_API_URL,
-            ],
+            ]
+            + ([SENTRY_ORIGIN] if SENTRY_ORIGIN else []),
         ),
     }
 }
