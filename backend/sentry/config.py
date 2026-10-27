@@ -71,17 +71,25 @@ def extract_sentry_origin(dsn):
 
 
 def init_sentry(env, env_name, is_debug=False):
-    sentry_enabled = env.bool("SENTRY_ENABLED", default=False)
+    sentry_enabled = env.bool(
+        "VITE_SENTRY_ENABLED", default=env.bool("SENTRY_ENABLED", default=False)
+    )
     if not sentry_enabled:
         return None
-    dsn = env.str("SENTRY_DSN", default="")
+    dsn = env.str("VITE_SENTRY_DSN", default=env.str("SENTRY_DSN", default=""))
     if not dsn:
         return None
     release = env.str(
-        "SENTRY_RELEASE",
-        default=env.str("CONTAINER_VERSION", default=env.str("SOURCE_VERSION", default=None)),
+        "VITE_SENTRY_RELEASE",
+        default=env.str(
+            "SENTRY_RELEASE",
+            default=env.str("CONTAINER_VERSION", default=env.str("SOURCE_VERSION", default=None)),
+        ),
     )
-    traces_rate = env.float("SENTRY_TRACES_SAMPLE_RATE", default=0.1)
+    traces_rate = env.float(
+        "VITE_SENTRY_TRACES_SAMPLE_RATE",
+        default=env.float("SENTRY_TRACES_SAMPLE_RATE", default=0.1),
+    )
     profiles_rate = env.float("SENTRY_PROFILES_SAMPLE_RATE", default=0.1)
     send_pii = env.bool("SENTRY_SEND_DEFAULT_PII", default=False)
     sentry_sdk.init(
