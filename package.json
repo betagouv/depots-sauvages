@@ -25,7 +25,7 @@
     "camelcase-keys": "^10.0.2",
     "chart.js": "^4.5.1",
     "dayjs": "^1.11.21",
-    "dompurify": "^3.4.11",
+    "dompurify": "^3.4.17",
     "pinia": "^3.0.4",
     "snakecase-keys": "^9.0.2",
     "vue": "^3.5.38",
@@ -45,8 +45,8 @@
     "@vitejs/plugin-vue": "^6.0.7",
     "axe-core": "^4.12.1",
     "jsdom": "^29.1.1",
-    "vite": "^8.1.0",
-    "vitest": "^4.1.9",
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5",
     "vitest-axe": "^0.1.0"
   },
   "engines": {
