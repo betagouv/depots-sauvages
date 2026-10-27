@@ -43,7 +43,14 @@
         <SectionFinalisation id="finalisation" />
 
         <div class="fr-grid-row fr-grid-row--center fr-mt-6w">
-          <DsfrButton label="Enregistrer la constatation" type="submit" />
+          <DsfrButton type="submit" :disabled="store.isSubmitting">
+            <span
+              v-if="store.isSubmitting"
+              class="fr-icon-refresh-line fr-icon--sm fr-mr-1w spinner"
+              aria-hidden="true"
+            ></span>
+            {{ store.isSubmitting ? 'Enregistrement en cours...' : 'Enregistrer la constatation' }}
+          </DsfrButton>
         </div>
       </div>
     </div>
@@ -76,5 +83,19 @@ const showPrejudice = computed(() =>
 
 .constatation-form {
   padding-bottom: 4rem;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>
