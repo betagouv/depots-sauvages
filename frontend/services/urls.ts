@@ -11,10 +11,18 @@ export const getLettreInfoUrl = (id: number | null) => {
   return `${API_URL}/constatations/${id}/documents/lettre-info/`
 }
 
-
 export const getSuiviProcedureUrl = (id: number | string) => {
   return `/suivi-procedure/${id}`
 }
 
 export const LOGIN_URL = `${BACKEND_URL}/oidc/authenticate/`
 export const LOGOUT_URL = `${BACKEND_URL}/logout/`
+
+export const isSafeInternalRedirectPath = (path: unknown): path is string => {
+  return (
+    typeof path === 'string' &&
+    path.startsWith('/') &&
+    !path.startsWith('//') &&
+    !path.includes('\\')
+  )
+}

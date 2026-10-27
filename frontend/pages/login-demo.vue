@@ -25,7 +25,11 @@
                 />
               </div>
 
-              <div v-if="errorMessage" class="fr-alert fr-alert--error fr-alert--sm fr-mb-3w" role="alert">
+              <div
+                v-if="errorMessage"
+                class="fr-alert fr-alert--error fr-alert--sm fr-mb-3w"
+                role="alert"
+              >
                 <p>{{ errorMessage }}</p>
               </div>
 
@@ -48,11 +52,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
 import { getBypassAuthConfig, loginBypassAuth } from '@/services/api'
+import { isSafeInternalRedirectPath } from '@/services/urls'
+import { onMounted, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
+const router = useRouter()
 const bypassAuthEnabled = ref(false)
 const emailInput = ref('')
 const isLoggingIn = ref(false)
@@ -64,15 +70,16 @@ const handleBypassLogin = async () => {
   errorMessage.value = ''
   try {
     await loginBypassAuth(emailInput.value.trim().toLowerCase())
-    // Redirect to dashboard or next url
-    const nextPath = (route.query.next as string) || '/mes-procedures'
-    window.location.href = nextPath
+    const nextPath = isSafeInternalRedirectPath(route.query.next)
+      ? route.query.next
+      : '/mes-procedures'
+    await router.push(nextPath)
   } catch (error: any) {
     console.error('Login failed:', error)
     if (error && (error.detail || error.error)) {
       errorMessage.value = error.detail || error.error
     } else {
-      errorMessage.value = "Adresse électronique inconnue ou non autorisée."
+      errorMessage.value = 'Adresse électronique inconnue ou non autorisée.'
     }
   } finally {
     isLoggingIn.value = false
