@@ -5,6 +5,15 @@
     <div v-else-if="userInfo?.is_authenticated">
       <h1 class="fr-h1 fr-mb-2w">Constatation de dépôt sauvage</h1>
 
+      <DsfrAlert
+        v-if="store.saveError"
+        type="error"
+        :description="store.saveError"
+        closeable
+        class="fr-mb-4w"
+        @close="store.clearSaveError()"
+      />
+
       <form @submit.prevent="submitForm" novalidate>
         <ConstatationForm />
       </form>
@@ -20,6 +29,7 @@
 </template>
 
 <script setup lang="ts">
+import { DsfrAlert } from '@gouvminint/vue-dsfr'
 import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import ConstatationForm from '../components/forms/constatation/ConstatationForm.vue'

@@ -20,6 +20,7 @@ export const useConstatationStore = defineStore('constatation', {
     errors: {} as Record<string, string>,
     formData: createEmptyConstatation(),
     hasBeenSubmitted: false,
+    saveError: null as string | null,
     _autoSavePromise: null as Promise<any> | null,
   }),
 
@@ -28,11 +29,16 @@ export const useConstatationStore = defineStore('constatation', {
       this.currentId = null
       this.formData = createEmptyConstatation()
       this.errors = {}
+      this.saveError = null
       this.hasBeenSubmitted = false
     },
 
     clearFieldError(field: string) {
       delete this.errors[field]
+    },
+
+    clearSaveError() {
+      this.saveError = null
     },
 
     updateBooleanField(field: keyof Constatation, value: string) {
@@ -75,7 +81,6 @@ export const useConstatationStore = defineStore('constatation', {
           data.prejudiceAutresCouts = (toNumOrNull(data.prejudiceAutresCouts) ?? 0) as any
         }
       }
-
       return toApiFormat(data)
     },
 
@@ -106,14 +111,32 @@ export const useConstatationStore = defineStore('constatation', {
     async autoSave() {
       try {
         const isDraft = this.formData.isDraft === false ? false : true
-        return await this.performSave(isDraft)
-      } catch (error) {
+        const result = await this.performSave(isDraft)
+        this.saveError = null
+        return result
+      } catch (error: any) {
         console.error('Erreur lors de l’autosave constatation:', error)
+        const errorText = typeof error === 'string' ? error : JSON.stringify(error || '')
+        if (errorText.includes('DATA_UPLOAD_MAX_MEMORY_SIZE') || errorText.includes('Request body exceeded') || errorText.includes('RequestDataTooBig')) {
+          this.saveError = "Le volume des photos dépasse la taille maximale autorisée par le serveur. Veuillez supprimer des photos ou utiliser des fichiers plus légers."
+        } else {
+          this.saveError = "Une erreur est survenue lors de l'enregistrement automatique du formulaire."
+        }
       }
     },
 
     async saveFormData() {
-      return await this.performSave(false)
+      try {
+        const result = await this.performSave(false)
+        this.saveError = null
+        return result
+      } catch (error: any) {
+        const errorText = typeof error === 'string' ? error : JSON.stringify(error || '')
+        if (errorText.includes('DATA_UPLOAD_MAX_MEMORY_SIZE') || errorText.includes('Request body exceeded') || errorText.includes('RequestDataTooBig')) {
+          this.saveError = "Le volume des photos dépasse la taille maximale autorisée par le serveur. Veuillez supprimer des photos ou utiliser des fichiers plus légers."
+        }
+        throw error
+      }
     },
 
     async loadConstatation(id: number) {

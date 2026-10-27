@@ -18,6 +18,15 @@
     </div>
 
     <div v-if="store.formData.photoDispo" class="fr-fieldset__element fr-mb-3w">
+      <DsfrAlert
+        v-if="store.saveError"
+        type="error"
+        :description="store.saveError"
+        small
+        closeable
+        class="fr-mb-2w"
+        @close="store.clearSaveError()"
+      />
       <PhotoUploader
         v-model="store.formData.photos"
         label="Ajouter des photos du dépôt"
@@ -89,7 +98,12 @@ import PhotoUploader from '@/components/forms/constatation/PhotoUploader.vue'
 import BooleanRadioSet from '@/components/shared/BooleanRadioSet.vue'
 import { useConstatationStore } from '@/stores/constatation'
 import { TypeDepotOptions, VolumeOptions } from '@/types/constatation'
-import { DsfrCheckboxSet, DsfrInputGroup, DsfrRadioButtonSet } from '@gouvminint/vue-dsfr'
+import {
+  DsfrAlert,
+  DsfrCheckboxSet,
+  DsfrInputGroup,
+  DsfrRadioButtonSet,
+} from '@gouvminint/vue-dsfr'
 
 const store = useConstatationStore()
 </script>
