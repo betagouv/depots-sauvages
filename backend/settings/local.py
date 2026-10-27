@@ -19,6 +19,7 @@ DEBUG = True
 
 SENTRY_DEBUG = env.bool("SENTRY_DEBUG", default=DEBUG)
 SENTRY_ENABLED = env.bool("SENTRY_ENABLED", default=False)
+SENTRY_RELEASE = env.str("SENTRY_RELEASE", default=None)
 
 if SENTRY_ENABLED:
     sentry_sdk.init(
@@ -29,7 +30,9 @@ if SENTRY_ENABLED:
         integrations=[DjangoIntegration()],
         send_default_pii=env.bool("SENTRY_SEND_DEFAULT_PII", default=False),
         environment=ENV_NAME,
+        release=SENTRY_RELEASE,
     )
+
 
 
 LOGGING["loggers"]["root"]["level"] = "DEBUG"

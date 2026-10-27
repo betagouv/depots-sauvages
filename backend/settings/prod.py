@@ -13,6 +13,10 @@ SECRET_KEY = env("SECRET_KEY")
 DEBUG = env.bool("DEBUG", default=False)
 SENTRY_DEBUG = env.bool("SENTRY_DEBUG", default=False)
 SENTRY_ENABLED = env.bool("SENTRY_ENABLED", default=False)
+SENTRY_RELEASE = env.str(
+    "SENTRY_RELEASE",
+    default=env.str("CONTAINER_VERSION", default=env.str("SOURCE_VERSION", default=None)),
+)
 
 if SENTRY_ENABLED:
     sentry_sdk.init(
@@ -22,7 +26,9 @@ if SENTRY_ENABLED:
         profiles_sample_rate=env.float("SENTRY_PROFILES_SAMPLE_RATE", default=0.1),
         send_default_pii=env.bool("SENTRY_SEND_DEFAULT_PII", default=False),
         environment=ENV_NAME,
+        release=SENTRY_RELEASE,
     )
+
 
 
 LOGGING_LEVEL = env("LOGGING_LEVEL", default="INFO")

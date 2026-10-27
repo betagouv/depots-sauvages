@@ -164,10 +164,11 @@ onMounted(async () => {
   let bypassEnabled = false
   try {
     const bypassConfig = await getBypassAuthConfig()
-    bypassEnabled = bypassConfig.enabled
-  } catch (e) {
-    console.warn('Failed to fetch bypass auth config', e)
+    bypassEnabled = bypassConfig?.enabled ?? false
+  } catch {
+    bypassEnabled = false
   }
+
 
   try {
     const fetchedUserInfo = await userStore.fetchUserInfo()
