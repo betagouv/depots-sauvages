@@ -13,6 +13,9 @@ export default defineConfig(({ mode }) => {
     },
     define: {
       global: 'window',
+      'import.meta.env.VITE_ENV_NAME': JSON.stringify(
+        process.env.VITE_ENV_NAME || process.env.ENV_NAME || env.VITE_ENV_NAME || env.ENV_NAME || ''
+      ),
     },
     server: {
       allowedHosts: [
