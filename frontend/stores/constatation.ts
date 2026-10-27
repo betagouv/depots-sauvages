@@ -121,17 +121,25 @@ export const useConstatationStore = defineStore('constatation', {
         return result
       } catch (error: any) {
         console.error('Erreur lors de l’autosave constatation:', error)
-        const errorText = typeof error === 'string' ? error : JSON.stringify(error || '')
         if (
-          errorText.includes('DATA_UPLOAD_MAX_MEMORY_SIZE') ||
-          errorText.includes('Request body exceeded') ||
-          errorText.includes('RequestDataTooBig')
+          error?.error === 'request_data_too_big' ||
+          (typeof error === 'string' && error.includes('request_data_too_big'))
         ) {
           this.saveError =
             'Le volume des photos dépasse la taille maximale autorisée par le serveur. Veuillez supprimer des photos ou utiliser des fichiers plus légers.'
         } else {
-          this.saveError =
-            "Une erreur est survenue lors de l'enregistrement automatique du formulaire."
+          const errorText = typeof error === 'string' ? error : JSON.stringify(error || '')
+          if (
+            errorText.includes('DATA_UPLOAD_MAX_MEMORY_SIZE') ||
+            errorText.includes('Request body exceeded') ||
+            errorText.includes('RequestDataTooBig')
+          ) {
+            this.saveError =
+              'Le volume des photos dépasse la taille maximale autorisée par le serveur. Veuillez supprimer des photos ou utiliser des fichiers plus légers.'
+          } else {
+            this.saveError =
+              "Une erreur est survenue lors de l'enregistrement automatique du formulaire."
+          }
         }
       }
     },
@@ -143,17 +151,25 @@ export const useConstatationStore = defineStore('constatation', {
         this.saveError = null
         return result
       } catch (error: any) {
-        const errorText = typeof error === 'string' ? error : JSON.stringify(error || '')
         if (
-          errorText.includes('DATA_UPLOAD_MAX_MEMORY_SIZE') ||
-          errorText.includes('Request body exceeded') ||
-          errorText.includes('RequestDataTooBig')
+          error?.error === 'request_data_too_big' ||
+          (typeof error === 'string' && error.includes('request_data_too_big'))
         ) {
           this.saveError =
             'Le volume des photos dépasse la taille maximale autorisée par le serveur. Veuillez supprimer des photos ou utiliser des fichiers plus légers.'
-        } else if (!this.saveError) {
-          this.saveError =
-            "Une erreur est survenue lors de l'enregistrement de votre constatation. Veuillez vérifier les informations et réessayer."
+        } else {
+          const errorText = typeof error === 'string' ? error : JSON.stringify(error || '')
+          if (
+            errorText.includes('DATA_UPLOAD_MAX_MEMORY_SIZE') ||
+            errorText.includes('Request body exceeded') ||
+            errorText.includes('RequestDataTooBig')
+          ) {
+            this.saveError =
+              'Le volume des photos dépasse la taille maximale autorisée par le serveur. Veuillez supprimer des photos ou utiliser des fichiers plus légers.'
+          } else if (!this.saveError) {
+            this.saveError =
+              "Une erreur est survenue lors de l'enregistrement de votre constatation. Veuillez vérifier les informations et réessayer."
+          }
         }
         throw error
       } finally {
