@@ -5,6 +5,16 @@
       <span v-if="hint" class="fr-hint-text">{{ hint }}</span>
     </label>
 
+    <DsfrAlert
+      v-if="feedbackMessage"
+      :type="feedbackType"
+      :description="feedbackMessage"
+      small
+      closeable
+      class="fr-mt-2w fr-mb-2w"
+      @close="feedbackMessage = ''"
+    />
+
     <div
       class="dropzone-container fr-mt-2w"
       :class="{ 'is-dragging': isDragging, 'is-processing': isProcessing }"
@@ -64,6 +74,7 @@
 </template>
 
 <script setup lang="ts">
+import { DsfrAlert } from '@gouvminint/vue-dsfr'
 import Compressor from 'compressorjs'
 import { ref } from 'vue'
 
@@ -94,6 +105,8 @@ const emit = defineEmits<{
 const fileInputRef = ref<HTMLInputElement | null>(null)
 const isDragging = ref(false)
 const isProcessing = ref(false)
+const feedbackMessage = ref('')
+const feedbackType = ref<'warning' | 'error' | 'info' | 'success'>('warning')
 
 const triggerFileInput = () => {
   if (!isProcessing.value && props.modelValue.length < props.maxPhotos) {
@@ -206,29 +219,33 @@ const fileToBase64 = (file: Blob | File): Promise<string> => {
 }
 
 const processFiles = async (files: File[]) => {
+  feedbackMessage.value = ''
   const currentCount = props.modelValue.length
   const availableSlots = props.maxPhotos - currentCount
   if (availableSlots <= 0) {
-    alert(`Vous avez atteint le nombre maximal de ${props.maxPhotos} photos.`)
+    feedbackType.value = 'warning'
+    feedbackMessage.value = `Vous avez atteint le nombre maximal de ${props.maxPhotos} photos.`
     return
   }
   let filesToProcess = files
   if (files.length > availableSlots) {
-    alert(
-      `Seules les ${availableSlots} première(s) photo(s) seront ajoutées pour ne pas dépasser la limite de ${props.maxPhotos} photos.`
-    )
+    feedbackType.value = 'warning'
+    feedbackMessage.value = `Seules les ${availableSlots} première(s) photo(s) ont été ajoutées pour ne pas dépasser la limite de ${props.maxPhotos} photos.`
     filesToProcess = files.slice(0, availableSlots)
   }
   const maxSizeBytes = props.maxFileSizeMb * 1024 * 1024
+  const oversizedFiles: string[] = []
   const validFiles = filesToProcess.filter((file) => {
     if (file.size > maxSizeBytes) {
-      alert(
-        `Le fichier "${file.name}" dépasse la taille maximale autorisée de ${props.maxFileSizeMb} Mo.`
-      )
+      oversizedFiles.push(file.name)
       return false
     }
     return true
   })
+  if (oversizedFiles.length > 0) {
+    feedbackType.value = 'error'
+    feedbackMessage.value = `Le(s) fichier(s) suivant(s) dépasse(nt) la taille maximale de ${props.maxFileSizeMb} Mo : ${oversizedFiles.join(', ')}.`
+  }
   if (validFiles.length === 0) return
   isProcessing.value = true
   try {
@@ -242,6 +259,8 @@ const processFiles = async (files: File[]) => {
     emit('update:modelValue', updatedList)
     emit('change')
   } catch (err) {
+    feedbackType.value = 'error'
+    feedbackMessage.value = 'Une erreur est survenue lors du traitement des images.'
     console.error('Erreur lors du traitement des images:', err)
   } finally {
     isProcessing.value = false
@@ -253,6 +272,12 @@ const removePhoto = (index: number) => {
   newList.splice(index, 1)
   emit('update:modelValue', newList)
   emit('change')
+  if (
+    newList.length < props.maxPhotos &&
+    feedbackMessage.value.includes(`nombre maximal de ${props.maxPhotos} photos`)
+  ) {
+    feedbackMessage.value = ''
+  }
 }
 </script>
 
