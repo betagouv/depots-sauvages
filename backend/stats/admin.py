@@ -1,6 +1,11 @@
 from django.contrib import admin
 
-from backend.stats.models import StatsConstatation, StatsSuiviProcedure
+from backend.stats.models import (
+    StatsConstatation,
+    StatsProConnectProfile,
+    StatsSuiviProcedure,
+    StatsUser,
+)
 
 
 @admin.register(StatsConstatation)
@@ -47,3 +52,20 @@ class StatsSuiviProcedureAdmin(admin.ModelAdmin):
         "created",
         "modified",
     ]
+
+
+@admin.register(StatsUser)
+class StatsUserAdmin(admin.ModelAdmin):
+    list_display = ["id", "user_hash", "is_staff", "is_active", "date_joined", "last_login"]
+    list_filter = ["is_staff", "is_active", "date_joined"]
+    search_fields = ["user_hash"]
+    list_per_page = 25
+
+
+@admin.register(StatsProConnectProfile)
+class StatsProConnectProfileAdmin(admin.ModelAdmin):
+    list_display = ["id", "user_hash", "organization_label", "siret", "siren", "created", "modified"]
+    list_filter = ["created", "modified"]
+    search_fields = ["user_hash", "siret", "siren", "organization_label"]
+    list_per_page = 25
+
