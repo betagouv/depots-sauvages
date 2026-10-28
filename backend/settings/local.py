@@ -1,7 +1,6 @@
 import environ
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
 
+from backend.sentry.config import init_sentry
 from backend.settings.base import *  # noqa
 
 env = environ.Env()
@@ -18,18 +17,7 @@ INSTALLED_APPS = ["whitenoise.runserver_nostatic"] + INSTALLED_APPS
 DEBUG = True
 
 SENTRY_DEBUG = env.bool("SENTRY_DEBUG", default=DEBUG)
-SENTRY_ENABLED = env.bool("SENTRY_ENABLED", default=False)
-
-if SENTRY_ENABLED:
-    sentry_sdk.init(
-        dsn=env(
-            "SENTRY_DSN",
-            default="https://e4726a0f536286183d2122364f00ed29@sentry.incubateur.net/289",
-        ),
-        integrations=[DjangoIntegration()],
-        send_default_pii=env.bool("SENTRY_SEND_DEFAULT_PII", default=False),
-        environment=ENV_NAME,
-    )
+init_sentry(env, env_name=ENV_NAME, is_debug=SENTRY_DEBUG)
 
 
 LOGGING["loggers"]["root"]["level"] = "DEBUG"
@@ -87,7 +75,9 @@ THROTTLE_UNSAFE_RATE = env("THROTTLE_UNSAFE_RATE", default="100/m")
 
 
 # ProConnect / OIDC Settings
-PROCONNECT_ENABLED = env.bool("VITE_PROCONNECT_ENABLED", default=False)
+PROCONNECT_ENABLED = env.bool(
+    "PROCONNECT_ENABLED", default=env.bool("VITE_PROCONNECT_ENABLED", default=False)
+)
 
 if PROCONNECT_ENABLED:
     INSTALLED_APPS += ["mozilla_django_oidc"]
@@ -110,7 +100,9 @@ if PROCONNECT_ENABLED:
 
 
 # Auth Configuration
-LOGIN_REQUIRED = env.bool("VITE_LOGIN_REQUIRED", default=False)
+LOGIN_REQUIRED = env.bool(
+    "LOGIN_REQUIRED", default=env.bool("VITE_LOGIN_REQUIRED", default=False)
+)
 
 # Admin configuration
 ENABLE_ADMIN = env.bool("ENABLE_ADMIN", default=True)
