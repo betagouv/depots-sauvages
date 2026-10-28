@@ -29,4 +29,13 @@ export function initSentry(app, router) {
       return event
     },
   })
+  if (typeof window !== 'undefined') {
+    window.Sentry = Sentry
+    window.triggerSentryTestError = () => {
+      const testError = new Error('Test Sentry frontend manuel')
+      Sentry.captureException(testError)
+      console.info('Test error sent to Sentry:', testError)
+      return testError
+    }
+  }
 }
