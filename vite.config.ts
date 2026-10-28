@@ -22,6 +22,7 @@ export default defineConfig(({ mode }) => {
       'import.meta.env.VITE_ENV_NAME': getSharedEnv('ENV_NAME', env),
       'import.meta.env.VITE_SENTRY_DSN': getSharedEnv('SENTRY_DSN', env),
       'import.meta.env.VITE_SENTRY_ENABLED': getSharedEnv('SENTRY_ENABLED', env, 'false'),
+      'import.meta.env.VITE_SENTRY_DEBUG': getSharedEnv('SENTRY_DEBUG', env, 'false'),
       'import.meta.env.VITE_SENTRY_TRACES_SAMPLE_RATE': getSharedEnv(
         'SENTRY_TRACES_SAMPLE_RATE',
         env,

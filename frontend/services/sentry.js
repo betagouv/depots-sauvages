@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/vue'
-import { SENTRY_DSN, SENTRY_ENABLED } from './config'
+import { SENTRY_DEBUG, SENTRY_DSN, SENTRY_ENABLED } from './config'
 
 export function initSentry(app, router) {
   if (!SENTRY_ENABLED || !SENTRY_DSN) {
@@ -29,7 +29,7 @@ export function initSentry(app, router) {
       return event
     },
   })
-  if (typeof window !== 'undefined') {
+  if (SENTRY_DEBUG && typeof window !== 'undefined') {
     window.Sentry = Sentry
     window.triggerSentryTestError = () => {
       const testError = new Error('Test Sentry frontend manuel')
