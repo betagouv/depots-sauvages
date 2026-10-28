@@ -51,7 +51,19 @@ class ProConnectAccessConfig(SingletonModel):
         return clean_cat.startswith(prefixes)
 
 
-class ProConnectProfile(TimeStampedModel):
+class ProConnectProfileBaseModel(TimeStampedModel):
+    siret = models.CharField(max_length=14, blank=True, db_index=True, verbose_name="SIRET")
+    siren = models.CharField(max_length=9, blank=True, db_index=True, verbose_name="SIREN")
+    organization_label = models.CharField(
+        max_length=255, blank=True, verbose_name="Nom de l'organisation"
+    )
+    roles = models.JSONField(default=list, blank=True, verbose_name="Rôles ProConnect")
+
+    class Meta:
+        abstract = True
+
+
+class ProConnectProfile(ProConnectProfileBaseModel):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -59,12 +71,6 @@ class ProConnectProfile(TimeStampedModel):
         verbose_name="Utilisateur",
     )
     sub = models.CharField(max_length=255, blank=True, db_index=True, verbose_name="Sub ProConnect")
-    siret = models.CharField(max_length=14, blank=True, db_index=True, verbose_name="SIRET")
-    siren = models.CharField(max_length=9, blank=True, db_index=True, verbose_name="SIREN")
-    organization_label = models.CharField(
-        max_length=255, blank=True, verbose_name="Nom de l'organisation"
-    )
-    roles = models.JSONField(default=list, blank=True, verbose_name="Rôles ProConnect")
     raw_claims = models.JSONField(default=dict, blank=True, verbose_name="Claims bruts OIDC")
 
     class Meta:

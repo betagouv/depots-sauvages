@@ -1,12 +1,23 @@
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 from django.db.models import Max
 
 from backend.constatations.models import Constatation
 from backend.procedures.models import SuiviProcedure
-from backend.stats.models import StatsConstatation, StatsSuiviProcedure
+from backend.proconnect.models import ProConnectProfile
+from backend.stats.models import (
+    StatsConstatation,
+    StatsProConnectProfile,
+    StatsSuiviProcedure,
+    StatsUser,
+)
+
+User = get_user_model()
 
 SYNC_REGISTRY = [
+    (User, StatsUser),
+    (ProConnectProfile, StatsProConnectProfile),
     (Constatation, StatsConstatation),
     (SuiviProcedure, StatsSuiviProcedure),
 ]
@@ -42,7 +53,6 @@ class Command(BaseCommand):
                 )
             )
             return
-
         if self.stats_db_alias not in settings.DATABASES:
             self.stdout.write(
                 self.style.WARNING(
@@ -75,7 +85,8 @@ class Command(BaseCommand):
         if exclude_fields:
             qs = qs.defer(*exclude_fields)
         target_db = self.stats_db_alias
-        if not full_reset:
+        has_modified = "modified" in {f.name for f in stats_model._meta.fields}
+        if not full_reset and has_modified:
             last_modified = stats_model.objects.using(target_db).aggregate(Max("modified"))[
                 "modified__max"
             ]
@@ -85,7 +96,9 @@ class Command(BaseCommand):
             else:
                 self.stdout.write(f"Syncing {model_name} full (no previous records found)")
         else:
-            self.stdout.write(f"Syncing {model_name} full (--full-reset)")
+            self.stdout.write(
+                f"Syncing {model_name} full ({'--full-reset' if full_reset else 'no modified field'})"
+            )
         total_count = qs.count()
         if total_count == 0:
             self.stdout.write(f"No records to sync for {model_name}.")
@@ -101,7 +114,14 @@ class Command(BaseCommand):
                     continue
                 val = getattr(prod_obj, field.attname, getattr(prod_obj, field.name, None))
                 if val is None and field.name == "user_hash":
-                    val = getattr(prod_obj, "user_id", None)
+                    if hasattr(prod_obj, "user_id"):
+                        val = getattr(prod_obj, "user_id")
+                    elif (
+                        prod_model == User
+                        or getattr(prod_obj, "_meta", None)
+                        and prod_obj._meta.model_name == "user"
+                    ):
+                        val = getattr(prod_obj, "id", None)
                 if field.name in stats_anonymize:
                     anonymizer_func = stats_anonymize[field.name]
                     val = anonymizer_func(val, record_id=getattr(prod_obj, "id", None))

@@ -3,6 +3,7 @@ from trackman.models import TrackingBaseModel
 
 from backend.constatations.models import ConstatationBaseModel
 from backend.procedures.models import SuiviProcedureBaseModel
+from backend.proconnect.models import ProConnectProfileBaseModel
 from backend.stats.anonymizer import (
     anonymize_email,
     anonymize_fake_name,
@@ -56,3 +57,42 @@ class StatsSuiviProcedure(SuiviProcedureBaseModel, TrackingBaseModel):
         db_table = "stats_suivi_procedure"
         verbose_name = "Statistique Suivi de procédure"
         verbose_name_plural = "Statistiques Suivis de procédures"
+
+
+class UniqueUserHashModelMixin(models.Model):
+    user_hash = models.CharField("hash utilisateur", max_length=64, unique=True, db_index=True)
+
+    class Meta:
+        abstract = True
+
+
+class StatsUser(UniqueUserHashModelMixin, TrackingBaseModel):
+    id = models.IntegerField(primary_key=True)
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    date_joined = models.DateTimeField(null=True, blank=True)
+    last_login = models.DateTimeField(null=True, blank=True)
+
+    stats_exclude = {"password", "first_name", "last_name", "email", "username", "is_superuser"}
+    stats_anonymize = {
+        "user_hash": anonymize_user_hash,
+    }
+
+    class Meta:
+        db_table = "stats_user"
+        verbose_name = "Statistique Utilisateur"
+        verbose_name_plural = "Statistiques Utilisateurs"
+
+
+class StatsProConnectProfile(
+    UniqueUserHashModelMixin, ProConnectProfileBaseModel, TrackingBaseModel
+):
+    stats_exclude = {"raw_claims", "user", "sub"}
+    stats_anonymize = {
+        "user_hash": anonymize_user_hash,
+    }
+
+    class Meta:
+        db_table = "stats_proconnect_profile"
+        verbose_name = "Statistique Profil ProConnect"
+        verbose_name_plural = "Statistiques Profils ProConnect"

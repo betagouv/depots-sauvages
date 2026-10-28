@@ -5,7 +5,14 @@ from django.contrib.auth import get_user_model
 from django.core.management import call_command
 
 from backend.constatations.models import Constatation
-from backend.stats.models import StatsConstatation, StatsSuiviProcedure
+from backend.proconnect.models import ProConnectProfile
+from backend.stats.anonymizer import anonymize_user_hash
+from backend.stats.models import (
+    StatsConstatation,
+    StatsProConnectProfile,
+    StatsSuiviProcedure,
+    StatsUser,
+)
 
 User = get_user_model()
 
@@ -13,6 +20,22 @@ User = get_user_model()
 @pytest.mark.django_db(databases=["default", "stats_db"])
 def test_sync_stats_db_command_full_and_incremental():
     u1 = User.objects.create_user(username="agent1", email="agent1@example.com")
+    u2 = User.objects.create_user(username="agent_sans_constat", email="agent_alone@example.com")
+    p1 = ProConnectProfile.objects.create(
+        user=u1,
+        sub="sub-oidc-12345",
+        siret="13002526500013",
+        siren="130025265",
+        organization_label="DINUM",
+        roles=["admin"],
+    )
+    p2 = ProConnectProfile.objects.create(
+        user=u2,
+        sub="sub-oidc-99999",
+        siret="21690123100018",
+        siren="216901231",
+        organization_label="Mairie de Lyon",
+    )
     c1 = Constatation.objects.using("default").create(
         user=u1,
         commune="Lyon",
@@ -44,7 +67,32 @@ def test_sync_stats_db_command_full_and_incremental():
     stats_s1 = StatsSuiviProcedure.objects.using("stats_db").get(id=s1.id)
     assert stats_s1.constatation_id == c1.id
     assert stats_s1.observations_internes == "[ANONYMIZED]"
-
+    stats_u1 = StatsUser.objects.using("stats_db").get(id=u1.id)
+    assert stats_u1.user_hash == stats_c1.user_hash
+    assert stats_u1.user_hash == anonymize_user_hash(u1.id)
+    assert not hasattr(stats_u1, "email")
+    assert not hasattr(stats_u1, "password")
+    stats_p1 = StatsProConnectProfile.objects.using("stats_db").get(id=p1.id)
+    assert stats_p1.user_hash == stats_u1.user_hash
+    assert stats_p1.organization_label == "DINUM"
+    assert not hasattr(stats_p1, "sub")
+    assert not hasattr(stats_p1, "raw_claims")
+    stats_u2 = StatsUser.objects.using("stats_db").get(id=u2.id)
+    stats_p2 = StatsProConnectProfile.objects.using("stats_db").get(id=p2.id)
+    assert stats_p2.user_hash == stats_u2.user_hash
+    constat_hashes = set(
+        StatsConstatation.objects.using("stats_db").values_list("user_hash", flat=True)
+    )
+    users_without_constatation = (
+        StatsUser.objects.using("stats_db").exclude(user_hash__in=constat_hashes).count()
+    )
+    assert users_without_constatation == 1
+    proconnect_without_constatation = (
+        StatsProConnectProfile.objects.using("stats_db")
+        .exclude(user_hash__in=constat_hashes)
+        .count()
+    )
+    assert proconnect_without_constatation == 1
     c2 = Constatation.objects.using("default").create(
         commune="Marseille",
         constatant_nom="Martin",
