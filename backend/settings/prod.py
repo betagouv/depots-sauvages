@@ -1,5 +1,6 @@
 import environ
 
+from backend.sentry.config import init_sentry
 from backend.settings.base import *  # noqa
 
 env = environ.Env()
@@ -8,7 +9,6 @@ ENV_NAME = env("ENV_NAME")
 
 SECRET_KEY = env("SECRET_KEY")
 
-from backend.sentry.config import init_sentry
 
 DEBUG = env.bool("DEBUG", default=False)
 SENTRY_DEBUG = env.bool("SENTRY_DEBUG", default=False)
@@ -161,7 +161,9 @@ if redis_url:
     }
 
 # ProConnect / OIDC Settings
-PROCONNECT_ENABLED = env.bool("VITE_PROCONNECT_ENABLED", default=False)
+PROCONNECT_ENABLED = env.bool(
+    "PROCONNECT_ENABLED", default=env.bool("VITE_PROCONNECT_ENABLED", default=False)
+)
 
 if PROCONNECT_ENABLED:
     INSTALLED_APPS += ["mozilla_django_oidc"]
@@ -184,7 +186,7 @@ if PROCONNECT_ENABLED:
 
 
 # Auth Configuration
-LOGIN_REQUIRED = env.bool("VITE_LOGIN_REQUIRED", default=True)
+LOGIN_REQUIRED = env.bool("LOGIN_REQUIRED", default=env.bool("VITE_LOGIN_REQUIRED", default=True))
 
 # Admin configuration
 ENABLE_ADMIN = env.bool("ENABLE_ADMIN", default=True)

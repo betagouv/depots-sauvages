@@ -75,7 +75,9 @@ THROTTLE_UNSAFE_RATE = env("THROTTLE_UNSAFE_RATE", default="100/m")
 
 
 # ProConnect / OIDC Settings
-PROCONNECT_ENABLED = env.bool("VITE_PROCONNECT_ENABLED", default=False)
+PROCONNECT_ENABLED = env.bool(
+    "PROCONNECT_ENABLED", default=env.bool("VITE_PROCONNECT_ENABLED", default=False)
+)
 
 if PROCONNECT_ENABLED:
     INSTALLED_APPS += ["mozilla_django_oidc"]
@@ -98,7 +100,9 @@ if PROCONNECT_ENABLED:
 
 
 # Auth Configuration
-LOGIN_REQUIRED = env.bool("VITE_LOGIN_REQUIRED", default=False)
+LOGIN_REQUIRED = env.bool(
+    "LOGIN_REQUIRED", default=env.bool("VITE_LOGIN_REQUIRED", default=False)
+)
 
 # Admin configuration
 ENABLE_ADMIN = env.bool("ENABLE_ADMIN", default=True)
