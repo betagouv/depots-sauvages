@@ -108,12 +108,14 @@ export const isSuiviStepCompleted = (
       return suivi.decision_poursuite !== ''
     case 4:
       if (suivi.decision_poursuite === 'sanction') {
+        const montant =
+          suivi.montant_amende === null ||
+          suivi.montant_amende === undefined ||
+          (suivi.montant_amende as any) === ''
+            ? null
+            : Number(suivi.montant_amende)
         const montantValide =
-          suivi.montant_amende !== null &&
-          suivi.montant_amende !== undefined &&
-          !Number.isNaN(suivi.montant_amende) &&
-          suivi.montant_amende >= 0 &&
-          suivi.montant_amende <= 15000
+          montant !== null && !Number.isNaN(montant) && montant >= 0 && montant <= 15000
         return (
           suivi.montant_fixe &&
           montantValide &&

@@ -56,7 +56,7 @@
                 <div class="fr-grid-row">
                   <div class="fr-col-12 fr-col-md-6">
                     <DsfrInput
-                      v-model="suivi.montant_amende"
+                      v-model="montantModel"
                       type="number"
                       label="Montant de l'amende (€)"
                       label-visible
@@ -205,6 +205,18 @@ defineEmits(['back-to-decision', 'go-to-cloture'])
 const openCalculateur = () => {
   openTallyPopup('9qElYG', { layout: 'modal', width: 900 })
 }
+
+const montantModel = computed({
+  get: () => props.suivi.montant_amende ?? '',
+  set: (val: string | number | null | undefined) => {
+    if (val === '' || val === null || val === undefined) {
+      props.suivi.montant_amende = null
+    } else {
+      const num = Number(val)
+      props.suivi.montant_amende = Number.isNaN(num) ? null : num
+    }
+  },
+})
 
 const montantError = computed(() => {
   if (props.suivi.montant_amende && props.suivi.montant_amende > 15000) {
