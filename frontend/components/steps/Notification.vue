@@ -34,7 +34,7 @@
           <div class="fr-col-12 fr-col-md-6">
             <DsfrInput
               v-model="suivi.numero_suivi_lettre"
-              label="Numéro de suivi"
+              label="Numéro de suivi (optionnel)"
               label-visible
               placeholder="ex. : 1A00915820380"
               maxlength="50"
