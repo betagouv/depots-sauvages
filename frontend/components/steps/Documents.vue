@@ -1,5 +1,7 @@
 <template>
-  <div class="documents-integration">
+  <div class="documents-integration" :class="{ 'is-step-locked': disabled }">
+    <StepLockBanner v-if="disabled" />
+
     <BandeauInformation :has-procedure="hasProcedure" :auteur-identifie="auteurIdentifie" />
 
     <div class="fr-mt-2w">
@@ -11,7 +13,12 @@
 
       <div class="fr-mb-4w fr-mt-4w">
         <h4 class="fr-h6 fr-mb-3w">Ce qu'il vous reste à faire :</h4>
-        <ListeActions step-id="constat-documents" :actions="actions" @update-case="onUpdateCase" />
+        <ListeActions
+          step-id="constat-documents"
+          :actions="actions"
+          :disabled="disabled"
+          @update-case="onUpdateCase"
+        />
       </div>
     </div>
   </div>
@@ -25,6 +32,7 @@ import type { SuiviProcedure } from '../../stores/suivi-procedure'
 import BandeauInformation from '../procedures/BandeauInformation.vue'
 import CartesDocuments from '../procedures/CartesDocuments.vue'
 import ListeActions, { type Action } from './ListeActions.vue'
+import StepLockBanner from './StepLockBanner.vue'
 
 const props = defineProps<{
   suivi: SuiviProcedure
@@ -34,6 +42,7 @@ const props = defineProps<{
   lettreInfoUrl: string
   modifyUrl: string
   constatationId?: number | string
+  disabled?: boolean
 }>()
 
 const actions = computed((): Action[] => {

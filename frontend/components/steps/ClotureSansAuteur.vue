@@ -1,11 +1,18 @@
 <template>
-  <div class="step-cloture-sans-auteur">
+  <div class="step-cloture-sans-auteur" :class="{ 'is-step-locked': disabled }">
+    <StepLockBanner v-if="disabled" />
+
     <DsfrAlert type="info" title="Auteur non identifié" class="fr-mb-4w">
       L'auteur n'a pas pu être identifié. Dans cette situation, la procédure ne peut pas aboutir.
     </DsfrAlert>
 
     <h4 class="fr-h6 fr-mb-2w">Actions pour clôturer la procédure</h4>
-    <ListeActions step-id="cloture-sans-auteur" :actions="actions" @update-case="onUpdateCase" />
+    <ListeActions
+      step-id="cloture-sans-auteur"
+      :actions="actions"
+      :disabled="disabled"
+      @update-case="onUpdateCase"
+    />
   </div>
 </template>
 
@@ -14,10 +21,12 @@ import { computed } from 'vue'
 import { trackUserAction } from '../../services/tracking'
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
 import ListeActions, { type Action } from './ListeActions.vue'
+import StepLockBanner from './StepLockBanner.vue'
 
 const props = defineProps<{
   suivi: SuiviProcedure
   constatationId?: number | string
+  disabled?: boolean
 }>()
 
 const actions = computed((): Action[] => [

@@ -1,5 +1,5 @@
 <template>
-  <div class="action-list fr-mt-2w">
+  <div class="action-list fr-mt-2w" :class="{ 'is-disabled-actions': disabled }">
     <div class="premium-action-bracket fr-py-1w">
       <div v-for="(action, index) in actions" :key="index" class="action-row">
         <div class="premium-action-item" :class="{ 'is-completed': action.completed }">
@@ -7,6 +7,7 @@
             v-if="!action.readonly"
             :model-value="action.completed"
             :name="`${stepId}-action-${index}`"
+            :disabled="disabled"
             class="premium-action-content"
             @update:model-value="(val: boolean) => $emit('update-case', action, val)"
           >
@@ -36,7 +37,9 @@
             v-if="action.completed && ($slots[`extra-${action.id}`] || $slots[`extra-${index}`])"
             class="action-details fr-p-3w"
           >
-            <slot :name="action.id ? `extra-${action.id}` : `extra-${index}`"></slot>
+            <fieldset :disabled="disabled" class="action-fieldset">
+              <slot :name="action.id ? `extra-${action.id}` : `extra-${index}`"></slot>
+            </fieldset>
           </div>
         </transition>
       </div>
@@ -60,6 +63,7 @@ export interface Action {
 defineProps<{
   stepId: string
   actions: Action[]
+  disabled?: boolean
 }>()
 
 defineEmits(['update-case'])
@@ -71,10 +75,31 @@ defineEmits(['update-case'])
   flex-direction: column;
 }
 
+.action-fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
 .action-details {
   margin-top: 0.5rem;
   margin-left: 0.5rem;
   padding-left: 0.5rem !important;
+}
+
+.is-disabled-actions {
+  opacity: 0.72;
+}
+
+.is-disabled-actions .premium-action-bracket {
+  border-left-color: var(--border-default-grey);
+}
+
+.is-disabled-actions .premium-action-item {
+  background-color: var(--background-alt-grey) !important;
+  border-color: var(--border-default-grey);
+  box-shadow: none;
 }
 
 /* Transitions */

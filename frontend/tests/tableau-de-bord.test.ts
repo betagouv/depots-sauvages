@@ -11,7 +11,7 @@ import {
 const ilYA = (jours: number) => dayjs().subtract(jours, 'day').format('YYYY-MM-DD')
 
 const SIGNE = { preuves_fournies: true, constatation_signee: true, lettre_signe: true }
-const ENVOYE = { ...SIGNE, lettre_envoyee: true, copie_archives: true }
+const ENVOYE = { ...SIGNE, lettre_envoyee: true, lettre_envoyee_date: ilYA(10), copie_archives: true }
 const RECU = (jours: number) => ({
   ...ENVOYE,
   ar_recu: true,
@@ -102,11 +102,10 @@ describe('Rangement des dossiers en colonnes', () => {
     expect(placement.alertes).toContain('Pli non réclamé')
   })
 
-  it('garde le dossier en contradictoire si une case de la notification manque', () => {
+  it('passe en « Décision à prendre » à la fin du contradictoire même sans copie archivée', () => {
     const placement = getPlacementProcedure(dossier({ ...RECU(20), copie_archives: false }))
-    expect(placement.colonne).toBe('contradictoire')
-    expect(placement.alertes[0]).toMatch(/copie aux archives/)
-    expect(placement.action.label).toBe('Garder une copie pour archive')
+    expect(placement.colonne).toBe('decision')
+    expect(placement.action.label).toBe('Décider des poursuites')
   })
 
   it('passe en « Décision à prendre » à la fin du contradictoire', () => {
@@ -142,6 +141,7 @@ describe('Rangement des dossiers en colonnes', () => {
       ...RECU(30),
       decision_poursuite: 'sanction',
       montant_fixe: true,
+      montant_amende: 500,
       arrete_redige: true,
       titre_recette_emis: true,
       notification_sanction_envoyee: true,

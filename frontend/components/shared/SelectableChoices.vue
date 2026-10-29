@@ -1,5 +1,5 @@
 <template>
-  <div class="premium-choices-container fr-mt-2w fr-p-2w">
+  <div class="premium-choices-container fr-mt-2w fr-p-2w" :class="{ 'is-disabled-choices': disabled }">
     <h5 v-if="legend" class="fr-h5 fr-mb-3w text-center">{{ legend }}</h5>
 
     <div :class="layoutClass">
@@ -15,6 +15,7 @@
         <DsfrCheckbox
           :name="option.id"
           :model-value="modelValue === option.value"
+          :disabled="disabled"
           @update:modelValue="toggle(option.value)"
         >
           <template #label>
@@ -41,6 +42,7 @@ const props = defineProps<{
   modelValue: any
   legend?: string
   layout?: 'grid' | 'list'
+  disabled?: boolean
 }>()
 
 const emit = defineEmits(['update:modelValue'])
@@ -56,6 +58,7 @@ const itemWrapperClass = computed(() => {
 })
 
 const toggle = (val: any) => {
+  if (props.disabled) return
   const newValue = props.modelValue === val ? '' : val
   emit('update:modelValue', newValue)
 }
@@ -64,5 +67,15 @@ const toggle = (val: any) => {
 <style scoped>
 .text-center {
   text-align: center;
+}
+.is-disabled-choices {
+  opacity: 0.72;
+}
+
+.is-disabled-choices :deep(.premium-choice-card .fr-checkbox-group) {
+  background-color: var(--background-alt-grey) !important;
+  border-color: var(--border-default-grey) !important;
+  box-shadow: none !important;
+  cursor: not-allowed !important;
 }
 </style>

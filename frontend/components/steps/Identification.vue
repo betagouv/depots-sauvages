@@ -1,5 +1,7 @@
 <template>
-  <div class="step-identification">
+  <div class="step-identification" :class="{ 'is-step-locked': disabled }">
+    <StepLockBanner v-if="disabled" />
+
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12 fr-col-md-6">
         <div class="procedure-choice fr-p-3w">
@@ -86,6 +88,7 @@
           v-model="suivi.identification_reussie"
           legend="Avez-vous réussi à identifier l'auteur ?"
           :options="identificationOptions"
+          :disabled="disabled"
           class="fr-mt-4w"
         />
       </div>
@@ -98,12 +101,14 @@ import { watch } from 'vue'
 import { trackUserAction } from '../../services/tracking'
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
 import SelectableChoices from '../shared/SelectableChoices.vue'
+import StepLockBanner from './StepLockBanner.vue'
 
 const props = defineProps<{
   suivi: SuiviProcedure
   auteurIdentifie?: boolean
   modifyUrl?: string
   constatationId?: number | string
+  disabled?: boolean
 }>()
 
 const identificationOptions = [

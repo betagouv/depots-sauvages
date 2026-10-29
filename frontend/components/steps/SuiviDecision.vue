@@ -1,5 +1,7 @@
 <template>
-  <div class="step-decision">
+  <div class="step-decision" :class="{ 'is-step-locked': disabled }">
+    <StepLockBanner v-if="disabled" />
+
     <DsfrHighlight v-if="!isNpai" class="fr-ml-0 fr-mb-4w">
       <p class="fr-mb-1w">
         Une fois le délai du contradictoire écoulé, deux issues sont possibles selon la réponse de
@@ -33,6 +35,7 @@
       v-model="suivi.decision_poursuite"
       :legend="currentLegend"
       :options="currentOptions"
+      :disabled="disabled"
       class="fr-mt-4w"
     />
 
@@ -73,11 +76,13 @@ import { computed, watch } from 'vue'
 import { trackUserAction } from '../../services/tracking'
 import type { SuiviProcedure } from '../../stores/suivi-procedure'
 import SelectableChoices from '../shared/SelectableChoices.vue'
+import StepLockBanner from './StepLockBanner.vue'
 
 const props = defineProps<{
   suivi: SuiviProcedure
   modifyUrl: string
   constatationId?: number | string
+  disabled?: boolean
 }>()
 
 defineEmits(['back-to-notification'])

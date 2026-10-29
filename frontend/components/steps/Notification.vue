@@ -1,5 +1,7 @@
 <template>
-  <div class="step-notification">
+  <div class="step-notification" :class="{ 'is-step-locked': disabled }">
+    <StepLockBanner v-if="disabled" />
+
     <DsfrAlert type="info" title="Documents pour cette étape" class="fr-mb-4w">
       <p class="fr-mb-2w">
         Vous devez envoyer la lettre d'information à l'auteur présumé. Si vous ne l'avez pas encore
@@ -11,8 +13,19 @@
       </DsfrButton>
     </DsfrAlert>
 
+    <DsfrAlert type="info" small class="fr-mb-4w">
+      <p class="fr-mb-0">
+        Pensez à conserver une copie de tous les documents pour vos archives.
+      </p>
+    </DsfrAlert>
+
     <h4 class="fr-h6 fr-mb-2w">Ce qu'il vous reste à faire :</h4>
-    <ListeActions step-id="notification" :actions="actions" @update-case="onUpdateCase">
+    <ListeActions
+      step-id="notification"
+      :actions="actions"
+      :disabled="disabled"
+      @update-case="onUpdateCase"
+    >
       <template #extra-lettre_envoyee>
         <div class="fr-grid-row fr-grid-row--gutters">
           <div class="fr-col-12 fr-col-md-6">
@@ -27,7 +40,7 @@
           <div class="fr-col-12 fr-col-md-6">
             <DsfrInput
               v-model="suivi.numero_suivi_lettre"
-              label="Numéro de suivi"
+              label="Numéro de suivi (optionnel)"
               label-visible
               placeholder="ex. : 1A00915820380"
               maxlength="50"
@@ -106,6 +119,7 @@ import type { SuiviProcedure } from '../../stores/suivi-procedure'
 import { getTodayISOString } from '../../utils/date'
 import { calculateContradictoire, buildLaPosteSuiviUrl } from '../../utils/procedure'
 import ListeActions, { type Action } from './ListeActions.vue'
+import StepLockBanner from './StepLockBanner.vue'
 
 import { trackAndOpenLink, trackEvent } from '../../services/matomo'
 import { trackUserAction } from '../../services/tracking'
@@ -114,6 +128,7 @@ const props = defineProps<{
   suivi: SuiviProcedure
   lettreInfoUrl: string
   constatationId?: number | string
+  disabled?: boolean
 }>()
 
 const openUrl = (url: string) => {
@@ -141,11 +156,6 @@ const actions = computed((): Action[] => [
     id: 'lettre_envoyee',
     label: "Envoyer la lettre d'information en recommandé avec accusé de réception",
     completed: props.suivi.lettre_envoyee,
-  },
-  {
-    id: 'copie_archives',
-    label: 'Conserver une copie de tous les documents pour vos archives',
-    completed: props.suivi.copie_archives,
   },
   {
     id: 'ar_recu',
@@ -191,9 +201,6 @@ const onUpdateCase = (action: Action, val: boolean) => {
           date_envoi: props.suivi.lettre_envoyee_date || today,
         })
       }
-      break
-    case 'copie_archives':
-      props.suivi.copie_archives = val
       break
     case 'ar_recu':
       props.suivi.ar_recu = val
