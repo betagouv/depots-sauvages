@@ -118,6 +118,7 @@ export interface Constatation {
 
   // Description
   volumeDepot: VolumeDepot
+  volumeM3: number | null
   risqueEcoulement: boolean
   typesDepot: TypeDepot[]
   precisionsDepot: string
@@ -192,6 +193,7 @@ export const createEmptyConstatation = (): Constatation => ({
   constatantRoleAutre: '',
   constatantEstUtilisateurConnecte: true,
   volumeDepot: '',
+  volumeM3: null,
   risqueEcoulement: false,
   typesDepot: [],
   precisionsDepot: '',

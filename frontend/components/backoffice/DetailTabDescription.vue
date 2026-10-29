@@ -15,7 +15,15 @@
       </div>
       <div class="fr-col-6">
         <span class="fr-text--xs fr-mb-0 bo-text-mention-uppercase">Volume estimé</span>
-        <p class="fr-text--md fr-mb-1w"><strong>{{ procedure.volume_depot || 'Non renseigné' }}</strong></p>
+        <p class="fr-text--md fr-mb-1w">
+          <strong>
+            {{
+              procedure.volume_m3 !== null && procedure.volume_m3 !== undefined
+                ? `${procedure.volume_m3} m³`
+                : procedure.volume_depot || 'Non renseigné'
+            }}
+          </strong>
+        </p>
       </div>
       <div class="fr-col-12">
         <span class="fr-text--xs fr-mb-0 bo-text-mention-uppercase">Types de déchets</span>

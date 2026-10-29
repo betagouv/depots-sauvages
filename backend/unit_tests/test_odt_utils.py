@@ -133,3 +133,34 @@ def test_prepare_context_with_photos(monkeypatch, tmp_path):
     assert "photos" in context
     assert len(context["photos"]) == 1
     assert context["photos"][0].endswith(".png")
+
+
+def test_prepare_context_volume_formatting(monkeypatch):
+    mock_inst = MagicMock()
+    mock_inst.get_prejudice_montant_calcule.return_value = 0
+    mock_inst.souhaite_porter_plainte = False
+
+    # 1. When legacy volume_depot is set: it takes priority to preserve historical document value
+    monkeypatch.setattr(
+        "backend.doc_maker.odt_utils.model_to_dict",
+        lambda inst: {"volume_m3": 2.5, "volume_depot": "Entre 1 et 3m3"},
+    )
+    context = prepare_context(mock_inst)
+    assert context["volume_depot"] == "Entre 1 et 3m3"
+
+    # 2. When volume_depot is empty and volume_m3 is set (new or re-saved constatations)
+    monkeypatch.setattr(
+        "backend.doc_maker.odt_utils.model_to_dict",
+        lambda inst: {"volume_m3": 2.5, "volume_depot": ""},
+    )
+    context = prepare_context(mock_inst)
+    assert context["volume_depot"] in ["2,5 m³", "2.5 m³"]
+
+    # 3. When neither is set
+    monkeypatch.setattr(
+        "backend.doc_maker.odt_utils.model_to_dict",
+        lambda inst: {"volume_m3": None, "volume_depot": ""},
+    )
+    context = prepare_context(mock_inst)
+    assert context["volume_depot"] == ""
+

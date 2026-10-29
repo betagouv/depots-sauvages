@@ -70,13 +70,17 @@
     </div>
 
     <div class="fr-fieldset__element">
-      <DsfrRadioButtonSet
-        v-model="store.formData.volumeDepot"
-        legend="Volume estimé"
+      <DsfrInputGroup
+        v-model="store.formData.volumeM3"
+        type="number"
+        min="0.1"
+        step="0.1"
+        inputmode="decimal"
+        label="Volume estimé (en m³)"
+        hint="Exemples de repères : un coffre de voiture ≈ 0,5 m³, une remorque ≈ 1 à 2 m³, une benne de chantier ≈ 8 à 10 m³"
         :required="true"
-        :options="VolumeOptions"
-        :error-message="store.errors.volumeDepot"
-        @update:model-value="store.clearFieldError('volumeDepot')"
+        :error-message="store.errors.volumeM3"
+        @update:model-value="store.clearFieldError('volumeM3')"
       />
     </div>
 
@@ -97,12 +101,11 @@
 import PhotoUploader from '@/components/forms/constatation/PhotoUploader.vue'
 import BooleanRadioSet from '@/components/shared/BooleanRadioSet.vue'
 import { useConstatationStore } from '@/stores/constatation'
-import { TypeDepotOptions, VolumeOptions } from '@/types/constatation'
+import { TypeDepotOptions } from '@/types/constatation'
 import {
   DsfrAlert,
   DsfrCheckboxSet,
   DsfrInputGroup,
-  DsfrRadioButtonSet,
 } from '@gouvminint/vue-dsfr'
 
 const store = useConstatationStore()
