@@ -121,5 +121,27 @@ describe('Notification.vue & Suivi La Poste', () => {
       const link = wrapper.find('a[href*="laposte.fr"]')
       expect(link.exists()).toBe(false)
     })
+
+    it('affiche le conseil de conservation pour les archives et ne propose plus la case copie_archives', () => {
+      const wrapper = mount(NotificationStep, {
+        props: {
+          suivi: makeSuivi(''),
+          lettreInfoUrl: '/api/lettre-info/1',
+          constatationId: 1,
+        },
+        global: {
+          stubs: {
+            DsfrButton: true,
+            DsfrInput: true,
+            DsfrSelect: true,
+          },
+        },
+      })
+
+      expect(wrapper.text()).toContain('Pensez à conserver une copie de tous les documents pour vos archives.')
+      const listeActions = wrapper.findComponent({ name: 'ListeActions' })
+      const actions = (listeActions.props('actions') as any[])
+      expect(actions.some((a) => a.id === 'copie_archives')).toBe(false)
+    })
   })
 })

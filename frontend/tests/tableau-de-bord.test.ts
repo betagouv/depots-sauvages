@@ -102,11 +102,10 @@ describe('Rangement des dossiers en colonnes', () => {
     expect(placement.alertes).toContain('Pli non réclamé')
   })
 
-  it('garde le dossier en contradictoire si une case de la notification manque', () => {
+  it('passe en « Décision à prendre » à la fin du contradictoire même sans copie archivée', () => {
     const placement = getPlacementProcedure(dossier({ ...RECU(20), copie_archives: false }))
-    expect(placement.colonne).toBe('contradictoire')
-    expect(placement.alertes[0]).toMatch(/copie aux archives/)
-    expect(placement.action.label).toBe('Garder une copie pour archive')
+    expect(placement.colonne).toBe('decision')
+    expect(placement.action.label).toBe('Décider des poursuites')
   })
 
   it('passe en « Décision à prendre » à la fin du contradictoire', () => {

@@ -72,7 +72,6 @@ const finContradictoire = (joursRestants: number, dateFin: string | null) => {
 const etapesNotificationRestantes = (suivi: SuiviProcedure) => {
   const restantes: string[] = []
   if (!suivi.lettre_envoyee_date) restantes.push("date d'envoi")
-  if (!suivi.copie_archives) restantes.push('copie aux archives')
   if (!suivi.ar_recu || !suivi.ar_statut) restantes.push("statut de l'accusé de réception")
   return restantes
 }

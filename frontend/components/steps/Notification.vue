@@ -13,6 +13,12 @@
       </DsfrButton>
     </DsfrAlert>
 
+    <DsfrAlert type="info" small class="fr-mb-4w">
+      <p class="fr-mb-0">
+        Pensez à conserver une copie de tous les documents pour vos archives.
+      </p>
+    </DsfrAlert>
+
     <h4 class="fr-h6 fr-mb-2w">Ce qu'il vous reste à faire :</h4>
     <ListeActions
       step-id="notification"
@@ -152,11 +158,6 @@ const actions = computed((): Action[] => [
     completed: props.suivi.lettre_envoyee,
   },
   {
-    id: 'copie_archives',
-    label: 'Conserver une copie de tous les documents pour vos archives',
-    completed: props.suivi.copie_archives,
-  },
-  {
     id: 'ar_recu',
     label:
       "Réceptionner l'accusé de réception : c'est le point de départ de la période du contradictoire",
@@ -200,9 +201,6 @@ const onUpdateCase = (action: Action, val: boolean) => {
           date_envoi: props.suivi.lettre_envoyee_date || today,
         })
       }
-      break
-    case 'copie_archives':
-      props.suivi.copie_archives = val
       break
     case 'ar_recu':
       props.suivi.ar_recu = val

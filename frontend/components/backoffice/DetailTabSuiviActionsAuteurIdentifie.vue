@@ -99,10 +99,6 @@
             disabled
           />
         </div>
-        <label class="fr-text--xs fr-mb-0 bo-flex-center-gap">
-          <input type="checkbox" :checked="procedure.suivi_procedure?.copie_archives" disabled />
-          Copie archivée dans le dossier
-        </label>
       </div>
     </div>
 

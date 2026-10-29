@@ -98,7 +98,6 @@ export const isSuiviStepCompleted = (
       return (
         suivi.lettre_envoyee &&
         Boolean(suivi.lettre_envoyee_date) &&
-        suivi.copie_archives &&
         suivi.ar_recu &&
         Boolean(suivi.ar_statut) &&
         (suivi.ar_statut === 'npai' || Boolean(suivi.ar_presentation_date))
