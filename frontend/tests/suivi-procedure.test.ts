@@ -272,4 +272,62 @@ describe('Page Suivi de Procédure', () => {
       expect(tally.openTallyPopup).not.toHaveBeenCalled()
     })
   })
+
+  describe('Séquentialité et verrouillage des étapes', () => {
+    it('débloque l’étape 1 initialement et verrouille les étapes suivantes si l’étape 1 n’est pas complète', async () => {
+      ;(api.getUserInfo as any).mockResolvedValue({ is_authenticated: true })
+      ;(api.fetchResource as any).mockImplementation((url: string) => {
+        if (url.includes('/suivi-procedure/')) {
+          return Promise.resolve({
+            etape_en_cours: 2,
+            preuves_fournies: false,
+            constatation_signee: false,
+            lettre_signe: false,
+          })
+        }
+        return Promise.resolve({
+          id: 163,
+          created: true,
+          auteur_identifie: true,
+          commune: 'Amiens',
+          date_constat: '2026-03-27',
+        })
+      })
+
+      let capturedSteps: any[] = []
+      const stubs = {
+        StepperProcedure: {
+          props: ['steps', 'currentStep'],
+          template: '<div data-testid="stepper"><slot :name="`step-${currentStep}`" :locked="steps[currentStep]?.locked" /></div>',
+          mounted() {
+            capturedSteps = (this as any).steps
+          },
+        },
+        Chargement: true,
+        LoginInvitation: true,
+        DsfrBadge: true,
+        DsfrButton: true,
+        Metadata: true,
+        InfosComplementaires: true,
+        Notification: {
+          props: ['disabled'],
+          template: '<div data-testid="notification-step" :data-disabled="disabled" />',
+        },
+      }
+
+      render(SuiviProcedurePage, {
+        global: { plugins: [createTestingPinia({ stubActions: false })], stubs },
+      })
+
+      await waitFor(() => {
+        expect(screen.getByTestId('notification-step')).toBeInTheDocument()
+      })
+
+      // Étape 1 est débloquée
+      expect(capturedSteps[1].locked).toBe(false)
+      // Étape 2 est verrouillée car étape 1 non complétée
+      expect(capturedSteps[2].locked).toBe(true)
+      expect(screen.getByTestId('notification-step')).toHaveAttribute('data-disabled', 'true')
+    })
+  })
 })

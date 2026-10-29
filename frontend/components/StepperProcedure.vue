@@ -9,15 +9,19 @@
         'step--completed': step.completed,
         'step--pending': index !== currentStep && !step.completed,
         'step--optional': step.optional,
+        'step--locked': step.locked,
       }"
     >
       <div class="step-sidebar">
-        <div class="step-icon-container" @click="$emit('update:currentStep', index)">
+        <div class="step-icon-container" @click="selectStep(index)">
           <div v-if="step.completed" class="step-icon step-icon--completed">
             <span class="fr-icon-check-line fr-icon--sm" aria-hidden="true"></span>
           </div>
           <div v-else-if="currentStep === index" class="step-icon step-icon--active">
             {{ index }}
+          </div>
+          <div v-else-if="step.locked" class="step-icon step-icon--locked">
+            <span class="fr-icon-lock-line fr-icon--sm" aria-hidden="true"></span>
           </div>
           <div v-else class="step-icon step-icon--pending">
             {{ index }}
@@ -27,7 +31,7 @@
       </div>
 
       <div class="step-content">
-        <header class="step-header fr-mb-1w" @click="$emit('update:currentStep', index)">
+        <header class="step-header fr-mb-1w" @click="selectStep(index)">
           <div class="step-header-container">
             <h3 class="step-title fr-h6 fr-mb-0" tabindex="-1">{{ step.title }}</h3>
             <div class="step-badges">
@@ -41,6 +45,11 @@
                 class="fr-badge fr-badge--sm fr-badge--success fr-badge--no-icon"
                 >Fait</span
               >
+              <span
+                v-else-if="step.locked"
+                class="fr-badge fr-badge--sm fr-badge--warning fr-badge--no-icon"
+                >En attente des étapes précédentes</span
+              >
             </div>
           </div>
           <p v-if="step.description" class="fr-text--xs fr-mb-0 fr-mt-1v fr-text-mention--grey">
@@ -48,8 +57,13 @@
           </p>
         </header>
 
-        <div v-if="currentStep === index" :key="index" class="step-details fr-mt-2w">
-          <slot :name="`step-${index}`"></slot>
+        <div
+          v-if="currentStep === index"
+          :key="index"
+          class="step-details fr-mt-2w"
+          :class="{ 'step-details--locked': step.locked }"
+        >
+          <slot :name="`step-${index}`" :locked="step.locked"></slot>
         </div>
       </div>
     </div>
@@ -57,20 +71,45 @@
 </template>
 
 <script setup lang="ts">
+import { nextTick } from 'vue'
+
 export interface Step {
   title: string
   description?: string
   completed?: boolean
   optional?: boolean
+  locked?: boolean
   showBracket?: boolean
 }
 
-defineProps<{
+const props = defineProps<{
   steps: Step[]
   currentStep: number
 }>()
 
-defineEmits(['update:currentStep'])
+const emit = defineEmits(['update:currentStep'])
+
+const selectStep = async (index: number) => {
+  emit('update:currentStep', index)
+
+  await nextTick()
+
+  // Wait a short frame for the accordion content to start rendering/expanding
+  window.requestAnimationFrame(() => {
+    const activeElement = document.querySelector<HTMLElement>('.step--active')
+    if (activeElement) {
+      const rect = activeElement.getBoundingClientRect()
+      // If the top of the newly opened step is not comfortably in view (e.g. above header or too low)
+      const topOffset = 80 // offset to leave comfortable breathing room below sticky header / top
+      const targetScrollY = window.scrollY + rect.top - topOffset
+
+      window.scrollTo({
+        top: Math.max(0, targetScrollY),
+        behavior: 'smooth',
+      })
+    }
+  })
+}
 </script>
 
 <style scoped>
@@ -81,7 +120,7 @@ defineEmits(['update:currentStep'])
 
 .step-item {
   display: flex;
-  scroll-margin-top: 1rem;
+  scroll-margin-top: 5rem;
   gap: 1.25rem;
 }
 
@@ -128,6 +167,12 @@ defineEmits(['update:currentStep'])
   background-color: white;
   color: var(--text-active-blue-france);
   border: 1px solid var(--border-active-blue-france);
+}
+
+.step-icon--locked {
+  background-color: var(--background-contrast-grey);
+  color: var(--text-mention-grey);
+  border: 1px solid var(--border-default-grey);
 }
 
 .step-line {
@@ -192,5 +237,33 @@ defineEmits(['update:currentStep'])
 
 .step-details {
   background-color: white;
+  transition: all 0.25s ease-in-out;
+}
+
+.step-details--locked {
+  position: relative;
+  background: linear-gradient(180deg, rgba(246, 246, 246, 0.4) 0%, rgba(240, 242, 248, 0.25) 100%);
+  border: 1px dashed var(--border-default-grey);
+  border-radius: 12px;
+  padding: 1.25rem 1rem 0.5rem 1rem;
+}
+
+.step-details--locked::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--border-default-grey),
+    var(--border-default-grey) 8px,
+    transparent 8px,
+    transparent 16px
+  );
+  opacity: 0.6;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
 }
 </style>

@@ -95,14 +95,28 @@ export const isSuiviStepCompleted = (
       if (!context.auteurIdentifie) {
         return suivi.identification_reussie !== null
       }
-      return suivi.lettre_envoyee && suivi.copie_archives && suivi.ar_recu
+      return (
+        suivi.lettre_envoyee &&
+        Boolean(suivi.lettre_envoyee_date) &&
+        suivi.copie_archives &&
+        suivi.ar_recu &&
+        Boolean(suivi.ar_statut) &&
+        (suivi.ar_statut === 'npai' || Boolean(suivi.ar_presentation_date))
+      )
     case 3:
       if (suivi.decision_poursuite === 'recherche_adresse') return false
       return suivi.decision_poursuite !== ''
     case 4:
       if (suivi.decision_poursuite === 'sanction') {
+        const montantValide =
+          suivi.montant_amende !== null &&
+          suivi.montant_amende !== undefined &&
+          !Number.isNaN(suivi.montant_amende) &&
+          suivi.montant_amende >= 0 &&
+          suivi.montant_amende <= 15000
         return (
           suivi.montant_fixe &&
+          montantValide &&
           suivi.arrete_redige &&
           suivi.titre_recette_emis &&
           suivi.notification_sanction_envoyee
@@ -122,12 +136,38 @@ export const isSuiviStepCompleted = (
       return false
     case 5:
       if (suivi.decision_poursuite === 'sanction') {
-        return suivi.titre_recette_confirme && suivi.montant_recouvre && suivi.dossier_archive
+        return (
+          suivi.titre_recette_confirme &&
+          suivi.montant_recouvre &&
+          Boolean(suivi.date_recouvrement_effective) &&
+          suivi.dossier_archive
+        )
       }
       return suivi.dossier_archive
     default:
       return false
   }
+}
+
+/**
+ * Checks if a step in the sequence is unlocked (i.e. all preceding steps are completed).
+ * Step 0 (constatation) is always unlocked.
+ */
+export const isSuiviStepUnlocked = (
+  suivi: SuiviProcedure | null | undefined,
+  stepIndex: number,
+  context: { auteurIdentifie: boolean; hasProcedure?: boolean }
+): boolean => {
+  if (stepIndex <= 0) return true
+  if (!suivi) return false
+
+  // Step 1 requires Step 0 (which is the constatation itself, completed by default on this page)
+  for (let i = 1; i < stepIndex; i++) {
+    if (!isSuiviStepCompleted(suivi, i, context)) {
+      return false
+    }
+  }
+  return true
 }
 
 export const useSuiviStore = defineStore('suiviProcedure', () => {
@@ -158,6 +198,15 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
     return isSuiviStepCompleted(suivi, stepIndex, context)
   }
 
+  const isStepUnlocked = (
+    constatationId: string,
+    stepIndex: number,
+    context: { auteurIdentifie: boolean }
+  ): boolean => {
+    const suivi = procedures[constatationId]
+    return isSuiviStepUnlocked(suivi, stepIndex, context)
+  }
+
   const fetchSuivi = async (constatationId: string, internalConstatationId: number) => {
     try {
       const data = await fetchResource(`${API_URL}/suivi-procedure/${internalConstatationId}/`)
@@ -184,6 +233,7 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
     procedures,
     getOrCreateSuivi,
     isStepCompleted,
+    isStepUnlocked,
     fetchSuivi,
     saveSuivi,
   }

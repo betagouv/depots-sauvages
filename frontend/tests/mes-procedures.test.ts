@@ -177,6 +177,7 @@ describe('Page Mes Procédures', () => {
           constatation_signee: true,
           lettre_signe: true,
           lettre_envoyee: true,
+          lettre_envoyee_date: '2026-06-05',
           copie_archives: true,
           ar_recu: true,
           ar_statut: 'distribue',

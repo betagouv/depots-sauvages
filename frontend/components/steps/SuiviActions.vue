@@ -1,5 +1,7 @@
 <template>
-  <div class="step-actions">
+  <div class="step-actions" :class="{ 'is-step-locked': disabled }">
+    <StepLockBanner v-if="disabled" />
+
     <transition name="fade-slide" mode="out-in">
       <div v-if="suivi.decision_poursuite === 'sanction'" key="sanction" class="action-block">
         <DsfrAlert type="info" title="Modèles de documents" class="fr-mb-4w">
@@ -42,7 +44,12 @@
         </DsfrAlert>
 
         <h4 class="fr-h6 fr-mb-3w">Ce qu'il vous reste à faire :</h4>
-        <ListeActions step-id="sanction" :actions="sanctionActions" @update-case="onUpdateSanction">
+        <ListeActions
+          step-id="sanction"
+          :actions="sanctionActions"
+          :disabled="disabled"
+          @update-case="onUpdateSanction"
+        >
           <template #extra-fixer_montant>
             <transition name="fade-slide">
               <div v-if="suivi.montant_fixe" class="fr-pt-2w">
@@ -53,6 +60,7 @@
                       type="number"
                       label="Montant de l'amende (€)"
                       label-visible
+                      :disabled="disabled"
                       :error-message="montantError"
                       :is-invalid="!!montantError"
                       :min="0"
@@ -77,7 +85,7 @@
             Le statut NPAI a automatiquement validé l'abandon pour "Auteur introuvable". Dans ce cas
             précis, aucun courrier de notification n'est à envoyer.
             <div class="fr-mt-2w">
-              <DsfrButton @click="$emit('go-to-cloture')" size="sm">
+              <DsfrButton @click="$emit('go-to-cloture')" size="sm" :disabled="disabled">
                 Passer directement à la clôture
               </DsfrButton>
             </div>
@@ -106,6 +114,7 @@
             v-model="suivi.motif_abandon"
             legend="Quel est le motif d'abandon de la poursuite ?"
             :options="motifAbandonOptions"
+            :disabled="disabled"
             layout="list"
             class="fr-my-4w"
             @update:model-value="onMotifUpdate"
@@ -118,7 +127,7 @@
                   La procédure peut être poursuivie à l'encontre d'un autre auteur identifié (ex.
                   prestataire, sous-traitant, fournisseur, client, intermédiaire).
                 </p>
-                <DsfrButton secondary size="sm" @click="startNewProcedure">
+                <DsfrButton secondary size="sm" :disabled="disabled" @click="startNewProcedure">
                   <span class="fr-icon-add-circle-line fr-mr-1w" aria-hidden="true"></span>
                   Démarrer une nouvelle procédure
                 </DsfrButton>
@@ -136,6 +145,7 @@
               v-model="suivi.souhaite_notifier_abandon"
               legend="Souhaitez-vous notifier la personne de l'abandon ?"
               :options="notificationOptions"
+              :disabled="disabled"
               class="fr-mt-4w"
             />
           </transition>
@@ -146,6 +156,7 @@
               <ListeActions
                 step-id="abandon"
                 :actions="abandonActions"
+                :disabled="disabled"
                 @update-case="onUpdateAbandon"
               />
             </div>
@@ -168,11 +179,13 @@ import { openTallyPopup } from '../../utils/tally'
 import SelectableChoices from '../shared/SelectableChoices.vue'
 import AttenteDecision from './AttenteDecision.vue'
 import ListeActions, { type Action } from './ListeActions.vue'
+import StepLockBanner from './StepLockBanner.vue'
 
 const props = defineProps<{
   suivi: SuiviProcedure
   modifyUrl: string
   constatationId?: number | string
+  disabled?: boolean
 }>()
 
 const trackDocSanction = (docType: string) => {

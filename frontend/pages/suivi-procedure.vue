@@ -44,7 +44,7 @@
             <template #step-0>
               <Constatation :auteur-identifie="auteurIdentifie" />
             </template>
-            <template #step-1>
+            <template #step-1="{ locked }">
               <AucuneProcedure v-if="!hasProcedure" :modify-url="modifyUrl" />
               <Documents
                 v-else
@@ -54,14 +54,16 @@
                 :doc-constat-url="getDocConstatUrl(procedureData.id)"
                 :lettre-info-url="getLettreInfoUrl(procedureData.id)"
                 :constatation-id="procedureData.id"
+                :disabled="locked"
               />
             </template>
-            <template v-if="hasProcedure" #step-2>
+            <template v-if="hasProcedure" #step-2="{ locked }">
               <Notification
                 v-if="auteurIdentifie"
                 :suivi="suiviProcedure"
                 :lettre-info-url="getLettreInfoUrl(procedureData.id)"
                 :constatation-id="procedureData.id"
+                :disabled="locked"
                 @next-step="activeStep = 3"
               />
               <Identification
@@ -69,14 +71,16 @@
                 :suivi="suiviProcedure"
                 :auteur-identifie="auteurIdentifie"
                 :constatation-id="procedureData.id"
+                :disabled="locked"
               />
             </template>
-            <template v-if="hasProcedure" #step-3>
+            <template v-if="hasProcedure" #step-3="{ locked }">
               <SuiviDecision
                 v-if="auteurIdentifie"
                 :suivi="suiviProcedure"
                 :constatation-id="procedureData.id"
                 :modify-url="modifyUrl"
+                :disabled="locked"
                 @back-to-notification="activeStep = 2"
               />
               <MettreAjourDossier
@@ -87,22 +91,25 @@
                 v-else-if="suiviProcedure.identification_reussie === false"
                 :suivi="suiviProcedure"
                 :constatation-id="procedureData.id"
+                :disabled="locked"
               />
             </template>
-            <template v-if="hasProcedure" #step-4>
+            <template v-if="hasProcedure" #step-4="{ locked }">
               <SuiviActions
                 v-if="auteurIdentifie"
                 :suivi="suiviProcedure"
                 :constatation-id="procedureData.id"
+                :disabled="locked"
                 @back-to-decision="activeStep = 3"
                 @go-to-cloture="activeStep = 5"
               />
             </template>
-            <template v-if="hasProcedure" #step-5>
+            <template v-if="hasProcedure" #step-5="{ locked }">
               <Cloture
                 v-if="auteurIdentifie"
                 :suivi="suiviProcedure"
                 :constatation-id="procedureData.id"
+                :disabled="locked"
                 @back-to-decision="activeStep = 3"
               />
             </template>
@@ -208,13 +215,18 @@ const getStepStatus = (index: number) =>
     currentStep: activeStep.value,
   })
 
+const isStepUnlocked = (index: number) =>
+  suiviStore.isStepUnlocked(constatationId.value, index, {
+    auteurIdentifie: auteurIdentifie.value,
+  })
+
 const steps = computed(() => {
   if (!constatationId.value) return []
 
   if (!hasProcedure.value) {
     return [
-      { title: 'Réaliser la constatation', completed: getStepStatus(0) },
-      { title: 'Mettre à jour la procédure', completed: false },
+      { title: 'Réaliser la constatation', completed: getStepStatus(0), locked: false },
+      { title: 'Mettre à jour la procédure', completed: false, locked: false },
     ]
   }
 
@@ -224,15 +236,15 @@ const steps = computed(() => {
       identificationReussie: suiviProcedure.value.identification_reussie,
     })
     const baseSteps = [
-      { title: titles[0], completed: getStepStatus(0) },
-      { title: titles[1], completed: getStepStatus(1) },
-      { title: titles[2], completed: getStepStatus(2) },
+      { title: titles[0], completed: getStepStatus(0), locked: false },
+      { title: titles[1], completed: getStepStatus(1), locked: !isStepUnlocked(1) },
+      { title: titles[2], completed: getStepStatus(2), locked: !isStepUnlocked(2) },
     ]
 
     if (suiviProcedure.value.identification_reussie === true) {
-      baseSteps.push({ title: titles[3], completed: false })
+      baseSteps.push({ title: titles[3], completed: false, locked: !isStepUnlocked(3) })
     } else if (suiviProcedure.value.identification_reussie === false) {
-      baseSteps.push({ title: titles[3], completed: getStepStatus(5) })
+      baseSteps.push({ title: titles[3], completed: getStepStatus(5), locked: !isStepUnlocked(3) })
     }
 
     return baseSteps
@@ -244,12 +256,12 @@ const steps = computed(() => {
   })
 
   return [
-    { title: titles[0], completed: getStepStatus(0) },
-    { title: titles[1], completed: getStepStatus(1) },
-    { title: titles[2], completed: getStepStatus(2) },
-    { title: titles[3], completed: getStepStatus(3) },
-    { title: titles[4], completed: getStepStatus(4) },
-    { title: titles[5], completed: getStepStatus(5) },
+    { title: titles[0], completed: getStepStatus(0), locked: false },
+    { title: titles[1], completed: getStepStatus(1), locked: !isStepUnlocked(1) },
+    { title: titles[2], completed: getStepStatus(2), locked: !isStepUnlocked(2) },
+    { title: titles[3], completed: getStepStatus(3), locked: !isStepUnlocked(3) },
+    { title: titles[4], completed: getStepStatus(4), locked: !isStepUnlocked(4) },
+    { title: titles[5], completed: getStepStatus(5), locked: !isStepUnlocked(5) },
   ]
 })
 

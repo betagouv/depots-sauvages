@@ -1,9 +1,16 @@
 <template>
-  <div class="cloture">
+  <div class="cloture" :class="{ 'is-step-locked': disabled }">
+    <StepLockBanner v-if="disabled" />
+
     <transition name="fade-slide" mode="out-in">
       <div v-if="suivi.decision_poursuite" key="content">
         <h4 class="fr-h6 fr-mb-2w">Actions pour clôturer la procédure</h4>
-        <ListeActions step-id="cloture" :actions="actions" @update-case="onUpdateCase">
+        <ListeActions
+          step-id="cloture"
+          :actions="actions"
+          :disabled="disabled"
+          @update-case="onUpdateCase"
+        >
           <template #extra-montant_recouvre>
             <transition name="fade-slide">
               <div v-if="suivi.montant_recouvre" class="fr-pt-2w">
@@ -13,6 +20,7 @@
                     label="Date de recouvrement"
                     label-visible
                     type="date"
+                    :disabled="disabled"
                     :max="today"
                   />
                 </div>
@@ -41,10 +49,12 @@ import type { SuiviProcedure } from '../../stores/suivi-procedure'
 import { getTodayISOString } from '../../utils/date'
 import AttenteDecision from './AttenteDecision.vue'
 import ListeActions, { type Action } from './ListeActions.vue'
+import StepLockBanner from './StepLockBanner.vue'
 
 const props = defineProps<{
   suivi: SuiviProcedure
   constatationId?: number | string
+  disabled?: boolean
 }>()
 
 const trackMontantRecouvre = () => {
