@@ -96,6 +96,7 @@ urlpatterns.extend(
             ProConnectAccessConfigView.as_view(),
             name="backoffice-proconnect-config",
         ),
+        path("api/chatbot/", include("backend.chatbot.urls")),
         path("api/", include(router.urls)),
         path("logout/", logout_view, name="logout"),
     ]

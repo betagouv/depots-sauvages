@@ -1,4 +1,5 @@
 import locale
+import os
 from pathlib import Path
 
 SETTINGS_DIR = Path(__file__).resolve().parent
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
     "backend.activity_logs",
     "backend.proconnect",
     "backend.sentry",
+    "backend.chatbot",
 ]
 
 TRACKMAN_DATABASE_ALIAS = "stats_db"
@@ -264,6 +266,12 @@ ADMIN_URL_NAME = "admin"
 # Bypass Auth Configuration
 BYPASS_AUTH_ENABLED = False
 ENV_NAME = "development"
+
+# Chatbot AI Configuration
+AI_PROVIDER = os.getenv("AI_PROVIDER", "mock")
+AI_API_KEY = os.getenv("AI_API_KEY", "")
+AI_MODEL = os.getenv("AI_MODEL", "")
+AI_BASE_URL = os.getenv("AI_BASE_URL", "")
 
 # Permissions Policy
 PERMISSIONS_POLICY = {
