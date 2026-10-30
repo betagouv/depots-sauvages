@@ -27,6 +27,12 @@ class BackofficePagination(PageNumberPagination):
     max_page_size = 200
 
 
+class BackofficeUsersPagination(PageNumberPagination):
+    page_size = 3
+    page_size_query_param = "page_size"
+    max_page_size = 200
+
+
 class BackofficeProceduresViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAdminUser]
     serializer_class = BackofficeProcedureSerializer
@@ -56,7 +62,7 @@ class BackofficeStaffViewSet(viewsets.ReadOnlyModelViewSet):
 class BackofficeUsersViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAdminUser]
     serializer_class = BackofficeUserSerializer
-    pagination_class = BackofficePagination
+    pagination_class = BackofficeUsersPagination
     filter_backends = [DjangoFilterBackend]
     filterset_class = BackofficeUserFilterSet
 

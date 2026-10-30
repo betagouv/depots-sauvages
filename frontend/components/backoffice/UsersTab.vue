@@ -41,7 +41,7 @@
     >
       <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap">
         <span class="fr-text--sm fr-text-mention--grey fr-mb-0">
-          Nombre d'utilisateurs : <strong>{{ filteredUsers.length }}</strong> sur <strong>{{ store.totalUsersCount }}</strong> au total
+          Nombre d'utilisateurs : <strong>{{ store.totalUsersCount }}</strong> au total
         </span>
         <button
           class="fr-btn fr-btn--sm fr-btn--secondary"
@@ -122,13 +122,13 @@
               Chargement des utilisateurs...
             </td>
           </tr>
-          <tr v-else-if="paginatedUsers.length === 0">
+          <tr v-else-if="users.length === 0">
             <td colspan="11" class="fr-text--center fr-py-3w fr-text-mention--grey">
               Aucun utilisateur trouvé pour ces critères.
             </td>
           </tr>
           <tr
-            v-for="user in paginatedUsers"
+            v-for="user in users"
             :key="user.id"
             :class="{ 'bo-row-zero-procedures': user.procedures_count === 0 }"
           >
@@ -251,8 +251,8 @@ const filters = reactive({
   hasProconnect: parseQueryParam(route.query.has_proconnect, 'Tous'),
 })
 
-const page = ref(1)
-const pageSize = 25
+const page = ref(parseQueryParam(route.query.page, 1))
+const pageSize = 3
 
 const customizableColumns = [
   { key: 'id', label: 'ID' },
@@ -285,70 +285,30 @@ const formatUserName = (user: BackofficeUser) => {
   return parts.length ? parts.join(' ') : '—'
 }
 
-const filteredUsers = computed(() => {
-  return store.users.filter((user) => {
-    // Search filter
-    if (filters.search) {
-      const q = filters.search.toLowerCase()
-      const matchesEmail = user.email?.toLowerCase().includes(q)
-      const matchesFirst = user.first_name?.toLowerCase().includes(q)
-      const matchesLast = user.last_name?.toLowerCase().includes(q)
-      const matchesSiret = user.proconnect_profile?.siret?.toLowerCase().includes(q)
-      const matchesSiren = user.proconnect_profile?.siren?.toLowerCase().includes(q)
-      const matchesOrg = user.proconnect_profile?.organization_label?.toLowerCase().includes(q)
+const users = computed(() => store.users)
 
-      if (
-        !matchesEmail &&
-        !matchesFirst &&
-        !matchesLast &&
-        !matchesSiret &&
-        !matchesSiren &&
-        !matchesOrg
-      ) {
-        return false
-      }
-    }
-
-    // Has procedures filter
-    if (filters.hasProcedures === 'Non' && user.procedures_count > 0) {
-      return false
-    }
-    if (filters.hasProcedures === 'Oui' && user.procedures_count === 0) {
-      return false
-    }
-
-    // Has proconnect filter
-    if (filters.hasProconnect === 'Oui' && !user.has_proconnect) {
-      return false
-    }
-    if (filters.hasProconnect === 'Non' && user.has_proconnect) {
-      return false
-    }
-
-    return true
-  })
-})
-
-const totalPages = computed(() => Math.ceil(filteredUsers.value.length / pageSize) || 1)
-
-const paginatedUsers = computed(() => {
-  const start = (page.value - 1) * pageSize
-  return filteredUsers.value.slice(start, start + pageSize)
-})
+const totalPages = computed(() => Math.ceil(store.totalUsersCount / pageSize) || 1)
 
 const pages = computed(() => {
   return Array.from({ length: totalPages.value }, (_, i) => ({
     label: String(i + 1),
     title: `Page ${i + 1}`,
+    href: '#',
   }))
 })
 
 const changePage = (newPage: number) => {
-  page.value = newPage
+  if (newPage >= 1 && newPage <= totalPages.value) {
+    page.value = newPage
+    updateUrlParams()
+  }
 }
 
 const updateUrlParams = () => {
   const query: Record<string, string> = { ...route.query } as Record<string, string>
+
+  if (page.value > 1) query.page = String(page.value)
+  else delete query.page
 
   if (filters.search) query.user_search = filters.search
   else delete query.user_search
@@ -372,18 +332,51 @@ const updateUrlParams = () => {
 const loadUsers = async () => {
   isLoading.value = true
   try {
-    // We load all users into store (or with backend pagination / params)
-    await store.fetchUsers()
+    await store.fetchUsers({
+      page: page.value,
+      page_size: pageSize,
+      search: filters.search || undefined,
+      has_procedures: filters.hasProcedures !== 'Tous' ? filters.hasProcedures : undefined,
+      has_proconnect: filters.hasProconnect !== 'Tous' ? filters.hasProconnect : undefined,
+    })
   } finally {
     isLoading.value = false
   }
 }
 
+// Watch filters to reset page to 1, update URL and load users
 watch(
   () => [filters.search, filters.hasProcedures, filters.hasProconnect],
   () => {
     page.value = 1
     updateUrlParams()
+    loadUsers()
+  }
+)
+
+// Sync route query changes to backend fetch
+watch(
+  () => route.query,
+  async (newQuery) => {
+    if (route.path === '/utilisateurs-liste') {
+      const qPage = parseQueryParam(newQuery.page, 1)
+      const qSearch = parseQueryParam(newQuery.user_search, '')
+      const qHasProc = parseQueryParam(newQuery.has_procedures, 'Tous')
+      const qHasPc = parseQueryParam(newQuery.has_proconnect, 'Tous')
+
+      if (
+        page.value !== qPage ||
+        filters.search !== qSearch ||
+        filters.hasProcedures !== qHasProc ||
+        filters.hasProconnect !== qHasPc
+      ) {
+        page.value = qPage
+        filters.search = qSearch
+        filters.hasProcedures = qHasProc
+        filters.hasProconnect = qHasPc
+        await loadUsers()
+      }
+    }
   }
 )
 
@@ -412,8 +405,11 @@ const exportCsv = async () => {
   }
 }
 
+// Initial load if route.query didn't trigger it (e.g. nested tab without route change)
 onMounted(() => {
-  loadUsers()
+  if (store.users.length === 0) {
+    loadUsers()
+  }
 })
 </script>
 
