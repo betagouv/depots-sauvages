@@ -82,30 +82,39 @@ describe('UsersTab.vue', () => {
     expect(wrapper.text()).toContain('Mairie de Test')
     expect(wrapper.text()).toContain('0 procédure')
 
-    // Filter by zero procedures
+    // Filter by zero procedures triggers store.fetchUsers with appropriate params
     const selectProcedures = wrapper.find('#filter-procedures-count')
     await selectProcedures.setValue('Non')
     await flushPromises()
 
-    expect(wrapper.text()).not.toContain('jean@example.com')
-    expect(wrapper.text()).toContain('claire@example.com')
+    expect(store.fetchUsers).toHaveBeenCalledWith(
+      expect.objectContaining({
+        has_procedures: 'Non',
+      })
+    )
 
-    // Filter by proconnect
+    // Filter by proconnect triggers store.fetchUsers
     await selectProcedures.setValue('Tous')
     const selectProconnect = wrapper.find('#filter-proconnect')
     await selectProconnect.setValue('Oui')
     await flushPromises()
 
-    expect(wrapper.text()).toContain('jean@example.com')
-    expect(wrapper.text()).not.toContain('claire@example.com')
+    expect(store.fetchUsers).toHaveBeenCalledWith(
+      expect.objectContaining({
+        has_proconnect: 'Oui',
+      })
+    )
 
-    // Search filter
+    // Search filter triggers store.fetchUsers
     await selectProconnect.setValue('Tous')
     const searchInput = wrapper.find('#user-search-input')
     await searchInput.setValue('Mairie')
     await flushPromises()
 
-    expect(wrapper.text()).toContain('jean@example.com')
-    expect(wrapper.text()).not.toContain('claire@example.com')
+    expect(store.fetchUsers).toHaveBeenCalledWith(
+      expect.objectContaining({
+        search: 'Mairie',
+      })
+    )
   })
 })
