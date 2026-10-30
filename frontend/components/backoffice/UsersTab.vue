@@ -63,7 +63,7 @@
     </div>
 
     <!-- Users Grid Table -->
-    <div class="bo-table-container">
+    <div ref="tableContainerRef" class="bo-table-container">
       <table class="bo-table">
         <thead>
           <tr>
@@ -297,10 +297,16 @@ const pages = computed(() => {
   }))
 })
 
+const tableContainerRef = ref<HTMLElement | null>(null)
+
 const changePage = (newPage: number) => {
   if (newPage >= 1 && newPage <= totalPages.value) {
     page.value = newPage
     updateUrlParams()
+    loadUsers()
+    if (tableContainerRef.value) {
+      tableContainerRef.value.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
   }
 }
 
