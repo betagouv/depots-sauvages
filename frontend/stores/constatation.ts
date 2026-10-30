@@ -84,8 +84,6 @@ export const useConstatationStore = defineStore('constatation', {
         }
       }
       data.volumeM3 = toNumOrNull(data.volumeM3) as any
-      // When saving/updating the volume via the new input, clear the legacy text value
-      data.volumeDepot = '' as any
       return toApiFormat(data)
     },
 
