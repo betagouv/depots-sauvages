@@ -252,7 +252,7 @@ const filters = reactive({
 })
 
 const page = ref(parseQueryParam(route.query.page, 1))
-const pageSize = 3
+const pageSize = 50
 
 const customizableColumns = [
   { key: 'id', label: 'ID' },
