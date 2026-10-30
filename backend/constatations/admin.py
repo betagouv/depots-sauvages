@@ -85,6 +85,7 @@ class ConstatationAdmin(admin.ModelAdmin):
                     "nature_terrain",
                     "proprietaire_terrain_prive",
                     "volume_depot",
+                    "volume_m3",
                     "types_depot",
                     "precisions_depot",
                     "photo_dispo",

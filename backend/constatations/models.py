@@ -23,6 +23,9 @@ class ConstatationBaseModel(PrejudiceMixin, TimeStampedModel):
     )
 
     volume_depot = models.CharField("volume", max_length=255, blank=True)
+    volume_m3 = models.DecimalField(
+        "volume estimé (m³)", max_digits=8, decimal_places=2, null=True, blank=True
+    )
     types_depot = models.JSONField("types", default=list, blank=True, null=True)
     precisions_depot = models.TextField("précisions", blank=True)
     photo_dispo = models.BooleanField("photos", default=False)

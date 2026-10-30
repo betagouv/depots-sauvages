@@ -119,6 +119,7 @@ describe('SectionAuteurDepot - Validation Entreprise', () => {
     store.formData.dateConstat = '2026-05-26'
     store.formData.heureConstat = '10:00'
     store.formData.volumeDepot = 'Moins de 1m3'
+    store.formData.volumeM3 = 0.5
     store.formData.typesDepot = ['Pneus']
     store.formData.precisionsDepot = 'Dépôt de pneus'
     store.formData.ceciEstUnTest = false

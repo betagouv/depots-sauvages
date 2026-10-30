@@ -45,6 +45,7 @@ export interface BackofficeProcedure {
   date_constat: string
   constatant_role: string
   volume_depot: string
+  volume_m3: number | null
   nature_terrain: string[]
   ceci_est_un_test: boolean
   user_email: string

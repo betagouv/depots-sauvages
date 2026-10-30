@@ -69,15 +69,23 @@
       </DsfrInputGroup>
     </div>
 
-    <div class="fr-fieldset__element">
-      <DsfrRadioButtonSet
-        v-model="store.formData.volumeDepot"
-        legend="Volume estimé"
+    <div class="fr-fieldset__element fr-mb-3w">
+      <DsfrInputGroup
+        v-model="store.formData.volumeM3"
+        type="number"
+        min="0.1"
+        step="0.1"
+        inputmode="decimal"
+        label="Volume estimé (en m³)"
+        hint="Indiquez le volume estimé en mètres cubes (ex. 1.5). Consultez l'aide ci-dessous si nécessaire."
         :required="true"
-        :options="VolumeOptions"
-        :error-message="store.errors.volumeDepot"
-        @update:model-value="store.clearFieldError('volumeDepot')"
+        :error-message="store.errors.volumeM3"
+        @update:model-value="store.clearFieldError('volumeM3')"
       />
+
+      <div class="fr-mt-1w">
+        <VolumeGuideAccordion @select-volume="setVolume" />
+      </div>
     </div>
 
     <div class="fr-fieldset__element">
@@ -95,15 +103,21 @@
 
 <script setup lang="ts">
 import PhotoUploader from '@/components/forms/constatation/PhotoUploader.vue'
+import VolumeGuideAccordion from '@/components/forms/constatation/VolumeGuideAccordion.vue'
 import BooleanRadioSet from '@/components/shared/BooleanRadioSet.vue'
 import { useConstatationStore } from '@/stores/constatation'
-import { TypeDepotOptions, VolumeOptions } from '@/types/constatation'
+import { TypeDepotOptions } from '@/types/constatation'
 import {
   DsfrAlert,
   DsfrCheckboxSet,
   DsfrInputGroup,
-  DsfrRadioButtonSet,
 } from '@gouvminint/vue-dsfr'
 
 const store = useConstatationStore()
+
+const setVolume = (val: number) => {
+  store.formData.volumeM3 = val
+  store.clearFieldError('volumeM3')
+  store.autoSave()
+}
 </script>

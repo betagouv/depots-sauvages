@@ -83,6 +83,7 @@ export const useConstatationStore = defineStore('constatation', {
           data.prejudiceAutresCouts = (toNumOrNull(data.prejudiceAutresCouts) ?? 0) as any
         }
       }
+      data.volumeM3 = toNumOrNull(data.volumeM3) as any
       return toApiFormat(data)
     },
 
@@ -238,7 +239,10 @@ export const useConstatationStore = defineStore('constatation', {
       if (!data.heureConstat) this.errors.heureConstat = "L'heure est obligatoire"
 
       // Description
-      if (!data.volumeDepot) this.errors.volumeDepot = 'Le volume est obligatoire'
+      const volNum = Number(data.volumeM3)
+      if (data.volumeM3 === null || data.volumeM3 === undefined || data.volumeM3 === ('' as any) || isNaN(volNum) || volNum <= 0) {
+        this.errors.volumeM3 = 'Le volume estimé (en m³) est obligatoire et doit être supérieur à 0'
+      }
 
       const typesDepot = data.typesDepot || []
       if (typesDepot.length === 0) this.errors.typesDepot = 'Le type de dépôt est obligatoire'

@@ -70,6 +70,7 @@ class BackofficeProcedureSerializer(serializers.ModelSerializer):
             "date_constat",
             "constatant_role",
             "volume_depot",
+            "volume_m3",
             "nature_terrain",
             "ceci_est_un_test",
             "user_email",

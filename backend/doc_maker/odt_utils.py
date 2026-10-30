@@ -141,10 +141,34 @@ class DocumentContextBuilder:
         self.context["photos"] = photo_paths
         return self
 
+    def format_volume(self):
+        """Format the volume for document templates.
+
+        If a legacy estimated range (volume_depot) exists, it is displayed in priority
+        to preserve the authentic historical record.
+        Otherwise, the precise numerical volume (volume_m3) is formatted with m³.
+        """
+        volume_depot = self.context.get("volume_depot")
+        volume_m3 = self.context.get("volume_m3")
+        if volume_depot:
+            self.context["volume_depot"] = volume_depot
+        elif volume_m3 is not None:
+            # e.g., 2 or 2.5 formatted as "2 m³" or "2,5 m³" (strips unnecessary trailing zeros)
+            val_formatted = (
+                floatformat(volume_m3, -2).rstrip("0").rstrip(",")
+                if "," in floatformat(volume_m3, -2)
+                else floatformat(volume_m3, -2)
+            )
+            self.context["volume_depot"] = f"{val_formatted} m³"
+        else:
+            self.context["volume_depot"] = ""
+        return self
+
     def build(self):
         """Build and return the final context dictionary."""
         self.remove_unneeded_fields()
         self.add_calculated_fields()
+        self.format_volume()
         self.add_current_date_info()
         self.format_constat_date_and_time()
         self.check_constatant_role_elision()
