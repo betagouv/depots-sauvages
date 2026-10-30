@@ -95,10 +95,37 @@ export interface Assignee {
   email?: string
 }
 
+export interface ProConnectProfileData {
+  id: number
+  siret: string
+  siren: string
+  organization_label: string
+  roles: string[]
+  sub: string
+  created: string
+  modified: string
+}
+
+export interface BackofficeUser {
+  id: number
+  email: string
+  first_name: string
+  last_name: string
+  is_staff: boolean
+  is_active: boolean
+  date_joined: string
+  last_login: string | null
+  procedures_count: number
+  has_proconnect: boolean
+  proconnect_profile: ProConnectProfileData | null
+}
+
 export interface BackofficeState {
   assignees: Assignee[]
   procedures: BackofficeProcedure[]
   totalProceduresCount: number
+  users: BackofficeUser[]
+  totalUsersCount: number
   stats: {
     totalActive: number
     arWaiting: number
@@ -125,6 +152,8 @@ export const useBackofficeStore = defineStore('backoffice', {
     assignees: [{ id: null, name: 'Non assigné' }],
     procedures: [],
     totalProceduresCount: 0,
+    users: [],
+    totalUsersCount: 0,
     stats: {
       totalActive: 0,
       arWaiting: 0,
@@ -344,6 +373,29 @@ export const useBackofficeStore = defineStore('backoffice', {
         await this.fetchAssignees()
       } catch (error) {
         console.error('Failed to fetch backoffice procedures:', error)
+      }
+    },
+    async fetchUsers(params?: Record<string, any>) {
+      try {
+        const query = new URLSearchParams()
+        if (params) {
+          Object.entries(params).forEach(([key, val]) => {
+            if (val !== undefined && val !== null && val !== '' && val !== 'Tous') {
+              query.append(key, String(val))
+            }
+          })
+        }
+        const queryString = query.toString() ? `?${query.toString()}` : ''
+        const data = await fetchResource(`${API_URL}/backoffice-users/${queryString}`)
+        if (data && typeof data === 'object' && 'results' in data) {
+          this.users = data.results as BackofficeUser[]
+          this.totalUsersCount = data.count ?? data.results.length
+        } else {
+          this.users = (data as BackofficeUser[]) || []
+          this.totalUsersCount = this.users.length
+        }
+      } catch (error) {
+        console.error('Failed to fetch backoffice users:', error)
       }
     },
   },

@@ -13,6 +13,7 @@ from backend.backoffice.views import (
     BackofficeDashboardStatsViewSet,
     BackofficeProceduresViewSet,
     BackofficeStaffViewSet,
+    BackofficeUsersViewSet,
 )
 from backend.blog.views import BlogArticleViewSet
 from backend.bypass_auth.views import BypassAuthConfigView, BypassAuthLoginView
@@ -43,6 +44,7 @@ router.register(
     basename="backoffice-dashboard-stats",
 )
 router.register("backoffice-staff", BackofficeStaffViewSet, basename="backoffice-staff")
+router.register("backoffice-users", BackofficeUsersViewSet, basename="backoffice-users")
 
 router.register("constatations", ConstatationViewSet, basename="constatation")
 router.register("faq-items", FAQItemViewSet, basename="faq-item")

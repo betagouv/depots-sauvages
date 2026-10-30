@@ -56,6 +56,17 @@
         <li role="presentation">
           <button
             class="fr-tabs__tab"
+            :aria-selected="currentTab === 'users'"
+            role="tab"
+            @click="router.push({ path: '/utilisateurs-liste', query: route.query })"
+          >
+            <span class="fr-icon-user-line fr-mr-1w" aria-hidden="true"></span>
+            Utilisateurs
+          </button>
+        </li>
+        <li role="presentation">
+          <button
+            class="fr-tabs__tab"
             :aria-selected="currentTab === 'proconnect'"
             role="tab"
             @click="router.push({ path: '/proconnect-acces', query: route.query })"
@@ -71,6 +82,8 @@
 
       <DetailTab v-if="currentTab === 'detail'" :selectedProcedureId="selectedProcedureId" />
 
+      <UsersTab v-if="currentTab === 'users'" />
+
       <ProConnectConfigTab v-if="currentTab === 'proconnect'" />
     </div>
   </div>
@@ -82,6 +95,7 @@ import DashboardTab from '@/components/backoffice/DashboardTab.vue'
 import DetailTab from '@/components/backoffice/DetailTab.vue'
 import ProConnectConfigTab from '@/components/backoffice/ProConnectConfigTab.vue'
 import ProceduresTab from '@/components/backoffice/ProceduresTab.vue'
+import UsersTab from '@/components/backoffice/UsersTab.vue'
 
 import { useBackofficeStore } from '@/stores/backoffice'
 import { computed, onMounted } from 'vue'

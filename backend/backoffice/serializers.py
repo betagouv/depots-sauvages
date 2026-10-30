@@ -3,6 +3,7 @@ from rest_framework import serializers
 
 from backend.constatations.models import Constatation
 from backend.procedures.models import SuiviProcedure
+from backend.proconnect.models import ProConnectProfile
 
 
 class BackofficeSuiviProcedureSerializer(serializers.ModelSerializer):
@@ -138,3 +139,48 @@ class StaffUserSerializer(serializers.ModelSerializer):
     def get_name(self, obj):
         full_name = obj.get_full_name()
         return full_name if full_name else obj.email
+
+
+class BackofficeProConnectProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProConnectProfile
+        fields = [
+            "id",
+            "siret",
+            "siren",
+            "organization_label",
+            "roles",
+            "sub",
+            "created",
+            "modified",
+        ]
+
+
+class BackofficeUserSerializer(serializers.ModelSerializer):
+    procedures_count = serializers.IntegerField(read_only=True)
+    proconnect_profile = serializers.SerializerMethodField()
+    has_proconnect = serializers.SerializerMethodField()
+
+    class Meta:
+        model = get_user_model()
+        fields = [
+            "id",
+            "email",
+            "first_name",
+            "last_name",
+            "is_staff",
+            "is_active",
+            "date_joined",
+            "last_login",
+            "procedures_count",
+            "has_proconnect",
+            "proconnect_profile",
+        ]
+
+    def get_has_proconnect(self, obj):
+        return hasattr(obj, "proconnect_profile") and obj.proconnect_profile is not None
+
+    def get_proconnect_profile(self, obj):
+        if hasattr(obj, "proconnect_profile") and obj.proconnect_profile is not None:
+            return BackofficeProConnectProfileSerializer(obj.proconnect_profile).data
+        return None

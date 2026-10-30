@@ -1,4 +1,5 @@
 import django_filters
+from django.contrib.auth import get_user_model
 from django.db.models import Q
 
 from backend.constatations.models import Constatation
@@ -76,4 +77,53 @@ class BackofficeProcedureFilterSet(django_filters.FilterSet):
                 | Q(constatant_prenom__icontains=value)
                 | Q(user__email__icontains=value)
             )
+        return queryset
+
+
+class BackofficeUserFilterSet(django_filters.FilterSet):
+    search = django_filters.CharFilter(method="filter_search")
+    procedures_count = django_filters.CharFilter(method="filter_procedures_count")
+    has_procedures = django_filters.CharFilter(method="filter_has_procedures")
+    has_proconnect = django_filters.CharFilter(method="filter_has_proconnect")
+
+    class Meta:
+        model = get_user_model()
+        fields = [
+            "search",
+            "procedures_count",
+            "has_procedures",
+            "has_proconnect",
+        ]
+
+    def filter_search(self, queryset, name, value):
+        if value:
+            return queryset.filter(
+                Q(email__icontains=value)
+                | Q(first_name__icontains=value)
+                | Q(last_name__icontains=value)
+                | Q(proconnect_profile__siret__icontains=value)
+                | Q(proconnect_profile__siren__icontains=value)
+                | Q(proconnect_profile__organization_label__icontains=value)
+            )
+        return queryset
+
+    def filter_procedures_count(self, queryset, name, value):
+        if value == "0" or value == "zero":
+            return queryset.filter(procedures_count=0)
+        elif value == ">0" or value == "gt0":
+            return queryset.filter(procedures_count__gt=0)
+        return queryset
+
+    def filter_has_procedures(self, queryset, name, value):
+        if value == "Oui" or value == "true" or value == "1":
+            return queryset.filter(procedures_count__gt=0)
+        elif value == "Non" or value == "false" or value == "0":
+            return queryset.filter(procedures_count=0)
+        return queryset
+
+    def filter_has_proconnect(self, queryset, name, value):
+        if value == "Oui" or value == "true" or value == "1":
+            return queryset.filter(proconnect_profile__isnull=False)
+        elif value == "Non" or value == "false" or value == "0":
+            return queryset.filter(proconnect_profile__isnull=True)
         return queryset
