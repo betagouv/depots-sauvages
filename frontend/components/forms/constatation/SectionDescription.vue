@@ -80,7 +80,7 @@
         hint="Indiquez le volume estimé en mètres cubes (ex. 1.5). Consultez l'aide ci-dessous si nécessaire."
         :required="true"
         :error-message="store.errors.volumeM3"
-        @update:model-value="store.clearFieldError('volumeM3')"
+        @update:model-value="onVolumeInput"
       />
 
       <div class="fr-mt-1w">
@@ -115,8 +115,14 @@ import {
 
 const store = useConstatationStore()
 
+const onVolumeInput = () => {
+  store.formData.volumeDepot = '' as any
+  store.clearFieldError('volumeM3')
+}
+
 const setVolume = (val: number) => {
   store.formData.volumeM3 = val
+  store.formData.volumeDepot = '' as any
   store.clearFieldError('volumeM3')
   store.autoSave()
 }
