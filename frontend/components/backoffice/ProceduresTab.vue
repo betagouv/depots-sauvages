@@ -90,7 +90,7 @@
 
     <!-- Count display / info bar & Pagination controls -->
     <div class="fr-mb-2w bo-info-bar" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem">
-      <span class="fr-text--sm fr-text-mention--grey">
+      <span class="fr-text--sm fr-text-mention--grey fr-mb-0">
         Nombre de procédures : <strong>{{ filteredProcedures.length }}</strong> sur <strong>{{ store.totalProceduresCount }}</strong> au total
       </span>
       <DsfrPagination

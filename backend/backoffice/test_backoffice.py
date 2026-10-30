@@ -326,3 +326,123 @@ def test_backoffice_procedures_filter_besoin_accompagnement(client):
     assert ids_for({"besoin_accompagnement": "Oui"}) == {avec_accompagnement.id}
     assert ids_for({"besoinAccompagnement": "Oui"}) == {avec_accompagnement.id}
     assert ids_for({"besoinAccompagnement": "Non"}) == {sans_accompagnement.id}
+
+
+@pytest.mark.django_db
+def test_backoffice_users_permissions(client):
+    url = reverse("backoffice-users-list")
+    # Anonymous
+    response = client.get(url)
+    assert response.status_code in [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN]
+
+    # Non staff
+    user = UserFactory(is_staff=False)
+    client.force_login(user)
+    response = client.get(url)
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+@pytest.mark.django_db
+def test_backoffice_users_list_and_filters(client):
+    from backend.proconnect.models import ProConnectProfile
+
+    staff_user = UserFactory(is_staff=True, email="staff@beta.gouv.fr")
+    client.force_login(staff_user)
+
+    user_without_proc = UserFactory(
+        email="zero_proc@test.com", first_name="Alice", last_name="Dupont"
+    )
+    user_with_proc = UserFactory(
+        email="with_proc@test.com", first_name="Bob", last_name="Martin"
+    )
+    Constatation.objects.create(
+        user=user_with_proc,
+        commune="Paris",
+        date_constat="2026-06-27",
+        constatant_role="Garde champêtre",
+        ceci_est_un_test=False,
+    )
+
+    ProConnectProfile.objects.create(
+        user=user_with_proc,
+        siret="12345678900012",
+        siren="123456789",
+        organization_label="Mairie de Paris",
+        roles=["agent_public"],
+    )
+
+    url = reverse("backoffice-users-list")
+    response = client.get(url)
+    assert response.status_code == status.HTTP_200_OK
+    data = response.json()
+    results = data["results"] if isinstance(data, dict) and "results" in data else data
+    emails = [u["email"] for u in results]
+    assert "zero_proc@test.com" in emails
+    assert "with_proc@test.com" in emails
+
+    bob_data = next(u for u in results if u["email"] == "with_proc@test.com")
+    assert bob_data["procedures_count"] == 1
+    assert bob_data["has_proconnect"] is True
+    assert bob_data["proconnect_profile"]["siret"] == "12345678900012"
+    assert bob_data["proconnect_profile"]["organization_label"] == "Mairie de Paris"
+
+    alice_data = next(u for u in results if u["email"] == "zero_proc@test.com")
+    assert alice_data["procedures_count"] == 0
+    assert alice_data["has_proconnect"] is False
+    assert alice_data["proconnect_profile"] is None
+
+    # Filter by has_procedures=Non
+    res_no_proc = client.get(url, {"has_procedures": "Non"}).json()
+    res_no_proc_emails = [u["email"] for u in res_no_proc.get("results", res_no_proc)]
+    assert "zero_proc@test.com" in res_no_proc_emails
+    assert "with_proc@test.com" not in res_no_proc_emails
+
+    # Filter by has_procedures=Oui
+    res_has_proc = client.get(url, {"has_procedures": "Oui"}).json()
+    res_has_proc_emails = [u["email"] for u in res_has_proc.get("results", res_has_proc)]
+    assert "with_proc@test.com" in res_has_proc_emails
+    assert "zero_proc@test.com" not in res_has_proc_emails
+
+    # Filter by has_proconnect=Oui
+    res_pc = client.get(url, {"has_proconnect": "Oui"}).json()
+    res_pc_emails = [u["email"] for u in res_pc.get("results", res_pc)]
+    assert "with_proc@test.com" in res_pc_emails
+    assert "zero_proc@test.com" not in res_pc_emails
+
+    # Filter search by siret
+    res_search = client.get(url, {"search": "12345678900012"}).json()
+    res_search_emails = [u["email"] for u in res_search.get("results", res_search)]
+    assert "with_proc@test.com" in res_search_emails
+    assert "zero_proc@test.com" not in res_search_emails
+
+
+@pytest.mark.django_db
+def test_backoffice_users_export_csv(client):
+    from backend.proconnect.models import ProConnectProfile
+
+    staff_user = UserFactory(is_staff=True, email="staff2@beta.gouv.fr")
+    client.force_login(staff_user)
+
+    user = UserFactory(email="test_csv@test.com", first_name="Claire", last_name="Fontaine")
+    ProConnectProfile.objects.create(
+        user=user,
+        siret="98765432100011",
+        siren="987654321",
+        organization_label="Communauté de communes",
+        roles=["agent_public"],
+    )
+
+    url = reverse("backoffice-users-export-csv")
+    response = client.get(url)
+    assert response.status_code == status.HTTP_200_OK
+    assert response["Content-Type"].startswith("text/csv")
+    content = response.content.decode("utf-8-sig")
+    assert "Identifiant;E-mail;Prénom;Nom" in content
+    assert "test_csv@test.com" in content
+    assert "98765432100011" in content
+    assert "Communauté de communes" in content
+
+    # Test with filter on CSV export
+    response_filtered = client.get(url, {"has_procedures": "Oui"})
+    content_filtered = response_filtered.content.decode("utf-8-sig")
+    assert "test_csv@test.com" not in content_filtered

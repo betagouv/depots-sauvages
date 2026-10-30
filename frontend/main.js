@@ -225,6 +225,17 @@ const router = createRouter({
       },
     },
     {
+      path: '/utilisateurs-liste',
+      name: 'UsersListBackoffice',
+      component: () => import('./pages/backoffice.vue'),
+      meta: {
+        title: 'Backoffice - Utilisateurs',
+        requiresStaff: true,
+        tab: 'users',
+        activeMenu: '/backoffice',
+      },
+    },
+    {
       path: '/proconnect-acces',
       name: 'ProConnectAccesBackoffice',
       component: () => import('./pages/backoffice.vue'),
