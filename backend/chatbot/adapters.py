@@ -9,19 +9,19 @@ from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
-SYSTEM_PROMPT = """Tu es l'Assistant IA de la plateforme Stop Dépôt Sauvage (Protect'Envi).
-Ton rôle est d'accompagner les maires, élus locaux, gardes champêtres, policiers municipaux et agents assermentés dans la gestion et la verbalisation des dépôts sauvages.
+SYSTEM_PROMPT = """Tu es l'Assistant IA de la plateforme officielle Stop Dépôt Sauvage (Protect'Envi).
+Ton rôle est d'apporter immédiatement des réponses concrètes, juridiquement précises et directement actionnables aux maires, élus locaux, policiers municipaux, gardes champêtres et agents assermentés.
 
-Tu apportes des conseils précis basés sur la réglementation en vigueur (Code de l'environnement, Code général des collectivités territoriales, Code pénal) :
-- Procédure de police administrative (mise en demeure, astreinte journalière jusqu'à 1500€, consignation, amende administrative jusqu'à 15 000€ selon l'article L. 541-3).
-- Procédure pénale (constat d'infraction, procès-verbal transmis au Procureur de la République sous 5 jours, amendes forfaitaires ou contraventions de 5ème classe).
-- Guide méthodologique pour la constatation de flagrant délit, relevé des indices et éléments d'identification de l'auteur.
+DIRECTIVES ESSENTIELLES :
+1. Réponds TOUJOURS directement à la question posée dès la première ligne. Ne répète jamais de formule d'accueil générique du type "Bonjour, comment puis-je vous aider" si une question précise a été posée.
+2. Si l'utilisateur mentionne un dépôt constaté (ex: "J'ai constaté un dépôt", "dépôt de gravats", etc.) :
+   - Explique immédiatement les 2 ou 3 réflexes prioritaires (sécurisation/photos, qualification du terrain public/privé, relevé d'indices).
+   - Pose-lui immédiatement les 3 questions clés pour préparer son dossier : la commune / adresse, la nature et le volume estimé des déchets, et si un auteur ou des indices (courrier, plaque) ont été trouvés.
+3. Si l'utilisateur pose une question de procédure légale :
+   - Détaille clairement les deux voies : Police administrative (Art. L. 541-3 CE : mise en demeure, astreinte jusqu'à 1500€/j, amende jusqu'à 15 000€) et Procédure pénale (Art. R. 635-8 CP, PV transmis au Procureur sous 5 jours).
+4. Dès que les informations suffisantes sur un dépôt sont réunies ou dès que l'utilisateur te demande de formaliser/créer un brouillon, déclenche l'outil `propose_constatation_draft`.
 
-Capacité d'action :
-Lorsque l'utilisateur te décrit une situation de dépôt ou exprime le souhait de faire une constatation ou d'engager une procédure, aide-le à récapituler les informations essentielles (commune, type de déchets, volume estimé, type de terrain, auteur éventuel).
-Dès que ces informations clés sont rassemblées ou qu'il te demande de préparer la démarche, utilise impérativement l'outil `propose_constatation_draft` pour lui permettre de créer son brouillon en un clic.
-
-Reste concis, structuré, bienveillant et professionnel. Adopte un ton clair conforme aux standards des services publics français."""
+Ton style : Clair, structuré (puces, gras), rigoureux, expert et concis."""
 
 TOOL_PROPOSE_CONSTATATION_DRAFT = {
     "type": "function",
@@ -265,7 +265,49 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
                     if isinstance(part, dict) and part.get("type") == "text":
                         text_content += part.get("text", "")
                 content = text_content
-            openai_messages.append({"role": role, "content": str(content)})
+
+            content_str = str(content).strip() if content is not None else ""
+
+            # Check if this message contained a tool call or tool result
+            tool_calls = msg.get("tool_calls")
+            if not tool_calls and isinstance(msg.get("parts"), list):
+                # Extract tool calls from Vercel AI SDK parts format if present
+                for part in msg.get("parts", []):
+                    if isinstance(part, dict) and part.get("type") in ("tool-input-available", "tool-call"):
+                        tool_calls = [{
+                            "id": part.get("toolCallId") or part.get("id") or f"call_{uuid.uuid4().hex[:8]}",
+                            "type": "function",
+                            "function": {
+                                "name": part.get("toolName") or part.get("name", ""),
+                                "arguments": json.dumps(part.get("input") or part.get("args") or {}, ensure_ascii=False),
+                            }
+                        }]
+                        break
+
+            # Albert / vLLM requires:
+            # 1. assistant messages must have either non-empty content or non-empty tool_calls
+            # 2. empty placeholder assistant messages must be ignored
+            if role == "assistant":
+                if not content_str and not tool_calls:
+                    continue
+                msg_entry: Dict[str, Any] = {"role": "assistant"}
+                if content_str:
+                    msg_entry["content"] = content_str
+                else:
+                    msg_entry["content"] = ""
+                if tool_calls:
+                    msg_entry["tool_calls"] = tool_calls
+                openai_messages.append(msg_entry)
+            elif role == "user":
+                if not content_str:
+                    continue
+                openai_messages.append({"role": "user", "content": content_str})
+            else:
+                openai_messages.append({"role": role, "content": content_str})
+
+        # Albert rejects requests where the final message is from the assistant
+        while openai_messages and openai_messages[-1].get("role") == "assistant":
+            openai_messages.pop()
 
         payload = {
             "model": self.model,
@@ -279,13 +321,15 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
             resp = requests.post(
                 url, headers=headers, json=payload, stream=True, timeout=self.timeout
             )
+            if not resp.ok:
+                logger.error("LLM API returned error %s: %s | Payload sent: %s", resp.status_code, resp.text, json.dumps(payload, ensure_ascii=False))
             resp.raise_for_status()
         except Exception as e:
             logger.exception("Error during LLM request to %s: %s", url, e)
             yield sse_event(
                 {
                     "type": "error",
-                    "errorText": f"Erreur de communication avec le fournisseur d'IA : {str(e)}",
+                    "errorText": "Erreur de communication avec le fournisseur d'IA.",
                 }
             )
             return
@@ -306,7 +350,10 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
 
             try:
                 chunk = json.loads(data_str)
-                choice = chunk.get("choices", [{}])[0]
+                choices = chunk.get("choices") or []
+                if not choices:
+                    continue
+                choice = choices[0]
                 delta = choice.get("delta", {})
 
                 if content_delta := delta.get("content"):
@@ -364,9 +411,9 @@ def get_ai_adapter() -> BaseAIAdapter:
     model = getattr(settings, "AI_MODEL", "")
     base_url = getattr(settings, "AI_BASE_URL", "")
 
-    if provider == "openrouter":
+    if provider in ("openrouter", "openrouter-api"):
         base_url = base_url or "https://openrouter.ai/api/v1"
-        model = model or "mistralai/mistral-large-2411"
+        model = model or "deepseek/deepseek-chat"
         return OpenAICompatibleAIAdapter(
             api_key=api_key, model=model, base_url=base_url
         )
@@ -378,9 +425,9 @@ def get_ai_adapter() -> BaseAIAdapter:
             api_key=api_key, model=model, base_url=base_url
         )
 
-    if provider == "albert":
+    if provider in ("albert", "albert-api"):
         base_url = base_url or "https://albert.api.etalab.gouv.fr/v1"
-        model = model or "albert/albert-small"
+        model = model or "mistral-small-3-2-24b-instruct-2506"
         return OpenAICompatibleAIAdapter(
             api_key=api_key, model=model, base_url=base_url
         )

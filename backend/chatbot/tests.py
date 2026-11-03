@@ -61,3 +61,35 @@ def test_chatbot_chat_mock_general_question(client):
                 pass
     reconstructed_text = "".join(deltas).lower()
     assert "mise en demeure" in reconstructed_text
+
+
+def test_get_ai_adapter_albert_api(settings):
+    settings.AI_PROVIDER = "albert-api"
+    settings.AI_MODEL = "mistral-small-3-2-24b-instruct-2506"
+    settings.AI_BASE_URL = "https://albert.api.etalab.gouv.fr/v1"
+    settings.AI_API_KEY = "test-key"
+
+    from backend.chatbot.adapters import OpenAICompatibleAIAdapter, get_ai_adapter
+
+    adapter = get_ai_adapter()
+    assert isinstance(adapter, OpenAICompatibleAIAdapter)
+    assert adapter.model == "mistral-small-3-2-24b-instruct-2506"
+    assert adapter.base_url == "https://albert.api.etalab.gouv.fr/v1"
+    assert adapter.api_key == "test-key"
+
+
+def test_get_ai_adapter_openrouter(settings):
+    settings.AI_PROVIDER = "openrouter"
+    settings.AI_MODEL = ""
+    settings.AI_BASE_URL = ""
+    settings.AI_API_KEY = "test-openrouter-key"
+
+    from backend.chatbot.adapters import OpenAICompatibleAIAdapter, get_ai_adapter
+
+    adapter = get_ai_adapter()
+    assert isinstance(adapter, OpenAICompatibleAIAdapter)
+    assert adapter.model == "deepseek/deepseek-chat"
+    assert adapter.base_url == "https://openrouter.ai/api/v1"
+    assert adapter.api_key == "test-openrouter-key"
+
+

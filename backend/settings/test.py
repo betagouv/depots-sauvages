@@ -70,3 +70,7 @@ STORAGES = {
         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
+
+# Chatbot AI Adapter in tests
+AI_PROVIDER = "mock"
+
