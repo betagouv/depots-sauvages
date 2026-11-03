@@ -1,5 +1,6 @@
 <template>
   <div>
+    <DsfrSkipLinks :links="skipLinks" />
     <DsfrHeader
       service-title="Stop Dépôt Sauvage - Protect'Envi"
       service-description="Accompagner les collectivités pour mieux lutter contre les dépôts sauvages."
@@ -21,6 +22,7 @@
       <template #mainnav="{ hidemodal }">
         <nav
           v-if="!route.meta.hideNavigation"
+          id="main-navigation"
           class="fr-nav"
           role="navigation"
           aria-label="Menu principal"
@@ -54,7 +56,7 @@
       </template>
     </DsfrHeader>
 
-    <main role="main" id="content">
+    <main role="main" id="content" tabindex="-1">
       <slot />
     </main>
     <DsfrFooter :logo-text="logoText" :after-mandatory-links="afterMandatoryLinks">
@@ -83,7 +85,13 @@
 </template>
 
 <script setup lang="ts">
-import { DsfrFooter, DsfrFooterLinkList, DsfrHeader, DsfrToggleSwitch } from '@gouvminint/vue-dsfr'
+import {
+  DsfrFooter,
+  DsfrFooterLinkList,
+  DsfrHeader,
+  DsfrSkipLinks,
+  DsfrToggleSwitch,
+} from '@gouvminint/vue-dsfr'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { getBypassAuthConfig } from '../services/api'
@@ -128,6 +136,12 @@ const navLinks = computed<NavLink[]>(() => {
   return links
 })
 
+const skipLinks = computed(() => [
+  { id: 'content', text: 'Contenu' },
+  ...(route.meta.hideNavigation ? [] : [{ id: 'main-navigation', text: 'Menu' }]),
+  { id: 'footer', text: 'Pied de page' },
+])
+
 interface QuickLink {
   label: string
   href?: string
@@ -168,7 +182,6 @@ onMounted(async () => {
   } catch {
     bypassEnabled = false
   }
-
 
   try {
     const fetchedUserInfo = await userStore.fetchUserInfo()
