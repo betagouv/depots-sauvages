@@ -124,13 +124,7 @@ except locale.Error:
     pass  # Fallback to system default
 
 # Public site URL used to build canonical, Open Graph, and sitemap.xml URLs.
-#
-# DOMAIN SWITCH PROCEDURE:
-# When stopdepotsauvage.beta.gouv.fr becomes the primary served domain:
-#   1. Set SITE_BASE_URL to https://stopdepotsauvage.beta.gouv.fr
-#   2. Set up permanent (301) path-by-path redirects from protect-envi
-#   3. Re-submit sitemap.xml in Search Console for the new domain.
-SITE_BASE_URL = "https://protect-envi.beta.gouv.fr"
+SITE_BASE_URL = "https://stopdepotsauvage.beta.gouv.fr"
 
 # Default sharing image (social networks, chat previews)
 SEO_DEFAULT_IMAGE = "/static/depot-de-dechet-sauvage-image-accueil.webp"
