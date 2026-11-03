@@ -38,7 +38,6 @@ else:
     DATABASE_ROUTERS = []
 
 # Public site URL (canonical, Open Graph, sitemap.xml).
-# See "DOMAIN SWITCH PROCEDURE" in backend/settings/base.py before modifying.
 SITE_BASE_URL = env.str("SITE_BASE_URL", default=SITE_BASE_URL)  # noqa: F405
 
 # Security settings for production
