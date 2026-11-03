@@ -73,7 +73,7 @@ SEO_PATTERNS = [
         },
     ),
     (
-        r"^/demarche-numerique-rejoindre-(?:protectenvi|stop-depot-sauvage)$",
+        r"^/(?:rejoindre-le-dispositif|demarche-numerique-rejoindre-(?:protectenvi|stop-depot-sauvage))$",
         {
             "title": "Rejoindre le dispositif - Stop Dépôt Sauvage",
             "desc": "Rejoignez le dispositif Stop Dépôt Sauvage pour lutter contre les dépôts sauvages.",
