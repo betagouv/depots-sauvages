@@ -17,7 +17,7 @@ STATIC_PUBLIC_PATHS = [
     ("/simulateur", 0.7),
     ("/calculateur", 0.7),
     ("/rdv", 0.6),
-    ("/demarche-numerique-rejoindre-stop-depot-sauvage", 0.6),
+    ("/rejoindre-le-dispositif", 0.6),
     ("/contact", 0.5),
 ]
 

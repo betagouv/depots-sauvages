@@ -9,7 +9,6 @@ export const BACKEND_URL = import.meta.env.DEV
     ? window.location.origin
     : ''
 export const API_URL = `${BACKEND_URL}/api`
-export const DN_BASE_URL = import.meta.env.VITE_DN_BASE_URL || 'https://demarche.numerique.gouv.fr'
 
 // Helper to get CSRF token
 const getCSRFToken = (): string => {
