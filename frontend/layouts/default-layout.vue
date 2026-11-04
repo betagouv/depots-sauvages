@@ -57,6 +57,16 @@
     </DsfrHeader>
 
     <main role="main" id="content" tabindex="-1">
+      <div
+        v-if="breadcrumbLinks.length"
+        :class="{ 'fr-background-alt--blue-france': route.meta.breadcrumbBand }"
+      >
+        <div
+          :class="route.meta.fullWidth ? 'fr-container--fluid fr-px-2w fr-px-md-4w' : 'fr-container'"
+        >
+          <DsfrBreadcrumb :links="breadcrumbLinks" class="fr-mt-0 fr-mb-0 fr-pt-2w" />
+        </div>
+      </div>
       <slot />
     </main>
     <DsfrFooter :logo-text="logoText" :after-mandatory-links="afterMandatoryLinks">
@@ -86,35 +96,39 @@
 
 <script setup lang="ts">
 import {
+  DsfrBreadcrumb,
   DsfrFooter,
   DsfrFooterLinkList,
   DsfrHeader,
   DsfrSkipLinks,
   DsfrToggleSwitch,
 } from '@gouvminint/vue-dsfr'
-import { computed, onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed, onMounted, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useBreadcrumb } from '../composables/useBreadcrumb'
 import { getBypassAuthConfig } from '../services/api'
 import { PROCONNECT_ENABLED } from '../services/config'
 import { LOGIN_URL, LOGOUT_URL } from '../services/urls'
 import { useAdminModeStore } from '../stores/admin-mode'
 import { useUserStore } from '../stores/user'
+import { buildBreadcrumbLinks } from '../utils/breadcrumb'
 
 interface FooterLink {
   text: string
   href: string
 }
 
-interface BreadcrumbLink {
-  text: string
-  to: string
-}
-
 const route = useRoute()
+const router = useRouter()
 const adminModeStore = useAdminModeStore()
 const userStore = useUserStore()
 const logoText = ['Ministère', 'de l’intérieur']
-const breadcrumbLinks: BreadcrumbLink[] = []
+const { dynamicLabel, setCurrentPageLabel } = useBreadcrumb()
+const breadcrumbLinks = computed(() => buildBreadcrumbLinks(route, router, dynamicLabel.value))
+watch(
+  () => route.path,
+  () => setCurrentPageLabel(null),
+)
 
 interface NavLink {
   text: string

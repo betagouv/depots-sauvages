@@ -5,8 +5,12 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import DefaultLayout from '../layouts/default-layout.vue'
 
 const route = { fullPath: '/', meta: {} as Record<string, unknown> }
+const router = {
+  resolve: vi.fn((to: string) => ({ href: to, meta: {} })),
+}
 vi.mock('vue-router', () => ({
   useRoute: () => route,
+  useRouter: () => router,
 }))
 
 vi.mock('../services/api', async () => ({
