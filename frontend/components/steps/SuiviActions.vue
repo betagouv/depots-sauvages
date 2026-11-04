@@ -51,30 +51,30 @@
           @update-case="onUpdateSanction"
         >
           <template #extra-fixer_montant>
-            <transition name="fade-slide">
-              <div v-if="suivi.montant_fixe" class="fr-pt-2w">
-                <div class="fr-grid-row">
-                  <div class="fr-col-12 fr-col-md-6">
-                    <DsfrInput
-                      v-model="montantModel"
-                      type="number"
-                      label="Montant de l'amende (€)"
-                      label-visible
-                      :disabled="disabled"
-                      :error-message="montantError"
-                      :is-invalid="!!montantError"
-                      :min="0"
-                      step="50"
-                      @keydown="onKeyDownNumber"
-                    />
-                    <DsfrAlert type="info" class="fr-mt-2w">
-                      Pour vous aider à évaluer le montant de l’amende,
-                      <a href="#" class="fr-link" @click.prevent="openCalculateur">utilisez notre calculateur</a>.
-                    </DsfrAlert>
-                  </div>
+            <div class="fr-pt-2w">
+              <div class="fr-grid-row">
+                <div class="fr-col-12 fr-col-md-6">
+                  <DsfrInput
+                    v-model="montantModel"
+                    type="number"
+                    label="Montant de l'amende (€)"
+                    label-visible
+                    :disabled="disabled"
+                    :error-message="montantError"
+                    :is-invalid="!!montantError"
+                    :min="0"
+                    step="50"
+                    @keydown="onKeyDownNumber"
+                  />
+                  <DsfrAlert type="info" class="fr-mt-2w">
+                    Pour vous aider à évaluer le montant de l’amende,
+                    <a href="#" class="fr-link" @click.prevent="openCalculateur"
+                      >utilisez notre calculateur</a
+                    >.
+                  </DsfrAlert>
                 </div>
               </div>
-            </transition>
+            </div>
           </template>
         </ListeActions>
       </div>
@@ -253,7 +253,8 @@ const notificationOptions = [
 watch(
   () => props.suivi.montant_amende,
   (newAmount) => {
-    if (props.suivi.montant_fixe && newAmount != null) {
+    if (newAmount != null) {
+      props.suivi.montant_fixe = true
       trackUserAction('sanction_decidee', props.constatationId, {
         montant_amende: newAmount,
       })
