@@ -93,3 +93,58 @@ def test_get_ai_adapter_openrouter(settings):
     assert adapter.api_key == "test-openrouter-key"
 
 
+def test_knowledge_retriever_search():
+    from backend.chatbot.retriever import get_retriever
+
+    retriever = get_retriever()
+    assert len(retriever.documents) > 50
+
+    results = retriever.search("amende administrative contradictoire délai", top_k=2)
+    assert len(results) > 0
+    assert any("amende" in doc["title"].lower() or "amende" in doc["content"].lower() for doc in results)
+
+
+def test_openai_compatible_adapter_injects_knowledge_context(settings):
+    from unittest.mock import MagicMock, patch
+    from backend.chatbot.adapters import OpenAICompatibleAIAdapter
+
+    settings.AI_PROVIDER = "openrouter"
+    adapter = OpenAICompatibleAIAdapter(
+        api_key="fake-key", model="test-model", base_url="https://fake.ai/v1"
+    )
+
+    with patch("requests.post") as mock_post:
+        mock_post.return_value = MagicMock(
+            status_code=200,
+            iter_lines=lambda *args, **kwargs: iter(
+                [
+                    b'data: {"choices": [{"delta": {"content": "Test response"}}]}\n\n',
+                    b"data: [DONE]\n\n",
+                ]
+            ),
+        )
+
+        events = list(
+            adapter.stream_chat(
+                messages=[
+                    {
+                        "role": "user",
+                        "content": "Quel est le montant maximal d'une amende administrative ?",
+                    }
+                ],
+                context={"currentPath": "/constatations", "userCommune": "Rennes"},
+            )
+        )
+
+        sent_payload = mock_post.call_args[1]["json"]
+        messages_sent = sent_payload["messages"]
+
+        # Ensure documents were injected into system prompt
+        has_knowledge_injection = any(
+            "DOCUMENTS OFFICIELS ET JURIDIQUES DE RÉFÉRENCE" in m.get("content", "")
+            for m in messages_sent
+        )
+        assert has_knowledge_injection
+
+
+

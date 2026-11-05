@@ -15,12 +15,19 @@ Ton rôle est d'apporter immédiatement des réponses concrètes, juridiquement 
 
 DIRECTIVES ESSENTIELLES :
 1. Réponds TOUJOURS directement à la question posée dès la première ligne. Ne répète jamais de formule d'accueil générique du type "Bonjour, comment puis-je vous aider" si une question précise a été posée.
-2. Si l'utilisateur mentionne un dépôt constaté (ex: "J'ai constaté un dépôt", "dépôt de gravats", etc.) :
-   - Explique immédiatement les 2 ou 3 réflexes prioritaires (sécurisation/photos, qualification du terrain public/privé, relevé d'indices).
-   - Pose-lui immédiatement les 3 questions clés pour préparer son dossier : la commune / adresse, la nature et le volume estimé des déchets, et si un auteur ou des indices (courrier, plaque) ont été trouvés.
-3. Si l'utilisateur pose une question de procédure légale :
-   - Détaille clairement les deux voies : Police administrative (Art. L. 541-3 CE : mise en demeure, astreinte jusqu'à 1500€/j, amende jusqu'à 15 000€) et Procédure pénale (Art. R. 635-8 CP, PV transmis au Procureur sous 5 jours).
-4. Dès que les informations suffisantes sur un dépôt sont réunies ou dès que l'utilisateur te demande de formaliser/créer un brouillon, déclenche l'outil `propose_constatation_draft`.
+2. Si l'utilisateur pose une question sur l'évaluation ou le calcul d'une amende administrative (Art. L. 541-3 CE) :
+   - Rappelle la règle fondamentale : pas de barème rigide ou tarif municipal fixe (illégal car l'amende doit être individualisée et proportionnée).
+   - Donne la formule indicative du calculateur Stop Dépôt Sauvage : **250 € par m³ de déchet**, avec **coefficient x2 si déchets dangereux** (amiante, huiles, produits chimiques) et **coefficient x3 si l'auteur est un professionnel / entreprise**.
+   - Précise le plafond légal de **15 000 €** pour la première amende, et jusqu'à **150 000 €** et **1 500 €/jour d'astreinte** en cas de non-respect de la mise en demeure.
+   - Mentionne le lien vers le calculateur interactif (`/calculateur`).
+3. Si l'utilisateur pose une question sur l'évaluation du volume des déchets (m³) :
+   - Fournis des repères visuels concrets : Sac poubelle 100 L = 0,1 m³ ; Coffre de voiture = 0,3 à 0,5 m³ ; Canapé 3 places = 1,5 à 2,5 m³ ; Remorque = 1 à 2 m³ ; Camionnette utilitaire = 3 à 7 m³ ; Benne de chantier = 8 à 30 m³.
+4. Si l'utilisateur mentionne un dépôt constaté (ex: "J'ai constaté un dépôt", "dépôt de gravats", etc.) :
+   - Explique immédiatement les réflexes prioritaires (photos, domaine public/privé, relevé d'indices).
+   - Pose les questions clés pour préparer son dossier : commune/adresse, nature et volume estimé (m³), et auteur ou indices identifiés.
+5. Si l'utilisateur pose une question de procédure légale :
+   - Détaille clairement les deux voies : Police administrative (Art. L. 541-3 CE : contradictoire 10 jours, mise en demeure, astreinte, amende au profit de la commune) et Procédure pénale (Art. R. 635-8 CP, PV transmis au Procureur sous 5 jours).
+6. Dès que les informations suffisantes sur un dépôt sont réunies ou dès que l'utilisateur te demande de formaliser/créer un brouillon, déclenche l'outil `propose_constatation_draft`.
 
 Ton style : Clair, structuré (puces, gras), rigoureux, expert et concis."""
 
@@ -50,6 +57,10 @@ TOOL_PROPOSE_CONSTATATION_DRAFT = {
                         "Plus de 100m3",
                     ],
                     "description": "Fourchette de volume estimée du dépôt",
+                },
+                "volumeM3": {
+                    "type": "number",
+                    "description": "Volume chiffré estimé en m3 (ex: 0.5, 2.0, 5.0, 15.0)",
                 },
                 "typesDepot": {
                     "type": "array",
@@ -161,10 +172,13 @@ class MockAIAdapter(BaseAIAdapter):
                 types_depot = ["Encombrants"]
 
             volume = "Entre 1 et 3m3"
+            volume_m3 = 2.0
             if "10" in query or "important" in query or "gros" in query:
                 volume = "Entre 3 et 10m3"
+                volume_m3 = 6.0
             elif "petit" in query or "sac" in query or "moins" in query:
                 volume = "Moins de 1m3"
+                volume_m3 = 0.5
 
             commune_match = re.search(r"(?:à|a|sur|commune de)\s+([A-ZÀ-Ÿ][a-zà-ÿ\-]+)", last_user_message)
             commune = commune_match.group(1) if commune_match else ""
@@ -174,6 +188,7 @@ class MockAIAdapter(BaseAIAdapter):
                 "commune": commune,
                 "localisationDepot": "Chemin rural / abords de voirie",
                 "volumeDepot": volume,
+                "volumeM3": volume_m3,
                 "typesDepot": types_depot,
                 "natureTerrain": ["domaine public"],
                 "auteurIdentifie": False,

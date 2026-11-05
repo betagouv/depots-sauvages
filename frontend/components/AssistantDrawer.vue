@@ -317,6 +317,9 @@ const applyDraftAndRedirect = (inputData: any) => {
   if (inputData.volumeDepot) {
     constatationStore.formData.volumeDepot = inputData.volumeDepot
   }
+  if (typeof inputData.volumeM3 === 'number') {
+    constatationStore.formData.volumeM3 = inputData.volumeM3
+  }
   if (Array.isArray(inputData.typesDepot) && inputData.typesDepot.length > 0) {
     constatationStore.formData.typesDepot = inputData.typesDepot
   }
