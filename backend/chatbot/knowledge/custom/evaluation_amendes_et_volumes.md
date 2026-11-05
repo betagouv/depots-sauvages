@@ -82,10 +82,3 @@ Voici les équivalences métrologiques et repères visuels officiels intégrés 
   - Grande benne : $30\text{ m³}$
 - **Semi-remorque (38 t / 44 t)** : $80,0\text{ à } 100,0\text{ m³}$
 
-### E. Règles de correspondance pour les fourchettes historiques
-Si l'évaluation est faite par tranches globales :
-- **Moins de 1 m³** : moyenne indicative retenue à **$0,5\text{ m³}$**
-- **Entre 1 et 3 m³** : moyenne indicative retenue à **$2,0\text{ m³}$**
-- **Entre 3 et 10 m³** : moyenne indicative retenue à **$6,0\text{ m³}$**
-- **Entre 10 et 100 m³** : moyenne indicative retenue à **$50,0\text{ m³}$**
-- **Plus de 100 m³** : base de **$150,0\text{ m³}$**

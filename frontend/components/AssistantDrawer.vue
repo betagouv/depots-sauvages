@@ -41,176 +41,188 @@
         </div>
       </header>
 
-      <!-- Zone des messages -->
+      <!-- Zone des messages ou invitation connexion -->
       <section class="assistant-body fr-p-3w" ref="chatBodyRef">
-        <!-- Message de bienvenue initial si aucun message -->
-        <div v-if="messages.length === 0" class="welcome-box premium-box fr-p-3w fr-mb-2w">
-          <div class="welcome-badge fr-text--xs fr-mb-1w">
-            <span class="fr-icon-sparkling-fill fr-icon--xs fr-mr-1v"></span>
-            Conseils personnalisés
-          </div>
-          <p class="fr-text--sm fr-mb-2w welcome-text">
-            Bonjour ! Je suis à vos côtés pour vous assister dans l'application de la réglementation (Code de l'environnement, pouvoirs de police du maire) ou préparer votre procès-verbal de constatation.
-          </p>
-          <div class="quick-prompts-container">
-            <p class="fr-text--xs fr-text-mention--grey fr-mb-1w quick-prompts-label">Suggestions rapides :</p>
-            <div class="quick-prompts">
-              <button
-                v-for="(prompt, idx) in quickPrompts"
-                :key="idx"
-                class="premium-prompt-pill"
-                @click="sendQuickPrompt(prompt)"
-              >
-                <span class="fr-icon-arrow-right-s-line fr-icon--xs fr-mr-1v" aria-hidden="true"></span>
-                <span>{{ prompt }}</span>
-              </button>
-            </div>
-          </div>
+        <!-- État non connecté : invitation ProConnect -->
+        <div v-if="!userStore.isAuthenticated" class="unauthenticated-container fr-my-auto">
+          <LoginInvitation
+            title="Assistant réservé aux agents publics et élus"
+            description="Pour bénéficier de l'assistance juridique et préparer vos dossiers en toute sécurité, veuillez vous connecter via ProConnect."
+            :redirectTo="route.fullPath"
+          />
         </div>
 
-        <!-- Liste des messages -->
-        <div
-          v-for="message in messages"
-          :key="message.id"
-          class="chat-bubble-row"
-          :class="{ 'user-row': message.role === 'user', 'assistant-row': message.role === 'assistant' }"
-        >
-          <div class="chat-bubble" :class="{ 'user-bubble': message.role === 'user', 'assistant-bubble': message.role === 'assistant' }">
-            <div class="bubble-sender fr-text--xs fr-mb-1v">
-              {{ message.role === 'user' ? 'Vous' : 'Stop Dépot Sauvage' }}
+        <!-- État connecté -->
+        <template v-else>
+          <!-- Message de bienvenue initial si aucun message -->
+          <div v-if="messages.length === 0" class="welcome-box premium-box fr-p-3w fr-mb-2w">
+            <div class="welcome-badge fr-text--xs fr-mb-1w">
+              <span class="fr-icon-sparkling-fill fr-icon--xs fr-mr-1v"></span>
+              Conseils personnalisés
             </div>
-
-            <!-- Contenu texte pour utilisateur (texte direct) ou assistant (Markdown assaini) -->
-            <div
-              v-if="message.role === 'user' && getMessageText(message)"
-              class="user-message-content fr-text--sm"
-            >
-              {{ getMessageText(message) }}
-            </div>
-            <div
-              v-else-if="getMessageText(message)"
-              class="message-rendered-markdown fr-text--sm"
-              v-html="renderMarkdown(getMessageText(message))"
-            ></div>
-
-            <!-- Actions sur le message assistant : Copier & Feedback (👍 / 👎) -->
-            <div v-if="message.role === 'assistant' && getMessageText(message)" class="message-actions-bar fr-mt-1w">
-              <button
-                class="action-icon-btn"
-                :class="{ 'copied': copiedMessageId === message.id }"
-                :title="copiedMessageId === message.id ? 'Copié !' : 'Copier la réponse'"
-                :aria-label="copiedMessageId === message.id ? 'Copié' : 'Copier la réponse'"
-                @click="copyMessageContent(message)"
-              >
-                <span :class="copiedMessageId === message.id ? 'fr-icon-check-line text-success' : 'fr-icon-file-copy-line'" aria-hidden="true"></span>
-                <span v-if="copiedMessageId === message.id" class="action-btn-label">Copié</span>
-              </button>
-
-              <button
-                class="action-icon-btn"
-                :class="{ 'active-thumb': feedbackMap[message.id] === 'up' }"
-                title="Réponse utile"
-                aria-label="Réponse utile"
-                @click="toggleFeedback(message.id, 'up')"
-              >
-                <span class="fr-icon-thumb-up-line" aria-hidden="true"></span>
-              </button>
-
-              <button
-                class="action-icon-btn"
-                :class="{ 'active-thumb': feedbackMap[message.id] === 'down' }"
-                title="Réponse à améliorer"
-                aria-label="Réponse à améliorer"
-                @click="toggleFeedback(message.id, 'down')"
-              >
-                <span class="fr-icon-thumb-down-line" aria-hidden="true"></span>
-              </button>
-            </div>
-
-            <!-- Suggestions dynamiques de rebond (Follow-up chips) pour le dernier message assistant -->
-            <div
-              v-if="message.role === 'assistant' && isLastAssistantMessage(message) && status !== 'streaming' && dynamicFollowUps.length > 0"
-              class="follow-up-chips-container fr-mt-2w"
-            >
-              <div class="follow-up-label fr-text--xs fr-mb-1v">
-                <span class="fr-icon-lightbulb-line fr-icon--xs fr-mr-1v"></span>
-                Suggestions de questions :
-              </div>
-              <div class="follow-up-chips">
+            <p class="fr-text--sm fr-mb-2w welcome-text">
+              {{ welcomeMessage }}
+            </p>
+            <div class="quick-prompts-container">
+              <p class="fr-text--xs fr-text-mention--grey fr-mb-1w quick-prompts-label">Suggestions rapides :</p>
+              <div class="quick-prompts">
                 <button
-                  v-for="(chip, chipIdx) in dynamicFollowUps"
-                  :key="chipIdx"
-                  class="follow-up-chip-btn"
-                  @click="sendQuickPrompt(chip)"
+                  v-for="(prompt, idx) in quickPrompts"
+                  :key="idx"
+                  class="premium-prompt-pill"
+                  @click="sendQuickPrompt(prompt)"
                 >
                   <span class="fr-icon-arrow-right-s-line fr-icon--xs fr-mr-1v" aria-hidden="true"></span>
-                  <span>{{ chip }}</span>
+                  <span>{{ prompt }}</span>
                 </button>
               </div>
             </div>
+          </div>
 
-            <!-- Tool Calls : Generative UI (ex: Brouillon de constatation) -->
-            <template v-if="getToolCalls(message).length > 0">
+          <!-- Liste des messages -->
+          <div
+            v-for="message in messages"
+            :key="message.id"
+            class="chat-bubble-row"
+            :class="{ 'user-row': message.role === 'user', 'assistant-row': message.role === 'assistant' }"
+          >
+            <div class="chat-bubble" :class="{ 'user-bubble': message.role === 'user', 'assistant-bubble': message.role === 'assistant' }">
+              <div class="bubble-sender fr-text--xs fr-mb-1v">
+                {{ message.role === 'user' ? 'Vous' : 'Stop Dépot Sauvage' }}
+              </div>
+
+              <!-- Contenu texte pour utilisateur (texte direct) ou assistant (Markdown assaini) -->
               <div
-                v-for="toolCall in getToolCalls(message)"
-                :key="toolCall.toolCallId || toolCall.id"
-                class="tool-call-container fr-mt-2w"
+                v-if="message.role === 'user' && getMessageText(message)"
+                class="user-message-content fr-text--sm"
               >
-                <!-- Carte spécifique à propose_constatation_draft -->
-                <div v-if="toolCall.toolName === 'propose_constatation_draft'" class="draft-card premium-draft-card fr-p-3w">
-                  <div class="draft-card-header fr-mb-2w">
-                    <div class="draft-card-icon-wrap fr-mr-1w">
-                      <span class="fr-icon-file-text-line fr-icon--sm text-primary"></span>
-                    </div>
-                    <div>
-                      <strong class="fr-text--sm d-block draft-card-title">Brouillon de constatation préparé</strong>
-                      <span class="fr-text--xs fr-text-mention--grey">Prêt à être finalisé sur le site</span>
-                    </div>
-                  </div>
-                  <ul class="draft-recap-list fr-text--xs fr-mb-2w">
-                    <li v-if="toolCall.input?.commune">
-                      <span class="recap-label">Commune :</span> <span class="recap-value">{{ toolCall.input.commune }}</span>
-                    </li>
-                    <li v-if="toolCall.input?.typesDepot?.length">
-                      <span class="recap-label">Déchets :</span> <span class="recap-value">{{ toolCall.input.typesDepot.join(', ') }}</span>
-                    </li>
-                    <li v-if="toolCall.input?.volumeDepot">
-                      <span class="recap-label">Volume estimé :</span> <span class="recap-value">{{ toolCall.input.volumeDepot }}</span>
-                    </li>
-                    <li v-if="toolCall.input?.localisationDepot">
-                      <span class="recap-label">Lieu :</span> <span class="recap-value">{{ toolCall.input.localisationDepot }}</span>
-                    </li>
-                  </ul>
+                {{ getMessageText(message) }}
+              </div>
+              <div
+                v-else-if="getMessageText(message)"
+                class="message-rendered-markdown fr-text--sm"
+                v-html="renderMarkdown(getMessageText(message))"
+              ></div>
+
+              <!-- Actions sur le message assistant : Copier & Feedback (👍 / 👎) -->
+              <div v-if="message.role === 'assistant' && getMessageText(message)" class="message-actions-bar fr-mt-1w">
+                <button
+                  class="action-icon-btn"
+                  :class="{ 'copied': copiedMessageId === message.id }"
+                  :title="copiedMessageId === message.id ? 'Copié !' : 'Copier la réponse'"
+                  :aria-label="copiedMessageId === message.id ? 'Copié' : 'Copier la réponse'"
+                  @click="copyMessageContent(message)"
+                >
+                  <span :class="copiedMessageId === message.id ? 'fr-icon-check-line text-success' : 'fr-icon-file-copy-line'" aria-hidden="true"></span>
+                  <span v-if="copiedMessageId === message.id" class="action-btn-label">Copié</span>
+                </button>
+
+                <button
+                  class="action-icon-btn"
+                  :class="{ 'active-thumb': feedbackMap[message.id] === 'up' }"
+                  title="Réponse utile"
+                  aria-label="Réponse utile"
+                  @click="toggleFeedback(message.id, 'up')"
+                >
+                  <span class="fr-icon-thumb-up-line" aria-hidden="true"></span>
+                </button>
+
+                <button
+                  class="action-icon-btn"
+                  :class="{ 'active-thumb': feedbackMap[message.id] === 'down' }"
+                  title="Réponse à améliorer"
+                  aria-label="Réponse à améliorer"
+                  @click="toggleFeedback(message.id, 'down')"
+                >
+                  <span class="fr-icon-thumb-down-line" aria-hidden="true"></span>
+                </button>
+              </div>
+
+              <!-- Suggestions dynamiques de rebond (Follow-up chips) pour le dernier message assistant -->
+              <div
+                v-if="message.role === 'assistant' && isLastAssistantMessage(message) && status !== 'streaming' && dynamicFollowUps.length > 0"
+                class="follow-up-chips-container fr-mt-2w"
+              >
+                <div class="follow-up-label fr-text--xs fr-mb-1v">
+                  <span class="fr-icon-lightbulb-line fr-icon--xs fr-mr-1v"></span>
+                  Suggestions de questions :
+                </div>
+                <div class="follow-up-chips">
                   <button
-                    class="fr-btn fr-btn--sm fr-btn--icon-left fr-icon-checkbox-circle-line w-100 justify-center premium-draft-action-btn"
-                    @click="applyDraftAndRedirect(toolCall.input)"
+                    v-for="(chip, chipIdx) in dynamicFollowUps"
+                    :key="chipIdx"
+                    class="follow-up-chip-btn"
+                    @click="sendQuickPrompt(chip)"
                   >
-                    Créer mon brouillon de constatation
+                    <span class="fr-icon-arrow-right-s-line fr-icon--xs fr-mr-1v" aria-hidden="true"></span>
+                    <span>{{ chip }}</span>
                   </button>
                 </div>
               </div>
-            </template>
-          </div>
-        </div>
 
-        <!-- Indicateur de streaming / chargement -->
-        <div v-if="status === 'streaming' || status === 'submitted'" class="loading-bubble-row">
-          <div class="chat-bubble assistant-bubble loading-bubble">
-            <span class="typing-indicator fr-mr-1w">
-              <span></span><span></span><span></span>
-            </span>
-            <span class="fr-text--xs fr-text-mention--grey">L'assistant rédige sa réponse...</span>
+              <!-- Tool Calls : Generative UI (ex: Brouillon de constatation) -->
+              <template v-if="getToolCalls(message).length > 0">
+                <div
+                  v-for="toolCall in getToolCalls(message)"
+                  :key="toolCall.toolCallId || toolCall.id"
+                  class="tool-call-container fr-mt-2w"
+                >
+                  <!-- Carte spécifique à propose_constatation_draft -->
+                  <div v-if="toolCall.toolName === 'propose_constatation_draft'" class="draft-card premium-draft-card fr-p-3w">
+                    <div class="draft-card-header fr-mb-2w">
+                      <div class="draft-card-icon-wrap fr-mr-1w">
+                        <span class="fr-icon-file-text-line fr-icon--sm text-primary"></span>
+                      </div>
+                      <div>
+                        <strong class="fr-text--sm d-block draft-card-title">Brouillon de constatation préparé</strong>
+                        <span class="fr-text--xs fr-text-mention--grey">Prêt à être finalisé sur le site</span>
+                      </div>
+                    </div>
+                    <ul class="draft-recap-list fr-text--xs fr-mb-2w">
+                      <li v-if="toolCall.input?.commune">
+                        <span class="recap-label">Commune :</span> <span class="recap-value">{{ toolCall.input.commune }}</span>
+                      </li>
+                      <li v-if="toolCall.input?.typesDepot?.length">
+                        <span class="recap-label">Déchets :</span> <span class="recap-value">{{ toolCall.input.typesDepot.join(', ') }}</span>
+                      </li>
+                      <li v-if="toolCall.input?.volumeDepot">
+                        <span class="recap-label">Volume estimé :</span> <span class="recap-value">{{ toolCall.input.volumeDepot }}</span>
+                      </li>
+                      <li v-if="toolCall.input?.localisationDepot">
+                        <span class="recap-label">Lieu :</span> <span class="recap-value">{{ toolCall.input.localisationDepot }}</span>
+                      </li>
+                    </ul>
+                    <button
+                      class="fr-btn fr-btn--sm fr-btn--icon-left fr-icon-checkbox-circle-line w-100 justify-center premium-draft-action-btn"
+                      @click="applyDraftAndRedirect(toolCall.input)"
+                    >
+                      Créer mon brouillon de constatation
+                    </button>
+                  </div>
+                </div>
+              </template>
+            </div>
           </div>
-        </div>
 
-        <!-- Erreur éventuelle -->
-        <div v-if="error" class="fr-alert fr-alert--error fr-alert--sm fr-mt-2w">
-          <p class="fr-text--xs">Une erreur est survenue lors de l'échange. Veuillez réessayer.</p>
-        </div>
+          <!-- Indicateur de streaming / chargement -->
+          <div v-if="status === 'streaming' || status === 'submitted'" class="loading-bubble-row">
+            <div class="chat-bubble assistant-bubble loading-bubble">
+              <span class="typing-indicator fr-mr-1w">
+                <span></span><span></span><span></span>
+              </span>
+              <span class="fr-text--xs fr-text-mention--grey">L'assistant rédige sa réponse...</span>
+            </div>
+          </div>
+
+          <!-- Erreur éventuelle -->
+          <div v-if="error" class="fr-alert fr-alert--error fr-alert--sm fr-mt-2w">
+            <p class="fr-text--xs">Une erreur est survenue lors de l'échange. Veuillez réessayer.</p>
+          </div>
+        </template>
       </section>
 
-      <!-- Footer : Formulaire de saisie Premium -->
-      <footer class="assistant-footer fr-p-3w">
+      <!-- Footer : Formulaire de saisie Premium (uniquement si connecté) -->
+      <footer v-if="userStore.isAuthenticated" class="assistant-footer fr-p-3w">
         <form @submit.prevent="handleSubmitMessage" class="chat-form">
           <div class="input-container premium-input-wrapper">
             <textarea
@@ -248,6 +260,8 @@ import { marked } from 'marked'
 import DOMPurify from 'dompurify'
 import { API_URL, getCSRFToken } from '../services/api'
 import { useConstatationStore } from '../stores/constatation'
+import { useUserStore } from '../stores/user'
+import LoginInvitation from './shared/LoginInvitation.vue'
 
 const props = defineProps<{
   isOpen: boolean
@@ -260,6 +274,7 @@ const emit = defineEmits<{
 const router = useRouter()
 const route = useRoute()
 const constatationStore = useConstatationStore()
+const userStore = useUserStore()
 
 const inputMessage = ref('')
 const chatBodyRef = ref<HTMLElement | null>(null)
@@ -284,7 +299,7 @@ const loadStoredMessages = () => {
   return undefined
 }
 
-// Transport configured for Django chatbot API with CSRF token
+// Transport configured for Django chatbot API with CSRF token and navigation context
 const transport = new DefaultChatTransport({
   api: `${API_URL}/chatbot/chat/`,
   credentials: 'include',
@@ -292,6 +307,11 @@ const transport = new DefaultChatTransport({
     const csrfToken = getCSRFToken()
     return csrfToken ? { 'X-CSRFToken': csrfToken } : {}
   },
+  body: () => ({
+    context: {
+      currentPath: route.fullPath,
+    },
+  }),
 })
 
 // useChat composable
@@ -402,27 +422,57 @@ const dynamicFollowUps = computed<string[]>(() => {
   ]
 })
 
-// Suggestions rapides contextuelles selon la route
+// Message de bienvenue adaptatif selon le profil utilisateur
+const proceduresCount = computed(() => userStore.userInfo?.procedures_count ?? 0)
+
+const welcomeMessage = computed(() => {
+  const path = route.path
+  if (path.includes('suivi-procedure') || path.includes('constatation')) {
+    return "Bonjour ! J'ai chargé le contexte de votre dossier en cours. Que souhaitez-vous vérifier ou réaliser (délais, modèle d'arrêté, amende) ?"
+  }
+  if (proceduresCount.value === 0) {
+    return "Bonjour ! Vous n'avez pas encore initié de procédure. Vous faites face à un dépôt sauvage ou vous vous demandez si votre situation permet d'agir ? Vérifions-le ensemble en 1 minute pour préparer votre premier dossier."
+  }
+  return "Bonjour ! Je suis à vos côtés pour vous assister dans l'avancement de vos procédures, l'évaluation des amendes administratives et la sécurisation juridique de vos dossiers."
+})
+
+// Suggestions rapides contextuelles selon le profil (primo-utilisateur vs dossiers en cours) et la route
 const quickPrompts = computed(() => {
   const currentPath = route.path
+
+  // Si on est sur une page de suivi de procédure
+  if (currentPath.includes('suivi-procedure')) {
+    return [
+      'Quelle est la prochaine étape à réaliser sur ce dossier ?',
+      'Comment calculer le montant de l’amende administrative ?',
+      'Mon courrier est revenu en pli non réclamé : que faire ?',
+    ]
+  }
+
+  // Si on est sur le formulaire de constatation
   if (currentPath.includes('constatation')) {
     return [
       'Quels sont les éléments obligatoires du constat ?',
-      'Quelle différence entre domaine public et privé ?',
-      'Comment qualifier le volume des déchets ?',
+      'Quelle différence entre domaine public et terrain privé ?',
+      'Comment qualifier le volume des déchets (m³) ?',
     ]
   }
-  if (currentPath.includes('procedure')) {
+
+  // Si l'utilisateur est connecté mais n'a AUCUNE procédure (primo-utilisateur)
+  if (proceduresCount.value === 0) {
     return [
-      'Quels sont les délais d’une mise en demeure ?',
-      'Comment ordonner une astreinte journalière ?',
-      'Quel recours si le contrevenant refuse de payer ?',
+      'J’ai constaté un dépôt sur ma commune : comment agir ?',
+      'Faut-il une délibération préalable pour sanctionner ?',
+      'Un agent technique peut-il constater et signer le rapport ?',
+      'Préparer mon premier brouillon de constatation',
     ]
   }
+
+  // Utilisateur avec des procédures existantes
   return [
-    'J\'ai constaté un dépôt de gravats sur ma commune',
-    'Quelle est la procédure légale contre un dépôt sauvage ?',
-    'Quels sont les pouvoirs de police du maire ?',
+    'Où en sont mes dossiers et quelles sont les priorités ?',
+    'Comment identifier un véhicule sans police municipale ?',
+    'J’ai constaté un nouveau dépôt : préparer un brouillon',
   ]
 })
 

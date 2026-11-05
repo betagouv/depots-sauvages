@@ -6,30 +6,34 @@ import uuid
 from typing import Any, Dict, Generator, List, Optional
 import requests
 from django.conf import settings
+from backend.chatbot.context import scrub_pii
 from backend.chatbot.retriever import get_retriever
 
 logger = logging.getLogger(__name__)
 
-SYSTEM_PROMPT = """Tu es l'Assistant IA de la plateforme officielle Stop Dépôt Sauvage (Protect'Envi).
-Ton rôle est d'apporter immédiatement des réponses concrètes, juridiquement précises et directement actionnables aux maires, élus locaux, policiers municipaux, gardes champêtres et agents assermentés.
+SYSTEM_PROMPT = """Tu es l'Assistant IA officiel de la plateforme Stop Dépôt Sauvage (Protect'Envi).
+Ton rôle est d'apporter immédiatement des réponses concrètes, juridiquement inattaquables et directement actionnables aux maires, élus locaux, policiers municipaux, gardes champêtres et agents assermentés.
+
+CONFIDENTIALITÉ STRICTE (ZERO-PII) :
+- Ne demande et ne divulgue JAMAIS de données personnelles nominatives (noms, prénoms, adresses personnelles, numéros de téléphone ou de plaque d'immatriculation).
+- Traite les dossiers par leur identifiant technique (#ID).
 
 DIRECTIVES ESSENTIELLES :
-1. Réponds TOUJOURS directement à la question posée dès la première ligne. Ne répète jamais de formule d'accueil générique du type "Bonjour, comment puis-je vous aider" si une question précise a été posée.
-2. Si l'utilisateur pose une question sur l'évaluation ou le calcul d'une amende administrative (Art. L. 541-3 CE) :
-   - Rappelle la règle fondamentale : pas de barème rigide ou tarif municipal fixe (illégal car l'amende doit être individualisée et proportionnée).
-   - Donne la formule indicative du calculateur Stop Dépôt Sauvage : **250 € par m³ de déchet**, avec **coefficient x2 si déchets dangereux** (amiante, huiles, produits chimiques) et **coefficient x3 si l'auteur est un professionnel / entreprise**.
-   - Précise le plafond légal de **15 000 €** pour la première amende, et jusqu'à **150 000 €** et **1 500 €/jour d'astreinte** en cas de non-respect de la mise en demeure.
-   - Mentionne le lien vers le calculateur interactif (`/calculateur`).
-3. Si l'utilisateur pose une question sur l'évaluation du volume des déchets (m³) :
-   - Fournis des repères visuels concrets : Sac poubelle 100 L = 0,1 m³ ; Coffre de voiture = 0,3 à 0,5 m³ ; Canapé 3 places = 1,5 à 2,5 m³ ; Remorque = 1 à 2 m³ ; Camionnette utilitaire = 3 à 7 m³ ; Benne de chantier = 8 à 30 m³.
-4. Si l'utilisateur mentionne un dépôt constaté (ex: "J'ai constaté un dépôt", "dépôt de gravats", etc.) :
-   - Explique immédiatement les réflexes prioritaires (photos, domaine public/privé, relevé d'indices).
-   - Pose les questions clés pour préparer son dossier : commune/adresse, nature et volume estimé (m³), et auteur ou indices identifiés.
-5. Si l'utilisateur pose une question de procédure légale :
-   - Détaille clairement les deux voies : Police administrative (Art. L. 541-3 CE : contradictoire 10 jours, mise en demeure, astreinte, amende au profit de la commune) et Procédure pénale (Art. R. 635-8 CP, PV transmis au Procureur sous 5 jours).
+1. Réponds TOUJOURS directement à la question posée dès la première ligne. Pas de formule d'accueil verbeuse si une question précise est posée.
+2. Si l'utilisateur est un primo-utilisateur sans procédure (procedures_count = 0) :
+   - Encourage-le et lève les freins : rappelle qu'aucune assermentation judiciaire ni délibération préalable n'est obligatoire pour initier une constatation.
+   - S'il mentionne un dépôt, pose les 2 questions clés (nature/volume et lieu) et propose immédiatement le brouillon de constatation via l'outil `propose_constatation_draft`.
+3. Si un dossier précis est actif dans le contexte ou mentionné par l'utilisateur :
+   - Prends en compte son étape actuelle, son volume et le statut de la procédure.
+4. Sur les délais de notification et le contradictoire (10 jours minimum) :
+   - "Distribué", "Refusé" et "Pli avisé et non réclamé" : le délai de 10 jours court à compter de la date de présentation. La procédure N'EST PAS bloquée en cas de pli non réclamé.
+   - "NPAI" (N'habite pas à l'adresse indiquée) : la notification est inopposable. Il faut soit rechercher l'adresse (via le Procureur si plainte), soit abandonner la procédure avec motif NPAI (sans notification requise).
+5. Sur l'évaluation de l'amende (Art. L. 541-3 CE) :
+   - Rappelle l'interdiction des tarifs municipaux forfaitaires fixes (illégaux car l'amende doit être individualisée).
+   - Formule indicative du calculateur Stop Dépôt Sauvage : **250 € par m³**, coefficient x2 si déchets dangereux (amiante, huiles, VHU), coefficient x3 si professionnel/entreprise. Plafond : 15 000 €.
 6. Dès que les informations suffisantes sur un dépôt sont réunies ou dès que l'utilisateur te demande de formaliser/créer un brouillon, déclenche l'outil `propose_constatation_draft`.
 
-Ton style : Clair, structuré (puces, gras), rigoureux, expert et concis."""
+Style : Clair, structuré (puces, gras), rigoureux, expert et concis."""
 
 TOOL_PROPOSE_CONSTATATION_DRAFT = {
     "type": "function",
@@ -260,37 +264,41 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
 
         if context:
             ctx_desc = []
-            if current_path := context.get("currentPath"):
-                ctx_desc.append(f"Page actuelle de l'utilisateur : {current_path}")
-            if user_role := context.get("userRole"):
-                ctx_desc.append(f"Rôle de l'utilisateur : {user_role}")
-            if user_commune := context.get("userCommune"):
-                ctx_desc.append(f"Commune de l'utilisateur : {user_commune}")
+            if profil := context.get("profil_usager"):
+                ctx_desc.append(f"Profil usager : {profil} ({context.get('procedures_count', 0)} procédure(s) au total)")
+            if current_path := context.get("current_path") or context.get("currentPath"):
+                ctx_desc.append(f"Page active : {current_path}")
+            if dossier_actif := context.get("dossier_actif"):
+                ctx_desc.append(f"Dossier actuellement ouvert #{dossier_actif.get('id')} : étape '{dossier_actif.get('etape_metier')}', volume {dossier_actif.get('volume_estime')}, auteur identifié : {dossier_actif.get('auteur_identifie')}, statut AR : {dossier_actif.get('ar_statut')}")
+            elif dossiers := context.get("dossiers_recents"):
+                recap_dossiers = ", ".join(f"#{d.get('id')} ({d.get('etape_metier')})" for d in dossiers[:3])
+                ctx_desc.append(f"Dossiers récents de la collectivité : {recap_dossiers}")
+
             if ctx_desc:
                 openai_messages.append(
                     {
                         "role": "system",
-                        "content": "Contexte de session : " + " | ".join(ctx_desc),
+                        "content": "Contexte de session (Strictement Anonymisé) : " + " | ".join(ctx_desc),
                     }
                 )
 
-        # Recherche documentaire ciblée sur le dernier message utilisateur (RAG)
-        last_user_query = ""
+        # Recherche documentaire ciblée sur les 2 derniers messages utilisateur avec concaténation multi-tours
+        user_queries = []
         for m in reversed(messages):
             if m.get("role") == "user":
                 c = m.get("content", "")
                 if isinstance(c, str):
-                    last_user_query = c
+                    user_queries.append(c)
                 elif isinstance(c, list):
-                    last_user_query = " ".join(
-                        part.get("text", "") for part in c if isinstance(part, dict)
-                    )
-                break
+                    user_queries.append(" ".join(p.get("text", "") for p in c if isinstance(p, dict)))
+                if len(user_queries) >= 2:
+                    break
 
-        if last_user_query:
+        combined_query = " ".join(reversed(user_queries))
+        if combined_query:
             try:
                 retriever = get_retriever()
-                relevant_docs = retriever.search(last_user_query, top_k=2)
+                relevant_docs = retriever.search(combined_query, top_k=2)
                 if relevant_docs:
                     rag_context_blocks = []
                     for doc in relevant_docs:
@@ -298,9 +306,9 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
                             f"### Source : {doc['source']} ({doc['title']})\n{doc['content']}"
                         )
                     rag_system_message = (
-                        "DOCUMENTS OFFICIELS ET JURIDIQUES DE RÉFÉRENCE (À privilégier pour ta réponse) :\n\n"
+                        "DOCUMENTS OFFICIELS ET JURIDIQUES DE RÉFÉRENCE (À respecter impérativement) :\n\n"
                         + "\n\n---\n\n".join(rag_context_blocks)
-                        + "\n\nCONSIGNE : Utilise ces documents officiels en priorité pour formuler une réponse juridiquement exacte, citer les bons articles et respecter les modèles de procédure."
+                        + "\n\nCONSIGNE : Utilise ces documents officiels pour formuler une réponse juridiquement exacte."
                     )
                     openai_messages.append(
                         {"role": "system", "content": rag_system_message}
@@ -319,6 +327,10 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
                 content = text_content
 
             content_str = str(content).strip() if content is not None else ""
+            if role == "user":
+                # Épuration anti-PII stricte avant toute transmission à l'API LLM
+                content_str = scrub_pii(content_str)
+
 
             # Check if this message contained a tool call or tool result
             tool_calls = msg.get("tool_calls")
@@ -465,7 +477,7 @@ def get_ai_adapter() -> BaseAIAdapter:
 
     if provider in ("openrouter", "openrouter-api"):
         base_url = base_url or "https://openrouter.ai/api/v1"
-        model = model or "deepseek/deepseek-chat"
+        model = model or "~deepseek/deepseek-v4-flash-latest"
         return OpenAICompatibleAIAdapter(
             api_key=api_key, model=model, base_url=base_url
         )
