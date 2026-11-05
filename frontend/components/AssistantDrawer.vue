@@ -23,12 +23,21 @@
               </p>
             </div>
           </div>
-          <button
-            class="fr-btn fr-btn--tertiary-no-outline fr-btn--sm fr-icon-close-line close-btn-round"
-            title="Fermer le volet d'assistance"
-            aria-label="Fermer"
-            @click="closeDrawer"
-          ></button>
+          <div class="header-actions">
+            <button
+              v-if="messages.length > 0"
+              class="fr-btn fr-btn--tertiary-no-outline fr-btn--sm fr-icon-delete-line header-action-btn"
+              title="Nouvelle conversation"
+              aria-label="Nouvelle conversation"
+              @click="clearChat"
+            ></button>
+            <button
+              class="fr-btn fr-btn--tertiary-no-outline fr-btn--sm fr-icon-close-line close-btn-round"
+              title="Fermer le volet d'assistance"
+              aria-label="Fermer"
+              @click="closeDrawer"
+            ></button>
+          </div>
         </div>
       </header>
 
@@ -83,6 +92,62 @@
               class="message-rendered-markdown fr-text--sm"
               v-html="renderMarkdown(getMessageText(message))"
             ></div>
+
+            <!-- Actions sur le message assistant : Copier & Feedback (👍 / 👎) -->
+            <div v-if="message.role === 'assistant' && getMessageText(message)" class="message-actions-bar fr-mt-1w">
+              <button
+                class="action-icon-btn"
+                :class="{ 'copied': copiedMessageId === message.id }"
+                :title="copiedMessageId === message.id ? 'Copié !' : 'Copier la réponse'"
+                :aria-label="copiedMessageId === message.id ? 'Copié' : 'Copier la réponse'"
+                @click="copyMessageContent(message)"
+              >
+                <span :class="copiedMessageId === message.id ? 'fr-icon-check-line text-success' : 'fr-icon-file-copy-line'" aria-hidden="true"></span>
+                <span v-if="copiedMessageId === message.id" class="action-btn-label">Copié</span>
+              </button>
+
+              <button
+                class="action-icon-btn"
+                :class="{ 'active-thumb': feedbackMap[message.id] === 'up' }"
+                title="Réponse utile"
+                aria-label="Réponse utile"
+                @click="toggleFeedback(message.id, 'up')"
+              >
+                <span class="fr-icon-thumb-up-line" aria-hidden="true"></span>
+              </button>
+
+              <button
+                class="action-icon-btn"
+                :class="{ 'active-thumb': feedbackMap[message.id] === 'down' }"
+                title="Réponse à améliorer"
+                aria-label="Réponse à améliorer"
+                @click="toggleFeedback(message.id, 'down')"
+              >
+                <span class="fr-icon-thumb-down-line" aria-hidden="true"></span>
+              </button>
+            </div>
+
+            <!-- Suggestions dynamiques de rebond (Follow-up chips) pour le dernier message assistant -->
+            <div
+              v-if="message.role === 'assistant' && isLastAssistantMessage(message) && status !== 'streaming' && dynamicFollowUps.length > 0"
+              class="follow-up-chips-container fr-mt-2w"
+            >
+              <div class="follow-up-label fr-text--xs fr-mb-1v">
+                <span class="fr-icon-lightbulb-line fr-icon--xs fr-mr-1v"></span>
+                Suggestions de questions :
+              </div>
+              <div class="follow-up-chips">
+                <button
+                  v-for="(chip, chipIdx) in dynamicFollowUps"
+                  :key="chipIdx"
+                  class="follow-up-chip-btn"
+                  @click="sendQuickPrompt(chip)"
+                >
+                  <span class="fr-icon-arrow-right-s-line fr-icon--xs fr-mr-1v" aria-hidden="true"></span>
+                  <span>{{ chip }}</span>
+                </button>
+              </div>
+            </div>
 
             <!-- Tool Calls : Generative UI (ex: Brouillon de constatation) -->
             <template v-if="getToolCalls(message).length > 0">
@@ -175,7 +240,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, nextTick, watch } from 'vue'
+import { ref, computed, nextTick, watch, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useChat } from '@ai-sdk/vue'
 import { DefaultChatTransport } from 'ai'
@@ -198,6 +263,26 @@ const constatationStore = useConstatationStore()
 
 const inputMessage = ref('')
 const chatBodyRef = ref<HTMLElement | null>(null)
+const copiedMessageId = ref<string | null>(null)
+const feedbackMap = ref<Record<string, 'up' | 'down'>>({})
+
+// Clef pour localStorage
+const CHAT_STORAGE_KEY = 'protectenvi_chatbot_history_v1'
+
+const loadStoredMessages = () => {
+  try {
+    const raw = localStorage.getItem(CHAT_STORAGE_KEY)
+    if (raw) {
+      const parsed = JSON.parse(raw)
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed
+      }
+    }
+  } catch (e) {
+    console.warn('Could not restore chat history:', e)
+  }
+  return undefined
+}
 
 // Transport configured for Django chatbot API with CSRF token
 const transport = new DefaultChatTransport({
@@ -212,6 +297,109 @@ const transport = new DefaultChatTransport({
 // useChat composable
 const { messages, status, error, sendMessage } = useChat({
   transport,
+  initialMessages: loadStoredMessages(),
+})
+
+// Persistance automatique dans localStorage
+watch(
+  messages,
+  (newMessages) => {
+    try {
+      if (newMessages && newMessages.length > 0) {
+        localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(newMessages))
+      } else {
+        localStorage.removeItem(CHAT_STORAGE_KEY)
+      }
+    } catch (e) {
+      // quota or private mode
+    }
+  },
+  { deep: true }
+)
+
+const clearChat = () => {
+  messages.value = []
+  feedbackMap.value = {}
+  try {
+    localStorage.removeItem(CHAT_STORAGE_KEY)
+  } catch (e) {}
+}
+
+const isLastAssistantMessage = (message: any) => {
+  for (let i = messages.value.length - 1; i >= 0; i--) {
+    if (messages.value[i].role === 'assistant') {
+      return messages.value[i].id === message.id
+    }
+  }
+  return false
+}
+
+const copyMessageContent = async (message: any) => {
+  const text = getMessageText(message)
+  if (!text) return
+  try {
+    await navigator.clipboard.writeText(text)
+    copiedMessageId.value = message.id
+    setTimeout(() => {
+      if (copiedMessageId.value === message.id) {
+        copiedMessageId.value = null
+      }
+    }, 2000)
+  } catch (e) {
+    console.warn('Clipboard write failed:', e)
+  }
+}
+
+const toggleFeedback = (messageId: string, type: 'up' | 'down') => {
+  if (feedbackMap.value[messageId] === type) {
+    delete feedbackMap.value[messageId]
+  } else {
+    feedbackMap.value[messageId] = type
+  }
+}
+
+// Suggestions dynamiques contextuelles selon la dernière réponse de l'assistant
+const dynamicFollowUps = computed<string[]>(() => {
+  if (messages.value.length === 0) return []
+  const lastAssistant = [...messages.value].reverse().find((m) => m.role === 'assistant')
+  if (!lastAssistant) return []
+
+  const content = getMessageText(lastAssistant).toLowerCase()
+
+  // Détection du sujet abordé pour proposer des questions de rebond pertinentes
+  if (content.includes('amende') || content.includes('astreinte') || content.includes('15 000')) {
+    return [
+      'Comment notifier l’amende au contrevenant ?',
+      'Quelle est la formule de calcul de l’amende ?',
+      'Quel recours devant le Tribunal Administratif ?',
+    ]
+  }
+  if (content.includes('mise en demeure') || content.includes('contradictoire') || content.includes('délai')) {
+    return [
+      'Quel modèle de courrier utiliser pour la mise en demeure ?',
+      'Que faire si le contrevenant ne répond pas après 10 jours ?',
+      'Faut-il envoyer en recommandé avec accusé de réception ?',
+    ]
+  }
+  if (content.includes('brouillon') || content.includes('constatation') || content.includes('pv')) {
+    return [
+      'Quelles photos ou preuves joindre au constat ?',
+      'Peut-on fouiller les sacs poubelles pour trouver des indices ?',
+      'Quelle différence si le dépôt est sur un chemin rural ?',
+    ]
+  }
+  if (content.includes('propriété privée') || content.includes('terrain privé')) {
+    return [
+      'Le maire peut-il agir sur un terrain privé ?',
+      'Faut-il mettre en demeure le propriétaire du terrain ?',
+    ]
+  }
+
+  // Fallbacks génériques selon la route
+  return [
+    'Quelle est la marche à suivre immédiate ?',
+    'Existe-t-il un modèle d\'arrêté municipal ?',
+  ]
 })
 
 // Suggestions rapides contextuelles selon la route
@@ -406,6 +594,29 @@ watch(
   align-items: center;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.header-action-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--background-alt-grey, #f6f6f6);
+  color: var(--text-mention--grey, #666);
+  transition: all 0.2s ease;
+}
+
+.header-action-btn:hover {
+  background-color: #fee9e9;
+  color: #c9191e;
+}
+
 .assistant-title-group {
   display: flex;
   align-items: center;
@@ -576,6 +787,93 @@ watch(
 
 .message-rendered-markdown {
   line-height: 1.45;
+}
+
+/* Actions sous le message (copier, vote) */
+.message-actions-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding-top: 0.35rem;
+  border-top: 1px solid rgba(0, 0, 145, 0.06);
+}
+
+.action-icon-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 0.2rem 0.4rem;
+  font-size: 0.75rem;
+  color: var(--text-mention--grey, #666);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: all 0.15s ease;
+}
+
+.action-icon-btn:hover {
+  background-color: var(--background-alt-grey, #f0f2f8);
+  color: var(--text-action-high-blue-france, #000091);
+}
+
+.action-icon-btn.copied {
+  color: #18753c;
+  background-color: #eafbe7;
+}
+
+.action-icon-btn.active-thumb {
+  color: var(--text-action-high-blue-france, #000091);
+  background-color: #e8edff;
+  font-weight: 600;
+}
+
+.action-btn-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.text-success {
+  color: #18753c;
+}
+
+/* Follow-up chips dynamiques (suggestions de relance) */
+.follow-up-chips-container {
+  padding-top: 0.5rem;
+}
+
+.follow-up-label {
+  font-weight: 600;
+  color: var(--text-action-high-blue-france, #000091);
+  display: flex;
+  align-items: center;
+}
+
+.follow-up-chips {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.follow-up-chip-btn {
+  background: linear-gradient(135deg, #f8f9fe 0%, #f0f3ff 100%);
+  border: 1px solid var(--border-default-blue-france, #dbe2ff);
+  border-radius: 8px;
+  padding: 0.4rem 0.65rem;
+  font-size: 0.78rem;
+  text-align: left;
+  color: var(--text-action-high-blue-france, #000091);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.follow-up-chip-btn:hover {
+  background: #e4eaff;
+  border-color: var(--border-active-blue-france, #000091);
+  transform: translateX(3px);
 }
 
 .message-rendered-markdown :deep(p) {
