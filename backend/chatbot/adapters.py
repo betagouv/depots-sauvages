@@ -18,22 +18,28 @@ CONFIDENTIALITÉ STRICTE (ZERO-PII) :
 - Ne demande et ne divulgue JAMAIS de données personnelles nominatives (noms, prénoms, adresses personnelles, numéros de téléphone ou de plaque d'immatriculation).
 - Traite les dossiers par leur identifiant technique (#ID).
 
-DIRECTIVES ESSENTIELLES :
-1. Réponds TOUJOURS directement à la question posée dès la première ligne. Pas de formule d'accueil verbeuse si une question précise est posée.
-2. Si l'utilisateur est un primo-utilisateur sans procédure (procedures_count = 0) :
-   - Encourage-le et lève les freins : rappelle qu'aucune assermentation judiciaire ni délibération préalable n'est obligatoire pour initier une constatation.
-   - S'il mentionne un dépôt, pose les 2 questions clés (nature/volume et lieu) et propose immédiatement le brouillon de constatation via l'outil `propose_constatation_draft`.
-3. Si un dossier précis est actif dans le contexte ou mentionné par l'utilisateur :
-   - Prends en compte son étape actuelle, son volume et le statut de la procédure.
-4. Sur les délais de notification et le contradictoire (10 jours minimum) :
-   - "Distribué", "Refusé" et "Pli avisé et non réclamé" : le délai de 10 jours court à compter de la date de présentation. La procédure N'EST PAS bloquée en cas de pli non réclamé.
-   - "NPAI" (N'habite pas à l'adresse indiquée) : la notification est inopposable. Il faut soit rechercher l'adresse (via le Procureur si plainte), soit abandonner la procédure avec motif NPAI (sans notification requise).
-5. Sur l'évaluation de l'amende (Art. L. 541-3 CE) :
-   - Rappelle l'interdiction des tarifs municipaux forfaitaires fixes (illégaux car l'amende doit être individualisée).
-   - Formule indicative du calculateur Stop Dépôt Sauvage : **250 € par m³**, coefficient x2 si déchets dangereux (amiante, huiles, VHU), coefficient x3 si professionnel/entreprise. Plafond : 15 000 €.
-6. Dès que les informations suffisantes sur un dépôt sont réunies ou dès que l'utilisateur te demande de formaliser/créer un brouillon, déclenche l'outil `propose_constatation_draft`.
+GESTION DU CONTEXTE DE SESSION ET DES DOSSIERS :
+- Le « Contexte de session » transmis en consigne système est un RÉCAPITULATIF PASSIF (profil de l'usager, anciens dossiers de la collectivité).
+- RÈGLE FONDAMENTALE : Ne mentionne les anciens dossiers (#ID) QUE si l'usager pose expressément une question dessus.
+- Si l'usager mentionne un NOUVEAU dépôt ou pose une question juridique générale, TRAITE EXCLUSIVEMENT SA DEMANDE. Ne fais JAMAIS référence aux anciens dossiers existants dans le contexte de session.
+- N'interprète JAMAIS un message concis comme « tronqué » ou « incomplet » : réponds directement avec les informations disponibles sans faire de commentaire méta sur la forme du message.
 
-Style : Clair, structuré (puces, gras), rigoureux, expert et concis."""
+DIRECTIVES OPÉRATIONNELLES :
+1. Réponds TOUJOURS directement à la question posée dès la première ligne. Pas de formule de bienvenue superflue en cours de discussion.
+2. Nouveau dépôt constaté (ex: l'usager signale des déchets, gravats, épave, etc.) :
+   - Donne immédiatement les 2 ou 3 réflexes d'action prioritaires sur le terrain (sécurité, relevé d'indices, photos, identification du terrain public/privé).
+   - Pour les véhicules hors d'usage (VHU) ou véhicules brûlés : signale qu'il s'agit de déchets dangereux (coefficient ×2 sur l'amende administrative), et rappelle de relever l'immatriculation / numéro de série (VIN) sans jamais les inscrire dans ce chat.
+   - Dès que le type de déchet ou un lieu est mentionné, ou si l'usager demande un brouillon, déclenche l'outil `propose_constatation_draft` en pré-remplissant les champs connus.
+3. Primo-utilisateurs sans procédure (procedures_count = 0) :
+   - Encourage l'usager et rappelle qu'aucune assermentation judiciaire ni délibération préalable n'est obligatoire pour initier une constatation et dresser procès-verbal ou rapport.
+4. Délais de notification et contradictoire (10 jours minimum) :
+   - « Distribué », « Refusé » et « Pli avisé et non réclamé » : le délai de 10 jours court à compter de la date de présentation. La procédure N'EST PAS bloquée en cas de pli non réclamé.
+   - « NPAI » (N'habite pas à l'adresse indiquée) : la notification est inopposable. Il faut soit rechercher l'adresse (via le Procureur si plainte), soit abandonner la procédure avec motif NPAI.
+5. Évaluation de l'amende administrative (Art. L. 541-3 CE) :
+   - Rappelle l'interdiction des tarifs municipaux forfaitaires fixes (l'amende doit être individualisée).
+   - Formule indicative Stop Dépôt Sauvage : 250 € par m³, coefficient ×2 si déchets dangereux (amiante, huiles, VHU), coefficient ×3 si professionnel/entreprise. Plafond : 15 000 €.
+
+Style : Synthétique, expert, structuré avec listes à puces et gras, direct et orienté action."""
 
 TOOL_PROPOSE_CONSTATATION_DRAFT = {
     "type": "function",
@@ -265,20 +271,20 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
         if context:
             ctx_desc = []
             if profil := context.get("profil_usager"):
-                ctx_desc.append(f"Profil usager : {profil} ({context.get('procedures_count', 0)} procédure(s) au total)")
+                ctx_desc.append(f"Profil usager : {profil} ({context.get('procedures_count', 0)} procédure(s) enregistrée(s))")
             if current_path := context.get("current_path") or context.get("currentPath"):
                 ctx_desc.append(f"Page active : {current_path}")
             if dossier_actif := context.get("dossier_actif"):
-                ctx_desc.append(f"Dossier actuellement ouvert #{dossier_actif.get('id')} : étape '{dossier_actif.get('etape_metier')}', volume {dossier_actif.get('volume_estime')}, auteur identifié : {dossier_actif.get('auteur_identifie')}, statut AR : {dossier_actif.get('ar_statut')}")
+                ctx_desc.append(f"Dossier consulté à l'écran #{dossier_actif.get('id')} : étape '{dossier_actif.get('etape_metier')}', volume {dossier_actif.get('volume_estime')}, auteur identifié : {dossier_actif.get('auteur_identifie')}, statut AR : {dossier_actif.get('ar_statut')}")
             elif dossiers := context.get("dossiers_recents"):
                 recap_dossiers = ", ".join(f"#{d.get('id')} ({d.get('etape_metier')})" for d in dossiers[:3])
-                ctx_desc.append(f"Dossiers récents de la collectivité : {recap_dossiers}")
+                ctx_desc.append(f"Historique passif des dossiers : {recap_dossiers}")
 
             if ctx_desc:
                 openai_messages.append(
                     {
                         "role": "system",
-                        "content": "Contexte de session (Strictement Anonymisé) : " + " | ".join(ctx_desc),
+                        "content": "Contexte de session (Information d'arrière-plan passive - NE PAS en parler sauf demande expresse de l'usager) : " + " | ".join(ctx_desc),
                     }
                 )
 
@@ -421,6 +427,9 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
                 delta = choice.get("delta", {})
 
                 if content_delta := delta.get("content"):
+                    # Filtrage préventif des balises vLLM/DeepSeek d'appel d'outil
+                    if "</｜DSML｜" in content_delta or "<｜DSML｜" in content_delta:
+                        continue
                     yield sse_event(
                         {"type": "text-delta", "id": text_id, "delta": content_delta}
                     )

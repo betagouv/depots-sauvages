@@ -384,6 +384,9 @@ const dynamicFollowUps = computed<string[]>(() => {
   const lastAssistant = [...messages.value].reverse().find((m) => m.role === 'assistant')
   if (!lastAssistant) return []
 
+  // Ne pas encombrer avec des suggestions si un outil (brouillon de constatation) est déjà proposé
+  if (getToolCalls(lastAssistant).length > 0) return []
+
   const content = getMessageText(lastAssistant).toLowerCase()
 
   // Détection du sujet abordé pour proposer des questions de rebond pertinentes
@@ -401,6 +404,13 @@ const dynamicFollowUps = computed<string[]>(() => {
       'Faut-il envoyer en recommandé avec accusé de réception ?',
     ]
   }
+  if (content.includes('véhicule') || content.includes('vhu') || content.includes('pièces auto')) {
+    return [
+      'Comment retrouver le titulaire du certificat d’immatriculation ?',
+      'Faut-il faire enlever l’épave par la fourrière municipale ?',
+      'Comment appliquer le coefficient ×2 pour déchet dangereux ?',
+    ]
+  }
   if (content.includes('brouillon') || content.includes('constatation') || content.includes('pv')) {
     return [
       'Quelles photos ou preuves joindre au constat ?',
@@ -415,7 +425,7 @@ const dynamicFollowUps = computed<string[]>(() => {
     ]
   }
 
-  // Fallbacks génériques selon la route
+  // Fallbacks légers selon la route
   return [
     'Quelle est la marche à suivre immédiate ?',
     'Existe-t-il un modèle d\'arrêté municipal ?',
@@ -513,16 +523,20 @@ const handleSubmitMessage = () => {
 }
 
 const getMessageText = (message: any): string => {
+  let text = ''
   if (typeof message.content === 'string') {
-    return message.content
-  }
-  if (Array.isArray(message.parts)) {
-    return message.parts
+    text = message.content
+  } else if (Array.isArray(message.parts)) {
+    text = message.parts
       .filter((p: any) => p.type === 'text')
       .map((p: any) => p.text)
       .join('')
   }
-  return ''
+  // Nettoyer les balises techniques résiduelles vLLM / DeepSeek tool-calls
+  if (text) {
+    text = text.replace(/<\|[A-Z0-9_]+\|[^>]*>/gi, '').replace(/<\/\|[A-Z0-9_]+\|[^>]*>/gi, '').trim()
+  }
+  return text
 }
 
 const getToolCalls = (message: any): any[] => {
