@@ -6,6 +6,7 @@ import uuid
 from typing import Any, Dict, Generator, List, Optional
 import requests
 from django.conf import settings
+from backend.chatbot.retriever import get_retriever
 
 logger = logging.getLogger(__name__)
 
@@ -248,6 +249,8 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
                 ctx_desc.append(f"Page actuelle de l'utilisateur : {current_path}")
             if user_role := context.get("userRole"):
                 ctx_desc.append(f"Rôle de l'utilisateur : {user_role}")
+            if user_commune := context.get("userCommune"):
+                ctx_desc.append(f"Commune de l'utilisateur : {user_commune}")
             if ctx_desc:
                 openai_messages.append(
                     {
@@ -255,6 +258,40 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
                         "content": "Contexte de session : " + " | ".join(ctx_desc),
                     }
                 )
+
+        # Recherche documentaire ciblée sur le dernier message utilisateur (RAG)
+        last_user_query = ""
+        for m in reversed(messages):
+            if m.get("role") == "user":
+                c = m.get("content", "")
+                if isinstance(c, str):
+                    last_user_query = c
+                elif isinstance(c, list):
+                    last_user_query = " ".join(
+                        part.get("text", "") for part in c if isinstance(part, dict)
+                    )
+                break
+
+        if last_user_query:
+            try:
+                retriever = get_retriever()
+                relevant_docs = retriever.search(last_user_query, top_k=2)
+                if relevant_docs:
+                    rag_context_blocks = []
+                    for doc in relevant_docs:
+                        rag_context_blocks.append(
+                            f"### Source : {doc['source']} ({doc['title']})\n{doc['content']}"
+                        )
+                    rag_system_message = (
+                        "DOCUMENTS OFFICIELS ET JURIDIQUES DE RÉFÉRENCE (À privilégier pour ta réponse) :\n\n"
+                        + "\n\n---\n\n".join(rag_context_blocks)
+                        + "\n\nCONSIGNE : Utilise ces documents officiels en priorité pour formuler une réponse juridiquement exacte, citer les bons articles et respecter les modèles de procédure."
+                    )
+                    openai_messages.append(
+                        {"role": "system", "content": rag_system_message}
+                    )
+            except Exception as e:
+                logger.warning("Error retrieving knowledge docs: %s", e)
 
         for msg in messages:
             role = msg.get("role", "user")
