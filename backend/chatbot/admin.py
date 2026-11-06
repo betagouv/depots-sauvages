@@ -24,10 +24,4 @@ class ChatbotConfigAdmin(SingletonModelAdmin):
                 "fields": ("system_prompt",),
             },
         ),
-        (
-            "Débogage & Observabilité",
-            {
-                "fields": ("debug_mode",),
-            },
-        ),
     )

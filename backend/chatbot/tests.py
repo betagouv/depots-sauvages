@@ -334,6 +334,23 @@ def test_retriever_source_slugs_and_normalization():
     assert res_faq[0]["url"] == "/faq/peut-on-fouiller-un-depot-sauvage"
 
 
+def test_is_safe_external_url():
+    """Vérifie la protection SSRF contre les IP privées et réseaux internes."""
+    from backend.chatbot.views import is_safe_external_url
+
+    # URLs légitimes
+    assert is_safe_external_url("https://openrouter.ai/api/v1") is True
+    assert is_safe_external_url("https://api.mistral.ai/v1") is True
+
+    # Tentatives SSRF (adresses locales / privées)
+    assert is_safe_external_url("http://127.0.0.1:8000/api") is False
+    assert is_safe_external_url("http://localhost:8000/api") is False
+    assert is_safe_external_url("http://169.254.169.254/latest/meta-data/") is False
+    assert is_safe_external_url("http://10.0.0.1:8000/") is False
+    assert is_safe_external_url("ftp://openrouter.ai") is False
+
+
+
 
 
 

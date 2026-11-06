@@ -1,5 +1,8 @@
+import ipaddress
 import json
 import logging
+import socket
+from urllib.parse import urlparse
 from django.http import StreamingHttpResponse
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
@@ -10,18 +13,44 @@ from backend.chatbot.adapters import get_ai_adapter
 from backend.chatbot.context import build_safe_user_context
 from backend.chatbot.models import ChatbotConfig
 from backend.chatbot.serializers import ChatbotConfigSerializer
+from backend.throttling.throttles import ChatbotRateThrottle
 
 logger = logging.getLogger(__name__)
 
 
-class CsrfExemptSessionAuthentication(SessionAuthentication):
+def is_safe_external_url(url: str, allow_private: bool = False) -> bool:
     """
-    SessionAuthentication without strict CSRF enforcement for the chatbot endpoint,
-    while still attaching request.user when authenticated via session.
+    Vérifie qu'une URL est sécurisée et ne cible pas le réseau local ou les IP privées (SSRF).
     """
+    try:
+        parsed = urlparse(url)
+        if parsed.scheme not in ("http", "https") or not parsed.netloc:
+            return False
 
-    def enforce_csrf(self, request):
-        return
+        hostname = parsed.hostname
+        if not hostname:
+            return False
+
+        if allow_private:
+            return True
+
+        # Validation de l'adresse IP directe
+        try:
+            ip = ipaddress.ip_address(hostname)
+            return not (ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved or ip.is_multicast)
+        except ValueError:
+            pass
+
+        # Résolution DNS pour bloquer les domaines pointant vers localhost / IPs privées
+        addr_info = socket.getaddrinfo(hostname, None)
+        for item in addr_info:
+            resolved_ip = ipaddress.ip_address(item[4][0])
+            if resolved_ip.is_private or resolved_ip.is_loopback or resolved_ip.is_link_local or resolved_ip.is_reserved or resolved_ip.is_multicast:
+                return False
+
+        return True
+    except Exception:
+        return False
 
 
 class ChatbotChatView(APIView):
@@ -31,8 +60,9 @@ class ChatbotChatView(APIView):
     Builds a strictly anonymized (Zero-PII) context.
     """
 
-    authentication_classes = [CsrfExemptSessionAuthentication]
+    authentication_classes = [SessionAuthentication]
     permission_classes = [IsAuthenticated]
+    throttle_classes = [ChatbotRateThrottle]
 
     def post(self, request, *args, **kwargs):
         data = request.data
@@ -166,13 +196,12 @@ class BackofficeChatbotTestConnectionView(APIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-        from urllib.parse import urlparse
-        parsed = urlparse(base_url)
-        if parsed.scheme not in ("http", "https") or not parsed.netloc:
+        allow_private_network = bool(getattr(settings, "DEBUG", False))
+        if not is_safe_external_url(base_url, allow_private=allow_private_network):
             return Response(
                 {
                     "success": False,
-                    "error": "Format d'URL de base invalide (doit commencer par http:// ou https://).",
+                    "error": "URL de base invalide ou non autorisée (les adresses locales et privées sont interdites pour des raisons de sécurité).",
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )

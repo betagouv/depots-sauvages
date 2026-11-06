@@ -176,6 +176,7 @@ REST_FRAMEWORK = {
 # Global rate limits (requests per minute)
 THROTTLE_SAFE_RATE = "300/m"
 THROTTLE_UNSAFE_RATE = "60/m"
+THROTTLE_CHATBOT_RATE = "20/m"
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "Dépôts Sauvages API",
