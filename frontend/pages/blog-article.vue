@@ -1,7 +1,5 @@
 <template>
   <div class="fr-container fr-py-4w">
-    <DsfrBreadcrumb :links="breadcrumbLinks" class="fr-mb-4w" />
-
     <div v-if="isLoading" class="text-center fr-py-6w">
       <p class="fr-text--lead">Chargement de l'article...</p>
     </div>
@@ -80,8 +78,8 @@
 import type { BlogArticleItem } from '@/components/blog/BlogArticleCard.vue'
 import BlogArticleModal, { type BlogArticleFormData } from '@/components/blog/BlogArticleModal.vue'
 import * as api from '@/services/api'
+import { useBreadcrumb } from '@/composables/useBreadcrumb'
 import { trackEvent, trackPageViewWithTitle } from '@/services/matomo'
-import { DsfrBreadcrumb } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAdminModeStore } from '../stores/admin-mode'
@@ -106,11 +104,11 @@ const form = reactive<BlogArticleFormData>({
   is_published: true,
 })
 
-const breadcrumbLinks = computed(() => [
-  { text: 'Accueil', to: '/' },
-  { text: 'Blog', to: '/blog' },
-  { text: article.value ? article.value.title : 'Article', to: route.path },
-])
+const { setCurrentPageLabel } = useBreadcrumb()
+watch(
+  () => article.value?.title,
+  (title) => setCurrentPageLabel(title ?? null),
+)
 
 const formattedDate = computed(() => {
   if (!article.value?.created_at) return ''
