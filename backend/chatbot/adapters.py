@@ -480,6 +480,14 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
                 logger.warning("Error decoding LLM chunk: %s", e)
                 continue
 
+        # Si aucun texte n'a été produit (ex: le LLM a émis directement un tool_call sans texte),
+        # émettre une phrase d'accompagnement pour que la bulle de chat ne reste pas vide.
+        if not accumulated_text_chunks:
+            intro_msg = "J'ai préparé votre brouillon de constatation avec les éléments disponibles. Vous pouvez le compléter et l'enregistrer ci-dessous :"
+            yield sse_event(
+                {"type": "text-delta", "id": text_id, "delta": intro_msg}
+            )
+
         yield sse_event({"type": "text-end", "id": text_id})
 
         if self.debug_mode:

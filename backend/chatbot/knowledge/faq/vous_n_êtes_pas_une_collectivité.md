@@ -1,6 +1,6 @@
 # FAQ - 👤 Vous n'êtes pas une collectivité ?
 
-## J'ai constaté un dépôt sauvage : à qui le signaler ?
+## J'ai constaté un dépôt sauvage : à qui le signaler ? <!-- slug: jai-constate-un-depot-sauvage-a-qui-le-signaler -->
 
 Stop Dépôt Sauvage est un outil réservé aux collectivités : il ne permet pas de signaler un dépôt. Pour le signaler, adressez-vous à la mairie de la commune concernée : c'est le maire qui dispose du pouvoir de police pour agir.
 
@@ -17,7 +17,7 @@ Un particulier ne peut pas sanctionner lui-même l'auteur : la mairie décide de
 
 ---
 
-## J'ai reçu un courrier de ma mairie dans le cadre d'une procédure pour dépôt sauvage : que dois-je faire ?
+## J'ai reçu un courrier de ma mairie dans le cadre d'une procédure pour dépôt sauvage : que dois-je faire ? <!-- slug: jai-recu-un-courrier-de-ma-mairie-dans-le-cadre-dune-procedure-pour-depot-sauvage-que-dois-je-faire -->
 
 Stop Dépôt Sauvage est un outil utilisé par les communes : c'est la commune qui a engagé la procédure administrative, et c'est le maire qui décide des suites à donner. L'équipe de Stop Dépôt Sauvage n'a pas accès à votre dossier et ne peut ni le modifier, ni l'annuler, ni vous conseiller sur la procédure.
 
@@ -25,7 +25,7 @@ Pour toute question, pour présenter vos observations ou pour obtenir des préci
 
 ---
 
-## Un dépôt sauvage a été fait sur mon terrain : que faire ?
+## Un dépôt sauvage a été fait sur mon terrain : que faire ? <!-- slug: un-depot-sauvage-a-ete-fait-sur-mon-terrain-que-faire -->
 
 Stop Dépôt Sauvage est un outil réservé aux collectivités. Si un dépôt a été déposé sur votre terrain, vous en êtes en principe la victime : signalez-le à la mairie de la commune, en joignant des photographies datées, et conservez les éléments utiles (courrier, plaque d'immatriculation…) sans les détruire. Vous pouvez aussi déposer plainte auprès de la gendarmerie ou de la police.
 
@@ -33,7 +33,7 @@ Le maire peut alors engager une procédure administrative contre l'auteur. Pour 
 
 ---
 
-## Je suis gendarme ou policier : comment orienter une commune ?
+## Je suis gendarme ou policier : comment orienter une commune ? <!-- slug: je-suis-gendarme-ou-policier-comment-orienter-une-commune -->
 
 Stop Dépôt Sauvage est un service public numérique gratuit développé par le CESAN (Gendarmerie nationale), destiné aux communes. 
 
@@ -47,7 +47,7 @@ Pour accompagner un maire, vous pouvez vous appuyer sur les webinaires Stop Dép
 
 ---
 
-## Je représente une préfecture ou une sous-préfecture : puis-je accéder aux procédures des communes ?
+## Je représente une préfecture ou une sous-préfecture : puis-je accéder aux procédures des communes ? <!-- slug: je-represente-une-prefecture-ou-une-sous-prefecture-puis-je-acceder-aux-procedures-des-communes -->
 
 Stop Dépôt Sauvage est utilisé par les communes, qui restent seules responsables de leurs procédures. Les arrêtés prononçant des amendes sont transmis à la préfecture ou à la sous-préfecture au titre du contrôle de légalité, par les canaux habituels de la commune. 
 
@@ -55,7 +55,7 @@ Pour échanger sur l'outil, vous accompagner dans sa présentation aux élus de 
 
 ---
 
-## Je représente la DREAL, la DDT, l'OFB ou un autre service de l'État : puis-je utiliser l'outil ?
+## Je représente la DREAL, la DDT, l'OFB ou un autre service de l'État : puis-je utiliser l'outil ? <!-- slug: je-represente-la-dreal-la-ddt-lofb-ou-un-autre-service-de-letat-puis-je-utiliser-loutil -->
 
 La procédure administrative contre les dépôts sauvages relève du pouvoir de police du maire : les services de l'État ne peuvent pas l'engager à sa place. En revanche, vous pouvez la faire connaître aux communes de votre territoire, notamment pour les dépôts qui touchent à vos compétences (installations classées, véhicules hors d'usage, espaces naturels). 
 
@@ -63,7 +63,7 @@ Pour une présentation, une démonstration ou un partenariat, contactez l'équip
 
 ---
 
-## Je suis une association, une entreprise ou un autre partenaire : puis-je utiliser l'outil ou collaborer ?
+## Je suis une association, une entreprise ou un autre partenaire : puis-je utiliser l'outil ou collaborer ? <!-- slug: je-suis-une-association-une-entreprise-ou-un-autre-partenaire-puis-je-utiliser-loutil-ou-collaborer -->
 
 Stop Dépôt Sauvage n'est pas ouvert aux associations ni aux entreprises : il est réservé aux collectivités. 
 

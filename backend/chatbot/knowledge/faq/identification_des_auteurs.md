@@ -1,6 +1,6 @@
 # FAQ - 🔍 Identification des auteurs
 
-## Peut-on engager une procédure avec des preuves partielles ?
+## Peut-on engager une procédure avec des preuves partielles ? <!-- slug: peut-on-engager-une-procedure-avec-des-preuves-partielles -->
 
 Oui, dès lors que les éléments recueillis permettent d’identifier un auteur présumé.
 
@@ -10,7 +10,7 @@ Si l’identité est incomplète, la commune peut déposer plainte afin que la g
 
 ---
 
-## Peut-on fouiller un dépôt sauvage ?
+## Peut-on fouiller un dépôt sauvage ? <!-- slug: peut-on-fouiller-un-depot-sauvage -->
 
 Cela dépend de qui fouille. Le maire, ses adjoints, les agents de police municipale et les gardes champêtres peuvent rechercher dans le dépôt des éléments permettant d’identifier l’auteur (courrier, facture, ticket de caisse…) : cela fait partie de leurs prérogatives, sans commissionnement.
 
@@ -20,7 +20,7 @@ Dans tous les cas, prenez des précautions de sécurité (gants, objets coupants
 
 ---
 
-## Peut-on utiliser des caméras de chasse ?
+## Peut-on utiliser des caméras de chasse ? <!-- slug: peut-on-utiliser-des-cameras-de-chasse -->
 
 **Non.** En l'état du droit actuel, les maires ne peuvent pas s'appuyer sur les images captées par des caméras de type « chasse » pour identifier une personne et lui adresser une mise en demeure ou une amende.
 
@@ -32,13 +32,13 @@ Ce sujet est abordé lors des webinaires Stop Dépôt Sauvage : [Inscription](/r
 
 ---
 
-## Faut‑il appeler la gendarmerie en cas de dépôt sauvage ?
+## Faut‑il appeler la gendarmerie en cas de dépôt sauvage ? <!-- slug: fautil-appeler-la-gendarmerie-en-cas-de-depot-sauvage -->
 
 Non, sauf si la commune souhaite un constat judiciaire ou a besoin d’aide pour identifier l’auteur (plaque d’immatriculation, réquisitions…). Dans ce cas, laissez le dépôt en place le temps de leurs constatations.
 
 ---
 
-## Comment identifier l’auteur ?
+## Comment identifier l’auteur ? <!-- slug: comment-identifier-lauteur -->
 
 Par tout moyen licite :
 
@@ -51,7 +51,7 @@ Lorsque l’identité ne peut être obtenue que par une démarche judiciaire (r�
 
 ---
 
-## Qui peut consulter les images de vidéo-protection de la commune ?
+## Qui peut consulter les images de vidéo-protection de la commune ? <!-- slug: est-ce-que-les-policiers-municipaux-peuvent-ont-les-prerogatives-pour-pouvoir-consulter-les-videos-de-la-mairie -->
 
 L’accès aux images dépend uniquement de ce que prévoit le dossier d’autorisation déposé par la commune en préfecture : aucune catégorie de personnes n’est autorisée par défaut. Maire, adjoint, agent de police municipale, autre agent communal : chaque personne amenée à visionner les images doit être nommément désignée.
 
@@ -63,13 +63,13 @@ Le référent sûreté de votre brigade de gendarmerie peut vous accompagner dan
 
 ---
 
-## Peut-on obtenir l’identité d’un auteur présumé à partir d’un simple ticket de caisse avec un code de carte bancaire ?
+## Peut-on obtenir l’identité d’un auteur présumé à partir d’un simple ticket de caisse avec un code de carte bancaire ? <!-- slug: peut-on-obtenir-lidentite-dun-auteur-presume-a-partir-dun-simple-ticket-de-caisse-avec-un-code-cb -->
 
 Oui, mais uniquement dans le cadre d’une procédure judiciaire. Un dépôt de plainte est nécessaire pour que les forces de l’ordre puissent effectuer les réquisitions bancaires permettant d’identifier la personne.
 
 ---
 
-## Si une procédure judiciaire est engagée pour identifier l’auteur (plaque d’immatriculation ou autre), l’identité peut-elle être transmise pour compléter la procédure administrative ?
+## Si une procédure judiciaire est engagée pour identifier l’auteur (plaque d’immatriculation ou autre), l’identité peut-elle être transmise pour compléter la procédure administrative ? <!-- slug: si-une-procedure-judiciaire-est-engagee-pour-identifier-lauteur-plaque-dimmatriculation-ou-autre-lidentite-peut-elle-etre-transmise-pour-completer-la-procedure-administrative -->
 
 Oui. Lorsque l’identité est obtenue par la gendarmerie (par exemple grâce à une plaque d’immatriculation), elle peut être utilisée pour poursuivre la procédure administrative. Deux cas se présentent :
 
@@ -80,7 +80,7 @@ Des modèles de courrier à la brigade et au procureur seront bientôt disponibl
 
 ---
 
-## La police municipale peut‑elle identifier un véhicule ?
+## La police municipale peut‑elle identifier un véhicule ? <!-- slug: la-police-municipale-peutelle-identifier-un-vehicule -->
 
 Oui. Les agents de police municipale et les gardes champêtres peuvent accéder au fichier d’immatriculation (SIV) dans le cadre légal, ce qui suffit pour lancer la procédure administrative.
 
@@ -88,13 +88,13 @@ Dans les autres cas (demande formulée directement par le maire, identification 
 
 ---
 
-## Pourquoi les plaintes sont‑elles parfois classées sans suite ?
+## Pourquoi les plaintes sont‑elles parfois classées sans suite ? <!-- slug: pourquoi-les-plaintes-sontelles-parfois-classees-sans-suite -->
 
 Pour manque de preuves, surcharge des juridictions ou faible gravité pénale des faits. Un classement sans suite n’empêche pas la commune d’engager la procédure administrative, qui reste possible et indépendante de la procédure judiciaire.
 
 ---
 
-## Peut-on utiliser la vidéo-protection pour identifier les auteurs de dépôts sauvages ?
+## Peut-on utiliser la vidéo-protection pour identifier les auteurs de dépôts sauvages ? <!-- slug: peut-on-utiliser-la-video-protection-pour-identifier-les-auteurs-de-depots-sauvages -->
 
 Oui, sous conditions. La vidéo-protection peut être utilisée pour prévenir et constater les infractions relatives à l’abandon d’ordures, de déchets ou de matériaux ([art. L. 251-2 et L. 252-2 du Code de la sécurité intérieure](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000047569457?isSuggest=true)).
 
@@ -106,7 +106,7 @@ Sur un terrain forestier privé, le propriétaire peut installer des caméras po
 
 ---
 
-## Quelles informations sur l’auteur faut-il pour engager la procédure ?
+## Quelles informations sur l’auteur faut-il pour engager la procédure ? <!-- slug: quelles-informations-sur-lauteur-faut-il-pour-engager-la-procedure -->
 
 Il faut pouvoir identifier clairement le responsable du dépôt. Pour une personne physique, le nom, le prénom et l’adresse sont nécessaires ; la date et le lieu de naissance ne le sont pas. Pour une personne morale, ce sont les informations permettant d’identifier l’entreprise responsable.
 

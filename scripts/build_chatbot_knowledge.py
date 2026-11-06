@@ -147,7 +147,8 @@ def process_dump_data():
         with open(file_path, "w", encoding="utf-8") as f:
             f.write(f"# FAQ - {cat_data['title']}\n\n")
             for item in cat_data["items"]:
-                f.write(f"## {item['question']}\n\n")
+                slug_attr = f" <!-- slug: {item['slug']} -->" if item.get('slug') else ""
+                f.write(f"## {item['question']}{slug_attr}\n\n")
                 f.write(f"{item['answer']}\n\n---\n\n")
         print(f"Généré FAQ: {file_path.name} ({len(cat_data['items'])} Q/R)")
 

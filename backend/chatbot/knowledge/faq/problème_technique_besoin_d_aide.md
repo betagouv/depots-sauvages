@@ -1,6 +1,6 @@
 # FAQ - ❓Problème technique / Besoin d'aide
 
-## Comment créer un compte Stop Dépôt Sauvage ?
+## Comment créer un compte Stop Dépôt Sauvage ? <!-- slug: comment-se-creer-un-compte-proconnect -->
 
 Rendez-vous sur [https://stopdepotsauvage.beta.gouv.fr/demarrer-constatation](/demarrer-constatation) et cliquez sur « Se connecter avec ProConnect » : cela crée votre compte sécurisé. 
 
@@ -8,7 +8,7 @@ Si vous n’avez pas encore de compte ProConnect, consultez la question suivante
 
 ---
 
-## Comment se créer un compte ProConnect ?
+## Comment se créer un compte ProConnect ? <!-- slug: comment-se-creer-un-compte-proconnect -->
 
 Suivez le guide pour créer votre compte ProConnect : [https://proconnect.crisp.help/fr/article/utiliser-proconnect-au-sein-dune-collectivite-ou-dune-mairie-1mobnb6/](https://proconnect.crisp.help/fr/article/utiliser-proconnect-au-sein-dune-collectivite-ou-dune-mairie-1mobnb6/)
 
@@ -16,31 +16,31 @@ En cas de difficulté, vous pouvez [contacter l’équipe](mailto:contact@stopde
 
 ---
 
-## Comment changer le nom du titulaire d’un compte (agent muté, nouveau maire) ?
+## Comment changer le nom du titulaire d’un compte (agent muté, nouveau maire) ? <!-- slug: comment-changer-le-nom-du-titulaire-dun-compte-agent-mute-nouveau-maire -->
 
 Les identifiants, mots de passe et le nom rattaché à votre compte se gèrent directement depuis votre espace ProConnect : l’équipe Stop Dépôt Sauvage n’a pas la main sur ces informations. Vous pouvez modifier le nom associé à votre compte ici : [https://www.proconnect.gouv.fr/mon-compte](https://www.proconnect.gouv.fr/mon-compte)
 
 ---
 
-## Un agent mutualisé entre plusieurs communes peut-il utiliser un seul compte ?
+## Un agent mutualisé entre plusieurs communes peut-il utiliser un seul compte ? <!-- slug: un-agent-mutualise-entre-plusieurs-communes-peut-il-utiliser-un-seul-compte -->
 
 Oui. Un agent peut utiliser un seul compte, avec son adresse électronique, même s’il intervient pour plusieurs communes. Lors de chaque procédure, il lui suffit de sélectionner la commune concernée pour que la démarche soit rattachée au bon territoire.
 
 ---
 
-## Peut-on partager un dossier avec un collègue ou un supérieur ?
+## Peut-on partager un dossier avec un collègue ou un supérieur ? <!-- slug: peut-on-partager-un-dossier-avec-un-collegue-ou-un-superieur -->
 
 Pas encore. Le partage et la consultation de dossiers entre plusieurs utilisateurs d’une même commune ne sont pas encore disponibles ; c’est une évolution prévue prochainement. Pour le moment, un dossier n’est accessible que par l’utilisateur qui l’a créé.
 
 ---
 
-## Comment clôturer une procédure lancée par erreur (mauvaise personne, abandon décidé par le maire) ?
+## Comment clôturer une procédure lancée par erreur (mauvaise personne, abandon décidé par le maire) ? <!-- slug: comment-cloturer-une-procedure-lancee-par-erreur-mauvaise-personne-abandon-decide-par-le-maire -->
 
 Dans votre suivi de procédure, onglet « Mes procédures », rendez-vous à la section « 3. Abandonner les poursuites », indiquez le motif, puis clôturez la procédure.
 
 ---
 
-## Comment échanger avec l’équipe ou participer à un webinaire ?
+## Comment échanger avec l’équipe ou participer à un webinaire ? <!-- slug: comment-echanger-avec-lequipe-ou-participer-a-un-webinaire -->
 
 Vous pouvez consulter les prochaines sessions et vous inscrire directement [ici](/rdv).
 
@@ -48,7 +48,7 @@ Le support de présentation est envoyé aux participants après la session ; s�
 
 ---
 
-## Puis-je obtenir les coordonnées d’autres communes utilisatrices ?
+## Puis-je obtenir les coordonnées d’autres communes utilisatrices ? <!-- slug: puis-je-obtenir-les-coordonnees-dautres-communes-utilisatrices -->
 
 Nous ne pouvons pas communiquer les coordonnées des communes utilisatrices sans leur accord préalable : les coordonnées professionnelles nominatives de leurs interlocuteurs sont des données à caractère personnel, dont la transmission à un tiers doit s’inscrire dans un cadre juridique approprié (RGPD).
 

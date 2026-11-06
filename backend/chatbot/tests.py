@@ -313,6 +313,31 @@ def test_chatbot_debug_mode_logging(caplog):
     assert "Hello world" in caplog.text
 
 
+@pytest.mark.django_db
+def test_retriever_source_slugs_and_normalization():
+    """Vérifie que le retriever normalise les accents et associe les slugs officiels."""
+    from backend.chatbot.retriever import get_retriever
+
+    retriever = get_retriever()
+    assert len(retriever.documents) > 50
+
+    # Recherche sur mot accentué et non-accentué
+    res_accent = retriever.search("Comment rédiger un rapport ?", top_k=2)
+    res_no_accent = retriever.search("comment rediger un rapport", top_k=2)
+    assert len(res_accent) > 0
+    assert len(res_no_accent) > 0
+    assert res_accent[0]["title"] == res_no_accent[0]["title"]
+
+    # Vérification présence de l'URL sur une FAQ
+    res_faq = retriever.search("Peut-on fouiller un dépôt sauvage ?", top_k=1)
+    assert len(res_faq) > 0
+    assert res_faq[0]["url"] == "/faq/peut-on-fouiller-un-depot-sauvage"
+
+
+
+
+
+
 
 
 

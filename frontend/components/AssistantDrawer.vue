@@ -185,15 +185,22 @@
                       <li v-if="toolCall.input?.typesDepot?.length">
                         <span class="recap-label">Déchets :</span> <span class="recap-value">{{ toolCall.input.typesDepot.join(', ') }}</span>
                       </li>
-                      <li v-if="toolCall.input?.volumeDepot">
-                        <span class="recap-label">Volume estimé :</span> <span class="recap-value">{{ toolCall.input.volumeDepot }}</span>
+                      <li v-if="typeof toolCall.input?.volumeM3 === 'number' || toolCall.input?.volumeDepot">
+                        <span class="recap-label">Volume estimé :</span> <span class="recap-value">{{ typeof toolCall.input?.volumeM3 === 'number' ? `${toolCall.input.volumeM3} m³` : toolCall.input.volumeDepot }}</span>
                       </li>
                       <li v-if="toolCall.input?.localisationDepot">
                         <span class="recap-label">Lieu :</span> <span class="recap-value">{{ toolCall.input.localisationDepot }}</span>
                       </li>
                     </ul>
+
+                    <!-- Aide visuelle intégrée pour ajuster / choisir le volume -->
+                    <AssistantVolumeGuide
+                      :current-volume-m3="toolCall.input?.volumeM3"
+                      @select-volume="(val, label) => updateDraftVolume(toolCall.input, val, label)"
+                    />
+
                     <button
-                      class="fr-btn fr-btn--sm fr-btn--icon-left fr-icon-checkbox-circle-line w-100 justify-center premium-draft-action-btn"
+                      class="fr-btn fr-btn--sm fr-btn--icon-left fr-icon-checkbox-circle-line w-100 justify-center premium-draft-action-btn fr-mt-2w"
                       @click="applyDraftAndRedirect(toolCall.input)"
                     >
                       Créer mon brouillon de constatation
@@ -223,6 +230,14 @@
 
       <!-- Footer : Formulaire de saisie Premium (uniquement si connecté) -->
       <footer v-if="userStore.isAuthenticated" class="assistant-footer fr-p-3w">
+        <!-- Aide visuelle volume dépliable accessible à tout moment au-dessus du champ de saisie -->
+        <div class="fr-mb-2w" v-if="messages.length > 0">
+          <AssistantVolumeGuide
+            :interactive="true"
+            @select-volume="onVolumeSelectedFromChat"
+          />
+        </div>
+
         <form @submit.prevent="handleSubmitMessage" class="chat-form">
           <div class="input-container premium-input-wrapper">
             <textarea
@@ -262,6 +277,7 @@ import { API_URL, getCSRFToken } from '../services/api'
 import { useConstatationStore } from '../stores/constatation'
 import { useUserStore } from '../stores/user'
 import LoginInvitation from './shared/LoginInvitation.vue'
+import AssistantVolumeGuide from './AssistantVolumeGuide.vue'
 
 const props = defineProps<{
   isOpen: boolean
@@ -544,7 +560,13 @@ const getToolCalls = (message: any): any[] => {
   if (Array.isArray(message.parts)) {
     for (const part of message.parts) {
       if (part.type === 'tool-input-available' || part.type?.startsWith('tool-')) {
-        tools.push(part)
+        const resolvedName =
+          part.toolName ||
+          (part.type?.startsWith('tool-') ? part.type.replace(/^tool-/, '') : '')
+        tools.push({
+          ...part,
+          toolName: resolvedName,
+        })
       }
     }
   }
@@ -557,6 +579,16 @@ const renderMarkdown = (content: string): string => {
   return DOMPurify.sanitize(rawHtml)
 }
 
+const updateDraftVolume = (inputData: any, val: number, _label: string) => {
+  if (!inputData) return
+  inputData.volumeM3 = val
+}
+
+const onVolumeSelectedFromChat = (val: number, label: string) => {
+  inputMessage.value = `Le volume estimé du dépôt est d'environ ${val} m³ (${label}).`
+  handleSubmitMessage()
+}
+
 const applyDraftAndRedirect = (inputData: any) => {
   if (!inputData) return
 
@@ -566,11 +598,11 @@ const applyDraftAndRedirect = (inputData: any) => {
   if (inputData.localisationDepot) {
     constatationStore.formData.localisationDepot = inputData.localisationDepot
   }
-  if (inputData.volumeDepot) {
-    constatationStore.formData.volumeDepot = inputData.volumeDepot
-  }
   if (typeof inputData.volumeM3 === 'number') {
     constatationStore.formData.volumeM3 = inputData.volumeM3
+    constatationStore.formData.volumeDepot = '' as any
+  } else if (inputData.volumeDepot) {
+    constatationStore.formData.volumeDepot = inputData.volumeDepot
   }
   if (Array.isArray(inputData.typesDepot) && inputData.typesDepot.length > 0) {
     constatationStore.formData.typesDepot = inputData.typesDepot

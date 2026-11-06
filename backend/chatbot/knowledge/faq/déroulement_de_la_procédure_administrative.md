@@ -1,6 +1,6 @@
 # FAQ - 🧾 Déroulement de la procédure administrative
 
-## Quelles sont les étapes de la procédure administrative ?
+## Quelles sont les étapes de la procédure administrative ? <!-- slug: quelles-sont-les-etapes-de-la-procedure-administrative -->
 
 **Constater et identifier**
 
@@ -27,7 +27,7 @@ Lorsque la mise en demeure n’est pas respectée dans le délai fixé, la commu
 
 ---
 
-## Qui peut engager la procédure administrative ?
+## Qui peut engager la procédure administrative ? <!-- slug: qui-peut-engager-la-procedure-administrative -->
 
 Le maire, ou ses adjoints par délégation.
 
@@ -37,7 +37,7 @@ Le président d’un EPCI à fiscalité propre (ou d’un groupement de collecti
 
 ---
 
-## Qui peut constater un dépôt sauvage ?
+## Qui peut constater un dépôt sauvage ? <!-- slug: qui-peut-constater-un-depot-sauvage -->
 
 Tout agent communal peut repérer un dépôt et le signaler. En revanche, le rapport de constatation doit être signé par une personne habilitée :
 
@@ -50,7 +50,7 @@ Les agents de police municipale peuvent par ailleurs verbaliser certaines infrac
 
 ---
 
-## Peut-on engager une procédure si le dépôt est sur un terrain privé ?
+## Peut-on engager une procédure si le dépôt est sur un terrain privé ? <!-- slug: peut-on-engager-une-procedure-si-le-depot-est-sur-un-terrain-prive -->
 
 Oui, à condition que le maire justifie son intervention par une atteinte à la sécurité, à la tranquillité ou à la salubrité publiques, au titre de ses pouvoirs de police générale ([art. L. 2212-2 du CGCT](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000029946370?isSuggest=true)). Ces pouvoirs s’exercent aussi sur les propriétés privées. S’agissant de déchets, l’atteinte à la salubrité est en pratique facile à argumenter. Les éléments retenus doivent être mentionnés dans le rapport de constatation.
 
@@ -64,7 +64,7 @@ Le propriétaire du terrain est soit l’auteur, soit la victime du dépôt. S�
 
 ---
 
-## Que faire si le dépôt implique plusieurs personnes ?
+## Que faire si le dépôt implique plusieurs personnes ? <!-- slug: que-faire-si-le-depot-implique-plusieurs-personnes -->
 
 Plusieurs responsables peuvent être sanctionnés pour un même dépôt :
 
@@ -76,7 +76,7 @@ Chaque personne peut faire l’objet d’une amende distincte, proportionnée à
 
 ---
 
-## Peut-on retirer un dépôt sauvage immédiatement ?
+## Peut-on retirer un dépôt sauvage immédiatement ? <!-- slug: peut-on-retirer-un-depot-sauvage-immediatement -->
 
 Oui, dès lors que les éléments nécessaires ont été recueillis (photos, indices, éléments d’identification).
 
@@ -88,7 +88,7 @@ Dans tous les cas, conservez vos preuves avant l’enlèvement (photographies da
 
 ---
 
-## Le président d’un EPCI peut-il accorder une délégation de signature à un agent ?
+## Le président d’un EPCI peut-il accorder une délégation de signature à un agent ? <!-- slug: le-president-dun-epci-peut-il-accorder-une-delegation-de-signature-a-un-agent -->
 
 Oui. Le président d’un EPCI peut déléguer sa signature à certains agents pour les actes relatifs à la procédure administrative ([art. L. 5211-9 du CGCT](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000037200843?isSuggest=true)). Cette délégation prend la forme d’un arrêté désignant les agents bénéficiaires et les actes concernés.
 

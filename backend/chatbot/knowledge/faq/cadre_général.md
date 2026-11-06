@@ -1,6 +1,6 @@
 # FAQ - ⚖️ Cadre général
 
-## Quelle est la base juridique de la procédure administrative ?
+## Quelle est la base juridique de la procédure administrative ? <!-- slug: quelle-est-la-base-juridique-de-la-procedure-administrative -->
 
 La procédure repose sur [l’article L. 541-3 du Code de l’environnement](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000048247402). Il permet à l’autorité titulaire du pouvoir de police (le maire, ou ses adjoints par délégation) d’ordonner à l’auteur d’un dépôt sauvage le paiement d’une amende administrative, après l’avoir informé et mis en mesure de présenter ses observations, sans passer par le tribunal judiciaire.
 
@@ -8,7 +8,7 @@ Cette procédure relève du pouvoir de police administrative du maire.
 
 ---
 
-## En quoi la procédure administrative diffère-t-elle de la procédure pénale ?
+## En quoi la procédure administrative diffère-t-elle de la procédure pénale ? <!-- slug: en-quoi-la-procedure-administrative-differe-t-elle-de-la-procedure-judiciaire -->
 
 Les deux procédures sont distinctes et peuvent coexister : une commune peut déposer plainte (voie judiciaire) et engager en parallèle une procédure administrative pour un même dépôt.
 
@@ -35,7 +35,7 @@ Les deux procédures sont distinctes et peuvent coexister : une commune peut dé
 
 ---
 
-## Dois-je obligatoirement déposer plainte pour engager une procédure contre un dépôt sauvage ?
+## Dois-je obligatoirement déposer plainte pour engager une procédure contre un dépôt sauvage ? <!-- slug: dois-je-obligatoirement-deposer-plainte-pour-engager-une-procedure-contre-un-depot-sauvage -->
 
 Non. Le dépôt de plainte n’est pas obligatoire. La procédure administrative, prévue par [l’article L. 541-3 du Code de l’environnement](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000048247402), peut être engagée directement par le maire ou son représentant, sans intervention préalable de la police ou de la gendarmerie.
 
@@ -45,7 +45,7 @@ Une plainte peut toutefois être utile lorsque l’auteur n’a pas pu être ide
 
 ---
 
-## Faut-il une délibération du conseil municipal (ou un arrêté préalable) pour engager la procédure et prononcer l’amende ?
+## Faut-il une délibération du conseil municipal (ou un arrêté préalable) pour engager la procédure et prononcer l’amende ? <!-- slug: faut-il-une-deliberation-du-conseil-municipal-pour-demarrer-une-procedure-administrative -->
 
 Non. La procédure relève du pouvoir de police administrative du maire ([art. L. 541-3 du Code de l’environnement](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000048247402)) : aucune délibération du conseil municipal n’est nécessaire, ni pour l’engager, ni pour prononcer l’amende. Aucun arrêté préalable n’est non plus requis : seul l’arrêté prononçant l’amende à l’encontre de l’auteur est nécessaire.
 

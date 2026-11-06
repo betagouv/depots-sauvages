@@ -1,6 +1,6 @@
 # FAQ - 🧩 Cas particuliers et situations spécifiques
 
-## Si l’auteur nie être responsable, que se passe-t-il ?
+## Si l’auteur nie être responsable, que se passe-t-il ? <!-- slug: si-lauteur-nie-etre-responsable-que-se-passe-t-il -->
 
 Une simple contestation ne suffit pas, à elle seule, à classer le dossier, mais elle doit être examinée. Les observations de l’auteur sont recueillies pendant la phase contradictoire (10 jours minimum). Le maire apprécie ensuite si les éléments réunis (indices dans le dépôt, photos, vidéo, plaque d’immatriculation, témoignages) sont suffisamment sérieux et concordants pour l’identifier.
 
@@ -10,13 +10,13 @@ En cas de doute sérieux, mieux vaut abandonner les poursuites : la commune doit
 
 ---
 
-## Existe-t-il un réseau de nettoyage partenaire de la Gendarmerie nationale ?
+## Existe-t-il un réseau de nettoyage partenaire de la Gendarmerie nationale ? <!-- slug: existe-t-il-un-reseau-partenaire-de-la-gendarmerie-nationale-proposant-un-service-de-nettoyage-en-cas-de-depot-sauvage-sur-lensemble-du-territoire-francais -->
 
 Pas pour le moment. La Gendarmerie nationale ne dispose pas d’annuaire ou de réseau national et ne propose pas de conventions. Les mairies peuvent solliciter les responsables des filières REP (responsabilité élargie du producteur) ou tout autre acteur compétent pour nettoyer un dépôt ou un site pollué.
 
 ---
 
-## Les enquêteurs environnementaux locaux sont-ils avisés quand une commune lance une procédure sur Stop Dépôt Sauvage ?
+## Les enquêteurs environnementaux locaux sont-ils avisés quand une commune lance une procédure sur Stop Dépôt Sauvage ? <!-- slug: lorsquun-maire-fera-une-demarche-sur-protect-envi-est-ce-que-les-enqueteurs-environnementaux-locaux-seront-avises-de-cette-demarche-pour-quon-puisse-laccompagner -->
 
 Non, pas pour le moment. N’hésitez pas à informer votre gendarme référent de votre démarche.
 
@@ -26,13 +26,13 @@ Lien utile pour faire de la prévention sur les dépôts sauvages sur [**Gend'É
 
 ---
 
-## La procédure administrative peut-elle être engagée en période pré‑électorale ?
+## La procédure administrative peut-elle être engagée en période pré‑électorale ? <!-- slug: la-procedure-administrative-peut-elle-etre-engagee-en-periode-preelectorale -->
 
 Oui. Il s’agit d’une mesure relevant du pouvoir de police administrative du maire, qui peut être exercé à tout moment, y compris en période pré-électorale.
 
 ---
 
-## Peut‑on redéposer les déchets chez l’auteur ?
+## Peut‑on redéposer les déchets chez l’auteur ? <!-- slug: peuton-redeposer-les-dechets-chez-lauteur -->
 
 Non. Redéposer soi-même les déchets chez l’auteur est illégal (voie de fait, atteinte à la propriété) et expose la commune à des poursuites.
 
@@ -40,7 +40,7 @@ La bonne voie est la procédure administrative. Si l’auteur n’enlève pas le
 
 ---
 
-## Est-il possible d’engager une procédure administrative lorsque l’auteur est de nationalité étrangère ?
+## Est-il possible d’engager une procédure administrative lorsque l’auteur est de nationalité étrangère ? <!-- slug: est-il-possible-dengager-une-procedure-administrative-lorsque-lauteur-est-de-nationalite-etrangere -->
 
 Oui, il n’existe pas d’obstacle particulier. Le juge administratif a déjà validé la légalité de titres de recette émis contre une personne étrangère, y compris lorsqu’elle ne réside pas régulièrement en France (TA Paris, 24 décembre 2025, n° 2417059).
 
@@ -48,7 +48,7 @@ Le montant de l’amende peut donc être recouvré par le Trésor public, à con
 
 ---
 
-## Cas particuliers des Véhicules hors d'usage (VHU)
+## Cas particuliers des Véhicules hors d'usage (VHU) <!-- slug: cas-particuliers-des-vehicules-hors-dusage-vhu -->
 
 Un véhicule hors d’usage (VHU) est un déchet dangereux. La procédure administrative reste possible lorsqu’un dépôt comporte un ou plusieurs VHU.
 
@@ -58,13 +58,13 @@ Pour les véhicules abandonnés sur la voie publique, voir aussi « Comment dét
 
 ---
 
-## Puis-je utiliser Stop Dépôt Sauvage si ma commune est en zone Police nationale ?
+## Puis-je utiliser Stop Dépôt Sauvage si ma commune est en zone Police nationale ? <!-- slug: puis-je-utiliser-protectenvi-si-ma-commune-est-en-zone-police-nationale -->
 
 Oui. Stop Dépôt Sauvage peut être utilisé par toutes les communes, qu’elles soient en zone Police nationale ou en zone Gendarmerie. La procédure administrative relève des pouvoirs du maire et n’est pas liée au zonage des forces de sécurité.
 
 ---
 
-## Un habitant peut-il signaler un dépôt ou « amender » lui-même l’auteur en flagrant délit ?
+## Un habitant peut-il signaler un dépôt ou « amender » lui-même l’auteur en flagrant délit ? <!-- slug: un-habitant-peut-il-signaler-un-depot-ou-amender-lui-meme-lauteur-en-flagrant-delit -->
 
 Stop Dépôt Sauvage est un outil destiné aux collectivités : ce n’est pas une plateforme de signalement. Un habitant ne peut pas prononcer lui-même une amende administrative.
 
@@ -72,7 +72,7 @@ En revanche, un habitant qui constate un dépôt, y compris en flagrant délit, 
 
 ---
 
-## Les déjections canines sont-elles couvertes par la procédure L. 541-3 ?
+## Les déjections canines sont-elles couvertes par la procédure L. 541-3 ? <!-- slug: les-dejections-canines-sont-elles-couvertes-par-la-procedure-l-541-3 -->
 
 Non, pas automatiquement. Il faut distinguer l’infraction pénale prévue par l’[article R. 634-2 du Code pénal](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000042662252?isSuggest=true) de la procédure administrative de [l’article L. 541-3 du Code de l’environnement](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000048247402). Les déjections canines ne sont pas assimilées à un « dépôt sauvage » : leur abandon est sanctionné pénalement ([art. R. 541-76-1 du Code de l’environnement](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000042662205?isSuggest=true), qui renvoie aux contraventions du Code pénal).
 
@@ -80,7 +80,7 @@ Stop Dépôt Sauvage ne permet donc pas de sanctionner l’ensemble des comporte
 
 ---
 
-## Existe-t-il un outil équivalent pour le stationnement sur voirie communale ?
+## Existe-t-il un outil équivalent pour le stationnement sur voirie communale ? <!-- slug: existe-t-il-un-outil-equivalent-pour-le-stationnement-sur-voirie-communale -->
 
 Stop Dépôt Sauvage ne couvre que les dépôts sauvages. Pour le stationnement, l’État propose le procès-verbal électronique (PVe) de l’ANTAI, qui permet de constater les infractions et de transmettre les procès-verbaux pour traitement. Il ne s’agit pas d’une sanction administrative : ces infractions relèvent de la verbalisation prévue par le Code de la route.
 
