@@ -14,9 +14,7 @@
     </DsfrAlert>
 
     <DsfrAlert type="info" small class="fr-mb-4w">
-      <p class="fr-mb-0">
-        Pensez à conserver une copie de tous les documents pour vos archives.
-      </p>
+      <p class="fr-mb-0">Pensez à conserver une copie de tous les documents pour vos archives.</p>
     </DsfrAlert>
 
     <h4 class="fr-h6 fr-mb-2w">Ce qu'il vous reste à faire :</h4>
@@ -174,20 +172,40 @@ const trackAccuseReception = () => {
   }
 }
 
+// Filling in a sub-step field checks its box (never the other way round), so the step
+// stays consistent with what the agent entered now that fields are always visible.
 watch(
   () => [props.suivi.ar_statut, props.suivi.ar_presentation_date],
-  () => {
+  ([statut, date]) => {
+    if (statut || date) {
+      props.suivi.ar_recu = true
+    }
     trackAccuseReception()
   }
 )
 
+const trackLettreEnvoyee = (dateEnvoi: string) => {
+  trackUserAction('notification_auteur_envoyee', props.constatationId, {
+    date_envoi: dateEnvoi,
+  })
+}
+
 watch(
   () => props.suivi.lettre_envoyee_date,
   (newDate) => {
-    if (props.suivi.lettre_envoyee && newDate) {
-      trackUserAction('notification_auteur_envoyee', props.constatationId, {
-        date_envoi: newDate,
-      })
+    if (newDate) {
+      props.suivi.lettre_envoyee = true
+      trackLettreEnvoyee(newDate)
+    }
+  }
+)
+
+watch(
+  () => props.suivi.numero_suivi_lettre,
+  (numero) => {
+    if (numero?.trim() && !props.suivi.lettre_envoyee) {
+      props.suivi.lettre_envoyee = true
+      trackLettreEnvoyee(props.suivi.lettre_envoyee_date || today)
     }
   }
 )
@@ -197,9 +215,7 @@ const onUpdateCase = (action: Action, val: boolean) => {
     case 'lettre_envoyee':
       props.suivi.lettre_envoyee = val
       if (val) {
-        trackUserAction('notification_auteur_envoyee', props.constatationId, {
-          date_envoi: props.suivi.lettre_envoyee_date || today,
-        })
+        trackLettreEnvoyee(props.suivi.lettre_envoyee_date || today)
       }
       break
     case 'ar_recu':
