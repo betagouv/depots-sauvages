@@ -96,7 +96,7 @@ class KnowledgeRetriever:
                         # Extraire le slug si présent sous la forme <!-- slug: ... -->
                         slug_match = re.search(r"<!--\s*slug:\s*([^\s>]+)\s*-->", header_line)
                         slug = slug_match.group(1) if slug_match else ""
-                        title = re.sub(r"<!--.*?-->", "", header_line).strip()
+                        title = re.sub(r"<!--[\s\S]*?-->", "", header_line).strip()
                         tokens = set(self._tokenize(sec_str))
                         self.documents.append({
                             "title": title,

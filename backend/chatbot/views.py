@@ -273,12 +273,12 @@ class BackofficeChatbotTestConnectionView(APIView):
                 },
                 status=status.HTTP_504_GATEWAY_TIMEOUT,
             )
-        except Exception as e:
-            logger.warning("Error testing LLM API connection: %s", e)
+        except Exception:
+            logger.exception("Error testing LLM API connection")
             return Response(
                 {
                     "success": False,
-                    "error": f"Erreur de communication avec l'API : {str(e)}",
+                    "error": "Erreur interne lors du test de connexion à l'API.",
                 },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
