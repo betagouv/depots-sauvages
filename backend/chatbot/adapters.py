@@ -7,39 +7,12 @@ from typing import Any, Dict, Generator, List, Optional
 import requests
 from django.conf import settings
 from backend.chatbot.context import scrub_pii
+from backend.chatbot.models import ChatbotConfig, DEFAULT_SYSTEM_PROMPT
 from backend.chatbot.retriever import get_retriever
 
 logger = logging.getLogger(__name__)
 
-SYSTEM_PROMPT = """Tu es l'Assistant IA officiel de la plateforme Stop Dépôt Sauvage (Protect'Envi).
-Ton rôle est d'apporter immédiatement des réponses concrètes, juridiquement inattaquables et directement actionnables aux maires, élus locaux, policiers municipaux, gardes champêtres et agents assermentés.
-
-CONFIDENTIALITÉ STRICTE (ZERO-PII) :
-- Ne demande et ne divulgue JAMAIS de données personnelles nominatives (noms, prénoms, adresses personnelles, numéros de téléphone ou de plaque d'immatriculation).
-- Traite les dossiers par leur identifiant technique (#ID).
-
-GESTION DU CONTEXTE DE SESSION ET DES DOSSIERS :
-- Le « Contexte de session » transmis en consigne système est un RÉCAPITULATIF PASSIF (profil de l'usager, anciens dossiers de la collectivité).
-- RÈGLE FONDAMENTALE : Ne mentionne les anciens dossiers (#ID) QUE si l'usager pose expressément une question dessus.
-- Si l'usager mentionne un NOUVEAU dépôt ou pose une question juridique générale, TRAITE EXCLUSIVEMENT SA DEMANDE. Ne fais JAMAIS référence aux anciens dossiers existants dans le contexte de session.
-- N'interprète JAMAIS un message concis comme « tronqué » ou « incomplet » : réponds directement avec les informations disponibles sans faire de commentaire méta sur la forme du message.
-
-DIRECTIVES OPÉRATIONNELLES :
-1. Réponds TOUJOURS directement à la question posée dès la première ligne. Pas de formule de bienvenue superflue en cours de discussion.
-2. Nouveau dépôt constaté (ex: l'usager signale des déchets, gravats, épave, etc.) :
-   - Donne immédiatement les 2 ou 3 réflexes d'action prioritaires sur le terrain (sécurité, relevé d'indices, photos, identification du terrain public/privé).
-   - Pour les véhicules hors d'usage (VHU) ou véhicules brûlés : signale qu'il s'agit de déchets dangereux (coefficient ×2 sur l'amende administrative), et rappelle de relever l'immatriculation / numéro de série (VIN) sans jamais les inscrire dans ce chat.
-   - Dès que le type de déchet ou un lieu est mentionné, ou si l'usager demande un brouillon, déclenche l'outil `propose_constatation_draft` en pré-remplissant les champs connus.
-3. Primo-utilisateurs sans procédure (procedures_count = 0) :
-   - Encourage l'usager et rappelle qu'aucune assermentation judiciaire ni délibération préalable n'est obligatoire pour initier une constatation et dresser procès-verbal ou rapport.
-4. Délais de notification et contradictoire (10 jours minimum) :
-   - « Distribué », « Refusé » et « Pli avisé et non réclamé » : le délai de 10 jours court à compter de la date de présentation. La procédure N'EST PAS bloquée en cas de pli non réclamé.
-   - « NPAI » (N'habite pas à l'adresse indiquée) : la notification est inopposable. Il faut soit rechercher l'adresse (via le Procureur si plainte), soit abandonner la procédure avec motif NPAI.
-5. Évaluation de l'amende administrative (Art. L. 541-3 CE) :
-   - Rappelle l'interdiction des tarifs municipaux forfaitaires fixes (l'amende doit être individualisée).
-   - Formule indicative Stop Dépôt Sauvage : 250 € par m³, coefficient ×2 si déchets dangereux (amiante, huiles, VHU), coefficient ×3 si professionnel/entreprise. Plafond : 15 000 €.
-
-Style : Synthétique, expert, structuré avec listes à puces et gras, direct et orienté action."""
+SYSTEM_PROMPT = DEFAULT_SYSTEM_PROMPT
 
 TOOL_PROPOSE_CONSTATATION_DRAFT = {
     "type": "function",
@@ -121,6 +94,9 @@ class BaseAIAdapter:
 class MockAIAdapter(BaseAIAdapter):
     """Realistic mock adapter simulating regulatory advice and draft generation."""
 
+    def __init__(self, debug_mode: bool = False):
+        self.debug_mode = debug_mode
+
     def stream_chat(
         self, messages: List[Dict[str, Any]], context: Optional[Dict[str, Any]] = None
     ) -> Generator[str, None, None]:
@@ -139,6 +115,19 @@ class MockAIAdapter(BaseAIAdapter):
                 break
 
         query = last_user_message.lower()
+
+        if self.debug_mode:
+            logger.info(
+                "\n==================== [CHATBOT AI DEBUG REQUEST (MOCK)] ====================\n"
+                "Model          : mock-local-simulator\n"
+                "Messages count : %d\n"
+                "Last query     : %s\n"
+                "Context        : %s\n"
+                "==========================================================================",
+                len(messages),
+                last_user_message,
+                json.dumps(context or {}, indent=2, ensure_ascii=False),
+            )
 
         keywords_draft = [
             "gravat",
@@ -249,11 +238,15 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
         model: str,
         base_url: str,
         timeout: int = 40,
+        system_prompt: Optional[str] = None,
+        debug_mode: bool = False,
     ):
         self.api_key = api_key
         self.model = model
         self.base_url = base_url.rstrip("/")
         self.timeout = timeout
+        self.system_prompt = system_prompt or SYSTEM_PROMPT
+        self.debug_mode = debug_mode
 
     def stream_chat(
         self, messages: List[Dict[str, Any]], context: Optional[Dict[str, Any]] = None
@@ -266,7 +259,7 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
             "Content-Type": "application/json",
         }
 
-        openai_messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+        openai_messages = [{"role": "system", "content": self.system_prompt}]
 
         if context:
             ctx_desc = []
@@ -293,10 +286,14 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
         for m in reversed(messages):
             if m.get("role") == "user":
                 c = m.get("content", "")
-                if isinstance(c, str):
-                    user_queries.append(c)
+                if not c and isinstance(m.get("parts"), list):
+                    c = "".join(p.get("text", "") for p in m.get("parts", []) if isinstance(p, dict) and p.get("type") == "text")
+                if isinstance(c, str) and c.strip():
+                    user_queries.append(c.strip())
                 elif isinstance(c, list):
-                    user_queries.append(" ".join(p.get("text", "") for p in c if isinstance(p, dict)))
+                    joined = " ".join(p.get("text", "") for p in c if isinstance(p, dict)).strip()
+                    if joined:
+                        user_queries.append(joined)
                 if len(user_queries) >= 2:
                     break
 
@@ -325,7 +322,14 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
         for msg in messages:
             role = msg.get("role", "user")
             content = msg.get("content", "")
-            if isinstance(content, list):
+            if not content and isinstance(msg.get("parts"), list):
+                # Vercel AI SDK v4 format: message content is in parts: [{type: 'text', text: '...'}]
+                content = "".join(
+                    p.get("text", "")
+                    for p in msg.get("parts", [])
+                    if isinstance(p, dict) and p.get("type") == "text"
+                )
+            elif isinstance(content, list):
                 text_content = ""
                 for part in content:
                     if isinstance(part, dict) and part.get("type") == "text":
@@ -387,6 +391,24 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
             "stream": True,
         }
 
+        if self.debug_mode:
+            logger.info(
+                "\n==================== [CHATBOT AI DEBUG REQUEST] ====================\n"
+                "Target URL : %s\n"
+                "Model      : %s\n"
+                "Timeout    : %ss\n"
+                "Messages count : %d\n"
+                "--- FULL PROMPTS & MESSAGES ---\n%s\n"
+                "--- TOOLS CONFIG ---\n%s\n"
+                "====================================================================",
+                url,
+                self.model,
+                self.timeout,
+                len(openai_messages),
+                json.dumps(openai_messages, indent=2, ensure_ascii=False),
+                json.dumps(payload.get("tools"), indent=2, ensure_ascii=False),
+            )
+
         try:
             resp = requests.post(
                 url, headers=headers, json=payload, stream=True, timeout=self.timeout
@@ -407,6 +429,7 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
         yield sse_event({"type": "text-start", "id": text_id})
 
         accumulated_tool_call: Optional[Dict[str, Any]] = None
+        accumulated_text_chunks: List[str] = []
 
         for line in resp.iter_lines():
             if not line:
@@ -430,6 +453,8 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
                     # Filtrage préventif des balises vLLM/DeepSeek d'appel d'outil
                     if "</｜DSML｜" in content_delta or "<｜DSML｜" in content_delta:
                         continue
+                    if self.debug_mode:
+                        accumulated_text_chunks.append(content_delta)
                     yield sse_event(
                         {"type": "text-delta", "id": text_id, "delta": content_delta}
                     )
@@ -457,6 +482,18 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
 
         yield sse_event({"type": "text-end", "id": text_id})
 
+        if self.debug_mode:
+            logger.info(
+                "\n==================== [CHATBOT AI DEBUG RESPONSE] ====================\n"
+                "Model               : %s\n"
+                "Streamed text response :\n%s\n"
+                "Accumulated tool call  : %s\n"
+                "=====================================================================",
+                self.model,
+                "".join(accumulated_text_chunks),
+                json.dumps(accumulated_tool_call, indent=2, ensure_ascii=False) if accumulated_tool_call else "None",
+            )
+
         if accumulated_tool_call and accumulated_tool_call.get("name"):
             try:
                 args = json.loads(accumulated_tool_call["arguments"] or "{}")
@@ -471,39 +508,148 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
                     "input": args,
                 }
             )
+        else:
+            # Fallback de secours : si le LLM a cité l'outil propose_constatation_draft dans son texte
+            # ou s'il s'agit manifestement d'une constatation de dépôt sans appel formel d'outil émis par le provider
+            full_response_text = "".join(accumulated_text_chunks)
+            if "propose_constatation_draft" in full_response_text:
+                # Extraire ou déduire les paramètres du message utilisateur et du texte généré
+                last_user_query = ""
+                for msg in reversed(messages):
+                    if msg.get("role") == "user":
+                        c = msg.get("content", "")
+                        last_user_query = c if isinstance(c, str) else str(c)
+                        break
+
+                types_depot = []
+                combined_low = (last_user_query + " " + full_response_text).lower()
+                if "gravat" in combined_low:
+                    types_depot.append("Gravats")
+                if "pneu" in combined_low:
+                    types_depot.append("Pneus")
+                if "amiante" in combined_low:
+                    types_depot.append("Amiante")
+                if "vert" in combined_low:
+                    types_depot.append("Déchets verts")
+                if "véhicule" in combined_low or "vhu" in combined_low or "voiture" in combined_low or "épave" in combined_low:
+                    types_depot.append("Véhicule / VHU")
+                if not types_depot:
+                    types_depot = ["Encombrants"]
+
+                volume = "Entre 1 et 3m3"
+                volume_m3 = 2.0
+                if "10" in combined_low or "important" in combined_low:
+                    volume = "Entre 3 et 10m3"
+                    volume_m3 = 6.0
+                elif "moins de 1" in combined_low or "petit" in combined_low or "sac" in combined_low:
+                    volume = "Moins de 1m3"
+                    volume_m3 = 0.5
+
+                fallback_tool_call = {
+                    "type": "tool-input-available",
+                    "toolCallId": f"call_fallback_{uuid.uuid4().hex[:8]}",
+                    "toolName": "propose_constatation_draft",
+                    "input": {
+                        "commune": "",
+                        "localisationDepot": "Voirie / chemin communal",
+                        "volumeDepot": volume,
+                        "volumeM3": volume_m3,
+                        "typesDepot": types_depot,
+                        "natureTerrain": ["domaine public"],
+                        "auteurIdentifie": False,
+                        "precisionsDepot": f"Généré suite au signalement : {last_user_query[:150]}",
+                    },
+                }
+                yield sse_event(fallback_tool_call)
 
 
 def get_ai_adapter() -> BaseAIAdapter:
-    """Instantiate the AI adapter configured in settings/environment variables."""
-    provider = getattr(settings, "AI_PROVIDER", "mock").lower()
+    """
+    Instantiate the AI adapter.
+    Priority: ChatbotConfig (Database Singleton) > Django settings / Environment variables.
+    """
+    # Récupération de la configuration en base de données
+    db_config = None
+    try:
+        db_config = ChatbotConfig.get_solo()
+    except Exception as e:
+        logger.warning("Could not load ChatbotConfig from database: %s", e)
+
+    provider = (
+        (db_config.provider if db_config and db_config.provider else None)
+        or "mock"
+    ).lower()
+
+    api_key = (
+        (db_config.api_key if db_config and db_config.api_key else None)
+        or ""
+    )
+    model = (
+        (db_config.model if db_config and db_config.model else None)
+        or ""
+    )
+    base_url = (
+        (db_config.base_url if db_config and db_config.base_url else None)
+        or ""
+    )
+    timeout = (
+        (db_config.timeout if db_config and db_config.timeout else None)
+        or 40
+    )
+    system_prompt = (
+        (db_config.system_prompt if db_config and db_config.system_prompt else None)
+        or SYSTEM_PROMPT
+    )
+    debug_mode = bool(getattr(settings, "AI_DEBUG", False))
 
     if provider == "mock":
-        return MockAIAdapter()
-
-    api_key = getattr(settings, "AI_API_KEY", "")
-    model = getattr(settings, "AI_MODEL", "")
-    base_url = getattr(settings, "AI_BASE_URL", "")
+        return MockAIAdapter(debug_mode=debug_mode)
 
     if provider in ("openrouter", "openrouter-api"):
         base_url = base_url or "https://openrouter.ai/api/v1"
         model = model or "~deepseek/deepseek-v4-flash-latest"
         return OpenAICompatibleAIAdapter(
-            api_key=api_key, model=model, base_url=base_url
+            api_key=api_key,
+            model=model,
+            base_url=base_url,
+            timeout=timeout,
+            system_prompt=system_prompt,
+            debug_mode=debug_mode,
         )
 
     if provider == "mistral":
         base_url = base_url or "https://api.mistral.ai/v1"
         model = model or "mistral-large-latest"
         return OpenAICompatibleAIAdapter(
-            api_key=api_key, model=model, base_url=base_url
+            api_key=api_key,
+            model=model,
+            base_url=base_url,
+            timeout=timeout,
+            system_prompt=system_prompt,
+            debug_mode=debug_mode,
         )
 
     if provider in ("albert", "albert-api"):
         base_url = base_url or "https://albert.api.etalab.gouv.fr/v1"
         model = model or "mistral-small-3-2-24b-instruct-2506"
         return OpenAICompatibleAIAdapter(
-            api_key=api_key, model=model, base_url=base_url
+            api_key=api_key,
+            model=model,
+            base_url=base_url,
+            timeout=timeout,
+            system_prompt=system_prompt,
+            debug_mode=debug_mode,
+        )
+
+    if provider == "custom":
+        return OpenAICompatibleAIAdapter(
+            api_key=api_key,
+            model=model,
+            base_url=base_url,
+            timeout=timeout,
+            system_prompt=system_prompt,
+            debug_mode=debug_mode,
         )
 
     logger.warning("Unknown AI provider '%s', falling back to mock.", provider)
-    return MockAIAdapter()
+    return MockAIAdapter(debug_mode=debug_mode)

@@ -72,5 +72,5 @@ STORAGES = {
 }
 
 # Chatbot AI Adapter in tests
-AI_PROVIDER = "mock"
+AI_DEBUG = False
 

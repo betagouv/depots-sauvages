@@ -107,13 +107,17 @@ def test_chatbot_chat_mock_endpoint_authenticated(client):
     assert "Rennes" in content_str
 
 
-def test_get_ai_adapter_openrouter(settings):
-    settings.AI_PROVIDER = "openrouter"
-    settings.AI_MODEL = ""
-    settings.AI_BASE_URL = ""
-    settings.AI_API_KEY = "test-openrouter-key"
-
+@pytest.mark.django_db
+def test_get_ai_adapter_openrouter():
+    from backend.chatbot.models import ChatbotConfig
     from backend.chatbot.adapters import OpenAICompatibleAIAdapter, get_ai_adapter
+
+    config = ChatbotConfig.get_solo()
+    config.provider = "openrouter"
+    config.model = ""
+    config.base_url = ""
+    config.api_key = "test-openrouter-key"
+    config.save()
 
     adapter = get_ai_adapter()
     assert isinstance(adapter, OpenAICompatibleAIAdapter)
@@ -136,6 +140,180 @@ def test_knowledge_retriever_search():
     # Test d'exclusion de la FAQ citoyenne
     all_sources = [d["source"] for d in retriever.documents]
     assert not any("vous_n_êtes_pas_une_collectivité" in src for src in all_sources)
+
+
+@pytest.mark.django_db
+def test_chatbot_config_fixture_and_singleton():
+    from django.core.management import call_command
+    from backend.chatbot.models import ChatbotConfig
+
+    call_command("loaddata", "chatbot_config")
+    config = ChatbotConfig.get_solo()
+    assert config.pk == 1
+    assert "Assistant IA officiel" in config.system_prompt
+    assert config.timeout == 40
+
+
+@pytest.mark.django_db
+def test_get_ai_adapter_from_db_config():
+    from backend.chatbot.adapters import OpenAICompatibleAIAdapter, get_ai_adapter
+    from backend.chatbot.models import ChatbotConfig
+
+    config = ChatbotConfig.get_solo()
+    config.provider = "mistral"
+    config.model = "mistral-large-test"
+    config.api_key = "test-mistral-key"
+    config.system_prompt = "Tu es un prompt personnalisé."
+    config.save()
+
+    adapter = get_ai_adapter()
+    assert isinstance(adapter, OpenAICompatibleAIAdapter)
+    assert adapter.model == "mistral-large-test"
+    assert adapter.api_key == "test-mistral-key"
+    assert adapter.system_prompt == "Tu es un prompt personnalisé."
+
+
+@pytest.mark.django_db
+def test_backoffice_chatbot_config_api():
+    from django.contrib.auth import get_user_model
+    from rest_framework.test import APIClient
+    from backend.chatbot.models import ChatbotConfig
+
+    User = get_user_model()
+    admin_user = User.objects.create_superuser("admin@example.com", "admin@example.com", "password")
+    regular_user = User.objects.create_user("user@example.com", "user@example.com", "password")
+
+    client = APIClient()
+
+    # Accès refusé pour user non staff
+    client.force_authenticate(user=regular_user)
+    res = client.get("/api/chatbot/config/")
+    assert res.status_code == 403
+
+    # Accès autorisé pour admin
+    client.force_authenticate(user=admin_user)
+    res = client.get("/api/chatbot/config/")
+    assert res.status_code == 200
+    assert "system_prompt" in res.data
+    assert "default_system_prompt" in res.data
+    assert "api_key" not in res.data  # write_only
+
+    # Mise à jour de la configuration
+    update_data = {
+        "provider": "openrouter",
+        "model": "deepseek/deepseek-chat",
+        "api_key": "sk-or-v1-123456789",
+        "system_prompt": "Prompt mis à jour",
+        "timeout": 60,
+    }
+    res = client.put("/api/chatbot/config/", data=update_data, format="json")
+    assert res.status_code == 200
+    assert res.data["provider"] == "openrouter"
+    assert res.data["model"] == "deepseek/deepseek-chat"
+    assert res.data["timeout"] == 60
+    assert res.data["has_api_key"] is True
+    assert "••••" in res.data["api_key_masked"]
+
+    config = ChatbotConfig.get_solo()
+    assert config.provider == "openrouter"
+    assert config.api_key == "sk-or-v1-123456789"
+    assert config.system_prompt == "Prompt mis à jour"
+
+
+@pytest.mark.django_db
+def test_backoffice_chatbot_test_connection_endpoint(monkeypatch):
+    from django.contrib.auth import get_user_model
+    from rest_framework.test import APIClient
+    from backend.chatbot.models import ChatbotConfig
+
+    config = ChatbotConfig.get_solo()
+    config.api_key = ""
+    config.save()
+
+    User = get_user_model()
+    admin_user = User.objects.create_superuser("admin_test@example.com", "admin_test@example.com", "password")
+
+    client = APIClient()
+    client.force_authenticate(user=admin_user)
+
+    # Test avec provider mock
+    res = client.post("/api/chatbot/test-connection/", data={"provider": "mock"}, format="json")
+    assert res.status_code == 200
+    assert res.data["success"] is True
+    assert "Mock" in res.data["message"]
+
+    # Test sans clé API pour un provider externe
+    res = client.post("/api/chatbot/test-connection/", data={"provider": "openrouter", "api_key": ""}, format="json")
+    assert res.status_code == 400
+    assert "clé d'API" in res.data["error"]
+
+    # Test avec simulation d'appel HTTP externe réussi
+    class MockResponse:
+        status_code = 200
+        def json(self):
+            return {
+                "choices": [
+                    {"message": {"content": "pong response"}}
+                ]
+            }
+
+    import requests
+    monkeypatch.setattr(requests, "post", lambda *args, **kwargs: MockResponse())
+
+    res = client.post(
+        "/api/chatbot/test-connection/",
+        data={
+            "provider": "openrouter",
+            "api_key": "sk-dummy-key",
+            "model": "deepseek/deepseek-chat",
+        },
+        format="json",
+    )
+    assert res.status_code == 200
+    assert res.data["success"] is True
+    assert res.data["sample_reply"] == "pong response"
+
+
+@pytest.mark.django_db
+def test_chatbot_debug_mode_logging(caplog):
+    import logging
+    from backend.chatbot.adapters import OpenAICompatibleAIAdapter
+
+    adapter = OpenAICompatibleAIAdapter(
+        api_key="test-key",
+        model="test-model",
+        base_url="https://api.test.com/v1",
+        debug_mode=True,
+    )
+
+    with caplog.at_level(logging.INFO):
+        # Tester que le debug logge les requêtes sortantes lors d'un stream_chat
+        class MockStreamResponse:
+            ok = True
+            status_code = 200
+            def iter_lines(self):
+                yield b'data: {"choices": [{"delta": {"content": "Hello world"}}]}'
+                yield b'data: [DONE]'
+            def raise_for_status(self):
+                pass
+
+        import requests
+        orig_post = requests.post
+        requests.post = lambda *args, **kwargs: MockStreamResponse()
+        try:
+            generator = adapter.stream_chat(messages=[{"role": "user", "content": "Question de test"}])
+            list(generator)
+        finally:
+            requests.post = orig_post
+
+    assert "[CHATBOT AI DEBUG REQUEST]" in caplog.text
+    assert "test-model" in caplog.text
+    assert "Question de test" in caplog.text
+    assert "[CHATBOT AI DEBUG RESPONSE]" in caplog.text
+    assert "Hello world" in caplog.text
+
+
+
 
 
 

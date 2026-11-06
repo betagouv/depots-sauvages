@@ -267,11 +267,8 @@ ADMIN_URL_NAME = "admin"
 BYPASS_AUTH_ENABLED = False
 ENV_NAME = "development"
 
-# Chatbot AI Configuration
-AI_PROVIDER = os.getenv("AI_PROVIDER", "mock")
-AI_API_KEY = os.getenv("AI_API_KEY", "")
-AI_MODEL = os.getenv("AI_MODEL", "")
-AI_BASE_URL = os.getenv("AI_BASE_URL", "")
+# Chatbot AI Configuration (defaults)
+AI_DEBUG = False
 
 # Permissions Policy
 PERMISSIONS_POLICY = {

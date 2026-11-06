@@ -121,3 +121,7 @@ if BYPASS_AUTH_ENABLED:
 
 # Maximum request body size for uploads (Base64 photos batching)
 DATA_UPLOAD_MAX_MEMORY_SIZE = env.int("DATA_UPLOAD_MAX_MEMORY_SIZE", default=26214400)  # 25 MB
+
+# Chatbot AI Configuration
+# Le mode debug des agents IA est configurable en local (désactivé par défaut en base.py, forcé à False en prod)
+AI_DEBUG = env.bool("AI_DEBUG", default=False)
