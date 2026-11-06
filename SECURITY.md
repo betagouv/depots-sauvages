@@ -56,7 +56,21 @@ Les privilèges et le contrôle d'accès sont gérés à plusieurs niveaux pour 
 
 ---
 
-### D. Limiteur de débit - rate limiting
+### D. Sécurité et confidentialité de l'Assistant IA (Chatbot)
+
+L'Assistant IA respecte les principes de minimisation des données et de défense en profondeur :
+
+- **Accès restreint** : Réservé aux agents authentifiés, requêtes protégées contre le CSRF.
+- **Principe Zero-PII** : Aucune donnée nominative (auteurs présumés, coordonnées d'agents, adresses postales ou immatriculations) n'est transmise aux modèles d'IA. Un filtre actif assainit les entrées utilisateur avant envoi.
+- **Contrôle des flux et des débits** : Protection contre le déni de service et les requêtes abusives via un limiteur de débit dédié, et filtrage strict anti-SSRF sur les connecteurs de modèles.
+
+> [!TIP]
+> Pour consulter le fonctionnement détaillé et les garanties de l'assistant, référez-vous au document :
+> 📖 **[Assistant IA : Fonctionnement et Sécurité](./docs/assistant-ia-securite.md)**
+
+---
+
+### E. Limiteur de débit - rate limiting
 
 Afin de prévenir les abus, le spam, les tentatives de force brute et les attaques par déni de service :
 
@@ -65,7 +79,7 @@ Afin de prévenir les abus, le spam, les tentatives de force brute et les attaqu
 
 ---
 
-### E. Sécurisation des cookies et sessions
+### F. Sécurisation des cookies et sessions
 
 Les cookies de session et de sécurité sont configurés selon les meilleures pratiques du web :
 
@@ -74,7 +88,7 @@ Les cookies de session et de sécurité sont configurés selon les meilleures pr
 
 ---
 
-### F. Protection contre l'indexation des environnements hors production
+### G. Protection contre l'indexation des environnements hors production
 
 Pour éviter que des moteurs de recherche n'indexent des environnements de staging ou de test et n'exposent des données factices :
 

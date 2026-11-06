@@ -54,3 +54,20 @@ class UnsafeRateThrottle(BaseRateThrottle):
         if request.method in SAFE_METHODS:
             return True
         return super().allow_request(request, view)
+
+
+class ChatbotRateThrottle(BaseRateThrottle):
+    """
+    Dedicated throttle class for the Chatbot streaming and AI requests
+    to prevent token abuse and Denial of Wallet / DoS.
+    Rates per user or per client IP.
+    """
+
+    rate = getattr(settings, "THROTTLE_CHATBOT_RATE", "20/m")
+    cache_key_prefix = "chatbot_throttle"
+
+    def get_cache_key(self, request, view):
+        if request.user and request.user.is_authenticated:
+            return f"{self.cache_key_prefix}_user_{request.user.pk}"
+        return super().get_cache_key(request, view)
+

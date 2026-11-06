@@ -7,6 +7,23 @@
       :quick-links="quickLinks"
     >
       <template #before-quick-links>
+        <div class="fr-header__tools-item assistant-header-item">
+          <button
+            type="button"
+            class="assistant-pill-btn"
+            @click="openAssistant"
+            title="Ouvrir l'Assistant IA"
+            aria-label="Assistant IA"
+          >
+            <div class="assistant-pill-icon-glow">
+              <svg class="assistant-pill-icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L13.8 8.2L20 10L13.8 11.8L12 18L10.2 11.8L4 10L10.2 8.2L12 2Z" fill="white" />
+                <path d="M19 16L20 19L23 20L20 21L19 24L18 21L15 20L18 19L19 16Z" fill="white" opacity="0.8" />
+              </svg>
+            </div>
+            <span class="assistant-pill-label">Assistant IA</span>
+          </button>
+        </div>
         <div v-if="userInfo?.is_staff" class="fr-header__tools-item admin-toggle-header-item">
           <DsfrToggleSwitch
             label="Mode admin"
@@ -79,6 +96,9 @@
         </p>
       </template>
     </DsfrFooter>
+
+    <!-- Volet latéral Assistant IA -->
+    <AssistantDrawer :is-open="isAssistantOpen" @close="isAssistantOpen = false" />
   </div>
 </template>
 
@@ -86,6 +106,7 @@
 import { DsfrFooter, DsfrFooterLinkList, DsfrHeader, DsfrToggleSwitch } from '@gouvminint/vue-dsfr'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import AssistantDrawer from '../components/AssistantDrawer.vue'
 import { getBypassAuthConfig } from '../services/api'
 import { PROCONNECT_ENABLED } from '../services/config'
 import { LOGIN_URL, LOGOUT_URL } from '../services/urls'
@@ -105,6 +126,16 @@ interface BreadcrumbLink {
 const route = useRoute()
 const adminModeStore = useAdminModeStore()
 const userStore = useUserStore()
+const isAssistantOpen = ref(false)
+
+const openAssistant = () => {
+  isAssistantOpen.value = true
+  // En mobile, si le menu modal DSFR est ouvert, on déclenche le clic sur le bouton de fermeture
+  const closeMenuBtn = document.getElementById('close-button')
+  if (closeMenuBtn) {
+    closeMenuBtn.click()
+  }
+}
 const logoText = ['Ministère', 'de l’intérieur']
 const breadcrumbLinks: BreadcrumbLink[] = []
 
@@ -282,7 +313,89 @@ const afterMandatoryLinks = [
   white-space: nowrap;
 }
 
+.assistant-header-item {
+  display: flex;
+  align-items: center;
+  margin-right: 1.25rem;
+}
+
+/* Style Pill Premium inspiré du bouton Agent moderne */
+.assistant-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #1b1e36 0%, #0d1226 100%);
+  color: #ffffff;
+  border: 1px solid rgba(100, 115, 255, 0.3);
+  padding: 0.35rem 0.85rem 0.35rem 0.45rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(10, 15, 60, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+}
+
+.assistant-pill-btn:hover {
+  background: linear-gradient(135deg, #24294a 0%, #151b38 100%);
+  border-color: rgba(140, 155, 255, 0.6);
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 6px 20px rgba(45, 60, 180, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+}
+
+.assistant-pill-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.assistant-pill-icon-glow {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2b7fff 0%, #9834ff 50%, #f43f5e 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(152, 52, 255, 0.5);
+  flex-shrink: 0;
+}
+
+.assistant-pill-icon-svg {
+  width: 16px;
+  height: 16px;
+}
+
+.assistant-pill-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  color: #ffffff;
+}
+
+.assistant-pill-badge {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #c9d5ff;
+  padding: 0.1rem 0.4rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
 @media (max-width: 767px) {
+  .assistant-header-item {
+    margin-right: 0;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-default-grey);
+    width: 100%;
+    justify-content: space-between;
+  }
+  .assistant-pill-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+  }
   .admin-toggle-header-item {
     margin-right: 0;
     padding-right: 0;

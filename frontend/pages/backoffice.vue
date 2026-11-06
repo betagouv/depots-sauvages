@@ -75,6 +75,17 @@
             Accès ProConnect
           </button>
         </li>
+        <li role="presentation">
+          <button
+            class="fr-tabs__tab"
+            :aria-selected="currentTab === 'chatbot'"
+            role="tab"
+            @click="router.push({ path: '/chatbot-config', query: route.query })"
+          >
+            <span class="fr-icon-chat-3-line fr-mr-1w" aria-hidden="true"></span>
+            Chatbot
+          </button>
+        </li>
       </ul>
       <DashboardTab v-if="currentTab === 'dashboard'" />
 
@@ -85,12 +96,15 @@
       <UsersTab v-if="currentTab === 'users'" />
 
       <ProConnectConfigTab v-if="currentTab === 'proconnect'" />
+
+      <ChatbotConfigTab v-if="currentTab === 'chatbot'" />
     </div>
   </div>
 </template>
 
 
 <script setup lang="ts">
+import ChatbotConfigTab from '@/components/backoffice/ChatbotConfigTab.vue'
 import DashboardTab from '@/components/backoffice/DashboardTab.vue'
 import DetailTab from '@/components/backoffice/DetailTab.vue'
 import ProConnectConfigTab from '@/components/backoffice/ProConnectConfigTab.vue'

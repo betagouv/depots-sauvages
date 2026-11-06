@@ -1,4 +1,5 @@
 import locale
+import os
 from pathlib import Path
 
 SETTINGS_DIR = Path(__file__).resolve().parent
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
     "backend.activity_logs",
     "backend.proconnect",
     "backend.sentry",
+    "backend.chatbot",
 ]
 
 TRACKMAN_DATABASE_ALIAS = "stats_db"
@@ -168,6 +170,7 @@ REST_FRAMEWORK = {
 # Global rate limits (requests per minute)
 THROTTLE_SAFE_RATE = "300/m"
 THROTTLE_UNSAFE_RATE = "60/m"
+THROTTLE_CHATBOT_RATE = "20/m"
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "Dépôts Sauvages API",
@@ -258,6 +261,9 @@ ADMIN_URL_NAME = "admin"
 # Bypass Auth Configuration
 BYPASS_AUTH_ENABLED = False
 ENV_NAME = "development"
+
+# Chatbot AI Configuration (defaults)
+AI_DEBUG = False
 
 # Permissions Policy
 PERMISSIONS_POLICY = {
