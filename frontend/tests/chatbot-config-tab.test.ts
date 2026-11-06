@@ -42,9 +42,6 @@ describe('ChatbotConfigTab.vue', () => {
 
     const textarea = wrapper.find('#chatbot-system-prompt').element as HTMLTextAreaElement
     expect(textarea.value).toBe('Prompt de test initial')
-
-    const debugToggle = wrapper.find('#chatbot-debug-mode').element as HTMLInputElement
-    expect(debugToggle.checked).toBe(false)
   })
 
   it('permet de restaurer le prompt par défaut', async () => {
@@ -94,7 +91,6 @@ describe('ChatbotConfigTab.vue', () => {
 
     await wrapper.find('#chatbot-provider').setValue('mistral')
     await wrapper.find('#chatbot-system-prompt').setValue('Prompt mis à jour')
-    await wrapper.find('#chatbot-debug-mode').setValue(true)
 
     const saveBtn = wrapper.findAll('button').find((b) => b.text().includes('Enregistrer'))
     expect(saveBtn).toBeDefined()
@@ -104,7 +100,6 @@ describe('ChatbotConfigTab.vue', () => {
       expect.objectContaining({
         provider: 'mistral',
         system_prompt: 'Prompt mis à jour',
-        debug_mode: true,
       })
     )
   })
