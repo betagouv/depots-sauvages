@@ -151,5 +151,11 @@ describe('Clôturer : recouvrement', () => {
     await nextTick()
     expect(suivi.montant_recouvre).toBe(true)
     expect(trackCalls('recouvrement_confirme')).toHaveLength(1)
+
+    // Clearing the date does not emit additional tracking events
+    suivi.date_recouvrement_effective = ''
+    await nextTick()
+    expect(suivi.montant_recouvre).toBe(true)
+    expect(trackCalls('recouvrement_confirme')).toHaveLength(1)
   })
 })

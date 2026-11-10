@@ -68,8 +68,8 @@ watch(
   (date) => {
     if (date) {
       props.suivi.montant_recouvre = true
+      trackMontantRecouvre()
     }
-    trackMontantRecouvre()
   }
 )
 
