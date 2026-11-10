@@ -32,16 +32,14 @@
           </div>
         </div>
 
-        <transition name="slide-up">
-          <div
-            v-if="action.completed && ($slots[`extra-${action.id}`] || $slots[`extra-${index}`])"
-            class="action-details fr-p-3w"
-          >
-            <fieldset :disabled="disabled" class="action-fieldset">
-              <slot :name="action.id ? `extra-${action.id}` : `extra-${index}`"></slot>
-            </fieldset>
-          </div>
-        </transition>
+        <div
+          v-if="$slots[`extra-${action.id}`] || $slots[`extra-${index}`]"
+          class="action-details fr-p-3w"
+        >
+          <fieldset :disabled="disabled" class="action-fieldset">
+            <slot :name="action.id ? `extra-${action.id}` : `extra-${index}`"></slot>
+          </fieldset>
+        </div>
       </div>
     </div>
 
@@ -100,22 +98,5 @@ defineEmits(['update-case'])
   background-color: var(--background-alt-grey) !important;
   border-color: var(--border-default-grey);
   box-shadow: none;
-}
-
-/* Transitions */
-.slide-up-enter-active,
-.slide-up-leave-active {
-  transition: all 0.3s ease-out;
-  max-height: 500px;
-  opacity: 1;
-}
-
-.slide-up-enter-from,
-.slide-up-leave-to {
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  padding-top: 0;
-  padding-bottom: 0;
 }
 </style>

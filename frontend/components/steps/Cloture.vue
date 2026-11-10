@@ -12,27 +12,25 @@
           @update-case="onUpdateCase"
         >
           <template #extra-montant_recouvre>
-            <transition name="fade-slide">
-              <div v-if="suivi.montant_recouvre" class="fr-pt-2w">
-                <div class="fr-col-12 fr-col-md-6">
-                  <DsfrInput
-                    v-model="suivi.date_recouvrement_effective"
-                    label="Date de recouvrement"
-                    label-visible
-                    type="date"
-                    :disabled="disabled"
-                    :max="today"
-                  />
-                </div>
-
-                <p class="fr-mt-4w fr-mb-0">
-                  <span class="fr-icon-info-line fr-mr-1v" aria-hidden="true"></span>
-                  Le Trésor public se charge de la perception de l'amende. En cas d'insolvabilité de
-                  l'auteur, la mairie n'est évidemment pas redevable de ce montant. La mairie actera
-                  le non-recouvrement de l'amende en conseil municipal.
-                </p>
+            <div class="fr-pt-2w">
+              <div class="fr-col-12 fr-col-md-6">
+                <DsfrInput
+                  v-model="suivi.date_recouvrement_effective"
+                  label="Date de recouvrement"
+                  label-visible
+                  type="date"
+                  :disabled="disabled"
+                  :max="today"
+                />
               </div>
-            </transition>
+
+              <p class="fr-mt-4w fr-mb-0">
+                <span class="fr-icon-info-line fr-mr-1v" aria-hidden="true"></span>
+                Le Trésor public se charge de la perception de l'amende. En cas d'insolvabilité de
+                l'auteur, la mairie n'est évidemment pas redevable de ce montant. La mairie actera
+                le non-recouvrement de l'amende en conseil municipal.
+              </p>
+            </div>
           </template>
         </ListeActions>
       </div>
@@ -67,8 +65,11 @@ const trackMontantRecouvre = () => {
 
 watch(
   () => props.suivi.date_recouvrement_effective,
-  () => {
-    trackMontantRecouvre()
+  (date) => {
+    if (date) {
+      props.suivi.montant_recouvre = true
+      trackMontantRecouvre()
+    }
   }
 )
 
