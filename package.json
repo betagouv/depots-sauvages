@@ -10,6 +10,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@ai-sdk/vue": "^4.0.157",
     "@gouvfr/dsfr": "^1.14.4",
     "@gouvminint/vue-dsfr": "^8.17.0",
     "@iconify/vue": "^5.0.1",
@@ -23,16 +24,19 @@
     "@uppy/dashboard": "^6.0.2",
     "@uppy/locales": "^5.3.1",
     "@uppy/vue": "^4.0.1",
+    "ai": "^7.0.157",
     "camelcase-keys": "^10.0.2",
     "chart.js": "^4.5.1",
     "dayjs": "^1.11.21",
     "dompurify": "^3.4.17",
+    "marked": "^18.1.2",
     "pinia": "^3.0.4",
     "snakecase-keys": "^9.0.2",
     "vue": "^3.5.44",
     "vue-chartjs": "^5.3.3",
     "vue-matomo": "^4.2.0",
-    "vue-router": "^5.1.0"
+    "vue-router": "^5.1.0",
+    "zod": "^4.6.7"
   },
   "resolutions": {
     "minimatch@npm:9.0.1": "^9.0.5",

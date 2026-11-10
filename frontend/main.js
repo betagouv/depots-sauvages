@@ -246,6 +246,17 @@ const router = createRouter({
         activeMenu: '/backoffice',
       },
     },
+    {
+      path: '/chatbot-config',
+      name: 'ChatbotConfigBackoffice',
+      component: () => import('./pages/backoffice.vue'),
+      meta: {
+        title: 'Backoffice - Configuration Chatbot',
+        requiresStaff: true,
+        tab: 'chatbot',
+        activeMenu: '/backoffice',
+      },
+    },
 
     {
       path: '/mentions-legales',

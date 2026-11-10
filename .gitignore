@@ -67,5 +67,22 @@ coverage/
 *.sln
 *.sw? 
 
+# Coverage & test artifacts
+.coverage
+.coverage.*
+htmlcov/
+
+# Local databases
+db_stats.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
+
+# Dev and fixtures dumps
+fixtures_blog_faq*.json
+.agents/
+.cursor/
+.cursorrules
+.dev/
+
 # Generated documents
 /documents/ 

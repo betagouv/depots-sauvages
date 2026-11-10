@@ -1,0 +1,3633 @@
+[
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 1,
+
+  "fields": {
+
+    "title": "⚖️ Cadre général",
+
+    "slug": "cadre-general",
+
+    "content": [],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-06-16T09:41:15Z",
+
+    "is_published": true,
+
+    "order": 1,
+
+    "parent": null,
+
+    "is_top_level": true
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 2,
+
+  "fields": {
+
+    "title": "Quelle est la base juridique de la procédure administrative ?",
+
+    "slug": "quelle-est-la-base-juridique-de-la-procedure-administrative",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>La procédure repose sur <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000048247402\">l’article L. 541-3 du Code de l’environnement</a>. Il permet à l’autorité titulaire du pouvoir de police (le maire, ou ses adjoints par délégation) d’ordonner à l’auteur d’un dépôt sauvage le paiement d’une amende administrative, après l’avoir informé et mis en mesure de présenter ses observations, sans passer par le tribunal judiciaire.</p><p>Cette procédure relève du pouvoir de police administrative du maire.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T07:23:39.690Z",
+
+    "is_published": true,
+
+    "order": 1,
+
+    "parent": 1,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 3,
+
+  "fields": {
+
+    "title": "En quoi la procédure administrative diffère-t-elle de la procédure pénale ?",
+
+    "slug": "en-quoi-la-procedure-administrative-differe-t-elle-de-la-procedure-judiciaire",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Les deux procédures sont distinctes et peuvent coexister&nbsp;: une commune peut déposer plainte (voie judiciaire) et engager en parallèle une procédure administrative pour un même dépôt.</p><p><strong>Procédure pénale</strong></p><ul class=\"tiptap-ul\"><li><p>Déclenchée par un dépôt de plainte (mairie, gendarmerie, police) ou à l’initiative de la Gendarmerie nationale ou de la Police nationale.</p></li><li><p>Instruite par la gendarmerie ou la police, sous l’autorité du procureur de la République.</p></li><li><p>Sanction prononcée par le tribunal judiciaire.</p></li><li><p>Contravention de 4e classe en principe (<a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000042662252?isSuggest=true\">art. R. 634-2 du Code pénal</a>, ou <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000042663117?isSuggest=true\">R. 644-2</a> lorsque les déchets embarrassent la voie publique), avec amende forfaitaire de 135 €&nbsp;; contravention de 5e classe si les déchets ont été transportés avec un véhicule (<a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000022375979?isSuggest=true\">art. R. 635-8</a>).</p></li><li><p>Recouvrement au profit de l’État.</p></li><li><p>Recours devant le tribunal judiciaire.</p></li></ul><p><strong>Procédure administrative</strong></p><ul class=\"tiptap-ul\"><li><p>Déclenchée directement par le maire ou ses adjoints.</p></li><li><p>Gérée en autonomie par la commune.</p></li><li><p>Sanction prononcée par arrêté du maire.</p></li><li><p>Amende jusqu’à 15 000 €, prononcée avec une mise en demeure d’enlever le dépôt&nbsp;; jusqu’à 150 000 € si l’auteur ne respecte pas cette mise en demeure.</p></li><li><p>Recouvrement au profit de la commune.</p></li><li><p>Recours devant le tribunal administratif.</p></li></ul><p></p><p>👉 Pour en savoir plus : <a class=\"fr-link\" href=\"/comprendre-la-procedure?mtm_campaign=comprendre_la_procedure&mtm_source=faq&mtm_medium=equipe\"><strong>Comprendre la procédure</strong></a><strong> </strong><br>👉 Vous êtes prêt à agir : <a class=\"fr-link\" href=\"/demarrer-constatation?mtm_campaign=demarrer_procedure&mtm_source=equipe&mtm_medium=faq\"><strong>Démarrer une procédure administrative</strong></a></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T09:18:43.829Z",
+
+    "is_published": true,
+
+    "order": 2,
+
+    "parent": 1,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 4,
+
+  "fields": {
+
+    "title": "🧾 Déroulement de la procédure administrative",
+
+    "slug": "deroulement-de-la-procedure-administrative",
+
+    "content": [],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-06-16T09:41:15Z",
+
+    "is_published": true,
+
+    "order": 2,
+
+    "parent": null,
+
+    "is_top_level": true
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 5,
+
+  "fields": {
+
+    "title": "Quelles sont les étapes de la procédure administrative ?",
+
+    "slug": "quelles-sont-les-etapes-de-la-procedure-administrative",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p><strong>Constater et identifier</strong></p><ol class=\"tiptap-ol\"><li><p><strong>Constater le dépôt.</strong> Sur terrain public ou privé (voir la question dédiée aux terrains privés). Le repérage peut être fait par tout agent communal&nbsp;; le rapport de constatation doit être signé par une personne habilitée.</p></li><li><p><strong>Identifier l’auteur présumé.</strong> Par tout moyen licite&nbsp;: élément trouvé dans le dépôt, photo, vidéo, immatriculation, témoignage…</p></li><li><p><strong>Rédiger le rapport de constatation.</strong> Il est pré-rempli automatiquement dans Stop Dépôt Sauvage, puis signé par une personne habilitée.</p></li></ol><p><strong>Respecter le contradictoire et décider</strong></p><ol class=\"tiptap-ol\"><li><p><strong>Informer l’auteur présumé.</strong> Une lettre d’information lui expose les faits reprochés et les sanctions encourues, et lui laisse un délai minimum de 10 jours pour présenter ses observations, écrites ou orales. Il peut se faire assister par un conseil ou représenter par un mandataire.</p></li><li><p><strong>Décider.</strong> Après expiration du délai, le maire prend un arrêté prononçant l’amende, dans la limite de 15 000 €, individualisée selon la gravité des faits. Si le dépôt est toujours sur place, l’arrêté peut y joindre une mise en demeure d’enlever les déchets dans un délai déterminé. L’équipe Stop Dépôt Sauvage peut accompagner la commune dans le choix du montant et la rédaction de l’arrêté.</p></li></ol><p><strong>Notifier et recouvrer</strong></p><ol class=\"tiptap-ol\"><li><p><strong>Notifier l’arrêté</strong> à la personne sanctionnée.</p></li><li><p><strong>Émettre le titre de recette</strong>, transmis au Trésor public, qui assure le recouvrement au bénéfice de la commune.</p></li><li><p><strong>Transmettre l’arrêté au contrôle de légalité</strong> (préfecture ou sous-préfecture).</p></li></ol><p><strong>Si l’auteur n’enlève pas le dépôt</strong></p><p>Lorsque la mise en demeure n’est pas respectée dans le délai fixé, la commune peut notamment faire procéder d’office à l’enlèvement aux frais de l’auteur, lui demander de consigner une somme, lui infliger une astreinte (jusqu’à 1 500 € par jour) ou prononcer une amende pouvant aller jusqu’à 150 000 € (voir «&nbsp;Après l’amende, l’auteur n’enlève pas le dépôt&nbsp;: que faire&nbsp;?&nbsp;»). <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000048247402\">L’article L. 541-3 du Code de l’environnement</a> précise que l’amende ne peut être prononcée plus d’un an après la constatation des manquements&nbsp;: ne tardez pas.</p><p></p><p></p><p>👉 Pour lancer la constatation dès maintenant : <a class=\"fr-link\" href=\"/demarrer-constatation?mtm_campaign=demarrer_procedure&mtm_source=equipe&mtm_medium=faq\"><strong>Démarrer une procédure administrative</strong></a></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T09:20:16.177Z",
+
+    "is_published": true,
+
+    "order": 1,
+
+    "parent": 4,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 6,
+
+  "fields": {
+
+    "title": "Qui peut engager la procédure administrative ?",
+
+    "slug": "qui-peut-engager-la-procedure-administrative",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Le maire, ou ses adjoints par délégation.</p><p>Le président d’un EPCI à fiscalité propre (ou d’un groupement de collectivités) compétent en collecte des déchets ménagers, lorsque les maires lui ont transféré leurs prérogatives au titre de  <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000048247402\">l’article L. 541-3 du Code de l’environnement</a>. Ce transfert est facultatif&nbsp;: il est décidé par arrêté préfectoral, après accord de tous les maires des communes membres et du président (<a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000048850168?isSuggest=true\">art. L. 5211-9-2 du CGCT</a>).</p><p>👉 Pour lancer la constatation dès maintenant : <a class=\"fr-link\" href=\"/demarrer-constatation?mtm_campaign=demarrer_procedure&mtm_source=equipe&mtm_medium=faq\"><strong>Démarrer une procédure administrative</strong></a></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T09:21:09.245Z",
+
+    "is_published": true,
+
+    "order": 2,
+
+    "parent": 4,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 7,
+
+  "fields": {
+
+    "title": "Qui peut constater un dépôt sauvage ?",
+
+    "slug": "qui-peut-constater-un-depot-sauvage",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Tout agent communal peut repérer un dépôt et le signaler. En revanche, le rapport de constatation doit être signé par une personne habilitée&nbsp;:</p><ul class=\"tiptap-ul\"><li><p>le maire et ses adjoints, le garde champêtre et les agents de police municipale, qui n’ont besoin d’aucune habilitation supplémentaire&nbsp;;</p></li><li><p>tout autre agent (service technique, DGS, ASVP…), à condition d’avoir été commissionné par arrêté du maire. Un modèle d’arrêté de commissionnement est disponible <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://fichiers.numerique.gouv.fr/explorer/items/files/f5eea0b3-8bdc-49f6-a9a0-151b34207c74\">ici</a>.</p></li></ul><p>Cette habilitation relève uniquement du volet administratif&nbsp;: aucune assermentation devant le tribunal n’est requise pour utiliser Stop Dépôt Sauvage.</p><p>Les agents de police municipale peuvent par ailleurs verbaliser certaines infractions pénales, selon une procédure distincte.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T09:11:53.636Z",
+
+    "is_published": true,
+
+    "order": 3,
+
+    "parent": 4,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 8,
+
+  "fields": {
+
+    "title": "Peut-on engager une procédure si le dépôt est sur un terrain privé ?",
+
+    "slug": "peut-on-engager-une-procedure-si-le-depot-est-sur-un-terrain-prive",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Oui, à condition que le maire justifie son intervention par une atteinte à la sécurité, à la tranquillité ou à la salubrité publiques, au titre de ses pouvoirs de police générale (<a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000029946370?isSuggest=true\">art. L. 2212-2 du CGCT</a>). Ces pouvoirs s’exercent aussi sur les propriétés privées. S’agissant de déchets, l’atteinte à la salubrité est en pratique facile à argumenter. Les éléments retenus doivent être mentionnés dans le rapport de constatation.</p><p>Une fois cette légitimité établie, le maire peut mettre en œuvre la procédure administrative pour dépôt sauvage, au titre de son pouvoir de police spéciale (<a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000048247402\">article L. 541-3 du Code de l’environnement</a>).</p><p><strong>Qui est responsable&nbsp;?</strong></p><p>Le propriétaire du terrain est soit l’auteur, soit la victime du dépôt. S’il est victime, il convient d’en rechercher l’auteur. S’il refuse de nettoyer ou tarde à le faire, il peut toutefois être considéré comme détenteur des déchets et devenir responsable au titre de la procédure.</p><p></p><p>👉 Pour lancer la constatation dès maintenant : <a class=\"fr-link\" href=\"/demarrer-constatation?mtm_campaign=demarrer_procedure&mtm_source=equipe&mtm_medium=faq\"><strong>Démarrer une procédure administrative</strong></a></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T09:22:07.174Z",
+
+    "is_published": true,
+
+    "order": 4,
+
+    "parent": 4,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 9,
+
+  "fields": {
+
+    "title": "Que faire si le dépôt implique plusieurs personnes ?",
+
+    "slug": "que-faire-si-le-depot-implique-plusieurs-personnes",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Plusieurs responsables peuvent être sanctionnés pour un même dépôt&nbsp;:</p><ul class=\"tiptap-ul\"><li><p>l’auteur du dépôt&nbsp;;</p></li><li><p>le propriétaire initial des déchets&nbsp;;</p></li><li><p>le propriétaire du terrain, en cas de carence.</p></li></ul><p>Chaque personne peut faire l’objet d’une amende distincte, proportionnée à son rôle dans les faits. Dans l’outil, un dossier distinct est créé pour chaque personne.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T07:27:11.793Z",
+
+    "is_published": true,
+
+    "order": 5,
+
+    "parent": 4,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 10,
+
+  "fields": {
+
+    "title": "🔍 Identification des auteurs",
+
+    "slug": "identification-des-auteurs",
+
+    "content": [],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-06-16T09:41:15Z",
+
+    "is_published": true,
+
+    "order": 3,
+
+    "parent": null,
+
+    "is_top_level": true
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 11,
+
+  "fields": {
+
+    "title": "Peut-on engager une procédure avec des preuves partielles ?",
+
+    "slug": "peut-on-engager-une-procedure-avec-des-preuves-partielles",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Oui, dès lors que les éléments recueillis permettent d’identifier un auteur présumé.</p><p>Si l’identité est incomplète, la commune peut déposer plainte afin que la gendarmerie ou la police procède aux vérifications (immatriculation, identité bancaire…), puis reprendre la procédure administrative une fois l’identité communiquée.</p><p></p><p>👉 Pour lancer la constatation dès maintenant : <a class=\"fr-link\" href=\"/demarrer-constatation?mtm_campaign=demarrer_procedure&mtm_source=equipe&mtm_medium=faq\"><strong>Démarrer une procédure administrative</strong></a></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T07:30:54.186Z",
+
+    "is_published": true,
+
+    "order": 2,
+
+    "parent": 10,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 12,
+
+  "fields": {
+
+    "title": "Peut-on fouiller un dépôt sauvage ?",
+
+    "slug": "peut-on-fouiller-un-depot-sauvage",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Cela dépend de qui fouille. Le maire, ses adjoints, les agents de police municipale et les gardes champêtres peuvent rechercher dans le dépôt des éléments permettant d’identifier l’auteur (courrier, facture, ticket de caisse…)&nbsp;: cela fait partie de leurs prérogatives, sans commissionnement.</p><p>Pour un autre agent (service technique, ASVP…), la recherche d’éléments d’identification dans les déchets suppose d’avoir été commissionné par arrêté du maire&nbsp;: l’<a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000045850201?isSuggest=true\">article L. 541-44 du Code de l’environnement</a> réserve les pouvoirs de recherche et de constatation à certaines catégories d’agents expressément habilités. Un ASVP ne peut donc pas fouiller du seul fait de sa qualité.</p><p>Dans tous les cas, prenez des précautions de sécurité (gants, objets coupants ou souillés) et photographiez le dépôt avant et après la fouille. Seul le rapport de constatation doit être signé par une personne habilitée.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T09:23:16.164Z",
+
+    "is_published": true,
+
+    "order": 3,
+
+    "parent": 10,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 16,
+
+  "fields": {
+
+    "title": "Peut-on utiliser des caméras de chasse ?",
+
+    "slug": "peut-on-utiliser-des-cameras-de-chasse",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p><strong>Non.</strong> En l'état du droit actuel, les maires ne peuvent pas s'appuyer sur les images captées par des caméras de type « chasse » pour identifier une personne et lui adresser une mise en demeure ou une amende.</p><p>L'usage de ces caméras ne fait l'objet d'aucun encadrement juridique spécifique et ne peut pas être assimilé à de la vidéoprotection au sens du Code de la sécurité intérieure. Les images collectées ne constituent pas une preuve suffisante pour justifier une sanction administrative ou judiciaire, même en cas d'infraction avérée (dépôt sauvage de déchets). Elles peuvent éventuellement servir d'indices, mais ne permettent pas, à elles seules, d'établir la matérialité de l'infraction ni l'identité de l'auteur de manière opposable.</p><p>Il est donc recommandé au maire d'user de ses pouvoirs de police judiciaire, en sollicitant l'intervention des forces de l'ordre ou en utilisant des dispositifs de vidéoprotection classiques autorisés par le préfet, plutôt que de s'appuyer sur des pièges photographiques pour constater les infractions.</p><p>Ce sujet est abordé lors des webinaires Stop Dépôt Sauvage : <a class=\"fr-link\" href=\"/rdv?mtm_campaign=webinaire&mtm_source=faq&mtm_medium=equipe\">Inscription</a></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-08T07:12:39.843Z",
+
+    "is_published": true,
+
+    "order": 3,
+
+    "parent": 10,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 17,
+
+  "fields": {
+
+    "title": "🧩 Cas particuliers et situations spécifiques",
+
+    "slug": "questions-frequentes-complementaires",
+
+    "content": [],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-06-17T08:33:52.773Z",
+
+    "is_published": true,
+
+    "order": 5,
+
+    "parent": null,
+
+    "is_top_level": true
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 19,
+
+  "fields": {
+
+    "title": "Peut-on retirer un dépôt sauvage immédiatement ?",
+
+    "slug": "peut-on-retirer-un-depot-sauvage-immediatement",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Oui, dès lors que les éléments nécessaires ont été recueillis (photos, indices, éléments d’identification).</p><p>Laisser le dépôt en place n’a d’intérêt que si la commune souhaite mettre l’auteur en demeure de le nettoyer&nbsp;: en cas de non-respect de cette mise en demeure, l’amende peut alors atteindre 150 000 € (au lieu de 15 000 €).</p><p>Dans tous les cas, conservez vos preuves avant l’enlèvement (photographies datées, éléments trouvés dans le dépôt).</p><p></p><p>👉 Pour lancer la constatation dès maintenant : <a class=\"fr-link\" href=\"/demarrer-constatation?mtm_campaign=demarrer_procedure&mtm_source=equipe&mtm_medium=faq\"><strong>Démarrer une procédure administrative</strong></a></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T07:26:28.299Z",
+
+    "is_published": true,
+
+    "order": 2,
+
+    "parent": 4,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 20,
+
+  "fields": {
+
+    "title": "Faut‑il appeler la gendarmerie en cas de dépôt sauvage ?",
+
+    "slug": "fautil-appeler-la-gendarmerie-en-cas-de-depot-sauvage",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Non, sauf si la commune souhaite un constat judiciaire ou a besoin d’aide pour identifier l’auteur (plaque d’immatriculation, réquisitions…). Dans ce cas, laissez le dépôt en place le temps de leurs constatations.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T07:33:12.471Z",
+
+    "is_published": true,
+
+    "order": 4,
+
+    "parent": 10,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 21,
+
+  "fields": {
+
+    "title": "Comment identifier l’auteur ?",
+
+    "slug": "comment-identifier-lauteur",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Par tout moyen licite&nbsp;:</p><ul class=\"tiptap-ul\"><li><p>éléments trouvés dans le dépôt (courrier, facture, ticket de caisse, emballage…)&nbsp;;</p></li><li><p>images d'une vidéoprotection autorisée par le préfet, ou photographies prises par un agent ou par un habitant (les images de caméras de chasse ne suffisent pas à elles seules : voir la question dédiée) ; </p></li><li><p>plaque d’immatriculation d’un véhicule&nbsp;;</p></li><li><p>témoignages, y compris d’habitants (voir «&nbsp;Un habitant peut-il signaler un dépôt&nbsp;?&nbsp;»).</p></li></ul><p>Lorsque l’identité ne peut être obtenue que par une démarche judiciaire (réquisition bancaire, fichier d’immatriculation hors accès de la police municipale), la commune peut déposer plainte&nbsp;: voir les questions suivantes.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-08T07:13:44.611Z",
+
+    "is_published": true,
+
+    "order": 11,
+
+    "parent": 10,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 22,
+
+  "fields": {
+
+    "title": "Si l’auteur nie être responsable, que se passe-t-il ?",
+
+    "slug": "si-lauteur-nie-etre-responsable-que-se-passe-t-il",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Une simple contestation ne suffit pas, à elle seule, à classer le dossier, mais elle doit être examinée. Les observations de l’auteur sont recueillies pendant la phase contradictoire (10 jours minimum). Le maire apprécie ensuite si les éléments réunis (indices dans le dépôt, photos, vidéo, plaque d’immatriculation, témoignages) sont suffisamment sérieux et concordants pour l’identifier.</p><p>Le propriétaire ou détenteur d’un déchet en reste responsable jusqu’à son élimination, ce qui peut jouer en défaveur d’une personne qui se contente de nier.</p><p>En cas de doute sérieux, mieux vaut abandonner les poursuites&nbsp;: la commune doit pouvoir justifier sa décision devant le tribunal administratif en cas de recours.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T07:35:19.390Z",
+
+    "is_published": true,
+
+    "order": 5,
+
+    "parent": 17,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 23,
+
+  "fields": {
+
+    "title": "Peut-on remplacer l’amende par des travaux d’intérêt général ?",
+
+    "slug": "peut-on-remplacer-lamende-par-des-travaux-dinteret-general",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Non. Les travaux d’intérêt général (TIG) relèvent exclusivement de la procédure pénale et d’une décision du juge&nbsp;: ils ne peuvent pas se substituer à une amende administrative.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T08:29:33.487Z",
+
+    "is_published": true,
+
+    "order": 6,
+
+    "parent": 62,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 24,
+
+  "fields": {
+
+    "title": "Que se passe-t-il en cas d’insolvabilité de l’auteur ?",
+
+    "slug": "que-se-passe-t-il-en-cas-dinsolvabilite-de-lauteur",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Le recouvrement est assuré par la DGFiP (Trésor public). Si l’auteur est insolvable et que le recouvrement échoue, la créance peut être admise en non-valeur&nbsp;: la commune ne perçoit alors pas le montant de l’amende.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T08:29:43.473Z",
+
+    "is_published": true,
+
+    "order": 7,
+
+    "parent": 62,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 27,
+
+  "fields": {
+
+    "title": "Existe-t-il un réseau de nettoyage partenaire de la Gendarmerie nationale ?",
+
+    "slug": "existe-t-il-un-reseau-partenaire-de-la-gendarmerie-nationale-proposant-un-service-de-nettoyage-en-cas-de-depot-sauvage-sur-lensemble-du-territoire-francais",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Pas pour le moment. La Gendarmerie nationale ne dispose pas d’annuaire ou de réseau national et ne propose pas de conventions. Les mairies peuvent solliciter les responsables des filières REP (responsabilité élargie du producteur) ou tout autre acteur compétent pour nettoyer un dépôt ou un site pollué.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T08:25:08.857Z",
+
+    "is_published": true,
+
+    "order": 10,
+
+    "parent": 17,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 28,
+
+  "fields": {
+
+    "title": "Qui peut consulter les images de vidéo-protection de la commune ?",
+
+    "slug": "est-ce-que-les-policiers-municipaux-peuvent-ont-les-prerogatives-pour-pouvoir-consulter-les-videos-de-la-mairie",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>L’accès aux images dépend uniquement de ce que prévoit le dossier d’autorisation déposé par la commune en préfecture&nbsp;: aucune catégorie de personnes n’est autorisée par défaut. Maire, adjoint, agent de police municipale, autre agent communal&nbsp;: chaque personne amenée à visionner les images doit être nommément désignée.</p><p>L’habilitation se fait via le <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://www.formulaires.service-public.gouv.fr/gf/cerfa_13806.do\">formulaire CERFA de demande d’autorisation (n° 13806)</a>, qui comporte une rubrique listant le nom, le prénom et la fonction de chaque personne habilitée (une liste complémentaire peut être jointe au-delà de quatre personnes).</p><p>Pour ajouter des personnes après coup, la commune informe la préfecture (courrier, email ou téléprocédure), qui met à jour l’autorisation. Les agents territoriaux ne relevant pas de la police municipale doivent en plus être agréés individuellement par le préfet dès lors qu’ils visionnent des images de la voie publique.</p><p>Le référent sûreté de votre brigade de gendarmerie peut vous accompagner dans ces démarches.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T09:24:26.245Z",
+
+    "is_published": true,
+
+    "order": 16,
+
+    "parent": 10,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 29,
+
+  "fields": {
+
+    "title": "Les enquêteurs environnementaux locaux sont-ils avisés quand une commune lance une procédure sur Stop Dépôt Sauvage ?",
+
+    "slug": "lorsquun-maire-fera-une-demarche-sur-protect-envi-est-ce-que-les-enqueteurs-environnementaux-locaux-seront-avises-de-cette-demarche-pour-quon-puisse-laccompagner",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Non, pas pour le moment. N’hésitez pas à informer votre gendarme référent de votre démarche.</p><p>Dans le cadre du dispositif initial, les communes pilotes sont accompagnées par le CESAN (Commandement pour l’environnement et la santé). À terme, l’objectif est de sensibiliser les gendarmes locaux à cette procédure et, pourquoi pas, de prévoir une information automatique de la brigade à chaque nouveau dossier.</p><p>Lien utile pour faire de la prévention sur les dépôts sauvages sur <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://www.gendarmerie.interieur.gouv.fr/gendelus/environnement/sensibiliser-s-informer-et-se-former/sensibiliser-la-population/sensibiliser-le-grand-public\"><strong>Gend'Élus</strong></a></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T08:25:34.119Z",
+
+    "is_published": true,
+
+    "order": 12,
+
+    "parent": 17,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 30,
+
+  "fields": {
+
+    "title": "Peut-on obtenir l’identité d’un auteur présumé à partir d’un simple ticket de caisse avec un code de carte bancaire ?",
+
+    "slug": "peut-on-obtenir-lidentite-dun-auteur-presume-a-partir-dun-simple-ticket-de-caisse-avec-un-code-cb",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Oui, mais uniquement dans le cadre d’une procédure judiciaire. Un dépôt de plainte est nécessaire pour que les forces de l’ordre puissent effectuer les réquisitions bancaires permettant d’identifier la personne.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T07:34:15.034Z",
+
+    "is_published": true,
+
+    "order": 18,
+
+    "parent": 10,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 31,
+
+  "fields": {
+
+    "title": "Comment estimer le montant de l’amende administrative ? Existe-t-il une grille ?",
+
+    "slug": "comment-estimer-le-montant-de-lamende-administrative-existe-t-il-une-grille",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Il n’existe pas de grille nationale officielle, et l’adoption d’une grille à montants fixes est déconseillée&nbsp;: <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000048247402\">l’article L. 541-3 du Code de l’environnement</a> impose que le montant soit individualisé et proportionné à la gravité des faits. Le maire tient compte des circonstances propres à chaque dossier&nbsp;: volume et nature des déchets, dangerosité, coût de nettoyage supporté par la commune, caractère intentionnel, récidive, coopération du responsable. Une grille aux montants strictement fixes pourrait fragiliser une amende en cas de recours devant le juge administratif.</p><p>Pour vous aider, le calculateur de Stop Dépôt Sauvage propose une première estimation&nbsp;</p><p>👉 <a class=\"fr-link\" href=\"/calculateur\"><strong><em>J'estime le montant de l'amende avec le calculateur</em></strong></a></p><ul class=\"tiptap-ul\"><li><p>250 € par m³ de dépôt&nbsp;;</p></li><li><p>coefficient × 2 en présence de déchets dangereux&nbsp;;</p></li><li><p>coefficient × 3 lorsque l’auteur est une entreprise.</p></li></ul><p>Ce résultat n’est qu’une base de réflexion, pas un barème automatique&nbsp;: le maire fixe le montant final au regard de la situation, dans la limite de 15 000 €.<br><br>Pour plus d'informations, vous pouvez vous <a class=\"fr-link\" href=\"/rdv?mtm_campaign=webinaire&mtm_source=faq&mtm_medium=equipe\"><strong>inscrire au webinaire Stop Dépôt Sauvage</strong>.</a></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-22T10:38:47.194Z",
+
+    "is_published": true,
+
+    "order": 14,
+
+    "parent": 62,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 32,
+
+  "fields": {
+
+    "title": "La procédure administrative peut-elle être engagée en période pré‑électorale ?",
+
+    "slug": "la-procedure-administrative-peut-elle-etre-engagee-en-periode-preelectorale",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Oui. Il s’agit d’une mesure relevant du pouvoir de police administrative du maire, qui peut être exercé à tout moment, y compris en période pré-électorale.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T08:25:45.409Z",
+
+    "is_published": true,
+
+    "order": 15,
+
+    "parent": 17,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 33,
+
+  "fields": {
+
+    "title": "Si une procédure judiciaire est engagée pour identifier l’auteur (plaque d’immatriculation ou autre), l’identité peut-elle être transmise pour compléter la procédure administrative ?",
+
+    "slug": "si-une-procedure-judiciaire-est-engagee-pour-identifier-lauteur-plaque-dimmatriculation-ou-autre-lidentite-peut-elle-etre-transmise-pour-completer-la-procedure-administrative",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Oui. Lorsque l’identité est obtenue par la gendarmerie (par exemple grâce à une plaque d’immatriculation), elle peut être utilisée pour poursuivre la procédure administrative. Deux cas se présentent&nbsp;:</p><ul class=\"tiptap-ul\"><li><p><strong>Identification via le SIV</strong> (système d’immatriculation des véhicules)&nbsp;: l’identité peut être communiquée aux policiers municipaux et aux gardes champêtres, même si la procédure judiciaire est en cours (et aussi en dehors de toute procédure judiciaire).</p></li><li><p><strong>Identification hors SIV, ou demande directement par le maire</strong>&nbsp;: la communication n’est possible qu’avec l’autorisation du procureur de la République, à solliciter directement ou via la brigade de gendarmerie. Cela suppose normalement de clore la procédure judiciaire pour «&nbsp;poursuite autre que pénale&nbsp;», ce qu’il appartient au procureur de décider.</p></li></ul><p>Des modèles de courrier à la brigade et au procureur seront bientôt disponibles.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T07:34:28.715Z",
+
+    "is_published": true,
+
+    "order": 19,
+
+    "parent": 10,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 34,
+
+  "fields": {
+
+    "title": "Peut‑on redéposer les déchets chez l’auteur ?",
+
+    "slug": "peuton-redeposer-les-dechets-chez-lauteur",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Non. Redéposer soi-même les déchets chez l’auteur est illégal (voie de fait, atteinte à la propriété) et expose la commune à des poursuites.</p><p>La bonne voie est la procédure administrative. Si l’auteur n’enlève pas le dépôt, la commune peut le faire enlever à ses frais sur le fondement de l’article L. 541-3 du Code de l’environnement.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T08:25:54.490Z",
+
+    "is_published": true,
+
+    "order": 17,
+
+    "parent": 17,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 35,
+
+  "fields": {
+
+    "title": "La police municipale peut‑elle identifier un véhicule ?",
+
+    "slug": "la-police-municipale-peutelle-identifier-un-vehicule",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Oui. Les agents de police municipale et les gardes champêtres peuvent accéder au fichier d’immatriculation (SIV) dans le cadre légal, ce qui suffit pour lancer la procédure administrative.</p><p>Dans les autres cas (demande formulée directement par le maire, identification hors SIV), la communication de l’identité nécessite l’autorisation du procureur de la République&nbsp;: voir la question précédente.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T07:34:38.489Z",
+
+    "is_published": true,
+
+    "order": 20,
+
+    "parent": 10,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 36,
+
+  "fields": {
+
+    "title": "Pourquoi les plaintes sont‑elles parfois classées sans suite ?",
+
+    "slug": "pourquoi-les-plaintes-sontelles-parfois-classees-sans-suite",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Pour manque de preuves, surcharge des juridictions ou faible gravité pénale des faits. Un classement sans suite n’empêche pas la commune d’engager la procédure administrative, qui reste possible et indépendante de la procédure judiciaire.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T07:34:46.705Z",
+
+    "is_published": true,
+
+    "order": 21,
+
+    "parent": 10,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 37,
+
+  "fields": {
+
+    "title": "Le président d’un EPCI peut-il accorder une délégation de signature à un agent ?",
+
+    "slug": "le-president-dun-epci-peut-il-accorder-une-delegation-de-signature-a-un-agent",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Oui. Le président d’un EPCI peut déléguer sa signature à certains agents pour les actes relatifs à la procédure administrative (<a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000037200843?isSuggest=true\">art. L. 5211-9 du CGCT</a>). Cette délégation prend la forme d’un arrêté désignant les agents bénéficiaires et les actes concernés.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T09:22:39.310Z",
+
+    "is_published": true,
+
+    "order": 20,
+
+    "parent": 4,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 38,
+
+  "fields": {
+
+    "title": "Comment prononcer l’amende ?",
+
+    "slug": "comment-mettre-lamende",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<ol class=\"tiptap-ol\"><li><p>Choisir le montant, avec l’aide du calculateur Stop Dépôt Sauvage.</p></li><li><p>Prendre un arrêté municipal prononçant l’amende et, si le dépôt est toujours sur place, mettant l’auteur en demeure de l’enlever dans un délai déterminé (modèle disponible dans le suivi de procédure, étape «&nbsp;4. Sanctionner l’auteur&nbsp;»).</p></li><li><p>Notifier l’arrêté à la personne sanctionnée (étape obligatoire&nbsp;: voir la question suivante).</p></li><li><p>Émettre un titre de recette et l’envoyer au Trésor public.</p></li><li><p>Soumettre l’arrêté au contrôle de légalité (préfecture ou sous-préfecture&nbsp;: les mairies disposent d’une adresse e-mail de contact).</p></li></ol><p></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T08:49:52.127Z",
+
+    "is_published": true,
+
+    "order": 21,
+
+    "parent": 62,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 39,
+
+  "fields": {
+
+    "title": "Comment créer un compte Stop Dépôt Sauvage ?",
+
+    "slug": "comment-se-creer-un-compte-proconnect",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Rendez-vous sur <a class=\"fr-link\" href=\"/demarrer-constatation\">https://stopdepotsauvage.beta.gouv.fr/demarrer-constatation</a> et cliquez sur «&nbsp;Se connecter avec ProConnect&nbsp;»&nbsp;: cela crée votre compte sécurisé. <br><br>Si vous n’avez pas encore de compte ProConnect, consultez la question suivante.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T08:51:14.431Z",
+
+    "is_published": true,
+
+    "order": 5,
+
+    "parent": 63,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 40,
+
+  "fields": {
+
+    "title": "L’arrêté municipal prononçant une amende doit-il être notifié à la personne sanctionnée ?",
+
+    "slug": "dans-le-cadre-dune-procedure-administrative-larrete-municipal-prononcant-une-amende-doit-il-etre-notifie-a-la-personne-sanctionnee",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Oui. L’arrêté prononçant l’amende administrative doit être notifié à la personne sanctionnée, ce qui le rend opposable, puis transmis au Trésor public pour recouvrement.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T08:50:12.160Z",
+
+    "is_published": true,
+
+    "order": 23,
+
+    "parent": 62,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 41,
+
+  "fields": {
+
+    "title": "La date de naissance de l’auteur est-elle obligatoire pour émettre un titre de recette ?",
+
+    "slug": "la-date-de-naissance-de-lauteur-est-elle-obligatoirement-requise-pour-lemission-dun-titre-de-recettes-aupres-du-tresor-public",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Non. Il n’existe pas de formalisme obligatoire pour les titres de recette, mais la doctrine exige une «&nbsp;désignation précise du débiteur&nbsp;» (<a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://www.collectivites-locales.gouv.fr/files/files/2.%20G%C3%A9rer%20les%20finances%20publiques%20locales/1.%20Le%20budget/3.%20Instructions%20budg%C3%A9taires%20et%20comptables/Autres%20instructions%20des%20collectivit%C3%A9s%20locales%20(M14%2C%20M52%2C%20M61%2C%20M71%2C%20M831%2C%20M832)/M14/2022/M14%20Tome%20II%202022.pdf\">circulaire du 18 juin 1998&nbsp;; instruction n° 11-008-M0 du 21 mars 2011</a>). En règle générale, le nom, les prénoms et l’adresse suffisent pour une personne physique.</p><p>Si votre trésorerie vous demande des éléments supplémentaires (date et lieu de naissance, par exemple), il peut s’agir d’une habitude locale et non d’une obligation légale&nbsp;: n’hésitez pas à <a class=\"fr-link\" href=\"mailto:contact@stopdepotsauvage.beta.gouv.fr\">nous contacter</a>.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T09:28:58.348Z",
+
+    "is_published": true,
+
+    "order": 24,
+
+    "parent": 62,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 42,
+
+  "fields": {
+
+    "title": "Est-il possible d’engager une procédure administrative lorsque l’auteur est de nationalité étrangère ?",
+
+    "slug": "est-il-possible-dengager-une-procedure-administrative-lorsque-lauteur-est-de-nationalite-etrangere",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Oui, il n’existe pas d’obstacle particulier. Le juge administratif a déjà validé la légalité de titres de recette émis contre une personne étrangère, y compris lorsqu’elle ne réside pas régulièrement en France (TA Paris, 24 décembre 2025, n° 2417059).</p><p>Le montant de l’amende peut donc être recouvré par le Trésor public, à condition de connaître les nom, prénoms et adresse du débiteur.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T08:26:03.801Z",
+
+    "is_published": true,
+
+    "order": 25,
+
+    "parent": 17,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 44,
+
+  "fields": {
+
+    "title": "Cas particuliers des Véhicules hors d'usage (VHU)",
+
+    "slug": "cas-particuliers-des-vehicules-hors-dusage-vhu",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Un véhicule hors d’usage (VHU) est un déchet dangereux. La procédure administrative reste possible lorsqu’un dépôt comporte un ou plusieurs VHU.</p><p>À partir de plusieurs véhicules (au moins 10), il peut s’agir d’une gestion irrégulière de déchets, assimilable à une installation classée pour la protection de l’environnement (ICPE) exploitée sans autorisation. Le maire peut agir, mais peut aussi saisir la DREAL (direction régionale de l’environnement), compétente pour contrôler et sanctionner ces installations.</p><p>Pour les véhicules abandonnés sur la voie publique, voir aussi «&nbsp;Comment détruire une carcasse de véhicule abandonnée&nbsp;?&nbsp;» dans la rubrique Documents utiles.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T07:35:10.629Z",
+
+    "is_published": true,
+
+    "order": 1,
+
+    "parent": 17,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 45,
+
+  "fields": {
+
+    "title": "📄 Documents utiles",
+
+    "slug": "documents-utiles",
+
+    "content": [],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-06-16T09:41:15Z",
+
+    "is_published": true,
+
+    "order": 7,
+
+    "parent": null,
+
+    "is_top_level": true
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 46,
+
+  "fields": {
+
+    "title": "Modèles et liens utiles",
+
+    "slug": "modeles-et-liens-utiles",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Les modèles de documents (arrêté de sanction, titre de recette, etc.) sont téléchargeables directement dans votre suivi de procédure, à l’étape «&nbsp;4. Sanctionner l’auteur&nbsp;»&nbsp;: un bloc vous propose les modèles à télécharger.</p><p>Des modèles vierges sont également disponibles <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://fichiers.numerique.gouv.fr/explorer/items/7838e5e0-211e-4adb-8eb0-de3aee95f7e9\">ici</a>.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-06-16T09:41:15Z",
+
+    "updated_at": "2026-10-07T09:12:35.249Z",
+
+    "is_published": true,
+
+    "order": 1,
+
+    "parent": 45,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 62,
+
+  "fields": {
+
+    "title": "✍️ Emettre une amende",
+
+    "slug": "emettre-une-amende",
+
+    "content": [],
+
+    "created_at": "2026-06-16T13:36:18.425Z",
+
+    "updated_at": "2026-06-16T13:45:13.474Z",
+
+    "is_published": true,
+
+    "order": 11,
+
+    "parent": null,
+
+    "is_top_level": true
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 63,
+
+  "fields": {
+
+    "title": "❓Problème technique / Besoin d'aide",
+
+    "slug": "probleme-technique-besoin-daide",
+
+    "content": [],
+
+    "created_at": "2026-06-17T08:30:28.865Z",
+
+    "updated_at": "2026-06-17T08:30:28.865Z",
+
+    "is_published": true,
+
+    "order": 12,
+
+    "parent": null,
+
+    "is_top_level": true
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 64,
+
+  "fields": {
+
+    "title": "Puis-je utiliser Stop Dépôt Sauvage si ma commune est en zone Police nationale ?",
+
+    "slug": "puis-je-utiliser-protectenvi-si-ma-commune-est-en-zone-police-nationale",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Oui. Stop Dépôt Sauvage peut être utilisé par toutes les communes, qu’elles soient en zone Police nationale ou en zone Gendarmerie. La procédure administrative relève des pouvoirs du maire et n’est pas liée au zonage des forces de sécurité.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-07-10T08:30:32.203Z",
+
+    "updated_at": "2026-10-07T08:26:20.679Z",
+
+    "is_published": true,
+
+    "order": 26,
+
+    "parent": 17,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 65,
+
+  "fields": {
+
+    "title": "Dois-je obligatoirement déposer plainte pour engager une procédure contre un dépôt sauvage ?",
+
+    "slug": "dois-je-obligatoirement-deposer-plainte-pour-engager-une-procedure-contre-un-depot-sauvage",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Non. Le dépôt de plainte n’est pas obligatoire. La procédure administrative, prévue par <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000048247402\">l’article L. 541-3 du Code de l’environnement</a>, peut être engagée directement par le maire ou son représentant, sans intervention préalable de la police ou de la gendarmerie.</p><p>Une plainte peut toutefois être utile lorsque l’auteur n’a pas pu être identifié ou lorsque la commune souhaite engager en parallèle une procédure judiciaire. Les deux procédures sont complémentaires et peuvent être menées simultanément pour un même dépôt.<br><br><a class=\"fr-link\" href=\"/demarrer-constatation\"><strong>👉 Je souhaite démarrer une procédure administrative</strong></a></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-07-10T08:35:55.195Z",
+
+    "updated_at": "2026-10-07T09:19:19.149Z",
+
+    "is_published": true,
+
+    "order": 3,
+
+    "parent": 1,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 66,
+
+  "fields": {
+
+    "title": "Faut-il une délibération du conseil municipal (ou un arrêté préalable) pour engager la procédure et prononcer l’amende ?",
+
+    "slug": "faut-il-une-deliberation-du-conseil-municipal-pour-demarrer-une-procedure-administrative",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Non. La procédure relève du pouvoir de police administrative du maire (<a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000048247402\">art. L. 541-3 du Code de l’environnement</a>)&nbsp;: aucune délibération du conseil municipal n’est nécessaire, ni pour l’engager, ni pour prononcer l’amende. Aucun arrêté préalable n’est non plus requis&nbsp;: seul l’arrêté prononçant l’amende à l’encontre de l’auteur est nécessaire.</p><p>Si le conseil municipal souhaite malgré tout délibérer (par exemple pour afficher la politique de la commune), il est recommandé de prévoir des fourchettes de montants indicatives plutôt que des montants fixes, afin de laisser au maire la possibilité d’individualiser chaque amende (voir<a class=\"fr-link\" href=\"/faq/comment-estimer-le-montant-de-lamende-administrative-existe-t-il-une-grille\"> «&nbsp;Comment estimer le montant de l’amende&nbsp;?&nbsp;»</a>). Un modèle de délibération peut être transmis sur demande.</p><p><br><a class=\"fr-link\" href=\"/demarrer-constatation\"><strong>👉 Je souhaite démarrer une procédure administrative</strong></a></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-07-10T08:38:18.865Z",
+
+    "updated_at": "2026-10-22T10:36:45.151Z",
+
+    "is_published": true,
+
+    "order": 4,
+
+    "parent": 1,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 67,
+
+  "fields": {
+
+    "title": "Peut-on utiliser la vidéo-protection pour identifier les auteurs de dépôts sauvages ?",
+
+    "slug": "peut-on-utiliser-la-video-protection-pour-identifier-les-auteurs-de-depots-sauvages",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Oui, sous conditions. La vidéo-protection peut être utilisée pour prévenir et constater les infractions relatives à l’abandon d’ordures, de déchets ou de matériaux (<a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000047569457?isSuggest=true\">art. L. 251-2 et L. 252-2 du Code de la sécurité intérieure</a>).</p><p>Son installation est encadrée par le Code de la sécurité intérieure&nbsp;: elle nécessite une autorisation préfectorale préalable et le respect de formalités administratives, techniques et juridiques précises. Le maire, ses adjoints et les membres du conseil municipal peuvent être habilités par cette autorisation à consulter les images&nbsp;; la traçabilité des consultations doit être garantie (voir la question suivante).</p><p>Le cadre actuel ne permet pas l’analyse automatique, immédiate et systématique des images (vidéo-protection algorithmique).</p><p>Sur un terrain forestier privé, le propriétaire peut installer des caméras pour protéger sa propriété. Dès lors qu’elles filment une zone ouverte au public, le régime du respect de la vie privée s’applique. Les caméras de chasse ne relèvent pas de ce régime.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-07-16T13:42:13.093Z",
+
+    "updated_at": "2026-10-08T07:13:01.042Z",
+
+    "is_published": true,
+
+    "order": 13,
+
+    "parent": 10,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 68,
+
+  "fields": {
+
+    "title": "ℹ️ A propos",
+
+    "slug": "qui-sommes-nous",
+
+    "content": [],
+
+    "created_at": "2026-09-09T09:49:15.901Z",
+
+    "updated_at": "2026-09-09T10:10:55.517Z",
+
+    "is_published": true,
+
+    "order": 14,
+
+    "parent": null,
+
+    "is_top_level": true
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 69,
+
+  "fields": {
+
+    "title": "Qui développe Stop Dépôt Sauvage ?",
+
+    "slug": "qui-developpe-protectenvi",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Stop Dépôt Sauvage est un service public numérique gratuit, développé par le Commandement pour l’environnement et la santé (CESAN) de la Gendarmerie nationale. Il accompagne les collectivités, pas à pas, dans la procédure administrative de lutte contre les dépôts sauvages, de la constatation sur le terrain jusqu’à la sanction de l’auteur. L’outil est développé dans le cadre du programme <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"http://beta.gouv.fr\">beta.gouv.fr</a> de la direction interministérielle du numérique (DINUM).</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-09-09T10:05:35.758Z",
+
+    "updated_at": "2026-10-07T08:53:57.657Z",
+
+    "is_published": true,
+
+    "order": 1,
+
+    "parent": 68,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 70,
+
+  "fields": {
+
+    "title": "Stop Dépôt Sauvage s’appelait avant Protect’Envi : qu’est-ce que ça change ?",
+
+    "slug": "protectenvi-devient-stop-depot-sauvage-quest-ce-que-ca-change",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Depuis le 9 septembre 2026, Stop Dépôt Sauvage est le nouveau nom de l’outil que vous utilisez contre les dépôts sauvages (anciennement Protect’Envi). Un nom plus direct, qui dit ce qu’il fait.</p><p>Rien ne change dans votre utilisation&nbsp;: même outil, mêmes fonctionnalités, même équipe. Vos dossiers, vos données et vos procédures en cours sont intégralement conservés.</p><p>Pour en savoir plus, consultez notre <a class=\"fr-link\" href=\"/blog/protectenvi-devient-stop-depot-sauvage-pourquoi-ce-changement-de-nom\">article sur le changement de nom</a>. Pour découvrir les autres dispositifs d’accompagnement de la gendarmerie pour les élus sur le thème de l’environnement, rendez-vous sur <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://www.gendarmerie.interieur.gouv.fr/gendelus\">Gend’Élus</a>.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-09-09T10:10:37.158Z",
+
+    "updated_at": "2026-10-07T09:16:14.897Z",
+
+    "is_published": true,
+
+    "order": 2,
+
+    "parent": 68,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 71,
+
+  "fields": {
+
+    "title": "Quelles informations sur l’auteur faut-il pour engager la procédure ?",
+
+    "slug": "quelles-informations-sur-lauteur-faut-il-pour-engager-la-procedure",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Il faut pouvoir identifier clairement le responsable du dépôt. Pour une personne physique, le nom, le prénom et l’adresse sont nécessaires&nbsp;; la date et le lieu de naissance ne le sont pas. Pour une personne morale, ce sont les informations permettant d’identifier l’entreprise responsable.</p><p>Cette procédure administrative est distincte de la verbalisation pénale&nbsp;: les mentions obligatoires d’un procès-verbal pénal sont différentes.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-07T07:30:19.083Z",
+
+    "updated_at": "2026-10-07T07:30:19.083Z",
+
+    "is_published": true,
+
+    "order": 1,
+
+    "parent": 10,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 72,
+
+  "fields": {
+
+    "title": "Un habitant peut-il signaler un dépôt ou « amender » lui-même l’auteur en flagrant délit ?",
+
+    "slug": "un-habitant-peut-il-signaler-un-depot-ou-amender-lui-meme-lauteur-en-flagrant-delit",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Stop Dépôt Sauvage est un outil destiné aux collectivités&nbsp;: ce n’est pas une plateforme de signalement. Un habitant ne peut pas prononcer lui-même une amende administrative.</p><p>En revanche, un habitant qui constate un dépôt, y compris en flagrant délit, peut transmettre à la mairie les éléments dont il dispose (photographies, plaque d’immatriculation, identité de la personne, témoignage…). Ces éléments peuvent aider la commune à identifier l’auteur présumé et, si elle le souhaite, à engager la procédure administrative via Stop Dépôt Sauvage, dans le respect du contradictoire.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-07T08:26:44.570Z",
+
+    "updated_at": "2026-10-07T08:26:44.570Z",
+
+    "is_published": true,
+
+    "order": 27,
+
+    "parent": 17,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 73,
+
+  "fields": {
+
+    "title": "Les déjections canines sont-elles couvertes par la procédure L. 541-3 ?",
+
+    "slug": "les-dejections-canines-sont-elles-couvertes-par-la-procedure-l-541-3",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Non, pas automatiquement. Il faut distinguer l’infraction pénale prévue par l’<a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000042662252?isSuggest=true\">article R. 634-2 du Code pénal</a> de la procédure administrative de <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000048247402\">l’article L. 541-3 du Code de l’environnement</a>. Les déjections canines ne sont pas assimilées à un «&nbsp;dépôt sauvage&nbsp;»&nbsp;: leur abandon est sanctionné pénalement (<a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000042662205?isSuggest=true\">art. R. 541-76-1 du Code de l’environnement</a>, qui renvoie aux contraventions du Code pénal).</p><p>Stop Dépôt Sauvage ne permet donc pas de sanctionner l’ensemble des comportements visés par l’<a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000042662252?isSuggest=true\">article R. 634-2 du Code pénal</a> .</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-07T08:26:54.901Z",
+
+    "updated_at": "2026-10-07T09:26:55.833Z",
+
+    "is_published": true,
+
+    "order": 28,
+
+    "parent": 17,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 74,
+
+  "fields": {
+
+    "title": "Existe-t-il un outil équivalent pour le stationnement sur voirie communale ?",
+
+    "slug": "existe-t-il-un-outil-equivalent-pour-le-stationnement-sur-voirie-communale",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Stop Dépôt Sauvage ne couvre que les dépôts sauvages. Pour le stationnement, l’État propose le procès-verbal électronique (PVe) de l’ANTAI, qui permet de constater les infractions et de transmettre les procès-verbaux pour traitement. Il ne s’agit pas d’une sanction administrative&nbsp;: ces infractions relèvent de la verbalisation prévue par le Code de la route.</p><p>En l’absence de police municipale ou de garde champêtre, le maire peut intervenir lui-même en sa qualité d’officier de police judiciaire pour constater les infractions relevant de ses compétences. Pour mettre en place le PVe dans votre commune, rapprochez-vous de l’ANTAI.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-07T08:27:07.491Z",
+
+    "updated_at": "2026-10-07T08:27:07.491Z",
+
+    "is_published": true,
+
+    "order": 29,
+
+    "parent": 17,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 75,
+
+  "fields": {
+
+    "title": "Comment commissionner un agent ?",
+
+    "slug": "comment-commissionner-un-agent",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Pour qu’un agent non élu (service technique, DGS, ASVP…) puisse signer un rapport de constatation, le maire prend un arrêté de commissionnement qui l’habilite à constater les dépôts sauvages et à établir des rapports de constatation dans le cadre de <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000048247402\">l’article L. 541-3 du Code de l’environnement</a>. <br><br>Un modèle est téléchargeable <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://fichiers.numerique.gouv.fr/explorer/items/files/f5eea0b3-8bdc-49f6-a9a0-151b34207c74\">ici</a>.</p><p>Cette démarche relève uniquement du volet administratif&nbsp;: aucune assermentation devant le tribunal n’est requise. Le maire, ses adjoints, les agents de police municipale et les gardes champêtres n’ont pas besoin de commissionnement.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-07T08:27:47.327Z",
+
+    "updated_at": "2026-10-07T09:27:24.645Z",
+
+    "is_published": true,
+
+    "order": 2,
+
+    "parent": 45,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 76,
+
+  "fields": {
+
+    "title": "Existe-t-il un modèle de délibération ?",
+
+    "slug": "existe-t-il-un-modele-de-deliberation",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Une délibération n’est pas nécessaire pour engager la procédure. Si votre commune souhaite tout de même en adopter une, vous pouvez récupérer un modèle <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://fichiers.numerique.gouv.fr/explorer/items/files/6de89159-8c2b-4811-b47f-5723222a815a\">ici</a>.</p><p>Nous recommandons une délibération à portée indicative (fourchettes de montants selon le volume, la nature des déchets, la récidive…) plutôt que des montants strictement fixes, tout en laissant au maire la possibilité d’individualiser chaque amende.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-07T08:27:58.805Z",
+
+    "updated_at": "2026-10-07T09:13:56.783Z",
+
+    "is_published": true,
+
+    "order": 3,
+
+    "parent": 45,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 77,
+
+  "fields": {
+
+    "title": "Après l’amende, l’auteur n’enlève pas le dépôt : que faire ?",
+
+    "slug": "apres-lamende-lauteur-nenleve-pas-le-depot-que-faire",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>La procédure ne s’arrête pas avec l’amende&nbsp;: l’amende et l’enlèvement sont deux choses distinctes. L’arrêté qui prononce l’amende peut mettre l’auteur en demeure d’enlever le dépôt dans un délai déterminé. Si cette mise en demeure n’est pas respectée, la commune peut, sur le fondement de <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000048247402\">l’article L. 541-3 du Code de l’environnement</a>&nbsp;:</p><ul class=\"tiptap-ul\"><li><p>faire procéder d’office à l’enlèvement des déchets, aux frais de l’auteur&nbsp;;</p></li><li><p>lui demander de consigner une somme correspondant au coût des mesures prescrites&nbsp;;</p></li><li><p>lui infliger une astreinte journalière, jusqu’à 1 500 € par jour&nbsp;;</p></li><li><p>prononcer une amende pouvant aller jusqu’à 150 000 €.</p></li></ul><p></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-07T08:50:47.259Z",
+
+    "updated_at": "2026-10-07T09:29:13.699Z",
+
+    "is_published": true,
+
+    "order": 25,
+
+    "parent": 62,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 78,
+
+  "fields": {
+
+    "title": "Comment se créer un compte ProConnect ?",
+
+    "slug": "comment-se-creer-un-compte-proconnect",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Suivez le guide pour créer votre compte ProConnect&nbsp;: <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://proconnect.crisp.help/fr/article/utiliser-proconnect-au-sein-dune-collectivite-ou-dune-mairie-1mobnb6/\">https://proconnect.crisp.help/fr/article/utiliser-proconnect-au-sein-dune-collectivite-ou-dune-mairie-1mobnb6/</a></p><p>En cas de difficulté, vous pouvez <a class=\"fr-link\" href=\"mailto:contact@stopdepotsauvage.beta.gouv.fr\">contacter l’équipe</a>.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-07T08:51:25.647Z",
+
+    "updated_at": "2026-10-07T09:30:17.167Z",
+
+    "is_published": true,
+
+    "order": 6,
+
+    "parent": 63,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 79,
+
+  "fields": {
+
+    "title": "Comment changer le nom du titulaire d’un compte (agent muté, nouveau maire) ?",
+
+    "slug": "comment-changer-le-nom-du-titulaire-dun-compte-agent-mute-nouveau-maire",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Les identifiants, mots de passe et le nom rattaché à votre compte se gèrent directement depuis votre espace ProConnect&nbsp;: l’équipe Stop Dépôt Sauvage n’a pas la main sur ces informations. Vous pouvez modifier le nom associé à votre compte ici&nbsp;: <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://www.proconnect.gouv.fr/mon-compte\">https://www.proconnect.gouv.fr/mon-compte</a></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-07T08:51:36.934Z",
+
+    "updated_at": "2026-10-07T08:51:57.924Z",
+
+    "is_published": true,
+
+    "order": 22,
+
+    "parent": 63,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 80,
+
+  "fields": {
+
+    "title": "Un agent mutualisé entre plusieurs communes peut-il utiliser un seul compte ?",
+
+    "slug": "un-agent-mutualise-entre-plusieurs-communes-peut-il-utiliser-un-seul-compte",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Oui. Un agent peut utiliser un seul compte, avec son adresse électronique, même s’il intervient pour plusieurs communes. Lors de chaque procédure, il lui suffit de sélectionner la commune concernée pour que la démarche soit rattachée au bon territoire.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-07T08:51:49.347Z",
+
+    "updated_at": "2026-10-07T08:51:49.347Z",
+
+    "is_published": true,
+
+    "order": 23,
+
+    "parent": 63,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 81,
+
+  "fields": {
+
+    "title": "Peut-on partager un dossier avec un collègue ou un supérieur ?",
+
+    "slug": "peut-on-partager-un-dossier-avec-un-collegue-ou-un-superieur",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Pas encore. Le partage et la consultation de dossiers entre plusieurs utilisateurs d’une même commune ne sont pas encore disponibles&nbsp;; c’est une évolution prévue prochainement. Pour le moment, un dossier n’est accessible que par l’utilisateur qui l’a créé.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-07T08:52:51.661Z",
+
+    "updated_at": "2026-10-07T08:52:51.661Z",
+
+    "is_published": true,
+
+    "order": 24,
+
+    "parent": 63,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 82,
+
+  "fields": {
+
+    "title": "Comment clôturer une procédure lancée par erreur (mauvaise personne, abandon décidé par le maire) ?",
+
+    "slug": "comment-cloturer-une-procedure-lancee-par-erreur-mauvaise-personne-abandon-decide-par-le-maire",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Dans votre suivi de procédure, onglet «&nbsp;Mes procédures&nbsp;», rendez-vous à la section «&nbsp;3. Abandonner les poursuites&nbsp;», indiquez le motif, puis clôturez la procédure.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-07T08:53:04.859Z",
+
+    "updated_at": "2026-10-07T08:53:04.859Z",
+
+    "is_published": true,
+
+    "order": 25,
+
+    "parent": 63,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 83,
+
+  "fields": {
+
+    "title": "Comment échanger avec l’équipe ou participer à un webinaire ?",
+
+    "slug": "comment-echanger-avec-lequipe-ou-participer-a-un-webinaire",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Vous pouvez consulter les prochaines sessions et vous inscrire directement <a class=\"fr-link\" href=\"/rdv\">ici</a>.<br><br>Le support de présentation est envoyé aux participants après la session&nbsp;; s’il ne vous est pas parvenu, <a class=\"fr-link\" href=\"mailto:contact@stopdepotsauvage.beta.gouv.fr\">contactez l’équipe</a>.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-07T08:53:24.415Z",
+
+    "updated_at": "2026-10-07T09:31:14.863Z",
+
+    "is_published": true,
+
+    "order": 26,
+
+    "parent": 63,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 84,
+
+  "fields": {
+
+    "title": "Puis-je obtenir les coordonnées d’autres communes utilisatrices ?",
+
+    "slug": "puis-je-obtenir-les-coordonnees-dautres-communes-utilisatrices",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Nous ne pouvons pas communiquer les coordonnées des communes utilisatrices sans leur accord préalable&nbsp;: les coordonnées professionnelles nominatives de leurs interlocuteurs sont des données à caractère personnel, dont la transmission à un tiers doit s’inscrire dans un cadre juridique approprié (RGPD).</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-07T08:53:37.596Z",
+
+    "updated_at": "2026-10-07T08:53:37.596Z",
+
+    "is_published": true,
+
+    "order": 27,
+
+    "parent": 63,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 85,
+
+  "fields": {
+
+    "title": "Faut-il créer une régie de recettes pour encaisser l’amende ?",
+
+    "slug": "faut-il-creer-une-regie-de-recettes-pour-encaisser-lamende",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Non. Pour la procédure administrative contre les dépôts sauvages, aucune régie n’est nécessaire. La commune émet un titre de recettes, transmis au Trésor public (DDFIP), qui assure le recouvrement de l’amende au profit de la commune.</p><p>👉 Pour aller plus loin&nbsp;: <a class=\"fr-link\" href=\"/blog/regie-et-depots-sauvages-faut-il-en-creer-une-pour-la-procedure-administrative\">article de blog sur le recouvrement des amendes</a></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-07T08:58:35.973Z",
+
+    "updated_at": "2026-10-07T09:15:30.556Z",
+
+    "is_published": true,
+
+    "order": 27,
+
+    "parent": 62,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 86,
+
+  "fields": {
+
+    "title": "Qu’est-ce que l’exécution d’office, et que faire si le propriétaire du terrain refuse l’accès ?",
+
+    "slug": "quest-ce-que-lexecution-doffice-et-que-faire-si-le-proprietaire-du-terrain-refuse-lacces",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>L’exécution d’office consiste, pour la commune, à faire elle-même enlever les déchets, à la place de la personne mise en demeure et à ses frais. Elle n’est possible que si la mise en demeure d’enlever le dépôt n’a pas été respectée dans le délai fixé. Elle fait l’objet d’une décision motivée, qui indique les voies et délais de recours (<a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000048247402\">article L. 541-3 du Code de l’environnement</a>), et peut se combiner avec la consignation d’une somme ou une astreinte.</p><p><strong>Si le propriétaire du terrain refuse l’accès</strong></p><p>La commune saisit le juge des référés du tribunal judiciaire afin d’être autorisée à entrer sur le terrain, avec ou sans l’assistance de la force publique, et avec un serrurier si nécessaire. L’assignation est signifiée par un commissaire de justice. Le recours à un avocat est conseillé, mais n’est pas obligatoire.</p><p><strong>En cas de risque</strong></p><p>Si le dépôt présente un risque environnemental ou sanitaire, ou s’il tend à s’étendre, le maire peut fixer les mesures nécessaires sans attendre, y compris un nettoyage rapide (II de <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000048247402\">l’article L. 541-3 du Code de l’environnement</a>.). Le délai de 10 jours laissé à l’auteur pour présenter ses observations n’oblige donc pas à laisser le dépôt en place.</p><p>👉 Pour aller plus loin&nbsp;: <a class=\"fr-link\" href=\"/blog/execution-doffice-dun-depot-sauvage-saisir-le-juge-des-referes\">article de blog sur l’exécution d’office</a></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-07T08:59:30.081Z",
+
+    "updated_at": "2026-10-07T09:29:41.783Z",
+
+    "is_published": true,
+
+    "order": 26,
+
+    "parent": 62,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 87,
+
+  "fields": {
+
+    "title": "👤 Vous n'êtes pas une collectivité ?",
+
+    "slug": "vous-netes-pas-une-collectivite",
+
+    "content": [],
+
+    "created_at": "2026-10-08T09:11:26.133Z",
+
+    "updated_at": "2026-10-08T09:11:26.133Z",
+
+    "is_published": true,
+
+    "order": 13,
+
+    "parent": null,
+
+    "is_top_level": true
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 88,
+
+  "fields": {
+
+    "title": "J'ai constaté un dépôt sauvage : à qui le signaler ?",
+
+    "slug": "jai-constate-un-depot-sauvage-a-qui-le-signaler",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Stop Dépôt Sauvage est un outil réservé aux collectivités : il ne permet pas de signaler un dépôt. Pour le signaler, adressez-vous à la mairie de la commune concernée : c'est le maire qui dispose du pouvoir de police pour agir.</p><p>Pour l'aider, transmettez-lui si possible :</p><ul class=\"tiptap-ul\"><li><p>la localisation précise du dépôt (adresse, repère, coordonnées GPS) ;</p></li><li><p>quelques photographies datées ;</p></li><li><p>la nature des déchets, leur volume approximatif et tout risque apparent (déchets dangereux, bouteilles, objets coupants…) ;</p></li><li><p>si vous en avez, tout élément permettant d'identifier l'auteur : plaque d'immatriculation, description, témoignage.</p></li></ul><p>Quelques précautions : ne manipulez pas les déchets, et ne cherchez pas à confronter la personne qui dépose. Si vous assistez aux faits ou si le dépôt présente un danger immédiat, contactez la gendarmerie ou la police (17).</p><p>Un particulier ne peut pas sanctionner lui-même l'auteur : la mairie décide des suites à donner, en lien, si elle le souhaite, avec Stop Dépôt Sauvage.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-08T09:11:56.423Z",
+
+    "updated_at": "2026-10-08T09:11:56.423Z",
+
+    "is_published": true,
+
+    "order": 1,
+
+    "parent": 87,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 89,
+
+  "fields": {
+
+    "title": "J'ai reçu un courrier de ma mairie dans le cadre d'une procédure pour dépôt sauvage : que dois-je faire ?",
+
+    "slug": "jai-recu-un-courrier-de-ma-mairie-dans-le-cadre-dune-procedure-pour-depot-sauvage-que-dois-je-faire",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Stop Dépôt Sauvage est un outil utilisé par les communes : c'est la commune qui a engagé la procédure administrative, et c'est le maire qui décide des suites à donner. L'équipe de Stop Dépôt Sauvage n'a pas accès à votre dossier et ne peut ni le modifier, ni l'annuler, ni vous conseiller sur la procédure.</p><p>Pour toute question, pour présenter vos observations ou pour obtenir des précisions sur les faits qui vous sont reprochés, rapprochez-vous directement de la commune qui vous a écrit, en vous référant aux coordonnées et au délai indiqués dans son courrier.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-08T09:13:19.003Z",
+
+    "updated_at": "2026-10-08T09:13:19.003Z",
+
+    "is_published": true,
+
+    "order": 2,
+
+    "parent": 87,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 90,
+
+  "fields": {
+
+    "title": "Un dépôt sauvage a été fait sur mon terrain : que faire ?",
+
+    "slug": "un-depot-sauvage-a-ete-fait-sur-mon-terrain-que-faire",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Stop Dépôt Sauvage est un outil réservé aux collectivités. Si un dépôt a été déposé sur votre terrain, vous en êtes en principe la victime : signalez-le à la mairie de la commune, en joignant des photographies datées, et conservez les éléments utiles (courrier, plaque d'immatriculation…) sans les détruire. Vous pouvez aussi déposer plainte auprès de la gendarmerie ou de la police.<br><br>Le maire peut alors engager une procédure administrative contre l'auteur. Pour intervenir sur votre terrain, la commune doit vous informer et obtenir votre accord pour y accéder. Nous vous invitons à agir rapidement : si vous refusez de nettoyer ou tardez à le faire, vous pouvez être considéré comme détenteur des déchets.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-08T09:17:59.631Z",
+
+    "updated_at": "2026-10-08T09:17:59.631Z",
+
+    "is_published": true,
+
+    "order": 3,
+
+    "parent": 87,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 91,
+
+  "fields": {
+
+    "title": "Je suis gendarme ou policier : comment orienter une commune ?",
+
+    "slug": "je-suis-gendarme-ou-policier-comment-orienter-une-commune",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Stop Dépôt Sauvage est un service public numérique gratuit développé par le CESAN (Gendarmerie nationale), destiné aux communes. <br><br>Vous pouvez orienter le maire ou ses agents vers Stop Dépôt Sauvage pour engager une procédure administrative. <br><br>Les agents de police municipale et les gardes champêtres de la commune utilisent l'outil avec le compte de la commune.<br><br>Les brigades ne sont pas informées automatiquement des procédures lancées dans l'outil. </p><p></p><p>Pour accompagner un maire, vous pouvez vous appuyer sur les webinaires Stop Dépôt Sauvage <a class=\"fr-link\" href=\"/rdv\">ici</a> et sur le site <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"fr-link\" href=\"https://www.gendarmerie.interieur.gouv.fr/gendelus\">Gend'Élus</a>.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-08T09:19:52.640Z",
+
+    "updated_at": "2026-10-08T09:19:52.640Z",
+
+    "is_published": true,
+
+    "order": 4,
+
+    "parent": 87,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 92,
+
+  "fields": {
+
+    "title": "Je représente une préfecture ou une sous-préfecture : puis-je accéder aux procédures des communes ?",
+
+    "slug": "je-represente-une-prefecture-ou-une-sous-prefecture-puis-je-acceder-aux-procedures-des-communes",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Stop Dépôt Sauvage est utilisé par les communes, qui restent seules responsables de leurs procédures. Les arrêtés prononçant des amendes sont transmis à la préfecture ou à la sous-préfecture au titre du contrôle de légalité, par les canaux habituels de la commune. <br><br>Pour échanger sur l'outil, vous accompagner dans sa présentation aux élus de votre département ou envisager un partenariat, contactez l'équipe : <a class=\"fr-link\" href=\"mailto:contact@stopdepotsauvage.beta.gouv.fr\">contact@stopdepotsauvage.beta.gouv.fr</a>.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-08T09:20:47.876Z",
+
+    "updated_at": "2026-10-08T09:20:47.876Z",
+
+    "is_published": true,
+
+    "order": 5,
+
+    "parent": 87,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 93,
+
+  "fields": {
+
+    "title": "Je représente la DREAL, la DDT, l'OFB ou un autre service de l'État : puis-je utiliser l'outil ?",
+
+    "slug": "je-represente-la-dreal-la-ddt-lofb-ou-un-autre-service-de-letat-puis-je-utiliser-loutil",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>La procédure administrative contre les dépôts sauvages relève du pouvoir de police du maire : les services de l'État ne peuvent pas l'engager à sa place. En revanche, vous pouvez la faire connaître aux communes de votre territoire, notamment pour les dépôts qui touchent à vos compétences (installations classées, véhicules hors d'usage, espaces naturels). <br><br>Pour une présentation, une démonstration ou un partenariat, contactez l'équipe : <a class=\"fr-link\" href=\"mailto:contact@stopdepotsauvage.beta.gouv.fr\">contact@stopdepotsauvage.beta.gouv.fr</a>.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-08T09:21:36.140Z",
+
+    "updated_at": "2026-10-08T09:21:36.140Z",
+
+    "is_published": true,
+
+    "order": 6,
+
+    "parent": 87,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 94,
+
+  "fields": {
+
+    "title": "Je suis une association, une entreprise ou un autre partenaire : puis-je utiliser l'outil ou collaborer ?",
+
+    "slug": "je-suis-une-association-une-entreprise-ou-un-autre-partenaire-puis-je-utiliser-loutil-ou-collaborer",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Stop Dépôt Sauvage n'est pas ouvert aux associations ni aux entreprises : il est réservé aux collectivités. <br><br>Si vous constatez un dépôt, signalez-le à la mairie concernée. <br><br>Si vous souhaitez proposer un partenariat, un retour d'expérience ou vos services, contactez l'équipe : <a class=\"fr-link\" href=\"mailto:contact@stopdepotsauvage.beta.gouv.fr\">contact@stopdepotsauvage.beta.gouv.fr</a>.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-08T09:21:56.936Z",
+
+    "updated_at": "2026-10-08T09:21:56.936Z",
+
+    "is_published": true,
+
+    "order": 7,
+
+    "parent": 87,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "faq.faqitem",
+
+  "pk": 95,
+
+  "fields": {
+
+    "title": "L’auteur peut-il contester l’amende administrative ? Dans quel délai ?",
+
+    "slug": "lauteur-peut-il-contester-lamende-administrative-dans-quel-delai",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Oui. L’auteur peut contester l’amende devant le tribunal administratif dans les deux mois suivant la notification de votre décision. Il peut aussi vous adresser un recours gracieux : s’il le fait dans ce délai, un nouveau délai de deux mois court à compter de votre réponse. Votre silence pendant deux mois vaut rejet.</p><p>Pensez à mentionner les voies et délais de recours dans votre arrêté. Sans cette mention, le délai de deux mois ne peut pas être opposé à l’auteur. Conservez aussi la preuve de la notification et de la phase contradictoire : en cas de contestation, ce sont vos principales pièces.</p><p>Si l’auteur conteste, le juge examine le bien-fondé de l’amende et peut la confirmer, l’annuler ou la réduire.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-22T07:21:23.842Z",
+
+    "updated_at": "2026-10-22T07:21:23.842Z",
+
+    "is_published": true,
+
+    "order": 28,
+
+    "parent": 62,
+
+    "is_top_level": false
+
+  }
+
+},
+
+{
+
+  "model": "blog.blogarticle",
+
+  "pk": 3,
+
+  "fields": {
+
+    "title": "Dépôt sauvage : que faire quand on est maire ou agent de collectivité ?",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<h2>Un dépôt sauvage a été identifié sur votre commune : par où commencer ?</h2><p>Un dépôt de déchets a été identifié sur un terrain communal, un chemin rural ou un terrain privé, que ce soit via un signalement d'administré, via la vidéo-protection, un témoignage ou des preuves retrouvées sur place ? <br>En tant que maire, vous disposez d'un pouvoir de police spéciale pour agir, sans passer systématiquement par la voie pénale, souvent plus longue et plus lourde à mettre en œuvre.<br></p><p>Voici les étapes concrètes pour traiter un dépôt sauvage, du constat jusqu'à la sanction.</p><p></p><h2>Étape 1 : Constater le dépôt</h2><p>Avant toute chose, un agent habilité au sein de la commune (maire, adjoint, policier municipal, garde champêtre ou tout autre agent commissionné) doit se rendre sur place pour recueillir les éléments utiles dans le but d'établir un rapport de constatation :</p><ul class=\"tiptap-ul\"><li><p>la localisation précise du dépôt,</p></li><li><p>une description des déchets (nature, volume estimé),</p></li><li><p>des photos horodatées,</p></li><li><p>si possible, l'identification de l'auteur.</p></li></ul><p><em>C'est justement l'étape que Stop Dépôt Sauvage simplifie : l'outil génère automatiquement un rapport de constatation conforme.</em></p><p></p><h2>Étape 2 : Choisir la voie administrative plutôt que pénale</h2><p>C'est souvent ici que les communes perdent du temps. Par réflexe, beaucoup d'agents orientent le dossier vers la voie pénale (procès-verbal transmis au procureur, ou dépôt de plainte), qui dépend du bon vouloir du parquet et peut rester sans suite pendant des mois.</p><p>L'article L541-3 du Code de l'environnement donne au maire un pouvoir propre : après la constatation d'un dépôt sauvage, la commune peut engager une procédure administrative à l'encontre de l'auteur présumé (s'il est identifié), plus rapide et entièrement maîtrisée au niveau local.</p><p></p><h2>Étape 3 : Informer l'auteur présumé de ses obligations</h2><p>Une lettre d'information est adressée à l'auteur présumé des faits. Elle l'informe des faits constatés, de sa responsabilité au regard de cette infraction, ainsi que des risques et sanctions encourus dans le cadre de la procédure administrative.</p><p>Si le dépôt est sur un terrain privé et que l'auteur n'est pas le propriétaire, la question de responsabilité peut être complexe.</p><p></p><h2>Étape 4 : Sanctionner en cas d'inaction</h2><p>Si l'auteur ne répond pas à la lettre d'information, ou n'apporte pas les preuves suffisantes pour mettre un doute sur sa culpabilité, la commune peut prononcer une amende administrative, dont le montant peut atteindre 15 000 €.</p><p></p><p>👉<em>Consultez notre [</em><a class=\"fr-link\" href=\"/calculateur\"><em>Calculateur d'amende administrative]</em></a></p><p></p><h2>Étape 5 : Suivre le dossier jusqu'à sa résolution</h2><p>Un dossier de dépôt sauvage n'est jamais instantané : identification de l'auteur, phase de contradictoire, suivi du nettoyage, recouvrement par le Trésor Public... Stop Dépôt Sauvage accompagne chaque étape avec génération automatique des documents (rapport de constatation, lettre d'information, modèle d'arrêté) et suivi du statut du dossier.</p><p></p><hr><h2>Vous êtes prêt à traiter votre premier dossier ?</h2><p>Stop Dépôt Sauvage, développé avec la Gendarmerie nationale, vous accompagne gratuitement dans la mise en œuvre de la procédure administrative.</p><p></p><p>👉 <a class=\"fr-link\" href=\"/demarrer-constatation\"><em>[Démarrer une procédure administrative]</em></a></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-09-03T09:53:27.798Z",
+
+    "updated_at": "2026-09-22T14:55:04.934Z",
+
+    "is_published": true,
+
+    "order": 1,
+
+    "slug": "depot-sauvage-que-faire-quand-on-est-maire-ou-agent-de-collectivite",
+
+    "summary": "Dépôt sauvage : que faire en tant que maire ?\r\nUn dépôt sauvage a été signalé sur votre commune ? \r\nDécouvrez la procédure administrative à suivre, étape par étape, avec Stop Dépôt Sauvage.",
+
+    "cover_image": "blog_covers/DGuuI-8mG1NWsGxMvkSQ8eQ1Qh0iBwZsxcAVRhPgULVpxxu2saUJWAHCy-WSoI5-Sb7yTm6qtg8p9pGiqmk.jpeg"
+
+  }
+
+},
+
+{
+
+  "model": "blog.blogarticle",
+
+  "pk": 4,
+
+  "fields": {
+
+    "title": "Procédure administrative vs procédure pénale : quelle différence pour un dépôt sauvage ?",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<h2>Deux voies possibles, un réflexe souvent mal orienté</h2><p>Face à un dépôt sauvage, la première réaction reste bien souvent d'établir un procès-verbal, de le transmettre au procureur de la République, ou d'aller déposer plainte. C'est la voie pénale, la plus connue, la plus enseignée, mais pas toujours la plus adaptée ni la plus rapide.</p><p>Depuis la loi AGEC et l'article L541-3 du Code de l'environnement, le maire dispose d'un pouvoir propre pour engager une procédure administrative, sans dépendre d'une décision de justice. Deux voies, deux logiques : voici comment les distinguer et choisir la bonne.</p><p></p><h2>La procédure pénale : rappel du fonctionnement</h2><ul class=\"tiptap-ul\"><li><p>Un agent assermenté (le maire, un policier municipale, un garde-champêtre, etc...) constate l'infraction et rédige un procès-verbal.</p></li><li><p>Le PV est transmis au procureur de la République (en direct, ou via un dépôt de plainte), qui décide seul de la suite : poursuites, classement sans suite, ou alternative aux poursuites.</p></li><li><p>La commune n'a plus la main sur le dossier une fois le PV transmis.</p></li><li><p>Les délais peuvent s'étendre sur plusieurs mois, voire aboutir à un classement sans suite si le parquet considère le dossier peu prioritaire face à d'autres contentieux.</p></li></ul><p></p><h2>La procédure administrative : ce qui change</h2><ul class=\"tiptap-ul\"><li><p>Le maire (ou le président d'EPCI compétent) engage directement la procédure, sans passer par le parquet.</p></li><li><p>Une lettre d'information est adressée à l'auteur présumé, l'informant des faits constatés, de sa responsabilité, et des risques encourus.</p></li><li><p>En l'absence de réponse appropriée, la commune peut prononcer elle-même une amende administrative.</p></li><li><p>La commune garde la maîtrise du calendrier et du suivi, de bout en bout.</p></li></ul><p></p><h2>Tableau comparatif</h2><p></p><p><strong>Procédure administrative</strong></p><ul class=\"tiptap-ul\"><li><p><strong>Décideur : </strong>Le maire</p></li><li><p><strong>Délai de traitement : </strong>En quelques semaines</p></li><li><p><strong>Document déclencheur : </strong>Lettre d'information</p></li><li><p><strong>Sanction : </strong>Amende administrative (jusqu'à 15 000 €)</p></li><li><p><strong>Suivi : </strong>Assuré par la commune jusqu'à résolution</p></li></ul><p><strong>Procédure pénale</strong></p><ul class=\"tiptap-ul\"><li><p><strong>Décideur : </strong>Le procureur de la République</p></li><li><p><strong>Délai de traitement : </strong>Variable, dépend de la charge du parquet</p></li><li><p><strong>Document déclencheur : </strong>Procès-verbal</p></li><li><p><strong>Sanction : </strong>Amende pénale, éventuelles poursuites</p></li><li><p><strong>Suivi : </strong>Hors des mains de la commune après transmission</p></li></ul><p></p><h2>Pourquoi la voie administrative est souvent plus adaptée</h2><p>La voie pénale reste pertinente pour des faits graves ou récidivants nécessitant une réponse judiciaire. Mais pour la grande majorité des dépôts sauvages constatés par les communes, la procédure administrative permet d'agir plus vite, sans attendre l'arbitrage d'un parquet souvent saturé par d'autres priorités.</p><p>C'est aussi une procédure que la commune peut engager de façon autonome, sans mobiliser les forces de l'ordre à chaque étape.</p><p><br>👉 <em>Vous ne savez pas par où commencer sur un dossier concret ? Consultez : </em><a class=\"fr-link\" href=\"/blog/depot-sauvage-que-faire-quand-on-est-maire-ou-agent-de-collectivite\"><em>[Dépôt sauvage : que faire quand on est maire ou agent de collectivité ?]</em></a></p><p></p><h2>Les deux voies sont-elles cumulables ?</h2><p>Oui. Rien n'empêche une commune d'engager une procédure administrative tout en signalant les faits sur le plan pénal, notamment en cas de récidive ou de dépôt de grande ampleur (délit). Les deux logiques sont complémentaires plutôt qu'exclusives.</p><hr><h2>Simplifiez le choix de la procédure administrative</h2><p>Stop Dépôt Sauvage génère automatiquement les documents nécessaires (rapport de constatation, lettre d'information) pour engager une procédure administrative sans expertise juridique préalable.</p><p></p><p>👉 <a class=\"fr-link\" href=\"/demarrer-constatation\"><em>[Démarrer une procédure administrative]</em></a></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-09-03T09:54:54.288Z",
+
+    "updated_at": "2026-09-09T07:21:31.927Z",
+
+    "is_published": true,
+
+    "order": 2,
+
+    "slug": "procedure-administrative-vs-procedure-penale-quelle-difference-pour-un-depot-sauvage",
+
+    "summary": "Procédure administrative ou pénale : que choisir ?\r\nFace à un dépôt sauvage, faut-il engager une procédure administrative ou pénale ? \r\nDifférences, avantages et cas d'usage pour les maires et agents.",
+
+    "cover_image": "blog_covers/RJcq2XNph-zUmFpcEGR0Cmlf2BhN_rZaGtJXrFY3i9MrBtXOSPdbQ3XDqenG1PpM_dfZXmZawWp36B8uNbq.jpeg"
+
+  }
+
+},
+
+{
+
+  "model": "blog.blogarticle",
+
+  "pk": 5,
+
+  "fields": {
+
+    "title": "Amende administrative pour dépôt sauvage : comment ça marche ?",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<h2>Une sanction que la commune peut prononcer elle-même</h2><p>Dans le cadre de la procédure administrative prévue par l'article L541-3 du Code de l'environnement, le maire dispose du pouvoir de prononcer une amende administrative à l'encontre de l'auteur d'un dépôt sauvage, sans être dépendant d'une décision de justice.</p><p></p><p>👉 <em>Pour comprendre les étapes qui mènent à cette sanction : </em><a class=\"fr-link\" href=\"/blog/depot-sauvage-que-faire-quand-on-est-maire-ou-agent-de-collectivite\"><em>[Dépôt sauvage : que faire quand on est maire ou agent de collectivité ?]</em></a></p><p></p><h2>Quel est le montant de l'amende ?</h2><p><br>Le montant de l'amende administrative n'est pas fixe : il est calculé selon plusieurs critères propres à chaque dossier :</p><ul class=\"tiptap-ul\"><li><p>Statut de l'auteur : particulier ou entreprise (les plafonds légaux diffèrent selon les cas),</p></li><li><p>Récidive : un auteur déjà sanctionné pour des faits similaires s'expose à une sanction plus lourde,</p></li><li><p>Type de dépôt : la présence de déchets dangereux aggrave le montant retenu,</p></li><li><p>Volume des déchets : plus le dépôt est important, plus la sanction peut être élevée.</p></li></ul><p>Vous pouvez utiliser notre <a class=\"fr-link\" href=\"/calculateur\">calculateur d'amende</a> qui permet de donner une estimation du montant de l'amende que vous pouvez fixer.</p><p></p><h2>Qui décide du montant exact ?</h2><p>Le montant est fixé par le maire, dans le respect des plafonds prévus par la loi, en s'appuyant sur les critères ci-dessus et sur les éléments recueillis lors du constat.</p><p></p><h2>À qui est versée l'amende ?</h2><p>L'amende administrative est recouvrée comme une créance de la commune. Le titre de recette est émis par la commune et recouvré par le Trésor public, au même titre que d'autres recettes locales (redevances, taxes...).</p><p>Ce point rassure souvent les élus : contrairement à une idée reçue, la commune n'a pas à gérer elle-même l'encaissement, le circuit de recouvrement suit le droit commun des recettes publiques locales.</p><p></p><h2>Que se passe-t-il si l'auteur ne paie pas ?</h2><p>Comme pour toute créance publique, le Trésor public dispose de moyens de recouvrement forcé (mise en demeure de payer, puis procédures de recouvrement contentieux si nécessaire).</p><p></p><h2>Le nettoyage du site est-il inclus dans l'amende ?</h2><p>L'amende sanctionne l'infraction elle-même. La remise en état du site (évacuation des déchets) reste distincte et fait l'objet d'un suivi propre dans le cadre de la procédure, c'est un des objectifs suivis par les communes utilisant Stop Dépôt Sauvage, au-delà de la seule sanction financière.</p><hr><h2>Simplifiez le calcul et le suivi de vos amendes administratives</h2><p>Stop Dépôt Sauvage vous accompagne dans la constitution du dossier justifiant le montant de l'amende, et dans son suivi jusqu'à résolution complète.</p><p></p><p>👉 <a class=\"fr-link\" href=\"/demarrer-constatation\"><em>[Démarrer une procédure administrative]</em></a></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-09-03T09:59:57.033Z",
+
+    "updated_at": "2026-10-22T09:05:37.568Z",
+
+    "is_published": true,
+
+    "order": 3,
+
+    "slug": "amende-administrative-pour-depot-sauvage-comment-ca-marche",
+
+    "summary": "Amende administrative dépôt sauvage : montants et recouvrement\r\nQuel est le montant d'une amende administrative pour dépôt sauvage ? Qui la prononce, qui l'encaisse ? Réponses pour les maires et collectivités.",
+
+    "cover_image": "blog_covers/mVhpH6cmwxITYJq6-Wq_qnINAqbgvN-BL4mUoeCztSMZkNuW5m78It-ZVx6tA11dcgAXzFGKCjr6isH8EFv.jpeg"
+
+  }
+
+},
+
+{
+
+  "model": "blog.blogarticle",
+
+  "pk": 6,
+
+  "fields": {
+
+    "title": "Dépôt sauvage sur terrain privé : qui est responsable ?",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<h2>Une question fréquente, un cas concret à traiter avec précision</h2><p>C'est l'une des situations les plus courantes rencontrées par les communes : un dépôt sauvage est découvert non pas sur le domaine public, mais sur un terrain privé. La question qui suit presque toujours : qui est responsable, l'auteur du dépôt ou le propriétaire du terrain ?</p><p></p><h2>Le principe : la responsabilité de l'auteur du dépôt</h2><p>Quand l'auteur du dépôt est identifié, par témoignage, vidéo-protection, ou éléments retrouvés sur place, c'est lui qui reste responsable de l'infraction, qu'il soit ou non propriétaire du terrain sur lequel il a déposé les déchets. La procédure administrative (lettre d'information, puis le cas échéant amende) est alors engagée à son encontre.</p><p></p><h2>Et quand l'auteur n'est pas identifié ?</h2><p>C'est là que la situation se complique. En l'absence d'auteur identifié, la responsabilité peut se reporter sur le propriétaire du terrain, sur le fondement de son obligation d'entretien et de surveillance de sa propriété, même s'il n'est pas à l'origine du dépôt.</p><p>Cela ne signifie pas que le propriétaire est automatiquement sanctionné comme s'il était l'auteur : la commune doit apprécier au cas par cas, notamment :</p><ul class=\"tiptap-ul\"><li><p>si le terrain était correctement clôturé ou signalé,</p></li><li><p>si le propriétaire a lui-même signalé le dépôt,</p></li><li><p>si des dépôts répétés au même endroit suggèrent une négligence dans la surveillance du terrain.</p></li></ul><p></p><h2>Le rôle de la commune dans ce type de dossier</h2><p>Que le terrain soit privé ne retire pas au maire son pouvoir de police en matière de déchets : l'article L541-3 du Code de l'environnement s'applique indépendamment du régime de propriété du terrain concerné. La commune peut donc engager la procédure administrative, que le dépôt soit sur le domaine public ou sur une parcelle privée.</p><p></p><p>👉 <em>Vous ne savez pas par où commencer sur un dossier concret ? Consultez : </em><a class=\"fr-link\" href=\"/blog/depot-sauvage-que-faire-quand-on-est-maire-ou-agent-de-collectivite\"><em>[Dépôt sauvage : que faire quand on est maire ou agent de collectivité ?]</em></a></p><p></p><h2>Un cas fréquent : terrain agricole ou boisé non entretenu</h2><p>Les terrains agricoles en friche ou les parcelles boisées éloignées des habitations sont particulièrement exposés aux dépôts sauvages, précisément parce qu'ils sont peu surveillés. Dans ces cas, le dialogue avec le propriétaire est souvent la première étape : il est parfois lui-même à l'origine du signalement, ayant découvert le dépôt en se rendant sur sa parcelle.</p><p></p><h2>Que faire concrètement en tant que commune ?</h2><ol class=\"tiptap-ol\"><li><p>Constater le dépôt (rapport de constatation, photos, localisation précise).</p></li><li><p>Rechercher l'auteur (témoignages, éléments présents dans le dépôt, vidéo-protection).</p></li><li><p>Si l'auteur est identifié : engager la procédure à son encontre.</p></li><li><p>Si l'auteur reste inconnu : se rapprocher du propriétaire du terrain pour évaluer sa part de responsabilité et, le cas échéant, engager la procédure à son encontre.</p></li></ol><hr><h2>Un accompagnement pour chaque configuration de dossier</h2><p>Stop Dépôt Sauvage génère les documents adaptés à chaque situation, que l'auteur soit identifié ou que le dossier implique le propriétaire du terrain, et vous accompagne dans le suivi jusqu'à résolution.</p><p></p><p>👉 <a class=\"fr-link\" href=\"/demarrer-constatation\"><em>[Démarrer une procédure administrative]</em></a></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-09-03T10:00:51.754Z",
+
+    "updated_at": "2026-09-09T07:24:04.269Z",
+
+    "is_published": true,
+
+    "order": 4,
+
+    "slug": "depot-sauvage-sur-terrain-prive-qui-est-responsable",
+
+    "summary": "Dépôt sauvage sur terrain privé : qui est responsable ?\r\nUn dépôt sauvage a été découvert sur un terrain privé ? \r\nDécouvrez qui est responsable (auteur, propriétaire), et comment la commune peut agir.",
+
+    "cover_image": "blog_covers/Depot_sauvage_dechets_verts.jpg"
+
+  }
+
+},
+
+{
+
+  "model": "blog.blogarticle",
+
+  "pk": 7,
+
+  "fields": {
+
+    "title": "Tous les modèles pour traiter un dossier de dépôt sauvage",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<h2>Un dossier de dépôt sauvage, plusieurs documents à produire</h2><p>Traiter un dépôt sauvage suppose de produire, à chaque étape, un document juridiquement adapté : constat, information de l'auteur, arrêté, notification, titre de recette... Pas toujours simple de savoir lequel utiliser, à quel moment, et dans quel ordre.</p><p>Cette page recense tous les modèles disponibles sur Stop Dépôt Sauvage, générés automatiquement à partir des informations de votre dossier.</p><p></p><h2>Les modèles disponibles, selon l'ordre de la procédure</h2><h3>1. L'arrêté de commissionnement</h3><p>Avant même le premier dossier, cet arrêté habilite les agents de la commune (agent technique notamment) à constater les infractions relatives aux déchets. C'est un préalable indispensable : sans agent commissionné, aucun rapport de constatation n'a de valeur juridique.</p><h3>2. L'arrêté cadre de mise en place de la procédure administrative</h3><p>Cet arrêté formalise, au niveau de la commune, la mise en place de la procédure administrative prévue à l'article L541-3 du Code de l'environnement. Il pose le cadre général dans lequel s'inscriront ensuite tous les dossiers individuels.</p><h3>3. Le rapport de constatation</h3><p>Rédigé par l'agent habilité, ce document atteste des faits observés sur le terrain : localisation, description des déchets, photos horodatées, identification de l'auteur si possible. C'est le point de départ de tout dossier.</p><h3>4. La lettre d'information</h3><p>Adressée à l'auteur présumé des faits, elle l'informe des constatations réalisées, de sa responsabilité au regard de l'infraction, ainsi que des risques et sanctions encourus dans le cadre de la procédure administrative.</p><h3>5. L'arrêté individuel de sanction administrative</h3><p>Cet arrêté prononce formellement la sanction à l'encontre de l'auteur identifié : il fixe le montant de l'amende administrative.</p><h3>6. Le courrier de notification de l'amende administrative</h3><p>Ce courrier notifie officiellement au contrevenant le montant de l'amende administrative prononcée à son encontre, ainsi que les modalités de paiement et les voies de recours possibles.</p><h3>7. Le titre de recette</h3><p>Émis par la commune, ce document permet le recouvrement effectif de l'amende par le Trésor public, selon le circuit classique des recettes publiques locales.</p><p></p><p>👉 <em>Pour comprendre comment ces documents s'articulent dans une procédure complète : </em><a class=\"fr-link\" href=\"/blog/depot-sauvage-que-faire-quand-on-est-maire-ou-agent-de-collectivite\"><em>[Dépôt sauvage : que faire quand on est maire ou agent de collectivité ?]</em></a></p><hr><h2>Des modèles générés automatiquement, pas juste téléchargeables</h2><p>Sur Stop Dépôt Sauvage, certains de ces documents ne sont pas de simples trames à remplir à la main : ils sont générés automatiquement à partir des informations renseignées dans votre dossier (identité de l'auteur, description des faits, montant retenu...), avec la structure juridique adaptée à chaque étape.</p><p></p><p>👉 <a class=\"fr-link\" href=\"/demarrer-constatation\"><em>[Démarrer une procédure administrative]</em></a></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-09-03T10:01:49.715Z",
+
+    "updated_at": "2026-09-09T07:25:16.492Z",
+
+    "is_published": true,
+
+    "order": 5,
+
+    "slug": "tous-les-modeles-pour-traiter-un-dossier-de-depot-sauvage",
+
+    "summary": "Modèles de documents dépôt sauvage : rapport, arrêtés, lettres\r\nRapport de constatation, arrêté de sanction, titre de recette... découvrez tous les modèles nécessaires pour traiter un dépôt sauvage, et à quoi ils servent.",
+
+    "cover_image": "blog_covers/kg-I3rHSha_92GsgCbrxBc7F1jWYT01yzmiNSAzvV94uSR3vYQG86BC_9cViCEkJ_vIyGICCZYjcGoBI329.jpeg"
+
+  }
+
+},
+
+{
+
+  "model": "blog.blogarticle",
+
+  "pk": 8,
+
+  "fields": {
+
+    "title": "Comment une commune a traité son premier dossier sur Stop Dépôt Sauvage",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<h2><strong>Saint-Sulpice-de-Royan : un premier dossier traité de bout en bout</strong></h2><p>Saint-Sulpice-de-Royan, commune de 3 450 habitants en Charente-Maritime, a rejoint Stop Dépôt Sauvage en juillet 2026. Comme beaucoup de communes, elle avait déjà identifié un problème récurrent de dépôts sauvages sans avoir de méthode claire pour agir. Voici comment s'est déroulé son premier dossier.</p><p></p><h2><strong>Le point de départ : un dépôt repéré par un agent de la police municipale</strong></h2><p>Le 7 juillet 2026, un agent de la police municipale constate un dépôt sauvage sur un terrain public de la commune. Le site rassemble des déchets de construction, des encombrants, des peintures et essences, ainsi que du matériel ostréicole, des matériaux de rénovation, des plastiques, des cartons et des bidons.</p><p></p><h2><strong>Étape 1 : Le constat sur le terrain</strong></h2><p>Grâce à <em>Ludovic Caramel</em>, le rapport de constatation a été généré directement depuis son ordinateur, en quelques minutes.</p><h2><strong>Étape 2 : La lettre d'information</strong></h2><p>L'auteur a été identifié grâce à un indice trouvé sur place : un colis resté dans le dépôt portait l'identité d'une personne. La commune a ainsi pu générer et envoyer la lettre d'information à cette personne, l'informant de sa responsabilité et des sanctions encourues.</p><h2><strong>Étape 3 : Le suivi du dossier</strong></h2><p>Après réception de la lettre d'information, l'auteur a été reçu par la commune. Il s'est engagé à évacuer l'intégralité du dépôt et a mobilisé 4 bennes pour retirer plus de 100 m³ de déchets. Le nettoyage ayant été effectué par l'auteur lui-même, la commune a pu classer le dossier sans avoir à recourir à un arrêté de sanction.</p><p></p><h2><strong>Le résultat</strong></h2><ul class=\"tiptap-ul\"><li><p><strong>Procédure lancée</strong> : 7 juillet 2026 (constat) → 28 juillet 2026 (mise en conformité constatée)</p></li><li><p><strong>Volume de déchets traités</strong> : plus de 100 m³, évacués par l'auteur (4 bennes)</p></li><li><p><strong>Amende prononcée</strong> : aucune, la procédure ayant été classée sans suite après mise en conformité volontaire</p></li><li><p><strong>Temps passé par la commune</strong> : rapport de constatation et lettre d'information générés en quelques minutes ; aucun coût de nettoyage à la charge de la commune, l'évacuation ayant été prise en charge par l'auteur</p></li></ul><p><em>« Travaillant seul, sans véritable soutien juridique en interne, cet accompagnement a été un véritable soulagement. Il m'a permis d'avancer dans une procédure qui stagnait depuis plus d'un an : l'auteur des faits a commencé à retirer ses déchets. »</em> — Ludovic Caramel, police municipale de Saint-Sulpice-de-Royan</p><h2><strong>Ce que cette commune retient de sa première procédure</strong></h2><p>Un simple indice trouvé sur place (un colis portant une identité) a suffi à identifier l'auteur, sans recourir à un dispositif de vidéoprotection. La génération quasi immédiate du rapport de constatation et de la lettre d'information a permis d'agir rapidement après le constat. Enfin, la simple réception de la lettre d'information a suffi à obtenir une mise en conformité volontaire et rapide, sans qu'un arrêté de sanction soit nécessaire.</p><p></p><p>👉 <em>Pour comprendre la procédure dans le détail : </em><a class=\"fr-link\" href=\"/blog/depot-sauvage-que-faire-quand-on-est-maire-ou-agent-de-collectivite\"><em>[</em></a><a class=\"fr-link\" href=\"/blog/depot-sauvage-que-faire-quand-on-est-maire-ou-agent-de-collectivite\" title=\"https://docs.numerique.gouv.fr/docs/b60c2507-3425-490a-b510-52e785ac4590/\"><em><u>Dépôt sauvage : que faire quand on est maire ou agent de collectivité ?</u></em></a><a class=\"fr-link\" href=\"/blog/depot-sauvage-que-faire-quand-on-est-maire-ou-agent-de-collectivite\"><em>]</em></a></p><p>👉 <em>Pour voir tous les documents utilisés dans ce type de dossier : [</em><a class=\"fr-link\" href=\"/blog/tous-les-modeles-pour-traiter-un-dossier-de-depot-sauvage\" title=\"https://docs.numerique.gouv.fr/docs/d3de1cf9-dc20-4865-984f-33837091523a/\"><em><u>Tous les modèles pour traiter un dossier de dépôt sauvage</u></em></a><a class=\"fr-link\" href=\"/blog/tous-les-modeles-pour-traiter-un-dossier-de-depot-sauvage\"><em>]</em></a></p><p>&nbsp;</p><h2><strong>Envie de traiter votre premier dossier ?</strong></h2><p>Comme Saint-Sulpice-de-Royan, plus de 300 communes utilisent déjà Stop Dépôt Sauvage pour agir efficacement contre les dépôts sauvages.</p><p>👉 <em>[</em><a class=\"fr-link\" href=\"/demarrer-constatation\" title=\"https://protect-envi.beta.gouv.fr/demarrer-constatation\"><em><u>Démarrer une procédure administrative</u></em></a><a class=\"fr-link\" href=\"/demarrer-constatation\"><em>]</em></a></p><p></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-09-03T10:23:17.600Z",
+
+    "updated_at": "2026-09-09T12:07:41.160Z",
+
+    "is_published": true,
+
+    "order": 6,
+
+    "slug": "comment-une-commune-a-traite-son-premier-dossier-sur-protectenvi",
+
+    "summary": "Premier dossier dépôt sauvage : le cas concret d'une commune\r\nDécouvrez, étape par étape, comment Saint-Sulpice-de-Royan a traité son premier dossier de dépôt sauvage avec Stop Dépôt Sauvage.",
+
+    "cover_image": "blog_covers/images_1.jpeg"
+
+  }
+
+},
+
+{
+
+  "model": "blog.blogarticle",
+
+  "pk": 9,
+
+  "fields": {
+
+    "title": "Protect'Envi devient Stop Dépôt Sauvage : pourquoi ce changement de nom ?",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<h4>Un nom plus clair pour un outil qui ne change pas</h4><p>Depuis son lancement, l'outil qui vous permet de générer vos rapports de constatation, ou encore vos lettres d'information s'appelait Protect'Envi. Vous le retrouvez aujourd'hui sous le nom de Stop Dépôt Sauvage.</p><p>Rien ne change dans son fonctionnement : mêmes documents générés automatiquement, même accompagnement par l'équipe, même procédure administrative fondée sur l'article L. 541-3 du Code de l'environnement. Seul le nom évolue, pour mieux refléter ce que fait l'outil au quotidien.</p><h4>Pourquoi ce nouveau nom ?</h4><p>Protect'Envi est le nom du dispositif porté par la Gendarmerie nationale (CESAN) pour accompagner les collectivités dans la lutte contre les atteintes à l'environnement. C'est un nom institutionnel, qui a vocation à couvrir plusieurs actions au-delà du seul traitement des dépôts sauvages.</p><p>Stop Dépôt Sauvage, c'est le nom de l'outil que vous utilisez concrètement pour traiter vos dossiers de dépôts sauvages, de la constatation jusqu'à la sanction. Un nom qui dit directement ce qu'il permet de faire, sans détour.</p><p>Protect'Envi reste le dispositif institutionnel derrière l'outil. Stop Dépôt Sauvage devient le nom que vous utilisez au quotidien.</p><p><strong><em>Ce qui change pour vous :</em></strong></p><ul class=\"tiptap-ul\"><li><p>Le nom affichés sur le site</p></li><li><p>L'adresse à laquelle vous parlez de l'outil auprès de vos collègues ou d'autres communes : https://stopdepotsauvage.beta.gouv.fr</p></li></ul><p><strong><em>Ce qui ne change pas :</em></strong></p><ul class=\"tiptap-ul\"><li><p>Votre compte, vos dossiers et vos données restent accessibles normalement</p></li><li><p>Les documents déjà générés restent valables</p></li><li><p>L'équipe qui vous accompagne reste la même</p></li><li><p>La connexion via ProConnect ne change pas</p></li></ul><p></p><h4>Vous avez déjà un dossier en cours ?</h4><p>Aucune action n'est nécessaire de votre part. Vous retrouverez votre dossier tel que vous l'avez laissé, sous le nom Stop Dépôt Sauvage.</p><p>👉 <a class=\"fr-link\" href=\"/mes-procedures\"><strong>[Accéder à mes dossiers]</strong></a></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-09-09T11:57:45.770Z",
+
+    "updated_at": "2026-09-09T15:46:22.893Z",
+
+    "is_published": true,
+
+    "order": 7,
+
+    "slug": "protectenvi-devient-stop-depot-sauvage-pourquoi-ce-changement-de-nom",
+
+    "summary": "Vous connaissiez l'outil sous le nom de Protect'Envi ? \r\nDécouvrez pourquoi il s'appelle désormais Stop Dépôt Sauvage, et ce que ce changement implique concrètement pour votre commune.",
+
+    "cover_image": "blog_covers/Stopdepotsauvage.png"
+
+  }
+
+},
+
+{
+
+  "model": "blog.blogarticle",
+
+  "pk": 10,
+
+  "fields": {
+
+    "title": "Stop Dépôt Sauvage franchit le cap des 1 000 procédures engagées",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<h4>Un dispositif désormais utilisé à l'échelle nationale</h4><p>Quand Stop Dépôt Sauvage a été lancé, la conviction de départ était simple : donner aux maires un outil concret pour agir contre les dépôts sauvages, sans passer systématiquement par la voie pénale. Quelques mois plus tard, ce sont plus de 1 000 procédures administratives qui ont été engagées par des communes partout en France, et environ 500 communes qui utilisent activement l'outil.</p><p></p><h4>Ce que ces chiffres représentent concrètement</h4><p>Derrière chaque procédure, il y a un dépôt sauvage constaté, un rapport généré, une lettre d'information envoyée à l'auteur présumé, et bien souvent, un site nettoyé sans que la commune n'ait eu à en supporter le coût. 1 000 procédures, c'est autant de dossiers qui, sans l'outil, auraient risqué de rester bloqués faute de temps ou de ressources juridiques en interne.</p><p>500 communes actives, c'est aussi le signe que la procédure administrative de l'article L. 541-3 du Code de l'environnement, encore peu utilisée il y a quelques mois, devient un réflexe pour de plus en plus de maires et d'agents de collectivité.</p><p></p><h4>Pourquoi ça avance vite</h4><p>Plusieurs éléments expliquent cette montée en puissance :</p><ul class=\"tiptap-ul\"><li><p>Une procédure simple à mettre en œuvre, sans passer par la voie judiciaire</p></li><li><p>Des documents générés automatiquement (rapport de constatation, lettre d'information)</p></li><li><p>Un accompagnement humain par l'équipe pour les communes qui traitent leur premier dossier</p></li><li><p>Le bouche-à-oreille entre communes voisines et le relais des préfectures et brigades de gendarmerie</p></li></ul><p></p><h4>Et la suite ?</h4><p>Cette dynamique n'est qu'une étape. L'objectif est de continuer à accompagner de nouvelles communes, tout en simplifiant encore le traitement des dossiers pour celles qui utilisent déjà l'outil.</p><p></p><h4>Vous n'avez pas encore traité votre premier dossier ?</h4><p>Comme les 500 communes déjà actives, vous pouvez traiter votre premier dossier de dépôt sauvage gratuitement, avec l'accompagnement de l'équipe.</p><p>👉 <a class=\"fr-link\" href=\"/demarrer-constatation\"><em>[Démarrer une procédure administrative]</em></a></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-09-09T12:06:17.597Z",
+
+    "updated_at": "2026-09-09T15:47:03.983Z",
+
+    "is_published": true,
+
+    "order": 8,
+
+    "slug": "stop-depot-sauvage-franchit-le-cap-des-1-000-procedures-engagees",
+
+    "summary": "Plus de 1 000 procédures administratives engagées, environ 500 communes qui utilisent activement le dispositif : Stop Dépôt Sauvage franchit une nouvelle étape dans la lutte contre les dépôts sauvages.",
+
+    "cover_image": "blog_covers/1000PA.png"
+
+  }
+
+},
+
+{
+
+  "model": "blog.blogarticle",
+
+  "pk": 11,
+
+  "fields": {
+
+    "title": "Dépôt sauvage : plan d’action en 3 étapes pour les communes",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Face à un dépôt sauvage, le plus difficile est souvent de savoir par où commencer. Voici un parcours en trois étapes, applicable à tous les cas, que Stop Dépôt Sauvage permet de suivre au même endroit.</p><p></p><h4><strong>Étape 1 : constater le dépôt</strong></h4><p>Tout commence sur le terrain. L’agent qui découvre le dépôt le documente avant toute intervention : photos datées, localisation précise, nature et volume estimé des déchets, et tout indice utile (courriers, factures, emballages, plaque d’immatriculation).</p><p>Ces éléments alimentent un rapport de constatation. Plus il est précis, plus la suite de la procédure est solide. Stop Dépôt Sauvage le génère directement à partir de ce que vous saisissez.</p><p></p><h4><strong>Étape 2 : engager la procédure administrative</strong></h4><p>Une fois le dépôt constaté, la commune cherche à identifier l’auteur, ou à défaut le propriétaire du terrain ou le détenteur des déchets. Elle lui adresse ensuite un courrier l’informant de la procédure engagée et lui laisse la possibilité de présenter ses observations. C’est la phase contradictoire, qui dure 10 jours.</p><p>Cette étape est obligatoire : elle protège la commune comme la personne concernée, et rend la décision finale difficile à contester.</p><p></p><h4><strong>Étape 3 : sanctionner et remettre en état</strong></h4><p>À l’issue du délai, le maire peut prononcer les mesures prévues par l’article L541-3 du code de l’environnement : mise en demeure de nettoyer, remise en état aux frais de l’auteur, amende administrative. La sanction est adaptée à chaque situation (gravité, volume, récidive, situation de la personne), et non appliquée mécaniquement. Le recouvrement passe ensuite par la trésorerie, grâce à un titre de recette.</p><p></p><h4><strong>À retenir</strong></h4><p>Constater, informer, sanctionner : trois étapes, une seule base légale, une seule autorité compétente. Stop Dépôt Sauvage vous guide à chaque étape et génère les documents correspondants.</p><p>👉 <a class=\"fr-link\" href=\"/demarrer-constatation\"><em>[Démarrer une procédure administrative]</em></a></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-06T11:06:46.143Z",
+
+    "updated_at": "2026-10-06T11:27:09.785Z",
+
+    "is_published": true,
+
+    "order": 9,
+
+    "slug": "depot-sauvage-plan-daction-en-3-etapes-pour-les-communes",
+
+    "summary": "Constater, engager la procédure, sanctionner. \r\nDécouvrez les 3 étapes pour traiter un dépôt sauvage sur votre commune, de la photo au titre de recette.",
+
+    "cover_image": "blog_covers/_uwym18mwA7EZjLaXaYavWAXdPgrRZ_PNb8bs7ABCoz9KQ2H8nnAAQD9ShrxiMPQ9ZlEkZt3L-2TzD35FNw.jpeg"
+
+  }
+
+},
+
+{
+
+  "model": "blog.blogarticle",
+
+  "pk": 12,
+
+  "fields": {
+
+    "title": "Identifier l’auteur d’un dépôt sauvage : indices, plaque, vidéo",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Identifier l’auteur est l’étape qui bloque le plus souvent les communes, même quand elles disposent d’une plaque d’immatriculation. Voici comment s’y prendre, et que faire quand l’identification n’aboutit pas.</p><p></p><h4><strong>1. Fouiller le dépôt lui-même</strong></h4><p>C’est la piste la plus fructueuse. Courriers, factures, bons de livraison, étiquettes, ordonnances, emballages avec une adresse : un nom ou une adresse retrouvés dans les déchets constituent un indice sérieux. Photographiez chaque élément en place, avant de le déplacer, puis mentionnez-le dans le rapport de constatation.</p><p></p><h4><strong>2. Exploiter la plaque d’immatriculation</strong></h4><p>Une plaque relevée par un témoin ou une caméra est un bon point de départ, mais elle ne donne pas directement un nom : le fichier des immatriculations n’est pas consultable par tous les agents. Le plus souvent, l’identification du titulaire du véhicule passe par la gendarmerie, la police nationale ou un agent expressément habilité.</p><p>Par ailleurs, le titulaire de la carte grise n’est pas forcément la personne qui a déposé les déchets. Il s’agit d’un indice, qui permet d’écrire à la personne concernée et de recueillir ses explications dans le cadre de la procédure contradictoire.</p><p></p><h4><strong>3. Recueillir témoignages et images</strong></h4><p>Un voisin, un agriculteur, un riverain : tout témoignage daté et précis a de la valeur, surtout s’il est écrit. Les images issues de caméras (vidéosurveillance, pièges photographiques) peuvent aussi servir de preuve, à condition d’avoir été installées dans le respect des règles applicables.</p><p></p><h4><strong>4. S’appuyer sur la gendarmerie et la police municipale</strong></h4><p>La procédure administrative n’empêche pas de déposer plainte en parallèle. Un dépôt de plainte permet à la gendarmerie ou à la police d’enquêter, et d’accéder à des informations que la commune ne peut pas obtenir seule.</p><p></p><h4><strong>Et si l’auteur reste introuvable ?</strong></h4><p>La commune peut se tourner vers le propriétaire du terrain ou le détenteur des déchets, selon les cas. Dans tous les cas, le dépôt doit pouvoir être nettoyé, et la constatation précise du dépôt reste utile si de nouveaux éléments apparaissent plus tard.</p><p></p><p>👉 <a class=\"fr-link\" href=\"/blog/depot-sauvage-sur-terrain-prive-qui-est-responsable\"><em>En cas de dépôt sur un terrain privé, qui est responsable? </em></a></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-06T11:10:44.629Z",
+
+    "updated_at": "2026-10-06T11:27:55.247Z",
+
+    "is_published": true,
+
+    "order": 10,
+
+    "slug": "identifier-lauteur-dun-depot-sauvage-indices-plaque-video",
+
+    "summary": "Plaque d’immatriculation, courriers dans les déchets, témoins, caméras : comment une commune peut identifier l’auteur d’un dépôt sauvage et que faire quand c’est impossible.",
+
+    "cover_image": "blog_covers/mVhpH6cmwxITYJq6-Wq_qnINAqbgvN-BL4mUoeCztSMZkNuW5m78It-ZVx6tA11dcgAXzFGKCjr6isH8EFv.jpeg"
+
+  }
+
+},
+
+{
+
+  "model": "blog.blogarticle",
+
+  "pk": 13,
+
+  "fields": {
+
+    "title": "Commissionnement des agents : qui peut constater un dépôt sauvage ?",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Pour qu’un constat de dépôt sauvage soit solide, il doit être établi par un agent qui en a la qualité. Cette page fait le point sur les agents concernés et sur la démarche de commissionnement.</p><p></p><h4><strong>Qui peut constater ?</strong></h4><p>Les élus (maire, adjoints), les agents de police municipale et les gardes champêtres n’ont pas besoin d’être commissionnés : ils peuvent constater un dépôt et en fouiller le contenu dans le cadre de leurs prérogatives.</p><p>Les autres agents de la commune, comme les agents des services techniques ou de l’environnement, peuvent être désignés par le maire pour constater, à condition d’être commissionnés par arrêté.</p><p></p><h4><strong>Le commissionnement : de quoi s’agit-il ?</strong></h4><p>Le&nbsp;<strong>commissionnement</strong>&nbsp;est la décision par laquelle le maire (ou le président de l’intercommunalité) désigne un agent pour exercer cette mission. Il précise le périmètre de ses compétences.</p><p>L’<strong>assermentation</strong>&nbsp;n’est pas requise pour la procédure administrative : un arrêté de commissionnement suffit, sans prestation de serment devant le tribunal.</p><p></p><h4><strong>Les démarches, en pratique</strong></h4><ol class=\"tiptap-ol\"><li><p>Identifier les agents de la commune qui interviennent déjà sur le terrain.</p></li><li><p>Prendre un arrêté de commissionnement pour chaque agent concerné.</p></li><li><p>Informer l’agent de sa mission : constater les dépôts et rédiger le rapport de constatation.</p></li><li><p>Conserver l’arrêté, qui pourra être demandé en cas de contestation.</p></li></ol><p></p><h4><strong>Et pour la procédure administrative ?</strong></h4><p>Commune de petite taille, pas de police municipale : c’est la situation la plus courante, et elle ne bloque pas la démarche. Un simple arrêté de commissionnement suffit pour qu’un agent puisse constater, sans passage devant le tribunal, et le maire ou un adjoint peut aussi constater directement. Stop Dépôt Sauvage permet de générer le rapport de constatation quel que soit l’agent qui le rédige.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-06T11:11:33.636Z",
+
+    "updated_at": "2026-10-06T11:28:35.176Z",
+
+    "is_published": true,
+
+    "order": 11,
+
+    "slug": "commissionnement-des-agents-qui-peut-constater-un-depot-sauvage",
+
+    "summary": "Qui peut constater un dépôt sauvage dans une commune ? \r\nCommissionnement, élus, police municipale : le point pour les maires et les agents.",
+
+    "cover_image": "blog_covers/XXsiowngC3wVMvFfg-NQgQ6IC_bsZ0CPhfukLBqvLyEB0_6bmIqUmha-0ExS801_dUj8SeLrFdA8ZMyA4F7.jpeg"
+
+  }
+
+},
+
+{
+
+  "model": "blog.blogarticle",
+
+  "pk": 14,
+
+  "fields": {
+
+    "title": "Dépôt sauvage : faut-il attendre 10 jours avant de l’enlever ?",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Cela dépend de la situation. Les 10 jours de la procédure administrative correspondent à la phase contradictoire : ils laissent à l’auteur présumé le temps de présenter ses observations. L’article L541-3 du code de l’environnement prévoit deux façons de traiter le dépôt pendant ce temps.</p><p></p><h4><strong>Cas n° 1 : laisser l’auteur nettoyer pendant la phase contradictoire</strong></h4><p>L’article L541-3 permet à la commune de laisser le contrevenant procéder lui-même au nettoyage pendant la phase contradictoire. C’est un choix de la commune, pas une obligation. Il évite à la commune de supporter le coût de l’enlèvement et a un effet pédagogique : l’auteur répare lui-même.</p><p>Quelques conseils pour les communes qui font ce choix :</p><ul class=\"tiptap-ul\"><li><p>rubaliser la zone et installer une pancarte « Procédure administrative en cours » ;</p></li><li><p>ou déplacer le dépôt dans un local dédié, par les services techniques, et inviter l’auteur à venir le récupérer.</p></li></ul><p>Dans les deux cas, documentez d’abord le dépôt : photos datées, localisation, indices, rapport de constatation.</p><p></p><h4><strong>Cas n° 2 : intervenir rapidement en cas de risque</strong></h4><p>Le II du même article permet à la commune d’agir rapidement, sans attendre la fin du délai, lorsque le dépôt présente un risque, notamment environnemental ou sanitaire, ou un risque d’extension. Le maire peut alors faire procéder au nettoyage sans attendre.</p><p>La constatation doit être faite avant l’intervention. Il faut aussi conserver le coût de l’enlèvement (heures agents, matériel, déchèterie) pour le recouvrement.</p><p></p><h4><strong>Ce qu’il faut faire avant tout enlèvement</strong></h4><ul class=\"tiptap-ul\"><li><p>photographier le dépôt sous plusieurs angles, avec la date et la localisation ;</p></li><li><p>relever les indices (courriers, plaque, éléments identifiants) ;</p></li><li><p>estimer le volume et la nature des déchets ;</p></li><li><p>établir le rapport de constatation.</p></li></ul><p>Une fois ces éléments rassemblés, le dépôt peut être déplacé ou enlevé sans fragiliser la procédure.</p><p></p><h4><strong>Comment l’expliquer aux habitants</strong></h4><p>Quelques messages simples, selon le cas :</p><ul class=\"tiptap-ul\"><li><p>« Procédure administrative en cours : l’auteur est invité à nettoyer » ;</p></li><li><p>« Nous documentons chaque dépôt pour identifier et sanctionner son auteur » ;</p></li><li><p>« Le nettoyage a lieu rapidement, la procédure se poursuit en parallèle » ;</p></li><li><p>« Ce sont les auteurs, et non les contribuables, qui doivent payer le nettoyage ».</p></li></ul><p>En publiant le nombre de dossiers traités et d’amendes prononcées, la commune montre que le dispositif est efficace et dissuade les récidives.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-06T11:13:42.945Z",
+
+    "updated_at": "2026-10-06T11:29:12.012Z",
+
+    "is_published": true,
+
+    "order": 12,
+
+    "slug": "depot-sauvage-faut-il-attendre-10-jours-avant-de-lenlever",
+
+    "summary": "Pendant la phase contradictoire, la commune peut laisser l’auteur nettoyer lui-même ou intervenir rapidement en cas de risque. \r\nLes deux cas prévus par l’article L541-3 du Code de l'environnement, et nos conseils.",
+
+    "cover_image": "blog_covers/o5gfcmr2fm5P3tsnSQniwA0VYIGr_E7r3iPD5z9sXQMJ1ioP7iZBrT0kfAZGbhvWgiZy2u7B1Vw4oS9u8sk.jpeg"
+
+  }
+
+},
+
+{
+
+  "model": "blog.blogarticle",
+
+  "pk": 15,
+
+  "fields": {
+
+    "title": "Dépôts sauvages : le retour d’expérience des Salles-du-Gardon",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Rémy Clémencier est maire des Salles-du-Gardon, une commune d’environ 2 400 habitants, et en est à son premier mandat. Il a engagé six procédures avec Stop Dépôt Sauvage. Le résultat, tel qu’il le décrit en octobre 2026 : « il n’y a plus rien qui traîne ».</p><p></p><h4><strong>Le point de départ : un pouvoir de police sans moyen de l’exercer</strong></h4><p>Pendant la campagne municipale, les dépôts sauvages revenaient dans toutes les réunions. Élu, Rémy Clémencier fait le même constat que beaucoup de maires :</p><p>« […] tu as un pouvoir de police, mais tu ne peux rien faire. Tu ne peux pas verbaliser les gens. »</p><p>Il découvre ensuite la procédure administrative : « Ils répondent vraiment à mon attente. On est rentré dans votre procédure et on s’est rendu compte que c’était tout à fait adapté. »</p><p></p><h4><strong>Six procédures et une communication claire</strong></h4><p>La commune a engagé six procédures, rapprochées dans le temps, et a fait savoir qu’elle verbalisait. Les effets sont rapides.</p><p>« Je peux vous garantir que depuis, […] il n’y a plus rien. Donc, ça a eu l’effet escompté. Je ne sais pas jusqu’à quand, mais il n’y a plus rien qui traîne. »</p><p>Aucune des personnes concernées n’a utilisé la phase contradictoire. Sur les six, une seule est revenue vers la mairie, pour contester. Les auteurs étaient des habitués : « Au final, ça s’est arrêté et les gens se sont bien calmés. »</p><p></p><h4><strong>Un message qui circule</strong></h4><p>Pour le maire, l’effet dépasse les personnes sanctionnées :</p><p>« Je peux vous garantir qu’après ça fait le tour, les gens le savent. »</p><p>Il insiste sur deux points : la communication auprès des habitants (« Et surtout, on a communiqué ») et la fermeté. Côté habitants, les retours sont très majoritairement positifs : « […] à 95 %, je n’ai que des retours positifs du fait qu’il n’y ait plus de dépôts sauvages. […] C’est grâce à votre procédure que j’arrive à ça. »</p><p></p><h4><strong>Ce que ça change pour la commune</strong></h4><p>« Ça nous a révolutionné la vie, la gestion au niveau des dépôts sauvages. »</p><p>Selon lui, cette réussite donne aussi des idées aux communes voisines.</p><p></p><h4><strong>Ce qu’il retient pour les autres communes</strong></h4><ul class=\"tiptap-ul\"><li><p><strong>Communiquer</strong>&nbsp;: faire savoir que la commune verbalise, auprès des habitants.</p></li><li><p><strong>Faire preuve de fermeté</strong>&nbsp;: une procédure menée à son terme envoie un signal clair.</p></li><li><p><strong>S’appuyer sur la procédure</strong>&nbsp;: elle donne aux maires un moyen concret d’exercer leur pouvoir de police.</p></li></ul><p></p><p>👉 <a class=\"fr-link\" href=\"/demarrer-constatation\"><em>[Démarrer une procédure administrative]</em></a></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-06T11:15:28.032Z",
+
+    "updated_at": "2026-10-06T11:30:10.690Z",
+
+    "is_published": true,
+
+    "order": 13,
+
+    "slug": "depots-dencombrants-le-retour-dexperience-des-salles-du-gardon",
+
+    "summary": "Rémy Clémencier, maire des Salles-du-Gardon (2 400 habitants), raconte comment six procédures administratives ont fait disparaître les dépôts sauvages dans sa commune.",
+
+    "cover_image": "blog_covers/u4GYrjUg0rIccp1dFph3VOcB-JU-WJCUFK_TyJuJv_5SklBhcpB2wTXyL8kMZCYLvCJfW0Ye4BGI6Qhygzl.jpeg"
+
+  }
+
+},
+
+{
+
+  "model": "blog.blogarticle",
+
+  "pk": 16,
+
+  "fields": {
+
+    "title": "Exécution d’office d’un dépôt sauvage : saisir le juge des référés",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Quand une mise en demeure reste sans effet, la commune peut faire enlever les déchets aux frais du responsable : c’est l’exécution d’office. Mais si le propriétaire refuse l’accès à son terrain, elle ne peut pas entrer de force. Elle doit demander l’autorisation au juge des référés du tribunal judiciaire.</p><p></p><h4><strong>Quand faut-il saisir le juge ?</strong></h4><p>L’exécution d’office intervient à la fin de la procédure administrative : constat, courrier d’information, mise en demeure, puis, si rien n’est fait, travaux réalisés par la commune aux frais du propriétaire ou du détenteur des déchets. Si le propriétaire ne s’y oppose pas, la commune peut intervenir. S’il refuse l’accès, elle demande au juge des référés l’autorisation de pénétrer sur le terrain, avec ou sans le concours de la force publique et, si besoin, d’un serrurier.</p><p></p><h4><strong>Comment ça se passe ?</strong></h4><ol class=\"tiptap-ol\"><li><p><strong>La commune assigne le propriétaire en référé.</strong>&nbsp;L’assignation est signifiée par un commissaire de justice (anciennement huissier de justice).</p></li><li><p><strong>Un avocat n’est pas obligatoire, mais il est conseillé</strong>, car il aide à constituer un dossier solide.</p></li><li><p><strong>Le juge apprécie l’urgence</strong>&nbsp;et l’existence d’un trouble manifestement illicite ou d’un dommage imminent (articles 834 et 835 du code de procédure civile).</p></li><li><p><strong>S’il autorise l’intervention</strong>, l’ordonnance précise en général qui peut entrer (agents, entreprise), qui l’assiste (commissaire de justice, serrurier, force publique) et que les frais sont à la charge du propriétaire.</p></li></ol><p></p><h4><strong>Trois décisions pour s’y repérer</strong></h4><p>Ces décisions sont des cas d’espèce. Elles illustrent ce que les juges ont retenu, sans garantir le même résultat dans chaque dossier.</p><p><strong>Cour d’appel de Paris, 19 octobre 2023 (RG 23/03177) : un dépôt de véhicules hors d’usage.</strong>&nbsp;La commune demandait l’autorisation d’entrer chez un particulier qui stockait des carcasses, des pièces détachées et des pneus. Le juge de première instance avait enjoint au propriétaire d’enlever les déchets sous deux mois, puis autorisé la commune à intervenir d’office à défaut. La cour confirme. Elle retient que l’amoncellement constitue des déchets abandonnés au sens de l’article L541-3 du code de l’environnement, que les fluides répandus créent un risque de pollution et d’incendie, et que ces risques caractérisent l’urgence. Le rapport de la police municipale et les photographies ont pesé dans la décision.</p><p><strong>Tribunal judiciaire d’Amiens, 2 avril 2025 (RG 25/00090) : un terrain avec sacs de déchets et véhicule abandonné.</strong>&nbsp;La commune avait suivi toute la procédure : constats en 2022 et 2023, courrier recommandé, arrêté de mise en demeure avec délai d’un mois, puis arrêté de consignation. Le propriétaire n’a pas réagi et n’est pas venu à l’audience. Le juge autorise la commune à entrer, accompagnée d’un commissaire de justice, d’une entreprise et, si besoin, d’un serrurier et de la force publique. Les frais sont mis à la charge de la propriétaire, ainsi que 1 500 euros au titre des frais de procédure.</p><p><strong>Tribunal judiciaire de Grasse, 14 août 2025 (RG 25/01164) : un logement encombré de déchets.</strong>&nbsp;L’exécution d’office ne concerne pas que les terrains : ici, c’est un appartement. La commune avait multiplié les démarches (sommation, mises en demeure, arrêté municipal signifié, rapport d’un inspecteur assermenté). Le juge retient que le refus d’exécuter l’arrêté constitue un trouble manifestement illicite, et que l’accumulation de déchets crée un risque sanitaire. Il rappelle que l’ancienneté d’une situation n’empêche pas l’urgence. Il autorise la commune à intervenir pour évacuer, nettoyer et désinfecter aux frais des propriétaires. Les propriétaires étaient placés sous protection juridique : l’assignation visait aussi leurs représentants.</p><p></p><h4><strong>Les pièces à réunir avant de saisir le juge</strong></h4><ul class=\"tiptap-ul\"><li><p>les constats datés avec photos et le rapport de constatation ;</p></li><li><p>la preuve des démarches : courriers, recommandé, signification ;</p></li><li><p>l’arrêté de mise en demeure et sa notification ;</p></li><li><p>les éléments qui justifient l’urgence : risque de pollution, d’incendie, sanitaire, signalements de voisins ;</p></li><li><p>le cas échéant, l’arrêté de consignation ;</p></li><li><p>la liste précise de ce que la commune demande : entrer, évacuer, éliminer les déchets, être assistée d’un commissaire de justice, d’un serrurier, de la force publique, frais à la charge du propriétaire.</p></li></ul><p></p><h4><strong>Ce qu’il faut retenir</strong></h4><p>Le juge examine la procédure suivie par la commune. Plus elle est complète et documentée, plus la demande est solide. Stop Dépôt Sauvage permet de garder la trace de chaque étape et de générer les documents correspondants.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-06T11:18:35.894Z",
+
+    "updated_at": "2026-10-06T11:32:32.156Z",
+
+    "is_published": true,
+
+    "order": 14,
+
+    "slug": "execution-doffice-dun-depot-sauvage-saisir-le-juge-des-referes",
+
+    "summary": "Le propriétaire refuse l’accès à son terrain pour enlever un dépôt sauvage ? \r\nLa commune peut saisir le juge des référés. \r\nProcédure, pièces à fournir et trois décisions récentes.",
+
+    "cover_image": "blog_covers/hvXEDXB-BJNmR5CbIoI_mYjtA1AzbGdI8k98YOpoq3dqMri0H0SbAioQYPNQoPK4ZMOmI13baPivmd8pT5c.jpeg"
+
+  }
+
+},
+
+{
+
+  "model": "blog.blogarticle",
+
+  "pk": 17,
+
+  "fields": {
+
+    "title": "Régie et dépôts sauvages : faut-il en créer une pour la procédure administrative ?",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Non, une commune n’a pas besoin de créer une régie pour mener la procédure administrative de l’article L541-3 du code de l’environnement. Les sommes à recouvrer (amende, astreinte, frais d’exécution d’office) passent par un titre de recettes émis par la commune et recouvré par le Trésor public (DDFIP).</p><p></p><h4><strong>Ce que prévoit l’article L541-3</strong></h4><p>Le texte prévoit trois types de sommes :</p><ul class=\"tiptap-ul\"><li><p><strong>l’amende administrative</strong>&nbsp;: au plus 15 000 € avec la mise en demeure, puis au plus 150 000 € si la personne n’a pas obtempéré ;</p></li><li><p><strong>l’astreinte journalière</strong>&nbsp;: au plus 1 500 € par jour de retard ;</p></li><li><p><strong>la consignation et les frais d’exécution d’office</strong>, pour couvrir le coût des mesures prescrites.</p></li></ul><p>Le VI de l’article précise que les amendes et l’astreinte sont recouvrées au bénéfice de la commune lorsque l’autorité de police compétente est le maire. La consignation se fait « entre les mains d’un comptable public », et son recouvrement s’opère comme en matière de créances de l’État étrangères à l’impôt et au domaine, le comptable pouvant engager une saisie administrative à tiers détenteur. Le texte ne mentionne ni régie ni régisseur.</p><p></p><h4><strong>Comment ça se passe concrètement</strong></h4><ol class=\"tiptap-ol\"><li><p><strong>La commune prend sa décision</strong>&nbsp;(amende, mise en demeure, consignation) en précisant le délai et les modalités de paiement.</p></li><li><p><strong>Elle émet un titre de recette</strong>&nbsp;à destination du Trésor Public (DDFIP).</p></li><li><p><strong>Le Trésor public (DDFIP)</strong>&nbsp;assure le recouvrement et engage, si besoin, les mesures de poursuite, à l'encontre de la personne concernée. </p></li><li><p><strong>Le montant revient à la commune</strong>&nbsp;lorsque c’est le maire qui a prononcé l’amende.</p></li></ol><p>Après l’émission du titre, c’est le Trésor public (DDFIP) qui suit le paiement. Il est donc utile de lui demander un retour régulier sur les titres émis : certaines communes regrettent de ne pas savoir si les sommes ont été payées.</p><p></p><h4><strong>À quoi sert une régie, et pourquoi ce n’est pas le bon outil</strong></h4><p>Une régie permet d’encaisser directement, par l’intermédiaire d’un régisseur, des recettes au comptant pour des opérations courantes (cantine, droits de place, photocopies, etc.). Dans la procédure dépôt sauvage, la personne concernée reçoit une décision, puis un titre de paiement à payer auprès du Trésor public (DDFIP). Il n’y a pas d’encaissement sur place : une régie n’apporte rien et ajoute des formalités (création, nomination d’un régisseur, contrôles).</p><p></p><h4><strong>Si votre trésorerie vous demande une régie</strong></h4><p>Demandez-lui le texte sur lequel cette demande repose. Certaines pratiques locales relèvent de l’habitude administrative et non d’une obligation légale. Un échange avec le comptable en amont, avant la première procédure, permet souvent de clarifier le circuit.</p><p></p><h4><strong>À retenir</strong></h4><p>Pas de régie à créer : la commune décide, émet un titre de recettes, et le Trésor public (DDFIP) recouvre. Stop Dépôt Sauvage génère les documents de la procédure, et les modèles pour l’émission du titre.</p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-06T11:38:51.165Z",
+
+    "updated_at": "2026-10-06T11:44:30.802Z",
+
+    "is_published": true,
+
+    "order": 15,
+
+    "slug": "regie-et-depots-sauvages-faut-il-en-creer-une-pour-la-procedure-administrative",
+
+    "summary": "Amende, astreinte, frais de remise en état : faut-il une régie pour encaisser les sommes de la procédure dépôt sauvage ? Ce que dit l’article L541-3 du code de l'environnement et comment se passe le recouvrement.",
+
+    "cover_image": "blog_covers/3yHk3Zh6NOes15p5WJRx3T2qf5Axe7Cvh2sr_8NTvC9gicW48hrt5Yt06SLY8q7LhLn3HRwaJzeaPqO-jWg.jpeg"
+
+  }
+
+},
+
+{
+
+  "model": "blog.blogarticle",
+
+  "pk": 18,
+
+  "fields": {
+
+    "title": "Plan de lutte contre les dépôts sauvages : comment l’organiser dans sa commune ?",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Un plan de lutte efficace contre les dépôts sauvages repose sur cinq volets : un pilotage clair, un diagnostic chiffré, de la prévention, du ramassage et de la sanction, soutenus par la communication. Une commune n’a pas besoin de gros moyens pour s’y mettre : il suffit de l’organiser à son échelle.</p><h4>Pourquoi un plan plutôt que des actions isolées ?</h4><p>Un dépôt nettoyé sans analyse revient souvent. Les déchets sont variés (gravats, bois, pneus, déchets verts, sacs d’ordures ménagères, déchets d’artisans) et leur nature évolue selon les actions : une barrière réduit les dépôts en véhicule à un endroit, un changement d’horaires de déchèterie modifie ceux des professionnels. Un plan court (état des lieux, actions, bilan, nouveau plan) permet d’ajuster en continu.</p><h4>Les cinq volets</h4><ul class=\"tiptap-ul\"><li><p>Pilotage : désigner un référent et un suppléant, créer un canal de veille avec les acteurs concernés (services techniques, syndicat de collecte, intercommunalité) et identifier le temps agent consacré au sujet.</p></li><li><p>Diagnostic : localiser les dépôts, typer les déchets et chiffrer les coûts de collecte et de traitement. Un bilan annuel sert à piloter le reste.</p></li><li><p>Prévention : barrières ou aménagements sur les points d’accès, horaires de déchèterie adaptés, sensibilisation des usagers.</p></li><li><p>Ramassage : enlèvement rapide, procédure d’évacuation, moyens dédiés (véhicule, marché de collecte).</p></li><li><p>Sanction : pièges photo ou caméras, contrôles, procédure administrative de l’article L541-3 du Code de l'environnement, brigade verte.</p></li></ul><p>La communication traverse les cinq volets : panneau à côté d’une barrière ou d’une caméra, affiches, réseaux sociaux, bulletin municipal.</p><h4>Deux leviers souvent oubliés</h4><p>Le premier est un guide pour les élus : un document qui aide à qualifier un dépôt, rappelle les responsabilités de chacun et propose des outils pour lancer une verbalisation.</p><p>Le second concerne les entreprises. Les dépôts contiennent souvent des déchets de professionnels. Trois actions fonctionnent : élargir les horaires de déchèterie pour que les artisans y passent après leur journée, éditer un guide de gestion des déchets pour les professionnels, et informer les particuliers de leurs responsabilités lors d’un permis de travaux.</p><h4>Par où commencer ?</h4><p>Par l’état des lieux : localiser les dépôts, caractériser les déchets et chiffrer les coûts. Une cartographie crée souvent un déclic auprès des élus, et le suivi régulier permet ensuite de mesurer les effets.</p><p>👉 Vous voulez traiter un dépôt dès maintenant ? Consultez : <a class=\"fr-link\" href=\"/blog/depot-sauvage-plan-daction-en-3-etapes-pour-les-communes\">Dépôt sauvage : plan d’action en 3 étapes pour les communes</a></p><h4>À retenir</h4><p>Un référent, un diagnostic chiffré, de la prévention, du ramassage rapide et une sanction systématique : c’est la combinaison qui fait baisser les dépôts dans la durée. Stop Dépôt Sauvage couvre le volet sanction : il génère les documents de la procédure L541-3 du Code de l'environnement, du constat au titre de recette.</p><p>👉 <a class=\"fr-link\" href=\"/demarrer-constatation\">Démarrer une procédure administrative</a></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-20T09:40:40.063Z",
+
+    "updated_at": "2026-10-22T07:16:07.669Z",
+
+    "is_published": true,
+
+    "order": 16,
+
+    "slug": "plan-de-lutte-contre-les-depots-sauvages-5-volets",
+
+    "summary": "Pilotage, diagnostic, prévention, ramassage, sanction : les cinq volets d’un plan de lutte contre les dépôts sauvages, à l’échelle d’une commune.",
+
+    "cover_image": "blog_covers/plOAt4tPyc6YvUSjYcld6KwYwTcvEjaj4MS1PZAzCvkZfNVPNDUBVTPrZGUm74W0eIED0edpAzSQvKgmlTi.jpeg"
+
+  }
+
+},
+
+{
+
+  "model": "blog.blogarticle",
+
+  "pk": 19,
+
+  "fields": {
+
+    "title": "Dépôts sauvages sur un chemin rural : comment protéger l’accès ?",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Pour protéger un chemin rural des dépôts sauvages, combinez trois outils : des barrières qui limitent l’accès, des pièges photographiques et des panneaux, appuyés par un arrêté municipal. Les deux premiers dissuadent, le troisième informe, et l’arrêté donne une base légale à l’ensemble.</p><h4>Pourquoi les chemins ruraux sont-ils exposés ?</h4><p>Isolés, peu surveillés et accessibles en véhicule, les chemins ruraux et agricoles, les lisières de forêt et les abords des points d’apport volontaire attirent les dépôts. On y trouve des déchets ménagers, des déchets d’artisans (BTP, déchets verts) et des gravats.</p><h4>Les trois outils</h4><ul class=\"tiptap-ul\"><li><p>Les barrières limitent l’accès aux véhicules. Choisissez-les robustes et faciles à manipuler, et prévoyez un cadenas d’artillerie ou de pompier : une barrière restée ouverte ne sert à rien.</p></li><li><p>Les pièges photo permettent de repérer les passages et de recueillir des indices. Ils ne sont pas considérés comme de la vidéoprotection (pas d’autorisation préfectorale), mais ce cadre reste sujet à interprétation : rapprochez-vous du procureur de la République avant de les utiliser, et traitez les images comme des indices.</p></li><li><p>Les panneaux signalent la limitation d’accès et informent les usagers.</p></li></ul><h4>Comment s’y prendre ?</h4><ol class=\"tiptap-ol\"><li><p>Recenser les chemins exposés et mesurer l’ampleur du phénomène.</p></li><li><p>Choisir l’emplacement au cas par cas, selon les arbres, le type de chemin et les usages (piétons, vélos, tracteurs). Placez la barrière au plus près de l’accès, pour éviter un effet d’« entonnoir » où l’on peut se garer et déposer.</p></li><li><p>Prendre un arrêté de protection du chemin limitant l’accès aux véhicules à moteur, avec un panneau de limitation d’accès.</p></li><li><p>Formaliser l’entretien du matériel et son financement, par convention si l’achat est mutualisé avec d’autres communes.</p></li><li><p>Faire le bilan et ajuster : ajouter des panneaux, déplacer les pièges photo si les dépôts se reportent.</p></li></ol><h4>Associer les usagers du chemin</h4><p>Un dispositif posé sans concertation est vite contourné. Associez les agriculteurs, qui doivent accéder à leurs parcelles, pour choisir la largeur des barrières et prévoir un passage pour les vélos. Les haies, bosquets et fossés repris sur les bas-côtés limitent aussi l’accès tout en valorisant le lieu.</p><h4>Les pièges à anticiper</h4><ul class=\"tiptap-ul\"><li><p>Les chemins traversent souvent plusieurs communes : coordonnez-vous avec les voisins pour éviter que les dépôts ne se reportent.</p></li><li><p>La gestion des pièges photo est chronophage (images à trier, piles à changer).</p></li><li><p>Les dépôts récurrents sont mieux traités en combinant barrières, pièges et panneaux.</p></li></ul><p>👉 Un indice sur l’auteur ? Consultez : <a class=\"fr-link\" href=\"/blog/identifier-lauteur-dun-depot-sauvage-indices-plaque-video\">Identifier l’auteur d’un dépôt sauvage : indices, plaque, vidéo</a></p><h4>À retenir</h4><p>Barrières, pièges photo et panneaux empêchent ou dissuadent, mais ne remplacent pas la sanction lorsque vous retrouvez un indice sur l’auteur. Stop Dépôt Sauvage permet de lancer la procédure de l’article L541-3 du Code de l'environnement à partir de votre constat et des indices relevés.</p><p>👉 <a class=\"fr-link\" href=\"/demarrer-constatation\">Démarrer une procédure administrative</a></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-20T09:42:46.952Z",
+
+    "updated_at": "2026-10-22T07:16:14.983Z",
+
+    "is_published": true,
+
+    "order": 17,
+
+    "slug": "depots-sauvages-sur-les-chemins-ruraux-que-faire",
+
+    "summary": "Barrières, pièges photo, panneaux, arrêté de protection : la méthode pour protéger les chemins ruraux de votre commune contre les dépôts sauvages.",
+
+    "cover_image": "blog_covers/TkefiS3KjcW7Qw2eT1l6E0ib_Ia4KjssbfAleffCuomy4viOhs_4T6nyNDfwofN-gVT4q0ea0VLSmVXIQtT.jpeg"
+
+  }
+
+},
+
+{
+
+  "model": "blog.blogarticle",
+
+  "pk": 20,
+
+  "fields": {
+
+    "title": "Dépôts sauvages : comment communiquer pour les réduire ?",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Une communication efficace contre les dépôts sauvages repose sur un diagnostic, indique la solution la plus simple et dure dans le temps. Les interdictions seules provoquent souvent de la résistance : mieux vaut guider vers le bon geste.</p><h4>À quoi sert la communication ?</h4><p>Elle sert à déclencher le bon comportement, à faire connaître les actions menées, à sensibiliser aux impacts des dépôts et à générer de l’engagement. Elle accompagne chaque volet du plan de lutte : diagnostic, prévention, ramassage et sanction.</p><p>La démarche suit un cycle : diagnostic, stratégie, plan d’action (qui, quand, où, comment), puis évaluation et ajustement. Trois choix la structurent : les cibles, le message et le ton, et les canaux (sur les lieux de dépôt, en ligne, lors d’événements).</p><h4>Commencer par comprendre pourquoi on dépose</h4><p>Le diagnostic fonde la communication sur des réalités locales : cartographie des points noirs, caractérisation des dépôts, observations des agents, échanges avec les habitants. Il aide aussi à choisir un positionnement : enlever immédiatement les déchets (théorie de la « vitre brisée ») ou les laisser visibles un temps pour responsabiliser les usagers.</p><h4>Adapter le message au milieu</h4><p>En ville, la communication doit d’abord lever les freins logistiques : où sont les points d’apport volontaire et les déchèteries, comment faire enlever un encombrant. La densité de population impose des messages plus réguliers et plus proches des habitants.</p><p>En milieu naturel, on peut aussi rappeler les impacts des dépôts sur la faune et la flore, et faire appel au civisme avec une signalétique pédagogique sur les sites de passage. Un ruban indiquant qu’un dépôt est connu de la commune, visible avant son nettoyage, peut décourager le sur-dépôt.</p><h4>Les bons réflexes</h4><ul class=\"tiptap-ul\"><li><p>Adapter la campagne au territoire plutôt que reprendre un message tel quel.</p></li><li><p>Vérifier que le service est clair (horaires de déchèterie, collecte des encombrants) avant de sensibiliser.</p></li><li><p>Durer : les opérations ponctuelles s’essoufflent, il faut des rappels réguliers.</p></li><li><p>Mobiliser tous les services, y compris la police municipale.</p></li><li><p>Rendre le coût visible, par exemple en équivalent de places de crèche ou d’entretien de parcs.</p></li><li><p>Tester une signalétique au sol : des empreintes de pas colorées menant d’un point noir vers la poubelle la plus proche peuvent réduire les dépôts de 15 à 25 %, selon un guide de la DITP.</p></li></ul><h4>Le bon mot, le bon ton</h4><ul class=\"tiptap-ul\"><li><p>Plutôt que « Interdiction de jeter sous peine d’amende », dites : « Pour un quartier propre, merci de déposer vos déchets ici [lieu, horaires] ».</p></li><li><p>Plutôt que « Arrêtez de salir votre ville ! », dites : « 95 % des habitants utilisent la déchèterie. Et vous ? » (preuve sociale : on imite le comportement dominant).</p></li><li><p>Plutôt que « Les encombrants nuisent à l’environnement », dites : « Un meuble à jeter ? Appelez le 01.XX pour un retrait gratuit ».</p></li><li><p>Plutôt que « Le nettoyage coûte cher », dites : « Chaque année, le ramassage coûte l’équivalent d’une nouvelle crèche ».</p></li></ul><p>Les pourcentages et montants sont des exemples : remplacez-les par vos données locales.</p><p>👉 Vous cherchez la marche à suivre complète ? Consultez : <a class=\"fr-link\" href=\"/blog/depot-sauvage-plan-daction-en-3-etapes-pour-les-communes\">Dépôt sauvage : plan d’action en 3 étapes pour les communes</a></p><h4>À retenir</h4><p>Diagnostiquer, simplifier le bon geste, répéter dans le temps. Une bonne communication réduit les dépôts, mais certains auteurs persisteront : Stop Dépôt Sauvage aide les communes à engager la procédure de l’article L541-3 du Code de l'environnement de manière claire et proportionnée.</p><p>👉 <a class=\"fr-link\" href=\"/demarrer-constatation\">Démarrer une procédure administrative</a></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-20T09:44:36.913Z",
+
+    "updated_at": "2026-10-22T07:16:24.963Z",
+
+    "is_published": true,
+
+    "order": 18,
+
+    "slug": "depots-sauvages-bien-communiquer-pour-les-reduire",
+
+    "summary": "Diagnostic, bons messages, signalétique au sol, preuve sociale : les recommandations pour une communication qui change vraiment les comportements.",
+
+    "cover_image": "blog_covers/UPAgyywIJVvIeXvxfGg0GH98CtUIbPCkpAMWU7HruumVaYmyg5aGOo8dhCrXwmVT8cw-z3hbqINOtWlkx9v.jpeg"
+
+  }
+
+},
+
+{
+
+  "model": "blog.blogarticle",
+
+  "pk": 21,
+
+  "fields": {
+
+    "title": "Comment prévenir les dépôts sauvages par l’aménagement de l’espace public ?",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Aménager l’espace public réduit les dépôts sauvages de deux façons : en contraignant l’accès des véhicules, et en changeant la perception d’un lieu pour que personne n’ait envie d’y déposer. Les deux se combinent avec un message qui guide vers le bon geste.</p><h4>Trois leviers</h4><ul class=\"tiptap-ul\"><li><p>Mécanique : limiter la circulation et le stationnement, donc les abandons faits avec un véhicule.</p></li><li><p>Psychologique : un espace entretenu ou végétalisé active le contrôle social spontané et dissuade les incivilités.</p></li><li><p>Informationnel : orienter vers la bonne solution (horaires de collecte, points d’apport volontaire, déchèteries).</p></li></ul><h4>Embellir pour changer le regard</h4><p>Rendre plus visibles et plus agréables les lieux de dépôt peut prévenir le geste d’abandon :</p><ul class=\"tiptap-ul\"><li><p>Fresques artistiques sur des lieux délaissés, idéalement choisies avec les habitants.</p></li><li><p>Végétalisation d’un angle de mur dégradé ou d’un pas-de-porte (fosses de plantation, jardinières), souvent à la demande des riverains.</p></li><li><p>Cartographie des travaux de voirie pour prioriser les quartiers.</p></li></ul><p>Point de vigilance : la végétation complique le nettoiement, car les petits déchets sont plus difficiles à ramasser au milieu des plantes.</p><h4>Limiter l’accès avec le bon équipement</h4><p>Avant toute pose, un diagnostic identifie les points noirs et les riverains concernés. Selon le contexte :</p><ul class=\"tiptap-ul\"><li><p>En ville : potelets, barrières de voirie, abris-bacs, puis totems avec QR code orientant vers la déchèterie la plus proche.</p></li><li><p>Sur un chemin : barrières forestières renforcées, blocs d’enrochement sur les bas-côtés pour interdire le stationnement, panneaux d’information.</p></li><li><p>Sur un site précis : borne escamotable semi-automatique, panneaux et pièges photo.</p></li><li><p>En milieu rural : enrochements et barrières aux entrées de plaines et de massifs, posés avec les agriculteurs pour ne pas gêner leurs accès.</p></li></ul><h4>La méthode en quatre étapes</h4><ol class=\"tiptap-ol\"><li><p>Diagnostiquer : cartographier les dépôts, le profil des déposants et l’accessibilité du site (à pied, en véhicule, visible ou isolé).</p></li><li><p>Impliquer les acteurs locaux : agriculteurs et chasseurs en milieu rural, conseils de quartier, commerçants et écoles en ville. Un aménagement imposé est vite vandalisé ou contourné.</p></li><li><p>Penser à l’échelle globale : un point noir bloqué peut se déplacer 200 mètres plus loin. Anticipez les reports, y compris chez les communes voisines.</p></li><li><p>Sécuriser et entretenir : prendre les arrêtés municipaux d’interdiction de circuler pour les barrières sur chemins ruraux ou voies sans issue (sauf pompiers, agents), puis entretenir les lieux.</p></li></ol><h4>Les pièges à éviter</h4><ul class=\"tiptap-ul\"><li><p>Attendre trop longtemps entre l’évacuation des déchets et la pose des barrières : de nouveaux dépôts s’y forment.</p></li><li><p>Choisir des équipements trop légers : des petits enrochements ou barrières déplaçables sont vite contournés.</p></li><li><p>Négliger l’entretien : une jardinière desséchée renvoie une image d’abandon.</p></li><li><p>Oublier la biodiversité : ne bloquez ni les corridors écologiques ni l’écoulement des eaux de pluie.</p></li></ul><p>👉 Un auteur identifié ? Consultez : <a class=\"fr-link\" href=\"/blog/identifier-lauteur-dun-depot-sauvage-indices-plaque-video\">Identifier l’auteur d’un dépôt sauvage : indices, plaque, vidéo</a></p><h4>À retenir</h4><p>Diagnostiquer avant d’aménager, associer les riverains, anticiper le report des dépôts et entretenir dans la durée. Quand l’aménagement ne suffit pas, la procédure de l’article L541-3 du Code de l'environnement permet de sanctionner l’auteur : Stop Dépôt Sauvage génère les documents à chaque étape.</p><p>👉 <a class=\"fr-link\" href=\"/demarrer-constatation\">Démarrer une procédure administrative</a></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-20T09:47:11.624Z",
+
+    "updated_at": "2026-10-22T07:16:34.787Z",
+
+    "is_published": true,
+
+    "order": 19,
+
+    "slug": "prevenir-les-depots-sauvages-par-lamenagement-urbain",
+
+    "summary": "Végétalisation, mobilier défensif, barrières, enrochements : les leviers et une méthode en 4 étapes pour aménager l’espace public contre les dépôts sauvages.",
+
+    "cover_image": "blog_covers/U7sP_5bz6Z_Hi-ofIcJry86il140pdoHvQXyAUVaZZTGRKNW8d4bb9LK5CqP2KHluBxMDIlzVFMV0_bfaBW.jpeg"
+
+  }
+
+},
+
+{
+
+  "model": "blog.blogarticle",
+
+  "pk": 22,
+
+  "fields": {
+
+    "title": "Brigade verte : comment la créer dans sa commune ou son intercommunalité ?",
+
+    "content": [
+
+      {
+
+        "type": "rich_text",
+
+        "value": "<p>Une brigade verte réunit des agents chargés au quotidien de préserver le cadre de vie : informer les habitants, repérer et résorber les dépôts, et faciliter la sanction de leurs auteurs. Avant de recruter, il faut définir les objectifs, car ils déterminent le profil des agents, leur statut et leur rattachement.</p><h4>Définir les objectifs</h4><p><strong>Informer et sensibiliser :</strong> stands, porte-à-porte pour rappeler les règles et les solutions existantes. Ce rôle demande des agents de prévention ou des médiateurs, à l’aise à l’oral.</p><p><strong>Détecter et résorber :</strong> tournées de repérage et enlèvement rapide des dépôts. Ce rôle correspond à des agents de terrain (voirie, nettoiement).</p><p><strong>Réprimer les auteurs :</strong> constat des dépôts, relevé d’indices, procès-verbaux, verbalisation. Ce rôle demande des agents ayant la qualité pour constater.</p><p>Les agents assermentés peuvent être rattachés à la police municipale si elle existe. Ceux qui détectent les dépôts doivent transmettre aux forces de l’ordre ou aux agents habilités les signalements et les indices sur l’identité des auteurs.</p><h4>Assermentation ou commissionnement : ne pas confondre</h4><p>L’assermentation concerne le volet pénal. La loi AGEC et le décret du 11 décembre 2020 (article L541-44-1 du code de l’environnement) prévoient que tout agent public peut être commissionné et assermenté. La procédure comprend cinq étapes : arrêté de nomination, lettre au tribunal judiciaire (avec formation de l’agent), prestation de serment devant le tribunal, arrêté d’habilitation, puis carte d’habilitation. Elle n’est valable que sur le territoire de la collectivité, et le préfet peut la révoquer à tout moment.</p><p>Pour la procédure administrative de l’article L541-3 du Code de l'environnement, c’est plus simple : les agents non élus ont besoin d’un arrêté de commissionnement, sans serment devant le tribunal. Les élus, les policiers municipaux et les gardes champêtres n’ont pas besoin de ce commissionnement. Les deux volets peuvent coexister dans une même brigade.</p><p>👉 Pour le détail : <a class=\"fr-link\" href=\"/blog/commissionnement-des-agents-qui-peut-constater-un-depot-sauvage\">Commissionnement des agents : qui peut constater un dépôt sauvage ?</a></p><h4>Équiper les agents</h4><p>Prévoyez un véhicule adapté, des équipements de protection (gants renforcés, chaussures de sécurité, pinces à déchets) et un uniforme, qui renforce la légitimité de l’agent face aux usagers. La couleur peut varier selon le rôle : vert pour la prévention, bleu pour la sanction. Les agents assermentés peuvent recevoir un terminal de procès-verbaux électroniques. Le port d’arme n’est pas permis, mais certaines collectivités ajoutent un gilet pare-balles pour les zones à risque.</p><h4>Une brigade à l’échelle intercommunale</h4><p>Même si l’intercommunalité est compétente en collecte des déchets, c’est le maire qui reste compétent pour les abandons de déchets sur sa commune. Deux options existent :</p><ul class=\"tiptap-ul\"><li><p>Transférer le pouvoir de sanction administrative au président de l’EPCI, possible depuis la loi AGEC si l’EPCI a la compétence de collecte des déchets ménagers. Le transfert est décidé par arrêté préfectoral, après accord de tous les maires et du président de l’EPCI.</p></li><li><p>Créer une brigade intercommunale sans transfert de compétence, mise à disposition des communes volontaires par une convention de coordination (missions, répartition du temps de travail, équipement, financement).</p></li></ul><h4>Le garde champêtre, un agent ressource</h4><p>Le garde champêtre cumule des fonctions de police judiciaire et des pouvoirs d’enquête : audition libre, réquisition de véhicule, réquisition d’enregistrements de vidéo-protection. En flagrant délit, il peut demander des papiers d’identité, là où un agent de surveillance de la voie publique se limite au recueil d’identité. Son atout : réaliser en interne des actes d’enquête, sans dépendre de la disponibilité des officiers de police judiciaire.</p><p>Point de vigilance : les concours offrent peu de places, il y a donc plus de demandes que d’agents disponibles, et le métier reste limité à la catégorie C.</p><h4>À retenir</h4><p>Une brigade verte se construit d’abord sur ses objectifs, puis sur le statut de ses agents : assermentation pour le pénal, commissionnement pour la procédure administrative. Stop Dépôt Sauvage permet à vos agents de constater, de générer les courriers et de suivre chaque dossier.</p><p>👉 <a class=\"fr-link\" href=\"/demarrer-constatation\">Démarrer une procédure administrative</a></p>"
+
+      }
+
+    ],
+
+    "created_at": "2026-10-20T09:51:11.862Z",
+
+    "updated_at": "2026-10-22T07:16:42.608Z",
+
+    "is_published": true,
+
+    "order": 20,
+
+    "slug": "creer-une-brigade-verte-guide-pour-les-collectivites",
+
+    "summary": "Objectifs, assermentation des agents, équipement, brigade intercommunale, garde champêtre : les étapes pour créer une brigade verte contre les dépôts sauvages.",
+
+    "cover_image": "blog_covers/BcE6riDn93jJe7U6q6rtAOrKSexPxUd9Rl9C0njgVtHTWTwGbg_Yh1pfRWFfu8JTsuSXVafjsGxAMJ_iR1v.jpeg"
+
+  }
+
+}
+
+]

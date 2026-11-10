@@ -36,7 +36,22 @@ Afin d'éviter toute élévation de privilèges ou fuite de données lors de la 
 
 ---
 
-## 3. Authentification et Intégration
+## 3. Sécurité de l'Assistant IA (Chatbot)
+
+L'Assistant IA intègre des mesures de protection transverses pour assister les agents sans exposer de données sensibles :
+
+- **Accès restreint aux utilisateurs authentifiés** : L'API d'échange requiert une authentification effective et une protection CSRF active.
+- **Principe Zero-PII et filtrage à la volée** : Aucun élément d'identification personnelle (noms d'administrés, téléphones, emails, adresses, immatriculations) n'est transmis aux fournisseurs de modèles de langage. Les données de session sont anonymisées et un épurateur de texte masque préventivement les informations sensibles saisies par l'agent.
+- **Protection contre le déni de service et la surconsommation d'API (Denial of Wallet)** : L'accès au streaming est encadré par un limiteur de débit spécifique (`ChatbotRateThrottle`).
+- **Validation réseau stricte (Anti-SSRF)** : Tout appel de vérification ou de diagnostic réseau vers un service d'inférence externe valide préalablement l'adresse cible pour interdire l'accès aux réseaux internes ou aux services de métadonnées de l'hébergeur.
+
+> [!TIP]
+> Pour une présentation complète du fonctionnement général du chatbot et de ses garanties, consultez le document dédié :
+> 📖 **[Assistant IA : Fonctionnement et Sécurité](./assistant-ia-securite.md)**
+
+---
+
+## 4. Authentification et Intégration
 
 ### Fournisseur d'identité officiel (ProConnect)
 
@@ -65,7 +80,7 @@ Afin d'éviter toute élévation de privilèges ou fuite de données lors de la 
 
 ---
 
-## 4. Tests de Non-Régression de Sécurité
+## 5. Tests de Non-Régression de Sécurité
 
 Chaque fonctionnalité de sécurité sensible doit faire l'objet de tests automatisés.
 
@@ -75,7 +90,7 @@ Chaque fonctionnalité de sécurité sensible doit faire l'objet de tests automa
 
 ---
 
-## 5. Traitement Sécurisé des Fichiers et Photos (Upload & Doc Maker)
+## 6. Traitement Sécurisé des Fichiers et Photos (Upload & Doc Maker)
 
 L'application permet d'ajouter des photos lors d'une constatation pour enrichir le rapport généré. Plusieurs mécanismes de sécurité sont mis en œuvre pour prévenir les failles liées au téléversement de fichiers (telles que le téléchargement de scripts malveillants ou le déni de service) :
 

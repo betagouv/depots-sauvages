@@ -27,6 +27,7 @@ if PROJECT_ROOT not in TEMPLATES[0]["DIRS"]:
 # Disable rate limiting in tests by setting very high limits
 THROTTLE_SAFE_RATE = "10000/hour"
 THROTTLE_UNSAFE_RATE = "10000/hour"
+THROTTLE_CHATBOT_RATE = "10000/hour"
 
 # ProConnect / OIDC Settings
 PROCONNECT_ENABLED = False
@@ -70,3 +71,7 @@ STORAGES = {
         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
+
+# Chatbot AI Adapter in tests
+AI_DEBUG = False
+

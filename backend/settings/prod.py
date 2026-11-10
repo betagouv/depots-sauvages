@@ -139,6 +139,7 @@ ANYMAIL = {
 # Rate limiting
 THROTTLE_SAFE_RATE = env("THROTTLE_SAFE_RATE", default="400/m")
 THROTTLE_UNSAFE_RATE = env("THROTTLE_UNSAFE_RATE", default="100/m")
+THROTTLE_CHATBOT_RATE = env("THROTTLE_CHATBOT_RATE", default="20/m")
 
 
 # Reverse proxy settings
@@ -240,3 +241,7 @@ if CELLAR_HOST and CELLAR_KEY_ID and CELLAR_KEY_SECRET and CELLAR_MEDIA_BUCKET_N
         CONTENT_SECURITY_POLICY["DIRECTIVES"]["img-src"].extend(cellar_origins)
     if "CSP_MEDIA_SRC" not in env:
         CONTENT_SECURITY_POLICY["DIRECTIVES"]["media-src"].extend(cellar_origins)
+
+# Chatbot AI Configuration
+# Le mode debug des agents IA est TOUJOURS désactivé en production (zero leak PII/tokens)
+AI_DEBUG = False

@@ -12,7 +12,7 @@ export const API_URL = `${BACKEND_URL}/api`
 export const DN_BASE_URL = import.meta.env.VITE_DN_BASE_URL || 'https://demarche.numerique.gouv.fr'
 
 // Helper to get CSRF token
-const getCSRFToken = (): string => {
+export const getCSRFToken = (): string => {
   const decodedCookie = decodeURIComponent(document.cookie)
   const cookies = decodedCookie.split(';').map((c) => c.trim())
 
@@ -37,6 +37,8 @@ export const API_URLS = {
   proconnectRejectedInfo: `${API_URL}/proconnect/rejected-info/`,
   proconnectDemanderAcces: `${API_URL}/proconnect/demander-acces/`,
   backofficeProConnectConfig: `${API_URL}/backoffice/proconnect-config/`,
+  chatbotConfig: `${API_URL}/chatbot/config/`,
+  chatbotTestConnection: `${API_URL}/chatbot/test-connection/`,
 }
 
 // API functions
@@ -171,3 +173,42 @@ export const submitProConnectAccessRequest = (
   payload: ProConnectAccessRequestPayload
 ): Promise<{ success: boolean; message: string }> =>
   makeRequest(API_URLS.proconnectDemanderAcces, 'POST', payload)
+
+export interface ChatbotConfigData {
+  id?: number
+  provider: string
+  model: string
+  api_key?: string
+  base_url?: string
+  timeout: number
+  system_prompt: string
+  has_api_key?: boolean
+  api_key_masked?: string
+  default_system_prompt?: string
+}
+
+export const getChatbotConfig = (): Promise<ChatbotConfigData> =>
+  makeRequest(API_URLS.chatbotConfig, 'GET')
+
+export const updateChatbotConfig = (
+  payload: Partial<ChatbotConfigData> & { clear_api_key?: boolean }
+): Promise<ChatbotConfigData> =>
+  makeRequest(API_URLS.chatbotConfig, 'PUT', payload)
+
+export interface ChatbotTestConnectionResponse {
+  success: boolean
+  message?: string
+  error?: string
+  provider?: string
+  model?: string
+  latency_ms?: number
+  sample_reply?: string
+  status_code?: number
+}
+
+export const testChatbotConnection = (
+  payload: Partial<ChatbotConfigData>
+): Promise<ChatbotTestConnectionResponse> =>
+  makeRequest(API_URLS.chatbotTestConnection, 'POST', payload)
+
+
