@@ -261,6 +261,20 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
                 ctx_desc.append(f"Page active : {current_path}")
             if dossier_actif := context.get("dossier_actif"):
                 ctx_desc.append(f"Dossier consulté à l'écran #{dossier_actif.get('id')} : étape '{dossier_actif.get('etape_metier')}', volume {dossier_actif.get('volume_estime')}, auteur identifié : {dossier_actif.get('auteur_identifie')}, statut AR : {dossier_actif.get('ar_statut')}")
+            elif form_context := context.get("form_context"):
+                form_fields = []
+                if commune := form_context.get("commune"):
+                    form_fields.append(f"Commune : {commune}")
+                if volume_m3 := form_context.get("volumeM3"):
+                    form_fields.append(f"Volume : {volume_m3} m³")
+                elif volume_depot := form_context.get("volumeDepot"):
+                    form_fields.append(f"Volume : {volume_depot}")
+                if types := form_context.get("typesDepot"):
+                    form_fields.append(f"Déchets : {', '.join(types)}")
+                if terrain := form_context.get("natureTerrain"):
+                    form_fields.append(f"Terrain : {', '.join(terrain)}")
+                if form_fields:
+                    ctx_desc.append(f"Formulaire de constatation en cours de saisie sur la page : {'; '.join(form_fields)} (À préserver et enrichir sans écraser)")
             elif dossiers := context.get("dossiers_recents"):
                 recap_dossiers = ", ".join(f"#{d.get('id')} ({d.get('etape_metier')})" for d in dossiers[:3])
                 ctx_desc.append(f"Historique passif des dossiers : {recap_dossiers}")

@@ -46,7 +46,17 @@ onMounted(async () => {
           await store.loadConstatation(id)
         }
       } else {
-        store.resetStore()
+        // Si le store contient déjà des modifications (ex: prérempli depuis le chatbot),
+        // on ne réinitialise pas pour ne pas effacer les données saisies
+        const hasExistingData =
+          Boolean(store.formData.commune) ||
+          Boolean(store.formData.localisationDepot) ||
+          (Array.isArray(store.formData.typesDepot) && store.formData.typesDepot.length > 0) ||
+          store.formData.volumeM3 !== null ||
+          Boolean(store.formData.volumeDepot)
+        if (!hasExistingData) {
+          store.resetStore()
+        }
       }
 
       // The contact person fills the form and receives follow-ups.

@@ -72,10 +72,11 @@ def _resolve_etape_metier(suivi, procedure):
     return "Période du contradictoire ou décision de poursuite à prendre"
 
 
-def build_safe_user_context(user, current_path=""):
+def build_safe_user_context(user, current_path="", form_context=None):
     """
     Construit un dictionnaire de contexte strictement anonymisé et sécurisé (Zero-PII)
     à destination du prompt système de l'assistant IA.
+    Prend en compte également l'état en cours du formulaire de constatation si transmis.
     """
     if not user or not getattr(user, "is_authenticated", False):
         return {
@@ -136,11 +137,38 @@ def build_safe_user_context(user, current_path=""):
         else "utilisateur_avec_procedures"
     )
 
+    # Nettoyage et assainissement strict Zero-PII des informations du formulaire en cours
+    safe_form_data = None
+    if isinstance(form_context, dict) and form_context:
+        safe_form_data = {}
+        if commune := form_context.get("commune"):
+            safe_form_data["commune"] = str(commune).strip()
+        if localisation := form_context.get("localisationDepot"):
+            safe_form_data["localisationDepot"] = scrub_pii(str(localisation).strip())
+        if form_context.get("volumeM3") is not None:
+            try:
+                safe_form_data["volumeM3"] = float(form_context["volumeM3"])
+            except (ValueError, TypeError):
+                pass
+        elif volume_depot := form_context.get("volumeDepot"):
+            safe_form_data["volumeDepot"] = str(volume_depot)
+        if types := form_context.get("typesDepot"):
+            if isinstance(types, list):
+                safe_form_data["typesDepot"] = [str(t) for t in types if t]
+        if terrain := form_context.get("natureTerrain"):
+            if isinstance(terrain, list):
+                safe_form_data["natureTerrain"] = [str(t) for t in terrain if t]
+        if isinstance(form_context.get("auteurIdentifie"), bool):
+            safe_form_data["auteurIdentifie"] = form_context["auteurIdentifie"]
+        if precisions := form_context.get("precisionsDepot"):
+            safe_form_data["precisionsDepot"] = scrub_pii(str(precisions).strip())
+
     return {
         "is_authenticated": True,
         "profil_usager": profil_usager,
         "procedures_count": procedures_count,
         "current_path": current_path,
+        "form_context": safe_form_data,
         "dossier_actif": dossier_actif_summary,
         "dossiers_recents": dossiers_summary,
     }

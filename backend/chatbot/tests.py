@@ -68,6 +68,28 @@ def test_build_safe_user_context_with_procedures():
 
 
 @pytest.mark.django_db
+def test_build_safe_user_context_with_form_context():
+    User = get_user_model()
+    user = User.objects.create_user(username="agent_form", email="form@test.fr")
+    form_ctx = {
+        "commune": "Versailles",
+        "localisationDepot": "Chemin du parc près de Jean Dupont au 06 12 34 56 78",
+        "volumeM3": 3.5,
+        "typesDepot": ["Gravats", "Encombrants"],
+        "natureTerrain": ["domaine public"],
+    }
+    ctx = build_safe_user_context(user, current_path="/constatation", form_context=form_ctx)
+    assert ctx["form_context"] is not None
+    assert ctx["form_context"]["commune"] == "Versailles"
+    assert ctx["form_context"]["volumeM3"] == 3.5
+    assert ctx["form_context"]["typesDepot"] == ["Gravats", "Encombrants"]
+    # Check Zero-PII on form_context
+    form_str = json.dumps(ctx["form_context"], ensure_ascii=False)
+    assert "06 12 34 56 78" not in form_str
+    assert "[TÉL_MASQUÉ]" in form_str
+
+
+@pytest.mark.django_db
 def test_chatbot_chat_requires_authentication(client):
     url = reverse("chatbot-chat")
     payload = {"messages": [{"role": "user", "content": "Question anonyme"}]}

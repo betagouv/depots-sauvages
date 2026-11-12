@@ -175,6 +175,7 @@ class ChatbotChatView(APIView):
         messages = data.get("messages", [])
         raw_client_context = data.get("context", {}) if isinstance(data.get("context"), dict) else {}
         current_path = raw_client_context.get("currentPath", "")
+        form_context = raw_client_context.get("formContext")
         raw_conv_id = (
             raw_client_context.get("conversationId")
             or data.get("conversationId")
@@ -194,7 +195,7 @@ class ChatbotChatView(APIView):
 
         # Construction du contexte sécurisé et anonymisé Zero-PII
         safe_context = build_safe_user_context(
-            user=request.user, current_path=current_path
+            user=request.user, current_path=current_path, form_context=form_context
         )
 
         adapter = get_ai_adapter()

@@ -222,10 +222,22 @@
                       type="button"
                       class="fr-btn fr-btn--sm fr-btn--icon-left fr-icon-checkbox-circle-line w-100 justify-center premium-draft-action-btn fr-mt-1w"
                       :disabled="isApplyingDraft"
-                      @click="applyDraftAndRedirect(toolCall.input)"
+                      @click="applyDraftAndRedirect(toolCall.input, toolCall.toolCallId || toolCall.id)"
                     >
-                      {{ isApplyingDraft ? 'Création en cours...' : 'Créer mon brouillon de constatation' }}
+                      <span v-if="isApplyingDraft">Application en cours...</span>
+                      <span v-else-if="appliedDraftsMap[toolCall.toolCallId || toolCall.id]">
+                        {{ isOnConstatationForm ? 'Formulaire mis à jour ✓' : 'Brouillon créé ✓' }}
+                      </span>
+                      <span v-else>
+                        {{ isOnConstatationForm ? 'Mettre à jour le formulaire' : 'Créer mon brouillon de constatation' }}
+                      </span>
                     </button>
+                    <p
+                      v-if="appliedDraftsMap[toolCall.toolCallId || toolCall.id]"
+                      class="fr-text--xs text-success fr-mt-1v fr-mb-0 text-center"
+                    >
+                      Données fusionnées dans votre formulaire sans écraser vos saisies.
+                    </p>
                   </div>
                 </div>
               </template>
@@ -379,6 +391,31 @@ const loadStoredMessages = () => {
   return undefined
 }
 
+// Détection si l'utilisateur est actuellement sur la page du formulaire de constatation
+const isOnConstatationForm = computed(() => {
+  const p = route.path
+  return p === '/constatation' || p.startsWith('/constatation/')
+})
+
+// Mémorise les toolCall appliqués pour afficher l'indicateur visuel de succès
+const appliedDraftsMap = ref<Record<string, boolean>>({})
+
+// Données du store de constatation actuelles (sans PII) pour contextualiser l'assistant
+const getSafeStoreContext = () => {
+  const data = constatationStore.formData
+  if (!data) return null
+  const ctx: Record<string, any> = {}
+  if (data.commune) ctx.commune = data.commune
+  if (data.localisationDepot) ctx.localisationDepot = data.localisationDepot
+  if (typeof data.volumeM3 === 'number') ctx.volumeM3 = data.volumeM3
+  else if (data.volumeDepot) ctx.volumeDepot = data.volumeDepot
+  if (Array.isArray(data.typesDepot) && data.typesDepot.length > 0) ctx.typesDepot = data.typesDepot
+  if (Array.isArray(data.natureTerrain) && data.natureTerrain.length > 0) ctx.natureTerrain = data.natureTerrain
+  if (typeof data.auteurIdentifie === 'boolean') ctx.auteurIdentifie = data.auteurIdentifie
+  if (data.precisionsDepot) ctx.precisionsDepot = data.precisionsDepot
+  return Object.keys(ctx).length > 0 ? ctx : null
+}
+
 // Transport configured for Django chatbot API with CSRF token and navigation context
 const transport = new DefaultChatTransport({
   api: `${API_URL}/chatbot/chat/`,
@@ -392,6 +429,7 @@ const transport = new DefaultChatTransport({
     context: {
       conversationId: conversationId.value,
       currentPath: route.fullPath,
+      formContext: getSafeStoreContext(),
     },
   }),
 })
@@ -721,52 +759,97 @@ const onVolumeSelectedFromModal = (val: number, label: string) => {
 
 const isApplyingDraft = ref(false)
 
-const applyDraftAndRedirect = async (inputData: any) => {
+const applyDraftAndRedirect = async (inputData: any, toolCallId?: string) => {
   if (!inputData || isApplyingDraft.value) return
   isApplyingDraft.value = true
 
   try {
-    if (inputData.commune) {
+    // 1. Fusion non destructive : préserver les données existantes de l'utilisateur
+    if (inputData.commune && (!constatationStore.formData.commune || !isOnConstatationForm.value)) {
+      constatationStore.formData.commune = inputData.commune
+    } else if (inputData.commune && !constatationStore.formData.commune) {
       constatationStore.formData.commune = inputData.commune
     }
+
     if (inputData.localisationDepot) {
-      constatationStore.formData.localisationDepot = inputData.localisationDepot
+      if (!constatationStore.formData.localisationDepot) {
+        constatationStore.formData.localisationDepot = inputData.localisationDepot
+      } else if (!isOnConstatationForm.value) {
+        constatationStore.formData.localisationDepot = inputData.localisationDepot
+      }
     }
+
     if (typeof inputData.volumeM3 === 'number') {
       constatationStore.formData.volumeM3 = inputData.volumeM3
       constatationStore.formData.volumeDepot = '' as any
     } else if (inputData.volumeDepot) {
-      constatationStore.formData.volumeDepot = inputData.volumeDepot
-    }
-    if (Array.isArray(inputData.typesDepot) && inputData.typesDepot.length > 0) {
-      constatationStore.formData.typesDepot = inputData.typesDepot
-    }
-    if (Array.isArray(inputData.natureTerrain) && inputData.natureTerrain.length > 0) {
-      constatationStore.formData.natureTerrain = inputData.natureTerrain
-    }
-    if (inputData.precisionsDepot) {
-      constatationStore.formData.precisionsDepot = inputData.precisionsDepot
-    }
-    if (typeof inputData.auteurIdentifie === 'boolean') {
-      constatationStore.formData.auteurIdentifie = inputData.auteurIdentifie
-    }
-
-    // Auto-save the draft if user is authenticated and commune is present,
-    // then navigate directly to the form with the pre-filled draft
-    let targetPath = '/constatation'
-    if (userStore.isAuthenticated && constatationStore.formData.commune) {
-      try {
-        const savedDraft = await constatationStore.autoSave()
-        if (savedDraft?.id) {
-          targetPath = `/constatation/${savedDraft.id}`
-        }
-      } catch (err) {
-        console.warn('Auto-save of draft before redirect encountered an error, proceeding to form:', err)
+      if (!constatationStore.formData.volumeM3 && !constatationStore.formData.volumeDepot) {
+        constatationStore.formData.volumeDepot = inputData.volumeDepot
       }
     }
 
-    closeDrawer()
-    await router.push(targetPath)
+    // Fusion de listes (typesDepot) : union sans doublons pour ne pas décocher ce que l'usager a déjà sélectionné
+    if (Array.isArray(inputData.typesDepot) && inputData.typesDepot.length > 0) {
+      const existingTypes = new Set(constatationStore.formData.typesDepot || [])
+      inputData.typesDepot.forEach((t: any) => existingTypes.add(t))
+      constatationStore.formData.typesDepot = Array.from(existingTypes)
+    }
+
+    // Fusion de listes (natureTerrain) : union sans doublons
+    if (Array.isArray(inputData.natureTerrain) && inputData.natureTerrain.length > 0) {
+      const existingTerrain = new Set(constatationStore.formData.natureTerrain || [])
+      inputData.natureTerrain.forEach((t: any) => existingTerrain.add(t))
+      constatationStore.formData.natureTerrain = Array.from(existingTerrain)
+    }
+
+    if (inputData.precisionsDepot) {
+      if (!constatationStore.formData.precisionsDepot) {
+        constatationStore.formData.precisionsDepot = inputData.precisionsDepot
+      } else if (!constatationStore.formData.precisionsDepot.includes(inputData.precisionsDepot)) {
+        constatationStore.formData.precisionsDepot = `${constatationStore.formData.precisionsDepot}\n${inputData.precisionsDepot}`.trim()
+      }
+    }
+
+    if (typeof inputData.auteurIdentifie === 'boolean') {
+      if (constatationStore.formData.auteurIdentifie === null || !isOnConstatationForm.value) {
+        constatationStore.formData.auteurIdentifie = inputData.auteurIdentifie
+      }
+    }
+
+    // Marquer l'outil comme appliqué
+    if (toolCallId) {
+      appliedDraftsMap.value[toolCallId] = true
+    }
+
+    // 2. Comportement différencié selon que l'on est DÉJÀ sur la page du formulaire ou non :
+    if (isOnConstatationForm.value) {
+      // Déjà sur la page du formulaire : on autosauvegarde si commune présente sans recharger ni rediriger
+      if (userStore.isAuthenticated && constatationStore.formData.commune) {
+        try {
+          await constatationStore.autoSave()
+        } catch (err) {
+          console.warn('Auto-save encountered an error while updating form from chat:', err)
+        }
+      }
+      // On ne ferme pas brutalement le drawer pour laisser l'utilisateur voir le retour visuel,
+      // mais les données sont déjà répercutées en temps réel dans le formulaire.
+    } else {
+      // Pas encore sur le formulaire : sauvegarder et naviguer vers /constatation
+      let targetPath = '/constatation'
+      if (userStore.isAuthenticated && constatationStore.formData.commune) {
+        try {
+          const savedDraft = await constatationStore.autoSave()
+          if (savedDraft?.id) {
+            targetPath = `/constatation/${savedDraft.id}`
+          }
+        } catch (err) {
+          console.warn('Auto-save of draft before redirect encountered an error, proceeding to form:', err)
+        }
+      }
+
+      closeDrawer()
+      await router.push(targetPath)
+    }
   } finally {
     isApplyingDraft.value = false
   }
