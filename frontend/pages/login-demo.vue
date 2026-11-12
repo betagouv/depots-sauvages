@@ -54,11 +54,13 @@
 <script setup lang="ts">
 import { getBypassAuthConfig, loginBypassAuth } from '@/services/api'
 import { isSafeInternalRedirectPath } from '@/services/urls'
+import { useUserStore } from '@/stores/user'
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
+const userStore = useUserStore()
 const bypassAuthEnabled = ref(false)
 const emailInput = ref('')
 const isLoggingIn = ref(false)
@@ -70,6 +72,7 @@ const handleBypassLogin = async () => {
   errorMessage.value = ''
   try {
     await loginBypassAuth(emailInput.value.trim().toLowerCase())
+    await userStore.fetchUserInfo(true)
     const nextPath = isSafeInternalRedirectPath(route.query.next)
       ? route.query.next
       : '/mes-procedures'

@@ -104,7 +104,7 @@
 
 <script setup lang="ts">
 import { DsfrFooter, DsfrFooterLinkList, DsfrHeader, DsfrToggleSwitch } from '@gouvminint/vue-dsfr'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import AssistantDrawer from '../components/AssistantDrawer.vue'
 import { getBypassAuthConfig } from '../services/api'
@@ -190,69 +190,25 @@ const goToLogout = (event?: MouseEvent) => {
 }
 
 const isProConnectEnabled = PROCONNECT_ENABLED
+let bypassAuthEnabled = false
 
-onMounted(async () => {
-  let bypassEnabled = false
-  try {
-    const bypassConfig = await getBypassAuthConfig()
-    bypassEnabled = bypassConfig?.enabled ?? false
-  } catch {
-    bypassEnabled = false
-  }
-
-
-  try {
-    const fetchedUserInfo = await userStore.fetchUserInfo()
-
-    if (!fetchedUserInfo.is_staff) {
-      adminModeStore.setAdminMode(false)
-    }
-
-    if (fetchedUserInfo.is_authenticated) {
-      isAuthenticated.value = true
-      quickLinks.value.push({
-        label: 'Se déconnecter',
-        icon: 'fr-icon-logout-box-r-line',
-        iconRight: false,
-        href: LOGOUT_URL,
-        to: LOGOUT_URL, // for styling
-        onClick: goToLogout,
-      })
-    } else {
-      if (bypassEnabled) {
-        const demoUrl = `/login-demo?next=${encodeURIComponent(route.fullPath === '/' ? '/mes-procedures' : route.fullPath)}`
-        quickLinks.value.push({
-          label: 'Connexion de démo',
-          icon: 'fr-icon-user-line',
-          iconRight: false,
-          href: demoUrl,
-          to: demoUrl,
-          onClick: (event) => {
-            if (event) event.preventDefault()
-            window.location.href = demoUrl
-          },
-        })
-      }
-      if (isProConnectEnabled) {
-        const nextParam = route.fullPath === '/' ? '/mes-procedures' : route.fullPath
-        const loginUrlWithNext = `${LOGIN_URL}?next=${encodeURIComponent(nextParam)}`
-        quickLinks.value.push({
-          label: 'Se connecter via ProConnect',
-          icon: 'fr-icon-lock-line',
-          iconRight: false,
-          href: loginUrlWithNext,
-          to: loginUrlWithNext, // for styling
-          onClick: goToLogin,
-        })
-      }
-    }
-  } catch (error) {
-    console.error('Failed to fetch user info:', error)
-    adminModeStore.setAdminMode(false)
-
-    if (bypassEnabled) {
+const updateQuickLinks = (user: typeof userStore.userInfo) => {
+  const links: QuickLink[] = []
+  if (user?.is_authenticated) {
+    isAuthenticated.value = true
+    links.push({
+      label: 'Se déconnecter',
+      icon: 'fr-icon-logout-box-r-line',
+      iconRight: false,
+      href: LOGOUT_URL,
+      to: LOGOUT_URL,
+      onClick: goToLogout,
+    })
+  } else {
+    isAuthenticated.value = false
+    if (bypassAuthEnabled) {
       const demoUrl = `/login-demo?next=${encodeURIComponent(route.fullPath === '/' ? '/mes-procedures' : route.fullPath)}`
-      quickLinks.value.push({
+      links.push({
         label: 'Connexion de démo',
         icon: 'fr-icon-user-line',
         iconRight: false,
@@ -267,15 +223,45 @@ onMounted(async () => {
     if (isProConnectEnabled) {
       const nextParam = route.fullPath === '/' ? '/mes-procedures' : route.fullPath
       const loginUrlWithNext = `${LOGIN_URL}?next=${encodeURIComponent(nextParam)}`
-      quickLinks.value.push({
+      links.push({
         label: 'Se connecter via ProConnect',
         icon: 'fr-icon-lock-line',
         iconRight: false,
         href: loginUrlWithNext,
-        to: loginUrlWithNext, // for styling
+        to: loginUrlWithNext,
         onClick: goToLogin,
       })
     }
+  }
+  quickLinks.value = links
+}
+
+watch(
+  () => userStore.userInfo,
+  (newUser) => {
+    updateQuickLinks(newUser)
+  },
+  { deep: true }
+)
+
+onMounted(async () => {
+  try {
+    const bypassConfig = await getBypassAuthConfig()
+    bypassAuthEnabled = bypassConfig?.enabled ?? false
+  } catch {
+    bypassAuthEnabled = false
+  }
+
+  try {
+    const fetchedUserInfo = await userStore.fetchUserInfo()
+    if (!fetchedUserInfo.is_staff) {
+      adminModeStore.setAdminMode(false)
+    }
+    updateQuickLinks(fetchedUserInfo)
+  } catch (error) {
+    console.error('Failed to fetch user info:', error)
+    adminModeStore.setAdminMode(false)
+    updateQuickLinks(null)
   }
 })
 

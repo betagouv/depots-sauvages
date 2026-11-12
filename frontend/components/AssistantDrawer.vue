@@ -667,11 +667,14 @@ watch(
   { deep: true }
 )
 
-// Scroll on drawer open
+// Scroll on drawer open and refresh user info if needed
 watch(
   () => props.isOpen,
   (open) => {
     if (open) {
+      if (!userStore.isAuthenticated) {
+        userStore.fetchUserInfo(true).catch(() => {})
+      }
       scrollToBottom()
     }
   }
