@@ -42,7 +42,7 @@
       </header>
 
       <!-- Zone des messages ou invitation connexion -->
-      <section class="assistant-body fr-p-3w" ref="chatBodyRef">
+      <section class="assistant-body fr-p-3w" ref="chatBodyRef" @scroll="handleScroll">
         <!-- État non connecté : invitation ProConnect -->
         <div v-if="!userStore.isAuthenticated" class="unauthenticated-container fr-my-auto">
           <LoginInvitation
@@ -138,6 +138,20 @@
                 </button>
               </div>
 
+              <!-- Action contextuelle : aide au volume quand l'assistant sollicite une estimation -->
+              <div
+                v-if="message.role === 'assistant' && isLastAssistantMessage(message) && status !== 'streaming' && isAskingVolume(message)"
+                class="volume-context-action fr-mt-2w"
+              >
+                <button
+                  type="button"
+                  class="fr-btn fr-btn--secondary fr-btn--sm fr-btn--icon-left fr-icon-ruler-line"
+                  @click="openVolumeModalForChat"
+                >
+                  Estimer le volume (repères visuels)
+                </button>
+              </div>
+
               <!-- Suggestions dynamiques de rebond (Follow-up chips) pour le dernier message assistant -->
               <div
                 v-if="message.role === 'assistant' && isLastAssistantMessage(message) && status !== 'streaming' && dynamicFollowUps.length > 0"
@@ -193,17 +207,24 @@
                       </li>
                     </ul>
 
-                    <!-- Aide visuelle intégrée pour ajuster / choisir le volume -->
-                    <AssistantVolumeGuide
-                      :current-volume-m3="toolCall.input?.volumeM3"
-                      @select-volume="(val, label) => updateDraftVolume(toolCall.input, val, label)"
-                    />
+                    <!-- Bouton modale pour ajuster / choisir le volume du brouillon -->
+                    <div class="fr-my-2w">
+                      <button
+                        type="button"
+                        class="fr-btn fr-btn--secondary fr-btn--sm fr-btn--icon-left fr-icon-ruler-line w-100 justify-center"
+                        @click="openVolumeModalForDraft(toolCall.input)"
+                      >
+                        {{ typeof toolCall.input?.volumeM3 === 'number' ? `Ajuster le volume (${toolCall.input.volumeM3} m³)` : "Aide au volume (repères visuels)" }}
+                      </button>
+                    </div>
 
                     <button
-                      class="fr-btn fr-btn--sm fr-btn--icon-left fr-icon-checkbox-circle-line w-100 justify-center premium-draft-action-btn fr-mt-2w"
+                      type="button"
+                      class="fr-btn fr-btn--sm fr-btn--icon-left fr-icon-checkbox-circle-line w-100 justify-center premium-draft-action-btn fr-mt-1w"
+                      :disabled="isApplyingDraft"
                       @click="applyDraftAndRedirect(toolCall.input)"
                     >
-                      Créer mon brouillon de constatation
+                      {{ isApplyingDraft ? 'Création en cours...' : 'Créer mon brouillon de constatation' }}
                     </button>
                   </div>
                 </div>
@@ -226,18 +247,28 @@
             <p class="fr-text--xs">Une erreur est survenue lors de l'échange. Veuillez réessayer.</p>
           </div>
         </template>
+
+        <!-- Bouton flottant de reprise du scroll vers le bas -->
+        <transition name="fade-slide">
+          <button
+            v-if="userStore.isAuthenticated && isUserScrolledUp && messages.length > 0"
+            type="button"
+            class="scroll-bottom-floating-btn"
+            :class="{ 'streaming-pulse': status === 'streaming' }"
+            title="Revenir au bas de la discussion"
+            aria-label="Faire défiler vers le bas"
+            @click="scrollToBottom(true, 'smooth')"
+          >
+            <span class="fr-icon-arrow-down-line" aria-hidden="true"></span>
+            <span v-if="status === 'streaming'" class="streaming-pill-label">
+              Nouveaux messages...
+            </span>
+          </button>
+        </transition>
       </section>
 
       <!-- Footer : Formulaire de saisie Premium (uniquement si connecté) -->
       <footer v-if="userStore.isAuthenticated" class="assistant-footer fr-p-3w">
-        <!-- Aide visuelle volume dépliable accessible à tout moment au-dessus du champ de saisie -->
-        <div class="fr-mb-2w" v-if="messages.length > 0">
-          <AssistantVolumeGuide
-            :interactive="true"
-            @select-volume="onVolumeSelectedFromChat"
-          />
-        </div>
-
         <form @submit.prevent="handleSubmitMessage" class="chat-form">
           <div class="input-container premium-input-wrapper">
             <textarea
@@ -267,6 +298,14 @@
           </div>
         </form>
       </footer>
+
+      <!-- Modale mutualisée des repères de volume -->
+      <VolumeGuideModal
+        :opened="isVolumeModalOpen"
+        :current-volume-m3="currentVolumeForModal"
+        @close="isVolumeModalOpen = false"
+        @select-volume="onVolumeSelectedFromModal"
+      />
     </aside>
   </div>
 </template>
@@ -282,7 +321,7 @@ import { API_URL, getCSRFToken, sendChatbotFeedback } from '../services/api'
 import { useConstatationStore } from '../stores/constatation'
 import { useUserStore } from '../stores/user'
 import LoginInvitation from './shared/LoginInvitation.vue'
-import AssistantVolumeGuide from './AssistantVolumeGuide.vue'
+import VolumeGuideModal from './shared/VolumeGuideModal.vue'
 
 const props = defineProps<{
   isOpen: boolean
@@ -301,6 +340,17 @@ const inputMessage = ref('')
 const chatBodyRef = ref<HTMLElement | null>(null)
 const copiedMessageId = ref<string | null>(null)
 const feedbackMap = ref<Record<string, 'up' | 'down'>>({})
+
+// Gestion intelligente du scroll (User Intent & Auto-scroll)
+const isUserScrolledUp = ref(false)
+const SCROLL_BOTTOM_THRESHOLD = 70 // pixels de tolérance par rapport au bas
+
+const handleScroll = () => {
+  if (!chatBodyRef.value) return
+  const { scrollTop, scrollHeight, clientHeight } = chatBodyRef.value
+  const distanceFromBottom = scrollHeight - scrollTop - clientHeight
+  isUserScrolledUp.value = distanceFromBottom > SCROLL_BOTTOM_THRESHOLD
+}
 
 // Clef pour localStorage
 const CHAT_STORAGE_KEY = 'protectenvi_chatbot_history_v1'
@@ -563,8 +613,10 @@ const handleSubmitMessage = () => {
   if (!text || status.value === 'streaming') return
 
   inputMessage.value = ''
+  // Forcer la remise à zéro de l'état "scrolled up" lors de l'envoi d'un message
+  isUserScrolledUp.value = false
   sendMessage({ text })
-  scrollToBottom()
+  scrollToBottom(true, 'smooth')
 }
 
 const getMessageText = (message: any): string => {
@@ -613,56 +665,139 @@ const updateDraftVolume = (inputData: any, val: number, _label: string) => {
   inputData.volumeM3 = val
 }
 
-const onVolumeSelectedFromChat = (val: number, label: string) => {
-  inputMessage.value = `Le volume estimé du dépôt est d'environ ${val} m³ (${label}).`
-  handleSubmitMessage()
+const isVolumeModalOpen = ref(false)
+const volumeModalDraftTarget = ref<any>(null)
+
+const currentVolumeForModal = computed<number | null>(() => {
+  if (volumeModalDraftTarget.value && typeof volumeModalDraftTarget.value.volumeM3 === 'number') {
+    return volumeModalDraftTarget.value.volumeM3
+  }
+  return null
+})
+
+const isAskingVolume = (message: any) => {
+  if (message.role !== 'assistant') return false
+  if (getToolCalls(message).length > 0) return false
+  const text = getMessageText(message).toLowerCase()
+  if (!text) return false
+  const hasVolumeTerm =
+    text.includes('volume') ||
+    text.includes('m³') ||
+    text.includes('m3') ||
+    text.includes('mètre cube') ||
+    text.includes('mètres cubes')
+  const hasEstimationOrQuestion =
+    text.includes('estim') ||
+    text.includes('évalu') ||
+    text.includes('quantité') ||
+    text.includes('combien') ||
+    text.includes('préciser') ||
+    text.includes('indiquer') ||
+    text.includes('taille') ||
+    text.includes('?')
+  return hasVolumeTerm && hasEstimationOrQuestion
 }
 
-const applyDraftAndRedirect = (inputData: any) => {
-  if (!inputData) return
-
-  if (inputData.commune) {
-    constatationStore.formData.commune = inputData.commune
-  }
-  if (inputData.localisationDepot) {
-    constatationStore.formData.localisationDepot = inputData.localisationDepot
-  }
-  if (typeof inputData.volumeM3 === 'number') {
-    constatationStore.formData.volumeM3 = inputData.volumeM3
-    constatationStore.formData.volumeDepot = '' as any
-  } else if (inputData.volumeDepot) {
-    constatationStore.formData.volumeDepot = inputData.volumeDepot
-  }
-  if (Array.isArray(inputData.typesDepot) && inputData.typesDepot.length > 0) {
-    constatationStore.formData.typesDepot = inputData.typesDepot
-  }
-  if (Array.isArray(inputData.natureTerrain) && inputData.natureTerrain.length > 0) {
-    constatationStore.formData.natureTerrain = inputData.natureTerrain
-  }
-  if (inputData.precisionsDepot) {
-    constatationStore.formData.precisionsDepot = inputData.precisionsDepot
-  }
-  if (typeof inputData.auteurIdentifie === 'boolean') {
-    constatationStore.formData.auteurIdentifie = inputData.auteurIdentifie
-  }
-
-  closeDrawer()
-  router.push('/commencer-constatation')
+const openVolumeModalForChat = () => {
+  volumeModalDraftTarget.value = null
+  isVolumeModalOpen.value = true
 }
 
-const scrollToBottom = () => {
+const openVolumeModalForDraft = (draftInput: any) => {
+  volumeModalDraftTarget.value = draftInput
+  isVolumeModalOpen.value = true
+}
+
+const onVolumeSelectedFromModal = (val: number, label: string) => {
+  if (volumeModalDraftTarget.value) {
+    updateDraftVolume(volumeModalDraftTarget.value, val, label)
+    volumeModalDraftTarget.value = null
+  } else {
+    inputMessage.value = `Le volume estimé du dépôt est d'environ ${val} m³ (${label}).`
+    handleSubmitMessage()
+  }
+  isVolumeModalOpen.value = false
+}
+
+const isApplyingDraft = ref(false)
+
+const applyDraftAndRedirect = async (inputData: any) => {
+  if (!inputData || isApplyingDraft.value) return
+  isApplyingDraft.value = true
+
+  try {
+    if (inputData.commune) {
+      constatationStore.formData.commune = inputData.commune
+    }
+    if (inputData.localisationDepot) {
+      constatationStore.formData.localisationDepot = inputData.localisationDepot
+    }
+    if (typeof inputData.volumeM3 === 'number') {
+      constatationStore.formData.volumeM3 = inputData.volumeM3
+      constatationStore.formData.volumeDepot = '' as any
+    } else if (inputData.volumeDepot) {
+      constatationStore.formData.volumeDepot = inputData.volumeDepot
+    }
+    if (Array.isArray(inputData.typesDepot) && inputData.typesDepot.length > 0) {
+      constatationStore.formData.typesDepot = inputData.typesDepot
+    }
+    if (Array.isArray(inputData.natureTerrain) && inputData.natureTerrain.length > 0) {
+      constatationStore.formData.natureTerrain = inputData.natureTerrain
+    }
+    if (inputData.precisionsDepot) {
+      constatationStore.formData.precisionsDepot = inputData.precisionsDepot
+    }
+    if (typeof inputData.auteurIdentifie === 'boolean') {
+      constatationStore.formData.auteurIdentifie = inputData.auteurIdentifie
+    }
+
+    // Auto-save the draft if user is authenticated and commune is present,
+    // then navigate directly to the form with the pre-filled draft
+    let targetPath = '/constatation'
+    if (userStore.isAuthenticated && constatationStore.formData.commune) {
+      try {
+        const savedDraft = await constatationStore.autoSave()
+        if (savedDraft?.id) {
+          targetPath = `/constatation/${savedDraft.id}`
+        }
+      } catch (err) {
+        console.warn('Auto-save of draft before redirect encountered an error, proceeding to form:', err)
+      }
+    }
+
+    closeDrawer()
+    await router.push(targetPath)
+  } finally {
+    isApplyingDraft.value = false
+  }
+}
+
+const scrollToBottom = (force = false, behavior: ScrollBehavior = 'auto') => {
   nextTick(() => {
-    if (chatBodyRef.value) {
+    if (!chatBodyRef.value) return
+    // Si l'utilisateur est remonté pour lire et qu'on ne force pas, ne pas écraser sa position de lecture
+    if (isUserScrolledUp.value && !force) return
+
+    if (behavior === 'smooth') {
+      chatBodyRef.value.scrollTo({
+        top: chatBodyRef.value.scrollHeight,
+        behavior: 'smooth',
+      })
+    } else {
       chatBodyRef.value.scrollTop = chatBodyRef.value.scrollHeight
+    }
+
+    if (force) {
+      isUserScrolledUp.value = false
     }
   })
 }
 
-// Auto-scroll on new message / streaming updates
+// Auto-scroll on new message / streaming updates (respecte la lecture de l'utilisateur)
 watch(
   () => [messages.value, status.value],
   () => {
-    scrollToBottom()
+    scrollToBottom(false)
   },
   { deep: true }
 )
@@ -672,10 +807,11 @@ watch(
   () => props.isOpen,
   (open) => {
     if (open) {
+      isUserScrolledUp.value = false
       if (!userStore.isAuthenticated) {
         userStore.fetchUserInfo(true).catch(() => {})
       }
-      scrollToBottom()
+      scrollToBottom(true)
     }
   }
 )
@@ -800,12 +936,14 @@ watch(
 }
 
 .assistant-body {
+  position: relative;
   flex: 1;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
   background-color: #fafbfe;
+  scroll-behavior: smooth;
 }
 
 /* Welcome Box & Suggestions */
@@ -897,6 +1035,7 @@ watch(
 .user-bubble .user-message-content {
   line-height: 1.35;
   word-break: break-word;
+  white-space: pre-wrap;
 }
 
 .assistant-bubble {
@@ -1200,6 +1339,75 @@ watch(
 .footer-hint {
   text-align: right;
   font-size: 0.72rem;
+}
+
+/* Bouton flottant de défilement vers le bas */
+.scroll-bottom-floating-btn {
+  position: sticky;
+  bottom: 0.75rem;
+  align-self: center;
+  z-index: 20;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background-color: #ffffff;
+  color: var(--text-action-high-blue-france, #000091);
+  border: 1px solid var(--border-default-blue-france, #cdd6ff);
+  border-radius: 9999px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgba(0, 0, 145, 0.16);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scroll-bottom-floating-btn:hover {
+  background-color: #f0f3ff;
+  border-color: var(--border-active-blue-france, #000091);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 145, 0.22);
+}
+
+.scroll-bottom-floating-btn.streaming-pulse {
+  background-color: #000091;
+  color: #ffffff;
+  border-color: #000091;
+  box-shadow: 0 4px 16px rgba(0, 0, 145, 0.35);
+  animation: pulseButton 2s infinite ease-in-out;
+}
+
+.scroll-bottom-floating-btn.streaming-pulse:hover {
+  background-color: #1212ff;
+  border-color: #1212ff;
+}
+
+.streaming-pill-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+@keyframes pulseButton {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 0, 145, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(0, 0, 145, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 0, 145, 0);
+  }
+}
+
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fade-slide-enter-from,
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(12px) scale(0.95);
 }
 
 @keyframes fadeIn {

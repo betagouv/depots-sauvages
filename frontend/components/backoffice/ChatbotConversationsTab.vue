@@ -241,7 +241,15 @@
               <span v-if="msg.feedback === 'up'" class="fr-ml-1w" title="Avis usager positif">👍</span>
               <span v-if="msg.feedback === 'down'" class="fr-ml-1w" title="Avis usager négatif">👎</span>
             </div>
-            <div class="dialog-bubble__content fr-text--sm">
+            <div
+              v-if="msg.role === 'assistant'"
+              class="dialog-bubble__content dialog-bubble__content--markdown fr-text--sm"
+              v-html="renderMarkdown(msg.content)"
+            ></div>
+            <div
+              v-else
+              class="dialog-bubble__content dialog-bubble__content--user fr-text--sm"
+            >
               {{ msg.content }}
             </div>
             <div v-if="msg.tool_calls && msg.tool_calls.length > 0" class="dialog-tool-call fr-mt-1w fr-p-2w">
@@ -274,6 +282,8 @@ import {
   type ChatbotConversationSummary,
   type ChatbotConversationDetail,
 } from '@/services/api'
+import { marked } from 'marked'
+import DOMPurify from 'dompurify'
 
 const isLoading = ref(true)
 const conversations = ref<ChatbotConversationSummary[]>([])
@@ -313,6 +323,12 @@ const formatTime = (isoString?: string) => {
   if (!isoString) return ''
   const d = new Date(isoString)
   return d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+}
+
+const renderMarkdown = (content?: string): string => {
+  if (!content || typeof content !== 'string') return ''
+  const rawHtml = marked.parse(content, { breaks: true, gfm: true }) as string
+  return DOMPurify.sanitize(rawHtml)
 }
 
 const fetchConversations = async () => {
@@ -488,6 +504,53 @@ onMounted(() => {
   background-color: #ffffff;
   border: 1px solid var(--border-default-grey, #e5e5e5);
   margin-right: auto;
+}
+
+.dialog-bubble__content {
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.dialog-bubble__content--user {
+  white-space: pre-wrap;
+}
+
+.dialog-bubble__content--markdown {
+  word-break: break-word;
+}
+
+.dialog-bubble__content--markdown :deep(p) {
+  margin-bottom: 0.5rem;
+}
+
+.dialog-bubble__content--markdown :deep(p:last-child) {
+  margin-bottom: 0;
+}
+
+.dialog-bubble__content--markdown :deep(ul),
+.dialog-bubble__content--markdown :deep(ol) {
+  padding-left: 1.25rem;
+  margin-bottom: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.dialog-bubble__content--markdown :deep(li) {
+  margin-bottom: 0.25rem;
+}
+
+.dialog-bubble__content--markdown :deep(pre) {
+  background-color: #f0f2f8;
+  padding: 0.5rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+.dialog-bubble__content--markdown :deep(code) {
+  background-color: #f0f2f8;
+  padding: 0.1rem 0.25rem;
+  border-radius: 3px;
+  font-size: 0.875em;
 }
 
 .dialog-tool-call {
