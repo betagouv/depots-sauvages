@@ -39,6 +39,8 @@ export const API_URLS = {
   backofficeProConnectConfig: `${API_URL}/backoffice/proconnect-config/`,
   chatbotConfig: `${API_URL}/chatbot/config/`,
   chatbotTestConnection: `${API_URL}/chatbot/test-connection/`,
+  chatbotFeedback: `${API_URL}/chatbot/feedback/`,
+  chatbotConversations: `${API_URL}/chatbot/conversations/`,
 }
 
 // API functions
@@ -210,5 +212,80 @@ export const testChatbotConnection = (
   payload: Partial<ChatbotConfigData>
 ): Promise<ChatbotTestConnectionResponse> =>
   makeRequest(API_URLS.chatbotTestConnection, 'POST', payload)
+
+export interface SendChatbotFeedbackPayload {
+  conversationId?: string
+  messageId?: string
+  messageIndex?: number
+  feedback: 'up' | 'down' | ''
+}
+
+export const sendChatbotFeedback = (
+  payload: SendChatbotFeedbackPayload
+): Promise<{ success: boolean; conversationId: string; feedback: string }> =>
+  makeRequest(API_URLS.chatbotFeedback, 'POST', payload)
+
+export interface ChatbotConversationSummary {
+  id: string
+  user_email: string
+  user_name: string
+  current_path: string
+  messages_count: number
+  first_user_message: string
+  last_user_message: string
+  has_draft_proposed: boolean
+  feedback: 'up' | 'down' | ''
+  created_at: string
+  updated_at: string
+}
+
+export interface ChatbotConversationDetail extends ChatbotConversationSummary {
+  messages: Array<{
+    id: string
+    role: 'user' | 'assistant'
+    content: string
+    timestamp: string
+    tool_calls?: Array<any>
+    feedback?: 'up' | 'down'
+  }>
+}
+
+export interface ChatbotConversationsListResponse {
+  count: number
+  page: number
+  page_size: number
+  stats: {
+    total_conversations: number
+    drafts_count: number
+    positive_count: number
+    negative_count: number
+  }
+  results: ChatbotConversationSummary[]
+}
+
+export const getChatbotConversations = (params: {
+  page?: number
+  page_size?: number
+  search?: string
+  has_draft?: string
+  feedback?: string
+}): Promise<ChatbotConversationsListResponse> => {
+  const query = new URLSearchParams()
+  if (params.page) query.append('page', params.page.toString())
+  if (params.page_size) query.append('page_size', params.page_size.toString())
+  if (params.search) query.append('search', params.search)
+  if (params.has_draft) query.append('has_draft', params.has_draft)
+  if (params.feedback) query.append('feedback', params.feedback)
+
+  const queryString = query.toString() ? `?${query.toString()}` : ''
+  return makeRequest(`${API_URLS.chatbotConversations}${queryString}`, 'GET')
+}
+
+export const getChatbotConversationDetail = (id: string): Promise<ChatbotConversationDetail> =>
+  makeRequest(`${API_URLS.chatbotConversations}${id}/`, 'GET')
+
+export const deleteChatbotConversation = (id: string): Promise<void> =>
+  makeRequest(`${API_URLS.chatbotConversations}${id}/`, 'DELETE')
+
 
 

@@ -56,6 +56,7 @@ Conformément à la politique de sécurité globale de la plateforme, l'assistan
 Pour préserver le secret professionnel et le RGPD lors des échanges avec des modèles de langage externes :
 - **Anonymisation du contexte métier** : Les dossiers ne sont référencés que par des identifiants techniques opaques. Les données personnelles d'auteurs présumés, d'agents, adresses postales précises ou plaques d'immatriculation ne sont jamais injectées dans le prompt système.
 - **Filtrage automatique à la volée** : Les messages saisis par l'utilisateur traversent un épurateur qui masque automatiquement les motifs sensibles identifiables (e-mails, numéros de téléphone, plaques, identifiants d'entreprises) avant tout appel au modèle d'IA.
+- **Stockage expurgé et droit d'accès** : Les conversations enregistrées en base (`ChatbotConversation`) pour le suivi back-office font l'objet du même filtrage préventif (`scrub_pii`). Les données brutes identifiantes ne sont jamais persistées. L'accès à ces journaux est restreint aux membres habilités de l'équipe (`IsAdminUser`), avec une purge automatique des échanges après 180 jours (6 mois).
 
 ### C. Limitation de débit (Anti-DoS & Maîtrise des coûts)
 - L'endpoint de streaming est protégé par un limiteur de débit applicatif dédié (`ChatbotRateThrottle`).

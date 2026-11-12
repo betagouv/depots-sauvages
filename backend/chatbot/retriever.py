@@ -3,7 +3,6 @@ import math
 import re
 import unicodedata
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -43,18 +42,18 @@ class KnowledgeRetriever:
     Exclut par défaut les sections destinées aux citoyens non-collectivités.
     """
 
-    def __init__(self, knowledge_dir: Path = KNOWLEDGE_DIR):
+    def __init__(self, knowledge_dir=KNOWLEDGE_DIR):
         self.knowledge_dir = knowledge_dir
-        self.documents: List[Dict[str, Any]] = []
+        self.documents = []
         self._load_documents()
 
-    def _normalize(self, text: str) -> str:
+    def _normalize(self, text):
         """Supprime les accents et met en minuscules."""
         nfkd = unicodedata.normalize("NFKD", text)
         no_accents = "".join(c for c in nfkd if not unicodedata.combining(c))
         return re.sub(r"[^\w\s]", " ", no_accents.lower())
 
-    def _tokenize(self, text: str) -> List[str]:
+    def _tokenize(self, text):
         cleaned = self._normalize(text)
         tokens = cleaned.split()
         stopwords = {
@@ -158,7 +157,7 @@ class KnowledgeRetriever:
 
         logger.info("Loaded %d knowledge chunks for chatbot", len(self.documents))
 
-    def search(self, query: str, top_k: int = 3) -> List[Dict[str, Any]]:
+    def search(self, query, top_k=3):
         """
         Recherche les k documents les plus pertinents pour la requête,
         avec expansion par synonymes.
@@ -174,7 +173,7 @@ class KnowledgeRetriever:
 
         query_tokens = set(expanded_tokens)
 
-        scored_docs: List[Tuple[float, Dict[str, Any]]] = []
+        scored_docs = []
         for doc in self.documents:
             doc_tokens = doc["tokens"]
             common_tokens = query_tokens.intersection(doc_tokens)
@@ -196,10 +195,10 @@ class KnowledgeRetriever:
 
 
 # Instance singleton
-_retriever: Optional[KnowledgeRetriever] = None
+_retriever = None
 
 
-def get_retriever() -> KnowledgeRetriever:
+def get_retriever():
     global _retriever
     if _retriever is None:
         _retriever = KnowledgeRetriever()

@@ -59,12 +59,18 @@
               <li>
                 Veiller à respecter la vie privée des tiers (notamment en évitant, dans la mesure du possible, de photographier de manière lisible des visages de personnes tierces non concernées par l'infraction dans les pièces justificatives).
               </li>
+              <li>
+                Concernant l'utilisation de l'Assistant IA : ne pas saisir de données personnelles nominatives de contrevenants ou de tiers (noms, prénoms, adresses complètes, plaques d'immatriculation) dans le fil de discussion.
+              </li>
             </ul>
           </DsfrHighlight>
 
-          <h2>4. Responsabilité de l'éditeur</h2>
+          <h2>4. Responsabilité de l'éditeur &amp; Utilisation de l'Assistant IA</h2>
           <p>
             <strong>Stop Dépôt Sauvage</strong> met tout en œuvre pour assurer la disponibilité du service. Toutefois, le service étant en constante évolution (mode "bêta"), l'éditeur ne peut garantir une accessibilité ininterrompue ou une absence totale d'anomalies.
+          </p>
+          <p>
+            L'Assistant IA intégré est un outil d'aide à la compréhension des procédures et à la pré-qualification des dossiers. Ses réponses sont générées automatiquement à titre informatif et indicatif. Elles ne constituent ni un avis juridique formel, ni une décision administrative opposable. L'autorité signataire (maire, agent assermenté ou habilité) conserve l'entière responsabilité de la vérification des faits, de l'exactitude des pièces et de l'opportunité des poursuites ou des sanctions.
           </p>
           <p>
             L'éditeur ne saurait être tenu responsable :

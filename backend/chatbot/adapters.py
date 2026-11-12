@@ -7,12 +7,10 @@ from typing import Any, Dict, Generator, List, Optional
 import requests
 from django.conf import settings
 from backend.chatbot.context import scrub_pii
-from backend.chatbot.models import ChatbotConfig, DEFAULT_SYSTEM_PROMPT
+from backend.chatbot.models import ChatbotConfig, get_default_system_prompt
 from backend.chatbot.retriever import get_retriever
 
 logger = logging.getLogger(__name__)
-
-SYSTEM_PROMPT = DEFAULT_SYSTEM_PROMPT
 
 TOOL_PROPOSE_CONSTATATION_DRAFT = {
     "type": "function",
@@ -70,12 +68,12 @@ TOOL_PROPOSE_CONSTATATION_DRAFT = {
 }
 
 
-def sse_event(data: Dict[str, Any]) -> str:
+def sse_event(data):
     """Format dictionary as Server-Sent Event for Vercel AI SDK."""
     return f"data: {json.dumps(data, ensure_ascii=False)}\n\n"
 
 
-def stream_text_words(text_id: str, full_text: str, delay: float = 0.045) -> Generator[str, None, None]:
+def stream_text_words(text_id, full_text, delay=0.045):
     """Emit text word-by-word with delay to produce a natural streaming effect."""
     tokens = re.findall(r"\S+\s*|\n", full_text)
     for token in tokens:
@@ -85,21 +83,17 @@ def stream_text_words(text_id: str, full_text: str, delay: float = 0.045) -> Gen
 
 
 class BaseAIAdapter:
-    def stream_chat(
-        self, messages: List[Dict[str, Any]], context: Optional[Dict[str, Any]] = None
-    ) -> Generator[str, None, None]:
+    def stream_chat(self, messages, context=None):
         raise NotImplementedError
 
 
 class MockAIAdapter(BaseAIAdapter):
     """Realistic mock adapter simulating regulatory advice and draft generation."""
 
-    def __init__(self, debug_mode: bool = False):
+    def __init__(self, debug_mode=False):
         self.debug_mode = debug_mode
 
-    def stream_chat(
-        self, messages: List[Dict[str, Any]], context: Optional[Dict[str, Any]] = None
-    ) -> Generator[str, None, None]:
+    def stream_chat(self, messages, context=None):
         text_id = f"txt_{uuid.uuid4().hex[:8]}"
 
         last_user_message = ""
@@ -234,23 +228,21 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
 
     def __init__(
         self,
-        api_key: str,
-        model: str,
-        base_url: str,
-        timeout: int = 40,
-        system_prompt: Optional[str] = None,
-        debug_mode: bool = False,
+        api_key,
+        model,
+        base_url,
+        timeout=40,
+        system_prompt=None,
+        debug_mode=False,
     ):
         self.api_key = api_key
         self.model = model
         self.base_url = base_url.rstrip("/")
         self.timeout = timeout
-        self.system_prompt = system_prompt or SYSTEM_PROMPT
+        self.system_prompt = system_prompt or get_default_system_prompt()
         self.debug_mode = debug_mode
 
-    def stream_chat(
-        self, messages: List[Dict[str, Any]], context: Optional[Dict[str, Any]] = None
-    ) -> Generator[str, None, None]:
+    def stream_chat(self, messages, context=None):
         text_id = f"txt_{uuid.uuid4().hex[:8]}"
 
         url = f"{self.base_url}/chat/completions"
@@ -571,7 +563,7 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
                 yield sse_event(fallback_tool_call)
 
 
-def get_ai_adapter() -> BaseAIAdapter:
+def get_ai_adapter():
     """
     Instantiate the AI adapter.
     Priority: ChatbotConfig (Database Singleton) > Django settings / Environment variables.
@@ -606,7 +598,7 @@ def get_ai_adapter() -> BaseAIAdapter:
     )
     system_prompt = (
         (db_config.system_prompt if db_config and db_config.system_prompt else None)
-        or SYSTEM_PROMPT
+        or get_default_system_prompt()
     )
     debug_mode = bool(getattr(settings, "AI_DEBUG", False))
 

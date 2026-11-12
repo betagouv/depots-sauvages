@@ -260,6 +260,11 @@
           <div class="footer-hint fr-text--xs fr-text-mention--grey fr-mt-1w">
             <span>Appuyez sur <strong>Entrée</strong> pour envoyer, <strong>Maj + Entrée</strong> pour aller à la ligne</span>
           </div>
+          <div class="legal-mention fr-text--xs fr-text-mention--grey fr-mt-1v">
+            <span class="fr-icon-information-line fr-icon--xs fr-mr-1v" aria-hidden="true"></span>
+            Réponses générées par IA à titre indicatif. Les échanges sont enregistrés pour le suivi et l’amélioration du service. Ne saisissez pas de données personnelles de tiers (nom, plaque, adresse).
+            <router-link to="/donnees-personnelles" class="fr-link fr-text--xs" target="_blank">En savoir plus</router-link>
+          </div>
         </form>
       </footer>
     </aside>
@@ -273,7 +278,7 @@ import { useChat } from '@ai-sdk/vue'
 import { DefaultChatTransport } from 'ai'
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
-import { API_URL, getCSRFToken } from '../services/api'
+import { API_URL, getCSRFToken, sendChatbotFeedback } from '../services/api'
 import { useConstatationStore } from '../stores/constatation'
 import { useUserStore } from '../stores/user'
 import LoginInvitation from './shared/LoginInvitation.vue'
@@ -299,6 +304,15 @@ const feedbackMap = ref<Record<string, 'up' | 'down'>>({})
 
 // Clef pour localStorage
 const CHAT_STORAGE_KEY = 'protectenvi_chatbot_history_v1'
+const CHAT_CONV_ID_KEY = 'protectenvi_chatbot_conversation_id_v1'
+
+const conversationId = ref<string>(localStorage.getItem(CHAT_CONV_ID_KEY) || '')
+if (!conversationId.value) {
+  conversationId.value = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : `conv_${Date.now()}`
+  try {
+    localStorage.setItem(CHAT_CONV_ID_KEY, conversationId.value)
+  } catch (e) {}
+}
 
 const loadStoredMessages = () => {
   try {
@@ -324,7 +338,9 @@ const transport = new DefaultChatTransport({
     return csrfToken ? { 'X-CSRFToken': csrfToken } : {}
   },
   body: () => ({
+    conversationId: conversationId.value,
     context: {
+      conversationId: conversationId.value,
       currentPath: route.fullPath,
     },
   }),
@@ -356,8 +372,10 @@ watch(
 const clearChat = () => {
   messages.value = []
   feedbackMap.value = {}
+  conversationId.value = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : `conv_${Date.now()}`
   try {
     localStorage.removeItem(CHAT_STORAGE_KEY)
+    localStorage.setItem(CHAT_CONV_ID_KEY, conversationId.value)
   } catch (e) {}
 }
 
@@ -386,11 +404,22 @@ const copyMessageContent = async (message: any) => {
   }
 }
 
-const toggleFeedback = (messageId: string, type: 'up' | 'down') => {
-  if (feedbackMap.value[messageId] === type) {
+const toggleFeedback = async (messageId: string, type: 'up' | 'down') => {
+  const nextVal = feedbackMap.value[messageId] === type ? '' : type
+  if (!nextVal) {
     delete feedbackMap.value[messageId]
   } else {
-    feedbackMap.value[messageId] = type
+    feedbackMap.value[messageId] = nextVal
+  }
+
+  try {
+    await sendChatbotFeedback({
+      conversationId: conversationId.value,
+      messageId,
+      feedback: nextVal as any,
+    })
+  } catch (e) {
+    console.warn('Could not record feedback to server:', e)
   }
 }
 

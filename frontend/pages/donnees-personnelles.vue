@@ -51,6 +51,10 @@
                 <strong>Support et statistiques d'utilisation :</strong> suivi des demandes
                 d'accompagnement et statistiques anonymisées.
               </li>
+              <li>
+                <strong>Assistance réglementaire et accompagnement via l'Assistant IA :</strong>
+                suivi des questions des agents connectés afin d'améliorer la pertinence des réponses et de la base documentaire, et d'assurer le suivi des demandes techniques. Les messages font l'objet d'un filtrage préventif automatique afin d'expurger les données nominatives ou sensibles (adresses email, numéros de téléphone, plaques d'immatriculation, identifiants SIRET/SIREN).
+              </li>
             </ul>
           </DsfrHighlight>
 
@@ -66,8 +70,10 @@
               Gendarmerie ou de police compétentes pour faire suite aux procédures.
             </li>
             <li>
-              À notre équipe technique (uniquement dans la limite stricte de la maintenance du
-              service).
+              À notre équipe technique et d'administration du service (dans la limite stricte de la maintenance, de l'amélioration et de la sécurité de la plateforme).
+            </li>
+            <li>
+              Pour les questions posées à l'Assistant IA : aux infrastructures de modèles de langage (LLM) sécurisées et souveraines (ex. Albert API / DINUM ou prestataires d'inférence conformes), recevant des requêtes strictement expurgées de toute donnée directement identifiante.
             </li>
           </ul>
 
@@ -79,6 +85,8 @@
             pendant 2 ans. À l’issue de ces périodes, les données à caractère personnel sont
             supprimées. Seules les données anonymes à visée statistique sont conservées au-delà de
             cette durée.
+            <br />
+            Les échanges et conversations enregistrés via l'Assistant IA sont conservés pour une durée maximale de <strong>6 mois (180 jours)</strong> avant suppression automatique, conformément aux recommandations de la CNIL relatives aux assistants conversationnels.
           </p>
 
           <h2>Registre des activités de traitement</h2>

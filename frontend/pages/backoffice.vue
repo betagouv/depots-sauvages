@@ -82,8 +82,19 @@
             role="tab"
             @click="router.push({ path: '/chatbot-config', query: route.query })"
           >
+            <span class="fr-icon-settings-5-line fr-mr-1w" aria-hidden="true"></span>
+            Config Chatbot
+          </button>
+        </li>
+        <li role="presentation">
+          <button
+            class="fr-tabs__tab"
+            :aria-selected="currentTab === 'chatbot-conversations'"
+            role="tab"
+            @click="router.push({ path: '/chatbot-conversations', query: route.query })"
+          >
             <span class="fr-icon-chat-3-line fr-mr-1w" aria-hidden="true"></span>
-            Chatbot
+            Conversations Chatbot
           </button>
         </li>
       </ul>
@@ -98,6 +109,8 @@
       <ProConnectConfigTab v-if="currentTab === 'proconnect'" />
 
       <ChatbotConfigTab v-if="currentTab === 'chatbot'" />
+
+      <ChatbotConversationsTab v-if="currentTab === 'chatbot-conversations'" />
     </div>
   </div>
 </template>
@@ -105,6 +118,7 @@
 
 <script setup lang="ts">
 import ChatbotConfigTab from '@/components/backoffice/ChatbotConfigTab.vue'
+import ChatbotConversationsTab from '@/components/backoffice/ChatbotConversationsTab.vue'
 import DashboardTab from '@/components/backoffice/DashboardTab.vue'
 import DetailTab from '@/components/backoffice/DetailTab.vue'
 import ProConnectConfigTab from '@/components/backoffice/ProConnectConfigTab.vue'

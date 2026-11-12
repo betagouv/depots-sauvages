@@ -350,6 +350,73 @@ def test_is_safe_external_url():
     assert is_safe_external_url("ftp://openrouter.ai") is False
 
 
+@pytest.mark.django_db
+def test_chatbot_conversation_persistence_and_backoffice(client):
+    """Vérifie la sauvegarde avec scrub_pii, la remontée de feedback et l'API backoffice."""
+    import uuid
+    from backend.chatbot.models import ChatbotConversation
+
+    User = get_user_model()
+    admin_user = User.objects.create_superuser("admin_conv@test.fr", "admin_conv@test.fr", "pass")
+    agent_user = User.objects.create_user(username="agent_conv", email="agent_conv@test.fr")
+
+    # 1. Conversation initiée par un agent avec PII
+    client.force_login(agent_user)
+    conv_id = str(uuid.uuid4())
+    payload = {
+        "messages": [
+            {
+                "role": "user",
+                "content": "Bonjour, mon tel est le 06 12 34 56 78 et j'ai des gravats à Rennes",
+            }
+        ],
+        "context": {
+            "conversationId": conv_id,
+            "currentPath": "/commencer-constatation",
+        },
+    }
+    res = client.post("/api/chatbot/chat/", data=json.dumps(payload), content_type="application/json")
+    assert res.status_code == 200
+    # Consommer le stream
+    list(res.streaming_content)
+
+    # Vérification en base
+    conv = ChatbotConversation.objects.get(id=conv_id)
+    assert conv.user == agent_user
+    assert conv.current_path == "/commencer-constatation"
+    assert conv.has_draft_proposed is True
+    # PII masquée dans les messages enregistrés
+    user_msg = conv.messages[0]["content"]
+    assert "06 12 34 56 78" not in user_msg
+    assert "[TÉL_MASQUÉ]" in user_msg
+
+    # 2. Envoi d'un feedback usager (👍)
+    fb_payload = {
+        "conversationId": conv_id,
+        "feedback": "up",
+    }
+    fb_res = client.post("/api/chatbot/feedback/", data=json.dumps(fb_payload), content_type="application/json")
+    assert fb_res.status_code == 200
+    conv.refresh_from_db()
+    assert conv.feedback == "up"
+
+    # 3. Consultation via l'API Backoffice (admin requis)
+    client.force_login(admin_user)
+    list_res = client.get("/api/chatbot/conversations/")
+    assert list_res.status_code == 200
+    assert list_res.data["count"] >= 1
+    assert list_res.data["stats"]["total_conversations"] >= 1
+    assert list_res.data["stats"]["drafts_count"] >= 1
+    assert list_res.data["stats"]["positive_count"] >= 1
+
+    # Détail d'une conversation
+    detail_res = client.get(f"/api/chatbot/conversations/{conv_id}/")
+    assert detail_res.status_code == 200
+    assert len(detail_res.data["messages"]) >= 2
+    assert detail_res.data["user_email"] == "agent_conv@test.fr"
+
+
+
 
 
 
