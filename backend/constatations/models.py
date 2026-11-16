@@ -117,6 +117,30 @@ class Constatation(ConstatationBaseModel):
         null=True,
         blank=True,
     )
+    team = models.ForeignKey(
+        "teams.Team",
+        on_delete=models.CASCADE,
+        related_name="constatations",
+        null=True,
+        blank=True,
+        verbose_name="Organisation / Équipe",
+    )
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        related_name="constatations_creees",
+        null=True,
+        blank=True,
+        verbose_name="Créé par",
+    )
+    updated_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        related_name="constatations_modifiees",
+        null=True,
+        blank=True,
+        verbose_name="Modifié par",
+    )
     doc_constat = models.BinaryField("Rapport de constatation", null=True, blank=True)
     lettre_info = models.BinaryField("Lettre d'information", null=True, blank=True)
 

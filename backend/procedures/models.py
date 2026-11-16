@@ -89,6 +89,22 @@ class SuiviProcedure(SuiviProcedureBaseModel):
         null=True,
         blank=True,
     )
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        related_name="suivis_crees",
+        null=True,
+        blank=True,
+        verbose_name="Créé par",
+    )
+    updated_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        related_name="suivis_modifies",
+        null=True,
+        blank=True,
+        verbose_name="Modifié par",
+    )
     personne_assignee = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
