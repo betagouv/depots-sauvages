@@ -41,18 +41,31 @@ def is_safe_external_url(url, allow_private=False):
         if allow_private:
             return True
 
-        # Validation de l'adresse IP directe
+        # Validate direct IP address
         try:
             ip = ipaddress.ip_address(hostname)
-            return not (ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved or ip.is_multicast)
+            is_unsafe = (
+                ip.is_private
+                or ip.is_loopback
+                or ip.is_link_local
+                or ip.is_reserved
+                or ip.is_multicast
+            )
+            return not is_unsafe
         except ValueError:
             pass
 
-        # Résolution DNS pour bloquer les domaines pointant vers localhost / IPs privées
+        # DNS resolution check to prevent private / loopback IP SSRF
         addr_info = socket.getaddrinfo(hostname, None)
         for item in addr_info:
             resolved_ip = ipaddress.ip_address(item[4][0])
-            if resolved_ip.is_private or resolved_ip.is_loopback or resolved_ip.is_link_local or resolved_ip.is_reserved or resolved_ip.is_multicast:
+            if (
+                resolved_ip.is_private
+                or resolved_ip.is_loopback
+                or resolved_ip.is_link_local
+                or resolved_ip.is_reserved
+                or resolved_ip.is_multicast
+            ):
                 return False
 
         return True
@@ -104,7 +117,10 @@ def _sanitize_client_messages_for_storage(raw_messages, existing_messages):
         tool_calls = prev.get("tool_calls", [])
         if not tool_calls and isinstance(msg.get("parts"), list):
             for part in msg.get("parts", []):
-                if isinstance(part, dict) and part.get("type") in ("tool-input-available", "tool-call"):
+                if isinstance(part, dict) and part.get("type") in (
+                    "tool-input-available",
+                    "tool-call",
+                ):
                     tool_calls.append(
                         {
                             "toolCallId": part.get("toolCallId") or part.get("id") or "",
@@ -157,7 +173,7 @@ class ChatbotChatView(APIView):
                 if current_path and not existing.current_path:
                     existing.current_path = current_path[:500]
                 return existing
-            # Si l'UUID n'existe pas encore du tout en base, on le crée avec cet UUID
+            # If the UUID does not exist yet in database, create it with this UUID
             if not ChatbotConversation.objects.filter(id=conv_uuid).exists():
                 return ChatbotConversation.objects.create(
                     id=conv_uuid,
@@ -173,7 +189,9 @@ class ChatbotChatView(APIView):
     def post(self, request, *args, **kwargs):
         data = request.data
         messages = data.get("messages", [])
-        raw_client_context = data.get("context", {}) if isinstance(data.get("context"), dict) else {}
+        raw_client_context = (
+            data.get("context", {}) if isinstance(data.get("context"), dict) else {}
+        )
         current_path = raw_client_context.get("currentPath", "")
         form_context = raw_client_context.get("formContext")
         raw_conv_id = (
@@ -182,7 +200,7 @@ class ChatbotChatView(APIView):
             or data.get("id")
         )
 
-        # Résolution et sauvegarde initiale des messages usager expurgés Zero-PII
+        # Resolve and persist initial client messages (Zero-PII scrubbed)
         conversation = None
         try:
             conversation = self._resolve_conversation(request.user, raw_conv_id, current_path)
@@ -193,7 +211,7 @@ class ChatbotChatView(APIView):
         except Exception as e:
             logger.warning("Could not initialize ChatbotConversation: %s", e)
 
-        # Construction du contexte sécurisé et anonymisé Zero-PII
+        # Build safe Zero-PII user and navigation context
         safe_context = build_safe_user_context(
             user=request.user, current_path=current_path, form_context=form_context
         )
@@ -331,7 +349,11 @@ class ChatbotFeedbackView(APIView):
                     target_updated = True
                     break
 
-        if not target_updated and isinstance(message_index, int) and 0 <= message_index < len(msgs):
+        has_valid_idx = (
+            isinstance(message_index, int)
+            and 0 <= message_index < len(msgs)
+        )
+        if not target_updated and has_valid_idx:
             if isinstance(msgs[message_index], dict):
                 if feedback_val:
                     msgs[message_index]["feedback"] = feedback_val
@@ -340,7 +362,7 @@ class ChatbotFeedbackView(APIView):
                 target_updated = True
 
         if not target_updated and msgs:
-            # Par défaut, appliquer sur le dernier message assistant
+            # Fallback: apply to the last assistant message
             for m in reversed(msgs):
                 if isinstance(m, dict) and m.get("role") == "assistant":
                     if feedback_val:
@@ -349,7 +371,7 @@ class ChatbotFeedbackView(APIView):
                         m.pop("feedback", None)
                     break
 
-        # Synthèse globale sur la conversation : si au moins un 'down' -> 'down', sinon si 'up' -> 'up'
+        # Global conversation feedback summary: 'down' takes precedence, else 'up'
         all_feedbacks = [
             m.get("feedback") for m in msgs if isinstance(m, dict) and m.get("feedback")
         ]
@@ -385,8 +407,7 @@ class BackofficeChatbotConfigView(APIView):
     def put(self, request):
         config = ChatbotConfig.get_solo()
         data = request.data.copy() if hasattr(request.data, "copy") else dict(request.data)
-        # Si api_key n'est pas fournie ou vide lors d'une mise à jour partielle sans volonté de l'effacer :
-        # Si le front envoie api_key null ou ne l'envoie pas, on conserve l'existante.
+        # If api_key is not passed or empty when updating, keep existing key unless cleared
         if "api_key" in data and (data["api_key"] is None or data["api_key"] == ""):
             if data.get("clear_api_key"):
                 data["api_key"] = ""
@@ -437,7 +458,7 @@ class BackofficeChatbotTestConnectionView(APIView):
                 status=status.HTTP_200_OK,
             )
 
-        # Résolution de la clé d'API : saisie en cours > en base
+        # Resolve API key: input in request body > stored in database
         api_key = (
             data.get("api_key")
             or config.api_key
@@ -453,7 +474,7 @@ class BackofficeChatbotTestConnectionView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # Base URL
+        # Base URL resolution
         base_url = (data.get("base_url") or config.base_url or "").strip()
         if not base_url:
             if provider in ("openrouter", "openrouter-api"):
@@ -476,12 +497,15 @@ class BackofficeChatbotTestConnectionView(APIView):
             return Response(
                 {
                     "success": False,
-                    "error": "URL de base invalide ou non autorisée (les adresses locales et privées sont interdites pour des raisons de sécurité).",
+                    "error": (
+                        "URL de base invalide ou non autorisée (les adresses locales et privées "
+                        "sont interdites pour des raisons de sécurité)."
+                    ),
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # Modèle
+        # LLM Model resolution
         model = data.get("model") or config.model or ""
         if not model:
             if provider in ("openrouter", "openrouter-api"):
@@ -510,13 +534,13 @@ class BackofficeChatbotTestConnectionView(APIView):
         debug_mode = bool(getattr(settings, "AI_DEBUG", False))
         if debug_mode:
             logger.info(
-                "\n==================== [CHATBOT TEST CONNECTION DEBUG REQUEST] ====================\n"
+                "\n================ [CHATBOT TEST CONNECTION DEBUG REQUEST] ================\n"
                 "Target URL : %s\n"
                 "Provider   : %s\n"
                 "Model      : %s\n"
                 "Timeout    : %ss\n"
                 "Payload    : %s\n"
-                "==================================================================================",
+                "==========================================================================",
                 url,
                 provider,
                 model,
@@ -530,11 +554,12 @@ class BackofficeChatbotTestConnectionView(APIView):
 
             if debug_mode:
                 logger.info(
-                    "\n==================== [CHATBOT TEST CONNECTION DEBUG RESPONSE] ====================\n"
+                    "\n==================== [CHATBOT TEST CONNECTION DEBUG RESPONSE] "
+                    "====================\n"
                     "Status Code : %s\n"
                     "Latency     : %sms\n"
                     "Raw Body    : %s\n"
-                    "==================================================================================",
+                    "===================================================================",
                     getattr(resp, "status_code", None),
                     latency_ms,
                     getattr(resp, "text", ""),
@@ -551,7 +576,10 @@ class BackofficeChatbotTestConnectionView(APIView):
                 return Response(
                     {
                         "success": True,
-                        "message": f"Connexion réussie avec succès au modèle '{model}' ({latency_ms} ms).",
+                        "message": (
+                            f"Connexion réussie avec succès au modèle '{model}' "
+                            f"({latency_ms} ms)."
+                        ),
                         "provider": provider,
                         "model": model,
                         "latency_ms": latency_ms,
@@ -564,7 +592,9 @@ class BackofficeChatbotTestConnectionView(APIView):
                 return Response(
                     {
                         "success": False,
-                        "error": f"L'API a répondu avec le statut HTTP {resp.status_code} : {err_text}",
+                        "error": (
+                            f"L'API a répondu avec le statut HTTP {resp.status_code} : {err_text}"
+                        ),
                         "status_code": resp.status_code,
                     },
                     status=status.HTTP_400_BAD_REQUEST,
@@ -602,7 +632,7 @@ class BackofficeChatbotConversationListView(APIView):
 
         qs = ChatbotConversation.objects.select_related("user").all()
 
-        # Statistiques globales rapides
+        # Fast global summary KPIs
         total_conversations = qs.count()
         drafts_count = qs.filter(has_draft_proposed=True).count()
         positive_count = qs.filter(feedback="up").count()
@@ -693,5 +723,3 @@ class BackofficeChatbotConversationDetailView(APIView):
             )
         conv.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-

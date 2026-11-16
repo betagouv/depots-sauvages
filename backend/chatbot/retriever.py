@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 KNOWLEDGE_DIR = Path(__file__).resolve().parent / "knowledge"
 
-# Table de synonymes métier pour relier le vocabulaire usager aux fiches juridiques
+# Domain synonyms dictionary mapping user vocabulary to legal and procedure terminology
 SYNONYMS_MAP = {
     "mettre": ["amende", "sanction", "montant", "calculateur"],
     "amender": ["amende", "sanctionner", "calculateur"],
@@ -37,9 +37,9 @@ SYNONYMS_MAP = {
 
 class KnowledgeRetriever:
     """
-    Indexeur et moteur de recherche documentaire léger (BM25 simplifié)
-    pour les FAQ, modèles ODT et guides du chatbot.
-    Exclut par défaut les sections destinées aux citoyens non-collectivités.
+    Lightweight document indexer and search engine (simplified BM25)
+    for FAQs, ODT templates, and chatbot guidance documents.
+    Excludes public citizen FAQs by default.
     """
 
     def __init__(self, knowledge_dir=KNOWLEDGE_DIR):
@@ -48,7 +48,7 @@ class KnowledgeRetriever:
         self._load_documents()
 
     def _normalize(self, text):
-        """Supprime les accents et met en minuscules."""
+        """Remove accents and convert text to lowercase."""
         nfkd = unicodedata.normalize("NFKD", text)
         no_accents = "".join(c for c in nfkd if not unicodedata.combining(c))
         return re.sub(r"[^\w\s]", " ", no_accents.lower())
@@ -78,7 +78,7 @@ class KnowledgeRetriever:
             if not file_path.is_file() or file_path.suffix not in (".md", ".txt"):
                 continue
 
-            # Ne pas indexer la FAQ destinée aux citoyens non-collectivités
+            # Skip citizen-facing FAQ (not for public administration agents)
             if "vous_n_êtes_pas_une_collectivité" in file_path.stem:
                 continue
 
@@ -92,7 +92,7 @@ class KnowledgeRetriever:
                             continue
                         lines = sec_str.split("\n", 1)
                         header_line = lines[0].replace("#", "").strip()
-                        # Extraire le slug si présent sous la forme <!-- slug: ... -->
+                        # Extract slug if present as <!-- slug: ... -->
                         slug_match = re.search(r"<!--\s*slug:\s*([^\s>]+)\s*-->", header_line)
                         slug = slug_match.group(1) if slug_match else ""
                         title = re.sub(r"<!--[\s\S]*?-->", "", header_line).strip()
@@ -119,7 +119,7 @@ class KnowledgeRetriever:
                         "tokens": tokens,
                     })
                 elif "custom" in file_path.parts and "README" not in file_path.name:
-                    # Découper les gros guides custom en sections H2 pour un ciblage précis
+                    # Split custom guide files by H2 headings for precise targeting
                     sections = re.split(r"\n(?=##\s+)", content)
                     main_title = ""
                     for i, sec in enumerate(sections):
@@ -130,7 +130,11 @@ class KnowledgeRetriever:
                         header_line = lines[0].replace("#", "").strip()
                         if i == 0 and sec_str.startswith("# "):
                             main_title = header_line
-                        title = f"{main_title} - {header_line}" if main_title and i > 0 else header_line
+                        title = (
+                            f"{main_title} - {header_line}"
+                            if main_title and i > 0
+                            else header_line
+                        )
                         tokens = set(self._tokenize(sec_str))
                         self.documents.append({
                             "title": title,
@@ -159,8 +163,7 @@ class KnowledgeRetriever:
 
     def search(self, query, top_k=3):
         """
-        Recherche les k documents les plus pertinents pour la requête,
-        avec expansion par synonymes.
+        Search top_k most relevant documents for query with synonym expansion.
         """
         raw_tokens = self._tokenize(query)
         if not raw_tokens or not self.documents:
@@ -183,9 +186,9 @@ class KnowledgeRetriever:
             score = len(common_tokens)
             title_tokens = set(self._tokenize(doc["title"]))
             title_intersection = query_tokens.intersection(title_tokens)
-            score += len(title_intersection) * 3.5  # Bonus fort sur le titre
+            score += len(title_intersection) * 3.5  # High bonus on title match
 
-            # Normalisation par la longueur
+            # Length normalization
             score = score / (math.log(len(doc_tokens) + 10) + 1.0)
             scored_docs.append((score, doc))
 
@@ -193,8 +196,7 @@ class KnowledgeRetriever:
         return [doc for _, doc in scored_docs[:top_k]]
 
 
-
-# Instance singleton
+# Singleton instance
 _retriever = None
 
 

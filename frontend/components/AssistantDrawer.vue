@@ -353,9 +353,9 @@ const chatBodyRef = ref<HTMLElement | null>(null)
 const copiedMessageId = ref<string | null>(null)
 const feedbackMap = ref<Record<string, 'up' | 'down'>>({})
 
-// Gestion intelligente du scroll (User Intent & Auto-scroll)
+// Smart scroll handling (User intent & auto-scroll)
 const isUserScrolledUp = ref(false)
-const SCROLL_BOTTOM_THRESHOLD = 70 // pixels de tolérance par rapport au bas
+const SCROLL_BOTTOM_THRESHOLD = 70 // tolerance in pixels from container bottom
 
 const handleScroll = () => {
   if (!chatBodyRef.value) return
@@ -364,7 +364,7 @@ const handleScroll = () => {
   isUserScrolledUp.value = distanceFromBottom > SCROLL_BOTTOM_THRESHOLD
 }
 
-// Clef pour localStorage
+// LocalStorage storage keys
 const CHAT_STORAGE_KEY = 'protectenvi_chatbot_history_v1'
 const CHAT_CONV_ID_KEY = 'protectenvi_chatbot_conversation_id_v1'
 
@@ -391,16 +391,16 @@ const loadStoredMessages = () => {
   return undefined
 }
 
-// Détection si l'utilisateur est actuellement sur la page du formulaire de constatation
+// Check if user is currently on the constatation form page
 const isOnConstatationForm = computed(() => {
   const p = route.path
   return p === '/constatation' || p.startsWith('/constatation/')
 })
 
-// Mémorise les toolCall appliqués pour afficher l'indicateur visuel de succès
+// Store applied tool calls to display a visual success indicator
 const appliedDraftsMap = ref<Record<string, boolean>>({})
 
-// Données du store de constatation actuelles (sans PII) pour contextualiser l'assistant
+// Safe constatation store data (Zero-PII) to contextualize the assistant
 const getSafeStoreContext = () => {
   const data = constatationStore.formData
   if (!data) return null
@@ -440,7 +440,7 @@ const { messages, status, error, sendMessage } = useChat({
   initialMessages: loadStoredMessages(),
 })
 
-// Persistance automatique dans localStorage
+// Automatic persistence in localStorage
 watch(
   messages,
   (newMessages) => {
@@ -511,18 +511,18 @@ const toggleFeedback = async (messageId: string, type: 'up' | 'down') => {
   }
 }
 
-// Suggestions dynamiques contextuelles selon la dernière réponse de l'assistant
+// Dynamic contextual follow-ups based on the last assistant response
 const dynamicFollowUps = computed<string[]>(() => {
   if (messages.value.length === 0) return []
   const lastAssistant = [...messages.value].reverse().find((m) => m.role === 'assistant')
   if (!lastAssistant) return []
 
-  // Ne pas encombrer avec des suggestions si un outil (brouillon de constatation) est déjà proposé
+  // Avoid cluttering with follow-up suggestions if a draft action tool is already available
   if (getToolCalls(lastAssistant).length > 0) return []
 
   const content = getMessageText(lastAssistant).toLowerCase()
 
-  // Détection du sujet abordé pour proposer des questions de rebond pertinentes
+  // Topic detection to provide relevant follow-up questions
   if (content.includes('amende') || content.includes('astreinte') || content.includes('15 000')) {
     return [
       'Comment notifier l’amende au contrevenant ?',
@@ -558,14 +558,14 @@ const dynamicFollowUps = computed<string[]>(() => {
     ]
   }
 
-  // Fallbacks légers selon la route
+  // Generic fallbacks according to current route
   return [
     'Quelle est la marche à suivre immédiate ?',
     'Existe-t-il un modèle d\'arrêté municipal ?',
   ]
 })
 
-// Message de bienvenue adaptatif selon le profil utilisateur
+// Adaptive welcome message based on user profile and current page
 const proceduresCount = computed(() => userStore.userInfo?.procedures_count ?? 0)
 
 const welcomeMessage = computed(() => {
@@ -579,11 +579,11 @@ const welcomeMessage = computed(() => {
   return "Bonjour ! Je suis à vos côtés pour vous assister dans l'avancement de vos procédures, l'évaluation des amendes administratives et la sécurisation juridique de vos dossiers."
 })
 
-// Suggestions rapides contextuelles selon le profil (primo-utilisateur vs dossiers en cours) et la route
+// Contextual quick prompts based on user profile (first-time vs existing procedures) and route
 const quickPrompts = computed(() => {
   const currentPath = route.path
 
-  // Si on est sur une page de suivi de procédure
+  // On procedure follow-up pages
   if (currentPath.includes('suivi-procedure')) {
     return [
       'Quelle est la prochaine étape à réaliser sur ce dossier ?',
@@ -592,7 +592,7 @@ const quickPrompts = computed(() => {
     ]
   }
 
-  // Si on est sur le formulaire de constatation
+  // On constatation form pages
   if (currentPath.includes('constatation')) {
     return [
       'Quels sont les éléments obligatoires du constat ?',
@@ -601,7 +601,7 @@ const quickPrompts = computed(() => {
     ]
   }
 
-  // Si l'utilisateur est connecté mais n'a AUCUNE procédure (primo-utilisateur)
+  // First-time user with 0 procedures
   if (proceduresCount.value === 0) {
     return [
       'J’ai constaté un dépôt sur ma commune : comment agir ?',
@@ -611,7 +611,7 @@ const quickPrompts = computed(() => {
     ]
   }
 
-  // Utilisateur avec des procédures existantes
+  // Returning user with existing procedures
   return [
     'Où en sont mes dossiers et quelles sont les priorités ?',
     'Comment identifier un véhicule sans police municipale ?',
@@ -651,7 +651,7 @@ const handleSubmitMessage = () => {
   if (!text || status.value === 'streaming') return
 
   inputMessage.value = ''
-  // Forcer la remise à zéro de l'état "scrolled up" lors de l'envoi d'un message
+  // Reset scrolled up state on message send
   isUserScrolledUp.value = false
   sendMessage({ text })
   scrollToBottom(true, 'smooth')
@@ -667,7 +667,7 @@ const getMessageText = (message: any): string => {
       .map((p: any) => p.text)
       .join('')
   }
-  // Nettoyer les balises techniques résiduelles vLLM / DeepSeek tool-calls
+  // Clean residual technical tags from vLLM / DeepSeek tool-calls
   if (text) {
     text = text.replace(/<\|[A-Z0-9_]+\|[^>]*>/gi, '').replace(/<\/\|[A-Z0-9_]+\|[^>]*>/gi, '').trim()
   }
@@ -764,7 +764,7 @@ const applyDraftAndRedirect = async (inputData: any, toolCallId?: string) => {
   isApplyingDraft.value = true
 
   try {
-    // 1. Fusion non destructive : préserver les données existantes de l'utilisateur
+    // 1. Non-destructive merge: preserve existing user inputs where appropriate
     if (inputData.commune && (!constatationStore.formData.commune || !isOnConstatationForm.value)) {
       constatationStore.formData.commune = inputData.commune
     } else if (inputData.commune && !constatationStore.formData.commune) {
@@ -788,14 +788,14 @@ const applyDraftAndRedirect = async (inputData: any, toolCallId?: string) => {
       }
     }
 
-    // Fusion de listes (typesDepot) : union sans doublons pour ne pas décocher ce que l'usager a déjà sélectionné
+    // List merge (typesDepot): union without duplicates to preserve already selected options
     if (Array.isArray(inputData.typesDepot) && inputData.typesDepot.length > 0) {
       const existingTypes = new Set(constatationStore.formData.typesDepot || [])
       inputData.typesDepot.forEach((t: any) => existingTypes.add(t))
       constatationStore.formData.typesDepot = Array.from(existingTypes)
     }
 
-    // Fusion de listes (natureTerrain) : union sans doublons
+    // List merge (natureTerrain): union without duplicates
     if (Array.isArray(inputData.natureTerrain) && inputData.natureTerrain.length > 0) {
       const existingTerrain = new Set(constatationStore.formData.natureTerrain || [])
       inputData.natureTerrain.forEach((t: any) => existingTerrain.add(t))
@@ -816,14 +816,14 @@ const applyDraftAndRedirect = async (inputData: any, toolCallId?: string) => {
       }
     }
 
-    // Marquer l'outil comme appliqué
+    // Mark tool as applied
     if (toolCallId) {
       appliedDraftsMap.value[toolCallId] = true
     }
 
-    // 2. Comportement différencié selon que l'on est DÉJÀ sur la page du formulaire ou non :
+    // 2. Differentiated navigation behavior based on whether user is already on the form
     if (isOnConstatationForm.value) {
-      // Déjà sur la page du formulaire : on autosauvegarde si commune présente sans recharger ni rediriger
+      // Already on the form page: auto-save if commune is present without page reload
       if (userStore.isAuthenticated && constatationStore.formData.commune) {
         try {
           await constatationStore.autoSave()
@@ -831,10 +831,9 @@ const applyDraftAndRedirect = async (inputData: any, toolCallId?: string) => {
           console.warn('Auto-save encountered an error while updating form from chat:', err)
         }
       }
-      // On ne ferme pas brutalement le drawer pour laisser l'utilisateur voir le retour visuel,
-      // mais les données sont déjà répercutées en temps réel dans le formulaire.
+      // Keep drawer open for visual confirmation while real-time form reflects values
     } else {
-      // Pas encore sur le formulaire : sauvegarder et naviguer vers /constatation
+      // Not yet on the form: save and navigate to /constatation
       let targetPath = '/constatation'
       if (userStore.isAuthenticated && constatationStore.formData.commune) {
         try {
@@ -858,7 +857,7 @@ const applyDraftAndRedirect = async (inputData: any, toolCallId?: string) => {
 const scrollToBottom = (force = false, behavior: ScrollBehavior = 'auto') => {
   nextTick(() => {
     if (!chatBodyRef.value) return
-    // Si l'utilisateur est remonté pour lire et qu'on ne force pas, ne pas écraser sa position de lecture
+    // If user scrolled up to read and force is not set, respect scroll position
     if (isUserScrolledUp.value && !force) return
 
     if (behavior === 'smooth') {
@@ -876,7 +875,7 @@ const scrollToBottom = (force = false, behavior: ScrollBehavior = 'auto') => {
   })
 }
 
-// Auto-scroll on new message / streaming updates (respecte la lecture de l'utilisateur)
+// Auto-scroll on new message / streaming updates
 watch(
   () => [messages.value, status.value],
   () => {

@@ -3,7 +3,7 @@ import logging
 import re
 import time
 import uuid
-from typing import Any, Dict, Generator, List, Optional
+from typing import Any, Dict, List, Optional
 import requests
 from django.conf import settings
 from backend.chatbot.context import scrub_pii
@@ -16,7 +16,10 @@ TOOL_PROPOSE_CONSTATATION_DRAFT = {
     "type": "function",
     "function": {
         "name": "propose_constatation_draft",
-        "description": "Propose à l'utilisateur de pré-remplir un brouillon de constatation sur Stop Dépôt Sauvage.",
+        "description": (
+            "Propose à l'utilisateur de pré-remplir un brouillon de constatation "
+            "sur Stop Dépôt Sauvage."
+        ),
         "parameters": {
             "type": "object",
             "properties": {
@@ -26,7 +29,9 @@ TOOL_PROPOSE_CONSTATATION_DRAFT = {
                 },
                 "localisationDepot": {
                     "type": "string",
-                    "description": "Précision sur le lieu du dépôt (rue, chemin, lieu-dit, coordonnées)",
+                    "description": (
+                        "Précision sur le lieu du dépôt (rue, chemin, lieu-dit, coordonnées)"
+                    ),
                 },
                 "volumeDepot": {
                     "type": "string",
@@ -46,7 +51,10 @@ TOOL_PROPOSE_CONSTATATION_DRAFT = {
                 "typesDepot": {
                     "type": "array",
                     "items": {"type": "string"},
-                    "description": "Types de déchets constatés (ex: Gravats, Encombrants, Pneus, Déchets verts, Amiante, etc.)",
+                    "description": (
+                        "Types de déchets constatés "
+                        "(ex: Gravats, Encombrants, Pneus, Déchets verts, Amiante, etc.)"
+                    ),
                 },
                 "natureTerrain": {
                     "type": "array",
@@ -173,7 +181,9 @@ class MockAIAdapter(BaseAIAdapter):
                 volume = "Moins de 1m3"
                 volume_m3 = 0.5
 
-            commune_match = re.search(r"(?:à|a|sur|commune de)\s+([A-ZÀ-Ÿ][a-zà-ÿ\-]+)", last_user_message)
+            commune_match = re.search(
+                r"(?:à|a|sur|commune de)\s+([A-ZÀ-Ÿ][a-zà-ÿ\-]+)", last_user_message
+            )
             commune = commune_match.group(1) if commune_match else ""
 
             tool_call_id = f"call_{uuid.uuid4().hex[:10]}"
@@ -185,7 +195,9 @@ class MockAIAdapter(BaseAIAdapter):
                 "typesDepot": types_depot,
                 "natureTerrain": ["domaine public"],
                 "auteurIdentifie": False,
-                "precisionsDepot": f"Signalé via l'assistant contextuel : {last_user_message.strip()}",
+                "precisionsDepot": (
+                    f"Signalé via l'assistant contextuel : {last_user_message.strip()}"
+                ),
             }
 
             yield sse_event(
@@ -197,14 +209,18 @@ class MockAIAdapter(BaseAIAdapter):
                 }
             )
 
-        elif "délai" in query or "delai" in query or "procédure" in query or "procedure" in query:
+        elif any(kw in query for kw in ("délai", "delai", "procédure", "procedure")):
             text = (
-                "Pour les dépôts sauvages, deux voies de procédure sont mobilisables par le maire ou l'agent assermenté :\n\n"
+                "Pour les dépôts sauvages, deux voies de procédure sont mobilisables par le "
+                "maire ou l'agent assermenté :\n\n"
                 "1. **Voie administrative (L. 541-3 C. Env.)** :\n"
-                "- Transmission d'une mise en demeure avec un délai contradictoire (généralement 10 jours ouvrés pour formuler des observations).\n"
-                "- Si le dépôt n'est pas évacué : arrêté d'astreinte journalière (jusqu'à 1500 €/jour) ou amende administrative (jusqu'à 15 000 €).\n\n"
+                "- Transmission d'une mise en demeure avec un délai contradictoire "
+                "(généralement 10 jours ouvrés pour formuler des observations).\n"
+                "- Si le dépôt n'est pas évacué : arrêté d'astreinte journalière "
+                "(jusqu'à 1500 €/jour) ou amende administrative (jusqu'à 15 000 €).\n\n"
                 "2. **Voie pénale (R. 635-8 du Code pénal)** :\n"
-                "- Rédaction d'un Procès-Verbal d'infraction, transmis au Procureur de la République dans les 5 jours de sa clôture.\n\n"
+                "- Rédaction d'un Procès-Verbal d'infraction, transmis au Procureur de la "
+                "République dans les 5 jours de sa clôture.\n\n"
                 "Avez-vous déjà relevé des indices ou identifié le contrevenant ?"
             )
             yield from stream_text_words(text_id, text)
@@ -216,7 +232,7 @@ class MockAIAdapter(BaseAIAdapter):
                 "Je peux vous accompagner pour :\n"
                 "- Connaître les règles et délais des procédures administratives et pénales.\n"
                 "- Vérifier les pouvoirs de police du maire ou des agents assermentés.\n"
-                "- **Préparer une constatation** et générer votre brouillon en quelques secondes.\n\n"
+                "- **Préparer une constatation** et générer un brouillon en quelques secondes.\n\n"
                 "Décrivez-moi le dépôt constaté ou posez-moi votre question juridique !"
             )
             yield from stream_text_words(text_id, text)
@@ -256,11 +272,20 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
         if context:
             ctx_desc = []
             if profil := context.get("profil_usager"):
-                ctx_desc.append(f"Profil usager : {profil} ({context.get('procedures_count', 0)} procédure(s) enregistrée(s))")
+                ctx_desc.append(
+                    f"Profil usager : {profil} "
+                    f"({context.get('procedures_count', 0)} procédure(s) enregistrée(s))"
+                )
             if current_path := context.get("current_path") or context.get("currentPath"):
                 ctx_desc.append(f"Page active : {current_path}")
             if dossier_actif := context.get("dossier_actif"):
-                ctx_desc.append(f"Dossier consulté à l'écran #{dossier_actif.get('id')} : étape '{dossier_actif.get('etape_metier')}', volume {dossier_actif.get('volume_estime')}, auteur identifié : {dossier_actif.get('auteur_identifie')}, statut AR : {dossier_actif.get('ar_statut')}")
+                ctx_desc.append(
+                    f"Dossier consulté à l'écran #{dossier_actif.get('id')} : "
+                    f"étape '{dossier_actif.get('etape_metier')}', "
+                    f"volume {dossier_actif.get('volume_estime')}, "
+                    f"auteur identifié : {dossier_actif.get('auteur_identifie')}, "
+                    f"statut AR : {dossier_actif.get('ar_statut')}"
+                )
             elif form_context := context.get("form_context"):
                 form_fields = []
                 if commune := form_context.get("commune"):
@@ -274,30 +299,45 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
                 if terrain := form_context.get("natureTerrain"):
                     form_fields.append(f"Terrain : {', '.join(terrain)}")
                 if form_fields:
-                    ctx_desc.append(f"Formulaire de constatation en cours de saisie sur la page : {'; '.join(form_fields)} (À préserver et enrichir sans écraser)")
+                    ctx_desc.append(
+                        "Formulaire de constatation en cours de saisie sur la page : "
+                        f"{'; '.join(form_fields)} (À préserver et enrichir sans écraser)"
+                    )
             elif dossiers := context.get("dossiers_recents"):
-                recap_dossiers = ", ".join(f"#{d.get('id')} ({d.get('etape_metier')})" for d in dossiers[:3])
+                recap_dossiers = ", ".join(
+                    f"#{d.get('id')} ({d.get('etape_metier')})" for d in dossiers[:3]
+                )
                 ctx_desc.append(f"Historique passif des dossiers : {recap_dossiers}")
 
             if ctx_desc:
                 openai_messages.append(
                     {
                         "role": "system",
-                        "content": "Contexte de session (Information d'arrière-plan passive - NE PAS en parler sauf demande expresse de l'usager) : " + " | ".join(ctx_desc),
+                        "content": (
+                            "Contexte de session (Information d'arrière-plan passive - "
+                            "NE PAS en parler sauf demande expresse de l'usager) : "
+                            + " | ".join(ctx_desc)
+                        ),
                     }
                 )
 
-        # Recherche documentaire ciblée sur les 2 derniers messages utilisateur avec concaténation multi-tours
+        # Targeted knowledge retrieval on the last 2 user messages (multi-turn)
         user_queries = []
         for m in reversed(messages):
             if m.get("role") == "user":
                 c = m.get("content", "")
                 if not c and isinstance(m.get("parts"), list):
-                    c = "".join(p.get("text", "") for p in m.get("parts", []) if isinstance(p, dict) and p.get("type") == "text")
+                    c = "".join(
+                        p.get("text", "")
+                        for p in m.get("parts", [])
+                        if isinstance(p, dict) and p.get("type") == "text"
+                    )
                 if isinstance(c, str) and c.strip():
                     user_queries.append(c.strip())
                 elif isinstance(c, list):
-                    joined = " ".join(p.get("text", "") for p in c if isinstance(p, dict)).strip()
+                    joined = " ".join(
+                        p.get("text", "") for p in c if isinstance(p, dict)
+                    ).strip()
                     if joined:
                         user_queries.append(joined)
                 if len(user_queries) >= 2:
@@ -315,9 +355,11 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
                             f"### Source : {doc['source']} ({doc['title']})\n{doc['content']}"
                         )
                     rag_system_message = (
-                        "DOCUMENTS OFFICIELS ET JURIDIQUES DE RÉFÉRENCE (À respecter impérativement) :\n\n"
+                        "DOCUMENTS OFFICIELS ET JURIDIQUES DE RÉFÉRENCE "
+                        "(À respecter impérativement) :\n\n"
                         + "\n\n---\n\n".join(rag_context_blocks)
-                        + "\n\nCONSIGNE : Utilise ces documents officiels pour formuler une réponse juridiquement exacte."
+                        + "\n\nCONSIGNE : Utilise ces documents officiels pour formuler "
+                        "une réponse juridiquement exacte."
                     )
                     openai_messages.append(
                         {"role": "system", "content": rag_system_message}
@@ -329,7 +371,7 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
             role = msg.get("role", "user")
             content = msg.get("content", "")
             if not content and isinstance(msg.get("parts"), list):
-                # Vercel AI SDK v4 format: message content is in parts: [{type: 'text', text: '...'}]
+                # Vercel AI SDK v4 format: message content is in parts
                 content = "".join(
                     p.get("text", "")
                     for p in msg.get("parts", [])
@@ -344,24 +386,36 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
 
             content_str = str(content).strip() if content is not None else ""
             if role == "user":
-                # Épuration anti-PII stricte avant toute transmission à l'API LLM
+                # Strict Zero-PII scrubbing before sending payload to LLM API
                 content_str = scrub_pii(content_str)
-
 
             # Check if this message contained a tool call or tool result
             tool_calls = msg.get("tool_calls")
             if not tool_calls and isinstance(msg.get("parts"), list):
                 # Extract tool calls from Vercel AI SDK parts format if present
                 for part in msg.get("parts", []):
-                    if isinstance(part, dict) and part.get("type") in ("tool-input-available", "tool-call"):
-                        tool_calls = [{
-                            "id": part.get("toolCallId") or part.get("id") or f"call_{uuid.uuid4().hex[:8]}",
-                            "type": "function",
-                            "function": {
-                                "name": part.get("toolName") or part.get("name", ""),
-                                "arguments": json.dumps(part.get("input") or part.get("args") or {}, ensure_ascii=False),
+                    if isinstance(part, dict) and part.get("type") in (
+                        "tool-input-available",
+                        "tool-call",
+                    ):
+                        tool_call_id = (
+                            part.get("toolCallId")
+                            or part.get("id")
+                            or f"call_{uuid.uuid4().hex[:8]}"
+                        )
+                        tool_calls = [
+                            {
+                                "id": tool_call_id,
+                                "type": "function",
+                                "function": {
+                                    "name": part.get("toolName") or part.get("name", ""),
+                                    "arguments": json.dumps(
+                                        part.get("input") or part.get("args") or {},
+                                        ensure_ascii=False,
+                                    ),
+                                },
                             }
-                        }]
+                        ]
                         break
 
             # Albert / vLLM requires:
@@ -420,7 +474,12 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
                 url, headers=headers, json=payload, stream=True, timeout=self.timeout
             )
             if not resp.ok:
-                logger.error("LLM API returned error %s: %s | Payload sent: %s", resp.status_code, resp.text, json.dumps(payload, ensure_ascii=False))
+                logger.error(
+                    "LLM API returned error %s: %s | Payload sent: %s",
+                    resp.status_code,
+                    resp.text,
+                    json.dumps(payload, ensure_ascii=False),
+                )
             resp.raise_for_status()
         except Exception as e:
             logger.exception("Error during LLM request to %s: %s", url, e)
@@ -456,7 +515,7 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
                 delta = choice.get("delta", {})
 
                 if content_delta := delta.get("content"):
-                    # Filtrage préventif des balises vLLM/DeepSeek d'appel d'outil
+                    # Preventive filtering of residual vLLM / DeepSeek tool-call tags
                     if "</｜DSML｜" in content_delta or "<｜DSML｜" in content_delta:
                         continue
                     if self.debug_mode:
@@ -486,10 +545,13 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
                 logger.warning("Error decoding LLM chunk: %s", e)
                 continue
 
-        # Si aucun texte n'a été produit (ex: le LLM a émis directement un tool_call sans texte),
-        # émettre une phrase d'accompagnement pour que la bulle de chat ne reste pas vide.
+        # If no text chunk was produced (e.g. LLM directly emitted a tool_call),
+        # emit an introductory sentence so the UI chat bubble is not empty.
         if not accumulated_text_chunks:
-            intro_msg = "J'ai préparé votre brouillon de constatation avec les éléments disponibles. Vous pouvez le compléter et l'enregistrer ci-dessous :"
+            intro_msg = (
+                "J'ai préparé votre brouillon de constatation avec les éléments disponibles. "
+                "Vous pouvez le compléter et l'enregistrer ci-dessous :"
+            )
             yield sse_event(
                 {"type": "text-delta", "id": text_id, "delta": intro_msg}
             )
@@ -505,7 +567,11 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
                 "=====================================================================",
                 self.model,
                 "".join(accumulated_text_chunks),
-                json.dumps(accumulated_tool_call, indent=2, ensure_ascii=False) if accumulated_tool_call else "None",
+                (
+                    json.dumps(accumulated_tool_call, indent=2, ensure_ascii=False)
+                    if accumulated_tool_call
+                    else "None"
+                ),
             )
 
         if accumulated_tool_call and accumulated_tool_call.get("name"):
@@ -523,11 +589,11 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
                 }
             )
         else:
-            # Fallback de secours : si le LLM a cité l'outil propose_constatation_draft dans son texte
-            # ou s'il s'agit manifestement d'une constatation de dépôt sans appel formel d'outil émis par le provider
+            # Fallback: if the LLM mentioned the tool propose_constatation_draft in its output
+            # without emitting a formal OpenAI tool_call structure
             full_response_text = "".join(accumulated_text_chunks)
             if "propose_constatation_draft" in full_response_text:
-                # Extraire ou déduire les paramètres du message utilisateur et du texte généré
+                # Extract or infer parameters from the conversation and generated response
                 last_user_query = ""
                 for msg in reversed(messages):
                     if msg.get("role") == "user":
@@ -545,7 +611,11 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
                     types_depot.append("Amiante")
                 if "vert" in combined_low:
                     types_depot.append("Déchets verts")
-                if "véhicule" in combined_low or "vhu" in combined_low or "voiture" in combined_low or "épave" in combined_low:
+                has_vehicle = any(
+                    kw in combined_low
+                    for kw in ("véhicule", "vhu", "voiture", "épave")
+                )
+                if has_vehicle:
                     types_depot.append("Véhicule / VHU")
                 if not types_depot:
                     types_depot = ["Encombrants"]
@@ -555,7 +625,11 @@ class OpenAICompatibleAIAdapter(BaseAIAdapter):
                 if "10" in combined_low or "important" in combined_low:
                     volume = "Entre 3 et 10m3"
                     volume_m3 = 6.0
-                elif "moins de 1" in combined_low or "petit" in combined_low or "sac" in combined_low:
+                elif (
+                    "moins de 1" in combined_low
+                    or "petit" in combined_low
+                    or "sac" in combined_low
+                ):
                     volume = "Moins de 1m3"
                     volume_m3 = 0.5
 
@@ -582,7 +656,7 @@ def get_ai_adapter():
     Instantiate the AI adapter.
     Priority: ChatbotConfig (Database Singleton) > Django settings / Environment variables.
     """
-    # Récupération de la configuration en base de données
+    # Retrieve configuration from the database singleton
     db_config = None
     try:
         db_config = ChatbotConfig.get_solo()

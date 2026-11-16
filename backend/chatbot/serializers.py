@@ -3,7 +3,7 @@ from backend.chatbot.models import ChatbotConfig, ChatbotConversation, get_defau
 
 
 class ChatbotConfigSerializer(serializers.ModelSerializer):
-    # Champ calculé indiquant si une clé est configurée (sans exposer la clé complète)
+    # Computed boolean indicating whether an API key is configured without exposing it
     has_api_key = serializers.SerializerMethodField()
     api_key_masked = serializers.SerializerMethodField()
     default_system_prompt = serializers.SerializerMethodField()
@@ -41,8 +41,8 @@ class ChatbotConfigSerializer(serializers.ModelSerializer):
         return get_default_system_prompt()
 
     def update(self, instance, validated_data):
-        # Si la clé n'est pas passée ou laissée vide alors qu'il y en avait déjà une et qu'on ne veut pas l'écraser :
-        # Note: si on transmet "" expressément, on autorise le reset de la clé.
+        # If api_key is not passed or empty when updating, preserve existing key.
+        # Note: an explicit empty string "" can be used to reset the key if desired.
         return super().update(instance, validated_data)
 
 
@@ -105,4 +105,3 @@ class ChatbotConversationListSerializer(serializers.ModelSerializer):
 class ChatbotConversationDetailSerializer(ChatbotConversationListSerializer):
     class Meta(ChatbotConversationListSerializer.Meta):
         fields = ChatbotConversationListSerializer.Meta.fields + ["messages"]
-

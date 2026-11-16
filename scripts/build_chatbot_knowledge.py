@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-Script d'extraction et de structuration documentaire pour le Chatbot Stop Dépôt Sauvage.
-Sources gérées :
-1. Modèles ODT officiels (backend/doc_maker/doc_templates/*.odt) -> Markdown
-2. FAQ et Articles Blog (extraits de la prod Scalingo) -> Markdown nettoyé et structuré
+Documentation extraction and structuring script for the Stop Dépôt Sauvage Chatbot.
+
+Handled sources:
+1. Official ODT templates (backend/doc_maker/doc_templates/*.odt) -> Markdown
+2. FAQs and Blog articles (extracted from Scalingo prod dump) -> Structured Markdown
 """
 
 import json
-import os
 import re
 import xml.etree.ElementTree as ET
 import zipfile
@@ -20,7 +20,7 @@ RAW_DUMP_FILE = KNOWLEDGE_DIR / "raw" / "prod_dump_faq_blog.json"
 
 
 def html_to_markdown(html_text: str) -> str:
-    """Nettoie le HTML riche TipTap / Wagtail en Markdown lisible."""
+    """Clean rich TipTap / Wagtail HTML into readable Markdown."""
     if not html_text:
         return ""
     text = html_text
@@ -41,50 +41,52 @@ def html_to_markdown(html_text: str) -> str:
     text = re.sub(r"<strong[^>]*>(.*?)</strong>", r"**\1**", text, flags=re.DOTALL)
     text = re.sub(r"<em[^>]*>(.*?)</em>", r"*\1*", text, flags=re.DOTALL)
     # Links: [text](href)
-    text = re.sub(r'<a\s+[^>]*href="([^"]+)"[^>]*>(.*?)</a>', r"[\2](\1)", text, flags=re.DOTALL)
+    text = re.sub(
+        r'<a\s+[^>]*href="([^"]+)"[^>]*>(.*?)</a>', r"[\2](\1)", text, flags=re.DOTALL
+    )
     # Strip remaining HTML tags
     text = re.sub(r"<[^>]+>", "", text)
     # Decode basic entities
-    text = text.replace("&nbsp;", " ").replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">")
+    text = (
+        text.replace("&nbsp;", " ")
+        .replace("&amp;", "&")
+        .replace("&lt;", "<")
+        .replace("&gt;", ">")
+    )
     # Clean up excessive newlines & trailing spaces
     text = re.sub(r"\n{3,}", "\n\n", text)
     return text.strip()
 
 
 def extract_odt_to_markdown(odt_path: Path, output_md_path: Path):
-    """Extrait le contenu texte structuré d'un fichier .odt."""
+    """Extract structured text content from an .odt file into Markdown."""
     print(f"Extraction ODT: {odt_path.name} -> {output_md_path.name}")
     try:
         with zipfile.ZipFile(odt_path) as z:
             content_xml = z.read("content.xml")
             tree = ET.fromstring(content_xml)
-            
-            # Namespaces ODT
-            ns = {
-                "text": "urn:oasis:names:tc:opendocument:xmlns:text:1.0",
-                "table": "urn:oasis:names:tc:opendocument:xmlns:table:1.0",
-            }
-            
+
             lines = []
             for elem in tree.iter():
                 tag = elem.tag.split("}")[-1] if "}" in elem.tag else elem.tag
                 if tag in ("p", "h"):
                     full_text = "".join(elem.itertext()).strip()
                     if full_text:
-                        # Si c'est un header
                         if tag == "h":
                             lines.append(f"\n## {full_text}\n")
                         else:
                             lines.append(full_text)
-            
+
             full_content = "\n\n".join(lines)
-            # Nettoyer les espaces multiples
             full_content = re.sub(r"[ \t]+", " ", full_content)
             full_content = re.sub(r"\n{3,}", "\n\n", full_content)
-            
+
             header = f"# Modèle officiel : {odt_path.stem.upper()}\n"
-            header += f"> Source : `{odt_path.name}` (modèle de document généré par Stop Dépôt Sauvage)\n\n"
-            
+            header += (
+                f"> Source : `{odt_path.name}` "
+                "(modèle de document généré par Stop Dépôt Sauvage)\n\n"
+            )
+
             output_md_path.parent.mkdir(parents=True, exist_ok=True)
             with open(output_md_path, "w", encoding="utf-8") as f:
                 f.write(header + full_content + "\n")
@@ -93,7 +95,7 @@ def extract_odt_to_markdown(odt_path: Path, output_md_path: Path):
 
 
 def process_dump_data():
-    """Traite les FAQ et les articles de blog depuis le dump de prod."""
+    """Process FAQs and blog articles from raw production dump."""
     if not RAW_DUMP_FILE.exists():
         print(f"Dump introuvable: {RAW_DUMP_FILE}")
         return
@@ -101,10 +103,14 @@ def process_dump_data():
     with open(RAW_DUMP_FILE, "r", encoding="utf-8") as f:
         data = json.load(f)
 
-    # 1. Traitement des FAQ
+    # 1. FAQ extraction
     faq_items = [d for d in data if d["model"] == "faq.faqitem"]
-    categories = {item["pk"]: item["fields"]["title"] for item in faq_items if item["fields"].get("is_top_level")}
-    
+    categories = {
+        item["pk"]: item["fields"]["title"]
+        for item in faq_items
+        if item["fields"].get("is_top_level")
+    }
+
     faq_by_category = {}
     for item in faq_items:
         fields = item["fields"]
@@ -112,10 +118,9 @@ def process_dump_data():
             continue
         parent_id = fields.get("parent")
         category_title = categories.get(parent_id, "Questions Générales")
-        # Nettoyage catégorie pour nom de fichier
         cat_slug = re.sub(r"[^\w\-]", "_", category_title).strip("_").lower()
         cat_slug = re.sub(r"_+", "_", cat_slug)
-        
+
         question = fields.get("title", "")
         content_blocks = fields.get("content", [])
         answer_parts = []
@@ -125,10 +130,10 @@ def process_dump_data():
             elif isinstance(block, str):
                 answer_parts.append(html_to_markdown(block))
         answer = "\n\n".join(answer_parts).strip()
-        
+
         if not answer:
             continue
-            
+
         if cat_slug not in faq_by_category:
             faq_by_category[cat_slug] = {
                 "title": category_title,
@@ -152,7 +157,7 @@ def process_dump_data():
                 f.write(f"{item['answer']}\n\n---\n\n")
         print(f"Généré FAQ: {file_path.name} ({len(cat_data['items'])} Q/R)")
 
-    # 2. Traitement des articles de blog
+    # 2. Blog articles extraction
     blog_dir = KNOWLEDGE_DIR / "blog"
     blog_dir.mkdir(parents=True, exist_ok=True)
     blog_articles = [d for d in data if d["model"] == "blog.blogarticle"]
@@ -162,12 +167,12 @@ def process_dump_data():
         slug = fields.get("slug", "article")
         summary = fields.get("summary", "")
         content_blocks = fields.get("content", [])
-        
+
         body_parts = []
         for block in content_blocks:
             if isinstance(block, dict) and block.get("type") == "rich_text":
                 body_parts.append(html_to_markdown(block.get("value", "")))
-        
+
         body = "\n\n".join(body_parts).strip()
         file_path = blog_dir / f"{slug}.md"
         with open(file_path, "w", encoding="utf-8") as f:
@@ -180,15 +185,15 @@ def process_dump_data():
 
 def main():
     print(f"Extraction des connaissances dans: {KNOWLEDGE_DIR}")
-    
-    # 1. Modèles ODT
+
+    # 1. ODT templates
     modeles_dir = KNOWLEDGE_DIR / "modeles"
     for odt_file in ODT_TEMPLATES_DIR.glob("*.odt"):
         extract_odt_to_markdown(odt_file, modeles_dir / f"{odt_file.stem}.md")
-        
-    # 2. FAQ et Blog
+
+    # 2. FAQ and Blog
     process_dump_data()
-    
+
     # 3. Custom README
     custom_dir = KNOWLEDGE_DIR / "custom"
     custom_dir.mkdir(parents=True, exist_ok=True)
@@ -198,9 +203,10 @@ def main():
             f.write(
                 "# Documents et Procédures Complémentaires\n\n"
                 "Déposez ici vos fichiers texte ou Markdown (.md ou .txt) contenant vos guides PDF "
-                "ou modèles spécifiques. Ils seront automatiquement indexés et pris en compte par le Chatbot.\n"
+                "ou modèles spécifiques. Ils seront automatiquement indexés et pris en compte "
+                "par le Chatbot.\n"
             )
-            
+
     print("Extraction et structuration terminées avec succès !")
 
 

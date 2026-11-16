@@ -12,7 +12,19 @@ urlpatterns = [
     path("chat/", ChatbotChatView.as_view(), name="chatbot-chat"),
     path("feedback/", ChatbotFeedbackView.as_view(), name="chatbot-feedback"),
     path("config/", BackofficeChatbotConfigView.as_view(), name="chatbot-config"),
-    path("test-connection/", BackofficeChatbotTestConnectionView.as_view(), name="chatbot-test-connection"),
-    path("conversations/", BackofficeChatbotConversationListView.as_view(), name="chatbot-conversations-list"),
-    path("conversations/<uuid:pk>/", BackofficeChatbotConversationDetailView.as_view(), name="chatbot-conversations-detail"),
+    path(
+        "test-connection/",
+        BackofficeChatbotTestConnectionView.as_view(),
+        name="chatbot-test-connection",
+    ),
+    path(
+        "conversations/",
+        BackofficeChatbotConversationListView.as_view(),
+        name="chatbot-conversations-list",
+    ),
+    path(
+        "conversations/<uuid:pk>/",
+        BackofficeChatbotConversationDetailView.as_view(),
+        name="chatbot-conversations-detail",
+    ),
 ]

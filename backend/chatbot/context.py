@@ -1,9 +1,8 @@
 import re
 
 from backend.constatations.models import Constatation
-from backend.procedures.models import SuiviProcedure
 
-# Patterns pour le nettoyage des PII
+# Regular expressions for scrubbing personally identifiable information (PII)
 EMAIL_REGEX = re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b")
 PHONE_REGEX = re.compile(r"\b(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}\b")
 SIRET_SIREN_REGEX = re.compile(r"\b\d{3}\s*\d{3}\s*\d{3}(?:\s*\d{5})?\b")
@@ -14,8 +13,8 @@ IMMATRICULATION_REGEX = re.compile(
 
 def scrub_pii(text):
     """
-    Supprime ou masque les informations nominatives et sensibles (emails, téléphones,
-    sirets, plaques d'immatriculation) d'un texte avant envoi au LLM.
+    Remove or mask nominative and sensitive data (emails, phone numbers,
+    SIRET/SIREN numbers, vehicle registration plates) before forwarding to LLM.
     """
     if not text or not isinstance(text, str):
         return ""
@@ -29,7 +28,8 @@ def scrub_pii(text):
 
 def _resolve_etape_metier(suivi, procedure):
     """
-    Détermine l'étape métier lisible pour l'agent (miroir des colonnes du tableau de bord).
+    Determine the human-readable procedure step for the assistant context
+    (mirrors the dashboard columns).
     """
     if procedure.is_draft:
         return "Brouillon à finaliser"
@@ -44,7 +44,7 @@ def _resolve_etape_metier(suivi, procedure):
     if not suivi:
         return "Pièces de procédure à signer"
 
-    # Vérification des étapes
+    # Check document signature status
     if not (suivi.preuves_fournies and suivi.constatation_signee and suivi.lettre_signe):
         return "Documents à signer (Rapport et/ou Lettre d'information)"
 
@@ -74,9 +74,9 @@ def _resolve_etape_metier(suivi, procedure):
 
 def build_safe_user_context(user, current_path="", form_context=None):
     """
-    Construit un dictionnaire de contexte strictement anonymisé et sécurisé (Zero-PII)
-    à destination du prompt système de l'assistant IA.
-    Prend en compte également l'état en cours du formulaire de constatation si transmis.
+    Build a strictly anonymized and safe (Zero-PII) context dictionary
+    for the AI assistant's system prompt.
+    Also incorporates the active state of the constatation form if provided.
     """
     if not user or not getattr(user, "is_authenticated", False):
         return {
@@ -89,12 +89,12 @@ def build_safe_user_context(user, current_path="", form_context=None):
     procedures_qs = Constatation.objects.filter(user=user).select_related("suivi_procedure")
     procedures_count = procedures_qs.count()
 
-    # Détection de l'ID d'un dossier actif depuis le chemin
-    # ex: /suivi-procedure/14 ou /constatation/14
+    # Detect the ID of an active procedure from the route
+    # e.g., /suivi-procedure/14 or /constatation/14
     active_id_match = re.search(r"/(?:suivi-procedure|constatation)/(\d+)", current_path or "")
     active_procedure_id = int(active_id_match.group(1)) if active_id_match else None
 
-    # Extraction des 5 dossiers les plus récents
+    # Extract up to 5 most recent procedures
     recent_procedures = list(procedures_qs.order_by("-id")[:5])
 
     dossiers_summary = []
@@ -137,7 +137,7 @@ def build_safe_user_context(user, current_path="", form_context=None):
         else "utilisateur_avec_procedures"
     )
 
-    # Nettoyage et assainissement strict Zero-PII des informations du formulaire en cours
+    # Clean and strictly sanitize form data (Zero-PII)
     safe_form_data = None
     if isinstance(form_context, dict) and form_context:
         safe_form_data = {}

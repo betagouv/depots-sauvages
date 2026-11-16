@@ -5,14 +5,16 @@ from backend.chatbot.models import ChatbotConversation
 
 
 class Command(BaseCommand):
-    help = "Supprime les conversations du chatbot plus anciennes que la durée de conservation RGPD (180 jours par défaut)."
+    help = (
+        "Purges chatbot conversations older than the GDPR retention period (180 days by default)."
+    )
 
     def add_arguments(self, parser):
         parser.add_argument(
             "--days",
             type=int,
             default=180,
-            help="Nombre de jours de conservation (défaut: 180 jours / 6 mois).",
+            help="Number of retention days (default: 180 days / 6 months).",
         )
 
     def handle(self, *args, **options):
@@ -21,6 +23,6 @@ class Command(BaseCommand):
         deleted_count, _ = ChatbotConversation.objects.filter(updated_at__lt=cutoff).delete()
         self.stdout.write(
             self.style.SUCCESS(
-                f"{deleted_count} conversation(s) du chatbot antérieure(s) à {days} jours supprimée(s)."
+                f"{deleted_count} chatbot conversation(s) older than {days} days deleted."
             )
         )

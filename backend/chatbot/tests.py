@@ -3,15 +3,15 @@ import pytest
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework import status
-from backend.chatbot.context import scrub_pii, build_safe_user_context
+from backend.chatbot.context import build_safe_user_context, scrub_pii
 from backend.constatations.models import Constatation
-from backend.procedures.models import SuiviProcedure
 
 
 def test_scrub_pii():
     text = (
         "Bonjour, je suis Jean Dupont, contactez-moi au 06 12 34 56 78 ou par "
-        "mail jean.dupont@collectivite.fr. L'auteur a la plaque AB-123-CD et SIRET 123 456 789 00012."
+        "mail jean.dupont@collectivite.fr. L'auteur a la plaque AB-123-CD "
+        "et SIRET 123 456 789 00012."
     )
     scrubbed = scrub_pii(text)
     assert "[EMAIL_MASQUÉ]" in scrubbed
@@ -154,12 +154,15 @@ def test_knowledge_retriever_search():
     retriever = get_retriever()
     assert len(retriever.documents) > 40
 
-    # Test avec synonyme ("mettre" -> amende / calculateur)
+    # Test with synonym ("mettre" -> amende / calculateur)
     results = retriever.search("combien mettre amende", top_k=2)
     assert len(results) > 0
-    assert any("amende" in doc["title"].lower() or "calculateur" in doc["content"].lower() for doc in results)
+    assert any(
+        "amende" in doc["title"].lower() or "calculateur" in doc["content"].lower()
+        for doc in results
+    )
 
-    # Test d'exclusion de la FAQ citoyenne
+    # Test exclusion of citizen FAQ
     all_sources = [d["source"] for d in retriever.documents]
     assert not any("vous_n_êtes_pas_une_collectivité" in src for src in all_sources)
 
@@ -207,12 +210,12 @@ def test_backoffice_chatbot_config_api():
 
     client = APIClient()
 
-    # Accès refusé pour user non staff
+    # Access denied for non-staff user
     client.force_authenticate(user=regular_user)
     res = client.get("/api/chatbot/config/")
     assert res.status_code == 403
 
-    # Accès autorisé pour admin
+    # Access allowed for admin
     client.force_authenticate(user=admin_user)
     res = client.get("/api/chatbot/config/")
     assert res.status_code == 200
@@ -220,7 +223,7 @@ def test_backoffice_chatbot_config_api():
     assert "default_system_prompt" in res.data
     assert "api_key" not in res.data  # write_only
 
-    # Mise à jour de la configuration
+    # Update chatbot configuration
     update_data = {
         "provider": "openrouter",
         "model": "deepseek/deepseek-chat",
@@ -253,25 +256,32 @@ def test_backoffice_chatbot_test_connection_endpoint(monkeypatch):
     config.save()
 
     User = get_user_model()
-    admin_user = User.objects.create_superuser("admin_test@example.com", "admin_test@example.com", "password")
+    admin_user = User.objects.create_superuser(
+        "admin_test@example.com", "admin_test@example.com", "password"
+    )
 
     client = APIClient()
     client.force_authenticate(user=admin_user)
 
-    # Test avec provider mock
+    # Test with mock provider
     res = client.post("/api/chatbot/test-connection/", data={"provider": "mock"}, format="json")
     assert res.status_code == 200
     assert res.data["success"] is True
     assert "Mock" in res.data["message"]
 
-    # Test sans clé API pour un provider externe
-    res = client.post("/api/chatbot/test-connection/", data={"provider": "openrouter", "api_key": ""}, format="json")
+    # Test without API key for an external provider
+    res = client.post(
+        "/api/chatbot/test-connection/",
+        data={"provider": "openrouter", "api_key": ""},
+        format="json",
+    )
     assert res.status_code == 400
     assert "clé d'API" in res.data["error"]
 
-    # Test avec simulation d'appel HTTP externe réussi
+    # Test with mock successful external HTTP call
     class MockResponse:
         status_code = 200
+
         def json(self):
             return {
                 "choices": [
@@ -309,13 +319,15 @@ def test_chatbot_debug_mode_logging(caplog):
     )
 
     with caplog.at_level(logging.INFO):
-        # Tester que le debug logge les requêtes sortantes lors d'un stream_chat
+        # Verify that debug logs outgoing requests during a stream_chat call
         class MockStreamResponse:
             ok = True
             status_code = 200
+
             def iter_lines(self):
                 yield b'data: {"choices": [{"delta": {"content": "Hello world"}}]}'
                 yield b'data: [DONE]'
+
             def raise_for_status(self):
                 pass
 
@@ -323,7 +335,9 @@ def test_chatbot_debug_mode_logging(caplog):
         orig_post = requests.post
         requests.post = lambda *args, **kwargs: MockStreamResponse()
         try:
-            generator = adapter.stream_chat(messages=[{"role": "user", "content": "Question de test"}])
+            generator = adapter.stream_chat(
+                messages=[{"role": "user", "content": "Question de test"}]
+            )
             list(generator)
         finally:
             requests.post = orig_post
@@ -337,34 +351,34 @@ def test_chatbot_debug_mode_logging(caplog):
 
 @pytest.mark.django_db
 def test_retriever_source_slugs_and_normalization():
-    """Vérifie que le retriever normalise les accents et associe les slugs officiels."""
+    """Verify that retriever normalizes accents and maps official slugs."""
     from backend.chatbot.retriever import get_retriever
 
     retriever = get_retriever()
     assert len(retriever.documents) > 50
 
-    # Recherche sur mot accentué et non-accentué
+    # Search with accented vs unaccented words
     res_accent = retriever.search("Comment rédiger un rapport ?", top_k=2)
     res_no_accent = retriever.search("comment rediger un rapport", top_k=2)
     assert len(res_accent) > 0
     assert len(res_no_accent) > 0
     assert res_accent[0]["title"] == res_no_accent[0]["title"]
 
-    # Vérification présence de l'URL sur une FAQ
+    # Verify presence of direct URL slug on FAQ chunk
     res_faq = retriever.search("Peut-on fouiller un dépôt sauvage ?", top_k=1)
     assert len(res_faq) > 0
     assert res_faq[0]["url"] == "/faq/peut-on-fouiller-un-depot-sauvage"
 
 
 def test_is_safe_external_url():
-    """Vérifie la protection SSRF contre les IP privées et réseaux internes."""
+    """Verify SSRF protection against private IPs and internal networks."""
     from backend.chatbot.views import is_safe_external_url
 
-    # URLs légitimes
+    # Valid external URLs
     assert is_safe_external_url("https://openrouter.ai/api/v1") is True
     assert is_safe_external_url("https://api.mistral.ai/v1") is True
 
-    # Tentatives SSRF (adresses locales / privées)
+    # SSRF attempts (private or loopback IPs)
     assert is_safe_external_url("http://127.0.0.1:8000/api") is False
     assert is_safe_external_url("http://localhost:8000/api") is False
     assert is_safe_external_url("http://169.254.169.254/latest/meta-data/") is False
@@ -374,7 +388,7 @@ def test_is_safe_external_url():
 
 @pytest.mark.django_db
 def test_chatbot_conversation_persistence_and_backoffice(client):
-    """Vérifie la sauvegarde avec scrub_pii, la remontée de feedback et l'API backoffice."""
+    """Verify persistence with scrub_pii, feedback transmission, and backoffice APIs."""
     import uuid
     from backend.chatbot.models import ChatbotConversation
 
@@ -382,7 +396,7 @@ def test_chatbot_conversation_persistence_and_backoffice(client):
     admin_user = User.objects.create_superuser("admin_conv@test.fr", "admin_conv@test.fr", "pass")
     agent_user = User.objects.create_user(username="agent_conv", email="agent_conv@test.fr")
 
-    # 1. Conversation initiée par un agent avec PII
+    # 1. Conversation started by public agent with PII
     client.force_login(agent_user)
     conv_id = str(uuid.uuid4())
     payload = {
@@ -397,32 +411,40 @@ def test_chatbot_conversation_persistence_and_backoffice(client):
             "currentPath": "/commencer-constatation",
         },
     }
-    res = client.post("/api/chatbot/chat/", data=json.dumps(payload), content_type="application/json")
+    res = client.post(
+        "/api/chatbot/chat/",
+        data=json.dumps(payload),
+        content_type="application/json",
+    )
     assert res.status_code == 200
-    # Consommer le stream
+    # Consume stream
     list(res.streaming_content)
 
-    # Vérification en base
+    # Database assertions
     conv = ChatbotConversation.objects.get(id=conv_id)
     assert conv.user == agent_user
     assert conv.current_path == "/commencer-constatation"
     assert conv.has_draft_proposed is True
-    # PII masquée dans les messages enregistrés
+    # Masked PII in stored conversation
     user_msg = conv.messages[0]["content"]
     assert "06 12 34 56 78" not in user_msg
     assert "[TÉL_MASQUÉ]" in user_msg
 
-    # 2. Envoi d'un feedback usager (👍)
+    # 2. Transmit user feedback (up)
     fb_payload = {
         "conversationId": conv_id,
         "feedback": "up",
     }
-    fb_res = client.post("/api/chatbot/feedback/", data=json.dumps(fb_payload), content_type="application/json")
+    fb_res = client.post(
+        "/api/chatbot/feedback/",
+        data=json.dumps(fb_payload),
+        content_type="application/json",
+    )
     assert fb_res.status_code == 200
     conv.refresh_from_db()
     assert conv.feedback == "up"
 
-    # 3. Consultation via l'API Backoffice (admin requis)
+    # 3. Query via backoffice API (staff required)
     client.force_login(admin_user)
     list_res = client.get("/api/chatbot/conversations/")
     assert list_res.status_code == 200
@@ -431,21 +453,8 @@ def test_chatbot_conversation_persistence_and_backoffice(client):
     assert list_res.data["stats"]["drafts_count"] >= 1
     assert list_res.data["stats"]["positive_count"] >= 1
 
-    # Détail d'une conversation
+    # Detail view of a conversation
     detail_res = client.get(f"/api/chatbot/conversations/{conv_id}/")
     assert detail_res.status_code == 200
     assert len(detail_res.data["messages"]) >= 2
     assert detail_res.data["user_email"] == "agent_conv@test.fr"
-
-
-
-
-
-
-
-
-
-
-
-
-

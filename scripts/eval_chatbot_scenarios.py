@@ -1,37 +1,46 @@
 #!/usr/bin/env python3
-"""Script de test et d'évaluation interactive de l'assistant IA Stop Dépôt Sauvage.
+"""Interactive evaluation and benchmark script for the Stop Dépôt Sauvage AI assistant.
 
-Permet de jouer des scénarios réalistes multi-tours face au véritable LLM configuré
-dans ChatbotConfig (ex: Albert / Mistral ou OpenAI) ou en mode interactif.
+Executes realistic multi-turn scenarios against the configured LLM
+(e.g., Albert / Mistral or OpenRouter) or in interactive mode.
 
-Usage :
+Usage:
     pipenv run python scripts/eval_chatbot_scenarios.py [--scenario SCENARIO_ID] [--interactive]
 """
 
 import argparse
 import json
 import os
-import sys
 import time
 
 import django
 
-# Initialisation Django
+# Django environment setup
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "backend.settings.local")
 django.setup()
 
-from backend.chatbot.adapters import get_ai_adapter
-from backend.chatbot.models import ChatbotConfig
+from backend.chatbot.adapters import get_ai_adapter  # noqa: E402
+from backend.chatbot.models import ChatbotConfig  # noqa: E402
 
 
 SCENARIOS = [
     {
         "id": "constatation_complete",
         "title": "Axe 1 : Dépôt important -> Collecte progressive & brouillon avec volume m3",
-        "description": "Un agent de voirie signale un dépôt important sans donner tous les détails au premier message.",
+        "description": (
+            "Un agent de voirie signale un dépôt important sans donner "
+            "tous les détails au premier message."
+        ),
         "turns": [
-            "Bonjour, on a un gros dépôt sauvage découvert ce matin sur la commune de Saint-Priest, des gravats avec du fibrociment.",
-            "C'est au bord du chemin communal des Chênes, sur le domaine public. On a estimé ça à environ une benne de 15 m3. Et en regardant dedans, on a trouvé des courriers au nom d'une entreprise du coin !",
+            (
+                "Bonjour, on a un gros dépôt sauvage découvert ce matin "
+                "sur la commune de Saint-Priest, des gravats avec du fibrociment."
+            ),
+            (
+                "C'est au bord du chemin communal des Chênes, sur le domaine public. "
+                "On a estimé ça à environ une benne de 15 m3. Et en regardant dedans, "
+                "on a trouvé des courriers au nom d'une entreprise du coin !"
+            ),
         ],
         "eval_criteria": {
             "propose_constatation": True,
@@ -45,7 +54,10 @@ SCENARIOS = [
         "title": "Axe 1 bis : Petit dépôt du quotidien (sacs, matelas) -> Brouillon < 1m3",
         "description": "Un élu trouve quelques sacs poubelles et un vieux matelas abandonnés.",
         "turns": [
-            "Un administré m'a signalé 4 sacs poubelles noirs et un vieux matelas jetés dans un fossé près de la mairie à Belleville.",
+            (
+                "Un administré m'a signalé 4 sacs poubelles noirs et un vieux matelas "
+                "jetés dans un fossé près de la mairie à Belleville."
+            ),
         ],
         "eval_criteria": {
             "propose_constatation": True,
@@ -56,9 +68,17 @@ SCENARIOS = [
     {
         "id": "orientation_contact_humain",
         "title": "Axe 2 : Cas complexe / contentieux -> Orientation équipe & webinaire",
-        "description": "Un maire est confronté à un contrevenant récalcitrant avec avocat et une situation bloquée.",
+        "description": (
+            "Un maire est confronté à un contrevenant récalcitrant avec avocat "
+            "et une situation bloquée."
+        ),
         "turns": [
-            "Bonjour. Nous avons mis en demeure un professionnel pour 50 m3 de déchets, mais son avocat conteste la procédure administrative et menace d'attaquer la commune au tribunal administratif. La gendarmerie refuse de prendre la plainte. Que faire ?",
+            (
+                "Bonjour. Nous avons mis en demeure un professionnel pour 50 m3 de déchets, "
+                "mais son avocat conteste la procédure administrative et menace d'attaquer "
+                "la commune au tribunal administratif. La gendarmerie refuse de prendre "
+                "la plainte. Que faire ?"
+            ),
         ],
         "eval_criteria": {
             "mentions_contact": "/contact",
@@ -68,9 +88,15 @@ SCENARIOS = [
     {
         "id": "pedagogie_sources_reelles",
         "title": "Axe 3 : Pédagogie juridique -> Sources réelles sans hallucination",
-        "description": "Un garde champêtre demande si on a le droit d'ouvrir les sacs pour trouver des preuves.",
+        "description": (
+            "Un garde champêtre demande si on a le droit d'ouvrir les sacs "
+            "pour trouver des preuves."
+        ),
         "turns": [
-            "Est-ce que j'ai légalement le droit de fouiller des sacs poubelles pour chercher des factures ou des lettres ?",
+            (
+                "Est-ce que j'ai légalement le droit de fouiller des sacs poubelles "
+                "pour chercher des factures ou des lettres ?"
+            ),
             "Quelles sont vos sources officielles sur ce point ?",
         ],
         "eval_criteria": {
@@ -81,9 +107,15 @@ SCENARIOS = [
     {
         "id": "calculateur_et_amende",
         "title": "Axe 3 bis : Évaluation de l'amende administrative et barème municipal",
-        "description": "Un secrétaire de mairie demande si le conseil municipal peut voter un tarif fixe de 500 € par dépôt.",
+        "description": (
+            "Un secrétaire de mairie demande si le conseil municipal peut voter "
+            "un tarif fixe de 500 € par dépôt."
+        ),
         "turns": [
-            "Notre conseil municipal veut voter un barème fixe de 500 € pour tout dépôt sauvage dans la commune. Est-ce légal et comment calculer l'amende ?",
+            (
+                "Notre conseil municipal veut voter un barème fixe de 500 € pour tout dépôt "
+                "sauvage dans la commune. Est-ce légal et comment calculer l'amende ?"
+            ),
         ],
         "eval_criteria": {
             "mentions_individualisation": True,
@@ -110,7 +142,6 @@ def run_scenario(scenario: dict, adapter, delay: float = 0.5):
 
         print(f"🤖 [Tour {turn_idx}] Assistant IA :")
         assistant_content = ""
-        turn_tools = []
 
         try:
             for raw_event in adapter.stream_chat(messages=messages):
@@ -131,10 +162,12 @@ def run_scenario(scenario: dict, adapter, delay: float = 0.5):
                         assistant_content += chunk
                         print(chunk, end="", flush=True)
                     elif evt_type == "tool-input-available":
-                        turn_tools.append(event)
                         total_tools_called.append(event)
                         print(f"\n   ⚙️ [TOOL CALL DÉTECTÉ] {event.get('toolName')}:")
-                        print(f"      {json.dumps(event.get('input', {}), indent=6, ensure_ascii=False)}")
+                        tool_input_json = json.dumps(
+                            event.get("input", {}), indent=6, ensure_ascii=False
+                        )
+                        print(f"      {tool_input_json}")
         except Exception as e:
             print(f"\n❌ Erreur lors de l'appel LLM : {e}")
 
@@ -142,42 +175,60 @@ def run_scenario(scenario: dict, adapter, delay: float = 0.5):
         messages.append({"role": "assistant", "content": assistant_content})
         time.sleep(delay)
 
-    # Analyse des critères
+    # Evaluate criteria
     print("📋 ÉVALUATION DU SCÉNARIO :")
     crit = scenario.get("eval_criteria", {})
     all_text = " ".join(m["content"] for m in messages if m["role"] == "assistant")
 
     if crit.get("propose_constatation"):
-        has_tool = any(t.get("toolName") == "propose_constatation_draft" for t in total_tools_called)
+        has_tool = any(
+            t.get("toolName") == "propose_constatation_draft"
+            for t in total_tools_called
+        )
         status = "✅ OK" if has_tool else "⚠️ Non détecté"
         print(f"  - Déclenchement brouillon de constatation : {status}")
 
         if has_tool and "volume_m3_expected" in crit:
-            last_draft = [t for t in total_tools_called if t.get("toolName") == "propose_constatation_draft"][-1]
+            last_draft = [
+                t for t in total_tools_called
+                if t.get("toolName") == "propose_constatation_draft"
+            ][-1]
             vol = last_draft.get("input", {}).get("volumeM3")
             expected_vol = crit["volume_m3_expected"]
-            v_status = "✅ OK" if vol == expected_vol else f"⚠️ Trouvé {vol} m³, attendu {expected_vol} m³"
+            v_status = (
+                "✅ OK"
+                if vol == expected_vol
+                else f"⚠️ Trouvé {vol} m³, attendu {expected_vol} m³"
+            )
             print(f"  - Précision volume m³ : {v_status}")
 
     if "mentions_contact" in crit:
         has_c = crit["mentions_contact"] in all_text
-        print(f"  - Orientation vers contact ({crit['mentions_contact']}) : {'✅ OK' if has_c else '⚠️ Absent'}")
+        c_status = "✅ OK" if has_c else "⚠️ Absent"
+        print(f"  - Orientation vers contact ({crit['mentions_contact']}) : {c_status}")
 
     if "mentions_rdv" in crit:
         has_r = crit["mentions_rdv"] in all_text
-        print(f"  - Orientation vers webinaire ({crit['mentions_rdv']}) : {'✅ OK' if has_r else '⚠️ Absent'}")
+        r_status = "✅ OK" if has_r else "⚠️ Absent"
+        print(f"  - Orientation vers webinaire ({crit['mentions_rdv']}) : {r_status}")
 
     if "mentions_calculateur" in crit:
         has_calc = crit["mentions_calculateur"] in all_text
-        print(f"  - Mention du calculateur (/calculateur) : {'✅ OK' if has_calc else '⚠️ Absent'}")
+        calc_status = "✅ OK" if has_calc else "⚠️ Absent"
+        print(f"  - Mention du calculateur (/calculateur) : {calc_status}")
 
     if "expected_url_substr" in crit:
         has_faq = crit["expected_url_substr"] in all_text
-        print(f"  - Lien officiel vérifié ({crit['expected_url_substr']}) : {'✅ OK' if has_faq else '⚠️ Absent'}")
+        faq_status = "✅ OK" if has_faq else "⚠️ Absent"
+        print(f"  - Lien officiel vérifié ({crit['expected_url_substr']}) : {faq_status}")
 
     if "no_hallucinated_domains" in crit:
         hallucinated = [d for d in crit["no_hallucinated_domains"] if d in all_text]
-        h_status = "✅ Aucun domaine fictif" if not hallucinated else f"❌ Hallucination détectée : {hallucinated}"
+        h_status = (
+            "✅ Aucun domaine fictif"
+            if not hallucinated
+            else f"❌ Hallucination détectée : {hallucinated}"
+        )
         print(f"  - Absence de faux domaines : {h_status}")
 
 
@@ -224,16 +275,26 @@ def run_interactive(adapter):
                     assistant_content += chunk
                     print(chunk, end="", flush=True)
                 elif event.get("type") == "tool-input-available":
-                    print(f"\n   ⚙️ [TOOL CALL] {event.get('toolName')} : {json.dumps(event.get('input', {}), ensure_ascii=False)}")
+                    tool_json = json.dumps(event.get("input", {}), ensure_ascii=False)
+                    print(f"\n   ⚙️ [TOOL CALL] {event.get('toolName')} : {tool_json}")
 
         print("\n")
         messages.append({"role": "assistant", "content": assistant_content})
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Évaluation de l'assistant IA Stop Dépôt Sauvage sur des scénarios terrain.")
-    parser.add_argument("--scenario", choices=[s["id"] for s in SCENARIOS] + ["all"], default="all", help="Identifiant du scénario à exécuter")
-    parser.add_argument("--interactive", action="store_true", help="Lancer en mode conversationnel libre")
+    parser = argparse.ArgumentParser(
+        description="Benchmark and evaluate Stop Dépôt Sauvage AI assistant on field scenarios."
+    )
+    parser.add_argument(
+        "--scenario",
+        choices=[s["id"] for s in SCENARIOS] + ["all"],
+        default="all",
+        help="Identifiant du scénario à exécuter",
+    )
+    parser.add_argument(
+        "--interactive", action="store_true", help="Lancer en mode conversationnel libre"
+    )
     args = parser.parse_args()
 
     cfg = ChatbotConfig.get_solo()
@@ -243,7 +304,11 @@ def main():
     if args.interactive:
         run_interactive(adapter)
     else:
-        to_run = SCENARIOS if args.scenario == "all" else [s for s in SCENARIOS if s["id"] == args.scenario]
+        to_run = (
+            SCENARIOS
+            if args.scenario == "all"
+            else [s for s in SCENARIOS if s["id"] == args.scenario]
+        )
         for s in to_run:
             run_scenario(s, adapter)
 

@@ -44,7 +44,10 @@ class ChatbotConfig(SingletonModel):
         blank=True,
         default="",
         verbose_name="Modèle LLM",
-        help_text="Nom/identifiant du modèle (ex: deepseek/deepseek-v4-flash-latest, mistral-large-latest).",
+        help_text=(
+            "Nom/identifiant du modèle "
+            "(ex: deepseek/deepseek-v4-flash-latest, mistral-large-latest)."
+        ),
     )
     api_key = models.CharField(
         max_length=500,
@@ -69,7 +72,9 @@ class ChatbotConfig(SingletonModel):
         default="",
         blank=True,
         verbose_name="Prompt système",
-        help_text="Instructions maîtresses guidant les réponses, le ton et les garde-fous du chatbot.",
+        help_text=(
+            "Instructions maîtresses guidant les réponses, le ton et les garde-fous du chatbot."
+        ),
     )
 
     class Meta:
@@ -111,7 +116,10 @@ class ChatbotConversation(models.Model):
         default=list,
         blank=True,
         verbose_name="Messages (expurgés Zero-PII)",
-        help_text="Historique des échanges de la conversation (questions usager filtrées et réponses assistant).",
+        help_text=(
+            "Historique des échanges de la conversation "
+            "(questions usager filtrées et réponses assistant)."
+        ),
     )
     has_draft_proposed = models.BooleanField(
         default=False,
