@@ -24,7 +24,6 @@ class UserInfoViewSet(viewsets.ViewSet):
                     team_logo_url = team.logo.url
                 except Exception:
                     team_logo_url = None
-
             return Response(
                 {
                     "is_authenticated": True,

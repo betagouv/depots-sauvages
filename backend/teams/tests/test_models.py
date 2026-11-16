@@ -52,13 +52,10 @@ def test_constatation_team_and_traceability_fields():
     assert constatation.updated_by == bob
     assert team.constatations.count() == 1
 
-    # SuiviProcedure was automatically created by signal and can track updates
+    # SuiviProcedure was automatically created by signal and tracks updates
     suivi = constatation.suivi_procedure
-    suivi.created_by = alice
     suivi.updated_by = bob
     suivi.save()
 
-    assert suivi.created_by == alice
     assert suivi.updated_by == bob
-    assert alice.suivis_crees.count() == 1
     assert bob.suivis_modifies.count() == 1

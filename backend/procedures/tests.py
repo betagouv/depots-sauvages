@@ -1,4 +1,5 @@
 import datetime
+
 import pytest
 from django.contrib.admin.sites import site
 from django.test import RequestFactory
@@ -150,7 +151,7 @@ def test_suivi_procedure_team_sharing_and_traceability(client):
     assert res_get.status_code == status.HTTP_200_OK
 
     # 2. Bob updates the SuiviProcedure:
-    # updated_by should be Bob, created_by should remain Alice
+    # updated_by should be Bob
     res_update = client.patch(
         url_a,
         {"preuves_fournies": True},
@@ -160,7 +161,6 @@ def test_suivi_procedure_team_sharing_and_traceability(client):
     suivi = SuiviProcedure.objects.get(constatation=c_a)
     assert suivi.preuves_fournies is True
     assert suivi.updated_by == bob
-    assert suivi.created_by == alice
 
     # 3. Charlie (team B) cannot access SuiviProcedure of team A -> 404
     client.force_login(charlie)

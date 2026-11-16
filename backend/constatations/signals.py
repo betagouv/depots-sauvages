@@ -148,9 +148,8 @@ def create_suivi_procedure(sender, instance, created, **kwargs):
     from backend.procedures.models import SuiviProcedure
 
     if created:
-        creator = getattr(instance, "created_by", None) or getattr(instance, "user", None)
-        updater = getattr(instance, "updated_by", None) or creator
+        updater = getattr(instance, "updated_by", None) or getattr(instance, "created_by", None) or getattr(instance, "user", None)
         SuiviProcedure.objects.get_or_create(
             constatation=instance,
-            defaults={"created_by": creator, "updated_by": updater},
+            defaults={"updated_by": updater},
         )
