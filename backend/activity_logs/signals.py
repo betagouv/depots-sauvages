@@ -9,16 +9,20 @@ from backend.stats.anonymizer import anonymize_user_hash
 @receiver(user_logged_in)
 def track_user_logged_in(sender, request, user, **kwargs):
     try:
+        log_data = {
+            "est_staff": user.is_staff,
+            "methode_auth": resolve_auth_method(request),
+        }
+        if getattr(user, "team_id", None) is not None:
+            log_data["team_id"] = user.team_id
+
         IdempotentTrackingHandler().track_action(
             {
                 "action": "utilisateur_connecte",
                 "actor": anonymize_user_hash(user.id),
                 "target": "auth",
                 "session_id": getattr(request.session, "session_key", None),
-                "data": {
-                    "est_staff": user.is_staff,
-                    "methode_auth": resolve_auth_method(request),
-                },
+                "data": log_data,
             },
             model_alias="activity_log",
         )

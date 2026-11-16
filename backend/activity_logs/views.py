@@ -12,6 +12,14 @@ class TrackActivityMixin:
                 .values_list("id", flat=True)
                 .first()
             )
+        team_id = getattr(self.request.user, "team_id", None)
+        log_data = {
+            "est_staff": self.request.user.is_staff,
+            **data,
+        }
+        if team_id is not None:
+            log_data["team_id"] = team_id
+
         IdempotentTrackingHandler().track_action(
             {
                 "action": action,
@@ -20,10 +28,7 @@ class TrackActivityMixin:
                 "constatation_id": constatation_id,
                 "suivi_procedure_id": suivi_procedure_id,
                 "session_id": getattr(self.request.session, "session_key", None),
-                "data": {
-                    "est_staff": self.request.user.is_staff,
-                    **data,
-                },
+                "data": log_data,
             },
             model_alias="activity_log",
         )
