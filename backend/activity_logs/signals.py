@@ -15,7 +15,6 @@ def track_user_logged_in(sender, request, user, **kwargs):
         }
         if getattr(user, "team_id", None) is not None:
             log_data["team_id"] = user.team_id
-
         IdempotentTrackingHandler().track_action(
             {
                 "action": "utilisateur_connecte",

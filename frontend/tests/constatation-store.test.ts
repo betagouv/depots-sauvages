@@ -494,7 +494,7 @@ describe('ConstatationStore - Prejudice Logic', () => {
         serverModified: '2026-11-16T10:05:00Z',
       })
 
-      // L'autosave suivant ne doit rien exécuter tant que le conflit est présent
+      // The next autosave should not execute while a conflict is active
       vi.spyOn(api, 'updateResource').mockClear()
       await store.autoSave()
       expect(api.updateResource).not.toHaveBeenCalled()

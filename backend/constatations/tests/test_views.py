@@ -455,7 +455,7 @@ def test_constatation_optimistic_locking(client):
     )
     detail_url = reverse("constatation-detail", args=[constat.id])
 
-    # 1. Update without last_synced_modified -> HTTP 200 (retrocompatibilite)
+    # 1. Update without last_synced_modified -> HTTP 200 (backward compatibility)
     client.force_login(alice)
     res = client.patch(detail_url, {"commune": "Lyon"}, content_type="application/json")
     assert res.status_code == status.HTTP_200_OK
