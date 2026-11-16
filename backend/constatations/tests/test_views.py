@@ -1,3 +1,4 @@
+import datetime
 import pytest
 from django.urls import reverse
 from rest_framework import status
@@ -433,3 +434,113 @@ def test_inactive_user_access_denied(client):
     client.force_login(user)
     response = client.get(reverse("constatation-list"))
     assert response.status_code in [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN]
+
+
+@pytest.mark.django_db(databases=["default", "stats_db"])
+def test_constatation_optimistic_locking(client):
+    alice = UserFactory(first_name="Alice", last_name="Smith")
+    bob = UserFactory(first_name="Bob", last_name="Jones")
+    team = Team.objects.create(name="Equipe Test", siret="12345678901234", siren="123456789")
+    alice.team = team
+    alice.save()
+    bob.team = team
+    bob.save()
+
+    constat = Constatation.objects.create(
+        user=alice,
+        created_by=alice,
+        updated_by=alice,
+        team=team,
+        commune="Paris",
+    )
+    detail_url = reverse("constatation-detail", args=[constat.id])
+
+    # 1. Update without last_synced_modified -> HTTP 200 (retrocompatibilite)
+    client.force_login(alice)
+    res = client.patch(detail_url, {"commune": "Lyon"}, content_type="application/json")
+    assert res.status_code == status.HTTP_200_OK
+    constat.refresh_from_db()
+    assert constat.commune == "Lyon"
+    assert constat.updated_by == alice
+
+    current_modified = constat.modified
+
+    # 2. Update with last_synced_modified synchronised (within tolerance) -> HTTP 200
+    res_sync = client.patch(
+        detail_url,
+        {"commune": "Marseille", "last_synced_modified": current_modified.isoformat()},
+        content_type="application/json",
+    )
+    assert res_sync.status_code == status.HTTP_200_OK
+    constat.refresh_from_db()
+    assert constat.commune == "Marseille"
+
+    # Bob simulates having an older timestamp (> 1 sec behind server_modified)
+    past_timestamp = (constat.modified - datetime.timedelta(seconds=5)).isoformat()
+
+    # 3. Bob sends update with older last_synced_modified -> HTTP 409 Conflict
+    client.force_login(bob)
+    res_conflict = client.patch(
+        detail_url,
+        {"commune": "Bordeaux", "last_synced_modified": past_timestamp},
+        content_type="application/json",
+    )
+    assert res_conflict.status_code == status.HTTP_409_CONFLICT
+    data = res_conflict.json()
+    assert data["error"] == "CONCURRENT_MODIFICATION"
+    assert "Alice Smith" in data["message"]
+    assert data["updated_by"] == "Alice Smith"
+    assert data["server_modified"] == constat.modified.isoformat()
+
+    # Verify database was NOT changed
+    constat.refresh_from_db()
+    assert constat.commune == "Marseille"
+
+    # 4. Bob sends update with force=True -> HTTP 200 (force overwrite)
+    res_force = client.patch(
+        detail_url,
+        {
+            "commune": "Bordeaux",
+            "last_synced_modified": past_timestamp,
+            "force": True,
+        },
+        content_type="application/json",
+    )
+    assert res_force.status_code == status.HTTP_200_OK
+    constat.refresh_from_db()
+    assert constat.commune == "Bordeaux"
+    assert constat.updated_by == bob
+
+    # 5. Robustness & Security: invalid or malicious last_synced_modified
+    # - non-string payload (e.g. dict or list) -> ignored safely, HTTP 200
+    res_malicious_type = client.patch(
+        detail_url,
+        {"commune": "Nice", "last_synced_modified": {"evil": "data"}},
+        content_type="application/json",
+    )
+    assert res_malicious_type.status_code == status.HTTP_200_OK
+
+    # - excessively long string (DoS prevention) -> ignored safely, HTTP 200
+    res_dos_len = client.patch(
+        detail_url,
+        {"commune": "Nice", "last_synced_modified": "2026-01-01" * 50},
+        content_type="application/json",
+    )
+    assert res_dos_len.status_code == status.HTTP_200_OK
+
+    # - invalid datetime format -> ignored safely, HTTP 200
+    res_invalid_date = client.patch(
+        detail_url,
+        {"commune": "Nice", "last_synced_modified": "not-a-date"},
+        content_type="application/json",
+    )
+    assert res_invalid_date.status_code == status.HTTP_200_OK
+
+    # - naive datetime string (no timezone offset) -> handled without crash, triggers 409
+    naive_past = (constat.modified - datetime.timedelta(seconds=10)).strftime("%Y-%m-%dT%H:%M:%S")
+    res_naive = client.patch(
+        detail_url,
+        {"commune": "Toulouse", "last_synced_modified": naive_past},
+        content_type="application/json",
+    )
+    assert res_naive.status_code == status.HTTP_409_CONFLICT
