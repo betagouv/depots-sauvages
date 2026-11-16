@@ -2,6 +2,7 @@ import { createTestingPinia } from '@pinia/testing'
 import { describe, expect, it, vi } from 'vitest'
 import * as api from '../services/api'
 import { useConstatationStore } from '../stores/constatation'
+import { useUserStore } from '../stores/user'
 
 vi.mock('../services/api', async () => {
   const actual = await vi.importActual('../services/api')
@@ -9,6 +10,8 @@ vi.mock('../services/api', async () => {
     ...actual,
     createResource: vi.fn(),
     updateResource: vi.fn(),
+    fetchResource: vi.fn(),
+    getUserInfo: vi.fn(),
   }
 })
 
@@ -421,5 +424,178 @@ describe('ConstatationStore - Prejudice Logic', () => {
     expect(store.saveError).toBe(
       'Le volume des photos dépasse la taille maximale autorisée par le serveur. Veuillez supprimer des photos ou utiliser des fichiers plus légers.'
     )
+  })
+
+  describe('Verrouillage Optimiste & Conflits Concurrence (HTTP 409)', () => {
+    it('enregistre lastSyncedModified lors du chargement de la constatation', async () => {
+      const pinia = createTestingPinia({ stubActions: false })
+      const store = useConstatationStore(pinia)
+
+      vi.spyOn(api, 'fetchResource').mockResolvedValue({
+        id: 42,
+        commune: 'Lyon',
+        modified: '2026-11-16T10:00:00Z',
+      })
+
+      await store.loadConstatation(42)
+
+      expect(store.currentId).toBe(42)
+      expect(store.lastSyncedModified).toBe('2026-11-16T10:00:00Z')
+      expect(store.conflictModalVisible).toBe(false)
+      expect(store.conflictDetails).toBeNull()
+    })
+
+    it('envoie last_synced_modified lors de performSave / saveFormData', async () => {
+      const pinia = createTestingPinia({ stubActions: false })
+      const store = useConstatationStore(pinia)
+
+      store.currentId = 42
+      store.lastSyncedModified = '2026-11-16T10:00:00Z'
+      store.formData.commune = 'Lyon'
+
+      vi.spyOn(api, 'updateResource').mockResolvedValue({
+        id: 42,
+        modified: '2026-11-16T10:05:00Z',
+      })
+
+      await store.saveFormData()
+
+      expect(api.updateResource).toHaveBeenCalledWith(
+        expect.stringContaining('/constatations/42/'),
+        expect.objectContaining({
+          last_synced_modified: '2026-11-16T10:00:00Z',
+        })
+      )
+      expect(store.lastSyncedModified).toBe('2026-11-16T10:05:00Z')
+    })
+
+    it('gère une erreur HTTP 409 : active conflictModalVisible, remplit conflictDetails et interrompt autosave', async () => {
+      const pinia = createTestingPinia({ stubActions: false })
+      const store = useConstatationStore(pinia)
+
+      store.currentId = 42
+      store.lastSyncedModified = '2026-11-16T10:00:00Z'
+      store.formData.commune = 'Lyon'
+
+      const conflictError = {
+        error: 'CONCURRENT_MODIFICATION',
+        message: 'Ce dossier a été modifié par Marc DUPONT entre-temps.',
+        updated_by: 'Marc DUPONT',
+        server_modified: '2026-11-16T10:05:00Z',
+      }
+      vi.spyOn(api, 'updateResource').mockRejectedValue(conflictError)
+
+      await expect(store.saveFormData()).rejects.toEqual(conflictError)
+
+      expect(store.conflictModalVisible).toBe(true)
+      expect(store.conflictDetails).toEqual({
+        updatedBy: 'Marc DUPONT',
+        message: 'Ce dossier a été modifié par Marc DUPONT entre-temps.',
+        serverModified: '2026-11-16T10:05:00Z',
+      })
+
+      // L'autosave suivant ne doit rien exécuter tant que le conflit est présent
+      vi.spyOn(api, 'updateResource').mockClear()
+      await store.autoSave()
+      expect(api.updateResource).not.toHaveBeenCalled()
+    })
+
+    it('permet de forcer la sauvegarde via forceSave()', async () => {
+      const pinia = createTestingPinia({ stubActions: false })
+      const store = useConstatationStore(pinia)
+
+      store.currentId = 42
+      store.lastSyncedModified = '2026-11-16T10:00:00Z'
+      store.formData.commune = 'Lyon'
+      store.conflictModalVisible = true
+      store.conflictDetails = {
+        updatedBy: 'Marc DUPONT',
+        message: 'Conflit',
+        serverModified: '2026-11-16T10:05:00Z',
+      }
+
+      vi.spyOn(api, 'updateResource').mockResolvedValue({
+        id: 42,
+        modified: '2026-11-16T10:10:00Z',
+      })
+
+      const res = await store.forceSave()
+
+      expect(api.updateResource).toHaveBeenCalledWith(
+        expect.stringContaining('/constatations/42/'),
+        expect.objectContaining({
+          force: true,
+        })
+      )
+      expect(store.conflictModalVisible).toBe(false)
+      expect(store.conflictDetails).toBeNull()
+      expect(store.lastSyncedModified).toBe('2026-11-16T10:10:00Z')
+      expect(res).toBeDefined()
+    })
+
+    it('permet de recharger la version serveur via resolveConflictReload()', async () => {
+      const pinia = createTestingPinia({ stubActions: false })
+      const store = useConstatationStore(pinia)
+
+      store.currentId = 42
+      store.conflictModalVisible = true
+      store.conflictDetails = {
+        updatedBy: 'Marc DUPONT',
+        message: 'Conflit',
+        serverModified: '2026-11-16T10:05:00Z',
+      }
+
+      vi.spyOn(api, 'fetchResource').mockResolvedValue({
+        id: 42,
+        commune: 'Lyon Rechargé',
+        modified: '2026-11-16T10:05:00Z',
+      })
+
+      await store.resolveConflictReload()
+
+      expect(api.fetchResource).toHaveBeenCalledWith(expect.stringContaining('/constatations/42/'))
+      expect(store.formData.commune).toBe('Lyon Rechargé')
+      expect(store.lastSyncedModified).toBe('2026-11-16T10:05:00Z')
+      expect(store.conflictModalVisible).toBe(false)
+      expect(store.conflictDetails).toBeNull()
+    })
+  })
+
+  describe('UserStore - Identité Équipe & Organisation', () => {
+    it('hydrate le state avec les informations d’organisation', async () => {
+      const pinia = createTestingPinia({ stubActions: false })
+      const userStore = useUserStore(pinia)
+
+      const userInfoData = {
+        is_authenticated: true,
+        proconnect_enabled: true,
+        first_name: 'Jean',
+        last_name: 'Valjean',
+        email: 'jean@mairie-montreuil.fr',
+        procedures_count: 5,
+        is_staff: false,
+        team_id: 12,
+        team_name: 'Mairie de Montreuil',
+        team_logo: 'https://cdn.example.com/logo.png',
+        team_siret: '21930048600012',
+      }
+      vi.spyOn(api, 'getUserInfo').mockResolvedValue(userInfoData)
+
+      await userStore.fetchUserInfo()
+
+      expect(userStore.isAuthenticated).toBe(true)
+      expect(userStore.hasTeam).toBe(true)
+      expect(userStore.teamId).toBe(12)
+      expect(userStore.teamName).toBe('Mairie de Montreuil')
+      expect(userStore.teamLogo).toBe('https://cdn.example.com/logo.png')
+      expect(userStore.teamSiret).toBe('21930048600012')
+
+      userStore.clearUser()
+      expect(userStore.teamId).toBeNull()
+      expect(userStore.teamName).toBeNull()
+      expect(userStore.teamLogo).toBeNull()
+      expect(userStore.teamSiret).toBeNull()
+      expect(userStore.hasTeam).toBe(false)
+    })
   })
 })

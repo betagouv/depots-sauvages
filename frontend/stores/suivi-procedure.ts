@@ -1,6 +1,12 @@
 import { defineStore } from 'pinia'
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { API_URL, fetchResource, patchResource } from '../services/api'
+
+export interface ConflictDetails {
+  updatedBy: string
+  message: string
+  serverModified: string
+}
 
 export interface SuiviProcedure {
   // Méta
@@ -173,6 +179,9 @@ export const isSuiviStepUnlocked = (
 
 export const useSuiviStore = defineStore('suiviProcedure', () => {
   const procedures = reactive<Record<string, SuiviProcedure>>({})
+  const lastSyncedModified = reactive<Record<string, string | null>>({})
+  const conflictModalVisible = ref(false)
+  const conflictDetails = ref<ConflictDetails | null>(null)
 
   const getOrCreateSuivi = (constatationId: string): SuiviProcedure => {
     if (!procedures[constatationId] || typeof procedures[constatationId] !== 'object') {
@@ -213,29 +222,85 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
       const data = await fetchResource(`${API_URL}/suivi-procedure/${internalConstatationId}/`)
       if (data && typeof data === 'object') {
         procedures[constatationId] = data
+        if (data.modified) {
+          lastSyncedModified[constatationId] = data.modified
+        }
       }
+      conflictModalVisible.value = false
+      conflictDetails.value = null
     } catch (e) {
       console.error('Erreur lors du chargement du suivi:', e)
     }
   }
 
-  const saveSuivi = async (constatationId: string, internalConstatationId: number) => {
+  const saveSuivi = async (
+    constatationId: string,
+    internalConstatationId: number,
+    options: { force?: boolean } = {}
+  ) => {
     const suivi = procedures[constatationId]
     if (!suivi) return
 
-    try {
-      await patchResource(`${API_URL}/suivi-procedure/${internalConstatationId}/`, suivi)
-    } catch (e) {
-      console.error('Erreur lors de la sauvegarde du suivi:', e)
+    const payload: any = { ...suivi }
+    if (options.force) {
+      payload.force = true
+    } else if (lastSyncedModified[constatationId]) {
+      payload.last_synced_modified = lastSyncedModified[constatationId]
     }
+
+    try {
+      const res = await patchResource(
+        `${API_URL}/suivi-procedure/${internalConstatationId}/`,
+        payload
+      )
+      if (res && res.modified) {
+        lastSyncedModified[constatationId] = res.modified
+      }
+      conflictModalVisible.value = false
+      conflictDetails.value = null
+      return res
+    } catch (e: any) {
+      if (
+        e?.error === 'CONCURRENT_MODIFICATION' ||
+        e?.status === 409 ||
+        (e && e.updated_by && e.server_modified)
+      ) {
+        conflictDetails.value = {
+          updatedBy: e.updated_by || 'Un autre utilisateur',
+          message: e.message || 'Ce dossier a été modifié par un autre utilisateur entre-temps.',
+          serverModified: e.server_modified || '',
+        }
+        conflictModalVisible.value = true
+      }
+      console.error('Erreur lors de la sauvegarde du suivi:', e)
+      throw e
+    }
+  }
+
+  const forceSave = async (constatationId: string, internalConstatationId: number) => {
+    return await saveSuivi(constatationId, internalConstatationId, { force: true })
+  }
+
+  const resolveConflictReload = async (
+    constatationId: string,
+    internalConstatationId: number
+  ) => {
+    await fetchSuivi(constatationId, internalConstatationId)
+    conflictModalVisible.value = false
+    conflictDetails.value = null
   }
 
   return {
     procedures,
+    lastSyncedModified,
+    conflictModalVisible,
+    conflictDetails,
     getOrCreateSuivi,
     isStepCompleted,
     isStepUnlocked,
     fetchSuivi,
     saveSuivi,
+    forceSave,
+    resolveConflictReload,
   }
 })
