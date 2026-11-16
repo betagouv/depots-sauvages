@@ -4,6 +4,8 @@ from rest_framework import status
 
 from backend.activity_logs.models import ActivityLog
 from backend.constatations.models import Constatation
+from backend.constatations.views import get_user_constatations_queryset
+from backend.teams.models import Team
 from backend.unit_tests.factories import UserFactory
 
 
@@ -22,6 +24,9 @@ def test_create_constatation_authenticated(client):
     constatation = Constatation.objects.first()
     assert constatation is not None
     assert constatation.user == user
+    assert constatation.created_by == user
+    assert constatation.updated_by == user
+    assert constatation.team is None
     assert constatation.commune == "Paris"
     log = ActivityLog.objects.get(action="constatation_demarree")
     assert log.constatation_id == constatation.id
@@ -156,7 +161,8 @@ def test_download_document_permissions(client):
     assert response.status_code == status.HTTP_200_OK
     assert b"".join(response.streaming_content) == b"dummy_content"
 
-    # 4. Verify ActivityLogs for download events (owner and staff generated 2 logs across 2 distinct sessions)
+    # 4. Verify ActivityLogs for download events
+    # (owner and staff generated 2 logs across 2 distinct sessions)
     logs = ActivityLog.objects.using("stats_db").filter(
         action="doc_constat_telecharge", constatation_id=c.id
     )
@@ -237,3 +243,193 @@ def test_constatation_photos_max_length_validation(client):
     )
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "photos" in response.json()
+
+
+@pytest.mark.django_db(databases=["default", "stats_db"])
+def test_team_member_sees_and_updates_team_constatations(client):
+    team_a = Team.objects.create(name="Commune A", siret="11111111111111", siren="111111111")
+    alice = UserFactory(team=team_a)
+    bob = UserFactory(team=team_a)
+
+    # Alice creates a constatation
+    client.force_login(alice)
+    create_res = client.post(
+        reverse("constatation-list"),
+        {"commune": "Village A", "is_draft": True},
+        format="json",
+    )
+    assert create_res.status_code == status.HTTP_201_CREATED
+    constat_id = create_res.data["id"]
+
+    constat = Constatation.objects.get(id=constat_id)
+    assert constat.team == team_a
+    assert constat.created_by == alice
+    assert constat.updated_by == alice
+
+    # Bob logs in and should see the constatation in the list
+    client.force_login(bob)
+    list_res = client.get(reverse("constatation-list"))
+    assert list_res.status_code == status.HTTP_200_OK
+    assert len(list_res.json()) == 1
+    assert list_res.json()[0]["id"] == constat_id
+
+    # Bob can retrieve the detail
+    detail_res = client.get(reverse("constatation-detail", args=[constat_id]))
+    assert detail_res.status_code == status.HTTP_200_OK
+
+    # Bob updates the constatation
+    update_res = client.patch(
+        reverse("constatation-detail", args=[constat_id]),
+        {"commune": "Village A Modifié"},
+        content_type="application/json",
+    )
+    assert update_res.status_code == status.HTTP_200_OK
+    constat.refresh_from_db()
+    assert constat.commune == "Village A Modifié"
+    assert constat.created_by == alice
+    assert constat.updated_by == bob
+
+
+@pytest.mark.django_db(databases=["default", "stats_db"])
+def test_team_isolation_cross_teams_denied(client):
+    team_a = Team.objects.create(name="Commune A", siret="11111111111111", siren="111111111")
+    team_b = Team.objects.create(name="Commune B", siret="22222222222222", siren="222222222")
+    agent_a = UserFactory(team=team_a)
+    agent_b = UserFactory(team=team_b)
+
+    constat_b = Constatation.objects.create(
+        user=agent_b,
+        created_by=agent_b,
+        updated_by=agent_b,
+        team=team_b,
+        commune="Commune B City",
+        doc_constat=b"odt_doc_b",
+    )
+
+    client.force_login(agent_a)
+
+    # agent_a lists constatations -> empty
+    list_res = client.get(reverse("constatation-list"))
+    assert list_res.status_code == status.HTTP_200_OK
+    assert len(list_res.json()) == 0
+
+    # agent_a tries to retrieve constat_b -> 404
+    detail_res = client.get(reverse("constatation-detail", args=[constat_b.id]))
+    assert detail_res.status_code == status.HTTP_404_NOT_FOUND
+
+    # agent_a tries to update constat_b -> 404
+    update_res = client.patch(
+        reverse("constatation-detail", args=[constat_b.id]),
+        {"commune": "Hacked"},
+        content_type="application/json",
+    )
+    assert update_res.status_code == status.HTTP_404_NOT_FOUND
+
+    # agent_a tries to download document of constat_b -> 404
+    download_url = reverse(
+        "constatation-document-download",
+        kwargs={"pk": constat_b.id, "doc_type": "doc-constat"},
+    )
+    download_res = client.get(download_url)
+    assert download_res.status_code == status.HTTP_404_NOT_FOUND
+
+
+@pytest.mark.django_db(databases=["default", "stats_db"])
+def test_user_without_team_isolation(client):
+    solo_user = UserFactory()  # team is None
+    other_user = UserFactory()  # team is None
+
+    constat_other = Constatation.objects.create(
+        user=other_user,
+        created_by=other_user,
+        updated_by=other_user,
+        team=None,
+        commune="Other Solo City",
+    )
+    constat_solo = Constatation.objects.create(
+        user=solo_user,
+        created_by=solo_user,
+        updated_by=solo_user,
+        team=None,
+        commune="My Solo City",
+    )
+
+    client.force_login(solo_user)
+    list_res = client.get(reverse("constatation-list"))
+    assert list_res.status_code == status.HTTP_200_OK
+    ids = [item["id"] for item in list_res.json()]
+    assert constat_solo.id in ids
+    assert constat_other.id not in ids
+
+    # Cannot view other solo constat
+    detail_res = client.get(reverse("constatation-detail", args=[constat_other.id]))
+    assert detail_res.status_code == status.HTTP_404_NOT_FOUND
+
+
+@pytest.mark.django_db(databases=["default", "stats_db"])
+def test_staff_user_sees_all_teams_constatations(client):
+    team_a = Team.objects.create(name="Commune A", siret="11111111111111", siren="111111111")
+    team_b = Team.objects.create(name="Commune B", siret="22222222222222", siren="222222222")
+    user_a = UserFactory(team=team_a)
+    user_b = UserFactory(team=team_b)
+    user_solo = UserFactory()
+
+    c_a = Constatation.objects.create(user=user_a, created_by=user_a, team=team_a, commune="A")
+    c_b = Constatation.objects.create(user=user_b, created_by=user_b, team=team_b, commune="B")
+    c_solo = Constatation.objects.create(
+        user=user_solo, created_by=user_solo, team=None, commune="Solo"
+    )
+
+    staff = UserFactory(is_staff=True)
+    client.force_login(staff)
+
+    list_res = client.get(reverse("constatation-list"))
+    assert list_res.status_code == status.HTTP_200_OK
+    ids = [item["id"] for item in list_res.json()]
+    assert c_a.id in ids
+    assert c_b.id in ids
+    assert c_solo.id in ids
+
+
+@pytest.mark.django_db(databases=["default", "stats_db"])
+def test_user_cannot_spoof_constatation_owner(client):
+    owner = UserFactory()
+    attacker = UserFactory()
+    client.force_login(owner)
+
+    constat = Constatation.objects.create(
+        user=owner,
+        created_by=owner,
+        updated_by=owner,
+        commune="Origine",
+    )
+    detail_url = reverse("constatation-detail", args=[constat.id])
+
+    # Attempt to change user/owner via PATCH payload
+    response = client.patch(
+        detail_url,
+        {"user": attacker.id, "commune": "Modifiee"},
+        content_type="application/json",
+    )
+    assert response.status_code == status.HTTP_200_OK
+    constat.refresh_from_db()
+    assert constat.user == owner
+    assert constat.user != attacker
+    assert constat.commune == "Modifiee"
+
+
+@pytest.mark.django_db(databases=["default", "stats_db"])
+def test_inactive_user_access_denied(client):
+    user = UserFactory(is_active=False)
+    Constatation.objects.create(
+        user=user,
+        created_by=user,
+        commune="Ghost Town",
+    )
+    # Queryset returns empty for inactive user
+    assert get_user_constatations_queryset(user).count() == 0
+
+    # DRF view returns 401/403 for inactive user
+    client.force_login(user)
+    response = client.get(reverse("constatation-list"))
+    assert response.status_code in [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN]
