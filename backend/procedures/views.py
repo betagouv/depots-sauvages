@@ -1,6 +1,8 @@
 from django.http import Http404
 from rest_framework import mixins, permissions, viewsets
+from rest_framework.response import Response
 
+from backend.constatations.concurrency import check_optimistic_lock
 from backend.constatations.views import get_user_constatations_queryset
 from backend.procedures.models import SuiviProcedure
 from backend.procedures.serializers import SuiviProcedureSerializer, SuiviProcedureStaffSerializer
@@ -47,6 +49,23 @@ class SuiviProcedureViewSet(
         )
         self.check_object_permissions(self.request, obj)
         return obj
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop("partial", False)
+        instance = self.get_object()
+
+        conflict_response = check_optimistic_lock(instance, request.data)
+        if conflict_response:
+            return conflict_response
+
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, "_prefetched_objects_cache", None):
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
 
     def perform_update(self, serializer):
         user = self.request.user

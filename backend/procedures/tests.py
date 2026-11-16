@@ -1,3 +1,4 @@
+import datetime
 import pytest
 from django.contrib.admin.sites import site
 from django.test import RequestFactory
@@ -192,3 +193,85 @@ def test_cannot_reassign_suivi_procedure_constatation(client):
     suivi_c1 = SuiviProcedure.objects.get(constatation=c1)
     assert suivi_c1.constatation == c1
     assert suivi_c1.constatation != c2
+
+
+@pytest.mark.django_db
+def test_suivi_procedure_optimistic_locking(client):
+    team = Team.objects.create(name="Equipe Proc", siret="99999999900011", siren="999999999")
+    alice = UserFactory(first_name="Alice", last_name="Dubois", team=team)
+    bob = UserFactory(first_name="Bob", last_name="Martin", team=team)
+
+    c = Constatation.objects.create(
+        user=alice,
+        created_by=alice,
+        updated_by=alice,
+        team=team,
+        commune="Rennes",
+    )
+    url = reverse("suivi-procedure-detail", args=[c.id])
+
+    # Initialize SuiviProcedure
+    client.force_login(alice)
+    res_init = client.get(url)
+    assert res_init.status_code == status.HTTP_200_OK
+    suivi = SuiviProcedure.objects.get(constatation=c)
+
+    # 1. Update without last_synced_modified -> HTTP 200
+    res = client.patch(url, {"preuves_fournies": True}, content_type="application/json")
+    assert res.status_code == status.HTTP_200_OK
+    suivi.refresh_from_db()
+    assert suivi.preuves_fournies is True
+    assert suivi.updated_by == alice
+
+    current_modified = suivi.modified
+
+    # 2. Update with last_synced_modified synchronised -> HTTP 200
+    res_sync = client.patch(
+        url,
+        {
+            "identification_reussie": True,
+            "last_synced_modified": current_modified.isoformat(),
+        },
+        content_type="application/json",
+    )
+    assert res_sync.status_code == status.HTTP_200_OK
+    suivi.refresh_from_db()
+    assert suivi.identification_reussie is True
+
+    # Bob has an older timestamp (> 1 sec behind server_modified)
+    past_timestamp = (suivi.modified - datetime.timedelta(seconds=5)).isoformat()
+
+    # 3. Bob attempts update with older timestamp -> HTTP 409 Conflict
+    client.force_login(bob)
+    res_conflict = client.patch(
+        url,
+        {
+            "lettre_signe": True,
+            "last_synced_modified": past_timestamp,
+        },
+        content_type="application/json",
+    )
+    assert res_conflict.status_code == status.HTTP_409_CONFLICT
+    data = res_conflict.json()
+    assert data["error"] == "CONCURRENT_MODIFICATION"
+    assert "Alice Dubois" in data["message"]
+    assert data["updated_by"] == "Alice Dubois"
+    assert data["server_modified"] == suivi.modified.isoformat()
+
+    suivi.refresh_from_db()
+    assert suivi.lettre_signe is False
+
+    # 4. Bob sends update with force=True -> HTTP 200
+    res_force = client.patch(
+        url,
+        {
+            "lettre_signe": True,
+            "last_synced_modified": past_timestamp,
+            "force": True,
+        },
+        content_type="application/json",
+    )
+    assert res_force.status_code == status.HTTP_200_OK
+    suivi.refresh_from_db()
+    assert suivi.lettre_signe is True
+    assert suivi.updated_by == bob
