@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     "solo",
     #
     # Project apps
+    "backend.teams",
     "backend.throttling",
     "backend.home",
     "backend.current_user",
