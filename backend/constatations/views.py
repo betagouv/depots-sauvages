@@ -26,13 +26,10 @@ def get_user_constatations_queryset(user):
     """
     if not user or not user.is_authenticated or not getattr(user, "is_active", True):
         return Constatation.objects.none()
-
     if user.is_staff:
         return Constatation.objects.all()
-
     if user.team_id:
         return Constatation.objects.filter(team_id=user.team_id)
-
     return Constatation.objects.filter(
         models.Q(team__isnull=True)
         & (models.Q(created_by=user) | models.Q(created_by__isnull=True, user=user))
@@ -87,18 +84,14 @@ class ConstatationViewSet(
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop("partial", False)
         instance = self.get_object()
-
         conflict_response = check_optimistic_lock(instance, request.data)
         if conflict_response:
             return conflict_response
-
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
-
         if getattr(instance, "_prefetched_objects_cache", None):
             instance._prefetched_objects_cache = {}
-
         return Response(serializer.data)
 
     def perform_update(self, serializer):
