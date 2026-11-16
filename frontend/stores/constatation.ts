@@ -14,6 +14,12 @@ import {
   validateRequiredPositiveNumber,
 } from '../utils/validation'
 
+export interface ConflictDetails {
+  updatedBy: string
+  message: string
+  serverModified: string
+}
+
 export const useConstatationStore = defineStore('constatation', {
   state: () => ({
     currentId: null as number | null,
@@ -23,6 +29,9 @@ export const useConstatationStore = defineStore('constatation', {
     saveError: null as string | null,
     isSubmitting: false,
     _autoSavePromise: null as Promise<any> | null,
+    lastSyncedModified: null as string | null,
+    conflictModalVisible: false,
+    conflictDetails: null as ConflictDetails | null,
   }),
 
   actions: {
@@ -33,6 +42,9 @@ export const useConstatationStore = defineStore('constatation', {
       this.saveError = null
       this.isSubmitting = false
       this.hasBeenSubmitted = false
+      this.lastSyncedModified = null
+      this.conflictModalVisible = false
+      this.conflictDetails = null
     },
 
     clearFieldError(field: string) {
@@ -87,26 +99,58 @@ export const useConstatationStore = defineStore('constatation', {
       return toApiFormat(data)
     },
 
-    async performSave(isDraft: boolean) {
+    async performSave(isDraft: boolean, options: { force?: boolean } = {}) {
       if (this._autoSavePromise) {
         try {
           await this._autoSavePromise
         } catch {}
       }
       const dataToSend = this._preparePayload(isDraft)
+      if (options.force) {
+        dataToSend.force = true
+      } else if (this.lastSyncedModified) {
+        dataToSend.last_synced_modified = this.lastSyncedModified
+      }
+
       const executeSave = async () => {
-        if (this.currentId) {
-          const res = await updateResource(
-            `${API_URLS.constatations}${this.currentId}/`,
-            dataToSend
-          )
+        try {
+          if (this.currentId) {
+            const res = await updateResource(
+              `${API_URLS.constatations}${this.currentId}/`,
+              dataToSend
+            )
+            if (!isDraft) this.formData.isDraft = false
+            if (res && res.modified) {
+              this.lastSyncedModified = res.modified
+            }
+            this.conflictModalVisible = false
+            this.conflictDetails = null
+            return res
+          }
+          const data = await createResource(API_URLS.constatations, dataToSend)
+          this.currentId = data.id
           if (!isDraft) this.formData.isDraft = false
-          return res
+          if (data && data.modified) {
+            this.lastSyncedModified = data.modified
+          }
+          this.conflictModalVisible = false
+          this.conflictDetails = null
+          return data
+        } catch (error: any) {
+          if (
+            error?.error === 'CONCURRENT_MODIFICATION' ||
+            error?.status === 409 ||
+            (error && error.updated_by && error.server_modified)
+          ) {
+            this.conflictDetails = {
+              updatedBy: error.updated_by || 'Un autre utilisateur',
+              message: error.message || 'Ce dossier a été modifié par un autre utilisateur entre-temps.',
+              serverModified: error.server_modified || '',
+            }
+            this.conflictModalVisible = true
+          }
+          throw error
         }
-        const data = await createResource(API_URLS.constatations, dataToSend)
-        this.currentId = data.id
-        if (!isDraft) this.formData.isDraft = false
-        return data
       }
       this._autoSavePromise = executeSave().finally(() => {
         this._autoSavePromise = null
@@ -114,13 +158,37 @@ export const useConstatationStore = defineStore('constatation', {
       return await this._autoSavePromise
     },
 
+    async forceSave(isDraft?: boolean) {
+      const draftState = isDraft !== undefined ? isDraft : (this.formData.isDraft ?? true)
+      return await this.performSave(draftState, { force: true })
+    },
+
+    async resolveConflictReload() {
+      if (this.currentId) {
+        await this.loadConstatation(this.currentId)
+      }
+      this.conflictModalVisible = false
+      this.conflictDetails = null
+    },
+
     async autoSave() {
+      if (this.conflictModalVisible) {
+        return
+      }
       try {
         const isDraft = this.formData.isDraft === false ? false : true
         const result = await this.performSave(isDraft)
         this.saveError = null
         return result
       } catch (error: any) {
+        if (
+          error?.error === 'CONCURRENT_MODIFICATION' ||
+          error?.status === 409 ||
+          (error && error.updated_by && error.server_modified)
+        ) {
+          // Conflit détecté : l'autosave est suspendu, la modale est levée, ne pas afficher d'erreur générique
+          return
+        }
         console.error('Erreur lors de l’autosave constatation:', error)
         if (
           error?.error === 'request_data_too_big' ||
@@ -153,6 +221,13 @@ export const useConstatationStore = defineStore('constatation', {
         return result
       } catch (error: any) {
         if (
+          error?.error === 'CONCURRENT_MODIFICATION' ||
+          error?.status === 409 ||
+          (error && error.updated_by && error.server_modified)
+        ) {
+          throw error
+        }
+        if (
           error?.error === 'request_data_too_big' ||
           (typeof error === 'string' && error.includes('request_data_too_big'))
         ) {
@@ -182,6 +257,11 @@ export const useConstatationStore = defineStore('constatation', {
       try {
         const data = await fetchResource(`${API_URLS.constatations}${id}/`)
         this.currentId = id
+        if (data.modified) {
+          this.lastSyncedModified = data.modified
+        }
+        this.conflictModalVisible = false
+        this.conflictDetails = null
         const formData = fromApiFormat(data)
 
         // Handle 'autre' function on load

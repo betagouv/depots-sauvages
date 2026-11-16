@@ -101,6 +101,10 @@ export interface UserInfo {
   email?: string
   procedures_count?: number
   is_staff?: boolean
+  team_id?: number | null
+  team_name?: string | null
+  team_logo?: string | null
+  team_siret?: string | null
 }
 
 export const getUserInfo = (): Promise<UserInfo> => makeRequest(API_URLS.userInfo, 'GET', {})
