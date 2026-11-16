@@ -13,11 +13,11 @@ def check_optimistic_lock(
     tolerance_seconds=DEFAULT_TOLERANCE_SECONDS,
 ):
     """
-    Vérifie les conflits d'édition concurrente (Optimistic Concurrency Control).
+    Check for concurrent edit conflicts (Optimistic Concurrency Control).
 
-    Retourne:
-        Response(status=409) si un conflit est détecté, ou None si la modification
-        peut se poursuivre.
+    Returns:
+        Response(status=409) if a conflict is detected, or None if the modification
+        can proceed safely.
     """
     force_val = request_data.get("force", False)
     force = force_val in (True, 1, "1", "true", "True")
@@ -28,7 +28,7 @@ def check_optimistic_lock(
     if not last_synced_modified_raw or not isinstance(last_synced_modified_raw, str):
         return None
 
-    # Garde-fou taille chaîne (évite DoS parsing regex/str)
+    # String length guard (prevents DoS regex/string parsing attacks)
     if len(last_synced_modified_raw) > MAX_TIMESTAMP_LENGTH:
         return None
 
@@ -38,7 +38,7 @@ def check_optimistic_lock(
 
     server_modified = instance.modified
 
-    # Normalisation des fuseaux horaires (aware vs naive)
+    # Timezone normalization (aware vs naive)
     if timezone.is_aware(server_modified) and timezone.is_naive(client_modified):
         client_modified = timezone.make_aware(client_modified, timezone.get_current_timezone())
     elif timezone.is_naive(server_modified) and timezone.is_aware(client_modified):

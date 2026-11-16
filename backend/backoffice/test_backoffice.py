@@ -316,12 +316,14 @@ def test_backoffice_procedures_filter_besoin_accompagnement(client):
         besoin_accompagnement=False,
     )
     url = reverse("backoffice-procedures-list")
+
     def ids_for(params):
         response = client.get(url, params)
         assert response.status_code == status.HTTP_200_OK
         data = response.json()
         results = data["results"] if isinstance(data, dict) and "results" in data else data
         return {item["id"] for item in results}
+
     assert ids_for({}) == {avec_accompagnement.id, sans_accompagnement.id}
     assert ids_for({"besoin_accompagnement": "Oui"}) == {avec_accompagnement.id}
     assert ids_for({"besoinAccompagnement": "Oui"}) == {avec_accompagnement.id}
@@ -352,9 +354,7 @@ def test_backoffice_users_list_and_filters(client):
     user_without_proc = UserFactory(
         email="zero_proc@test.com", first_name="Alice", last_name="Dupont"
     )
-    user_with_proc = UserFactory(
-        email="with_proc@test.com", first_name="Bob", last_name="Martin"
-    )
+    user_with_proc = UserFactory(email="with_proc@test.com", first_name="Bob", last_name="Martin")
     Constatation.objects.create(
         user=user_with_proc,
         commune="Paris",

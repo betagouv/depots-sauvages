@@ -19,7 +19,6 @@ class TrackActivityMixin:
         }
         if team_id is not None:
             log_data["team_id"] = team_id
-
         IdempotentTrackingHandler().track_action(
             {
                 "action": action,

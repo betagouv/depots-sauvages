@@ -159,9 +159,7 @@ class BackofficeTeamFilterSet(django_filters.FilterSet):
     def filter_search(self, queryset, name, value):
         if value:
             return queryset.filter(
-                Q(name__icontains=value)
-                | Q(siret__icontains=value)
-                | Q(siren__icontains=value)
+                Q(name__icontains=value) | Q(siret__icontains=value) | Q(siren__icontains=value)
             )
         return queryset
 

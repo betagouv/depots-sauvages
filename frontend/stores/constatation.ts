@@ -186,7 +186,7 @@ export const useConstatationStore = defineStore('constatation', {
           error?.status === 409 ||
           (error && error.updated_by && error.server_modified)
         ) {
-          // Conflit détecté : l'autosave est suspendu, la modale est levée, ne pas afficher d'erreur générique
+          // Conflict detected: autosave suspended, modal displayed, do not show generic error
           return
         }
         console.error('Erreur lors de l’autosave constatation:', error)
