@@ -1,5 +1,5 @@
-from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.db import models
 from model_utils.models import TimeStampedModel
 
@@ -16,6 +16,13 @@ class Team(TimeStampedModel):
 
     def __str__(self):
         return f"{self.name} ({self.siret})"
+
+    def save(self, *args, **kwargs):
+        self.siret = (self.siret or "").strip()
+        self.siren = (self.siren or "").strip()
+        if self.siret and len(self.siret) >= 9 and not self.siren:
+            self.siren = self.siret[:9]
+        super().save(*args, **kwargs)
 
 
 # Dynamically attach 'team' ForeignKey to the User model
@@ -49,3 +56,41 @@ class TeamAutoCreationExclusion(TimeStampedModel):
 
     def __str__(self):
         return f"{self.label} ({self.siret or self.siren})"
+
+    def clean(self):
+        super().clean()
+        self.siret = (self.siret or "").strip()
+        self.siren = (self.siren or "").strip()
+        if not self.siret and not self.siren:
+            raise ValidationError("Au moins un SIREN ou un SIRET doit être renseigné.")
+        if self.siret and (len(self.siret) != 14 or not self.siret.isdigit()):
+            raise ValidationError({"siret": "Le SIRET doit comporter exactement 14 chiffres."})
+        if self.siren and (len(self.siren) != 9 or not self.siren.isdigit()):
+            raise ValidationError({"siren": "Le SIREN doit comporter exactement 9 chiffres."})
+        if self.siret and self.siren and self.siret[:9] != self.siren:
+            raise ValidationError("Le SIREN ne correspond pas aux 9 premiers chiffres du SIRET.")
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def is_excluded(cls, siret: str = "", siren: str = "") -> bool:
+        """
+        Check if a SIRET or SIREN is excluded from automatic team creation.
+        """
+        siret = (siret or "").strip()
+        siren = (siren or "").strip()
+        if not siren and len(siret) >= 9:
+            siren = siret[:9]
+
+        if not siret and not siren:
+            return False
+
+        q = models.Q()
+        if siret:
+            q |= models.Q(siret=siret)
+        if siren:
+            q |= models.Q(siren=siren)
+
+        return cls.objects.filter(q).exists()
