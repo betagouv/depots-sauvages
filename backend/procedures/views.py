@@ -1,7 +1,7 @@
 from django.http import Http404
 from rest_framework import mixins, permissions, viewsets
 
-from backend.constatations.models import Constatation
+from backend.constatations.views import get_user_constatations_queryset
 from backend.procedures.models import SuiviProcedure
 from backend.procedures.serializers import SuiviProcedureSerializer, SuiviProcedureStaffSerializer
 
@@ -9,9 +9,14 @@ from backend.procedures.serializers import SuiviProcedureSerializer, SuiviProced
 class SuiviProcedureViewSet(
     mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet
 ):
-    queryset = SuiviProcedure.objects.all()
     lookup_field = "constatation_id"
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return SuiviProcedure.objects.filter(
+            constatation__in=get_user_constatations_queryset(user)
+        )
 
     def get_serializer_class(self):
         if self.request.user and self.request.user.is_staff:
@@ -23,14 +28,35 @@ class SuiviProcedureViewSet(
         Retrieves or automatically creates the SuiviProcedure object for the given constatation.
         """
         constatation_id = self.kwargs.get(self.lookup_field)
-        # Staff members can access the procedure for any Constatation, whereas regular
-        # users can only access it for Constatations they created.
-        if self.request.user.is_staff:
-            if not Constatation.objects.filter(id=constatation_id).exists():
-                raise Http404(f"Constatation with ID {constatation_id} not found.")
-        else:
-            if not Constatation.objects.filter(id=constatation_id, user=self.request.user).exists():
-                raise Http404(f"Constatation with ID {constatation_id} not found or access denied.")
-        # Ensure the procedure tracking exists as soon as we try to access it
-        obj, created = SuiviProcedure.objects.get_or_create(constatation_id=constatation_id)
+        constatation = (
+            get_user_constatations_queryset(self.request.user)
+            .filter(id=constatation_id)
+            .first()
+        )
+        if not constatation:
+            raise Http404(f"Constatation with ID {constatation_id} not found or access denied.")
+
+        creator = (
+            getattr(constatation, "created_by", None)
+            or getattr(constatation, "user", None)
+            or self.request.user
+        )
+        obj, _ = SuiviProcedure.objects.get_or_create(
+            constatation_id=constatation_id,
+            defaults={"created_by": creator, "updated_by": self.request.user},
+        )
+        self.check_object_permissions(self.request, obj)
         return obj
+
+    def perform_update(self, serializer):
+        user = self.request.user
+        update_kwargs = {"updated_by": user}
+        if serializer.instance.created_by is None:
+            constat = serializer.instance.constatation
+            creator = (
+                getattr(constat, "created_by", None)
+                or getattr(constat, "user", None)
+                or user
+            )
+            update_kwargs["created_by"] = creator
+        serializer.save(**update_kwargs)

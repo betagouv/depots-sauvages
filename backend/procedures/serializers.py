@@ -78,7 +78,7 @@ class SuiviProcedureSerializer(serializers.ModelSerializer):
             "observations_internes",
         ]
 
-        read_only_fields = ("created", "modified")
+        read_only_fields = ("created", "modified", "constatation")
 
 
 class SuiviProcedureStaffSerializer(SuiviProcedureSerializer):
@@ -95,4 +95,9 @@ class SuiviProcedureStaffSerializer(SuiviProcedureSerializer):
             "date_pilotage",
             "notes_traitement",
         ]
-        read_only_fields = ("created", "modified", "date_pilotage")
+        read_only_fields = (
+            "created",
+            "modified",
+            "constatation",
+            "date_pilotage",
+        )

@@ -7,6 +7,7 @@ from rest_framework import status
 from backend.constatations.models import Constatation
 from backend.procedures.admin import SuiviProcedureAdmin
 from backend.procedures.models import SuiviProcedure
+from backend.teams.models import Team
 from backend.unit_tests.factories import UserFactory
 
 
@@ -123,3 +124,71 @@ def test_suivi_procedure_admin_queryset_optimizations(db):
     assert "doc_constat" in deferred
     assert "lettre_info" in deferred
     assert "photos" in deferred
+
+
+@pytest.mark.django_db
+def test_suivi_procedure_team_sharing_and_traceability(client):
+    team_a = Team.objects.create(name="Team Alpha", siret="11111111111111", siren="111111111")
+    team_b = Team.objects.create(name="Team Beta", siret="22222222222222", siren="222222222")
+    alice = UserFactory(team=team_a)
+    bob = UserFactory(team=team_a)
+    charlie = UserFactory(team=team_b)
+
+    c_a = Constatation.objects.create(
+        user=alice,
+        created_by=alice,
+        updated_by=alice,
+        team=team_a,
+        commune="Alpha City",
+    )
+    url_a = reverse("suivi-procedure-detail", args=[c_a.id])
+
+    # 1. Bob (same team) can access the SuiviProcedure
+    client.force_login(bob)
+    res_get = client.get(url_a)
+    assert res_get.status_code == status.HTTP_200_OK
+
+    # 2. Bob updates the SuiviProcedure:
+    # updated_by should be Bob, created_by should remain Alice
+    res_update = client.patch(
+        url_a,
+        {"preuves_fournies": True},
+        content_type="application/json",
+    )
+    assert res_update.status_code == status.HTTP_200_OK
+    suivi = SuiviProcedure.objects.get(constatation=c_a)
+    assert suivi.preuves_fournies is True
+    assert suivi.updated_by == bob
+    assert suivi.created_by == alice
+
+    # 3. Charlie (team B) cannot access SuiviProcedure of team A -> 404
+    client.force_login(charlie)
+    res_denied = client.get(url_a)
+    assert res_denied.status_code == status.HTTP_404_NOT_FOUND
+
+    res_patch_denied = client.patch(
+        url_a,
+        {"preuves_fournies": False},
+        content_type="application/json",
+    )
+    assert res_patch_denied.status_code == status.HTTP_404_NOT_FOUND
+
+
+@pytest.mark.django_db
+def test_cannot_reassign_suivi_procedure_constatation(client):
+    user = UserFactory()
+    client.force_login(user)
+
+    c1 = Constatation.objects.create(user=user, commune="City 1")
+    c2 = Constatation.objects.create(user=user, commune="City 2")
+
+    url = reverse("suivi-procedure-detail", args=[c1.id])
+    res = client.patch(
+        url,
+        {"constatation": c2.id, "preuves_fournies": True},
+        content_type="application/json",
+    )
+    assert res.status_code == status.HTTP_200_OK
+    suivi_c1 = SuiviProcedure.objects.get(constatation=c1)
+    assert suivi_c1.constatation == c1
+    assert suivi_c1.constatation != c2

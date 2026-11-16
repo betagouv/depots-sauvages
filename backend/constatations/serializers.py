@@ -120,6 +120,7 @@ class ConstatationSerializer(serializers.ModelSerializer):
             "doc_constat_should_generate": {"required": False},
             "lettre_info_should_generate": {"required": False},
         }
+        read_only_fields = ("user", "created", "modified")
 
     def get_suivi_procedure(self, obj):
         sp = getattr(obj, "suivi_procedure", None)

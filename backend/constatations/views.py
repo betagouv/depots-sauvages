@@ -1,6 +1,7 @@
 import io
 
 from django.contrib.auth.decorators import login_required
+from django.db import models
 from django.http import FileResponse, Http404
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
@@ -11,6 +12,29 @@ from backend.activity_logs.views import TrackActivityMixin
 
 from .models import Constatation
 from .serializers import ConstatationListSerializer, ConstatationSerializer
+
+
+def get_user_constatations_queryset(user):
+    """
+    Returns the queryset of Constatation instances accessible by the user.
+    - Staff members: access to all constatations.
+    - User with team: access to all constatations belonging to the same team.
+    - User without team: access strictly to constatations with team__isnull=True
+      and created_by=user (fallback to user=user if created_by is null).
+    """
+    if not user or not user.is_authenticated or not getattr(user, "is_active", True):
+        return Constatation.objects.none()
+
+    if user.is_staff:
+        return Constatation.objects.all()
+
+    if user.team_id:
+        return Constatation.objects.filter(team_id=user.team_id)
+
+    return Constatation.objects.filter(
+        models.Q(team__isnull=True)
+        & (models.Q(created_by=user) | models.Q(created_by__isnull=True, user=user))
+    )
 
 
 class ConstatationViewSet(
@@ -33,7 +57,7 @@ class ConstatationViewSet(
 
     def get_queryset(self):
         qs = (
-            Constatation.objects.filter(user=self.request.user)
+            get_user_constatations_queryset(self.request.user)
             .defer(*self.DOCUMENT_BINARY_FIELDS)
             .order_by("-modified")
         )
@@ -42,7 +66,14 @@ class ConstatationViewSet(
         return qs
 
     def perform_create(self, serializer):
-        instance = serializer.save(user=self.request.user)
+        user = self.request.user
+        team = getattr(user, "team", None)
+        instance = serializer.save(
+            user=user,
+            team=team,
+            created_by=user,
+            updated_by=user,
+        )
         self._track(
             action="constatation_demarree",
             target="constatation",
@@ -53,7 +84,11 @@ class ConstatationViewSet(
 
     def perform_update(self, serializer):
         was_draft = serializer.instance.is_draft
-        instance = serializer.save()
+        user = self.request.user
+        update_kwargs = {"updated_by": user}
+        if serializer.instance.created_by is None:
+            update_kwargs["created_by"] = serializer.instance.user or user
+        instance = serializer.save(**update_kwargs)
         if was_draft and not instance.is_draft:
             action = "constatation_terminee"
         elif instance.is_draft:
@@ -82,9 +117,7 @@ class ConstatationDocumentDownloadView(View, TrackActivityMixin):
     model_class = Constatation
 
     def _get_constatation(self, pk):
-        if self.request.user.is_staff:
-            return get_object_or_404(self.model_class, pk=pk)
-        return get_object_or_404(self.model_class, pk=pk, user=self.request.user)
+        return get_object_or_404(get_user_constatations_queryset(self.request.user), pk=pk)
 
     def prepare_doc_constat(self, constatation):
         if not constatation.doc_constat:
