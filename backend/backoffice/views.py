@@ -9,14 +9,22 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
-from backend.backoffice.filters import BackofficeProcedureFilterSet, BackofficeUserFilterSet
+from backend.backoffice.filters import (
+    BackofficeProcedureFilterSet,
+    BackofficeTeamAutoCreationExclusionFilterSet,
+    BackofficeTeamFilterSet,
+    BackofficeUserFilterSet,
+)
 from backend.backoffice.serializers import (
     BackofficeProcedureSerializer,
+    BackofficeTeamAutoCreationExclusionSerializer,
+    BackofficeTeamSerializer,
     BackofficeUserSerializer,
     StaffUserSerializer,
 )
 from backend.backoffice.stats import get_backoffice_dashboard_stats
 from backend.constatations.models import Constatation
+from backend.teams.models import Team, TeamAutoCreationExclusion
 
 User = get_user_model()
 
@@ -69,7 +77,7 @@ class BackofficeUsersViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         return (
             User.objects.annotate(procedures_count=Count("constatations"))
-            .select_related("proconnect_profile")
+            .select_related("proconnect_profile", "team")
             .order_by("-id")
         )
 
@@ -93,6 +101,9 @@ class BackofficeUsersViewSet(viewsets.ReadOnlyModelViewSet):
                 "SIREN ProConnect",
                 "Organisation ProConnect",
                 "Rôles ProConnect",
+                "Équipe ID",
+                "Nom Équipe",
+                "SIRET Équipe",
                 "Nombre de procédures",
                 "Date de création",
                 "Dernière connexion",
@@ -101,11 +112,15 @@ class BackofficeUsersViewSet(viewsets.ReadOnlyModelViewSet):
 
         for user in queryset:
             profile = getattr(user, "proconnect_profile", None)
+            team = getattr(user, "team", None)
             has_pc = "Oui" if profile else "Non"
             siret = profile.siret if profile else ""
             siren = profile.siren if profile else ""
             org = profile.organization_label if profile else ""
             roles = ", ".join(profile.roles) if profile and profile.roles else ""
+            team_id = team.id if team else ""
+            team_name = team.name if team else ""
+            team_siret = team.siret if team else ""
             date_joined = user.date_joined.strftime("%Y-%m-%d %H:%M:%S") if user.date_joined else ""
             last_login = user.last_login.strftime("%Y-%m-%d %H:%M:%S") if user.last_login else ""
 
@@ -121,6 +136,9 @@ class BackofficeUsersViewSet(viewsets.ReadOnlyModelViewSet):
                     siren,
                     org,
                     roles,
+                    team_id,
+                    team_name,
+                    team_siret,
                     user.procedures_count,
                     date_joined,
                     last_login,
@@ -128,3 +146,23 @@ class BackofficeUsersViewSet(viewsets.ReadOnlyModelViewSet):
             )
 
         return response
+
+
+class BackofficeTeamsViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAdminUser]
+    serializer_class = BackofficeTeamSerializer
+    pagination_class = BackofficePagination
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = BackofficeTeamFilterSet
+
+    def get_queryset(self):
+        return Team.objects.annotate(members_count=Count("members")).order_by("-id")
+
+
+class BackofficeTeamAutoCreationExclusionsViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAdminUser]
+    serializer_class = BackofficeTeamAutoCreationExclusionSerializer
+    pagination_class = BackofficePagination
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = BackofficeTeamAutoCreationExclusionFilterSet
+    queryset = TeamAutoCreationExclusion.objects.all().order_by("-id")

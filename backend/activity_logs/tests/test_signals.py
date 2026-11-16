@@ -22,6 +22,18 @@ def test_user_logged_in_signal_tracking(rf):
     assert log.target == "auth"
     assert log.data["est_staff"] is False
     assert log.data["methode_auth"] == "password"
+    assert "team_id" not in log.data
+
+    # Test user with team
+    from backend.teams.models import Team
+
+    team = Team.objects.create(name="Team Alpha", siret="12312312300012")
+    user_with_team = User.objects.create_user(
+        username="teamuser", email="teamuser@example.com", password="password", team=team
+    )
+    user_logged_in.send(sender=User, request=request, user=user_with_team)
+    log_team = ActivityLog.objects.using("stats_db").filter(action="utilisateur_connecte").last()
+    assert log_team.data["team_id"] == team.id
 
 
 def test_resolve_auth_method(rf):
