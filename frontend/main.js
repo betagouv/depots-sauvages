@@ -78,6 +78,18 @@ const router = createRouter({
       meta: { title: 'Mes procédures', fullWidth: true },
     },
     {
+      path: '/se-preparer',
+      name: 'SePreparer',
+      component: () => import('./pages/se-preparer.vue'),
+      meta: {
+        title: 'Se préparer avant son premier dossier',
+        breadcrumbLabel: 'Se préparer',
+        breadcrumbParent: '/mes-procedures',
+        breadcrumbBand: true,
+        activeMenu: '/mes-procedures',
+      },
+    },
+    {
       path: '/acces-restreint',
       name: 'AccesRestreint',
       component: () => import('./pages/acces-restreint.vue'),
