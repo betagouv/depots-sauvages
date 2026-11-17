@@ -5,7 +5,7 @@
         <h1 class="fr-h1 fr-mb-3w">Se préparer avant sa première procédure</h1>
         <p class="fr-text fr-text--lead fr-mb-2w">
           Pas encore de dépôt sauvage à traiter ? Préparez votre collectivité dès maintenant : le
-          jour où un dépôt arrive, vous saurez qui fait quoi et comment agir.
+          jour où un dépôt arrive, vous saurez comment agir et qui peut le faire.
         </p>
         <p class="fr-text--sm fr-mb-2w">
           Vous avez déjà un dépôt à traiter ?

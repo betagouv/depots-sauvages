@@ -53,15 +53,14 @@ export const PREPARATION_SECTIONS: PreparationSection[] = [
       ...guideStep,
       {
         id: 'webinaire',
-        label: 'Je participe au webinaire',
+        label: "Je m'inscris au webinaire",
         description:
           'En moins de 60 minutes, découvrez comment agir concrètement grâce à la procédure administrative.',
         link: { label: "S'inscrire au prochain webinaire", to: '/rdv' },
       },
       {
         id: 'retours-experience',
-        label:
-          "Je parcours les retours d'expériences d'autres communes qui ont utilisé Stop Dépôt Sauvage",
+        label: "Je parcours les retours d'expérience d'autres communes",
         description: 'Utile aussi pour présenter la démarche à vos élus.',
         link: {
           label: 'Comment une commune a traité son premier dossier',
@@ -106,6 +105,8 @@ export const PREPARATION_SECTIONS: PreparationSection[] = [
       {
         id: 'enlever-depot',
         label: 'Je vérifie si je peux enlever un dépôt sans attendre',
+        description:
+          'Pendant la phase contradictoire, la commune peut laisser l’auteur nettoyer lui-même ou intervenir rapidement en cas de risque.',
         link: {
           label: 'Dépôt sauvage : faut-il attendre 10 jours avant de l’enlever ?',
           to: blog('depot-sauvage-faut-il-attendre-10-jours-avant-de-lenlever'),
