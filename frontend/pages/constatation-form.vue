@@ -8,6 +8,15 @@
       <form @submit.prevent="submitForm" novalidate>
         <ConstatationForm />
       </form>
+
+      <ConflictResolutionModal
+        :opened="store.conflictModalVisible"
+        :updatedBy="store.conflictDetails?.updatedBy"
+        :message="store.conflictDetails?.message"
+        @close="store.conflictModalVisible = false"
+        @reload="handleConflictReload"
+        @force-save="handleConflictForceSave"
+      />
     </div>
 
     <LoginInvitation
@@ -23,6 +32,7 @@
 import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import ConstatationForm from '../components/forms/constatation/ConstatationForm.vue'
+import ConflictResolutionModal from '../components/shared/ConflictResolutionModal.vue'
 import LoginInvitation from '../components/shared/LoginInvitation.vue'
 import PageLoader from '../components/shared/PageLoader.vue'
 import { getUserInfo, type UserInfo } from '../services/api'
@@ -124,6 +134,23 @@ const submitForm = async () => {
       }
     }
     scrollToFirstError()
+  }
+}
+
+const handleConflictReload = async () => {
+  if (store.currentId) {
+    await store.resolveConflictReload(store.currentId)
+  }
+}
+
+const handleConflictForceSave = async () => {
+  try {
+    const data = await store.forceSave()
+    if (data && data.id && !data.is_draft) {
+      router.push(`/constatation-fin/${data.id}`)
+    }
+  } catch (err) {
+    console.error('Erreur lors du force save:', err)
   }
 }
 </script>
