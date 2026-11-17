@@ -169,13 +169,12 @@ class BackofficeTeamAutoCreationExclusionFilterSet(django_filters.FilterSet):
 
     class Meta:
         model = TeamAutoCreationExclusion
-        fields = ["search", "siret", "siren"]
+        fields = ["search", "siren"]
 
     def filter_search(self, queryset, name, value):
         if value:
             return queryset.filter(
                 Q(label__icontains=value)
-                | Q(siret__icontains=value)
                 | Q(siren__icontains=value)
                 | Q(reason__icontains=value)
             )

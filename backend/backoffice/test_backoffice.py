@@ -611,7 +611,7 @@ def test_backoffice_team_exclusions_viewset_permissions_and_crud(client):
     resp_create = client.post(
         url,
         {
-            "siret": "13002526500013",
+            "siren": "130025265",
             "label": "DINUM",
             "reason": "Services du Premier ministre",
         },
@@ -625,7 +625,7 @@ def test_backoffice_team_exclusions_viewset_permissions_and_crud(client):
     resp_bad = client.post(
         url,
         {
-            "siret": "123",
+            "siren": "123",
             "label": "Bad Excl",
         },
         content_type="application/json",

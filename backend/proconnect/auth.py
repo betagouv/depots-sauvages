@@ -45,7 +45,7 @@ def sync_proconnect_team(user, claims):
         return
 
     siren = siret[:9]
-    if TeamAutoCreationExclusion.is_excluded(siret=siret, siren=siren):
+    if TeamAutoCreationExclusion.is_excluded(siren):
         logger.info(
             f"User {user.pk} with SIRET {siret} (SIREN {siren}) "
             "is excluded from automatic Team creation"

@@ -18,7 +18,6 @@ def load_initial_exclusions(apps, schema_editor):
         for item in exclusions_data:
             fields = item.get("fields", {})
             siren = fields.get("siren", "")
-            siret = fields.get("siret", "")
             label = fields.get("label", "")
             reason = fields.get("reason", "")
 
@@ -26,13 +25,7 @@ def load_initial_exclusions(apps, schema_editor):
             if siren:
                 TeamAutoCreationExclusion.objects.get_or_create(
                     siren=siren,
-                    siret=siret,
                     defaults={"label": label, "reason": reason},
-                )
-            elif siret:
-                TeamAutoCreationExclusion.objects.get_or_create(
-                    siret=siret,
-                    defaults={"siren": siren, "label": label, "reason": reason},
                 )
 
 
@@ -60,12 +53,9 @@ def populate_and_migrate_teams(apps, schema_editor):
             sp.updated_by_id = sp.constatation.updated_by_id
             sp.save(update_fields=["updated_by"])
 
-    # 3. Retrieve excluded SIREN and SIRET sets
+    # 3. Retrieve excluded SIREN set
     excluded_sirens = set(
         TeamAutoCreationExclusion.objects.exclude(siren="").values_list("siren", flat=True)
-    )
-    excluded_sirets = set(
-        TeamAutoCreationExclusion.objects.exclude(siret="").values_list("siret", flat=True)
     )
 
     # 4. Ensure all existing users have a UserProfile
@@ -80,7 +70,7 @@ def populate_and_migrate_teams(apps, schema_editor):
 
         if not siret or len(siret) != 14:
             continue
-        if siret in excluded_sirets or siren in excluded_sirens:
+        if siren in excluded_sirens:
             continue
 
         team_name = (profile.organization_label or "").strip() or f"Organisation {siret}"

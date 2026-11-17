@@ -12,6 +12,6 @@ class TeamAdmin(admin.ModelAdmin):
 
 @admin.register(TeamAutoCreationExclusion)
 class TeamAutoCreationExclusionAdmin(admin.ModelAdmin):
-    list_display = ("label", "siren", "siret", "created", "modified")
-    search_fields = ("label", "siren", "siret", "reason")
+    list_display = ("label", "siren", "created", "modified")
+    search_fields = ("label", "siren", "reason")
     readonly_fields = ("created", "modified")
