@@ -55,7 +55,14 @@
           </div>
         </section>
 
-        <div class="fr-mt-6w">
+        <div v-if="allDone" class="fr-alert fr-alert--success fr-mt-6w" role="status">
+          <h2 class="fr-alert__title">Votre collectivité est prête</h2>
+          <p>
+            Le jour où un dépôt arrive, démarrez une constatation : Stop Dépôt Sauvage génère
+            automatiquement vos documents de procédure et vous guide pas à pas.
+          </p>
+        </div>
+        <div class="fr-mt-4w">
           <router-link
             to="/demarrer-constatation"
             class="fr-btn fr-icon-add-line fr-btn--icon-left"
@@ -94,8 +101,11 @@ const doneSteps = ref<Set<string>>(new Set())
 const stepIds = PREPARATION_SECTIONS.flatMap((section) => section.steps.map((step) => step.id))
 
 // Ignores ids stored for steps that no longer exist, so the count never exceeds the total.
+const doneCount = computed(() => stepIds.filter((id) => doneSteps.value.has(id)).length)
+const allDone = computed(() => doneCount.value === stepIds.length)
+
 const progressLabel = computed(() => {
-  const count = stepIds.filter((id) => doneSteps.value.has(id)).length
+  const count = doneCount.value
   return `${count} action${count > 1 ? 's' : ''} faite${count > 1 ? 's' : ''} sur ${stepIds.length}`
 })
 

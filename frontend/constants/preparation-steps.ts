@@ -48,7 +48,7 @@ export const PREPARATION_SECTIONS: PreparationSection[] = [
   {
     id: 'prevenir-anticiper',
     title: 'Prévenir et anticiper les dépôts sauvages',
-    icon: 'fr-icon-book-2-line',
+    icon: 'fr-icon-shield-line',
     steps: [
       ...guideStep,
       {
@@ -75,6 +75,55 @@ export const PREPARATION_SECTIONS: PreparationSection[] = [
           label: 'Plan de lutte contre les dépôts sauvages : comment l’organiser',
           to: blog('plan-de-lutte-contre-les-depots-sauvages-5-volets'),
         },
+      },
+    ],
+  },
+  {
+    id: 'organisation',
+    title: 'Identifier qui peut agir dans la collectivité',
+    icon: 'fr-icon-team-line',
+    steps: [
+      {
+        id: 'habilites-constater',
+        label: "J'identifie les personnes habilitées à constater un dépôt sauvage",
+        description:
+          'Le maire, ses adjoints, le garde champêtre et les policiers municipaux peuvent constater sans habilitation supplémentaire. Tout autre agent doit être commissionné par arrêté du maire.',
+        link: {
+          label: 'Qui peut constater un dépôt sauvage ?',
+          to: faq('qui-peut-constater-un-depot-sauvage'),
+        },
+      },
+      {
+        id: 'habilites-procedure',
+        label: "J'identifie les personnes habilitées à lancer une procédure",
+        description:
+          "Le maire, ou ses adjoints par délégation. Dans une intercommunalité, le président de l'EPCI si les maires lui ont transféré ce pouvoir.",
+        link: {
+          label: 'Qui peut engager la procédure administrative ?',
+          to: faq('qui-peut-engager-la-procedure-administrative'),
+        },
+      },
+    ],
+    notes: [
+      {
+        text: "Pas besoin de délibération du conseil municipal ni d'arrêté préalable pour initier une procédure « dépôt sauvage » : celle-ci relève du pouvoir de police administrative du maire.",
+        link: {
+          label: 'En savoir plus sur la délibération',
+          to: faq(
+            'faut-il-une-deliberation-du-conseil-municipal-pour-demarrer-une-procedure-administrative'
+          ),
+        },
+      },
+      {
+        text: 'Stop Dépôt Sauvage peut être utilisé partout, en zone Police nationale comme en zone Gendarmerie.',
+        link: {
+          label: 'En savoir plus sur les zones police et gendarmerie',
+          to: faq('puis-je-utiliser-protectenvi-si-ma-commune-est-en-zone-police-nationale'),
+        },
+      },
+      {
+        text: 'Une autre question ?',
+        link: { label: 'Consulter la FAQ', to: '/faq' },
       },
     ],
   },
@@ -117,55 +166,6 @@ export const PREPARATION_SECTIONS: PreparationSection[] = [
         label:
           'En cas de doute, je vérifie mon éligibilité à la procédure administrative avec le simulateur',
         link: { label: "Ouvrir le simulateur d'éligibilité", action: 'simulator' },
-      },
-    ],
-    notes: [
-      {
-        text: "Pas besoin de délibération du conseil municipal ni d'arrêté préalable pour initier une procédure « dépôt sauvage » : celle-ci relève du pouvoir de police administrative du maire.",
-        link: {
-          label: 'En savoir plus sur la délibération',
-          to: faq(
-            'faut-il-une-deliberation-du-conseil-municipal-pour-demarrer-une-procedure-administrative'
-          ),
-        },
-      },
-      {
-        text: 'Stop Dépôt Sauvage peut être utilisé partout, en zone Police nationale comme en zone Gendarmerie.',
-        link: {
-          label: 'En savoir plus sur les zones police et gendarmerie',
-          to: faq('puis-je-utiliser-protectenvi-si-ma-commune-est-en-zone-police-nationale'),
-        },
-      },
-      {
-        text: 'Une autre question ?',
-        link: { label: 'Consulter la FAQ', to: '/faq' },
-      },
-    ],
-  },
-  {
-    id: 'organisation',
-    title: 'Identifier qui peut agir dans la collectivité',
-    icon: 'fr-icon-team-line',
-    steps: [
-      {
-        id: 'habilites-constater',
-        label: "J'identifie les personnes habilitées à constater un dépôt sauvage",
-        description:
-          'Le maire, ses adjoints, le garde champêtre et les policiers municipaux peuvent constater sans habilitation supplémentaire. Tout autre agent doit être commissionné par arrêté du maire.',
-        link: {
-          label: 'Qui peut constater un dépôt sauvage ?',
-          to: faq('qui-peut-constater-un-depot-sauvage'),
-        },
-      },
-      {
-        id: 'habilites-procedure',
-        label: "J'identifie les personnes habilitées à lancer une procédure",
-        description:
-          "Le maire, ou ses adjoints par délégation. Dans une intercommunalité, le président de l'EPCI si les maires lui ont transféré ce pouvoir.",
-        link: {
-          label: 'Qui peut engager la procédure administrative ?',
-          to: faq('qui-peut-engager-la-procedure-administrative'),
-        },
       },
     ],
   },

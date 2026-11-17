@@ -97,6 +97,23 @@ describe('Page Se préparer', () => {
     expect(await screen.findByText(/0 action faite sur/)).toBeInTheDocument()
   })
 
+  it('félicite l’utilisateur quand toutes les actions sont faites', async () => {
+    const allIds = PREPARATION_SECTIONS.flatMap((section) => section.steps.map((step) => step.id))
+    localStorage.setItem('se-preparer-etapes-faites', JSON.stringify(allIds))
+    mockUser(true)
+    renderPage()
+
+    expect(await screen.findByText('Votre collectivité est prête')).toBeInTheDocument()
+  })
+
+  it('ne félicite pas tant qu’une action reste à faire', async () => {
+    mockUser(true)
+    renderPage()
+
+    await screen.findByText(/0 action faite sur/)
+    expect(screen.queryByText('Votre collectivité est prête')).not.toBeInTheDocument()
+  })
+
   it('ne présente pas de problème d’accessibilité détectable', async () => {
     mockUser(true)
     const { container } = renderPage()
