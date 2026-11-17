@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 
 from backend.constatations.models import Constatation
 from backend.proconnect.auth import ProConnectOIDCBackend, sync_proconnect_team
-from backend.teams.models import Team, TeamAutoCreationExclusion
+from backend.teams.models import Team, TeamAutoCreationExclusion, UserProfile, get_user_team
 
 User = get_user_model()
 
@@ -33,11 +33,11 @@ def test_eligible_user_creates_and_attaches_to_new_team():
     user = backend.create_user(claims)
 
     user.refresh_from_db()
-    assert user.team is not None
-    assert user.team.siret == "21750001600019"
-    assert user.team.siren == "217500016"
-    assert user.team.name == "Mairie de Paris"
-    assert user.team.members.filter(pk=user.pk).exists()
+    assert get_user_team(user) is not None
+    assert get_user_team(user).siret == "21750001600019"
+    assert get_user_team(user).siren == "217500016"
+    assert get_user_team(user).name == "Mairie de Paris"
+    assert get_user_team(user).members.filter(user=user).exists()
 
 
 @pytest.mark.django_db
@@ -68,9 +68,9 @@ def test_colleague_joins_existing_team():
     user1.refresh_from_db()
     user2.refresh_from_db()
 
-    assert user1.team == user2.team
+    assert get_user_team(user1) == get_user_team(user2)
     assert Team.objects.filter(siret="21750001600019").count() == 1
-    assert user1.team.members.count() == 2
+    assert get_user_team(user1).members.count() == 2
 
 
 @pytest.mark.django_db
@@ -88,15 +88,15 @@ def test_user_with_fallback_name_when_org_label_missing():
     user = backend.create_user(claims)
     user.refresh_from_db()
 
-    assert user.team is not None
-    assert user.team.siret == "21110001600025"
-    assert user.team.name == "Organisation 21110001600025"
+    assert get_user_team(user) is not None
+    assert get_user_team(user).siret == "21110001600025"
+    assert get_user_team(user).name == "Organisation 21110001600025"
 
 
 @pytest.mark.django_db
 def test_orphan_constatations_are_attached_to_newly_joined_team():
     user = User.objects.create_user(username="agent_orphan", email="orphan@commune.fr")
-    assert user.team is None
+    assert get_user_team(user) is None
 
     # Create prior orphan constatations
     c1 = Constatation.objects.create(user=user, commune="Village A", team=None)
@@ -119,9 +119,9 @@ def test_orphan_constatations_are_attached_to_newly_joined_team():
     c2.refresh_from_db()
     c_other.refresh_from_db()
 
-    assert user.team is not None
-    assert c1.team == user.team
-    assert c2.team == user.team
+    assert get_user_team(user) is not None
+    assert c1.team == get_user_team(user)
+    assert c2.team == get_user_team(user)
     assert c_other.team is None
 
 
@@ -146,7 +146,7 @@ def test_user_with_excluded_siren_remains_individual():
     user = backend.create_user(claims)
     user.refresh_from_db()
 
-    assert user.team is None
+    assert get_user_team(user) is None
     assert not Team.objects.filter(siret="15700001900012").exists()
 
 
@@ -169,7 +169,7 @@ def test_user_with_excluded_siret_remains_individual():
     user = backend.create_user(claims)
     user.refresh_from_db()
 
-    assert user.team is None
+    assert get_user_team(user) is None
     assert not Team.objects.filter(siret="13002526500013").exists()
 
 
@@ -186,7 +186,7 @@ def test_user_without_valid_siret_remains_individual():
     }
     user_empty = backend.create_user(claims_empty)
     user_empty.refresh_from_db()
-    assert user_empty.team is None
+    assert get_user_team(user_empty) is None
 
     # Invalid siret length
     claims_invalid_len = {
@@ -197,7 +197,7 @@ def test_user_without_valid_siret_remains_individual():
     }
     user_invalid = backend.create_user(claims_invalid_len)
     user_invalid.refresh_from_db()
-    assert user_invalid.team is None
+    assert get_user_team(user_invalid) is None
 
     # Non-digit siret
     claims_non_digit = {
@@ -208,7 +208,7 @@ def test_user_without_valid_siret_remains_individual():
     }
     user_non_digit = backend.create_user(claims_non_digit)
     user_non_digit.refresh_from_db()
-    assert user_non_digit.team is None
+    assert get_user_team(user_non_digit) is None
 
 
 @pytest.mark.django_db
@@ -221,8 +221,8 @@ def test_user_already_having_team_is_not_reassigned():
     user = User.objects.create_user(
         username="agent_mutated",
         email="agent@mutation.fr",
-        team=initial_team,
     )
+    UserProfile.objects.create(user=user, team=initial_team)
 
     claims_new_org = {
         "sub": "sub-agent-mutated",
@@ -233,7 +233,7 @@ def test_user_already_having_team_is_not_reassigned():
     sync_proconnect_team(user, claims_new_org)
 
     user.refresh_from_db()
-    assert user.team == initial_team
+    assert get_user_team(user) == initial_team
     assert not Team.objects.filter(siret="22222222222222").exists()
 
 
@@ -250,9 +250,9 @@ def test_siret_with_whitespace_is_properly_stripped():
     user = backend.create_user(claims)
     user.refresh_from_db()
 
-    assert user.team is not None
-    assert user.team.siret == "21750001600019"
-    assert user.team.siren == "217500016"
+    assert get_user_team(user) is not None
+    assert get_user_team(user).siret == "21750001600019"
+    assert get_user_team(user).siren == "217500016"
 
 
 @pytest.mark.django_db
@@ -269,9 +269,9 @@ def test_extremely_long_organization_label_is_safely_truncated():
     user = backend.create_user(claims)
     user.refresh_from_db()
 
-    assert user.team is not None
-    assert len(user.team.name) <= 255
-    assert user.team.name == long_label[:255]
+    assert get_user_team(user) is not None
+    assert len(get_user_team(user).name) <= 255
+    assert get_user_team(user).name == long_label[:255]
 
 
 @pytest.mark.django_db
@@ -302,7 +302,7 @@ def test_orphan_constatations_respect_existing_teams():
     c_orphan.refresh_from_db()
     user.refresh_from_db()
 
-    assert c_orphan.team == user.team
+    assert c_orphan.team == get_user_team(user)
     assert c_existing_team.team == other_team
 
 

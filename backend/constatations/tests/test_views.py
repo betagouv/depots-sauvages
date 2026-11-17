@@ -439,13 +439,9 @@ def test_inactive_user_access_denied(client):
 
 @pytest.mark.django_db(databases=["default", "stats_db"])
 def test_constatation_optimistic_locking(client):
-    alice = UserFactory(first_name="Alice", last_name="Smith")
-    bob = UserFactory(first_name="Bob", last_name="Jones")
     team = Team.objects.create(name="Equipe Test", siret="12345678901234", siren="123456789")
-    alice.team = team
-    alice.save()
-    bob.team = team
-    bob.save()
+    alice = UserFactory(first_name="Alice", last_name="Smith", team=team)
+    bob = UserFactory(first_name="Bob", last_name="Jones", team=team)
 
     constat = Constatation.objects.create(
         user=alice,

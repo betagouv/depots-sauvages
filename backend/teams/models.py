@@ -81,35 +81,6 @@ def get_user_team_id(user):
     return profile.team_id if profile else None
 
 
-# Convenience read-only properties on User model to avoid breaking callers
-from django.contrib.auth import get_user_model
-
-_UserModel = get_user_model()
-
-if not hasattr(_UserModel, "team"):
-
-    def _user_team(self):
-        profile = getattr(self, "profile", None)
-        return profile.team if profile else None
-
-    def _user_team_setter(self, value):
-        from backend.teams.models import UserProfile
-
-        if not getattr(self, "pk", None):
-            self._pending_team = value
-            return
-        profile, _ = UserProfile.objects.get_or_create(user=self)
-        profile.team = value
-        profile.save()
-
-    def _user_team_id(self):
-        profile = getattr(self, "profile", None)
-        return profile.team_id if profile else None
-
-    _UserModel.team = property(_user_team, _user_team_setter)
-    _UserModel.team_id = property(_user_team_id)
-
-
 class TeamAutoCreationExclusion(TimeStampedModel):
     """
     SIREN numbers excluded from automatic Team creation and pooling

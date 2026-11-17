@@ -68,7 +68,7 @@ class ConstatationViewSet(
 
     def perform_create(self, serializer):
         user = self.request.user
-        team = getattr(user, "team", None)
+        team = get_user_team(user)
         instance = serializer.save(
             user=user,
             team=team,
