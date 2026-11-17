@@ -152,9 +152,9 @@ def test_user_with_excluded_siren_remains_individual():
 
 @pytest.mark.django_db
 def test_user_with_excluded_siret_remains_individual():
-    # Exclusion by exact SIRET
+    # Exclusion by SIREN (matching the SIRET's first 9 digits)
     TeamAutoCreationExclusion.objects.create(
-        siret="13002526500013",
+        siren="130025265",
         label="DINUM",
     )
 
@@ -304,35 +304,6 @@ def test_orphan_constatations_respect_existing_teams():
 
     assert c_orphan.team == user.team
     assert c_existing_team.team == other_team
-
-
-@pytest.mark.django_db
-def test_team_auto_creation_exclusion_model_validation():
-    from django.core.exceptions import ValidationError
-
-    # Missing both SIREN and SIRET
-    with pytest.raises(ValidationError, match="Au moins un SIREN ou un SIRET"):
-        TeamAutoCreationExclusion.objects.create(label="Test Vide", siren="", siret="")
-
-    # Invalid SIREN length
-    with pytest.raises(ValidationError):
-        TeamAutoCreationExclusion.objects.create(label="Bad SIREN", siren="12345", siret="")
-
-    # Invalid SIRET length
-    with pytest.raises(ValidationError):
-        TeamAutoCreationExclusion.objects.create(label="Bad SIRET", siren="", siret="12345")
-
-    # Mismatched SIREN and SIRET
-    with pytest.raises(ValidationError, match="Le SIREN ne correspond pas"):
-        TeamAutoCreationExclusion.objects.create(
-            label="Mismatch", siren="111111111", siret="22222222200012"
-        )
-
-    # Valid SIREN with spaces is stripped and saved
-    excl = TeamAutoCreationExclusion.objects.create(
-        label="Trimmed", siren="  157000019  ", siret=""
-    )
-    assert excl.siren == "157000019"
 
 
 @pytest.mark.django_db

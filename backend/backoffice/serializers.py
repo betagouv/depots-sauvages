@@ -240,7 +240,6 @@ class BackofficeTeamAutoCreationExclusionSerializer(serializers.ModelSerializer)
         fields = [
             "id",
             "siren",
-            "siret",
             "label",
             "reason",
             "created",
@@ -250,22 +249,6 @@ class BackofficeTeamAutoCreationExclusionSerializer(serializers.ModelSerializer)
 
     def validate_siren(self, value):
         val = (value or "").strip()
-        if val and (len(val) != 9 or not val.isdigit()):
+        if not val or len(val) != 9 or not val.isdigit():
             raise serializers.ValidationError("Le SIREN doit comporter exactement 9 chiffres.")
         return val
-
-    def validate_siret(self, value):
-        val = (value or "").strip()
-        if val and (len(val) != 14 or not val.isdigit()):
-            raise serializers.ValidationError("Le SIRET doit comporter exactement 14 chiffres.")
-        return val
-
-    def validate(self, attrs):
-        instance = self.instance or TeamAutoCreationExclusion()
-        for attr, value in attrs.items():
-            setattr(instance, attr, value)
-        try:
-            instance.clean()
-        except ValidationError as e:
-            raise serializers.ValidationError(serializers.as_serializer_error(e))
-        return attrs
