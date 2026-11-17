@@ -11,6 +11,7 @@ from rest_framework.response import Response
 
 from backend.activity_logs.views import TrackActivityMixin
 from backend.constatations.concurrency import check_optimistic_lock
+from backend.teams.models import get_user_team, get_user_team_id
 
 from .models import Constatation
 from .serializers import ConstatationListSerializer, ConstatationSerializer
@@ -28,8 +29,9 @@ def get_user_constatations_queryset(user):
         return Constatation.objects.none()
     if user.is_staff:
         return Constatation.objects.all()
-    if user.team_id:
-        return Constatation.objects.filter(team_id=user.team_id)
+    user_team_id = get_user_team_id(user)
+    if user_team_id:
+        return Constatation.objects.filter(team_id=user_team_id)
     return Constatation.objects.filter(
         models.Q(team__isnull=True)
         & (models.Q(created_by=user) | models.Q(created_by__isnull=True, user=user))

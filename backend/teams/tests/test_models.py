@@ -1,6 +1,6 @@
 import pytest
 from django.contrib.auth import get_user_model
-from backend.teams.models import Team, TeamAutoCreationExclusion
+from backend.teams.models import Team, TeamAutoCreationExclusion, UserProfile, get_user_team
 from backend.constatations.models import Constatation
 from backend.procedures.models import SuiviProcedure
 
@@ -12,14 +12,16 @@ def test_create_team_and_link_user():
     team = Team.objects.create(name="Mairie de Test", siret="12345678901234", siren="123456789")
     user = User.objects.create_user(username="agent1", email="agent1@test.fr")
 
-    assert user.team is None
+    profile, _ = UserProfile.objects.get_or_create(user=user)
+    assert profile.team is None
+    assert get_user_team(user) is None
 
-    user.team = team
-    user.save()
+    profile.team = team
+    profile.save()
 
-    assert user.team == team
+    assert get_user_team(user) == team
     assert team.members.count() == 1
-    assert team.members.first() == user
+    assert team.members.first().user == user
 
 
 @pytest.mark.django_db
@@ -36,8 +38,10 @@ def test_create_team_autocreation_exclusion():
 @pytest.mark.django_db
 def test_constatation_team_and_traceability_fields():
     team = Team.objects.create(name="Police Municipale", siret="98765432109876", siren="987654321")
-    alice = User.objects.create_user(username="alice", email="alice@test.fr", team=team)
-    bob = User.objects.create_user(username="bob", email="bob@test.fr", team=team)
+    alice = User.objects.create_user(username="alice", email="alice@test.fr")
+    bob = User.objects.create_user(username="bob", email="bob@test.fr")
+    UserProfile.objects.create(user=alice, team=team)
+    UserProfile.objects.create(user=bob, team=team)
 
     constatation = Constatation.objects.create(
         user=alice,

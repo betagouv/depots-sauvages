@@ -39,6 +39,7 @@ def load_initial_exclusions(apps, schema_editor):
 def populate_and_migrate_teams(apps, schema_editor):
     User = apps.get_model("auth", "User")
     Team = apps.get_model("teams", "Team")
+    UserProfile = apps.get_model("teams", "UserProfile")
     TeamAutoCreationExclusion = apps.get_model("teams", "TeamAutoCreationExclusion")
     Constatation = apps.get_model("constatations", "Constatation")
     SuiviProcedure = apps.get_model("procedures", "SuiviProcedure")
@@ -67,7 +68,11 @@ def populate_and_migrate_teams(apps, schema_editor):
         TeamAutoCreationExclusion.objects.exclude(siret="").values_list("siret", flat=True)
     )
 
-    # 4. Migrate users with eligible ProConnect profiles to Teams
+    # 4. Ensure all existing users have a UserProfile
+    for u in User.objects.all():
+        UserProfile.objects.get_or_create(user=u)
+
+    # 5. Migrate users with eligible ProConnect profiles to Teams
     for profile in ProConnectProfile.objects.select_related("user"):
         siret = (profile.siret or "").strip()
         siren = (profile.siren or "").strip() or (siret[:9] if len(siret) >= 9 else "")
@@ -84,9 +89,10 @@ def populate_and_migrate_teams(apps, schema_editor):
             defaults={"name": team_name, "siren": siren},
         )
 
-        if not user.team_id:
-            user.team = team
-            user.save(update_fields=["team"])
+        user_profile, _ = UserProfile.objects.get_or_create(user=user)
+        if not user_profile.team_id:
+            user_profile.team = team
+            user_profile.save(update_fields=["team"])
 
         # Associate historical user's constatations with the team
         Constatation.objects.filter(user=user, team__isnull=True).update(team=team)
@@ -99,7 +105,7 @@ def reverse_populate(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("teams", "0002_add_team_to_user"),
+        ("teams", "0002_create_user_profile"),
         ("constatations", "0010_constatation_created_by_constatation_team_and_more"),
         ("procedures", "0009_suiviprocedure_updated_by"),
         ("proconnect", "0001_initial"),

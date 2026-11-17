@@ -163,9 +163,9 @@ class BackofficeUserSerializer(serializers.ModelSerializer):
     procedures_count = serializers.IntegerField(read_only=True)
     proconnect_profile = serializers.SerializerMethodField()
     has_proconnect = serializers.SerializerMethodField()
-    team_id = serializers.IntegerField(source="team.id", read_only=True, default=None)
-    team_name = serializers.CharField(source="team.name", read_only=True, default=None)
-    team_siret = serializers.CharField(source="team.siret", read_only=True, default=None)
+    team_id = serializers.IntegerField(source="profile.team.id", read_only=True, default=None)
+    team_name = serializers.CharField(source="profile.team.name", read_only=True, default=None)
+    team_siret = serializers.CharField(source="profile.team.siret", read_only=True, default=None)
 
     class Meta:
         model = get_user_model()
