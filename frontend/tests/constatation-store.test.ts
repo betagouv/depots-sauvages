@@ -320,6 +320,8 @@ describe('ConstatationStore - Prejudice Logic', () => {
     await store.loadConstatation(456)
     expect(store.formData.isDraft).toBe(false)
 
+    // Modifier une valeur pour être considéré comme dirty
+    store.formData.commune = 'Villeurbanne'
     await store.autoSave()
 
     expect(api.updateResource).toHaveBeenCalledWith(

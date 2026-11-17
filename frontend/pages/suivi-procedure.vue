@@ -34,6 +34,14 @@
             </div>
           </header>
 
+          <ConflictBanner
+            :visible="suiviStore.conflictBannerVisible"
+            :updatedBy="suiviStore.conflictDetails?.updatedBy"
+            @reload="handleConflictReload"
+            @force-save="handleConflictForceSave"
+            @close="suiviStore.conflictBannerVisible = false"
+          />
+
           <InfosComplementaires
             v-if="hasProcedure"
             :suivi="suiviProcedure"
@@ -136,6 +144,7 @@ import { useRoute, useRouter } from 'vue-router'
 import StepperProcedure from '../components/StepperProcedure.vue'
 import Chargement from '../components/procedures/Chargement.vue'
 import Metadata from '../components/procedures/Metadata.vue'
+import ConflictBanner from '../components/shared/ConflictBanner.vue'
 import ConflictResolutionModal from '../components/shared/ConflictResolutionModal.vue'
 import LoginInvitation from '../components/shared/LoginInvitation.vue'
 import AucuneProcedure from '../components/steps/AucuneProcedure.vue'
@@ -187,17 +196,17 @@ const modifyUrl = computed(() => `/constatation/${constatationId.value}`)
 const isInitialLoading = ref(true)
 
 const debouncedSave = debounce(() => {
-  if (isInitialLoading.value) return
-  if (suiviStore.conflictModalVisible) return
+  if (isInitialLoading.value || suiviStore.isReloading) return
+  if (suiviStore.conflictModalVisible || suiviStore.conflictBannerVisible) return
   if (constatationId.value && procedureData.value?.id) {
-    suiviStore.saveSuivi(constatationId.value, procedureData.value.id)
+    suiviStore.saveSuivi(constatationId.value, procedureData.value.id, { isExplicitSubmit: false })
   }
 }, 1000)
 
 watch(
   () => suiviProcedure.value,
   () => {
-    if (isInitialLoading.value) return
+    if (isInitialLoading.value || suiviStore.isReloading) return
     debouncedSave()
   },
   { deep: true }
@@ -336,6 +345,7 @@ onMounted(async () => {
 })
 
 const handleConflictReload = async () => {
+  debouncedSave.cancel()
   const currentConstatationId = constatationId.value
   const internalId = procedureData.value?.id
   if (currentConstatationId && internalId) {
@@ -344,6 +354,7 @@ const handleConflictReload = async () => {
 }
 
 const handleConflictForceSave = async () => {
+  debouncedSave.cancel()
   const currentConstatationId = constatationId.value
   const internalId = procedureData.value?.id
   if (currentConstatationId && internalId) {
