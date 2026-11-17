@@ -9,9 +9,12 @@ export interface PreparationStep {
   id: string
   label: string
   description?: string
-  links: PreparationLink[]
-  // Resources not published yet: shown as "Bientôt disponible" until a URL is set.
-  upcoming?: string[]
+  link: PreparationLink
+}
+
+export interface PreparationNote {
+  text: string
+  link: PreparationLink
 }
 
 export interface PreparationSection {
@@ -19,231 +22,149 @@ export interface PreparationSection {
   title: string
   icon: string
   steps: PreparationStep[]
+  notes?: PreparationNote[]
 }
 
-// Resources to fill in before going live (Trello 998). Leave null to show "Bientôt disponible".
+// Resources to fill in before or after going live (Trello 998). A step whose resource is null is hidden.
 export const PENDING_RESOURCES: Record<string, string | null> = {
-  temoignagesAudio: null,
-  replayWebinaire: null,
-  arreteTypePrevention: null,
   guideUtilisation: null,
 }
 
 const faq = (slug: string) => `/faq/${slug}`
 const blog = (slug: string) => `/blog/${slug}`
 
+const guideStep: PreparationStep[] = PENDING_RESOURCES.guideUtilisation
+  ? [
+      {
+        id: 'guide',
+        label: "Je consulte le guide d'utilisation",
+        description: "Toutes les étapes de l'outil, de la constatation à la sanction.",
+        link: { label: "Ouvrir le guide d'utilisation", href: PENDING_RESOURCES.guideUtilisation },
+      },
+    ]
+  : []
+
 export const PREPARATION_SECTIONS: PreparationSection[] = [
   {
     id: 'organisation',
-    title: "Plus d'info sur mon organisation",
+    title: 'Savoir qui fait quoi dans ma collectivité',
     icon: 'fr-icon-team-line',
     steps: [
       {
         id: 'habilites-constater',
         label: "J'identifie les personnes habilitées à constater un dépôt sauvage",
         description:
-          'Le maire et ses adjoints, le garde champêtre et les agents de police municipale peuvent constater sans habilitation supplémentaire. Tout autre agent (service technique, DGS, ASVP…) doit être commissionné par arrêté du maire.',
-        links: [
-          {
-            label: 'Qui peut constater un dépôt sauvage ?',
-            to: faq('qui-peut-constater-un-depot-sauvage'),
-          },
-          { label: 'Comment commissionner un agent ?', to: faq('comment-commissionner-un-agent') },
-        ],
+          'Le maire, ses adjoints, le garde champêtre et les policiers municipaux peuvent constater sans habilitation supplémentaire. Tout autre agent doit être commissionné par arrêté du maire.',
+        link: {
+          label: 'Qui peut constater un dépôt sauvage ?',
+          to: faq('qui-peut-constater-un-depot-sauvage'),
+        },
       },
       {
         id: 'habilites-procedure',
         label: "J'identifie les personnes habilitées à lancer une procédure",
         description:
-          "Le maire, ou ses adjoints par délégation. Le président d'un EPCI compétent en collecte des déchets ménagers, lorsque les maires lui ont transféré leurs prérogatives.",
-        links: [
-          {
-            label: 'Qui peut engager la procédure administrative ?',
-            to: faq('qui-peut-engager-la-procedure-administrative'),
-          },
-        ],
+          "Le maire, ou ses adjoints par délégation. Dans une intercommunalité, le président de l'EPCI si les maires lui ont transféré ce pouvoir.",
+        link: {
+          label: 'Qui peut engager la procédure administrative ?',
+          to: faq('qui-peut-engager-la-procedure-administrative'),
+        },
+      },
+    ],
+    notes: [
+      {
+        text: "Pas besoin de délibération du conseil municipal ni d'arrêté préalable : seul l'arrêté prononçant l'amende est nécessaire.",
+        link: {
+          label: 'En savoir plus sur la délibération',
+          to: faq(
+            'faut-il-une-deliberation-du-conseil-municipal-pour-demarrer-une-procedure-administrative'
+          ),
+        },
+      },
+      {
+        text: 'Stop Dépôt Sauvage peut être utilisé partout, en zone Police nationale comme en zone Gendarmerie.',
+        link: {
+          label: 'En savoir plus sur les zones police et gendarmerie',
+          to: faq('puis-je-utiliser-protectenvi-si-ma-commune-est-en-zone-police-nationale'),
+        },
+      },
+      {
+        text: 'Une autre question ?',
+        link: { label: 'Consulter la FAQ', to: '/faq' },
       },
     ],
   },
   {
-    id: 'questions-frequentes',
-    title: 'Consulter les questions les plus fréquentes',
-    icon: 'fr-icon-question-line',
+    id: 'jour-j',
+    title: 'Être prêt le jour J',
+    icon: 'fr-icon-flashlight-line',
     steps: [
       {
-        id: 'deliberation',
-        label:
-          "Est-ce que j'ai besoin d'une délibération ou d'un arrêté pour mettre en œuvre la procédure administrative ?",
-        description:
-          "Non. La procédure relève du pouvoir de police administrative du maire : aucune délibération du conseil municipal n'est nécessaire, ni pour l'engager, ni pour prononcer l'amende. Aucun arrêté préalable n'est non plus requis : seul l'arrêté prononçant l'amende à l'encontre de l'auteur est nécessaire.",
-        links: [
-          {
-            label: 'Lire la réponse complète',
-            to: faq(
-              'faut-il-une-deliberation-du-conseil-municipal-pour-demarrer-une-procedure-administrative'
-            ),
-          },
-        ],
+        id: 'bons-reflexes',
+        label: 'Je découvre les bons réflexes face à un dépôt sauvage',
+        description: 'Les 3 étapes à suivre quand un dépôt est découvert sur votre territoire.',
+        link: {
+          label: 'Dépôt sauvage : plan d’action en 3 étapes pour les communes',
+          to: blog('depot-sauvage-plan-daction-en-3-etapes-pour-les-communes'),
+        },
       },
       {
-        id: 'zone-police',
-        label:
-          'Zone police ou gendarmerie : est-ce que je peux utiliser Stop Dépôt Sauvage partout ?',
+        id: 'identifier-auteur',
+        label: "Je consulte les bonnes pratiques pour identifier l'auteur d'un dépôt sauvage",
         description:
-          "Oui. Stop Dépôt Sauvage peut être utilisé par toutes les communes, qu'elles soient en zone Police nationale ou en zone Gendarmerie. La procédure administrative relève des pouvoirs du maire et n'est pas liée au zonage des forces de sécurité.",
-        links: [
-          {
-            label: 'Lire la réponse complète',
-            to: faq('puis-je-utiliser-protectenvi-si-ma-commune-est-en-zone-police-nationale'),
-          },
-        ],
+          'Indices trouvés dans le dépôt, vidéoprotection, plaque d’immatriculation, témoignages : ce qui est possible et dans quel cadre.',
+        link: {
+          label: 'Identifier l’auteur d’un dépôt sauvage : indices, plaque, vidéo',
+          to: blog('identifier-lauteur-dun-depot-sauvage-indices-plaque-video'),
+        },
       },
       {
-        id: 'faq',
-        label: 'Je consulte la FAQ pour répondre à toutes mes questions',
-        links: [{ label: 'Consulter la FAQ', to: '/faq' }],
+        id: 'enlever-depot',
+        label: 'Je vérifie si je peux enlever un dépôt sans attendre',
+        link: {
+          label: 'Dépôt sauvage : faut-il attendre 10 jours avant de l’enlever ?',
+          to: blog('depot-sauvage-faut-il-attendre-10-jours-avant-de-lenlever'),
+        },
       },
-    ],
-  },
-  {
-    id: 'eligibilite',
-    title: 'Vérifier mon éligibilité',
-    icon: 'fr-icon-checkbox-circle-line',
-    steps: [
       {
         id: 'simulateur',
         label:
           'En cas de doute, je vérifie mon éligibilité à la procédure administrative avec le simulateur',
-        links: [{ label: "Ouvrir le simulateur d'éligibilité", action: 'simulator' }],
+        link: { label: "Ouvrir le simulateur d'éligibilité", action: 'simulator' },
       },
     ],
   },
   {
-    id: 'identifier-auteur',
-    title: "Identifier l'auteur",
-    icon: 'fr-icon-search-line',
+    id: 'se-former',
+    title: 'Se former',
+    icon: 'fr-icon-book-2-line',
     steps: [
+      ...guideStep,
       {
-        id: 'bonnes-pratiques-identification',
-        label: "Je consulte les bonnes pratiques pour identifier l'auteur d'un dépôt sauvage",
+        id: 'webinaire',
+        label: 'Je participe au webinaire',
         description:
-          "Indices trouvés dans le dépôt, vidéoprotection, plaque d'immatriculation, témoignages : ce qui est possible et dans quel cadre.",
-        links: [
-          {
-            label: "Identifier l'auteur d'un dépôt sauvage : indices, plaque, vidéo",
-            to: blog('identifier-lauteur-dun-depot-sauvage-indices-plaque-video'),
-          },
-          { label: "Comment identifier l'auteur ?", to: faq('comment-identifier-lauteur') },
-          {
-            label: 'Peut-on utiliser des caméras de chasse ?',
-            to: faq('peut-on-utiliser-des-cameras-de-chasse'),
-          },
-          {
-            label: 'La police municipale peut-elle identifier un véhicule ?',
-            to: faq('la-police-municipale-peutelle-identifier-un-vehicule'),
-          },
-        ],
+          'En moins de 60 minutes, découvrez comment agir concrètement grâce à la procédure administrative.',
+        link: { label: "S'inscrire au prochain webinaire", to: '/rdv' },
       },
-    ],
-  },
-  {
-    id: 'retours-experience',
-    title: "S'inspirer d'autres communes",
-    icon: 'fr-icon-chat-quote-line',
-    steps: [
       {
         id: 'retours-experience',
         label:
           "Je parcours les retours d'expériences d'autres communes qui ont utilisé Stop Dépôt Sauvage",
         description: 'Utile aussi pour présenter la démarche à vos élus.',
-        links: [
-          {
-            label: 'Comment une commune a traité son premier dossier',
-            to: blog('comment-une-commune-a-traite-son-premier-dossier-sur-protectenvi'),
-          },
-          {
-            label: "Le retour d'expérience des Salles-du-Gardon",
-            to: blog('depots-dencombrants-le-retour-dexperience-des-salles-du-gardon'),
-          },
-          {
-            label: 'Strasbourg : sensibiliser, prévenir, verbaliser',
-            to: blog('strasbourg-contre-les-depots-sauvages-sensibiliser-prevenir-verbaliser'),
-          },
-          ...(PENDING_RESOURCES.temoignagesAudio
-            ? [
-                {
-                  label: 'Écouter les témoignages de communes',
-                  href: PENDING_RESOURCES.temoignagesAudio,
-                },
-              ]
-            : []),
-        ],
-        upcoming: PENDING_RESOURCES.temoignagesAudio ? [] : ['Témoignages audio de communes'],
+        link: {
+          label: 'Comment une commune a traité son premier dossier',
+          to: blog('comment-une-commune-a-traite-son-premier-dossier-sur-protectenvi'),
+        },
       },
-    ],
-  },
-  {
-    id: 'webinaire',
-    title: 'Participer au webinaire',
-    icon: 'fr-icon-video-chat-line',
-    steps: [
-      {
-        id: 'webinaire',
-        label: 'Je participe au webinaire',
-        description:
-          'En moins de 60 minutes, découvrir comment agir concrètement contre les dépôts sauvages grâce à la procédure administrative.',
-        links: [
-          { label: "S'inscrire au prochain webinaire", to: '/rdv' },
-          ...(PENDING_RESOURCES.replayWebinaire
-            ? [{ label: 'Voir le replay', href: PENDING_RESOURCES.replayWebinaire }]
-            : []),
-        ],
-        upcoming: PENDING_RESOURCES.replayWebinaire ? [] : ['Replay du webinaire'],
-      },
-    ],
-  },
-  {
-    id: 'prevention',
-    title: 'Prévenir les dépôts',
-    icon: 'fr-icon-shield-line',
-    steps: [
       {
         id: 'prevention',
         label: 'Je parcours les bonnes pratiques pour prévenir les dépôts',
         description: 'Panneaux, aménagement, communication auprès des habitants.',
-        links: [
-          {
-            label: 'Comment communiquer pour réduire les dépôts sauvages',
-            to: blog('depots-sauvages-bien-communiquer-pour-les-reduire'),
-          },
-          {
-            label: "Prévenir les dépôts par l'aménagement de l'espace public",
-            to: blog('prevenir-les-depots-sauvages-par-lamenagement-urbain'),
-          },
-          {
-            label: 'Organiser un plan de lutte dans sa commune',
-            to: blog('plan-de-lutte-contre-les-depots-sauvages-5-volets'),
-          },
-          ...(PENDING_RESOURCES.arreteTypePrevention
-            ? [{ label: "Télécharger l'arrêté type", href: PENDING_RESOURCES.arreteTypePrevention }]
-            : []),
-        ],
-        upcoming: PENDING_RESOURCES.arreteTypePrevention ? [] : ['Arrêté type'],
-      },
-    ],
-  },
-  {
-    id: 'guide',
-    title: "Consulter le guide d'utilisation",
-    icon: 'fr-icon-book-2-line',
-    steps: [
-      {
-        id: 'guide',
-        label: "Je consulte le guide d'utilisation",
-        links: PENDING_RESOURCES.guideUtilisation
-          ? [{ label: "Ouvrir le guide d'utilisation", href: PENDING_RESOURCES.guideUtilisation }]
-          : [],
-        upcoming: PENDING_RESOURCES.guideUtilisation ? [] : ["Guide d'utilisation"],
+        link: {
+          label: 'Plan de lutte contre les dépôts sauvages : comment l’organiser',
+          to: blog('plan-de-lutte-contre-les-depots-sauvages-5-volets'),
+        },
       },
     ],
   },

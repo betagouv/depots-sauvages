@@ -4,8 +4,14 @@
       <div class="fr-container">
         <h1 class="fr-h1 fr-mb-3w">Se préparer avant son premier dossier</h1>
         <p class="fr-text fr-text--lead fr-mb-2w">
-          Pas encore de dépôt sauvage à traiter ? Profitez-en pour préparer votre organisation : le
+          Pas encore de dépôt sauvage à traiter ? Préparez votre collectivité dès maintenant : le
           jour où un dépôt arrive, vous saurez qui fait quoi et comment agir.
+        </p>
+        <p class="fr-text--sm fr-mb-2w">
+          Vous avez déjà un dépôt à traiter ?
+          <router-link to="/demarrer-constatation" class="fr-link fr-text--sm"
+            >Démarrer une constatation</router-link
+          >
         </p>
         <p v-if="userInfo?.is_authenticated" class="fr-text--bold fr-mb-0" aria-live="polite">
           {{ progressLabel }}
@@ -18,7 +24,7 @@
 
       <template v-else-if="userInfo?.is_authenticated">
         <p class="fr-text--sm fr-text-mention--grey fr-mb-4w">
-          Cochez les étapes au fur et à mesure. Elles restent enregistrées sur ce navigateur.
+          Cochez chaque action une fois faite. Vos coches sont gardées sur cet ordinateur.
         </p>
 
         <section
@@ -38,6 +44,15 @@
             :done="doneSteps.has(step.id)"
             @update:done="(value) => setDone(step.id, value)"
           />
+          <div v-if="section.notes?.length" class="fr-callout fr-icon-information-line fr-mb-3w">
+            <h3 class="fr-callout__title fr-h6">Bon à savoir</h3>
+            <ul class="fr-raw-list">
+              <li v-for="note in section.notes" :key="note.link.label" class="fr-mb-2w">
+                <p class="fr-text--sm fr-mb-1v">{{ note.text }}</p>
+                <PreparationResourceLink :link="note.link" />
+              </li>
+            </ul>
+          </div>
         </section>
 
         <div class="fr-mt-6w">
@@ -63,6 +78,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import Chargement from '@/components/procedures/Chargement.vue'
+import PreparationResourceLink from '@/components/se-preparer/PreparationResourceLink.vue'
 import PreparationStep from '@/components/se-preparer/PreparationStep.vue'
 import LoginInvitation from '@/components/shared/LoginInvitation.vue'
 import { PREPARATION_SECTIONS } from '@/constants/preparation-steps'
@@ -75,11 +91,12 @@ const userInfo = ref<UserInfo | null>(null)
 const showLoading = ref(true)
 const doneSteps = ref<Set<string>>(new Set())
 
-const totalSteps = PREPARATION_SECTIONS.reduce((total, section) => total + section.steps.length, 0)
+const stepIds = PREPARATION_SECTIONS.flatMap((section) => section.steps.map((step) => step.id))
 
+// Ignores ids stored for steps that no longer exist, so the count never exceeds the total.
 const progressLabel = computed(() => {
-  const count = doneSteps.value.size
-  return `${count} étape${count > 1 ? 's' : ''} faite${count > 1 ? 's' : ''} sur ${totalSteps}`
+  const count = stepIds.filter((id) => doneSteps.value.has(id)).length
+  return `${count} action${count > 1 ? 's' : ''} faite${count > 1 ? 's' : ''} sur ${stepIds.length}`
 })
 
 const loadDoneSteps = () => {

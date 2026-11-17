@@ -48,7 +48,7 @@ describe('Page Se préparer', () => {
         expect(screen.getByLabelText(step.label)).toBeInTheDocument()
       }
     }
-    expect(screen.getByText(/0 étape faite sur/)).toBeInTheDocument()
+    expect(screen.getByText(/0 action faite sur/)).toBeInTheDocument()
   })
 
   it('invite à se connecter si l’utilisateur n’est pas connecté', async () => {
@@ -65,19 +65,36 @@ describe('Page Se préparer', () => {
     const { unmount } = renderPage()
 
     await fireEvent.click(await screen.findByLabelText(firstStep.label))
-    expect(screen.getByText(/1 étape faite sur/)).toBeInTheDocument()
+    expect(screen.getByText(/1 action faite sur/)).toBeInTheDocument()
     unmount()
 
     renderPage()
     expect(await screen.findByLabelText(firstStep.label)).toBeChecked()
   })
 
-  it('affiche « Bientôt disponible » pour une ressource pas encore publiée', async () => {
+  it('présente les réponses rassurantes sans case à cocher', async () => {
     mockUser(true)
     renderPage()
 
-    await screen.findByLabelText(PREPARATION_SECTIONS[0].steps[0].label)
-    expect(screen.getAllByText('Bientôt disponible').length).toBeGreaterThan(0)
+    expect(await screen.findByText('Bon à savoir')).toBeInTheDocument()
+    expect(screen.getByText(/Pas besoin de délibération/)).toBeInTheDocument()
+    expect(screen.queryByLabelText(/délibération/)).not.toBeInTheDocument()
+  })
+
+  it('masque le guide tant qu’il n’est pas publié', async () => {
+    mockUser(true)
+    renderPage()
+
+    await screen.findByText('Bon à savoir')
+    expect(screen.queryByText(/guide d'utilisation/i)).not.toBeInTheDocument()
+  })
+
+  it('ignore les étapes cochées qui n’existent plus', async () => {
+    localStorage.setItem('se-preparer-etapes-faites', JSON.stringify(['ancienne-etape']))
+    mockUser(true)
+    renderPage()
+
+    expect(await screen.findByText(/0 action faite sur/)).toBeInTheDocument()
   })
 
   it('ne présente pas de problème d’accessibilité détectable', async () => {
