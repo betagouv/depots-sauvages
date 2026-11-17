@@ -13,6 +13,8 @@ class ConstatationListSerializer(serializers.ModelSerializer):
     date_creation = serializers.DateTimeField(source="created", read_only=True)
     date_modification = serializers.DateTimeField(source="modified", read_only=True)
     suivi_procedure = serializers.SerializerMethodField()
+    created_by_name = serializers.SerializerMethodField()
+    updated_by_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Constatation
@@ -30,7 +32,23 @@ class ConstatationListSerializer(serializers.ModelSerializer):
             "date_creation",
             "date_modification",
             "suivi_procedure",
+            "created_by_name",
+            "updated_by_name",
         ]
+
+    def _format_user_name(self, user):
+        if not user:
+            return None
+        full_name = f"{getattr(user, 'first_name', '')} {getattr(user, 'last_name', '')}".strip()
+        return full_name or getattr(user, "email", "") or None
+
+    def get_created_by_name(self, obj):
+        user = getattr(obj, "created_by", None) or getattr(obj, "user", None)
+        return self._format_user_name(user)
+
+    def get_updated_by_name(self, obj):
+        user = getattr(obj, "updated_by", None)
+        return self._format_user_name(user)
 
     def get_suivi_procedure(self, obj):
         sp = getattr(obj, "suivi_procedure", None)

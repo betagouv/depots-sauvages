@@ -8,6 +8,13 @@
       :quick-links="quickLinks"
     >
       <template #before-quick-links>
+        <div v-if="userStore.hasTeam" class="fr-header__tools-item fr-mr-2w">
+          <DsfrBadge
+            type="info"
+            :label="userStore.teamName ? `Équipe : ${userStore.teamName}` : 'Organisation'"
+            class="fr-badge--no-icon fr-badge--sm"
+          />
+        </div>
         <div v-if="userInfo?.is_staff" class="fr-header__tools-item admin-toggle-header-item">
           <DsfrToggleSwitch
             label="Mode admin"
@@ -96,6 +103,7 @@
 
 <script setup lang="ts">
 import {
+  DsfrBadge,
   DsfrBreadcrumb,
   DsfrFooter,
   DsfrFooterLinkList,

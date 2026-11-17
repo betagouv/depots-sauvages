@@ -3,6 +3,9 @@
     <div class="fr-grid-row fr-grid-row--middle fr-mb-2w">
       <div class="fr-col">
         <h1>Mes procédures</h1>
+        <p v-if="userStore.hasTeam && userStore.teamName" class="fr-text--lead fr-text-mention--grey fr-mb-0">
+          Procédures partagées de l'organisation : <strong>{{ userStore.teamName }}</strong>
+        </p>
       </div>
       <div v-if="userInfo?.is_authenticated && procedures.length > 0" class="fr-col-auto">
         <router-link to="/demarrer-constatation" class="fr-btn">
@@ -79,6 +82,7 @@ import Chargement from '../components/procedures/Chargement.vue'
 import ColonneProcedures from '../components/procedures/ColonneProcedures.vue'
 import LoginInvitation from '../components/shared/LoginInvitation.vue'
 import { getUserInfo, type UserInfo } from '../services/api'
+import { useUserStore } from '../stores/user'
 import {
   COLONNES,
   comparerDansColonne,
@@ -88,6 +92,7 @@ import {
 
 const userInfo = ref<UserInfo | null>(null)
 const procedureStore = useProcedureStore()
+const userStore = useUserStore()
 const showLoading = ref(true)
 
 const recherche = ref('')

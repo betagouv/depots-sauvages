@@ -114,6 +114,15 @@
               />
             </template>
           </StepperProcedure>
+
+          <ConflictResolutionModal
+            :opened="suiviStore.conflictModalVisible"
+            :updatedBy="suiviStore.conflictDetails?.updatedBy"
+            :message="suiviStore.conflictDetails?.message"
+            @close="suiviStore.conflictModalVisible = false"
+            @reload="handleConflictReload"
+            @force-save="handleConflictForceSave"
+          />
         </div>
       </div>
     </div>
@@ -127,6 +136,7 @@ import { useRoute, useRouter } from 'vue-router'
 import StepperProcedure from '../components/StepperProcedure.vue'
 import Chargement from '../components/procedures/Chargement.vue'
 import Metadata from '../components/procedures/Metadata.vue'
+import ConflictResolutionModal from '../components/shared/ConflictResolutionModal.vue'
 import LoginInvitation from '../components/shared/LoginInvitation.vue'
 import AucuneProcedure from '../components/steps/AucuneProcedure.vue'
 import Cloture from '../components/steps/Cloture.vue'
@@ -317,6 +327,26 @@ onMounted(async () => {
     if (allerALaSectionOuverte) await afficherSectionOuverte()
   }
 })
+
+const handleConflictReload = async () => {
+  const currentConstatationId = constatationId.value
+  const procedure = suiviProcedure.value
+  if (currentConstatationId && procedure && procedure.id) {
+    await suiviStore.resolveConflictReload(currentConstatationId, procedure.id)
+  }
+}
+
+const handleConflictForceSave = async () => {
+  const currentConstatationId = constatationId.value
+  const procedure = suiviProcedure.value
+  if (currentConstatationId && procedure && procedure.id) {
+    try {
+      await suiviStore.forceSave(currentConstatationId, procedure.id)
+    } catch (err) {
+      console.error('Erreur lors du force save suivi:', err)
+    }
+  }
+}
 </script>
 
 <style scoped>
