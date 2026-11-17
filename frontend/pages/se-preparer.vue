@@ -2,7 +2,7 @@
   <div>
     <div class="fr-background-alt--blue-france fr-mb-6w fr-py-6w">
       <div class="fr-container">
-        <h1 class="fr-h1 fr-mb-3w">Se préparer avant son premier dossier</h1>
+        <h1 class="fr-h1 fr-mb-3w">Se préparer avant sa première procédure</h1>
         <p class="fr-text fr-text--lead fr-mb-2w">
           Pas encore de dépôt sauvage à traiter ? Préparez votre collectivité dès maintenant : le
           jour où un dépôt arrive, vous saurez qui fait quoi et comment agir.

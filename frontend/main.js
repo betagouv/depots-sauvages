@@ -82,7 +82,7 @@ const router = createRouter({
       name: 'SePreparer',
       component: () => import('./pages/se-preparer.vue'),
       meta: {
-        title: 'Se préparer avant son premier dossier',
+        title: 'Se préparer avant sa première procédure',
         breadcrumbLabel: 'Se préparer',
         breadcrumbParent: '/mes-procedures',
         breadcrumbBand: true,
