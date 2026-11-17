@@ -184,7 +184,11 @@ const auteurIdentifie = computed(() => procedureData.value?.auteur_identifie ?? 
 const modifyUrl = computed(() => `/constatation/${constatationId.value}`)
 
 // Auto-save logic with debounce
+const isInitialLoading = ref(true)
+
 const debouncedSave = debounce(() => {
+  if (isInitialLoading.value) return
+  if (suiviStore.conflictModalVisible) return
   if (constatationId.value && procedureData.value?.id) {
     suiviStore.saveSuivi(constatationId.value, procedureData.value.id)
   }
@@ -193,6 +197,7 @@ const debouncedSave = debounce(() => {
 watch(
   () => suiviProcedure.value,
   () => {
+    if (isInitialLoading.value) return
     debouncedSave()
   },
   { deep: true }
@@ -324,6 +329,8 @@ onMounted(async () => {
     error.value = err.error || 'Une erreur est survenue lors de la récupération du dossier.'
   } finally {
     showLoading.value = false
+    await nextTick()
+    isInitialLoading.value = false
     if (allerALaSectionOuverte) await afficherSectionOuverte()
   }
 })
