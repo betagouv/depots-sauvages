@@ -1,6 +1,7 @@
 from backend.activity_logs.tracking import IdempotentTrackingHandler
 from backend.procedures.models import SuiviProcedure
 from backend.stats.anonymizer import anonymize_user_hash
+from backend.teams.models import get_user_team_id
 
 
 class TrackActivityMixin:
@@ -12,7 +13,7 @@ class TrackActivityMixin:
                 .values_list("id", flat=True)
                 .first()
             )
-        team_id = getattr(self.request.user, "team_id", None)
+        team_id = get_user_team_id(self.request.user)
         log_data = {
             "est_staff": self.request.user.is_staff,
             **data,

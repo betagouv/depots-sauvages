@@ -4,6 +4,7 @@ from django.contrib.auth.signals import user_logged_in
 
 from backend.activity_logs.models import ActivityLog
 from backend.activity_logs.utils import resolve_auth_method
+from backend.unit_tests.factories import UserFactory
 
 User = get_user_model()
 
@@ -28,7 +29,7 @@ def test_user_logged_in_signal_tracking(rf):
     from backend.teams.models import Team
 
     team = Team.objects.create(name="Team Alpha", siret="12312312300012")
-    user_with_team = User.objects.create_user(
+    user_with_team = UserFactory(
         username="teamuser", email="teamuser@example.com", password="password", team=team
     )
     user_logged_in.send(sender=User, request=request, user=user_with_team)
