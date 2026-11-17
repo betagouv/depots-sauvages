@@ -337,18 +337,18 @@ onMounted(async () => {
 
 const handleConflictReload = async () => {
   const currentConstatationId = constatationId.value
-  const procedure = suiviProcedure.value
-  if (currentConstatationId && procedure && procedure.id) {
-    await suiviStore.resolveConflictReload(currentConstatationId, procedure.id)
+  const internalId = procedureData.value?.id
+  if (currentConstatationId && internalId) {
+    await suiviStore.resolveConflictReload(currentConstatationId, internalId)
   }
 }
 
 const handleConflictForceSave = async () => {
   const currentConstatationId = constatationId.value
-  const procedure = suiviProcedure.value
-  if (currentConstatationId && procedure && procedure.id) {
+  const internalId = procedureData.value?.id
+  if (currentConstatationId && internalId) {
     try {
-      await suiviStore.forceSave(currentConstatationId, procedure.id)
+      await suiviStore.forceSave(currentConstatationId, internalId)
     } catch (err) {
       console.error('Erreur lors du force save suivi:', err)
     }
