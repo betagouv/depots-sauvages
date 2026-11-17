@@ -221,7 +221,11 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
     try {
       const data = await fetchResource(`${API_URL}/suivi-procedure/${internalConstatationId}/`)
       if (data && typeof data === 'object') {
-        procedures[constatationId] = data
+        if (procedures[constatationId]) {
+          Object.assign(procedures[constatationId], data)
+        } else {
+          procedures[constatationId] = data
+        }
         if (data.modified) {
           lastSyncedModified[constatationId] = data.modified
         }
