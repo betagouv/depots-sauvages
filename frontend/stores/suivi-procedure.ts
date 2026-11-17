@@ -180,8 +180,30 @@ export const isSuiviStepUnlocked = (
 export const useSuiviStore = defineStore('suiviProcedure', () => {
   const procedures = reactive<Record<string, SuiviProcedure>>({})
   const lastSyncedModified = reactive<Record<string, string | null>>({})
+  const serverSnapshots = reactive<Record<string, string>>({})
   const conflictModalVisible = ref(false)
+  const conflictBannerVisible = ref(false)
   const conflictDetails = ref<ConflictDetails | null>(null)
+  const isReloading = ref(false)
+
+  const serializeForDiff = (data: any): string => {
+    if (!data) return ''
+    const copy = { ...data }
+    delete copy.modified
+    delete copy.created
+    delete copy.last_synced_modified
+    delete copy.force
+    return JSON.stringify(copy)
+  }
+
+  const isDirty = (constatationId: string): boolean => {
+    const current = procedures[constatationId]
+    const snapshot = serverSnapshots[constatationId]
+    if (!current) return false
+    // Si aucun snapshot n'est encore enregistré, considérer comme dirty
+    if (!snapshot) return true
+    return serializeForDiff(current) !== snapshot
+  }
 
   const getOrCreateSuivi = (constatationId: string): SuiviProcedure => {
     if (!procedures[constatationId] || typeof procedures[constatationId] !== 'object') {
@@ -229,8 +251,10 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
         if (data.modified) {
           lastSyncedModified[constatationId] = data.modified
         }
+        serverSnapshots[constatationId] = serializeForDiff(procedures[constatationId])
       }
       conflictModalVisible.value = false
+      conflictBannerVisible.value = false
       conflictDetails.value = null
     } catch (e) {
       console.error('Erreur lors du chargement du suivi:', e)
@@ -240,10 +264,15 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
   const saveSuivi = async (
     constatationId: string,
     internalConstatationId: number,
-    options: { force?: boolean } = {}
+    options: { force?: boolean; isExplicitSubmit?: boolean } = {}
   ) => {
     const suivi = procedures[constatationId]
     if (!suivi) return
+
+    // Si pas forcé et pas d'action explicite, vérifier si les données ont réellement changé
+    if (!options.force && !isDirty(constatationId)) {
+      return suivi
+    }
 
     const payload: any = { ...suivi }
     if (options.force) {
@@ -260,7 +289,9 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
       if (res && res.modified) {
         lastSyncedModified[constatationId] = res.modified
       }
+      serverSnapshots[constatationId] = serializeForDiff(procedures[constatationId])
       conflictModalVisible.value = false
+      conflictBannerVisible.value = false
       conflictDetails.value = null
       return res
     } catch (e: any) {
@@ -274,7 +305,11 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
           message: e.message || 'Ce dossier a été modifié par un autre utilisateur entre-temps.',
           serverModified: e.server_modified || '',
         }
-        conflictModalVisible.value = true
+        if (options.isExplicitSubmit) {
+          conflictModalVisible.value = true
+        } else {
+          conflictBannerVisible.value = true
+        }
       }
       console.error('Erreur lors de la sauvegarde du suivi:', e)
       throw e
@@ -289,16 +324,28 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
     constatationId: string,
     internalConstatationId: number
   ) => {
-    await fetchSuivi(constatationId, internalConstatationId)
+    isReloading.value = true
     conflictModalVisible.value = false
+    conflictBannerVisible.value = false
     conflictDetails.value = null
+    try {
+      await fetchSuivi(constatationId, internalConstatationId)
+    } finally {
+      // Laisser le temps à Vue de propager la mutation sans déclencher d'autosave
+      setTimeout(() => {
+        isReloading.value = false
+      }, 100)
+    }
   }
 
   return {
     procedures,
     lastSyncedModified,
     conflictModalVisible,
+    conflictBannerVisible,
     conflictDetails,
+    isReloading,
+    isDirty,
     getOrCreateSuivi,
     isStepCompleted,
     isStepUnlocked,

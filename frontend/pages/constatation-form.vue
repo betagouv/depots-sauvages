@@ -5,6 +5,14 @@
     <div v-else-if="userInfo?.is_authenticated">
       <h1 class="fr-h1 fr-mb-2w">Constatation de dépôt sauvage</h1>
 
+      <ConflictBanner
+        :visible="store.conflictBannerVisible"
+        :updatedBy="store.conflictDetails?.updatedBy"
+        @reload="handleConflictReload"
+        @force-save="handleConflictForceSave"
+        @close="store.conflictBannerVisible = false"
+      />
+
       <form @submit.prevent="submitForm" novalidate>
         <ConstatationForm />
       </form>
@@ -32,6 +40,7 @@
 import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import ConstatationForm from '../components/forms/constatation/ConstatationForm.vue'
+import ConflictBanner from '../components/shared/ConflictBanner.vue'
 import ConflictResolutionModal from '../components/shared/ConflictResolutionModal.vue'
 import LoginInvitation from '../components/shared/LoginInvitation.vue'
 import PageLoader from '../components/shared/PageLoader.vue'
@@ -80,6 +89,7 @@ onMounted(async () => {
 import { debounce } from '../utils/debounce'
 
 const debouncedAutoSave = debounce(() => {
+  if (store.isReloading) return
   if (store.formData.commune) {
     store.autoSave()
   }
@@ -88,6 +98,7 @@ const debouncedAutoSave = debounce(() => {
 watch(
   () => store.formData,
   () => {
+    if (store.isReloading) return
     if (store.hasBeenSubmitted) store.validate(true)
     debouncedAutoSave()
   },
@@ -138,12 +149,14 @@ const submitForm = async () => {
 }
 
 const handleConflictReload = async () => {
+  debouncedAutoSave.cancel()
   if (store.currentId) {
     await store.resolveConflictReload(store.currentId)
   }
 }
 
 const handleConflictForceSave = async () => {
+  debouncedAutoSave.cancel()
   try {
     const data = await store.forceSave()
     if (data && data.id && !data.is_draft) {

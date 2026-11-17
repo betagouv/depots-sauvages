@@ -30,8 +30,11 @@ export const useConstatationStore = defineStore('constatation', {
     isSubmitting: false,
     _autoSavePromise: null as Promise<any> | null,
     lastSyncedModified: null as string | null,
+    serverSnapshot: null as string | null,
     conflictModalVisible: false,
+    conflictBannerVisible: false,
     conflictDetails: null as ConflictDetails | null,
+    isReloading: false,
   }),
 
   actions: {
@@ -43,8 +46,11 @@ export const useConstatationStore = defineStore('constatation', {
       this.isSubmitting = false
       this.hasBeenSubmitted = false
       this.lastSyncedModified = null
+      this.serverSnapshot = null
       this.conflictModalVisible = false
+      this.conflictBannerVisible = false
       this.conflictDetails = null
+      this.isReloading = false
     },
 
     clearFieldError(field: string) {
@@ -99,7 +105,19 @@ export const useConstatationStore = defineStore('constatation', {
       return toApiFormat(data)
     },
 
-    async performSave(isDraft: boolean, options: { force?: boolean } = {}) {
+    _serializeForDiff() {
+      const data = { ...this.formData }
+      // Exclure les champs dynamiques non pertinents
+      delete (data as any).isDraft
+      return JSON.stringify(data)
+    },
+
+    isDirty(): boolean {
+      if (!this.serverSnapshot) return true
+      return this._serializeForDiff() !== this.serverSnapshot
+    },
+
+    async performSave(isDraft: boolean, options: { force?: boolean; isExplicitSubmit?: boolean } = {}) {
       if (this._autoSavePromise) {
         try {
           await this._autoSavePromise
@@ -123,7 +141,9 @@ export const useConstatationStore = defineStore('constatation', {
             if (res && res.modified) {
               this.lastSyncedModified = res.modified
             }
+            this.serverSnapshot = this._serializeForDiff()
             this.conflictModalVisible = false
+            this.conflictBannerVisible = false
             this.conflictDetails = null
             return res
           }
@@ -133,7 +153,9 @@ export const useConstatationStore = defineStore('constatation', {
           if (data && data.modified) {
             this.lastSyncedModified = data.modified
           }
+          this.serverSnapshot = this._serializeForDiff()
           this.conflictModalVisible = false
+          this.conflictBannerVisible = false
           this.conflictDetails = null
           return data
         } catch (error: any) {
@@ -147,7 +169,11 @@ export const useConstatationStore = defineStore('constatation', {
               message: error.message || 'Ce dossier a été modifié par un autre utilisateur entre-temps.',
               serverModified: error.server_modified || '',
             }
-            this.conflictModalVisible = true
+            if (options.isExplicitSubmit) {
+              this.conflictModalVisible = true
+            } else {
+              this.conflictBannerVisible = true
+            }
           }
           throw error
         }
@@ -164,20 +190,31 @@ export const useConstatationStore = defineStore('constatation', {
     },
 
     async resolveConflictReload() {
-      if (this.currentId) {
-        await this.loadConstatation(this.currentId)
-      }
+      this.isReloading = true
       this.conflictModalVisible = false
+      this.conflictBannerVisible = false
       this.conflictDetails = null
+      try {
+        if (this.currentId) {
+          await this.loadConstatation(this.currentId)
+        }
+      } finally {
+        setTimeout(() => {
+          this.isReloading = false
+        }, 100)
+      }
     },
 
     async autoSave() {
-      if (this.conflictModalVisible) {
+      if (this.conflictModalVisible || this.conflictBannerVisible || this.isReloading) {
+        return
+      }
+      if (!this.isDirty()) {
         return
       }
       try {
         const isDraft = this.formData.isDraft === false ? false : true
-        const result = await this.performSave(isDraft)
+        const result = await this.performSave(isDraft, { isExplicitSubmit: false })
         this.saveError = null
         return result
       } catch (error: any) {
@@ -186,7 +223,7 @@ export const useConstatationStore = defineStore('constatation', {
           error?.status === 409 ||
           (error && error.updated_by && error.server_modified)
         ) {
-          // Conflict detected: autosave suspended, modal displayed, do not show generic error
+          // Conflict detected: autosave suspended, banner displayed, do not show generic error
           return
         }
         console.error('Erreur lors de l’autosave constatation:', error)
@@ -216,7 +253,7 @@ export const useConstatationStore = defineStore('constatation', {
     async saveFormData() {
       this.isSubmitting = true
       try {
-        const result = await this.performSave(false)
+        const result = await this.performSave(false, { isExplicitSubmit: true })
         this.saveError = null
         return result
       } catch (error: any) {
@@ -261,6 +298,7 @@ export const useConstatationStore = defineStore('constatation', {
           this.lastSyncedModified = data.modified
         }
         this.conflictModalVisible = false
+        this.conflictBannerVisible = false
         this.conflictDetails = null
         const formData = fromApiFormat(data)
 
@@ -282,6 +320,7 @@ export const useConstatationStore = defineStore('constatation', {
         formData.photos = formData.photos ?? []
 
         this.formData = formData
+        this.serverSnapshot = this._serializeForDiff()
       } catch (error) {
         console.error('Error loading constatation:', error)
         throw error
