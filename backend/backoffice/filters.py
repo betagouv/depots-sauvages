@@ -86,10 +86,10 @@ class BackofficeUserFilterSet(django_filters.FilterSet):
     procedures_count = django_filters.CharFilter(method="filter_procedures_count")
     has_procedures = django_filters.CharFilter(method="filter_has_procedures")
     has_proconnect = django_filters.CharFilter(method="filter_has_proconnect")
-    team__name = django_filters.CharFilter(field_name="team__name", lookup_expr="icontains")
-    team__siret = django_filters.CharFilter(field_name="team__siret", lookup_expr="icontains")
-    team_name = django_filters.CharFilter(field_name="team__name", lookup_expr="icontains")
-    team_siret = django_filters.CharFilter(field_name="team__siret", lookup_expr="icontains")
+    team__name = django_filters.CharFilter(field_name="profile__team__name", lookup_expr="icontains")
+    team__siret = django_filters.CharFilter(field_name="profile__team__siret", lookup_expr="icontains")
+    team_name = django_filters.CharFilter(field_name="profile__team__name", lookup_expr="icontains")
+    team_siret = django_filters.CharFilter(field_name="profile__team__siret", lookup_expr="icontains")
     has_team = django_filters.CharFilter(method="filter_has_team")
 
     class Meta:
@@ -112,8 +112,8 @@ class BackofficeUserFilterSet(django_filters.FilterSet):
                 Q(email__icontains=value)
                 | Q(first_name__icontains=value)
                 | Q(last_name__icontains=value)
-                | Q(team__name__icontains=value)
-                | Q(team__siret__icontains=value)
+                | Q(profile__team__name__icontains=value)
+                | Q(profile__team__siret__icontains=value)
                 | Q(proconnect_profile__siret__icontains=value)
                 | Q(proconnect_profile__siren__icontains=value)
                 | Q(proconnect_profile__organization_label__icontains=value)
@@ -122,9 +122,9 @@ class BackofficeUserFilterSet(django_filters.FilterSet):
 
     def filter_has_team(self, queryset, name, value):
         if value == "Oui" or value == "true" or value == "1":
-            return queryset.filter(team__isnull=False)
+            return queryset.filter(profile__team__isnull=False)
         elif value == "Non" or value == "false" or value == "0":
-            return queryset.filter(team__isnull=True)
+            return queryset.filter(Q(profile__isnull=True) | Q(profile__team__isnull=True))
         return queryset
 
     def filter_procedures_count(self, queryset, name, value):

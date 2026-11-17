@@ -78,7 +78,7 @@ class BackofficeUsersViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         return (
             User.objects.annotate(procedures_count=Count("constatations"))
-            .select_related("proconnect_profile", "team")
+            .select_related("proconnect_profile", "profile__team")
             .order_by("-id")
         )
 
@@ -113,7 +113,8 @@ class BackofficeUsersViewSet(viewsets.ReadOnlyModelViewSet):
 
         for user in queryset:
             profile = getattr(user, "proconnect_profile", None)
-            team = getattr(user, "team", None)
+            from backend.teams.models import get_user_team
+            team = get_user_team(user)
             has_pc = "Oui" if profile else "Non"
             siret = profile.siret if profile else ""
             siren = profile.siren if profile else ""

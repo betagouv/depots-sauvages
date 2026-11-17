@@ -14,6 +14,16 @@ class UserFactory(factory.django.DjangoModelFactory):
     email = factory.Faker("email")
 
     @factory.post_generation
+    def team(obj, create, extracted, **kwargs):
+        if not create:
+            return
+        from backend.teams.models import UserProfile
+        profile, _ = UserProfile.objects.get_or_create(user=obj)
+        if extracted is not None:
+            profile.team = extracted
+            profile.save(update_fields=["team"])
+
+    @factory.post_generation
     def password(obj, create, extracted, **kwargs):
         password = extracted or "password"
         obj.set_password(password)

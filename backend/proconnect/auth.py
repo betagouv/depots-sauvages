@@ -8,7 +8,7 @@ from backend.constatations.models import Constatation
 from backend.proconnect.models import ProConnectAccessConfig, ProConnectProfile, PublicEntitySirene
 from backend.proconnect.monitoring import record_proconnect_sentry_event, track_proconnect_activity
 from backend.stats.anonymizer import anonymize_user_hash
-from backend.teams.models import Team, TeamAutoCreationExclusion
+from backend.teams.models import Team, TeamAutoCreationExclusion, UserProfile
 
 logger = logging.getLogger(__name__)
 
@@ -22,21 +22,22 @@ def resolve_nature_juridique(siren: str) -> str:
 
 def sync_proconnect_team(user, claims):
     """
-    Auto-attach user to a Team during ProConnect authentication:
-    - If user already belongs to a team (user.team is not None), do nothing.
+    Auto-attach user to a Team during ProConnect authentication via UserProfile:
+    - If user already belongs to a team, do nothing.
     - Eligibility:
       * SIRET must be present and valid (14 digits).
       * SIRET or SIREN (first 9 digits) must not be in TeamAutoCreationExclusion.
     - If eligible:
       * Get or create Team with siret, siren, and name
         (claims 'organization_label' or 'Organisation <siret>').
-      * Set user.team = team and save (update_fields=["team"]).
+      * Set user.profile.team = team and save.
       * Attach user's orphan historical constatations:
         Constatation.objects.filter(user=user, team__isnull=True).update(team=team).
     - If excluded or without valid SIRET:
-      * user.team remains None (strict individual mode).
+      * user.profile.team remains None (strict individual mode).
     """
-    if getattr(user, "team_id", None) is not None:
+    profile, _ = UserProfile.objects.get_or_create(user=user)
+    if profile.team_id is not None:
         return
 
     siret = str(claims.get("siret") or "").strip()
@@ -55,18 +56,17 @@ def sync_proconnect_team(user, claims):
     team_name = org_label or f"Organisation {siret}"
 
     with transaction.atomic():
-        if hasattr(user, "refresh_from_db") and getattr(user, "pk", None):
-            user.refresh_from_db(fields=["team"])
-            if getattr(user, "team_id", None) is not None:
-                return
+        profile.refresh_from_db(fields=["team"])
+        if profile.team_id is not None:
+            return
 
         team, _ = Team.objects.get_or_create(
             siret=siret,
             defaults={"name": team_name, "siren": siren},
         )
 
-        user.team = team
-        user.save(update_fields=["team"])
+        profile.team = team
+        profile.save(update_fields=["team"])
         logger.info(f"Attached user {user.pk} to Team {team.pk} ({team.name})")
 
         # Attach previous orphan constatations belonging to this user

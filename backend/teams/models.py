@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user_model
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from model_utils.models import TimeStampedModel
@@ -25,17 +25,102 @@ class Team(TimeStampedModel):
         super().save(*args, **kwargs)
 
 
-# Dynamically attach 'team' ForeignKey to the User model
-_user_model = get_user_model()
-if not hasattr(_user_model, "team"):
-    models.ForeignKey(
+class UserProfileQuerySet(models.QuerySet):
+    def with_team(self):
+        """Helper to systematically select_related team on UserProfile queries."""
+        return self.select_related("team")
+
+
+class UserProfile(TimeStampedModel):
+    """
+    User profile model holding the user's team membership and future preferences/roles.
+    """
+
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="profile",
+        verbose_name="Utilisateur",
+    )
+    team = models.ForeignKey(
         "teams.Team",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
         related_name="members",
         verbose_name="Organisation / Équipe",
-    ).contribute_to_class(_user_model, "team")
+    )
+
+    objects = UserProfileQuerySet.as_manager()
+
+    class Meta:
+        verbose_name = "profil utilisateur"
+        verbose_name_plural = "profils utilisateurs"
+
+    def __str__(self):
+        return f"Profil de {self.user} ({self.team.name if self.team else 'Sans équipe'})"
+
+
+def get_user_team(user):
+    """
+    Safely retrieves the user's Team instance from UserProfile,
+    without raising RelatedObjectDoesNotExist if the profile does not exist yet.
+    """
+    if not user or not getattr(user, "is_authenticated", False):
+        return None
+    profile = getattr(user, "profile", None)
+    return profile.team if profile else None
+
+
+def get_user_team_id(user):
+    """
+    Safely retrieves the user's team_id from UserProfile.
+    """
+    if not user or not getattr(user, "is_authenticated", False):
+        return None
+    profile = getattr(user, "profile", None)
+    return profile.team_id if profile else None
+
+
+# Convenience read-only properties on User model to avoid breaking callers
+from django.contrib.auth import get_user_model
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+_UserModel = get_user_model()
+
+
+@receiver(post_save, sender=_UserModel)
+def _handle_user_post_save_profile(sender, instance, created, **kwargs):
+    if hasattr(instance, "_pending_team"):
+        profile, _ = UserProfile.objects.get_or_create(user=instance)
+        profile.team = instance._pending_team
+        profile.save()
+        del instance._pending_team
+
+
+if not hasattr(_UserModel, "team"):
+
+    def _user_team(self):
+        profile = getattr(self, "profile", None)
+        return profile.team if profile else None
+
+    def _user_team_setter(self, value):
+        from backend.teams.models import UserProfile
+
+        if not getattr(self, "pk", None):
+            self._pending_team = value
+            return
+        profile, _ = UserProfile.objects.get_or_create(user=self)
+        profile.team = value
+        profile.save()
+
+    def _user_team_id(self):
+        profile = getattr(self, "profile", None)
+        return profile.team_id if profile else None
+
+    _UserModel.team = property(_user_team, _user_team_setter)
+    _UserModel.team_id = property(_user_team_id)
 
 
 class TeamAutoCreationExclusion(TimeStampedModel):
@@ -83,14 +168,11 @@ class TeamAutoCreationExclusion(TimeStampedModel):
         siren = (siren or "").strip()
         if not siren and len(siret) >= 9:
             siren = siret[:9]
-
         if not siret and not siren:
             return False
-
         q = models.Q()
         if siret:
             q |= models.Q(siret=siret)
         if siren:
             q |= models.Q(siren=siren)
-
         return cls.objects.filter(q).exists()

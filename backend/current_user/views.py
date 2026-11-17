@@ -9,6 +9,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from backend.constatations.views import get_user_constatations_queryset
+from backend.teams.models import get_user_team, get_user_team_id
 
 
 class UserInfoViewSet(viewsets.ViewSet):
@@ -17,7 +18,8 @@ class UserInfoViewSet(viewsets.ViewSet):
     def list(self, request):
         if request.user.is_authenticated and getattr(request.user, "is_active", True):
             user = request.user
-            team = getattr(user, "team", None)
+            team = get_user_team(user)
+            team_id = team.id if team else None
             team_logo_url = None
             if team and getattr(team, "logo", None):
                 try:
@@ -33,7 +35,7 @@ class UserInfoViewSet(viewsets.ViewSet):
                     "email": user.email,
                     "procedures_count": get_user_constatations_queryset(user).count(),
                     "is_staff": user.is_staff,
-                    "team_id": getattr(user, "team_id", None),
+                    "team_id": team_id,
                     "team_name": team.name if team else None,
                     "team_logo": team_logo_url,
                     "team_siret": team.siret if team else None,

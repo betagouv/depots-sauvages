@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ("constatations", "0009_populate_volume_m3"),
-        ("teams", "0002_add_team_to_user"),
+        ("teams", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
