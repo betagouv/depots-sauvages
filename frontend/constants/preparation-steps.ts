@@ -25,24 +25,18 @@ export interface PreparationSection {
   notes?: PreparationNote[]
 }
 
-// Resources to fill in before or after going live (Trello 998). A step whose resource is null is hidden.
-export const PENDING_RESOURCES: Record<string, string | null> = {
-  guideUtilisation: null,
-}
+// TODO(Trello 998): replace null with the user guide URL. Until then the step shows "Bientôt disponible".
+export const USER_GUIDE_URL: string | null = null
 
 const faq = (slug: string) => `/faq/${slug}`
 const blog = (slug: string) => `/blog/${slug}`
 
-const guideStep: PreparationStep[] = PENDING_RESOURCES.guideUtilisation
-  ? [
-      {
-        id: 'guide',
-        label: "Je consulte le guide d'utilisation",
-        description: "Toutes les étapes de l'outil, de la constatation à la sanction.",
-        link: { label: "Ouvrir le guide d'utilisation", href: PENDING_RESOURCES.guideUtilisation },
-      },
-    ]
-  : []
+const guideStep: PreparationStep = {
+  id: 'guide',
+  label: "Je consulte le guide d'utilisation",
+  description: "Le mode d'emploi de Stop Dépôt Sauvage, à ouvrir ou à télécharger.",
+  link: { label: "Ouvrir le guide d'utilisation", href: USER_GUIDE_URL ?? undefined },
+}
 
 export const PREPARATION_SECTIONS: PreparationSection[] = [
   {
@@ -50,7 +44,7 @@ export const PREPARATION_SECTIONS: PreparationSection[] = [
     title: 'Prévenir et anticiper les dépôts sauvages',
     icon: 'fr-icon-shield-line',
     steps: [
-      ...guideStep,
+      guideStep,
       {
         id: 'webinaire',
         label: "Je m'inscris au webinaire",

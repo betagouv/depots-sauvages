@@ -81,12 +81,13 @@ describe('Page Se préparer', () => {
     expect(screen.queryByLabelText(/délibération/)).not.toBeInTheDocument()
   })
 
-  it('masque le guide tant qu’il n’est pas publié', async () => {
+  it('affiche le guide comme « Bientôt disponible » tant que son adresse manque', async () => {
     mockUser(true)
     renderPage()
 
-    await screen.findByText('Bon à savoir')
-    expect(screen.queryByText(/guide d'utilisation/i)).not.toBeInTheDocument()
+    expect(await screen.findByLabelText("Je consulte le guide d'utilisation")).toBeInTheDocument()
+    expect(screen.getByText('Bientôt disponible')).toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: /Ouvrir le guide/ })).not.toBeInTheDocument()
   })
 
   it('ignore les étapes cochées qui n’existent plus', async () => {

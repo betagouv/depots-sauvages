@@ -27,10 +27,15 @@
     >
       {{ link.label }}
     </router-link>
+    <p v-else class="fr-text--sm fr-text-mention--grey fr-mb-0">
+      {{ link.label }}
+      <DsfrBadge label="Bientôt disponible" small no-icon class="fr-ml-1w" />
+    </p>
   </div>
 </template>
 
 <script setup lang="ts">
+import { DsfrBadge } from '@gouvminint/vue-dsfr'
 import type { PreparationLink } from '@/constants/preparation-steps'
 import { trackEvent } from '@/services/matomo'
 import { openTallyPopup } from '@/utils/tally'
