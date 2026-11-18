@@ -19,7 +19,10 @@
     <meta name="twitter:title" content="{{ seo_title }}" />
     <meta name="twitter:description" content="{{ seo_description }}" />
     <meta name="twitter:image" content="{{ seo_image }}" />
-    <link rel="icon" href="/static/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="/static/favicon/apple-touch-icon.png" />
+    <link rel="icon" href="/static/favicon/favicon.svg" type="image/svg+xml" />
+    <link rel="shortcut icon" href="/static/favicon/favicon.ico" type="image/x-icon" />
+    <link rel="manifest" href="/static/favicon/manifest.webmanifest" crossorigin="use-credentials" />
     <meta name="robots" content="{{ seo_robots }}" />
     <title>{{ seo_title }}</title>
     {% if seo_jsonld %}<script type="application/ld+json">{{ seo_jsonld }}</script>{% endif %}
