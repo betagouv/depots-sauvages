@@ -3,7 +3,7 @@ import VueDsfr from '@gouvminint/vue-dsfr'
 import { fireEvent, render, screen } from '@testing-library/vue'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { axe } from 'vitest-axe'
-import { PREPARATION_SECTIONS } from '../constants/preparation-steps'
+import { PREPARATION_SECTIONS, USER_GUIDE_URL } from '../constants/preparation-steps'
 import SePreparer from '../pages/se-preparer.vue'
 import * as api from '../services/api'
 
@@ -51,11 +51,19 @@ describe('Page Se préparer', () => {
     expect(screen.getByText(/0 action faite sur/)).toBeInTheDocument()
   })
 
-  it('invite à se connecter si l’utilisateur n’est pas connecté', async () => {
+  it('affiche seulement le titre et l’invitation à se connecter hors connexion', async () => {
     mockUser(false)
     renderPage()
 
     expect(await screen.findByText('Se connecter via ProConnect')).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', {
+        level: 1,
+        name: 'Se préparer pour mieux traiter les dépôts sauvages',
+      })
+    ).toBeInTheDocument()
+    expect(screen.getByText('Se préparer face aux dépôts sauvages')).toBeInTheDocument()
+    expect(screen.queryByText(/Préparez votre collectivité/)).not.toBeInTheDocument()
     expect(screen.queryByLabelText(PREPARATION_SECTIONS[0].steps[0].label)).not.toBeInTheDocument()
   })
 
@@ -81,13 +89,13 @@ describe('Page Se préparer', () => {
     expect(screen.queryByLabelText(/délibération/)).not.toBeInTheDocument()
   })
 
-  it('affiche le guide comme « Bientôt disponible » tant que son adresse manque', async () => {
+  it('ouvre le guide d’utilisation dans une nouvelle fenêtre', async () => {
     mockUser(true)
     renderPage()
 
-    expect(await screen.findByLabelText("Je consulte le guide d'utilisation")).toBeInTheDocument()
-    expect(screen.getByText('Bientôt disponible')).toBeInTheDocument()
-    expect(screen.queryByRole('link', { name: /Ouvrir le guide/ })).not.toBeInTheDocument()
+    const link = await screen.findByRole('link', { name: /Ouvrir le guide/ })
+    expect(link).toHaveAttribute('href', USER_GUIDE_URL)
+    expect(link).toHaveAttribute('target', '_blank')
   })
 
   it('ignore les étapes cochées qui n’existent plus', async () => {

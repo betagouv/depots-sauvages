@@ -25,8 +25,8 @@ export interface PreparationSection {
   notes?: PreparationNote[]
 }
 
-// TODO(Trello 998): replace null with the user guide URL. Until then the step shows "Bientôt disponible".
-export const USER_GUIDE_URL: string | null = null
+export const USER_GUIDE_URL =
+  'https://fichiers.numerique.gouv.fr/explorer/items/files/4a6f1042-3c39-4b18-9b98-065fe6a29a50'
 
 const faq = (slug: string) => `/faq/${slug}`
 const blog = (slug: string) => `/blog/${slug}`
@@ -35,7 +35,7 @@ const guideStep: PreparationStep = {
   id: 'guide',
   label: "Je consulte le guide d'utilisation",
   description: "Le mode d'emploi de Stop Dépôt Sauvage, à ouvrir ou à télécharger.",
-  link: { label: "Ouvrir le guide d'utilisation", href: USER_GUIDE_URL ?? undefined },
+  link: { label: "Ouvrir le guide d'utilisation", href: USER_GUIDE_URL },
 }
 
 export const PREPARATION_SECTIONS: PreparationSection[] = [
@@ -44,7 +44,6 @@ export const PREPARATION_SECTIONS: PreparationSection[] = [
     title: 'Prévenir et anticiper les dépôts sauvages',
     icon: 'fr-icon-shield-line',
     steps: [
-      guideStep,
       {
         id: 'webinaire',
         label: "Je m'inscris au webinaire",
@@ -52,6 +51,7 @@ export const PREPARATION_SECTIONS: PreparationSection[] = [
           'En moins de 60 minutes, découvrez comment agir concrètement grâce à la procédure administrative.',
         link: { label: "S'inscrire au prochain webinaire", to: '/rdv' },
       },
+      guideStep,
       {
         id: 'retours-experience',
         label: "Je parcours les retours d'expérience d'autres communes",

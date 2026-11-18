@@ -1,28 +1,31 @@
 <template>
   <div>
-    <div class="fr-background-alt--blue-france fr-mb-6w fr-py-6w">
-      <div class="fr-container">
-        <h1 class="fr-h1 fr-mb-3w">Se préparer avant sa première procédure</h1>
-        <p class="fr-text fr-text--lead fr-mb-2w">
-          Pas encore de dépôt sauvage à traiter ? Préparez votre collectivité dès maintenant : le
-          jour où un dépôt arrive, vous saurez comment agir et qui peut le faire.
-        </p>
-        <p class="fr-text--sm fr-mb-2w">
-          Vous avez déjà un dépôt à traiter ?
-          <router-link to="/demarrer-constatation" class="fr-link fr-text--sm"
-            >Démarrer une constatation</router-link
-          >
-        </p>
-        <p v-if="userInfo?.is_authenticated" class="fr-text--bold fr-mb-0" aria-live="polite">
-          {{ progressLabel }}
-        </p>
-      </div>
+    <div v-if="showLoading" class="fr-container fr-py-5w">
+      <Chargement message="Chargement..." />
     </div>
 
-    <div class="fr-container fr-pb-8w">
-      <Chargement v-if="showLoading" message="Chargement..." />
+    <template v-else-if="userInfo?.is_authenticated">
+      <div class="fr-background-alt--blue-france fr-mb-6w fr-py-6w">
+        <div class="fr-container">
+          <h1 class="fr-h1 fr-mb-3w">{{ PAGE_TITLE }}</h1>
+          <p class="fr-text fr-text--lead fr-mb-2w">
+            Vous n’avez pas encore de dépôt sauvage à traiter ? Préparez votre collectivité dès
+            maintenant pour prévenir le problème et être prêt le jour où un dépôt arrive. Vous
+            saurez comment agir et qui peut le faire.
+          </p>
+          <p class="fr-text--sm fr-mb-2w">
+            Vous avez déjà un dépôt à traiter ?
+            <router-link to="/demarrer-constatation" class="fr-link fr-text--sm"
+              >Démarrer une constatation</router-link
+            >
+          </p>
+          <p class="fr-text--bold fr-mb-0" aria-live="polite">
+            {{ progressLabel }}
+          </p>
+        </div>
+      </div>
 
-      <template v-else-if="userInfo?.is_authenticated">
+      <div class="fr-container fr-pb-8w">
         <p class="fr-text--sm fr-text-mention--grey fr-mb-4w">
           Cochez chaque action une fois faite. Vos coches sont gardées sur cet ordinateur.
         </p>
@@ -70,12 +73,15 @@
             Démarrer une constatation
           </router-link>
         </div>
-      </template>
+      </div>
+    </template>
 
+    <div v-else class="fr-container fr-py-5w">
+      <h1>{{ PAGE_TITLE }}</h1>
       <LoginInvitation
-        v-else
-        title="Accéder aux étapes de préparation"
-        description="Connectez-vous pour accéder à la liste des étapes qui vous préparent à traiter votre premier dépôt sauvage."
+        class="fr-mt-5w"
+        title="Se préparer face aux dépôts sauvages"
+        description="Connectez-vous pour accéder à la liste des actions et ressources qui vous préparent à mieux traiter les dépôts sauvages."
         redirect-to="/se-preparer"
       />
     </div>
@@ -92,6 +98,7 @@ import { PREPARATION_SECTIONS } from '@/constants/preparation-steps'
 import { getUserInfo, type UserInfo } from '@/services/api'
 import { trackEvent } from '@/services/matomo'
 
+const PAGE_TITLE = 'Se préparer pour mieux traiter les dépôts sauvages'
 const STORAGE_KEY = 'se-preparer-etapes-faites'
 
 const userInfo = ref<UserInfo | null>(null)
