@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from backend.procedures.models import SuiviProcedure
+from backend.teams.models import get_user_display_name
 
 
 class SuiviProcedureResumeSerializer(serializers.ModelSerializer):
@@ -85,10 +86,7 @@ class SuiviProcedureSerializer(serializers.ModelSerializer):
 
     def get_updated_by_name(self, obj):
         user = getattr(obj, "updated_by", None)
-        if not user:
-            return None
-        full_name = f"{getattr(user, 'first_name', '')} {getattr(user, 'last_name', '')}".strip()
-        return full_name or getattr(user, "email", "") or None
+        return get_user_display_name(user)
 
 
 class SuiviProcedureStaffSerializer(SuiviProcedureSerializer):

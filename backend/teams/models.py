@@ -81,6 +81,20 @@ def get_user_team_id(user):
     return profile.team_id if profile else None
 
 
+def get_user_display_name(user, fallback="Un autre utilisateur"):
+    """
+    Returns the human-friendly display name for a user:
+    1. Full name (first_name + last_name) if available via user.get_full_name()
+    2. Email address if available
+    3. Username if available
+    4. Provided fallback string or None
+    """
+    if not user:
+        return fallback if fallback != "Un autre utilisateur" else None
+    full_name = user.get_full_name() if hasattr(user, "get_full_name") else ""
+    return full_name or getattr(user, "email", "") or getattr(user, "username", "") or fallback
+
+
 class TeamAutoCreationExclusion(TimeStampedModel):
     """
     SIREN numbers excluded from automatic Team creation and pooling

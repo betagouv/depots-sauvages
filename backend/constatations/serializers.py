@@ -2,13 +2,7 @@ from rest_framework import serializers
 
 from backend.constatations.models import Constatation
 from backend.procedures.serializers import SuiviProcedureResumeSerializer
-
-
-def _format_user_name(user):
-    if not user:
-        return None
-    full_name = f"{getattr(user, 'first_name', '')} {getattr(user, 'last_name', '')}".strip()
-    return full_name or getattr(user, "email", "") or None
+from backend.teams.models import get_user_display_name
 
 
 class ConstatationListSerializer(serializers.ModelSerializer):
@@ -45,11 +39,11 @@ class ConstatationListSerializer(serializers.ModelSerializer):
 
     def get_created_by_name(self, obj):
         user = getattr(obj, "created_by", None) or getattr(obj, "user", None)
-        return _format_user_name(user)
+        return get_user_display_name(user)
 
     def get_updated_by_name(self, obj):
         user = getattr(obj, "updated_by", None)
-        return _format_user_name(user)
+        return get_user_display_name(user)
 
     def get_suivi_procedure(self, obj):
         sp = getattr(obj, "suivi_procedure", None)
@@ -147,11 +141,11 @@ class ConstatationSerializer(serializers.ModelSerializer):
 
     def get_created_by_name(self, obj):
         user = getattr(obj, "created_by", None) or getattr(obj, "user", None)
-        return _format_user_name(user)
+        return get_user_display_name(user)
 
     def get_updated_by_name(self, obj):
         user = getattr(obj, "updated_by", None)
-        return _format_user_name(user)
+        return get_user_display_name(user)
 
     def get_suivi_procedure(self, obj):
         sp = getattr(obj, "suivi_procedure", None)

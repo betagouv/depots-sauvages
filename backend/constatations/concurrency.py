@@ -3,6 +3,8 @@ from django.utils.dateparse import parse_datetime
 from rest_framework import status
 from rest_framework.response import Response
 
+from backend.teams.models import get_user_display_name
+
 # Maximum string length for last_synced_modified to prevent ReDoS / CPU exhaustion attacks
 MAX_TIMESTAMP_LENGTH = 100
 # Grace period (in seconds) to absorb slight network delays or clock drifts between client and server
@@ -52,15 +54,7 @@ def check_optimistic_lock(
         return None
     if diff_seconds > tolerance_seconds:
         updated_by_user = getattr(instance, "updated_by", None)
-        if updated_by_user:
-            first_name = getattr(updated_by_user, "first_name", "") or ""
-            last_name = getattr(updated_by_user, "last_name", "") or ""
-            full_name = f"{first_name} {last_name}".strip()
-            updated_by_name = (
-                full_name or getattr(updated_by_user, "email", "") or "Un autre collègue"
-            )
-        else:
-            updated_by_name = "Un autre utilisateur"
+        updated_by_name = get_user_display_name(updated_by_user, fallback="Un autre utilisateur")
         return Response(
             {
                 "error": "CONCURRENT_MODIFICATION",
