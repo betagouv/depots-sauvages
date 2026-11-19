@@ -46,6 +46,8 @@ export interface SuiviProcedure {
   montant_recouvre: boolean
   dossier_archive: boolean
   identification_reussie: boolean | null
+  modified?: string | null
+  updated_by_name?: string | null
 }
 
 /** Empty procedure tracking instance before any user input. */
