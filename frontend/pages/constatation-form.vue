@@ -2,7 +2,15 @@
   <div class="fr-container fr-py-6w">
     <PageLoader v-if="showLoading" />
 
-    <div v-else-if="userInfo?.is_authenticated">
+    <div v-else-if="!userInfo?.is_authenticated">
+      <LoginInvitation
+        title="Connectez-vous pour démarrer"
+        description="Pour initier une procédure et accéder au formulaire de constatation, vous devez vous connecter avec ProConnect."
+        redirectTo="/constatation"
+      />
+    </div>
+
+    <div v-else>
       <h1 class="fr-h1 fr-mb-2w">Constatation de dépôt sauvage</h1>
 
       <ConflictBanner
@@ -26,13 +34,6 @@
         @force-save="handleConflictForceSave"
       />
     </div>
-
-    <LoginInvitation
-      v-else
-      title="Connectez-vous pour démarrer"
-      description="Pour initier une procédure et accéder au formulaire de constatation, vous devez vous connecter avec ProConnect."
-      redirectTo="/constatation"
-    />
   </div>
 </template>
 
@@ -62,7 +63,12 @@ onMounted(async () => {
       if (editId) {
         const id = parseInt(editId as string, 10)
         if (!isNaN(id)) {
-          await store.loadConstatation(id)
+          try {
+            await store.loadConstatation(id)
+          } catch (error: any) {
+            router.replace({ name: 'NotFound' })
+            return
+          }
         }
       } else {
         store.resetStore()

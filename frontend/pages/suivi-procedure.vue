@@ -2,7 +2,7 @@
   <div class="fr-container fr-py-6w">
     <Chargement v-if="showLoading" />
     <LoginInvitation v-else-if="!isUserAuthenticated" />
-    <div v-else-if="error" class="fr-alert fr-alert--error fr-mb-4w">
+    <div v-else-if="error" class="fr-alert fr-alert--error fr-mb-4w" role="alert">
       <p>{{ error }}</p>
     </div>
     <div v-else-if="procedureData">
@@ -339,7 +339,8 @@ onMounted(async () => {
       allerALaSectionOuverte = true
     }
   } catch (err: any) {
-    error.value = err.error || 'Une erreur est survenue lors de la récupération du dossier.'
+    router.replace({ name: 'NotFound' })
+    return
   } finally {
     showLoading.value = false
     await nextTick()

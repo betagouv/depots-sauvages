@@ -47,7 +47,8 @@ onMounted(async () => {
             const constatation = await fetchResource(`${API_URLS.constatations}${id}/`)
             commune.value = constatation.commune ?? null
           } catch (error) {
-            console.error('Failed to load constatation:', error)
+            router.replace({ name: 'NotFound' })
+            return
           }
         }
       }
