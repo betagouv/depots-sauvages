@@ -1,6 +1,6 @@
 import pytest
 from django.contrib.auth import get_user_model
-from backend.teams.models import Team, TeamAutoCreationExclusion, UserProfile, get_user_team
+from backend.teams.models import Team, TeamAutoCreationExclusion, UserProfile, get_user_display_name, get_user_team
 from backend.constatations.models import Constatation
 from backend.procedures.models import SuiviProcedure
 
@@ -63,3 +63,22 @@ def test_constatation_team_and_traceability_fields():
 
     assert suivi.updated_by == bob
     assert bob.suivis_modifies.count() == 1
+
+
+@pytest.mark.django_db
+def test_get_user_display_name():
+    # 1. User with full name
+    u1 = User.objects.create_user(username="u1", email="u1@test.fr", first_name="Jean", last_name="Dupont")
+    assert get_user_display_name(u1) == "Jean Dupont"
+
+    # 2. User with only email
+    u2 = User.objects.create_user(username="u2", email="u2@test.fr")
+    assert get_user_display_name(u2) == "u2@test.fr"
+
+    # 3. User with only username
+    u3 = User.objects.create_user(username="u3")
+    assert get_user_display_name(u3) == "u3"
+
+    # 4. None user
+    assert get_user_display_name(None) is None
+    assert get_user_display_name(None, fallback="Inconnu") == "Inconnu"
