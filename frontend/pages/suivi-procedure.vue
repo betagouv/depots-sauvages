@@ -38,14 +38,6 @@
             </div>
           </header>
 
-          <ConflictBanner
-            :visible="suiviStore.conflictBannerVisible"
-            :updatedBy="suiviStore.conflictDetails?.updatedBy"
-            @reload="handleConflictReload"
-            @force-save="handleConflictForceSave"
-            @close="suiviStore.conflictBannerVisible = false"
-          />
-
           <InfosComplementaires
             v-if="hasProcedure"
             :suivi="suiviProcedure"
@@ -148,7 +140,6 @@ import { useRoute, useRouter } from 'vue-router'
 import StepperProcedure from '../components/StepperProcedure.vue'
 import Chargement from '../components/procedures/Chargement.vue'
 import Metadata from '../components/procedures/Metadata.vue'
-import ConflictBanner from '../components/shared/ConflictBanner.vue'
 import ConflictResolutionModal from '../components/shared/ConflictResolutionModal.vue'
 import LoginInvitation from '../components/shared/LoginInvitation.vue'
 import AucuneProcedure from '../components/steps/AucuneProcedure.vue'
@@ -201,7 +192,7 @@ const isInitialLoading = ref(true)
 
 const debouncedSave = debounce(() => {
   if (isInitialLoading.value || suiviStore.isReloading) return
-  if (suiviStore.conflictModalVisible || suiviStore.conflictBannerVisible) return
+  if (suiviStore.conflictModalVisible) return
   if (constatationId.value && procedureData.value?.id) {
     suiviStore.saveSuivi(constatationId.value, procedureData.value.id, { isExplicitSubmit: false })
   }

@@ -13,15 +13,6 @@
     <div v-else>
       <h1 class="fr-h1 fr-mb-2w">Constatation de dépôt sauvage</h1>
 
-      <ConflictBanner
-        id="conflict-banner"
-        :visible="store.conflictBannerVisible"
-        :updatedBy="store.conflictDetails?.updatedBy"
-        @reload="handleConflictReload"
-        @force-save="handleConflictForceSave"
-        @close="store.conflictBannerVisible = false"
-      />
-
       <form @submit.prevent="submitForm" novalidate>
         <ConstatationForm />
       </form>
@@ -42,7 +33,6 @@
 import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import ConstatationForm from '../components/forms/constatation/ConstatationForm.vue'
-import ConflictBanner from '../components/shared/ConflictBanner.vue'
 import ConflictResolutionModal from '../components/shared/ConflictResolutionModal.vue'
 import LoginInvitation from '../components/shared/LoginInvitation.vue'
 import PageLoader from '../components/shared/PageLoader.vue'
@@ -119,7 +109,7 @@ onUnmounted(() => {
 const scrollToFirstError = async () => {
   await nextTick()
   const firstError = document.querySelector<HTMLElement>(
-    '#conflict-banner, .conflict-banner, .fr-fieldset--error, .fr-input-group--error, .fr-select-group--error, .fr-alert--error'
+    '.fr-fieldset--error, .fr-input-group--error, .fr-select-group--error, .fr-alert--error'
   )
   firstError?.scrollIntoView({ behavior: 'smooth', block: 'center' })
 }
@@ -127,8 +117,8 @@ const scrollToFirstError = async () => {
 const submitForm = async () => {
   debouncedAutoSave.cancel()
 
-  // Si un conflit non résolu est déjà actif en tâche de fond, ouvrir la modal d'arbitrage
-  if (store.conflictBannerVisible || store.conflictDetails) {
+  // Si un conflit non résolu est déjà actif, ouvrir la modal d'arbitrage
+  if (store.conflictModalVisible || store.conflictDetails) {
     store.conflictModalVisible = true
     return
   }
@@ -153,7 +143,6 @@ const submitForm = async () => {
       error?.status === 409 ||
       (error && error.updated_by && error.server_modified)
     ) {
-      // Le conflit est intercepté par saveFormData qui a ouvert la modal ou déclenché l'état
       store.conflictModalVisible = true
       return
     }

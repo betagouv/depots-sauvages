@@ -396,7 +396,7 @@ describe('Page Suivi de Procédure', () => {
 
       await expect(store.saveSuivi('163', 163)).rejects.toEqual(conflictError)
 
-      expect(store.conflictBannerVisible).toBe(true)
+      expect(store.conflictModalVisible).toBe(true)
       expect(store.conflictDetails).toEqual({
         updatedBy: 'Alice MARTIN',
         message: 'Ce dossier a été modifié par Alice MARTIN entre-temps.',

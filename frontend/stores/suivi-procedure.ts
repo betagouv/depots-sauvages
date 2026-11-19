@@ -315,11 +315,8 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
           message: e.message || 'Ce dossier a été modifié par un autre utilisateur entre-temps.',
           serverModified: e.server_modified || '',
         }
-        if (options.isExplicitSubmit) {
-          conflictModalVisible.value = true
-        } else {
-          conflictBannerVisible.value = true
-        }
+        conflictModalVisible.value = true
+        conflictBannerVisible.value = false
       }
       console.error('Erreur lors de la sauvegarde du suivi:', e)
       throw e

@@ -169,11 +169,8 @@ export const useConstatationStore = defineStore('constatation', {
               message: error.message || 'Ce dossier a été modifié par un autre utilisateur entre-temps.',
               serverModified: error.server_modified || '',
             }
-            if (options.isExplicitSubmit) {
-              this.conflictModalVisible = true
-            } else {
-              this.conflictBannerVisible = true
-            }
+            this.conflictModalVisible = true
+            this.conflictBannerVisible = false
           }
           throw error
         }
