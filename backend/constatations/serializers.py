@@ -4,6 +4,13 @@ from backend.constatations.models import Constatation
 from backend.procedures.serializers import SuiviProcedureResumeSerializer
 
 
+def _format_user_name(user):
+    if not user:
+        return None
+    full_name = f"{getattr(user, 'first_name', '')} {getattr(user, 'last_name', '')}".strip()
+    return full_name or getattr(user, "email", "") or None
+
+
 class ConstatationListSerializer(serializers.ModelSerializer):
     """
     Lightweight serializer for listing constatations (e.g. mes-procedures page).
@@ -36,19 +43,13 @@ class ConstatationListSerializer(serializers.ModelSerializer):
             "updated_by_name",
         ]
 
-    def _format_user_name(self, user):
-        if not user:
-            return None
-        full_name = f"{getattr(user, 'first_name', '')} {getattr(user, 'last_name', '')}".strip()
-        return full_name or getattr(user, "email", "") or None
-
     def get_created_by_name(self, obj):
         user = getattr(obj, "created_by", None) or getattr(obj, "user", None)
-        return self._format_user_name(user)
+        return _format_user_name(user)
 
     def get_updated_by_name(self, obj):
         user = getattr(obj, "updated_by", None)
-        return self._format_user_name(user)
+        return _format_user_name(user)
 
     def get_suivi_procedure(self, obj):
         sp = getattr(obj, "suivi_procedure", None)
@@ -62,6 +63,8 @@ class ConstatationSerializer(serializers.ModelSerializer):
     date_creation = serializers.DateTimeField(source="created", read_only=True)
     date_modification = serializers.DateTimeField(source="modified", read_only=True)
     suivi_procedure = serializers.SerializerMethodField()
+    created_by_name = serializers.SerializerMethodField()
+    updated_by_name = serializers.SerializerMethodField()
 
     date_constat = serializers.DateField(required=False, allow_null=True)
     heure_constat = serializers.TimeField(required=False, allow_null=True)
@@ -132,6 +135,8 @@ class ConstatationSerializer(serializers.ModelSerializer):
             "souhaite_porter_plainte",
             "date_creation",
             "date_modification",
+            "created_by_name",
+            "updated_by_name",
             "suivi_procedure",
         ]
         extra_kwargs = {
@@ -139,6 +144,14 @@ class ConstatationSerializer(serializers.ModelSerializer):
             "lettre_info_should_generate": {"required": False},
         }
         read_only_fields = ("user", "created", "modified")
+
+    def get_created_by_name(self, obj):
+        user = getattr(obj, "created_by", None) or getattr(obj, "user", None)
+        return _format_user_name(user)
+
+    def get_updated_by_name(self, obj):
+        user = getattr(obj, "updated_by", None)
+        return _format_user_name(user)
 
     def get_suivi_procedure(self, obj):
         sp = getattr(obj, "suivi_procedure", None)

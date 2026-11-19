@@ -41,6 +41,8 @@ class SuiviProcedureResumeSerializer(serializers.ModelSerializer):
 
 
 class SuiviProcedureSerializer(serializers.ModelSerializer):
+    updated_by_name = serializers.SerializerMethodField()
+
     class Meta:
         model = SuiviProcedure
         fields = [
@@ -48,6 +50,7 @@ class SuiviProcedureSerializer(serializers.ModelSerializer):
             "created",
             "modified",
             "constatation",
+            "updated_by_name",
             "etape_en_cours",
             "preuves_fournies",
             "constatation_signee",
@@ -78,7 +81,14 @@ class SuiviProcedureSerializer(serializers.ModelSerializer):
             "observations_internes",
         ]
 
-        read_only_fields = ("created", "modified", "constatation")
+        read_only_fields = ("created", "modified", "constatation", "updated_by_name")
+
+    def get_updated_by_name(self, obj):
+        user = getattr(obj, "updated_by", None)
+        if not user:
+            return None
+        full_name = f"{getattr(user, 'first_name', '')} {getattr(user, 'last_name', '')}".strip()
+        return full_name or getattr(user, "email", "") or None
 
 
 class SuiviProcedureStaffSerializer(SuiviProcedureSerializer):

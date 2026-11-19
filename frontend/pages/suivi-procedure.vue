@@ -24,7 +24,11 @@
 
             <p class="fr-text--lead fr-mb-4w">Suivi des actions que vous devez réaliser.</p>
 
-            <Metadata :procedure="procedureData" class="fr-mb-3w" />
+            <Metadata
+              :procedure="procedureData"
+              :suivi="suiviProcedure"
+              class="fr-mb-3w"
+            />
 
             <div v-if="procedureData" class="fr-mt-2w">
               <DsfrButton secondary @click="router.push(modifyUrl)">
