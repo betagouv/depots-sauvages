@@ -58,7 +58,7 @@ interface ProcedureData {
   localisation_depot?: string | null
 }
 
-defineProps<{
+const props = defineProps<{
   procedure: ProcedureData
   suivi?: Partial<SuiviProcedure> | null
 }>()
@@ -67,6 +67,8 @@ const shouldShowSuiviModification = (
   creationDate?: string | null,
   suiviModifiedDate?: string | null
 ) => {
+  if (!suiviModifiedDate) return false
+  if (props.suivi?.updated_by_name) return true
   return shouldShowModificationDate(creationDate, suiviModifiedDate)
 }
 </script>
