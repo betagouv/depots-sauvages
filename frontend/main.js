@@ -324,6 +324,18 @@ const router = createRouter({
       component: () => import('./pages/comment-agir.vue'),
       meta: { breadcrumbBand: true, title: 'Comment agir' },
     },
+    {
+      path: '/404',
+      name: 'NotFound',
+      component: () => import('./pages/not-found.vue'),
+      meta: { title: 'Page non trouvée' },
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'CatchAllNotFound',
+      component: () => import('./pages/not-found.vue'),
+      meta: { title: 'Page non trouvée' },
+    },
   ],
 })
 
