@@ -14,6 +14,7 @@
       <h1 class="fr-h1 fr-mb-2w">Constatation de dépôt sauvage</h1>
 
       <ConflictBanner
+        id="conflict-banner"
         :visible="store.conflictBannerVisible"
         :updatedBy="store.conflictDetails?.updatedBy"
         @reload="handleConflictReload"
@@ -118,13 +119,20 @@ onUnmounted(() => {
 const scrollToFirstError = async () => {
   await nextTick()
   const firstError = document.querySelector<HTMLElement>(
-    '.fr-fieldset--error, .fr-input-group--error, .fr-select-group--error, .fr-alert--error'
+    '#conflict-banner, .conflict-banner, .fr-fieldset--error, .fr-input-group--error, .fr-select-group--error, .fr-alert--error'
   )
   firstError?.scrollIntoView({ behavior: 'smooth', block: 'center' })
 }
 
 const submitForm = async () => {
   debouncedAutoSave.cancel()
+
+  // Si un conflit non résolu est déjà actif en tâche de fond, ouvrir la modal d'arbitrage
+  if (store.conflictBannerVisible || store.conflictDetails) {
+    store.conflictModalVisible = true
+    return
+  }
+
   if (store.saveError) {
     scrollToFirstError()
     return
@@ -138,8 +146,17 @@ const submitForm = async () => {
     if (data && data.id) {
       router.push(`/constatation-fin/${data.id}`)
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error('Erreur lors de la sauvegarde:', error)
+    if (
+      error?.error === 'CONCURRENT_MODIFICATION' ||
+      error?.status === 409 ||
+      (error && error.updated_by && error.server_modified)
+    ) {
+      // Le conflit est intercepté par saveFormData qui a ouvert la modal ou déclenché l'état
+      store.conflictModalVisible = true
+      return
+    }
     if (error && typeof error === 'object') {
       const camelErrors = camelcaseKeys(error as Record<string, any>)
       for (const [key, val] of Object.entries(camelErrors)) {
