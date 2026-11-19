@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from backend.procedures.models import SuiviProcedure
+from backend.teams.models import get_user_display_name
 
 
 class SuiviProcedureResumeSerializer(serializers.ModelSerializer):
@@ -41,6 +42,8 @@ class SuiviProcedureResumeSerializer(serializers.ModelSerializer):
 
 
 class SuiviProcedureSerializer(serializers.ModelSerializer):
+    updated_by_name = serializers.SerializerMethodField()
+
     class Meta:
         model = SuiviProcedure
         fields = [
@@ -48,6 +51,7 @@ class SuiviProcedureSerializer(serializers.ModelSerializer):
             "created",
             "modified",
             "constatation",
+            "updated_by_name",
             "etape_en_cours",
             "preuves_fournies",
             "constatation_signee",
@@ -78,7 +82,11 @@ class SuiviProcedureSerializer(serializers.ModelSerializer):
             "observations_internes",
         ]
 
-        read_only_fields = ("created", "modified")
+        read_only_fields = ("created", "modified", "constatation", "updated_by_name")
+
+    def get_updated_by_name(self, obj):
+        user = getattr(obj, "updated_by", None)
+        return get_user_display_name(user)
 
 
 class SuiviProcedureStaffSerializer(SuiviProcedureSerializer):
@@ -95,4 +103,9 @@ class SuiviProcedureStaffSerializer(SuiviProcedureSerializer):
             "date_pilotage",
             "notes_traitement",
         ]
-        read_only_fields = ("created", "modified", "date_pilotage")
+        read_only_fields = (
+            "created",
+            "modified",
+            "constatation",
+            "date_pilotage",
+        )

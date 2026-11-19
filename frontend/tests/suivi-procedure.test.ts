@@ -12,6 +12,7 @@ vi.mock('../services/api', async () => {
     ...actual,
     getUserInfo: vi.fn(),
     fetchResource: vi.fn(),
+    patchResource: vi.fn(),
   }
 })
 
@@ -328,6 +329,137 @@ describe('Page Suivi de Procédure', () => {
       // Étape 2 est verrouillée car étape 1 non complétée
       expect(capturedSteps[2].locked).toBe(true)
       expect(screen.getByTestId('notification-step')).toHaveAttribute('data-disabled', 'true')
+    })
+  })
+
+  describe('Store Suivi - Verrouillage Optimiste & Conflits Concurrence (HTTP 409)', () => {
+    it('enregistre lastSyncedModified lors du fetchSuivi', async () => {
+      const { useSuiviStore } = await import('../stores/suivi-procedure')
+      const pinia = createTestingPinia({ stubActions: false })
+      const store = useSuiviStore(pinia)
+
+      vi.spyOn(api, 'fetchResource').mockResolvedValue({
+        id: 163,
+        modified: '2026-11-16T12:00:00Z',
+        etape_en_cours: 2,
+      })
+
+      await store.fetchSuivi('163', 163)
+
+      expect(store.lastSyncedModified['163']).toBe('2026-11-16T12:00:00Z')
+      expect(store.conflictModalVisible).toBe(false)
+      expect(store.conflictDetails).toBeNull()
+    })
+
+    it('envoie last_synced_modified lors de saveSuivi', async () => {
+      const { useSuiviStore } = await import('../stores/suivi-procedure')
+      const pinia = createTestingPinia({ stubActions: false })
+      const store = useSuiviStore(pinia)
+
+      store.getOrCreateSuivi('163')
+      store.lastSyncedModified['163'] = '2026-11-16T12:00:00Z'
+
+      vi.spyOn(api, 'patchResource').mockResolvedValue({
+        id: 163,
+        modified: '2026-11-16T12:05:00Z',
+        updated_by_name: 'Bob Dupont',
+      })
+
+      await store.saveSuivi('163', 163)
+
+      expect(api.patchResource).toHaveBeenCalledWith(
+        expect.stringContaining('/suivi-procedure/163/'),
+        expect.objectContaining({
+          last_synced_modified: '2026-11-16T12:00:00Z',
+        })
+      )
+      expect(store.lastSyncedModified['163']).toBe('2026-11-16T12:05:00Z')
+      expect(store.procedures['163'].modified).toBe('2026-11-16T12:05:00Z')
+      expect(store.procedures['163'].updated_by_name).toBe('Bob Dupont')
+    })
+
+    it('gère une réponse HTTP 409 sur saveSuivi', async () => {
+      const { useSuiviStore } = await import('../stores/suivi-procedure')
+      const pinia = createTestingPinia({ stubActions: false })
+      const store = useSuiviStore(pinia)
+
+      store.getOrCreateSuivi('163')
+      store.lastSyncedModified['163'] = '2026-11-16T12:00:00Z'
+
+      const conflictError = {
+        error: 'CONCURRENT_MODIFICATION',
+        message: 'Ce dossier a été modifié par Alice MARTIN entre-temps.',
+        updated_by: 'Alice MARTIN',
+        server_modified: '2026-11-16T12:05:00Z',
+      }
+      vi.spyOn(api, 'patchResource').mockRejectedValue(conflictError)
+
+      await expect(store.saveSuivi('163', 163)).rejects.toEqual(conflictError)
+
+      expect(store.conflictModalVisible).toBe(true)
+      expect(store.conflictDetails).toEqual({
+        updatedBy: 'Alice MARTIN',
+        message: 'Ce dossier a été modifié par Alice MARTIN entre-temps.',
+        serverModified: '2026-11-16T12:05:00Z',
+      })
+    })
+
+    it('permet de forcer la mise à jour via forceSave', async () => {
+      const { useSuiviStore } = await import('../stores/suivi-procedure')
+      const pinia = createTestingPinia({ stubActions: false })
+      const store = useSuiviStore(pinia)
+
+      store.getOrCreateSuivi('163')
+      store.conflictModalVisible = true
+      store.conflictDetails = {
+        updatedBy: 'Alice MARTIN',
+        message: 'Conflit',
+        serverModified: '2026-11-16T12:05:00Z',
+      }
+
+      vi.spyOn(api, 'patchResource').mockResolvedValue({
+        id: 163,
+        modified: '2026-11-16T12:10:00Z',
+      })
+
+      await store.forceSave('163', 163)
+
+      expect(api.patchResource).toHaveBeenCalledWith(
+        expect.stringContaining('/suivi-procedure/163/'),
+        expect.objectContaining({
+          force: true,
+        })
+      )
+      expect(store.conflictModalVisible).toBe(false)
+      expect(store.conflictDetails).toBeNull()
+      expect(store.lastSyncedModified['163']).toBe('2026-11-16T12:10:00Z')
+    })
+
+    it('permet de recharger le suivi serveur via resolveConflictReload', async () => {
+      const { useSuiviStore } = await import('../stores/suivi-procedure')
+      const pinia = createTestingPinia({ stubActions: false })
+      const store = useSuiviStore(pinia)
+
+      store.conflictModalVisible = true
+      store.conflictDetails = {
+        updatedBy: 'Alice MARTIN',
+        message: 'Conflit',
+        serverModified: '2026-11-16T12:05:00Z',
+      }
+
+      vi.spyOn(api, 'fetchResource').mockResolvedValue({
+        id: 163,
+        modified: '2026-11-16T12:05:00Z',
+        etape_en_cours: 3,
+      })
+
+      await store.resolveConflictReload('163', 163)
+
+      expect(api.fetchResource).toHaveBeenCalledWith(expect.stringContaining('/suivi-procedure/163/'))
+      expect(store.procedures['163'].etape_en_cours).toBe(3)
+      expect(store.lastSyncedModified['163']).toBe('2026-11-16T12:05:00Z')
+      expect(store.conflictModalVisible).toBe(false)
+      expect(store.conflictDetails).toBeNull()
     })
   })
 })

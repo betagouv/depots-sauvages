@@ -8,23 +8,37 @@ from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from backend.constatations.models import Constatation
+from backend.constatations.views import get_user_constatations_queryset
+from backend.teams.models import get_user_team, get_user_team_id
 
 
 class UserInfoViewSet(viewsets.ViewSet):
     permission_classes = [AllowAny]
 
     def list(self, request):
-        if request.user.is_authenticated:
+        if request.user.is_authenticated and getattr(request.user, "is_active", True):
+            user = request.user
+            team = get_user_team(user)
+            team_id = team.id if team else None
+            team_logo_url = None
+            if team and getattr(team, "logo", None):
+                try:
+                    team_logo_url = team.logo.url
+                except Exception:
+                    team_logo_url = None
             return Response(
                 {
                     "is_authenticated": True,
                     "proconnect_enabled": settings.PROCONNECT_ENABLED,
-                    "first_name": request.user.first_name,
-                    "last_name": request.user.last_name,
-                    "email": request.user.email,
-                    "procedures_count": Constatation.objects.filter(user=request.user).count(),
-                    "is_staff": request.user.is_staff,
+                    "first_name": user.first_name,
+                    "last_name": user.last_name,
+                    "email": user.email,
+                    "procedures_count": get_user_constatations_queryset(user).count(),
+                    "is_staff": user.is_staff,
+                    "team_id": team_id,
+                    "team_name": team.name if team else None,
+                    "team_logo": team_logo_url,
+                    "team_siret": team.siret if team else None,
                 }
             )
         return Response(

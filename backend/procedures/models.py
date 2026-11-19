@@ -89,6 +89,14 @@ class SuiviProcedure(SuiviProcedureBaseModel):
         null=True,
         blank=True,
     )
+    updated_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        related_name="suivis_modifies",
+        null=True,
+        blank=True,
+        verbose_name="Modifié par",
+    )
     personne_assignee = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -99,9 +107,7 @@ class SuiviProcedure(SuiviProcedureBaseModel):
         verbose_name="Assigné à",
     )
 
-    tracker = FieldTracker(
-        fields=["personne_assignee", "statut_traitement", "notes_traitement"]
-    )
+    tracker = FieldTracker(fields=["personne_assignee", "statut_traitement", "notes_traitement"])
 
     class Meta:
         verbose_name = "Suivi de procédure"

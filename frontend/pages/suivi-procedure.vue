@@ -2,7 +2,7 @@
   <div class="fr-container fr-py-6w">
     <Chargement v-if="showLoading" />
     <LoginInvitation v-else-if="!isUserAuthenticated" />
-    <div v-else-if="error" class="fr-alert fr-alert--error fr-mb-4w">
+    <div v-else-if="error" class="fr-alert fr-alert--error fr-mb-4w" role="alert">
       <p>{{ error }}</p>
     </div>
     <div v-else-if="procedureData">
@@ -24,7 +24,11 @@
 
             <p class="fr-text--lead fr-mb-4w">Suivi des actions que vous devez réaliser.</p>
 
-            <Metadata :procedure="procedureData" class="fr-mb-3w" />
+            <Metadata
+              :procedure="procedureData"
+              :suivi="suiviProcedure"
+              class="fr-mb-3w"
+            />
 
             <div v-if="procedureData" class="fr-mt-2w">
               <DsfrButton secondary @click="router.push(modifyUrl)">
@@ -114,6 +118,15 @@
               />
             </template>
           </StepperProcedure>
+
+          <ConflictResolutionModal
+            :opened="suiviStore.conflictModalVisible"
+            :updatedBy="suiviStore.conflictDetails?.updatedBy"
+            :message="suiviStore.conflictDetails?.message"
+            @close="suiviStore.conflictModalVisible = false"
+            @reload="handleConflictReload"
+            @force-save="handleConflictForceSave"
+          />
         </div>
       </div>
     </div>
@@ -127,6 +140,7 @@ import { useRoute, useRouter } from 'vue-router'
 import StepperProcedure from '../components/StepperProcedure.vue'
 import Chargement from '../components/procedures/Chargement.vue'
 import Metadata from '../components/procedures/Metadata.vue'
+import ConflictResolutionModal from '../components/shared/ConflictResolutionModal.vue'
 import LoginInvitation from '../components/shared/LoginInvitation.vue'
 import AucuneProcedure from '../components/steps/AucuneProcedure.vue'
 import Cloture from '../components/steps/Cloture.vue'
@@ -174,15 +188,20 @@ const auteurIdentifie = computed(() => procedureData.value?.auteur_identifie ?? 
 const modifyUrl = computed(() => `/constatation/${constatationId.value}`)
 
 // Auto-save logic with debounce
+const isInitialLoading = ref(true)
+
 const debouncedSave = debounce(() => {
+  if (isInitialLoading.value || suiviStore.isReloading) return
+  if (suiviStore.conflictModalVisible) return
   if (constatationId.value && procedureData.value?.id) {
-    suiviStore.saveSuivi(constatationId.value, procedureData.value.id)
+    suiviStore.saveSuivi(constatationId.value, procedureData.value.id, { isExplicitSubmit: false })
   }
 }, 1000)
 
 watch(
   () => suiviProcedure.value,
   () => {
+    if (isInitialLoading.value || suiviStore.isReloading) return
     debouncedSave()
   },
   { deep: true }
@@ -311,12 +330,37 @@ onMounted(async () => {
       allerALaSectionOuverte = true
     }
   } catch (err: any) {
-    error.value = err.error || 'Une erreur est survenue lors de la récupération du dossier.'
+    router.replace({ name: 'NotFound' })
+    return
   } finally {
     showLoading.value = false
+    await nextTick()
+    isInitialLoading.value = false
     if (allerALaSectionOuverte) await afficherSectionOuverte()
   }
 })
+
+const handleConflictReload = async () => {
+  debouncedSave.cancel()
+  const currentConstatationId = constatationId.value
+  const internalId = procedureData.value?.id
+  if (currentConstatationId && internalId) {
+    await suiviStore.resolveConflictReload(currentConstatationId, internalId)
+  }
+}
+
+const handleConflictForceSave = async () => {
+  debouncedSave.cancel()
+  const currentConstatationId = constatationId.value
+  const internalId = procedureData.value?.id
+  if (currentConstatationId && internalId) {
+    try {
+      await suiviStore.forceSave(currentConstatationId, internalId)
+    } catch (err) {
+      console.error('Erreur lors du force save suivi:', err)
+    }
+  }
+}
 </script>
 
 <style scoped>
