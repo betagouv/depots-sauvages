@@ -362,6 +362,7 @@ describe('Page Suivi de Procédure', () => {
       vi.spyOn(api, 'patchResource').mockResolvedValue({
         id: 163,
         modified: '2026-11-16T12:05:00Z',
+        updated_by_name: 'Bob Dupont',
       })
 
       await store.saveSuivi('163', 163)
@@ -373,6 +374,8 @@ describe('Page Suivi de Procédure', () => {
         })
       )
       expect(store.lastSyncedModified['163']).toBe('2026-11-16T12:05:00Z')
+      expect(store.procedures['163'].modified).toBe('2026-11-16T12:05:00Z')
+      expect(store.procedures['163'].updated_by_name).toBe('Bob Dupont')
     })
 
     it('gère une réponse HTTP 409 sur saveSuivi', async () => {

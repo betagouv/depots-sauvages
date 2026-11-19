@@ -288,8 +288,16 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
         `${API_URL}/suivi-procedure/${internalConstatationId}/`,
         payload
       )
-      if (res && res.modified) {
-        lastSyncedModified[constatationId] = res.modified
+      if (res && typeof res === 'object') {
+        if (res.modified) {
+          lastSyncedModified[constatationId] = res.modified
+          if (procedures[constatationId]) {
+            procedures[constatationId].modified = res.modified
+          }
+        }
+        if (res.updated_by_name && procedures[constatationId]) {
+          procedures[constatationId].updated_by_name = res.updated_by_name
+        }
       }
       serverSnapshots[constatationId] = serializeForDiff(procedures[constatationId])
       conflictModalVisible.value = false
