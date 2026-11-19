@@ -72,17 +72,17 @@ onMounted(async () => {
         }
       } else {
         store.resetStore()
-      }
 
-      // The contact person fills the form and receives follow-ups.
-      // He is by default the logged-in user.
-      // He can also be the legal 'constatant',
-      // or he can be filling the form on behalf of someone else.
-      if (!store.formData.contactNom && userInfo.value.last_name) {
-        store.formData.contactNom = userInfo.value.last_name
-      }
-      if (!store.formData.contactPrenom && userInfo.value.first_name) {
-        store.formData.contactPrenom = userInfo.value.first_name
+        // The contact person fills the form and receives follow-ups.
+        // He is by default the logged-in user on a brand new draft.
+        // He can also be the legal 'constatant',
+        // or he can be filling the form on behalf of someone else.
+        if (!store.formData.contactNom && userInfo.value.last_name) {
+          store.formData.contactNom = userInfo.value.last_name
+        }
+        if (!store.formData.contactPrenom && userInfo.value.first_name) {
+          store.formData.contactPrenom = userInfo.value.first_name
+        }
       }
     }
   } catch (error) {
