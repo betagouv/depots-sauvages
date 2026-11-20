@@ -84,9 +84,7 @@ const router = createRouter({
       meta: {
         title: 'Se préparer pour mieux traiter les dépôts sauvages',
         breadcrumbLabel: 'Se préparer',
-        breadcrumbParent: '/mes-procedures',
         breadcrumbBand: true,
-        activeMenu: '/mes-procedures',
       },
     },
     {
