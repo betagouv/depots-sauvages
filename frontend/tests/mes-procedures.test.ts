@@ -89,7 +89,7 @@ describe('Page Mes Procédures', () => {
     })
   })
 
-  it('doit afficher un message d’information quand aucun dossier n’est trouvé', async () => {
+  it('propose deux chemins quand aucun dossier n’est trouvé : constater ou se préparer', async () => {
     // Mock user info authenticated
     ;(api.getUserInfo as any).mockResolvedValue({
       is_authenticated: true,
@@ -102,7 +102,7 @@ describe('Page Mes Procédures', () => {
     const procedureStore = useProcedureStore(pinia)
     procedureStore.procedures = []
 
-    render(MesProcedures, {
+    const { container } = render(MesProcedures, {
       global: {
         plugins: [pinia],
         stubs: {
@@ -114,17 +114,28 @@ describe('Page Mes Procédures', () => {
           },
           DnLoading: true,
           VIcon: true,
+          RouterLink: { props: ['to'], template: '<a :href="to"><slot /></a>' },
         },
       },
     })
     await waitFor(() => {
       expect(screen.getByText(/Aucune procédure en cours/)).toBeInTheDocument()
-      expect(
-        screen.getByText(
-          /Vous n'avez pas encore créé de constatation pour initier une procédure administrative/
-        )
-      ).toBeInTheDocument()
     })
+    expect(
+      screen.getByRole('heading', { level: 3, name: /J'ai un dépôt à traiter/ })
+    ).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 3, name: /Pas encore de cas/ })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Se préparer' })).toHaveAttribute(
+      'href',
+      '/se-preparer'
+    )
+    expect(screen.getByRole('link', { name: 'Démarrer une constatation' })).toHaveAttribute(
+      'href',
+      '/demarrer-constatation'
+    )
+
+    const results = await axe(container)
+    expect(results.violations).toEqual([])
   })
 
   describe('Tableau de bord en colonnes', () => {

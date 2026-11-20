@@ -18,6 +18,7 @@ SITE_NAME = "Stop Dépôt Sauvage"
 # Authenticated or backoffice pages excluded from search engine indexing even in production.
 PRIVATE_PATH_PREFIXES = (
     "/mes-procedures",
+    "/se-preparer",
     "/suivi-procedure/",
     "/constatation",
     "/constatation-fin/",
