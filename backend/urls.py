@@ -152,6 +152,15 @@ urlpatterns.append(
     )
 )
 
+# Browsers and search engines request these icons at the site root by default.
+urlpatterns += [
+    path("favicon.ico", RedirectView.as_view(url="/static/favicon/favicon.ico", permanent=True)),
+    path(
+        "apple-touch-icon.png",
+        RedirectView.as_view(url="/static/favicon/apple-touch-icon.png", permanent=True),
+    ),
+]
+
 # Media files in debug / local dev
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

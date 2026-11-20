@@ -51,7 +51,7 @@ const router = createRouter({
     {
       path: '/',
       component: () => import('./pages/accueil.vue'),
-      meta: { title: 'Accueil', breadcrumb: false },
+      meta: { title: 'Agir contre les dépôts sauvages', breadcrumb: false },
     },
     {
       path: '/simulateur',
