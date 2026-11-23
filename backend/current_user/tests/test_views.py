@@ -101,10 +101,10 @@ def test_user_info_with_team_and_procedures_count(client):
     bob = UserFactory(team=team)
     solo_user = UserFactory()
 
-    # Create 2 constatations for team, 1 for solo user
-    Constatation.objects.create(user=alice, created_by=alice, team=team, commune="Lyon 1")
-    Constatation.objects.create(user=bob, created_by=bob, team=team, commune="Lyon 2")
-    Constatation.objects.create(user=solo_user, created_by=solo_user, team=None, commune="Solo 1")
+    # Create 2 validated constatations for team (is_draft=False), 1 for solo user
+    Constatation.objects.create(user=alice, created_by=alice, team=team, commune="Lyon 1", is_draft=False)
+    Constatation.objects.create(user=bob, created_by=bob, team=team, commune="Lyon 2", is_draft=False)
+    Constatation.objects.create(user=solo_user, created_by=solo_user, team=None, commune="Solo 1", is_draft=False)
 
     # Bob logs in: procedures_count should be 2 (both team constatations)
     client.force_login(bob)
