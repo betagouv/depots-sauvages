@@ -253,7 +253,7 @@ def test_team_member_sees_and_updates_team_constatations(client):
     alice = UserFactory(team=team_a)
     bob = UserFactory(team=team_a)
 
-    # Alice creates a constatation
+    # Alice creates a draft constatation
     client.force_login(alice)
     create_res = client.post(
         reverse("constatation-list"),
@@ -268,12 +268,27 @@ def test_team_member_sees_and_updates_team_constatations(client):
     assert constat.created_by == alice
     assert constat.updated_by == alice
 
-    # Bob logs in and should see the constatation in the list
+    # Drafts are private to their creator: Bob does NOT see Alice's draft
     client.force_login(bob)
-    list_res = client.get(reverse("constatation-list"))
-    assert list_res.status_code == status.HTTP_200_OK
-    assert len(list_res.json()) == 1
-    assert list_res.json()[0]["id"] == constat_id
+    list_res_bob = client.get(reverse("constatation-list"))
+    assert list_res_bob.status_code == status.HTTP_200_OK
+    assert len(list_res_bob.json()) == 0
+
+    # Alice finalizes the constatation (is_draft = False)
+    client.force_login(alice)
+    finalize_res = client.patch(
+        reverse("constatation-detail", args=[constat_id]),
+        {"is_draft": False},
+        content_type="application/json",
+    )
+    assert finalize_res.status_code == status.HTTP_200_OK
+
+    # Now Bob sees the validated constatation in the team list
+    client.force_login(bob)
+    list_res_bob_after = client.get(reverse("constatation-list"))
+    assert list_res_bob_after.status_code == status.HTTP_200_OK
+    assert len(list_res_bob_after.json()) == 1
+    assert list_res_bob_after.json()[0]["id"] == constat_id
 
     # Bob can retrieve the detail
     detail_res = client.get(reverse("constatation-detail", args=[constat_id]))
@@ -449,6 +464,7 @@ def test_constatation_optimistic_locking(client):
         updated_by=alice,
         team=team,
         commune="Paris",
+        is_draft=False,
     )
     detail_url = reverse("constatation-detail", args=[constat.id])
 
