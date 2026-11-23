@@ -21,7 +21,10 @@ def get_user_constatations_queryset(user):
     """
     Returns the queryset of Constatation instances accessible by the user.
     - Staff members: access to all constatations.
-    - User with team: access to all constatations belonging to the same team.
+    - User with team:
+        * All validated/submitted constatations belonging to the same team (is_draft=False).
+        * Drafts (is_draft=True) strictly created by this user (or fallback user=user if created_by is null).
+          Drafts remain strictly private to their author to prevent concurrency conflicts.
     - User without team: access strictly to constatations with team__isnull=True
       and created_by=user (fallback to user=user if created_by is null).
     """
@@ -31,7 +34,11 @@ def get_user_constatations_queryset(user):
         return Constatation.objects.all()
     user_team_id = get_user_team_id(user)
     if user_team_id:
-        return Constatation.objects.filter(team_id=user_team_id)
+        return Constatation.objects.filter(team_id=user_team_id).filter(
+            models.Q(is_draft=False)
+            | models.Q(created_by=user)
+            | models.Q(created_by__isnull=True, user=user)
+        )
     return Constatation.objects.filter(
         models.Q(team__isnull=True)
         & (models.Q(created_by=user) | models.Q(created_by__isnull=True, user=user))

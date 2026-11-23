@@ -142,6 +142,7 @@ def test_suivi_procedure_team_sharing_and_traceability(client):
         updated_by=alice,
         team=team_a,
         commune="Alpha City",
+        is_draft=False,
     )
     url_a = reverse("suivi-procedure-detail", args=[c_a.id])
 
@@ -207,6 +208,7 @@ def test_suivi_procedure_optimistic_locking(client):
         updated_by=alice,
         team=team,
         commune="Rennes",
+        is_draft=False,
     )
     url = reverse("suivi-procedure-detail", args=[c.id])
 
