@@ -174,7 +174,7 @@ interface QuickLink {
   onClick?: (event: MouseEvent) => void
 }
 
-const isAuthenticated = ref(false)
+const isAuthenticated = computed(() => userStore.isAuthenticated)
 const bypassEnabled = ref(false)
 const userInfo = computed(() => userStore.userInfo)
 const isProConnectEnabled = PROCONNECT_ENABLED
@@ -240,7 +240,6 @@ onMounted(async () => {
     if (!fetchedUserInfo.is_staff) {
       adminModeStore.setAdminMode(false)
     }
-    isAuthenticated.value = fetchedUserInfo.is_authenticated
   } catch (error) {
     console.error('Failed to fetch user info:', error)
     adminModeStore.setAdminMode(false)
