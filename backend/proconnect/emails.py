@@ -19,7 +19,7 @@ def send_proconnect_access_request_notification_task(validated_data: dict, admin
         admin_email = getattr(
             settings,
             "ADMIN_EMAIL",
-            getattr(settings, "DEFAULT_FROM_EMAIL", "contact@depots-sauvages.beta.gouv.fr"),
+            getattr(settings, "DEFAULT_FROM_EMAIL", "contact@stopdepotsauvage.beta.gouv.fr"),
         )
         subject_org = f"{organization_label} ({siren})" if organization_label and siren else (organization_label or siren or email)
         subject = f"[Stop Déchets Sauvages] Demande d'accès ProConnect : {subject_org}"
@@ -43,7 +43,7 @@ def send_proconnect_access_request_notification_task(validated_data: dict, admin
         from_email = getattr(
             settings,
             "SERVER_EMAIL",
-            getattr(settings, "DEFAULT_FROM_EMAIL", "contact@depots-sauvages.beta.gouv.fr"),
+            getattr(settings, "DEFAULT_FROM_EMAIL", "contact@stopdepotsauvage.beta.gouv.fr"),
         )
         mail_obj = EmailMessage(
             subject=subject,

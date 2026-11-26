@@ -32,7 +32,7 @@ describe('vue-guillotine link handling', () => {
     })
 
     it('detects mailto and tel as internal', () => {
-      expect(isInternalUrl('mailto:contact@depots-sauvages.beta.gouv.fr')).toBe(true)
+      expect(isInternalUrl('mailto:contact@stopdepotsauvage.beta.gouv.fr')).toBe(true)
       expect(isInternalUrl('tel:0123456789')).toBe(true)
     })
   })
