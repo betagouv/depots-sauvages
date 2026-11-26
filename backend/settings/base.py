@@ -235,7 +235,7 @@ CACHES = {
 ANYMAIL = {
     "TEST_MODE": True,
 }
-DEFAULT_FROM_EMAIL = "contact@depots-sauvages.beta.gouv.fr"
+DEFAULT_FROM_EMAIL = "contact@stopdepotsauvage.beta.gouv.fr"
 ADMIN_EMAIL = DEFAULT_FROM_EMAIL
 
 
