@@ -216,14 +216,14 @@ def build_article_jsonld(seo_data, canonical, image):
     return jsonld
 
 
-def build_website_jsonld():
+def build_website_jsonld(canonical):
     """Builds schema.org WebSite structured data so search engines display the site name."""
     return {
         "@context": "https://schema.org",
         "@type": "WebSite",
         "name": SITE_NAME,
         "alternateName": SITE_ALTERNATE_NAME,
-        "url": settings.SITE_BASE_URL,
+        "url": canonical,
     }
 
 
@@ -249,7 +249,7 @@ def build_seo_context(path):
         context["seo_modified_time"] = seo_data.get("modified_time")
         jsonld = build_article_jsonld(seo_data, canonical, image)
     elif normalize_path(path) == "/":
-        jsonld = build_website_jsonld()
+        jsonld = build_website_jsonld(canonical)
     if jsonld:
         # Escape '</' sequence to prevent prematurely closing script tags
         context["seo_jsonld"] = mark_safe(

@@ -301,29 +301,30 @@ def test_home_exposes_website_structured_data(client, settings):
     assert data["@type"] == "WebSite"
     assert data["name"] == "Stop Dépôt Sauvage"
     assert data["alternateName"] == "Protect'Envi"
-    assert data["url"] == "https://stopdepotsauvage.beta.gouv.fr"
+    assert data["url"] == "https://stopdepotsauvage.beta.gouv.fr/"
 
 
 @pytest.mark.django_db
 def test_favicon_tags_follow_dsfr(client):
     content = client.get("/").content.decode()
-    assert 'href="/static/favicon/favicon.svg"' in content
-    assert 'href="/static/favicon/favicon.ico"' in content
-    assert 'href="/static/favicon/apple-touch-icon.png"' in content
-    assert 'href="/static/favicon/manifest.webmanifest"' in content
+    assert 'href="/favicon.svg"' in content
+    assert 'href="/favicon.ico"' in content
+    assert 'href="/apple-touch-icon.png"' in content
+    assert 'href="/manifest.webmanifest"' in content
 
 
 @pytest.mark.parametrize(
-    "path, target",
+    "path",
     [
-        ("/favicon.ico", "/static/favicon/favicon.ico"),
-        ("/apple-touch-icon.png", "/static/favicon/apple-touch-icon.png"),
+        "/favicon.ico",
+        "/apple-touch-icon.png",
+        "/favicon.svg",
+        "/manifest.webmanifest",
     ],
 )
-def test_root_icons_redirect_to_static_files(client, path, target):
+def test_root_icons_served_directly_by_whitenoise(client, path):
     response = client.get(path)
-    assert response.status_code == 301
-    assert response["Location"] == target
+    assert response.status_code == 200
 
 
 def test_static_titles_fit_dsfr_limit():

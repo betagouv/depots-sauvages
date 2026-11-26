@@ -222,9 +222,17 @@ depots-sauvages/
 │   ├── procedures/      # Suivi des procédures administratives et pénales
 │   └── urls.py          # URL principale de configuration
 ├── frontend/            # Vue.js front-end
+├── static/              # Fichiers statiques Django servis sous /static/ (collectstatic)
+├── whitenoise_static/   # Fichiers statiques servis directement à la racine / par WhiteNoise
 ├── scripts/             # Scripts utilitaires
 ├── documents/           # Documents générés
 ```
+
+### 📁 Fichiers statiques : `static/` vs `whitenoise_static/`
+
+- **`static/`** (`STATICFILES_DIRS`) : assets classiques collectés par Django (`collectstatic`) et servis sous `/static/` avec hashing de cache (images, illustrations, etc.).
+- **`whitenoise_static/`** (`WHITENOISE_ROOT`) : fichiers purement statiques devant être servis **directement à la racine `/`** en HTTP 200 par WhiteNoise, sans hashing ni routage Django (favicons, `manifest.webmanifest`, et tout futur fichier racine comme `.well-known/security.txt`).
+  - Les fichiers dynamiques à la racine (`robots.txt`, `sitemap.xml`) restent quant à eux gérés par des vues Django dans `backend/urls.py`.
 
 ---
 

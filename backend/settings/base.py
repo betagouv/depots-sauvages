@@ -135,6 +135,8 @@ STATIC_ROOT = PROJECT_ROOT / "dist" / "static"
 STATICFILES_DIRS = [
     PROJECT_ROOT / "static",
 ]
+# Static files served directly at the site root "/" by WhiteNoise (favicons, manifest, etc.)
+WHITENOISE_ROOT = PROJECT_ROOT / "whitenoise_static"
 
 # Media files
 MEDIA_URL = "/media/"
