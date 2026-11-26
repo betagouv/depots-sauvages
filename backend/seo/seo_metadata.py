@@ -8,12 +8,10 @@ from django.utils.safestring import mark_safe
 from backend.seo.blog import get_blog_seo_data
 from backend.seo.faq import get_faq_seo_data
 
-DEFAULT_TITLE = (
-    "Stop Dépôt Sauvage - Accompagner les collectivités pour mieux lutter contre "
-    "les dépôts sauvages."
-)
+DEFAULT_TITLE = "Agir contre les dépôts sauvages - Stop Dépôt Sauvage"
 DEFAULT_DESCRIPTION = "Signaler un dépôt sauvage avec Stop Dépôt Sauvage."
 SITE_NAME = "Stop Dépôt Sauvage"
+SITE_ALTERNATE_NAME = "Protect'Envi"
 
 # Authenticated or backoffice pages excluded from search engine indexing even in production.
 PRIVATE_PATH_PREFIXES = (
@@ -33,14 +31,14 @@ SEO_PATTERNS = [
     (
         r"^/$",
         {
-            "title": "Stop Dépôt Sauvage - Accompagner les collectivités pour mieux lutter contre les dépôts sauvages.",
+            "title": DEFAULT_TITLE,
             "desc": "Signaler un dépôt sauvage avec Stop Dépôt Sauvage.",
         },
     ),
     (
         r"^/simulateur$",
         {
-            "title": "Simulateur d'éligibilité à la procédure administrative - Stop Dépôt Sauvage",
+            "title": "Simulateur d'amende pour dépôt sauvage - Stop Dépôt Sauvage",
             "desc": "Répondez à quelques questions, en 1 minute, pour savoir si Stop Dépôt Sauvage peut vous aider à agir efficacement.",
         },
     ),
@@ -89,7 +87,7 @@ SEO_PATTERNS = [
     (
         r"^/comment-agir$",
         {
-            "title": "Comment agir contre les dépôts sauvages ? - Stop Dépôt Sauvage",
+            "title": "Comment agir - Stop Dépôt Sauvage",
             "desc": "Découvrez comment une collectivité peut agir efficacement contre les dépôts sauvages.",
         },
     ),
@@ -218,6 +216,17 @@ def build_article_jsonld(seo_data, canonical, image):
     return jsonld
 
 
+def build_website_jsonld(canonical):
+    """Builds schema.org WebSite structured data so search engines display the site name."""
+    return {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": SITE_NAME,
+        "alternateName": SITE_ALTERNATE_NAME,
+        "url": canonical,
+    }
+
+
 def build_seo_context(path):
     """Builds complete SEO template context (tags, canonical, robots, OG, and JSON-LD)."""
     seo_data = get_seo_data(path) or {}
@@ -234,10 +243,14 @@ def build_seo_context(path):
         "seo_og_type": seo_data.get("og_type", "website"),
         "seo_image": image,
     }
+    jsonld = None
     if seo_data.get("og_type") == "article":
         context["seo_published_time"] = seo_data.get("published_time")
         context["seo_modified_time"] = seo_data.get("modified_time")
         jsonld = build_article_jsonld(seo_data, canonical, image)
+    elif normalize_path(path) == "/":
+        jsonld = build_website_jsonld(canonical)
+    if jsonld:
         # Escape '</' sequence to prevent prematurely closing script tags
         context["seo_jsonld"] = mark_safe(
             json.dumps(jsonld, ensure_ascii=False).replace("<", "\\u003C")

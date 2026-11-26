@@ -152,7 +152,7 @@ def test_seo_metadata_blog_draft_and_unknown_fall_back_to_default(client, path):
     response = client.get(path)
     assert response.status_code == 200
     content = response.content.decode()
-    assert "Stop Dépôt Sauvage - Accompagner les collectivités" in content
+    assert "Agir contre les dépôts sauvages - Stop Dépôt Sauvage" in content
     assert '<meta property="og:type" content="website" />' in content
 
 
@@ -281,10 +281,55 @@ def test_build_seo_context_unit(settings):
     settings.ENV_NAME = "prod"
     settings.SITE_BASE_URL = "https://stopdepotsauvage.beta.gouv.fr"
     ctx = build_seo_context("/comment-agir")
-    assert ctx["seo_title"] == "Comment agir contre les dépôts sauvages ? - Stop Dépôt Sauvage"
+    assert ctx["seo_title"] == "Comment agir - Stop Dépôt Sauvage"
     assert ctx["seo_canonical"] == "https://stopdepotsauvage.beta.gouv.fr/comment-agir"
     assert ctx["seo_robots"] == "index, follow"
 
     # Private path should be noindex
     ctx_private = build_seo_context("/mes-procedures")
     assert ctx_private["seo_robots"] == "noindex, nofollow"
+
+
+@pytest.mark.django_db
+def test_home_exposes_website_structured_data(client, settings):
+    settings.SITE_BASE_URL = "https://stopdepotsauvage.beta.gouv.fr"
+    content = client.get("/").content.decode()
+    raw = re.search(
+        r'<script type="application/ld\+json">(.*?)</script>', content, re.DOTALL
+    ).group(1)
+    data = json.loads(raw)
+    assert data["@type"] == "WebSite"
+    assert data["name"] == "Stop Dépôt Sauvage"
+    assert data["alternateName"] == "Protect'Envi"
+    assert data["url"] == "https://stopdepotsauvage.beta.gouv.fr/"
+
+
+@pytest.mark.django_db
+def test_favicon_tags_follow_dsfr(client):
+    content = client.get("/").content.decode()
+    assert 'href="/favicon.svg"' in content
+    assert 'href="/favicon.ico"' in content
+    assert 'href="/apple-touch-icon.png"' in content
+    assert 'href="/manifest.webmanifest"' in content
+
+
+@pytest.mark.parametrize(
+    "path",
+    [
+        "/favicon.ico",
+        "/apple-touch-icon.png",
+        "/favicon.svg",
+        "/manifest.webmanifest",
+    ],
+)
+def test_root_icons_served_directly_by_whitenoise(client, path):
+    response = client.get(path)
+    assert response.status_code == 200
+
+
+def test_static_titles_fit_dsfr_limit():
+    """DSFR: page title plus site name must not exceed 60 characters."""
+    from backend.seo.seo_metadata import DEFAULT_TITLE, SEO_PATTERNS
+
+    titles = [DEFAULT_TITLE] + [seo_data["title"] for _, seo_data in SEO_PATTERNS]
+    assert [title for title in titles if len(title) > 60] == []

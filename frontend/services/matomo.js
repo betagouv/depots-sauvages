@@ -1,8 +1,7 @@
 import { INTERNAL_HOSTS } from '../vue-guillotine/utils/linkUtils.js'
 import { MATOMO_ENABLED } from './config'
 
-const DEFAULT_TITLE =
-  'Stop Dépôt Sauvage - Accompagner les collectivités pour mieux lutter contre les dépôts sauvages.'
+const DEFAULT_TITLE = 'Agir contre les dépôts sauvages - Stop Dépôt Sauvage'
 
 // The site responds on multiple domains/aliases (stopdepotsauvage, protect-envi, etc.).
 // Without this list, Matomo treats cross-domain clicks as outlinks.
