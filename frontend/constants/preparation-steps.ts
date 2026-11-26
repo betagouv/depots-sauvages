@@ -1,9 +1,7 @@
-export interface PreparationLink {
-  label: string
-  to?: string
-  href?: string
-  action?: 'simulator'
-}
+export type PreparationLink =
+  | { label: string; to: string }
+  | { label: string; href: string }
+  | { label: string; action: 'simulator' }
 
 export interface PreparationStep {
   id: string
@@ -31,13 +29,6 @@ export const USER_GUIDE_URL =
 const faq = (slug: string) => `/faq/${slug}`
 const blog = (slug: string) => `/blog/${slug}`
 
-const guideStep: PreparationStep = {
-  id: 'guide',
-  label: "Je consulte le guide d'utilisation",
-  description: "Le mode d'emploi de Stop Dépôt Sauvage, à ouvrir ou à télécharger.",
-  link: { label: "Ouvrir le guide d'utilisation", href: USER_GUIDE_URL },
-}
-
 export const PREPARATION_SECTIONS: PreparationSection[] = [
   {
     id: 'prevenir-anticiper',
@@ -51,7 +42,12 @@ export const PREPARATION_SECTIONS: PreparationSection[] = [
           'En moins de 60 minutes, découvrez comment agir concrètement grâce à la procédure administrative.',
         link: { label: "S'inscrire au prochain webinaire", to: '/rdv' },
       },
-      guideStep,
+      {
+        id: 'guide',
+        label: "Je consulte le guide d'utilisation",
+        description: "Le mode d'emploi de Stop Dépôt Sauvage, à ouvrir ou à télécharger.",
+        link: { label: "Ouvrir le guide d'utilisation", href: USER_GUIDE_URL },
+      },
       {
         id: 'retours-experience',
         label: "Je parcours les retours d'expérience d'autres communes",

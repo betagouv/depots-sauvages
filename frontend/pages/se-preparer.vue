@@ -134,7 +134,11 @@ const setDone = (stepId: string, value: boolean) => {
     next.delete(stepId)
   }
   doneSteps.value = next
-  localStorage.setItem(STORAGE_KEY, JSON.stringify([...next]))
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify([...next]))
+  } catch {
+    // Ignore storage errors (private browsing or quota exceeded)
+  }
 }
 
 onMounted(async () => {

@@ -82,8 +82,7 @@ const router = createRouter({
       name: 'SePreparer',
       component: () => import('./pages/se-preparer.vue'),
       meta: {
-        title: 'Se préparer pour mieux traiter les dépôts sauvages',
-        breadcrumbLabel: 'Se préparer',
+        title: 'Se préparer',
         breadcrumbBand: true,
       },
     },

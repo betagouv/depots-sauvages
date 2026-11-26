@@ -28,7 +28,7 @@
                 <router-link class="fr-link" to="/mes-procedures">Mes procédures (espace connecté)</router-link>
               </li>
               <li class="fr-mb-1w">
-                <router-link class="fr-link" to="/se-preparer">Se préparer pour mieux traiter les dépôts sauvages (espace connecté)</router-link>
+                <router-link class="fr-link" to="/se-preparer">Se préparer (espace connecté)</router-link>
               </li>
               <li class="fr-mb-1w">
                 <router-link class="fr-link" to="/contact">Contactez-nous</router-link>
