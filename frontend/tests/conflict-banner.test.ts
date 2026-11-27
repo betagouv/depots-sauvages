@@ -35,7 +35,7 @@ describe('ConflictBanner', () => {
 
     const reloadButton = wrapper
       .findAll('button')
-      .find((b) => b.text().includes('Recharger la version à jour'))
+      .find((b) => b.text().includes('Récupérer la version à jour'))
     expect(reloadButton).toBeDefined()
     await reloadButton!.trigger('click')
 

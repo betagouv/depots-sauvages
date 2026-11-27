@@ -15,7 +15,7 @@
         class="fr-btn fr-btn--sm"
         @click="emit('reload')"
       >
-        Recharger la version à jour
+        Récupérer la version à jour
       </button>
       <button
         type="button"

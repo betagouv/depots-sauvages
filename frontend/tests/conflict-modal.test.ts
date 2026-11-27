@@ -25,7 +25,7 @@ describe('ConflictResolutionModal', () => {
     })
 
     const buttons = wrapper.findAll('button')
-    const reloadBtn = buttons.find((b) => b.text().includes('Recharger'))
+    const reloadBtn = buttons.find((b) => b.text().includes('Récupérer'))
     expect(reloadBtn).toBeDefined()
     if (reloadBtn) {
       await reloadBtn.trigger('click')

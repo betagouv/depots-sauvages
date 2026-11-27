@@ -19,10 +19,10 @@
 
       <ul class="fr-text--sm">
         <li>
-          <strong>Recharger la version serveur (recommandé) :</strong> Récupère la dernière version à jour enregistrée par votre collègue. Vos modifications locales non enregistrées seront remplacées.
+          <strong>Récupérer la version à jour (recommandé) :</strong> Récupère la dernière version à jour enregistrée par votre collègue. Vos modifications locales non enregistrées seront remplacées.
         </li>
         <li>
-          <strong>Conserver et forcer l'enregistrement :</strong> Écrase la version de votre collègue avec vos saisies actuelles.
+          <strong>Conserver mes saisies et écraser :</strong> Écrase la version de votre collègue avec vos saisies actuelles.
         </li>
       </ul>
     </div>
@@ -53,7 +53,7 @@ const emit = defineEmits<{
 
 const modalActions = computed(() => [
   {
-    label: 'Recharger la version à jour',
+    label: 'Récupérer la version à jour',
     onClick: () => emit('reload'),
   },
   {
