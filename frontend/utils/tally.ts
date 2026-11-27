@@ -38,6 +38,8 @@ declare global {
   }
 }
 
+export const SIMULATOR_TALLY_FORM_ID = 'A7xA8z'
+
 export const openTallyPopup = (formId: string, options: TallyPopupOptions = {}) => {
   const tryOpen = () => {
     if (typeof window !== 'undefined' && window.Tally) {

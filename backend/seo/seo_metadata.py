@@ -16,6 +16,7 @@ SITE_ALTERNATE_NAME = "Protect'Envi"
 # Authenticated or backoffice pages excluded from search engine indexing even in production.
 PRIVATE_PATH_PREFIXES = (
     "/mes-procedures",
+    "/se-preparer",
     "/suivi-procedure/",
     "/constatation",
     "/constatation-fin/",

@@ -206,7 +206,7 @@ def test_no_structured_data_outside_articles(client):
 @pytest.mark.django_db
 @pytest.mark.parametrize(
     "path",
-    ["/mes-procedures", "/suivi-procedure/12", "/tableau-de-bord", "/constatation-fin/3"],
+    ["/mes-procedures", "/se-preparer", "/suivi-procedure/12", "/tableau-de-bord", "/constatation-fin/3"],
 )
 def test_private_pages_are_not_indexable_in_prod(client, settings, path):
     settings.ENV_NAME = "prod"

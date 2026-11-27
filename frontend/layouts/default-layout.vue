@@ -166,112 +166,76 @@ interface QuickLink {
   onClick?: (event: MouseEvent) => void
 }
 
-const quickLinks = ref<QuickLink[]>([])
-
 const isAuthenticated = ref(false)
+const bypassEnabled = ref(false)
 const userInfo = computed(() => userStore.userInfo)
-
-const goToLogin = (event?: MouseEvent) => {
-  if (event) {
-    event.preventDefault()
-  }
-  const nextParam = route.fullPath === '/' ? '/mes-procedures' : route.fullPath
-  window.location.href = `${LOGIN_URL}?next=${encodeURIComponent(nextParam)}`
-}
-
-const goToLogout = (event?: MouseEvent) => {
-  if (event) {
-    event.preventDefault()
-  }
-  window.location.href = LOGOUT_URL
-}
-
 const isProConnectEnabled = PROCONNECT_ENABLED
 
-onMounted(async () => {
-  let bypassEnabled = false
-  try {
-    const bypassConfig = await getBypassAuthConfig()
-    bypassEnabled = bypassConfig?.enabled ?? false
-  } catch {
-    bypassEnabled = false
-  }
+// Computed from the current route so the user comes back to the page they were on after login.
+const loginNextPath = computed(() => (route.fullPath === '/' ? '/mes-procedures' : route.fullPath))
 
-  try {
-    const fetchedUserInfo = await userStore.fetchUserInfo()
+const redirectTo = (url: string) => (event?: MouseEvent) => {
+  event?.preventDefault()
+  window.location.href = url
+}
 
-    if (!fetchedUserInfo.is_staff) {
-      adminModeStore.setAdminMode(false)
-    }
-
-    if (fetchedUserInfo.is_authenticated) {
-      isAuthenticated.value = true
-      quickLinks.value.push({
+const quickLinks = computed<QuickLink[]>(() => {
+  if (isAuthenticated.value) {
+    return [
+      {
         label: 'Se déconnecter',
         icon: 'fr-icon-logout-box-r-line',
         iconRight: false,
         href: LOGOUT_URL,
         to: LOGOUT_URL, // for styling
-        onClick: goToLogout,
-      })
-    } else {
-      if (bypassEnabled) {
-        const demoUrl = `/login-demo?next=${encodeURIComponent(route.fullPath === '/' ? '/mes-procedures' : route.fullPath)}`
-        quickLinks.value.push({
-          label: 'Connexion de démo',
-          icon: 'fr-icon-user-line',
-          iconRight: false,
-          href: demoUrl,
-          to: demoUrl,
-          onClick: (event) => {
-            if (event) event.preventDefault()
-            window.location.href = demoUrl
-          },
-        })
-      }
-      if (isProConnectEnabled) {
-        const nextParam = route.fullPath === '/' ? '/mes-procedures' : route.fullPath
-        const loginUrlWithNext = `${LOGIN_URL}?next=${encodeURIComponent(nextParam)}`
-        quickLinks.value.push({
-          label: 'Se connecter via ProConnect',
-          icon: 'fr-icon-lock-line',
-          iconRight: false,
-          href: loginUrlWithNext,
-          to: loginUrlWithNext, // for styling
-          onClick: goToLogin,
-        })
-      }
+        onClick: redirectTo(LOGOUT_URL),
+      },
+    ]
+  }
+  const next = encodeURIComponent(loginNextPath.value)
+  const links: QuickLink[] = []
+  if (bypassEnabled.value) {
+    const demoUrl = `/login-demo?next=${next}`
+    links.push({
+      label: 'Connexion de démo',
+      icon: 'fr-icon-user-line',
+      iconRight: false,
+      href: demoUrl,
+      to: demoUrl,
+      onClick: redirectTo(demoUrl),
+    })
+  }
+  if (isProConnectEnabled) {
+    const loginUrl = `${LOGIN_URL}?next=${next}`
+    links.push({
+      label: 'Se connecter via ProConnect',
+      icon: 'fr-icon-lock-line',
+      iconRight: false,
+      href: loginUrl,
+      to: loginUrl, // for styling
+      onClick: redirectTo(loginUrl),
+    })
+  }
+  return links
+})
+
+onMounted(async () => {
+  try {
+    const bypassConfig = await getBypassAuthConfig()
+    bypassEnabled.value = bypassConfig?.enabled ?? false
+  } catch {
+    bypassEnabled.value = false
+  }
+
+  try {
+    const fetchedUserInfo = await userStore.fetchUserInfo()
+    if (!fetchedUserInfo.is_staff) {
+      adminModeStore.setAdminMode(false)
     }
+    isAuthenticated.value = fetchedUserInfo.is_authenticated
   } catch (error) {
     console.error('Failed to fetch user info:', error)
     adminModeStore.setAdminMode(false)
-
-    if (bypassEnabled) {
-      const demoUrl = `/login-demo?next=${encodeURIComponent(route.fullPath === '/' ? '/mes-procedures' : route.fullPath)}`
-      quickLinks.value.push({
-        label: 'Connexion de démo',
-        icon: 'fr-icon-user-line',
-        iconRight: false,
-        href: demoUrl,
-        to: demoUrl,
-        onClick: (event) => {
-          if (event) event.preventDefault()
-          window.location.href = demoUrl
-        },
-      })
-    }
-    if (isProConnectEnabled) {
-      const nextParam = route.fullPath === '/' ? '/mes-procedures' : route.fullPath
-      const loginUrlWithNext = `${LOGIN_URL}?next=${encodeURIComponent(nextParam)}`
-      quickLinks.value.push({
-        label: 'Se connecter via ProConnect',
-        icon: 'fr-icon-lock-line',
-        iconRight: false,
-        href: loginUrlWithNext,
-        to: loginUrlWithNext, // for styling
-        onClick: goToLogin,
-      })
-    }
   }
 })
 

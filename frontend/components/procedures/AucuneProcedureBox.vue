@@ -1,53 +1,67 @@
 <template>
-  <PremiumBox
-    title="Aucune procédure en cours"
-    description="Vous n'avez pas encore créé de constatation pour initier une procédure administrative de lutte contre les dépôts sauvages."
-    iconClass="fr-icon-folder-2-line"
-  >
-    <template #actions>
-      <router-link to="/demarrer-constatation" class="fr-btn">
-        <span class="fr-icon-add-line fr-mr-1w" aria-hidden="true"></span>
-        Lancer une procédure
-      </router-link>
-      <button class="fr-btn fr-btn--secondary" @click="openSimulator">
-        <span class="fr-icon-question-line fr-mr-1w" aria-hidden="true"></span>
-        Simulateur d'éligibilité
-      </button>
-    </template>
+  <section aria-labelledby="aucune-procedure-titre">
+    <h2 id="aucune-procedure-titre" class="fr-h3 fr-mb-4w">Aucune procédure en cours</h2>
 
-    <template #footer>
-      <div class="premium-info-footer fr-p-3w">
-        <p class="fr-text--sm fr-mb-0 text-left">
-          <span
-            class="fr-icon-info-line fr-mr-1w"
-            aria-hidden="true"
-            style="vertical-align: middle; color: var(--text-active-blue-france)"
-          ></span>
-          <strong>Comment ça marche ?</strong> Une fois la constatation du dépôt sauvage effectuée,
-          <strong>Stop Dépôt Sauvage</strong> génère automatiquement vos documents de procédure et
-          vous guide pas à pas.
-        </p>
+    <div class="fr-grid-row fr-grid-row--gutters">
+      <div class="fr-col-12 fr-col-md-6">
+        <div class="fr-card">
+          <div class="fr-card__body">
+            <div class="fr-card__content">
+              <h3 class="fr-card__title">J'ai un dépôt à traiter</h3>
+              <p class="fr-card__desc">
+                Constatez le dépôt : Stop Dépôt Sauvage génère automatiquement vos documents de
+                procédure et vous guide pas à pas.
+              </p>
+            </div>
+            <div class="fr-card__footer">
+              <ul class="fr-btns-group fr-btns-group--inline-md fr-btns-group--icon-left">
+                <li>
+                  <router-link
+                    to="/demarrer-constatation"
+                    class="fr-btn fr-icon-add-line fr-btn--icon-left"
+                    @click="track('Clic Démarrer une constatation')"
+                  >
+                    Démarrer une constatation
+                  </router-link>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
-    </template>
-  </PremiumBox>
+
+      <div class="fr-col-12 fr-col-md-6">
+        <div class="fr-card">
+          <div class="fr-card__body">
+            <div class="fr-card__content">
+              <h3 class="fr-card__title">Pas encore de cas ?</h3>
+              <p class="fr-card__desc">
+                Préparez votre collectivité pour prévenir les dépôts et être prêt le jour où un
+                dépôt arrive.
+              </p>
+            </div>
+            <div class="fr-card__footer">
+              <ul class="fr-btns-group fr-btns-group--inline-md fr-btns-group--icon-right">
+                <li>
+                  <router-link
+                    to="/se-preparer"
+                    class="fr-btn fr-btn--secondary fr-icon-arrow-right-line fr-btn--icon-right"
+                    @click="track('Clic Se préparer')"
+                  >
+                    Se préparer
+                  </router-link>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </template>
 
 <script setup lang="ts">
-import PremiumBox from '@/components/shared/PremiumBox.vue'
-import { openTallyPopup } from '@/utils/tally'
+import { trackEvent } from '@/services/matomo'
 
-const openSimulator = () => {
-  openTallyPopup('A7xA8z', { layout: 'modal', width: 900 })
-}
+const track = (action: string) => trackEvent('Mes procédures', action, 'Aucune procédure')
 </script>
-
-<style scoped>
-.premium-info-footer {
-  background-color: var(--background-alt-blue-france);
-  border-left: 4px solid var(--border-active-blue-france);
-  border-radius: 4px;
-}
-.text-left {
-  text-align: left;
-}
-</style>

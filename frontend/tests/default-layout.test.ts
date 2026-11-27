@@ -1,10 +1,11 @@
 import { createTestingPinia } from '@pinia/testing'
 import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/vue'
+import { nextTick, reactive } from 'vue'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import DefaultLayout from '../layouts/default-layout.vue'
 
-const route = { fullPath: '/', meta: {} as Record<string, unknown> }
+const route = reactive({ fullPath: '/', meta: {} as Record<string, unknown> })
 const router = {
   resolve: vi.fn((to: string) => ({ href: to, meta: {} })),
 }
@@ -16,6 +17,7 @@ vi.mock('vue-router', () => ({
 vi.mock('../services/api', async () => ({
   ...(await vi.importActual('../services/api')),
   getBypassAuthConfig: vi.fn().mockResolvedValue({ enabled: false }),
+  getUserInfo: vi.fn().mockResolvedValue({ is_authenticated: false }),
 }))
 
 const renderLayout = () =>
@@ -51,5 +53,37 @@ describe('Gabarit par défaut - liens d’évitement', () => {
     renderLayout()
 
     expect(screen.getByRole('main')).toHaveAttribute('tabindex', '-1')
+  })
+})
+
+describe('Gabarit par défaut - lien de connexion', () => {
+  it('ramène sur la page en cours après la connexion, même après une navigation', async () => {
+    route.fullPath = '/'
+    route.meta = {}
+    const api = await import('../services/api')
+    vi.mocked(api.getBypassAuthConfig).mockResolvedValueOnce({ enabled: true })
+    render(DefaultLayout, {
+      global: {
+        plugins: [createTestingPinia({ stubActions: false })],
+        stubs: {
+          DsfrHeader: {
+            props: ['quickLinks'],
+            template:
+              '<div><a v-for="link in quickLinks" :key="link.label" :href="link.href">{{ link.label }}</a></div>',
+          },
+          DsfrFooter: true,
+        },
+      },
+    })
+
+    const demoLink = await screen.findByRole('link', { name: 'Connexion de démo' })
+    expect(demoLink).toHaveAttribute('href', '/login-demo?next=%2Fmes-procedures')
+
+    route.fullPath = '/se-preparer'
+    await nextTick()
+    expect(screen.getByRole('link', { name: 'Connexion de démo' })).toHaveAttribute(
+      'href',
+      '/login-demo?next=%2Fse-preparer'
+    )
   })
 })
