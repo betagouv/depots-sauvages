@@ -6,6 +6,9 @@
         <p v-if="userStore.hasTeam && userStore.teamName" class="fr-text--lead fr-text-mention--grey fr-mb-0">
           Procédures partagées de l'organisation : <strong>{{ userStore.teamName }}</strong>
         </p>
+        <p v-if="userStore.userDisplayName" class="fr-text--sm fr-text-mention--grey fr-mb-0" :class="{ 'fr-mt-1v': userStore.hasTeam }">
+          Connecté en tant que : <strong>{{ userStore.userDisplayName }}</strong>
+        </p>
       </div>
       <div v-if="userInfo?.is_authenticated && procedures.length > 0" class="fr-col-auto">
         <router-link to="/demarrer-constatation" class="fr-btn">

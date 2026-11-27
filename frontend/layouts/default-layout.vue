@@ -8,12 +8,20 @@
       :quick-links="quickLinks"
     >
       <template #before-quick-links>
-        <div v-if="userStore.hasTeam" class="fr-header__tools-item fr-mr-2w">
+        <div v-if="userStore.hasTeam || userStore.userDisplayName" class="fr-header__tools-item header-user-team-item fr-mr-2w">
           <DsfrBadge
+            v-if="userStore.hasTeam"
             type="info"
             :label="userStore.teamName ? `Équipe : ${userStore.teamName}` : 'Organisation'"
             class="fr-badge--no-icon fr-badge--sm"
           />
+          <div
+            v-if="userStore.userDisplayName"
+            class="header-user-display-name fr-text--xs fr-text-mention--grey fr-mb-0"
+            :class="{ 'fr-mt-1v': userStore.hasTeam }"
+          >
+            {{ userStore.userDisplayName }}
+          </div>
         </div>
         <div v-if="userInfo?.is_staff" class="fr-header__tools-item admin-toggle-header-item">
           <DsfrToggleSwitch
@@ -267,6 +275,22 @@ const afterMandatoryLinks = [
   We keep these because standard utility classes cannot handle this specific 
   absolute positioning relative to the header structure.
 */
+
+.header-user-team-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.header-user-display-name {
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+  line-height: 1.25;
+}
 
 .admin-toggle-header-item {
   display: flex;

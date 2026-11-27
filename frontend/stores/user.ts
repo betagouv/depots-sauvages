@@ -19,6 +19,16 @@ export const useUserStore = defineStore('user', {
     isAuthenticated: (state) => state.userInfo?.is_authenticated ?? false,
     isStaff: (state) => state.userInfo?.is_staff ?? false,
     hasTeam: (state) => state.teamId !== null,
+    userDisplayName: (state): string | null => {
+      if (!state.userInfo) return null
+      const fullName = [state.userInfo.first_name, state.userInfo.last_name]
+        .map((part) => (part ?? '').trim())
+        .filter(Boolean)
+        .join(' ')
+      if (fullName) return fullName
+      if (state.userInfo.email) return state.userInfo.email.trim()
+      return null
+    },
   },
 
   actions: {

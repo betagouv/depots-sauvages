@@ -591,6 +591,7 @@ describe('ConstatationStore - Prejudice Logic', () => {
       expect(userStore.teamName).toBe('Mairie de Montreuil')
       expect(userStore.teamLogo).toBe('https://cdn.example.com/logo.png')
       expect(userStore.teamSiret).toBe('21930048600012')
+      expect(userStore.userDisplayName).toBe('Jean Valjean')
 
       userStore.clearUser()
       expect(userStore.teamId).toBeNull()
@@ -598,6 +599,7 @@ describe('ConstatationStore - Prejudice Logic', () => {
       expect(userStore.teamLogo).toBeNull()
       expect(userStore.teamSiret).toBeNull()
       expect(userStore.hasTeam).toBe(false)
+      expect(userStore.userDisplayName).toBeNull()
     })
   })
 })
