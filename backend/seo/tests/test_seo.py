@@ -300,7 +300,7 @@ def test_home_exposes_website_structured_data(client, settings):
     data = json.loads(raw)
     assert data["@type"] == "WebSite"
     assert data["name"] == "Stop Dépôt Sauvage"
-    assert data["alternateName"] == "Protect'Envi"
+    assert "alternateName" not in data
     assert data["url"] == "https://stopdepotsauvage.beta.gouv.fr/"
 
 

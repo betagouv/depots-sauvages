@@ -2,7 +2,7 @@
   <div>
     <DsfrSkipLinks :links="skipLinks" />
     <DsfrHeader
-      service-title="Stop Dépôt Sauvage - Protect'Envi"
+      service-title="Stop Dépôt Sauvage"
       service-description="Accompagner les collectivités pour mieux lutter contre les dépôts sauvages."
       :logoText="logoText"
       :quick-links="quickLinks"
@@ -71,7 +71,7 @@
     </main>
     <DsfrFooter :logo-text="logoText" :after-mandatory-links="afterMandatoryLinks">
       <template #description>
-        <strong>Stop Dépôt Sauvage - Protect'Envi</strong>
+        <strong>Stop Dépôt Sauvage</strong>
         <br />
         Accompagner les collectivités pour mieux lutter contre les dépôts sauvages.
       </template>

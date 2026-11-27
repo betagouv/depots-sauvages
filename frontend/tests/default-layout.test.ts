@@ -87,3 +87,30 @@ describe('Gabarit par défaut - lien de connexion', () => {
     )
   })
 })
+
+describe('Gabarit par défaut - en-tête et pied de page', () => {
+  it('affiche le nom du service "Stop Dépôt Sauvage" sans Protect\'Envi', () => {
+    render(DefaultLayout, {
+      global: {
+        plugins: [createTestingPinia({ stubActions: true })],
+        stubs: {
+          DsfrHeader: {
+            props: ['serviceTitle'],
+            template: '<header data-testid="header">{{ serviceTitle }}</header>',
+          },
+          DsfrFooter: {
+            template: '<footer><slot name="description" /></footer>',
+          },
+        },
+      },
+    })
+
+    const header = screen.getByTestId('header')
+    expect(header).toHaveTextContent('Stop Dépôt Sauvage')
+    expect(header).not.toHaveTextContent("Protect'Envi")
+
+    const footer = screen.getByRole('contentinfo')
+    expect(footer).toHaveTextContent('Stop Dépôt Sauvage')
+    expect(footer).not.toHaveTextContent("Protect'Envi")
+  })
+})

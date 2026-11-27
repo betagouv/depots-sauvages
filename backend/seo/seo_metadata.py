@@ -11,7 +11,6 @@ from backend.seo.faq import get_faq_seo_data
 DEFAULT_TITLE = "Agir contre les dépôts sauvages - Stop Dépôt Sauvage"
 DEFAULT_DESCRIPTION = "Signaler un dépôt sauvage avec Stop Dépôt Sauvage."
 SITE_NAME = "Stop Dépôt Sauvage"
-SITE_ALTERNATE_NAME = "Protect'Envi"
 
 # Authenticated or backoffice pages excluded from search engine indexing even in production.
 PRIVATE_PATH_PREFIXES = (
@@ -223,7 +222,6 @@ def build_website_jsonld(canonical):
         "@context": "https://schema.org",
         "@type": "WebSite",
         "name": SITE_NAME,
-        "alternateName": SITE_ALTERNATE_NAME,
         "url": canonical,
     }
 
