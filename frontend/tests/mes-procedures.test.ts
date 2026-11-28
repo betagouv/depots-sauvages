@@ -273,6 +273,32 @@ describe('Page Mes Procédures', () => {
       expect(colonne).toHaveTextContent('Marquer comme envoyé')
     })
 
+    it('masque les étapes vides lorsque l’interrupteur dédié est activé', async () => {
+      renderTableau()
+      expect(await screen.findByRole('region', { name: /À compléter/ })).toBeInTheDocument()
+
+      await fireEvent.click(screen.getByLabelText(/Masquer les étapes vides/))
+      expect(screen.queryByRole('region', { name: /À compléter/ })).not.toBeInTheDocument()
+      expect(screen.getByRole('region', { name: /Documents à signer/ })).toBeInTheDocument()
+      expect(screen.getByRole('region', { name: /Lettre à envoyer/ })).toBeInTheDocument()
+    })
+
+    it('permet de sauter directement à une colonne depuis la barre d’accès rapide', async () => {
+      renderTableau()
+      const nav = await screen.findByRole('navigation', { name: /Accès rapide aux étapes/ })
+      const bouton = within(nav).getByRole('button', { name: /Lettre à envoyer \(1\)/ })
+      const colonne = screen.getByRole('region', { name: /Lettre à envoyer/ })
+      const scrollIntoView = vi.fn()
+      colonne.scrollIntoView = scrollIntoView
+
+      await fireEvent.click(bouton)
+      expect(scrollIntoView).toHaveBeenCalledWith({
+        behavior: 'smooth',
+        inline: 'center',
+        block: 'nearest',
+      })
+    })
+
     it('est accessible (A11y)', async () => {
       const { container } = renderTableau()
       await screen.findByRole('region', { name: /Lettre à envoyer/ })

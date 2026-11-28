@@ -41,11 +41,16 @@
               :options="optionsFiltreAuteur"
             />
           </div>
-          <div class="fr-col-12 fr-col-md-4">
+          <div class="fr-col-12 fr-col-md-4 tableau-de-bord-options">
             <DsfrToggleSwitch
               v-model="afficherClotures"
               input-id="afficher-clotures"
               :label="`Afficher les dossiers clôturés (${nbClotures})`"
+            />
+            <DsfrToggleSwitch
+              v-model="masquerColonnesVides"
+              input-id="masquer-colonnes-vides"
+              label="Masquer les étapes vides"
             />
           </div>
         </div>
@@ -54,19 +59,67 @@
           {{ resumeResultats }}
         </p>
 
-        <div
-          class="tableau-de-bord fr-mb-3w"
-          role="region"
-          aria-label="Dossiers rangés par étape"
-          tabindex="0"
+        <nav
+          v-if="colonnesAffichees.length > 1"
+          class="tableau-de-bord-nav fr-mb-2w"
+          aria-label="Accès rapide aux étapes"
         >
-          <ColonneProcedures
-            v-for="colonne in colonnesAffichees"
-            :id="colonne.id"
-            :key="colonne.id"
-            :titre="colonne.titre"
-            :items="colonne.items"
-            class="tableau-de-bord__colonne"
+          <ul class="fr-tags-group">
+            <li v-for="colonne in colonnesAffichees" :key="colonne.id">
+              <button
+                type="button"
+                class="fr-tag fr-tag--sm"
+                :class="{ 'tableau-de-bord-nav__tag--vide': colonne.items.length === 0 }"
+                @click="allerAColonne(colonne.id)"
+              >
+                {{ colonne.titre }} ({{ colonne.items.length }})
+              </button>
+            </li>
+          </ul>
+        </nav>
+
+        <div
+          class="tableau-de-bord-conteneur fr-mb-3w"
+          :class="{
+            'tableau-de-bord-conteneur--ombre-gauche': peutDefilerGauche,
+            'tableau-de-bord-conteneur--ombre-droite': peutDefilerDroite,
+          }"
+        >
+          <button
+            v-if="peutDefilerGauche"
+            type="button"
+            class="fr-btn fr-btn--secondary fr-btn--sm fr-icon-arrow-left-s-line tableau-de-bord-conteneur__fleche tableau-de-bord-conteneur__fleche--gauche"
+            aria-label="Défiler les colonnes vers la gauche"
+            @click="defilerHorizontalement(-1)"
+          />
+
+          <div
+            ref="tableauRef"
+            class="tableau-de-bord"
+            :class="{ 'tableau-de-bord--glissement': enGlissement }"
+            role="region"
+            aria-label="Dossiers rangés par étape"
+            tabindex="0"
+            @scroll="mettreAJourEtatDefilement"
+            @mousedown="demarrerGlissement"
+            @wheel="gererMolette"
+          >
+            <ColonneProcedures
+              v-for="colonne in colonnesAffichees"
+              :id="colonne.id"
+              :key="colonne.id"
+              :titre="colonne.titre"
+              :items="colonne.items"
+              class="tableau-de-bord__colonne"
+            />
+          </div>
+
+          <button
+            v-if="peutDefilerDroite"
+            type="button"
+            class="fr-btn fr-btn--secondary fr-btn--sm fr-icon-arrow-right-s-line tableau-de-bord-conteneur__fleche tableau-de-bord-conteneur__fleche--droite"
+            aria-label="Défiler les colonnes vers la droite"
+            @click="defilerHorizontalement(1)"
           />
         </div>
       </template>
@@ -79,7 +132,7 @@
 
 <script setup lang="ts">
 import { useProcedureStore } from '@/stores/procedure'
-import { computed, onMounted, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import AucuneProcedureBox from '../components/procedures/AucuneProcedureBox.vue'
 import Chargement from '../components/procedures/Chargement.vue'
 import ColonneProcedures from '../components/procedures/ColonneProcedures.vue'
@@ -91,6 +144,7 @@ import {
   comparerDansColonne,
   correspondRecherche,
   getPlacementProcedure,
+  type ColonneId,
 } from '../utils/tableau-de-bord'
 
 const userInfo = ref<UserInfo | null>(null)
@@ -101,6 +155,15 @@ const showLoading = ref(true)
 const recherche = ref('')
 const filtreAuteur = ref('tous')
 const afficherClotures = ref(false)
+const masquerColonnesVides = ref(false)
+
+const tableauRef = ref<HTMLElement | null>(null)
+const peutDefilerGauche = ref(false)
+const peutDefilerDroite = ref(false)
+const enGlissement = ref(false)
+let glissementDepartX = 0
+let glissementDepartScroll = 0
+let resizeObserver: ResizeObserver | null = null
 
 const optionsFiltreAuteur = [
   { value: 'tous', text: 'Tous' },
@@ -152,7 +215,7 @@ const filtreActif = computed(() => recherche.value.trim() !== '' || filtreAuteur
 const colonnesAffichees = computed(() =>
   colonnes.value
     .filter((colonne) => colonne.id !== 'cloture' || afficherClotures.value)
-    .filter((colonne) => !filtreActif.value || colonne.items.length > 0)
+    .filter((colonne) => (!filtreActif.value && !masquerColonnesVides.value) || colonne.items.length > 0)
 )
 
 const pluriel = (nombre: number, mot: string) => `${nombre} ${mot}${nombre > 1 ? 's' : ''}`
@@ -179,6 +242,90 @@ const resumeResultats = computed(() => {
   return `${pluriel(enCours, 'dossier')} en cours${suffixe}`
 })
 
+const LARGEUR_DEFILEMENT = 300
+
+const mettreAJourEtatDefilement = () => {
+  const el = tableauRef.value
+  if (!el) {
+    peutDefilerGauche.value = false
+    peutDefilerDroite.value = false
+    return
+  }
+  peutDefilerGauche.value = el.scrollLeft > 4
+  peutDefilerDroite.value = el.scrollLeft + el.clientWidth < el.scrollWidth - 4
+}
+
+const defilerHorizontalement = (direction: -1 | 1) => {
+  tableauRef.value?.scrollBy({ left: direction * LARGEUR_DEFILEMENT, behavior: 'smooth' })
+}
+
+const allerAColonne = (colonneId: ColonneId) => {
+  const cible = tableauRef.value?.querySelector<HTMLElement>(`[data-colonne-id="${colonneId}"]`)
+  cible?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
+}
+
+const gererDeplacementGlissement = (event: MouseEvent) => {
+  if (!enGlissement.value || !tableauRef.value) return
+  const deltaX = event.clientX - glissementDepartX
+  tableauRef.value.scrollLeft = glissementDepartScroll - deltaX
+}
+
+const arreterGlissement = () => {
+  if (!enGlissement.value) return
+  enGlissement.value = false
+  window.removeEventListener('mousemove', gererDeplacementGlissement)
+  window.removeEventListener('mouseup', arreterGlissement)
+}
+
+const demarrerGlissement = (event: MouseEvent) => {
+  if (event.button !== 0 || !tableauRef.value) return
+  const cible = event.target as HTMLElement | null
+  if (cible?.closest('a, button, input, select, textarea, .carte-procedure')) return
+  enGlissement.value = true
+  glissementDepartX = event.clientX
+  glissementDepartScroll = tableauRef.value.scrollLeft
+  window.addEventListener('mousemove', gererDeplacementGlissement)
+  window.addEventListener('mouseup', arreterGlissement)
+}
+
+const gererMolette = (event: WheelEvent) => {
+  const el = tableauRef.value
+  if (!el || event.ctrlKey || Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return
+  if (el.scrollWidth <= el.clientWidth) return
+
+  const cible = event.target as HTMLElement | null
+  const liste = cible?.closest<HTMLElement>('.colonne-procedures__liste')
+  if (liste && liste.scrollHeight > liste.clientHeight) return
+
+  const versDroite = event.deltaY > 0
+  const peutAvancer = versDroite
+    ? el.scrollLeft + el.clientWidth < el.scrollWidth - 1
+    : el.scrollLeft > 1
+  if (!peutAvancer) return
+
+  event.preventDefault()
+  el.scrollLeft += event.deltaY
+}
+
+watch(
+  [tableauRef, colonnesAffichees],
+  async () => {
+    await nextTick()
+    resizeObserver?.disconnect()
+    if (tableauRef.value && typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(mettreAJourEtatDefilement)
+      resizeObserver.observe(tableauRef.value)
+    }
+    mettreAJourEtatDefilement()
+  },
+  { flush: 'post' }
+)
+
+onBeforeUnmount(() => {
+  arreterGlissement()
+  resizeObserver?.disconnect()
+})
+
 onMounted(async () => {
   try {
     userInfo.value = await getUserInfo()
@@ -189,16 +336,89 @@ onMounted(async () => {
     console.error('Failed to fetch data:', error)
   } finally {
     showLoading.value = false
+    await nextTick()
+    mettreAJourEtatDefilement()
   }
 })
 </script>
 
 <style scoped>
+.tableau-de-bord-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.tableau-de-bord-nav__tag--vide {
+  opacity: 0.65;
+}
+
+.tableau-de-bord-conteneur {
+  position: relative;
+}
+
+.tableau-de-bord-conteneur::before,
+.tableau-de-bord-conteneur::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0.75rem;
+  width: 2.5rem;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.tableau-de-bord-conteneur::before {
+  left: 0;
+  background: linear-gradient(to right, var(--background-default-grey), transparent);
+}
+
+.tableau-de-bord-conteneur::after {
+  right: 0;
+  background: linear-gradient(to left, var(--background-default-grey), transparent);
+}
+
+.tableau-de-bord-conteneur--ombre-gauche::before,
+.tableau-de-bord-conteneur--ombre-droite::after {
+  opacity: 1;
+}
+
+.tableau-de-bord-conteneur__fleche {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  background-color: var(--background-default-grey);
+  box-shadow: var(--raised-shadow);
+}
+
+.tableau-de-bord-conteneur__fleche--gauche {
+  left: 0.5rem;
+}
+
+.tableau-de-bord-conteneur__fleche--droite {
+  right: 0.5rem;
+}
+
 .tableau-de-bord {
   display: flex;
+  align-items: flex-start;
   gap: 1rem;
+  height: calc(100vh - 20rem);
+  min-height: 24rem;
+  max-height: 48rem;
   overflow-x: auto;
-  padding-bottom: 0.5rem;
+  overflow-y: hidden;
+  padding-bottom: 0.75rem;
+  cursor: grab;
+  scrollbar-color: var(--border-default-grey) var(--background-alt-grey);
+}
+
+.tableau-de-bord--glissement {
+  cursor: grabbing;
+  user-select: none;
 }
 
 .tableau-de-bord__colonne {
@@ -207,9 +427,21 @@ onMounted(async () => {
 }
 
 @media (max-width: 47.99em) {
+  .tableau-de-bord-conteneur::before,
+  .tableau-de-bord-conteneur::after,
+  .tableau-de-bord-conteneur__fleche {
+    display: none;
+  }
+
   .tableau-de-bord {
     flex-direction: column;
+    align-items: stretch;
+    height: auto;
+    min-height: 0;
+    max-height: none;
     overflow-x: visible;
+    overflow-y: visible;
+    cursor: default;
   }
 
   .tableau-de-bord__colonne {
