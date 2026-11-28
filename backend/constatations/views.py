@@ -19,8 +19,8 @@ from .serializers import ConstatationListSerializer, ConstatationSerializer
 
 def get_user_constatations_queryset(user):
     """
-    Returns the queryset of Constatation instances accessible by the user.
-    - Staff members: access to all constatations.
+    Returns the queryset of Constatation instances accessible by the user
+    in their personal/team workspace ("Mes procédures").
     - User with team:
         * All validated/submitted constatations belonging to the same team (is_draft=False).
         * Drafts (is_draft=True) strictly created by this user (or fallback user=user if created_by is null).
@@ -30,8 +30,6 @@ def get_user_constatations_queryset(user):
     """
     if not user or not user.is_authenticated or not getattr(user, "is_active", True):
         return Constatation.objects.none()
-    if user.is_staff:
-        return Constatation.objects.all()
     user_team_id = get_user_team_id(user)
     if user_team_id:
         return Constatation.objects.filter(team_id=user_team_id).filter(
@@ -138,6 +136,8 @@ class ConstatationDocumentDownloadView(View, TrackActivityMixin):
     model_class = Constatation
 
     def _get_constatation(self, pk):
+        if self.request.user.is_staff:
+            return get_object_or_404(Constatation, pk=pk)
         return get_object_or_404(get_user_constatations_queryset(self.request.user), pk=pk)
 
     def prepare_doc_constat(self, constatation):

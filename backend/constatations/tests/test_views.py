@@ -384,7 +384,7 @@ def test_user_without_team_isolation(client):
 
 
 @pytest.mark.django_db(databases=["default", "stats_db"])
-def test_staff_user_sees_all_teams_constatations(client):
+def test_staff_user_only_sees_own_or_team_constatations(client):
     team_a = Team.objects.create(name="Commune A", siret="11111111111111", siren="111111111")
     team_b = Team.objects.create(name="Commune B", siret="22222222222222", siren="222222222")
     user_a = UserFactory(team=team_a)
@@ -398,14 +398,18 @@ def test_staff_user_sees_all_teams_constatations(client):
     )
 
     staff = UserFactory(is_staff=True)
+    c_staff = Constatation.objects.create(
+        user=staff, created_by=staff, team=None, commune="StaffOwn"
+    )
     client.force_login(staff)
 
     list_res = client.get(reverse("constatation-list"))
     assert list_res.status_code == status.HTTP_200_OK
     ids = [item["id"] for item in list_res.json()]
-    assert c_a.id in ids
-    assert c_b.id in ids
-    assert c_solo.id in ids
+    assert ids == [c_staff.id]
+    assert c_a.id not in ids
+    assert c_b.id not in ids
+    assert c_solo.id not in ids
 
 
 @pytest.mark.django_db(databases=["default", "stats_db"])
