@@ -41,16 +41,11 @@
               :options="optionsFiltreAuteur"
             />
           </div>
-          <div class="fr-col-12 fr-col-md-4 tableau-de-bord-options">
+          <div class="fr-col-12 fr-col-md-4">
             <DsfrToggleSwitch
               v-model="afficherClotures"
               input-id="afficher-clotures"
               :label="`Afficher les dossiers clôturés (${nbClotures})`"
-            />
-            <DsfrToggleSwitch
-              v-model="masquerColonnesVides"
-              input-id="masquer-colonnes-vides"
-              label="Masquer les étapes vides"
             />
           </div>
         </div>
@@ -155,7 +150,6 @@ const showLoading = ref(true)
 const recherche = ref('')
 const filtreAuteur = ref('tous')
 const afficherClotures = ref(false)
-const masquerColonnesVides = ref(false)
 
 const tableauRef = ref<HTMLElement | null>(null)
 const peutDefilerGauche = ref(false)
@@ -215,7 +209,7 @@ const filtreActif = computed(() => recherche.value.trim() !== '' || filtreAuteur
 const colonnesAffichees = computed(() =>
   colonnes.value
     .filter((colonne) => colonne.id !== 'cloture' || afficherClotures.value)
-    .filter((colonne) => (!filtreActif.value && !masquerColonnesVides.value) || colonne.items.length > 0)
+    .filter((colonne) => !filtreActif.value || colonne.items.length > 0)
 )
 
 const pluriel = (nombre: number, mot: string) => `${nombre} ${mot}${nombre > 1 ? 's' : ''}`
@@ -343,12 +337,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.tableau-de-bord-options {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
 .tableau-de-bord-nav__tag--vide {
   opacity: 0.65;
 }

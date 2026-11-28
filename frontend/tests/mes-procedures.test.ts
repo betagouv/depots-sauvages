@@ -273,16 +273,6 @@ describe('Page Mes Procédures', () => {
       expect(colonne).toHaveTextContent('Marquer comme envoyé')
     })
 
-    it('masque les étapes vides lorsque l’interrupteur dédié est activé', async () => {
-      renderTableau()
-      expect(await screen.findByRole('region', { name: /À compléter/ })).toBeInTheDocument()
-
-      await fireEvent.click(screen.getByLabelText(/Masquer les étapes vides/))
-      expect(screen.queryByRole('region', { name: /À compléter/ })).not.toBeInTheDocument()
-      expect(screen.getByRole('region', { name: /Documents à signer/ })).toBeInTheDocument()
-      expect(screen.getByRole('region', { name: /Lettre à envoyer/ })).toBeInTheDocument()
-    })
-
     it('permet de sauter directement à une colonne depuis la barre d’accès rapide', async () => {
       renderTableau()
       const nav = await screen.findByRole('navigation', { name: /Accès rapide aux étapes/ })
