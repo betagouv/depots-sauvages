@@ -25,6 +25,15 @@
             Dépôt : {{ lieu }}
           </p>
 
+          <p v-if="procedure.updated_by_name || procedure.created_by_name" class="fr-text--xs fr-text-mention--grey fr-mb-0">
+            <template v-if="procedure.updated_by_name">
+              Modifié par {{ procedure.updated_by_name }}
+            </template>
+            <template v-else-if="procedure.created_by_name">
+              Initié par {{ procedure.created_by_name }}
+            </template>
+          </p>
+
           <p v-if="placement.info" class="fr-text--sm fr-mt-1w fr-mb-0">
             <span class="fr-icon-time-line fr-icon--sm fr-mr-1v" aria-hidden="true"></span>
             {{ placement.info }}

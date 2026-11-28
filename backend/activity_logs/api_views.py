@@ -95,6 +95,10 @@ class UserActionTrackingView(TrackingAPIViewMixin, APIView):
         if not isinstance(data, dict):
             data = {}
         data["est_staff"] = user.is_staff
+        from backend.teams.models import get_user_team_id
+        team_id = get_user_team_id(user)
+        if team_id is not None:
+            data["team_id"] = team_id
         details["data"] = data
         session_key = getattr(self.request.session, "session_key", None)
         if session_key:

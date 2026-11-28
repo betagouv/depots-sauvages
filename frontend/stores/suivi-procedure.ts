@@ -1,6 +1,12 @@
 import { defineStore } from 'pinia'
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { API_URL, fetchResource, patchResource } from '../services/api'
+
+export interface ConflictDetails {
+  updatedBy: string
+  message: string
+  serverModified: string
+}
 
 export interface SuiviProcedure {
   // Méta
@@ -40,6 +46,8 @@ export interface SuiviProcedure {
   montant_recouvre: boolean
   dossier_archive: boolean
   identification_reussie: boolean | null
+  modified?: string | null
+  updated_by_name?: string | null
 }
 
 /** Empty procedure tracking instance before any user input. */
@@ -173,6 +181,31 @@ export const isSuiviStepUnlocked = (
 
 export const useSuiviStore = defineStore('suiviProcedure', () => {
   const procedures = reactive<Record<string, SuiviProcedure>>({})
+  const lastSyncedModified = reactive<Record<string, string | null>>({})
+  const serverSnapshots = reactive<Record<string, string>>({})
+  const conflictModalVisible = ref(false)
+  const conflictBannerVisible = ref(false)
+  const conflictDetails = ref<ConflictDetails | null>(null)
+  const isReloading = ref(false)
+
+  const serializeForDiff = (data: any): string => {
+    if (!data) return ''
+    const copy = { ...data }
+    delete copy.modified
+    delete copy.created
+    delete copy.last_synced_modified
+    delete copy.force
+    return JSON.stringify(copy)
+  }
+
+  const isDirty = (constatationId: string): boolean => {
+    const current = procedures[constatationId]
+    const snapshot = serverSnapshots[constatationId]
+    if (!current) return false
+    // Si aucun snapshot n'est encore enregistré, considérer comme dirty
+    if (!snapshot) return true
+    return serializeForDiff(current) !== snapshot
+  }
 
   const getOrCreateSuivi = (constatationId: string): SuiviProcedure => {
     if (!procedures[constatationId] || typeof procedures[constatationId] !== 'object') {
@@ -212,30 +245,120 @@ export const useSuiviStore = defineStore('suiviProcedure', () => {
     try {
       const data = await fetchResource(`${API_URL}/suivi-procedure/${internalConstatationId}/`)
       if (data && typeof data === 'object') {
-        procedures[constatationId] = data
+        if (procedures[constatationId]) {
+          Object.assign(procedures[constatationId], data)
+        } else {
+          procedures[constatationId] = data
+        }
+        if (data.modified) {
+          lastSyncedModified[constatationId] = data.modified
+        }
+        serverSnapshots[constatationId] = serializeForDiff(procedures[constatationId])
       }
+      conflictModalVisible.value = false
+      conflictBannerVisible.value = false
+      conflictDetails.value = null
     } catch (e) {
       console.error('Erreur lors du chargement du suivi:', e)
     }
   }
 
-  const saveSuivi = async (constatationId: string, internalConstatationId: number) => {
+  const saveSuivi = async (
+    constatationId: string,
+    internalConstatationId: number,
+    options: { force?: boolean; isExplicitSubmit?: boolean } = {}
+  ) => {
     const suivi = procedures[constatationId]
     if (!suivi) return
 
+    // Si pas forcé et pas d'action explicite, vérifier si les données ont réellement changé
+    if (!options.force && !isDirty(constatationId)) {
+      return suivi
+    }
+
+    const payload: any = { ...suivi }
+    if (options.force) {
+      payload.force = true
+    } else if (lastSyncedModified[constatationId]) {
+      payload.last_synced_modified = lastSyncedModified[constatationId]
+    }
+
     try {
-      await patchResource(`${API_URL}/suivi-procedure/${internalConstatationId}/`, suivi)
-    } catch (e) {
+      const res = await patchResource(
+        `${API_URL}/suivi-procedure/${internalConstatationId}/`,
+        payload
+      )
+      if (res && typeof res === 'object') {
+        if (res.modified) {
+          lastSyncedModified[constatationId] = res.modified
+          if (procedures[constatationId]) {
+            procedures[constatationId].modified = res.modified
+          }
+        }
+        if (res.updated_by_name && procedures[constatationId]) {
+          procedures[constatationId].updated_by_name = res.updated_by_name
+        }
+      }
+      serverSnapshots[constatationId] = serializeForDiff(procedures[constatationId])
+      conflictModalVisible.value = false
+      conflictBannerVisible.value = false
+      conflictDetails.value = null
+      return res
+    } catch (e: any) {
+      if (
+        e?.error === 'CONCURRENT_MODIFICATION' ||
+        e?.status === 409 ||
+        (e && e.updated_by && e.server_modified)
+      ) {
+        conflictDetails.value = {
+          updatedBy: e.updated_by || 'Un autre utilisateur',
+          message: e.message || 'Ce dossier a été modifié par un autre utilisateur entre-temps.',
+          serverModified: e.server_modified || '',
+        }
+        conflictModalVisible.value = true
+        conflictBannerVisible.value = false
+      }
       console.error('Erreur lors de la sauvegarde du suivi:', e)
+      throw e
+    }
+  }
+
+  const forceSave = async (constatationId: string, internalConstatationId: number) => {
+    return await saveSuivi(constatationId, internalConstatationId, { force: true })
+  }
+
+  const resolveConflictReload = async (
+    constatationId: string,
+    internalConstatationId: number
+  ) => {
+    isReloading.value = true
+    conflictModalVisible.value = false
+    conflictBannerVisible.value = false
+    conflictDetails.value = null
+    try {
+      await fetchSuivi(constatationId, internalConstatationId)
+    } finally {
+      // Laisser le temps à Vue de propager la mutation sans déclencher d'autosave
+      setTimeout(() => {
+        isReloading.value = false
+      }, 100)
     }
   }
 
   return {
     procedures,
+    lastSyncedModified,
+    conflictModalVisible,
+    conflictBannerVisible,
+    conflictDetails,
+    isReloading,
+    isDirty,
     getOrCreateSuivi,
     isStepCompleted,
     isStepUnlocked,
     fetchSuivi,
     saveSuivi,
+    forceSave,
+    resolveConflictReload,
   }
 })

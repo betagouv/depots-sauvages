@@ -101,6 +101,10 @@ export interface UserInfo {
   email?: string
   procedures_count?: number
   is_staff?: boolean
+  team_id?: number | null
+  team_name?: string | null
+  team_logo?: string | null
+  team_siret?: string | null
 }
 
 export const getUserInfo = (): Promise<UserInfo> => makeRequest(API_URLS.userInfo, 'GET', {})
@@ -120,6 +124,8 @@ export interface ProcedureOverview {
   auteur_nom?: string
   auteur_prenom?: string
   is_draft?: boolean
+  created_by_name?: string | null
+  updated_by_name?: string | null
   // Procedure tracking summary: fields needed to determine which sections are completed
   suivi_procedure?: Partial<SuiviProcedure> & { etape_en_cours: number }
 }

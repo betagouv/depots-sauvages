@@ -273,6 +273,22 @@ describe('Page Mes Procédures', () => {
       expect(colonne).toHaveTextContent('Marquer comme envoyé')
     })
 
+    it('permet de sauter directement à une colonne depuis la barre d’accès rapide', async () => {
+      renderTableau()
+      const nav = await screen.findByRole('navigation', { name: /Accès rapide aux étapes/ })
+      const bouton = within(nav).getByRole('button', { name: /Lettre à envoyer \(1\)/ })
+      const colonne = screen.getByRole('region', { name: /Lettre à envoyer/ })
+      const scrollIntoView = vi.fn()
+      colonne.scrollIntoView = scrollIntoView
+
+      await fireEvent.click(bouton)
+      expect(scrollIntoView).toHaveBeenCalledWith({
+        behavior: 'smooth',
+        inline: 'center',
+        block: 'nearest',
+      })
+    })
+
     it('est accessible (A11y)', async () => {
       const { container } = renderTableau()
       await screen.findByRole('region', { name: /Lettre à envoyer/ })

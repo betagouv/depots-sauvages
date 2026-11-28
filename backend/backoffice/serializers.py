@@ -1,9 +1,11 @@
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from rest_framework import serializers
 
 from backend.constatations.models import Constatation
 from backend.procedures.models import SuiviProcedure
 from backend.proconnect.models import ProConnectProfile
+from backend.teams.models import Team, TeamAutoCreationExclusion
 
 
 class BackofficeSuiviProcedureSerializer(serializers.ModelSerializer):
@@ -161,6 +163,9 @@ class BackofficeUserSerializer(serializers.ModelSerializer):
     procedures_count = serializers.IntegerField(read_only=True)
     proconnect_profile = serializers.SerializerMethodField()
     has_proconnect = serializers.SerializerMethodField()
+    team_id = serializers.IntegerField(source="profile.team.id", read_only=True, default=None)
+    team_name = serializers.CharField(source="profile.team.name", read_only=True, default=None)
+    team_siret = serializers.CharField(source="profile.team.siret", read_only=True, default=None)
 
     class Meta:
         model = get_user_model()
@@ -176,6 +181,9 @@ class BackofficeUserSerializer(serializers.ModelSerializer):
             "procedures_count",
             "has_proconnect",
             "proconnect_profile",
+            "team_id",
+            "team_name",
+            "team_siret",
         ]
 
     def get_has_proconnect(self, obj):
@@ -185,3 +193,62 @@ class BackofficeUserSerializer(serializers.ModelSerializer):
         if hasattr(obj, "proconnect_profile") and obj.proconnect_profile is not None:
             return BackofficeProConnectProfileSerializer(obj.proconnect_profile).data
         return None
+
+
+class BackofficeTeamSerializer(serializers.ModelSerializer):
+    members_count = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = Team
+        fields = [
+            "id",
+            "name",
+            "siret",
+            "siren",
+            "logo",
+            "members_count",
+            "created",
+            "modified",
+        ]
+        read_only_fields = ["id", "created", "modified", "members_count"]
+
+    def validate_siret(self, value):
+        val = (value or "").strip()
+        if not val or len(val) != 14 or not val.isdigit():
+            raise serializers.ValidationError("Le SIRET doit comporter exactement 14 chiffres.")
+        return val
+
+    def validate_siren(self, value):
+        val = (value or "").strip()
+        if val and (len(val) != 9 or not val.isdigit()):
+            raise serializers.ValidationError("Le SIREN doit comporter exactement 9 chiffres.")
+        return val
+
+    def validate(self, attrs):
+        siret = attrs.get("siret") or (self.instance.siret if self.instance else "")
+        siren = attrs.get("siren") or (self.instance.siren if self.instance else "")
+        if siret and siren and siret[:9] != siren:
+            raise serializers.ValidationError(
+                "Le SIREN ne correspond pas aux 9 premiers chiffres du SIRET."
+            )
+        return attrs
+
+
+class BackofficeTeamAutoCreationExclusionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TeamAutoCreationExclusion
+        fields = [
+            "id",
+            "siren",
+            "label",
+            "reason",
+            "created",
+            "modified",
+        ]
+        read_only_fields = ["id", "created", "modified"]
+
+    def validate_siren(self, value):
+        val = (value or "").strip()
+        if not val or len(val) != 9 or not val.isdigit():
+            raise serializers.ValidationError("Le SIREN doit comporter exactement 9 chiffres.")
+        return val

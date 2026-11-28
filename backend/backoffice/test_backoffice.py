@@ -316,12 +316,14 @@ def test_backoffice_procedures_filter_besoin_accompagnement(client):
         besoin_accompagnement=False,
     )
     url = reverse("backoffice-procedures-list")
+
     def ids_for(params):
         response = client.get(url, params)
         assert response.status_code == status.HTTP_200_OK
         data = response.json()
         results = data["results"] if isinstance(data, dict) and "results" in data else data
         return {item["id"] for item in results}
+
     assert ids_for({}) == {avec_accompagnement.id, sans_accompagnement.id}
     assert ids_for({"besoin_accompagnement": "Oui"}) == {avec_accompagnement.id}
     assert ids_for({"besoinAccompagnement": "Oui"}) == {avec_accompagnement.id}
@@ -352,9 +354,7 @@ def test_backoffice_users_list_and_filters(client):
     user_without_proc = UserFactory(
         email="zero_proc@test.com", first_name="Alice", last_name="Dupont"
     )
-    user_with_proc = UserFactory(
-        email="with_proc@test.com", first_name="Bob", last_name="Martin"
-    )
+    user_with_proc = UserFactory(email="with_proc@test.com", first_name="Bob", last_name="Martin")
     Constatation.objects.create(
         user=user_with_proc,
         commune="Paris",
@@ -446,3 +446,194 @@ def test_backoffice_users_export_csv(client):
     response_filtered = client.get(url, {"has_procedures": "Oui"})
     content_filtered = response_filtered.content.decode("utf-8-sig")
     assert "test_csv@test.com" not in content_filtered
+
+
+@pytest.mark.django_db
+def test_backoffice_users_team_fields_and_filters(client):
+    from backend.teams.models import Team
+
+    staff = UserFactory(is_staff=True, email="staff_team@beta.gouv.fr")
+    client.force_login(staff)
+
+    team_lyon = Team.objects.create(name="Police Lyon", siret="11111111100011", siren="111111111")
+    team_paris = Team.objects.create(name="Mairie Paris", siret="22222222200022", siren="222222222")
+
+    user_lyon = UserFactory(
+        email="agent_lyon@test.com", first_name="Marc", last_name="Lyon", team=team_lyon
+    )
+    user_paris = UserFactory(
+        email="agent_paris@test.com", first_name="Julie", last_name="Paris", team=team_paris
+    )
+    user_solo = UserFactory(
+        email="agent_solo@test.com", first_name="Solo", last_name="User", team=None
+    )
+
+    url = reverse("backoffice-users-list")
+    response = client.get(url)
+    assert response.status_code == status.HTTP_200_OK
+    results = response.json().get("results", response.json())
+
+    lyon_data = next(u for u in results if u["email"] == "agent_lyon@test.com")
+    assert lyon_data["team_id"] == team_lyon.id
+    assert lyon_data["team_name"] == "Police Lyon"
+    assert lyon_data["team_siret"] == "11111111100011"
+
+    solo_data = next(u for u in results if u["email"] == "agent_solo@test.com")
+    assert solo_data["team_id"] is None
+    assert solo_data["team_name"] is None
+    assert solo_data["team_siret"] is None
+
+    # Filter by team__name
+    res_filter_name = client.get(url, {"team__name": "Police"}).json()
+    emails = [u["email"] for u in res_filter_name.get("results", res_filter_name)]
+    assert "agent_lyon@test.com" in emails
+    assert "agent_paris@test.com" not in emails
+    assert "agent_solo@test.com" not in emails
+
+    # Filter by team__siret
+    res_filter_siret = client.get(url, {"team__siret": "22222222200022"}).json()
+    emails = [u["email"] for u in res_filter_siret.get("results", res_filter_siret)]
+    assert "agent_paris@test.com" in emails
+    assert "agent_lyon@test.com" not in emails
+    assert "agent_solo@test.com" not in emails
+
+    # Global search includes team name and team siret
+    res_search_name = client.get(url, {"search": "Police Lyon"}).json()
+    emails = [u["email"] for u in res_search_name.get("results", res_search_name)]
+    assert "agent_lyon@test.com" in emails
+    assert "agent_paris@test.com" not in emails
+
+    res_search_siret = client.get(url, {"search": "11111111100011"}).json()
+    emails = [u["email"] for u in res_search_siret.get("results", res_search_siret)]
+    assert "agent_lyon@test.com" in emails
+
+    # Filter by has_team
+    res_has_team = client.get(url, {"has_team": "Oui"}).json()
+    emails = [u["email"] for u in res_has_team.get("results", res_has_team)]
+    assert "agent_lyon@test.com" in emails
+    assert "agent_paris@test.com" in emails
+    assert "agent_solo@test.com" not in emails
+
+    res_no_team = client.get(url, {"has_team": "Non"}).json()
+    emails = [u["email"] for u in res_no_team.get("results", res_no_team)]
+    assert "agent_solo@test.com" in emails
+    assert "agent_lyon@test.com" not in emails
+
+
+@pytest.mark.django_db
+def test_backoffice_teams_viewset_permissions_and_crud(client):
+    from backend.teams.models import Team
+
+    staff = UserFactory(is_staff=True, email="staff_team_admin@beta.gouv.fr")
+    non_staff = UserFactory(is_staff=False, email="user_team_admin@test.com")
+
+    # Anonymous
+    url = reverse("backoffice-teams-list")
+    resp_anon = client.get(url)
+    assert resp_anon.status_code in [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN]
+
+    # Non-staff
+    client.force_login(non_staff)
+    resp_non_staff = client.get(url)
+    assert resp_non_staff.status_code == status.HTTP_403_FORBIDDEN
+
+    # Staff: List
+    client.force_login(staff)
+    t1 = Team.objects.create(name="Mairie de Bordeaux", siret="33333333300033", siren="333333333")
+    UserFactory(email="member1@bordeaux.fr", team=t1)
+    UserFactory(email="member2@bordeaux.fr", team=t1)
+
+    resp_staff = client.get(url)
+    assert resp_staff.status_code == status.HTTP_200_OK
+    results = resp_staff.json().get("results", resp_staff.json())
+    t1_data = next(t for t in results if t["id"] == t1.id)
+    assert t1_data["name"] == "Mairie de Bordeaux"
+    assert t1_data["siret"] == "33333333300033"
+    assert t1_data["members_count"] == 2
+
+    # Staff: Create Team
+    create_payload = {
+        "name": "Mairie de Nice",
+        "siret": "44444444400044",
+    }
+    resp_create = client.post(url, create_payload, content_type="application/json")
+    assert resp_create.status_code == status.HTTP_201_CREATED
+    created_id = resp_create.json()["id"]
+    team_created = Team.objects.get(id=created_id)
+    assert team_created.name == "Mairie de Nice"
+    assert team_created.siren == "444444444"
+
+    # Staff: Update Team
+    detail_url = reverse("backoffice-teams-detail", kwargs={"pk": created_id})
+    resp_update = client.patch(
+        detail_url, {"name": "Ville de Nice"}, content_type="application/json"
+    )
+    assert resp_update.status_code == status.HTTP_200_OK
+    team_created.refresh_from_db()
+    assert team_created.name == "Ville de Nice"
+
+    # Staff: Delete Team
+    resp_delete = client.delete(detail_url)
+    assert resp_delete.status_code == status.HTTP_204_NO_CONTENT
+    assert not Team.objects.filter(id=created_id).exists()
+
+
+@pytest.mark.django_db
+def test_backoffice_team_exclusions_viewset_permissions_and_crud(client):
+    from backend.teams.models import TeamAutoCreationExclusion
+
+    staff = UserFactory(is_staff=True, email="staff_excl@beta.gouv.fr")
+    non_staff = UserFactory(is_staff=False, email="user_excl@test.com")
+
+    # Anonymous
+    url = reverse("backoffice-team-exclusions-list")
+    resp_anon = client.get(url)
+    assert resp_anon.status_code in [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN]
+
+    # Non-staff
+    client.force_login(non_staff)
+    resp_non_staff = client.get(url)
+    assert resp_non_staff.status_code == status.HTTP_403_FORBIDDEN
+
+    # Staff: List
+    client.force_login(staff)
+    excl = TeamAutoCreationExclusion.objects.create(
+        siren="157000019",
+        label="DGGN Test",
+        reason="Gendarmerie nationale",
+    )
+    resp_list = client.get(url)
+    assert resp_list.status_code == status.HTTP_200_OK
+    results = resp_list.json().get("results", resp_list.json())
+    assert any(item["siren"] == "157000019" for item in results)
+
+    # Staff: Create Exclusion (valid)
+    resp_create = client.post(
+        url,
+        {
+            "siren": "130025265",
+            "label": "DINUM",
+            "reason": "Services du Premier ministre",
+        },
+        content_type="application/json",
+    )
+    assert resp_create.status_code == status.HTTP_201_CREATED
+    dinum_id = resp_create.json()["id"]
+    assert TeamAutoCreationExclusion.objects.filter(id=dinum_id).exists()
+
+    # Staff: Create Exclusion (invalid validation)
+    resp_bad = client.post(
+        url,
+        {
+            "siren": "123",
+            "label": "Bad Excl",
+        },
+        content_type="application/json",
+    )
+    assert resp_bad.status_code == status.HTTP_400_BAD_REQUEST
+
+    # Staff: Delete Exclusion
+    detail_url = reverse("backoffice-team-exclusions-detail", kwargs={"pk": dinum_id})
+    resp_del = client.delete(detail_url)
+    assert resp_del.status_code == status.HTTP_204_NO_CONTENT
+    assert not TeamAutoCreationExclusion.objects.filter(id=dinum_id).exists()

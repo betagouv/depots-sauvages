@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Q
 
 from backend.constatations.models import Constatation
+from backend.teams.models import Team, TeamAutoCreationExclusion
 
 
 class BackofficeProcedureFilterSet(django_filters.FilterSet):
@@ -85,6 +86,11 @@ class BackofficeUserFilterSet(django_filters.FilterSet):
     procedures_count = django_filters.CharFilter(method="filter_procedures_count")
     has_procedures = django_filters.CharFilter(method="filter_has_procedures")
     has_proconnect = django_filters.CharFilter(method="filter_has_proconnect")
+    team__name = django_filters.CharFilter(field_name="profile__team__name", lookup_expr="icontains")
+    team__siret = django_filters.CharFilter(field_name="profile__team__siret", lookup_expr="icontains")
+    team_name = django_filters.CharFilter(field_name="profile__team__name", lookup_expr="icontains")
+    team_siret = django_filters.CharFilter(field_name="profile__team__siret", lookup_expr="icontains")
+    has_team = django_filters.CharFilter(method="filter_has_team")
 
     class Meta:
         model = get_user_model()
@@ -93,6 +99,11 @@ class BackofficeUserFilterSet(django_filters.FilterSet):
             "procedures_count",
             "has_procedures",
             "has_proconnect",
+            "team__name",
+            "team__siret",
+            "team_name",
+            "team_siret",
+            "has_team",
         ]
 
     def filter_search(self, queryset, name, value):
@@ -101,10 +112,19 @@ class BackofficeUserFilterSet(django_filters.FilterSet):
                 Q(email__icontains=value)
                 | Q(first_name__icontains=value)
                 | Q(last_name__icontains=value)
+                | Q(profile__team__name__icontains=value)
+                | Q(profile__team__siret__icontains=value)
                 | Q(proconnect_profile__siret__icontains=value)
                 | Q(proconnect_profile__siren__icontains=value)
                 | Q(proconnect_profile__organization_label__icontains=value)
             )
+        return queryset
+
+    def filter_has_team(self, queryset, name, value):
+        if value == "Oui" or value == "true" or value == "1":
+            return queryset.filter(profile__team__isnull=False)
+        elif value == "Non" or value == "false" or value == "0":
+            return queryset.filter(Q(profile__isnull=True) | Q(profile__team__isnull=True))
         return queryset
 
     def filter_procedures_count(self, queryset, name, value):
@@ -126,4 +146,36 @@ class BackofficeUserFilterSet(django_filters.FilterSet):
             return queryset.filter(proconnect_profile__isnull=False)
         elif value == "Non" or value == "false" or value == "0":
             return queryset.filter(proconnect_profile__isnull=True)
+        return queryset
+
+
+class BackofficeTeamFilterSet(django_filters.FilterSet):
+    search = django_filters.CharFilter(method="filter_search")
+
+    class Meta:
+        model = Team
+        fields = ["search", "siret", "siren"]
+
+    def filter_search(self, queryset, name, value):
+        if value:
+            return queryset.filter(
+                Q(name__icontains=value) | Q(siret__icontains=value) | Q(siren__icontains=value)
+            )
+        return queryset
+
+
+class BackofficeTeamAutoCreationExclusionFilterSet(django_filters.FilterSet):
+    search = django_filters.CharFilter(method="filter_search")
+
+    class Meta:
+        model = TeamAutoCreationExclusion
+        fields = ["search", "siren"]
+
+    def filter_search(self, queryset, name, value):
+        if value:
+            return queryset.filter(
+                Q(label__icontains=value)
+                | Q(siren__icontains=value)
+                | Q(reason__icontains=value)
+            )
         return queryset

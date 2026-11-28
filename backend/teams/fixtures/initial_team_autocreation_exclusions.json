@@ -1,0 +1,110 @@
+[
+  {
+    "model": "teams.teamautocreationexclusion",
+    "pk": 1,
+    "fields": {
+      "siren": "157000019",
+      "siret": "",
+      "label": "Gendarmerie Nationale (DGGN)",
+      "reason": "Corps national - agents répartis sur le territoire national ne devant pas partager un espace unique",
+      "created": "2026-11-16T12:00:00Z",
+      "modified": "2026-11-16T12:00:00Z"
+    }
+  },
+  {
+    "model": "teams.teamautocreationexclusion",
+    "pk": 2,
+    "fields": {
+      "siren": "130025265",
+      "siret": "",
+      "label": "DINUM (Direction Interministérielle du Numérique)",
+      "reason": "Administration centrale / équipes transverses interministérielles",
+      "created": "2026-11-16T12:00:00Z",
+      "modified": "2026-11-16T12:00:00Z"
+    }
+  },
+  {
+    "model": "teams.teamautocreationexclusion",
+    "pk": 3,
+    "fields": {
+      "siren": "130001779",
+      "siret": "",
+      "label": "Ministère de la Transition Écologique (MTE)",
+      "reason": "Ministère / Administration centrale (ancien SIREN)",
+      "created": "2026-11-16T12:00:00Z",
+      "modified": "2026-11-16T12:00:00Z"
+    }
+  },
+  {
+    "model": "teams.teamautocreationexclusion",
+    "pk": 4,
+    "fields": {
+      "siren": "130025943",
+      "siret": "",
+      "label": "Office Français de la Biodiversité (OFB)",
+      "reason": "Établissement public national multi-antennes",
+      "created": "2026-11-16T12:00:00Z",
+      "modified": "2026-11-16T12:00:00Z"
+    }
+  },
+  {
+    "model": "teams.teamautocreationexclusion",
+    "pk": 5,
+    "fields": {
+      "siren": "662043116",
+      "siret": "",
+      "label": "Office National des Forêts (ONF)",
+      "reason": "Établissement public national multi-antennes",
+      "created": "2026-11-16T12:00:00Z",
+      "modified": "2026-11-16T12:00:00Z"
+    }
+  },
+  {
+    "model": "teams.teamautocreationexclusion",
+    "pk": 6,
+    "fields": {
+      "siren": "130026032",
+      "siret": "",
+      "label": "Agence Nationale de la Cohésion des Territoires (ANCT)",
+      "reason": "Agence nationale",
+      "created": "2026-11-16T12:00:00Z",
+      "modified": "2026-11-16T12:00:00Z"
+    }
+  },
+  {
+    "model": "teams.teamautocreationexclusion",
+    "pk": 7,
+    "fields": {
+      "siren": "385290309",
+      "siret": "",
+      "label": "ADEME",
+      "reason": "Agence nationale",
+      "created": "2026-11-16T12:00:00Z",
+      "modified": "2026-11-16T12:00:00Z"
+    }
+  },
+  {
+    "model": "teams.teamautocreationexclusion",
+    "pk": 8,
+    "fields": {
+      "siren": "110068012",
+      "siret": "",
+      "label": "Ministère de la Transition Écologique (MTE - Actuel)",
+      "reason": "Ministère / Administration centrale",
+      "created": "2026-11-16T12:00:00Z",
+      "modified": "2026-11-16T12:00:00Z"
+    }
+  },
+  {
+    "model": "teams.teamautocreationexclusion",
+    "pk": 9,
+    "fields": {
+      "siren": "110010014",
+      "siret": "",
+      "label": "Ministère de la Justice",
+      "reason": "Ministère / Administration centrale et tribunaux",
+      "created": "2026-11-16T12:00:00Z",
+      "modified": "2026-11-16T12:00:00Z"
+    }
+  }
+]

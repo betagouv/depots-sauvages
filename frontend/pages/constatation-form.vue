@@ -2,20 +2,30 @@
   <div class="fr-container fr-py-6w">
     <PageLoader v-if="showLoading" />
 
-    <div v-else-if="userInfo?.is_authenticated">
+    <div v-else-if="!userInfo?.is_authenticated">
+      <LoginInvitation
+        title="Connectez-vous pour démarrer"
+        description="Pour initier une procédure et accéder au formulaire de constatation, vous devez vous connecter avec ProConnect."
+        redirectTo="/constatation"
+      />
+    </div>
+
+    <div v-else>
       <h1 class="fr-h1 fr-mb-2w">Constatation de dépôt sauvage</h1>
 
       <form @submit.prevent="submitForm" novalidate>
         <ConstatationForm />
       </form>
-    </div>
 
-    <LoginInvitation
-      v-else
-      title="Connectez-vous pour démarrer"
-      description="Pour initier une procédure et accéder au formulaire de constatation, vous devez vous connecter avec ProConnect."
-      redirectTo="/constatation"
-    />
+      <ConflictResolutionModal
+        :opened="store.conflictModalVisible"
+        :updatedBy="store.conflictDetails?.updatedBy"
+        :message="store.conflictDetails?.message"
+        @close="store.conflictModalVisible = false"
+        @reload="handleConflictReload"
+        @force-save="handleConflictForceSave"
+      />
+    </div>
   </div>
 </template>
 
@@ -23,6 +33,7 @@
 import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import ConstatationForm from '../components/forms/constatation/ConstatationForm.vue'
+import ConflictResolutionModal from '../components/shared/ConflictResolutionModal.vue'
 import LoginInvitation from '../components/shared/LoginInvitation.vue'
 import PageLoader from '../components/shared/PageLoader.vue'
 import { getUserInfo, type UserInfo } from '../services/api'
@@ -43,21 +54,26 @@ onMounted(async () => {
       if (editId) {
         const id = parseInt(editId as string, 10)
         if (!isNaN(id)) {
-          await store.loadConstatation(id)
+          try {
+            await store.loadConstatation(id)
+          } catch (error: any) {
+            router.replace({ name: 'NotFound' })
+            return
+          }
         }
       } else {
         store.resetStore()
-      }
 
-      // The contact person fills the form and receives follow-ups.
-      // He is by default the logged-in user.
-      // He can also be the legal 'constatant',
-      // or he can be filling the form on behalf of someone else.
-      if (!store.formData.contactNom && userInfo.value.last_name) {
-        store.formData.contactNom = userInfo.value.last_name
-      }
-      if (!store.formData.contactPrenom && userInfo.value.first_name) {
-        store.formData.contactPrenom = userInfo.value.first_name
+        // The contact person fills the form and receives follow-ups.
+        // He is by default the logged-in user on a brand new draft.
+        // He can also be the legal 'constatant',
+        // or he can be filling the form on behalf of someone else.
+        if (!store.formData.contactNom && userInfo.value.last_name) {
+          store.formData.contactNom = userInfo.value.last_name
+        }
+        if (!store.formData.contactPrenom && userInfo.value.first_name) {
+          store.formData.contactPrenom = userInfo.value.first_name
+        }
       }
     }
   } catch (error) {
@@ -70,6 +86,7 @@ onMounted(async () => {
 import { debounce } from '../utils/debounce'
 
 const debouncedAutoSave = debounce(() => {
+  if (store.isReloading) return
   if (store.formData.commune) {
     store.autoSave()
   }
@@ -78,6 +95,7 @@ const debouncedAutoSave = debounce(() => {
 watch(
   () => store.formData,
   () => {
+    if (store.isReloading) return
     if (store.hasBeenSubmitted) store.validate(true)
     debouncedAutoSave()
   },
@@ -98,6 +116,13 @@ const scrollToFirstError = async () => {
 
 const submitForm = async () => {
   debouncedAutoSave.cancel()
+
+  // Si un conflit non résolu est déjà actif, ouvrir la modal d'arbitrage
+  if (store.conflictModalVisible || store.conflictDetails) {
+    store.conflictModalVisible = true
+    return
+  }
+
   if (store.saveError) {
     scrollToFirstError()
     return
@@ -111,8 +136,16 @@ const submitForm = async () => {
     if (data && data.id) {
       router.push(`/constatation-fin/${data.id}`)
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error('Erreur lors de la sauvegarde:', error)
+    if (
+      error?.error === 'CONCURRENT_MODIFICATION' ||
+      error?.status === 409 ||
+      (error && error.updated_by && error.server_modified)
+    ) {
+      store.conflictModalVisible = true
+      return
+    }
     if (error && typeof error === 'object') {
       const camelErrors = camelcaseKeys(error as Record<string, any>)
       for (const [key, val] of Object.entries(camelErrors)) {
@@ -124,6 +157,25 @@ const submitForm = async () => {
       }
     }
     scrollToFirstError()
+  }
+}
+
+const handleConflictReload = async () => {
+  debouncedAutoSave.cancel()
+  if (store.currentId) {
+    await store.resolveConflictReload(store.currentId)
+  }
+}
+
+const handleConflictForceSave = async () => {
+  debouncedAutoSave.cancel()
+  try {
+    const data = await store.forceSave()
+    if (data && data.id && !data.is_draft) {
+      router.push(`/constatation-fin/${data.id}`)
+    }
+  } catch (err) {
+    console.error('Erreur lors du force save:', err)
   }
 }
 </script>

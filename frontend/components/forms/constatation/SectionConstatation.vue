@@ -155,6 +155,10 @@ const userInfo = ref<UserInfo | null>(null)
 watch(
   () => store.formData.constatantEstUtilisateurConnecte,
   async (newVal, oldVal) => {
+    // Si on charge un dossier existant, ne pas écraser le constatant avec l'utilisateur qui consulte
+    if (store.currentId && oldVal === undefined) {
+      return
+    }
     if (newVal) {
       if (!userInfo.value) {
         try {

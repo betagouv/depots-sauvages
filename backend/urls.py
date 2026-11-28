@@ -13,6 +13,8 @@ from backend.backoffice.views import (
     BackofficeDashboardStatsViewSet,
     BackofficeProceduresViewSet,
     BackofficeStaffViewSet,
+    BackofficeTeamAutoCreationExclusionsViewSet,
+    BackofficeTeamsViewSet,
     BackofficeUsersViewSet,
 )
 from backend.blog.views import BlogArticleViewSet
@@ -45,6 +47,12 @@ router.register(
 )
 router.register("backoffice-staff", BackofficeStaffViewSet, basename="backoffice-staff")
 router.register("backoffice-users", BackofficeUsersViewSet, basename="backoffice-users")
+router.register("backoffice-teams", BackofficeTeamsViewSet, basename="backoffice-teams")
+router.register(
+    "backoffice-team-exclusions",
+    BackofficeTeamAutoCreationExclusionsViewSet,
+    basename="backoffice-team-exclusions",
+)
 
 router.register("constatations", ConstatationViewSet, basename="constatation")
 router.register("faq-items", FAQItemViewSet, basename="faq-item")
