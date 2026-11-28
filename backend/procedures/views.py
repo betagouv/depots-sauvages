@@ -3,6 +3,7 @@ from rest_framework import mixins, permissions, viewsets
 from rest_framework.response import Response
 
 from backend.constatations.concurrency import check_optimistic_lock
+from backend.constatations.models import Constatation
 from backend.constatations.views import get_user_constatations_queryset
 from backend.procedures.models import SuiviProcedure
 from backend.procedures.serializers import SuiviProcedureSerializer, SuiviProcedureStaffSerializer
@@ -16,6 +17,8 @@ class SuiviProcedureViewSet(
 
     def get_queryset(self):
         user = self.request.user
+        if user.is_staff:
+            return SuiviProcedure.objects.all()
         return SuiviProcedure.objects.filter(constatation__in=get_user_constatations_queryset(user))
 
     def get_serializer_class(self):
@@ -26,15 +29,20 @@ class SuiviProcedureViewSet(
     def get_object(self):
         """
         Retrieves or automatically creates the SuiviProcedure object for the given constatation.
-        Access rules are delegated to get_user_constatations_queryset:
-        - Staff members can access the procedure for any Constatation.
+        Access rules:
+        - Staff members can access and update the procedure for any Constatation (used by backoffice).
         - Users in a team can access procedures of all Constatations belonging to that team.
         - Users without a team can only access procedures for Constatations they created.
         """
         constatation_id = self.kwargs.get(self.lookup_field)
-        constatation = (
-            get_user_constatations_queryset(self.request.user).filter(id=constatation_id).first()
-        )
+        if self.request.user.is_staff:
+            constatation = Constatation.objects.filter(id=constatation_id).first()
+        else:
+            constatation = (
+                get_user_constatations_queryset(self.request.user)
+                .filter(id=constatation_id)
+                .first()
+            )
         if not constatation:
             raise Http404(f"Constatation with ID {constatation_id} not found or access denied.")
         obj, _ = SuiviProcedure.objects.get_or_create(
